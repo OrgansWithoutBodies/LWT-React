@@ -1,0 +1,301 @@
+<body>
+  <div
+    id="overDiv"
+    style="position: absolute; visibility: hidden; z-index: 1000"
+  ></div>
+  <h4>
+    <a href="index.php" target="_top"
+      ><img
+        class="lwtlogo"
+        src="img/lwt_icon.png"
+        title="LWT - Current Table Set: Default Table Set"
+        alt="LWT - Current Table Set: Default Table Set"
+      />LWT</a
+    >&nbsp; | &nbsp;<select
+      id="quickmenu"
+      onchange="{var qm = document.getElementById('quickmenu'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}"
+    >
+      <option value="" selected="selected">[Menu]</option>
+      <option value="index">Home</option>
+      <option value="edit_texts">Texts</option>
+      <option value="edit_archivedtexts">Text Archive</option>
+      <option value="edit_texttags">Text Tags</option>
+      <option value="edit_languages">Languages</option>
+      <option value="edit_words">Terms</option>
+      <option value="edit_tags">Term Tags</option>
+      <option value="statistics">Statistics</option>
+      <option value="check_text">Text Check</option>
+      <option value="long_text_import">Long Text Import</option>
+      <option value="upload_words">Term Import</option>
+      <option value="backup_restore">Backup/Restore</option>
+      <option value="settings">Settings</option>
+      <option value="INFO">Help</option>
+    </select>
+  </h4>
+  <h3>My Languages</h3>
+  <p>&nbsp;</p>
+  <script type="text/javascript">
+    //<![CDATA[
+    var LANGUAGES = {
+      French: '1',
+      Chinese: '2',
+      German: '3',
+      Turkish: '4',
+      Japanese: '5',
+      Korean: '6',
+      Thai: '7',
+      Hebrew: '8',
+      Lithuanian: '9',
+      Amharic: '10',
+      Uyghur: '11',
+    };
+
+    function check_dupl_lang(curr) {
+      // Check if langname exists and its lang# != curr
+      var l = $('#LgName').val();
+      if (l in LANGUAGES) {
+        if (curr != LANGUAGES[l]) {
+          alert(
+            'Language "' +
+              l +
+              '" exists already. Please change the language name!'
+          );
+          $('#LgName').focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    //]]>
+  </script>
+
+  <h4>
+    Edit Language
+    <a target="_blank" href="info.htm#howtolang"
+      ><img src="icn/question-frame.png" title="Help" alt="Help"
+    /></a>
+  </h4>
+  <script
+    type="text/javascript"
+    src="js/unloadformcheck.js"
+    charset="utf-8"
+  ></script>
+  <form
+    class="validate"
+    action="/edit_languages.php"
+    method="post"
+    onsubmit="return check_dupl_lang(2);"
+  >
+    <input type="hidden" name="LgID" value="2" />
+    <table class="tab1" cellspacing="0" cellpadding="5">
+      <tbody>
+        <tr>
+          <td class="td1 right">Study Language "L2":</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="notempty setfocus checkoutsidebmp"
+              data_info="Study Language"
+              name="LgName"
+              id="LgName"
+              value="Chinese"
+              maxlength="40"
+              size="{40}"
+            />
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Dictionary 1 URI:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="notempty checkdicturl checkoutsidebmp"
+              name="LgDict1URI"
+              value="https://dict.naver.com/linedict/zhendict/dict.html#/cnen/search?query=###"
+              maxlength="200"
+              size="{60}"
+              data_info="Dictionary 1 URI"
+            />
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Dictionary 2 URI:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="checkdicturl checkoutsidebmp"
+              name="LgDict2URI"
+              value="http://chinesedictionary.mobi/?handler=QueryWorddict&amp;mwdqb=###"
+              maxlength="200"
+              size="{60}"
+              data_info="Dictionary 2 URI"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">GoogleTranslate URI:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="checkdicturl checkoutsidebmp"
+              name="LgGoogleTranslateURI"
+              value="*http://translate.google.com/?ie=UTF-8&amp;sl=zh&amp;tl=en&amp;text=###"
+              maxlength="200"
+              size="{60}"
+              data_info="GoogleTranslate URI"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Text Size:</td>
+          <td class="td1">
+            <select name="LgTextSize">
+              <option value="100">100 %</option>
+              <option value="150">150 %</option>
+              <option value="200" selected="selected">200 %</option>
+              <option value="250">250 %</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Character Substitutions:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="checkoutsidebmp"
+              data_info="Character Substitutions"
+              name="LgCharacterSubstitutions"
+              value=""
+              maxlength="500"
+              size="{60}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">RegExp Split Sentences:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="notempty checkoutsidebmp"
+              name="LgRegexpSplitSentences"
+              value=".!?:;。！？：；"
+              maxlength="500"
+              size="{60}"
+              data_info="RegExp Split Sentences"
+            />
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Exceptions Split Sentences:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="checkoutsidebmp"
+              data_info="Exceptions Split Sentences"
+              name="LgExceptionsSplitSentences"
+              value=""
+              maxlength="500"
+              size="{60}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">RegExp Word Characters:</td>
+          <td class="td1">
+            <input
+              type="text"
+              class="notempty checkoutsidebmp"
+              data_info="RegExp Word Characters"
+              name="LgRegexpWordCharacters"
+              value="一-龥"
+              maxlength="500"
+              size="{60}"
+            />
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Make each character a word:</td>
+          <td class="td1">
+            <select name="LgSplitEachChar">
+              <option value="0">No</option>
+              <option value="1" selected="selected">Yes</option>
+            </select>
+            (e.g. for Chinese, Japanese, etc.)
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Remove spaces:</td>
+          <td class="td1">
+            <select name="LgRemoveSpaces">
+              <option value="0">No</option>
+              <option value="1" selected="selected">Yes</option>
+            </select>
+            (e.g. for Chinese, Japanese, etc.)
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">Right-To-Left Script:</td>
+          <td class="td1">
+            <select name="LgRightToLeft">
+              <option value="0" selected="selected">No</option>
+              <option value="1">Yes</option>
+            </select>
+            (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right">
+            Export Template <img class="click" src="icn/question-frame.png"
+            title="Help" alt="Help" selectedoewin('info_export_template.htm');"
+            /> :
+          </td>
+          <td class="td1">
+            <input
+              type="text"
+              class="checkoutsidebmp"
+              data_info="Export Template"
+              name="LgExportTemplate"
+              value="$y\t$t\n"
+              maxlength="1000"
+              size="{60}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 right" colspan="2">
+            <input type="button" value="Cancel" selected{resetDirty();
+            location.href='edit_languages.php';}" />
+            <input type="submit" name="op" value="Change" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="smallgray">
+      <b>Warning:</b> Changing certain language settings (e.g. RegExp Word
+      Characters, etc.)<br />may cause partial or complete loss of improved
+      annotated texts!
+    </p>
+  </form>
+</body>
+<!--  -->

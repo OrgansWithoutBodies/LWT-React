@@ -1,0 +1,204 @@
+<body>
+  <div
+    id="overDiv"
+    style="position: absolute; visibility: hidden; z-index: 1000"
+  ></div>
+  <h4>
+    <a href="index.php" target="_top"
+      ><img
+        class="lwtlogo"
+        src="img/lwt_icon.png"
+        title="LWT - Current Table Set: Default Table Set"
+        alt="LWT - Current Table Set: Default Table Set"
+      />LWT</a
+    >&nbsp; | &nbsp;<select
+      id="quickmenu"
+      onchange="{var qm = document.getElementById('quickmenu'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}"
+    >
+      <option value="" selected="selected">[Menu]</option>
+      <option value="index">Home</option>
+      <option value="edit_texts">Texts</option>
+      <option value="edit_archivedtexts">Text Archive</option>
+      <option value="edit_texttags">Text Tags</option>
+      <option value="edit_languages">Languages</option>
+      <option value="edit_words">Terms</option>
+      <option value="edit_tags">Term Tags</option>
+      <option value="statistics">Statistics</option>
+      <option value="check_text">Text Check</option>
+      <option value="long_text_import">Long Text Import</option>
+      <option value="upload_words">Term Import</option>
+      <option value="backup_restore">Backup/Restore</option>
+      <option value="settings">Settings</option>
+      <option value="INFO">Help</option>
+    </select>
+  </h4>
+  <h3>Import Terms</h3>
+  <p>&nbsp;</p>
+  <form
+    enctype="multipart/form-data"
+    class="validate"
+    action="/upload_words.php"
+    method="post"
+    onsubmit="{return confirm ('Did you double-check everything?\nAre you sure?');}"
+  >
+    <table class="tab3" cellspacing="0" cellpadding="5">
+      <tbody>
+        <tr>
+          <td class="td1 center"><b>Language:</b></td>
+          <td class="td1">
+            <select name="LgID" class="notempty setfocus">
+              <option value="">[Choose...]</option>
+              <option value="10">Amharic</option>
+              <option value="2" selected="selected">Chinese</option>
+              <option value="1">French</option>
+              <option value="3">German</option>
+              <option value="8">Hebrew</option>
+              <option value="5">Japanese</option>
+              <option value="6">Korean</option>
+              <option value="9">Lithuanian</option>
+              <option value="7">Thai</option>
+              <option value="4">Turkish</option>
+              <option value="11">Uyghur</option>
+            </select>
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 center">
+            <b>Import Data:</b><br /><br />
+            Format per line:<br />
+            C1 D C2 D C3 D C4 D C5<br />
+            <br /><b>Field Delimiter "D":</b><br />
+            <select name="Tab">
+              <option value="c" selected="selected">
+                Comma "," [CSV File, LingQ]
+              </option>
+              <option value="t">TAB (ASCII 9) [TSV File]</option>
+              <option value="h">Hash "#" [Direct Input]</option>
+            </select>
+            <br />
+            <br />
+            <b>Column Assignment:</b><br />
+            "C1":
+            <select name="Col1">
+              <option value="w" selected="selected">Term</option>
+              <option value="t">Translation</option>
+              <option value="r">Romanization</option>
+              <option value="s">Sentence</option>
+              <option value="g">Tag List</option>
+              <option value="x">Don't import</option></select
+            ><br />
+            "C2":
+            <select name="Col2">
+              <option value="w">Term</option>
+              <option value="t" selected="selected">Translation</option>
+              <option value="r">Romanization</option>
+              <option value="s">Sentence</option>
+              <option value="g">Tag List</option>
+              <option value="x">Don't import</option></select
+            ><br />
+            "C3":
+            <select name="Col3">
+              <option value="w">Term</option>
+              <option value="t">Translation</option>
+              <option value="r">Romanization</option>
+              <option value="s">Sentence</option>
+              <option value="g">Tag List</option>
+              <option value="x" selected="selected">
+                Don't import
+              </option></select
+            ><br />
+            "C4":
+            <select name="Col4">
+              <option value="w">Term</option>
+              <option value="t">Translation</option>
+              <option value="r">Romanization</option>
+              <option value="s">Sentence</option>
+              <option value="g">Tag List</option>
+              <option value="x" selected="selected">
+                Don't import
+              </option></select
+            ><br />
+            "C5":
+            <select name="Col5">
+              <option value="w">Term</option>
+              <option value="t">Translation</option>
+              <option value="r">Romanization</option>
+              <option value="s">Sentence</option>
+              <option value="g">Tag List</option>
+              <option value="x" selected="selected">
+                Don't import
+              </option></select
+            ><br />
+            <br /><b>Overwrite existent<br />terms</b>:
+            <select name="Over">
+              <option value="0" selected="selected">No</option>
+              <option value="1">Yes</option>
+            </select>
+            <br /><br />
+            <b>Important:</b><br />
+            You must specify the term.<br />
+            Translation, romanization, <br />sentence and tag list<br />are
+            optional. The tag list <br />must be separated either<br />by spaces
+            or commas.
+          </td>
+          <td class="td1">
+            Either specify a <b>File to upload</b>:<br />
+            <input name="thefile" type="file" /><br /><br />
+            <b>Or</b> type in or paste from clipboard (do <b>NOT</b> specify
+            file):<br />
+            <textarea
+              class="checkoutsidebmp"
+              data_info="Upload"
+              name="Upload"
+              cols="60"
+              rows="25"
+            ></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 center"><b>Status</b> for all uploaded terms:</td>
+          <td class="td1">
+            <select class="notempty" name="WoStatus">
+              <option value="1" selected="selected">Learning [1]</option>
+              <option value="2">Learning [2]</option>
+              <option value="3">Learning [3]</option>
+              <option value="4">Learning [4]</option>
+              <option value="5">Learned [5]</option>
+              <option value="99">Well Known [WKn]</option>
+              <option value="98">Ignored [Ign]</option>
+            </select>
+            <img
+              src="icn/status-busy.png"
+              title="Field must not be empty"
+              alt="Field must not be empty"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="td1 center" colspan="2">
+            <span class="red2"
+              >A DATABASE <input type="button" value="BACKUP"
+              selectedlocation.href='backup_restore.php';" /> MAY BE
+              ADVISABLE!<br />PLEASE DOUBLE-CHECK EVERYTHING!</span
+            ><br /><input type="button" value="<< Back"
+            selectedlocation.href='index.php';" /> &nbsp; &nbsp; &nbsp; | &nbsp;
+            &nbsp; &nbsp;
+            <input type="submit" name="op" value="Import" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <p>
+    Sentences should contain the term in curly brackets "... {term} ...".<br />
+    If not, such sentences can be automatically created later with the
+    <br />"Set Term Sentences" action in the <input type="button" value="My
+    Texts" selectedlocation.href='edit_texts.php?query=&amp;page=1';" /> screen.
+  </p>
+</body>

@@ -1,0 +1,31 @@
+- differentiate 'legacy' & 'extended'
+- be able to have images in texts?
+- auto read pdf (if has outline)
+- React Native implementation? instead of 'mobile mode'
+- parse text from url
+- edit & add new are basically same form just prepopulated?
+- - wizard is different - maybe by passing through header/row implementation as component prop?
+- -
+- term conjugation/declension/etc
+- - term/baseTerm?
+- routerbar?
+- reliable way of handling redirects
+- customizable styles
+- tests that compare to original php?
+- have an interface to change db backend?
+- filter component
+-
+
+---
+
+PORT:
+
+- read text
+- export backup
+- start in request for read text
+- figure out frames/suitable alternative
+- sortable tables
+- pagination
+- annotate
+
+---

@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "experimentalDecorators": true,
       "outDir": "./dist/",
       "noImplicitAny": true,
       "module": "Commonjs",
@@ -7,6 +8,8 @@
       "jsx": "react",
       "allowJs": true,
       "moduleResolution": "node",
-      "esModuleInterop": true
+      "strictNullChecks": true,
+      "esModuleInterop": true,
+      "downlevelIteration": true,
     }
   }
