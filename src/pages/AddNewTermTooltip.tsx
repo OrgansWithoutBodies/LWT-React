@@ -209,6 +209,7 @@ export function KnownTermLines({ word }: { word: Words }): JSX.Element {
     </>
   );
 }
+// TODO why not working
 export function AddNewTermTooltip({
   word,
   sentence,

@@ -1,3 +1,5 @@
+import { AddNewLanguageType } from './parseMySqlDump';
+
 // TODO get langs from csv/google sheet?
 export type LangDef = {
   LgGlosbeKey: string;
@@ -477,3 +479,17 @@ export const LANGDEFS: Record<typeof LANGS[number], LangDef> = {
     LgRightToLeft: false,
   },
 };
+function WizardDataToNewLanguageData(
+  lang: typeof LANGS[number]
+): AddNewLanguageType {
+  const wizardData: LangDef = LANGDEFS[lang];
+  return {
+    ...wizardData,
+    LgRemoveSpaces: wizardData.LgRemoveSpaces === false ? 0 : 1,
+    LgSplitEachChar: wizardData.LgSplitEachChar === false ? 0 : 1,
+    LgRightToLeft: wizardData.LgRightToLeft === false ? 0 : 1,
+    LgName: lang,
+    LgExceptionsSplitSentences: wizardData.LgRegexpSplitSentences,
+    LgCharacterSubstitutions: '',
+  };
+}

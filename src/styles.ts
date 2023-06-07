@@ -87,12 +87,13 @@ const DarkColors: ColorSchema = {
   lum6: '#000000',
 
   //   value colors
-  str0: '#ADDFFF',
-  str1: '#F5B8A9',
-  str2: '#F5CCA9',
-  str3: '#F5E1A9',
-  str4: '#F5F3A9',
-  str5: '#A9F5A9',
+
+  str0: '#004ED2',
+  str1: '#B200DB',
+  str2: '#D31700',
+  str3: '#FF7900',
+  str4: '#6BC837',
+  str5: '#117433',
 
   //   right/wrong
   right: '#006400',
@@ -189,7 +190,7 @@ export const createColors = (variant: StyleVariant): CSSObject => {
     },
     'span.status98': {
       backgroundColor: Colors.lum5,
-      borderBottom: `dashed 1px ${Colors.test0}`,
+      borderBottom: `dashed 1px ${Colors.test10}`,
       color: Colors.lum0,
     },
     'span.mwsty': {
@@ -540,6 +541,81 @@ Additional styles for printing
       '#print': {
         fontSize: '75%',
       },
+    },
+    /*************************************************************
+Split View
+***************************************************************/
+    '.Resizer': {
+      position: 'relative',
+      background: 'darkGray',
+      '-moz-box-sizing': 'border-box',
+      '-webkit-box-sizing': 'border-box',
+      'box-sizing': 'border-box',
+      '-moz-background-clip': 'padding',
+      '-webkit-background-clip': 'padding',
+      'background-clip': 'padding-box',
+    },
+
+    /*
+  .Resizer:hover,
+  .Resizer:active {
+	-webkit-transition: all 2s ease,
+	transition: all 2s ease,
+  }*/
+
+    '.Resizer.horizontal': {
+      height: '20px',
+      margin: '-5px 0',
+      'border-top': '5px solid rgba(255, 255, 255, 0)',
+      'border-bottom': '5px solid rgba(255, 255, 255, 0)',
+      cursor: 'row-resize',
+      width: '100%',
+    },
+    /*   
+  .Resizer.horizontal:hover,
+  .Resizer.Resizer.horizontal:active {
+	border-top: 5px solid rgba(0, 0, 0, 0.5),
+	border-bottom: 5px solid rgba(0, 0, 0, 0.5),
+  }
+   */
+    '.Resizer.vertical': {
+      width: '20px',
+      margin: '0 -5px',
+      'border-left': '5px solid rgba(255, 255, 255, 0)',
+      'border-right': '5px solid rgba(255, 255, 255, 0)',
+      cursor: 'col-resize',
+    },
+
+    /*
+  .Resizer.vertical:hover,
+  .Resizer.vertical:active {
+	border-left: 5px solid rgba(0, 0, 0, 0.5),
+	border-right: 5px solid rgba(0, 0, 0, 0.5),
+  }
+  */
+
+    '.Resizer.disabled': {
+      cursor: 'notAllowed',
+    },
+    // '.Resizer.disabled':hover,
+    '.Resizer.disabled:active': {
+      borderColor: 'transparent',
+    },
+
+    // '.Resizer::after',
+    '.Resizer::before': {
+      content: '',
+      'border-left': '1px solid #333',
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-100%)',
+      right: 0,
+      display: 'inline-block',
+      height: '20px',
+      margin: '0 2px',
+    },
+    ' .Resizer::before': {
+      left: 0,
     },
   };
 };

@@ -9,11 +9,8 @@ import {
   TRefMap,
 } from './Forms';
 import { RequiredLineButton } from '../Icon';
-import {
-  AddNewWordType,
-  AddNewWordValidator,
-  dataService,
-} from '../data/data.service';
+import { dataService } from '../data/data.service';
+import { AddNewWordType, AddNewWordValidator } from '../data/parseMySqlDump';
 
 let STATUSES = {
   1: { abbr: '1', name: 'Learning' },

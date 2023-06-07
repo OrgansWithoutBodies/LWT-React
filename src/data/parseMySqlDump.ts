@@ -1,4 +1,5 @@
 // INSERT INTO {} VALUES(...{}...)
+import * as ss from 'superstruct';
 
 import {
   ArchivedTextsValidator,
@@ -39,3 +40,21 @@ export type Words = typeof WordsValidator.TYPE;
 export type WordsNoId = typeof WordsValidatorNoId.TYPE;
 
 export type WordTags = typeof WordTagsValidator.TYPE;
+
+export const AddNewWordValidator = ss.omit(WordsValidatorNoId, [
+  'WoStatusChanged',
+  'WoTodayScore',
+  'WoTomorrowScore',
+  'WoRandom',
+]);
+export type AddNewWordType = typeof AddNewWordValidator.TYPE;
+
+export const AddNewTextValidator = ss.omit(TextsValidatorNoId, [
+  'TxAnnotatedText',
+]);
+export type AddNewTextType = typeof AddNewTextValidator.TYPE;
+
+export const AddNewLanguageValidator = ss.omit(LanguagesValidatorNoId, []);
+export type AddNewLanguageType = typeof AddNewLanguageValidator.TYPE;
+
+// TODO tsoa to generate openapi from these schemas?

@@ -1,5 +1,6 @@
 import React from 'react';
-import { AddNewTextValidator, dataService } from '../data/data.service';
+import { dataService } from '../data/data.service';
+import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { RequiredLineButton } from '../Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';

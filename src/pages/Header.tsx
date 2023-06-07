@@ -12,15 +12,18 @@ export function Header({
   link?: string;
   readerIcons?: boolean;
 }) {
+  const logoSize = 48;
   return (
     <>
       <h4>
         <a href={link} target="_top">
           <img
             className="lwtlogo"
-            src="img/lwt_icon.png"
+            src="img/lwt_icon.svg"
             title="LWT - Current Table Set: Default Table Set"
             alt="LWT - Current Table Set: Default Table Set"
+            width={logoSize}
+            height={logoSize}
           />
           LWT
         </a>

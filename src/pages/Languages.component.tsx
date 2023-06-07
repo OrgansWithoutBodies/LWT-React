@@ -19,7 +19,6 @@ function LanguageLine({
   terms: Words[];
   archivedtexts: ArchivedTexts[];
 }): JSX.Element {
-  // TODO dedupe id field
   const id = language.LgID;
   const thisRowActive = activeLanguageId === id;
   const numTextsThisLanguage = texts.filter(

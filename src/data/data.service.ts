@@ -1,32 +1,15 @@
 import { StrengthMap } from '../pages/AddNewTermTooltip';
 import { dataStore, DataStore } from './data.storage';
-import * as ss from 'superstruct';
 
-import { LanguageNoId, Words } from './parseMySqlDump';
-import { TermStrengthOrUnknown } from './type';
 import {
-  LanguagesId,
-  Tags2Id,
-  TagsId,
-  TextsId,
-  TextsValidatorNoId,
-  WordsId,
-  WordsValidatorNoId,
-} from './validators';
+  AddNewTextType,
+  AddNewWordType,
+  LanguageNoId,
+  Words,
+} from './parseMySqlDump';
+import { TermStrengthOrUnknown } from './type';
+import { LanguagesId, Tags2Id, TagsId, TextsId, WordsId } from './validators';
 type LongTextForm = {};
-
-export const AddNewWordValidator = ss.omit(WordsValidatorNoId, [
-  'WoStatusChanged',
-  'WoTodayScore',
-  'WoTomorrowScore',
-  'WoRandom',
-]);
-export type AddNewWordType = typeof AddNewWordValidator.TYPE;
-
-export const AddNewTextValidator = ss.omit(TextsValidatorNoId, [
-  'TxAnnotatedText',
-]);
-export type AddNewTextType = typeof AddNewTextValidator.TYPE;
 
 function IDIsUnique<TBrand extends number>(
   id: number,

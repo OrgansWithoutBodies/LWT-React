@@ -1,5 +1,5 @@
 import { Query } from '@datorama/akita';
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, count, map, Observable } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
 import { TextsId } from './validators';
 const MINS_IN_SECONDS = 60;
@@ -23,6 +23,19 @@ export class DataQuery extends Query<DataState> {
   public texttags = this.select('texttags');
   public words = this.select('words');
   public wordtags = this.select('wordtags');
+
+  // public archivedtextsLen = this.archivedtexts.pipe(count());
+  // public archtexttagsLen = this.archtexttags.pipe(count());
+  // public languagesLen = this.languages.pipe(count());
+  // public sentencesLen = this.sentences.pipe(count());
+  // public settingsLen = this.settings.pipe(count());
+  // public tagsLen = this.tags.pipe(count());
+  // public tags2Len = this.tags2.pipe(count());
+  // public textitemsLen = this.textitems.pipe(count());
+  // public textsLen = this.texts.pipe(count());
+  // public texttagsLen = this.texttags.pipe(count());
+  // public wordsLen = this.words.pipe(count());
+  // public wordtagsLen = this.wordtags.pipe(count());
 
   public activeLanguageId = this.select('activeLanguageId');
 

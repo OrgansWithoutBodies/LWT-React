@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useData } from '../data/useAkita';
 import { Header } from './Header';
+// import { Gunzip } from 'browserify-zlib';
 
+export function RestoreFromBackup(
+  backupFile: React.MutableRefObject<HTMLInputElement>
+): void {
+  const reader = new FileReader();
+  const { files } = backupFile.current;
+  if (files) {
+    const buffer: string[] = [];
+    reader.onload = async (e) => {
+      const text = e.target.result;
+      // Gunzip.ungzip(text, function (err, dezipped) {
+      //   console.log(dezipped.toString());
+      // });
+      //     // decompression chunk ready, add it to the buffer
+      //     buffer.push(data.toString());
+      //   })
+      //   .on('end', function () {
+      //     // response and decompression complete, join the buffer and return
+      //     console.log(buffer.join(''));
+      //   }).
+
+      // console.log(text);
+      // alert(text);
+    };
+    const text = reader.readAsText(files[0]);
+    console.log('TEST123', text);
+  }
+}
 export function BackupScreen(): JSX.Element {
   const [
     ,
     { downloadBackup, restoreFromBackup, emptyDatabase, installDemoDatabase },
   ] = useData([]);
+  const restoreBackup = useRef();
   return (
     <>
       <body>
@@ -39,7 +68,7 @@ export function BackupScreen(): JSX.Element {
                     &nbsp;
                     <br />
                     <input
-                      type="submit"
+                      type="button"
                       name="backup"
                       value="Download LWT Backup"
                     />
@@ -69,7 +98,7 @@ export function BackupScreen(): JSX.Element {
                     </span>
                   </p>
                   <p>
-                    <input name="thefile" type="file" />
+                    <input name="thefile" type="file" ref={restoreBackup} />
                   </p>
                   <p className="right">
                     &nbsp;
@@ -78,9 +107,10 @@ export function BackupScreen(): JSX.Element {
                       YOU MAY LOSE DATA - BE CAREFUL: &nbsp; &nbsp; &nbsp;
                     </span>
                     <input
-                      type="submit"
+                      type="button"
                       name="restore"
                       value="Restore from LWT Backup"
+                      onClick={() => RestoreFromBackup(restoreBackup)}
                     />
                   </p>
                 </td>

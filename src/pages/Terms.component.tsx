@@ -356,6 +356,7 @@ function TermLine({ word }: { word: Words }): JSX.Element {
     </tr>
   );
 }
+// TODO "New New Term? - Set Language Filter first "
 export function Terms(): JSX.Element {
   const [{ activeWords }] = useData(['activeWords']);
 

@@ -62,7 +62,7 @@ export function NewLanguage() {
                 <br />
                 <span className="smallgray">
                   Select your native (L1) and study (L2) languages, and let the
-                  wizard set all language settings marked in yellow!
+                  wizard set all marked language settings!
                   <br />
                   (You can adjust the settings afterwards.)
                 </span>
