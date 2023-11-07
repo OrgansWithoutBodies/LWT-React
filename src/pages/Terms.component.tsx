@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { Icon } from '../Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
   return (
     <select
       name="tag1"
-      // onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_words.php?page=1&amp;tag1=' + val;}"
+      // onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_words?page=1&amp;tag1=' + val;}"
     >
       <option value="" selected>
         [Filter off]
@@ -77,7 +77,7 @@ export function TermsFilterBox({
             <input
               type="button"
               value="Reset All"
-              // onClick="resetAll('edit_words.php');"
+              // onClick="resetAll('edit_words');"
             />
           </th>
         </tr>
@@ -90,7 +90,7 @@ export function TermsFilterBox({
             Text:
             <select
               name="text"
-              // onChange="{val=document.form1.text.options[document.form1.text.selectedIndex].value; location.href='edit_words.php?page=1&amp;text=' + val;}"
+              // onChange="{val=document.form1.text.options[document.form1.text.selectedIndex].value; location.href='edit_words?page=1&amp;text=' + val;}"
             >
               <option value="" selected>
                 [Filter off]
@@ -107,7 +107,7 @@ export function TermsFilterBox({
             Status:
             <select
               name="status"
-              // onChange="{val=document.form1.status.options[document.form1.status.selectedIndex].value; location.href='edit_words.php?page=1&amp;status=' + val;}"
+              // onChange="{val=document.form1.status.options[document.form1.status.selectedIndex].value; location.href='edit_words?page=1&amp;status=' + val;}"
             >
               <option value="" selected>
                 [Filter off]
@@ -146,13 +146,13 @@ export function TermsFilterBox({
               type="button"
               name="querybutton"
               value="Filter"
-              // onClick="{val=document.form1.query.value; location.href='edit_words.php?page=1&amp;query=' + val;}"
+              // onClick="{val=document.form1.query.value; location.href='edit_words?page=1&amp;query=' + val;}"
             />
             &nbsp;
             <input
               type="button"
               value="Clear"
-              // onClick="{location.href='edit_words.php?page=1&amp;query=';}"
+              // onClick="{location.href='edit_words?page=1&amp;query=';}"
             />
           </td>
         </tr>
@@ -167,7 +167,7 @@ export function TermsFilterBox({
             Tag #1 ..
             <select
               name="tag12"
-              // onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_words.php?page=1&amp;tag12=' + val;}"
+              // onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_words?page=1&amp;tag12=' + val;}"
             >
               <option value="0">... OR ...</option>
               <option value="1">... AND ...</option>
@@ -194,7 +194,7 @@ export function TermsFilterBox({
             &nbsp; Page
             <select
               name="page1"
-              // onChange="{val=document.form1.page1.options[document.form1.page1.selectedIndex].value; location.href='edit_words.php?page=' + val;}"
+              // onChange="{val=document.form1.page1.options[document.form1.page1.selectedIndex].value; location.href='edit_words?page=' + val;}"
             >
               {[...new Array(numPages).keys()].map((pageNumber) => {
                 const isSelected = currentPage === pageNumber + 1;
@@ -206,11 +206,11 @@ export function TermsFilterBox({
               })}
             </select>
             of {numPages}&nbsp;
-            <a href="edit_words.php?page=2">
+            <a href="edit_words?page=2">
               <Icon iconName="control" title="Next Page" alt="Next Page" />
             </a>
             &nbsp;
-            <a href="edit_words.php?page=53">
+            <a href="edit_words?page=53">
               <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
             </a>
             &nbsp; &nbsp;
@@ -220,7 +220,7 @@ export function TermsFilterBox({
             Sort Order:
             <select
               name="sort"
-              // onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_words.php?page=1&amp;sort=' + val;}"
+              // onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_words?page=1&amp;sort=' + val;}"
             >
               <option value="1">Term A-Z</option>
               <option value="2">Translation A-Z</option>
@@ -275,11 +275,11 @@ export function TermsFooter({ numTerms }: { numTerms: number }): JSX.Element {
               })}
             </select>
             of {numPages}&nbsp;
-            <a href={`edit_words.php?page=${currentPage + 1}`}>
+            <a href={`edit_words?page=${currentPage + 1}`}>
               <Icon iconName="control" title="Next Page" alt="Next Page" />
             </a>
             &nbsp;
-            <a href={`edit_words.php?page=${numPages}`}>
+            <a href={`edit_words?page=${numPages}`}>
               <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
             </a>
             &nbsp; &nbsp;
@@ -306,7 +306,7 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       <td className="td1 center">
         {/* nowrap="nowrap" */}
         &nbsp;
-        <a href="/edit_words.php?chg=19517">
+        <a href="/edit_words?chg=19517">
           <Icon iconName="sticky-note--pencil" title="Edit" alt="Edit" />
         </a>
         &nbsp;

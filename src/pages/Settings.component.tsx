@@ -1,6 +1,5 @@
-import React from 'react';
-import { useData } from '../data/useAkita';
 import { RequiredLineButton } from '../Icon';
+import { useData } from '../data/useAkita';
 import { Header } from './Header';
 
 // TODO abstract this out into a nested settings component
@@ -10,7 +9,7 @@ export function SettingsComponent(): JSX.Element {
     <>
       <Header title="Settings/Preferences" />
       <p>&nbsp;</p>
-      <form className="validate" action="/settings.php" method="post">
+      <form className="validate" action="/settings" method="post">
         <table className="tab3" cellSpacing="0" cellPadding={5}>
           <tbody>
             <tr>
@@ -491,13 +490,13 @@ export function SettingsComponent(): JSX.Element {
                 <input
                   type="button"
                   value="<< Back"
-                  // onClick="{resetDirty(); location.href='index.php';}"
+                  // onClick="{resetDirty(); location.href='index';}"
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input
                   type="button"
                   value="Reset all settings to default"
-                  // onClick="{resetDirty(); location.href='settings.php?op=reset';}"
+                  // onClick="{resetDirty(); location.href='settings?op=reset';}"
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input type="submit" name="op" value="Save" />

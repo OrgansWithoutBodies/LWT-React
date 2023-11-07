@@ -1,17 +1,14 @@
-import React, { RefObject, useRef } from 'react';
-import * as ss from 'superstruct';
+import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Languages } from '../data/parseMySqlDump';
-import { LanguagesValidator, LanguagesValidatorNoId } from '../data/validators';
-import { LangDef } from '../data/wizardData';
+import { LanguagesValidatorNoId } from '../data/validators';
 import {
-  RefMap,
   CheckAndSubmit,
+  RefMap,
+  ResetForm,
   emptyToNullMap,
   parseNumMap,
-  ResetForm,
 } from './Forms';
-import { Icon, RequiredLineButton } from '../Icon';
 // TODO table component?
 // TODO map LangDef to Languages
 type LanguageNoId = Omit<Languages, 'LgID'>;
@@ -51,10 +48,10 @@ export function NewLanguage() {
                   alt="Language Settings Wizard"
                   className="click"
                 />
-                {/* onClick="window.open('select_lang_pair.php', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
+                {/* onClick="window.open('select_lang_pair', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
                 <br />
                 <span className="click">
-                  {/* click="window.open('select_lang_pair.php', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
+                  {/* click="window.open('select_lang_pair', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
                   <Icon iconName="arrow-000-medium" title="->" alt="->" />
                   <b>Language Settings Wizard</b>
                   <Icon iconName="arrow-180-medium" title="<-" alt="<-" />
@@ -290,7 +287,7 @@ export function NewLanguage() {
                   value="Cancel"
                   onClick={() => ResetForm(refMap)}
                 />
-                {/* onClick="{resetDirty(); location.href='edit_languages.php';}" */}
+                {/* onClick="{resetDirty(); location.href='edit_languages';}" */}
                 <input
                   type="button"
                   name="op"

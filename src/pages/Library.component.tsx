@@ -1,8 +1,7 @@
-import React from 'react';
+import { Icon } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { Icon } from '../Icon';
 import { Header } from './Header';
 
 export function MultiActions() {
@@ -126,11 +125,11 @@ function LibraryFooter({ numTexts }: { numTexts: number }): JSX.Element {
               <option value="2">2</option>
             </select>
             {/* selected="selected" of 2&nbsp; */}
-            <a href="edit_texts.php?page=2">
+            <a href="edit_texts?page=2">
               <Icon iconName="control" title="Next Page" alt="Next Page" />
             </a>
             &nbsp;
-            <a href="edit_texts.php?page=2">
+            <a href="edit_texts?page=2">
               <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
             </a>
             &nbsp; &nbsp;
@@ -157,11 +156,11 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
       <td className="td1 center">
         {/* nowrap="nowrap" */}
         &nbsp;
-        <a href="do_text.php?start=2">
+        <a href="do_text?start=2">
           <Icon iconName="book-open-bookmark" title="Read" alt="Read" />
         </a>
         &nbsp;
-        <a href="do_test.php?text=2">
+        <a href="do_test?text=2">
           <Icon iconName="question-balloon" title="Test" alt="Test" />
         </a>
         &nbsp;
@@ -169,15 +168,15 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
       <td className="td1 center">
         {/* nowrap="nowrap" */}
         &nbsp;
-        <a href="print_text.php?text=30">
+        <a href="print_text?text=30">
           <Icon iconName="printer" title="Print" alt="Print" />
         </a>
         &nbsp;
-        <a href="/edit_texts.php?arch=30">
+        <a href="/edit_texts?arch=30">
           <Icon iconName="inbox-download" title="Archive" alt="Archive" />
         </a>
         &nbsp;
-        <a href="/edit_texts.php?chg=30">
+        <a href="/edit_texts?chg=30">
           <Icon iconName="document--pencil" title="Edit" alt="Edit" />
         </a>
         &nbsp;

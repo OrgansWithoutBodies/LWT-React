@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { ArchivedTexts, Languages, Texts, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
-import { Icon } from '../Icon';
 import { Header } from './Header';
 
 function LanguageLine({
@@ -34,7 +33,7 @@ function LanguageLine({
     <tr>
       <td className="td1 center">
         <a
-        // href="save_setting_redirect.php?k=currentlanguage&amp;v=2&amp;u=edit_languages.php"
+        // href="save_setting_redirect?k=currentlanguage&amp;v=2&amp;u=edit_languages"
         >
           <Icon
             onClick={() => {
@@ -49,28 +48,28 @@ function LanguageLine({
         </a>
       </td>
       <td className="td1 center">
-        <a href={`do_test.php?lang=${id}`}>
+        <a href={`do_test?lang=${id}`}>
           <Icon iconName={'question-balloon'} title="Test" alt="Test" />
         </a>
       </td>
       <td className="td1 center">
         &nbsp;
-        <a href={`print_text.php?text=${id}`}>
+        <a href={`print_text?text=${id}`}>
           <Icon iconName="printer" title="Print" alt="Print" />
         </a>
         &nbsp;
-        <a href={`/edit_texts.php?arch=${id}`}>
+        <a href={`/edit_texts?arch=${id}`}>
           <Icon iconName="inbox-download" title="Archive" alt="Archive" />
         </a>
         &nbsp;
-        <a href={`/edit_texts.php?chg=${id}`}>
+        <a href={`/edit_texts?chg=${id}`}>
           <Icon iconName="document--pencil" title="Edit" alt="Edit" />
         </a>
         &nbsp;
         <span
           className="click"
           onClick={() => dataService.deleteLanguage(language.LgID)}
-          // onClick="if (confirmDelete()) location.href='/edit_texts.php?del=47';"
+          // onClick="if (confirmDelete()) location.href='/edit_texts?del=47';"
         >
           <Icon iconName="minus-button" title="Delete" alt="Delete" />
         </span>
@@ -78,11 +77,11 @@ function LanguageLine({
       </td>
       <td className="td1 center">{language.LgName}</td>
       <td className="td1 center">
-        <a href="edit_texts.php?page=1&amp;query=&amp;filterlang=2">
+        <a href="edit_texts?page=1&amp;query=&amp;filterlang=2">
           {numTextsThisLanguage}
         </a>
         &nbsp;&nbsp;
-        <a href="/edit_languages.php?refresh=2">
+        <a href="/edit_languages?refresh=2">
           <Icon
             iconName="lightning"
             title="Reparse Texts"
@@ -92,7 +91,7 @@ function LanguageLine({
       </td>
       <td className="td1 center">{numArchivedThisLanguage}</td>
       <td className="td1 center">
-        <a href="edit_words.php?page=1&amp;query=&amp;text=&amp;status=&amp;filterlang=2&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
+        <a href="edit_words?page=1&amp;query=&amp;text=&amp;status=&amp;filterlang=2&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
           {numTermsThisLanguage}
         </a>
       </td>
@@ -118,7 +117,7 @@ export function LanguagesPage(): JSX.Element {
     <>
       <Header title="My Languages" link={''} />
       <p>
-        <a href="/edit_languages.php?new=1">
+        <a href="/edit_languages?new=1">
           <Icon iconName="plus-button" title="New" alt="New" /> New Language ...
         </a>
       </p>

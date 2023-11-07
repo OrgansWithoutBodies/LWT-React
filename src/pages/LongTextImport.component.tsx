@@ -1,6 +1,5 @@
-import React from 'react';
+import { RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
-import { Icon, RequiredLineButton } from '../Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
 export default function ImportLongText(): JSX.Element {
@@ -13,7 +12,7 @@ export default function ImportLongText(): JSX.Element {
 
   return (
     <>
-      {/* <form enctype="multipart/form-data" className="validate" action="/long_text_import.php" method="post"> */}
+      {/* <form enctype="multipart/form-data" className="validate" action="/long_text_import" method="post"> */}
       <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
@@ -163,7 +162,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="button"
                 value="Cancel"
-                // onClick="{resetDirty(); location.href='index.php';}"
+                // onClick="{resetDirty(); location.href='index';}"
               />
               &nbsp; | &nbsp;
               <input
@@ -181,7 +180,7 @@ export default function ImportLongText(): JSX.Element {
 }
 
 {
-  /* <p class="smallgray">Import of a <b>single text</b>, max. 65,000 bytes long, with optional audio:</p><p><input type="button" value="Standard Text Import" onClick="location.href='edit_texts.php?new=1';"> </p>
+  /* <p class="smallgray">Import of a <b>single text</b>, max. 65,000 bytes long, with optional audio:</p><p><input type="button" value="Standard Text Import" onClick="location.href='edit_texts?new=1';"> </p>
 
 
 <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabIndex={0} style="display: none;"></ul> </>

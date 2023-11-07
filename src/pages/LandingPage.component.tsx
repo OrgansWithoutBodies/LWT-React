@@ -1,4 +1,3 @@
-import React, { useContext } from 'react';
 import { useData } from '../data/useAkita';
 import { useAppContext } from '../useContext';
 
@@ -34,46 +33,46 @@ export function LandingPage() {
 
         <ul>
           <li>
-            <a href="edit_texts.php">My Texts</a>
+            <a href="edit_texts">My Texts</a>
           </li>
           <li>
-            <a href="edit_archivedtexts.php">My Text Archive</a>
+            <a href="edit_archivedtexts">My Text Archive</a>
           </li>
           <li>
-            <a href="edit_texttags.php">My Text Tags</a> <br />
+            <a href="edit_texttags">My Text Tags</a> <br />
             <br />
           </li>
           <li>
-            <a href="edit_languages.php">My Languages</a> <br />
+            <a href="edit_languages">My Languages</a> <br />
             <br />
           </li>
           <li>
-            <a href="edit_words.php">My Terms (Words and Expressions)</a>
+            <a href="edit_words">My Terms (Words and Expressions)</a>
           </li>
           <li>
-            <a href="edit_tags.php">My Term Tags</a> <br />
+            <a href="edit_tags">My Term Tags</a> <br />
             <br />
           </li>
           <li>
-            <a href="statistics.php">My Statistics</a> <br />
+            <a href="statistics">My Statistics</a> <br />
             <br />
           </li>
           <li>
-            <a href="check_text.php">Check a Text</a>
+            <a href="check_text">Check a Text</a>
           </li>
           <li>
-            <a href="long_text_import.php">Long Text Import</a>
+            <a href="long_text_import">Long Text Import</a>
           </li>
           <li>
-            <a href="upload_words.php">Import Terms</a>
+            <a href="upload_words">Import Terms</a>
           </li>
           <li>
-            <a href="backup_restore.php">Backup/Restore/Empty Database</a>
+            <a href="backup_restore">Backup/Restore/Empty Database</a>
             <br />
             <br />
           </li>
           <li>
-            <a href="settings.php">Settings/Preferences</a>
+            <a href="settings">Settings/Preferences</a>
 
             <br />
             <br />
@@ -82,7 +81,7 @@ export function LandingPage() {
             <a href="info.htm">Help/Information</a>
           </li>
           <li>
-            <a href="mobile.php">Mobile LWT (Experimental)</a>
+            <a href="mobile">Mobile LWT (Experimental)</a>
           </li>
         </ul>
       </div>
@@ -137,7 +136,7 @@ export function LandingPage() {
                 <span
                   title="Manage Table Sets"
                   // TODO
-                  // onClick="location.href='table_set_management.php';"
+                  // onClick="location.href='table_set_management';"
                   className="click"
                 >
                   <i>Default</i> Table Set

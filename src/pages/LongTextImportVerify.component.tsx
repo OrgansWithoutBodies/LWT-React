@@ -1,4 +1,3 @@
-import React from 'react';
 import { Header } from './Header';
 import { byteSizeOfString } from './utils';
 
@@ -15,7 +14,7 @@ export function LongTextVerify(): JSX.Element {
       <p>&nbsp;</p>
       <form
         encType="multipart/form-data"
-        action="/long_text_import.php"
+        action="/long_text_import"
         method="post"
       >
         <input type="hidden" name="LgID" value="2" />
@@ -37,7 +36,7 @@ export function LongTextVerify(): JSX.Element {
                 <input
                   type="button"
                   value="Cancel"
-                  // onClick="{resetDirty(); location.href='index.php';}"
+                  // onClick="{resetDirty(); location.href='index';}"
                 />
                 &nbsp; | &nbsp;
                 <input

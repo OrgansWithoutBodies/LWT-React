@@ -1,4 +1,3 @@
-import React from 'react';
 import { Icon } from '../Icon';
 
 export function Header({
@@ -49,7 +48,7 @@ export function Header({
         {readerIcons && (
           <>
             &nbsp; | &nbsp;
-            <a href="do_text.php?start=2" target="_top">
+            <a href="do_text?start=2" target="_top">
               <Icon
                 iconName="navigation-180-button"
                 // TODO
@@ -57,7 +56,7 @@ export function Header({
                 alt="Previous Text: The Man and the Dog (annotated version)"
               />
             </a>
-            <a href="do_text.php?start=14" target="_top">
+            <a href="do_text?start=14" target="_top">
               <Icon
                 iconName="navigation-000-button"
                 // TODO
@@ -66,15 +65,15 @@ export function Header({
               />
             </a>
             &nbsp; | &nbsp;
-            <a href="do_test.php?text=11" target="_top">
+            <a href="do_test?text=11" target="_top">
               <Icon iconName="question-balloon" title="Test" alt="Test" />
             </a>
             &nbsp;
-            <a href="print_text.php?text=11" target="_top">
+            <a href="print_text?text=11" target="_top">
               <Icon iconName="printer" title="Print" alt="Print" />
               &nbsp;
             </a>
-            <a target="_top" href="edit_texts.php?chg=11">
+            <a target="_top" href="edit_texts?chg=11">
               <Icon
                 iconName="document--pencil"
                 title="Edit Text"
@@ -82,7 +81,7 @@ export function Header({
               />
             </a>
             &nbsp; | &nbsp;
-            <a href="new_word.php?text=11&amp;lang=2" target="ro">
+            <a href="new_word?text=11&amp;lang=2" target="ro">
               <Icon
                 iconName="sticky-note--plus"
                 title="New Term"

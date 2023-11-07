@@ -1,11 +1,7 @@
 import React from 'react';
 import { dataService } from '../data/data.service';
 import { Languages, Words } from '../data/parseMySqlDump';
-import {
-  TermStrength,
-  TermStrengthOrUnknown,
-  TermStrengths,
-} from '../data/type';
+import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { usePopoverContext } from './Tooltip';
 type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
@@ -42,7 +38,7 @@ function ExpressionsLines({
       Expr:
       {expressions.map((expressions, ii) => {
         return (
-          <a href="edit_mword.php?tid=44&amp;ord=55&amp;txt=这帮" target="ro">
+          <a href="edit_mword?tid=44&amp;ord=55&amp;txt=这帮" target="ro">
             {ii + 2}..{expressions}
           </a>
         );
@@ -136,7 +132,7 @@ function TermTooltipHeader({
                 {/* <!-- <font lucida="" grande",arial,sans-serif,stheiti,"arial="" unicode="" ms",mingliu"="" size={3} face="" color="#FFFFFF"> --> */}
                 <a
                   style={{ color: 'yellow' }}
-                  href="edit_word.php?tid=44&amp;ord=55&amp;wid=369"
+                  href="edit_word?tid=44&amp;ord=55&amp;wid=369"
                   target="ro"
                 >
                   {headerTitle} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -163,11 +159,11 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
         <br />▶ Unknown [?]
       </b>
       <br />
-      <a href="insert_word_wellknown.php?tid=44&amp;ord=1504" target="ro">
+      <a href="insert_word_wellknown?tid=44&amp;ord=1504" target="ro">
         I know this term well
       </a>
       <br />
-      <a href="insert_word_ignore.php?tid=44&amp;ord=1504" target="ro">
+      <a href="insert_word_ignore?tid=44&amp;ord=1504" target="ro">
         Ignore this term
       </a>
     </>
@@ -199,7 +195,7 @@ export function KnownTermLines({ word }: { word: Words }): JSX.Element {
         );
       })}
       <br />
-      <a href="edit_word.php?tid=44&amp;ord=55&amp;wid=369" target="ro">
+      <a href="edit_word?tid=44&amp;ord=55&amp;wid=369" target="ro">
         Edit term
       </a>
       |

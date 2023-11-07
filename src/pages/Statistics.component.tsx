@@ -1,4 +1,3 @@
-import React from 'react';
 import { Languages } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Header } from './Header';
@@ -98,24 +97,24 @@ export function StatisticsComponent(): JSX.Element {
                 <tr>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
-                    <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
                       <b>TODO</b>
                     </a>
                   </td>
                   <td className="td1 center">
-                    <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=15&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=15&amp;tag12=0&amp;tag2=&amp;tag1=">
                       <b>TODO</b>
                     </a>
                   </td>
                   <td className="td1 center">
-                    <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=14&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=14&amp;tag12=0&amp;tag2=&amp;tag1=">
                       <b>TODO</b>
                     </a>
                   </td>
                   <td className="td1 center">
                     <span className="status1">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=1&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=1&amp;tag12=0&amp;tag2=&amp;tag1=">
                         TODO
                       </a>
                       &nbsp;
@@ -124,7 +123,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status2">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=2&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=2&amp;tag12=0&amp;tag2=&amp;tag1=">
                         0
                       </a>
                       &nbsp;
@@ -133,7 +132,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status3">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=3&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=3&amp;tag12=0&amp;tag2=&amp;tag1=">
                         0
                       </a>
                       &nbsp;
@@ -142,7 +141,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status4">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=4&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=4&amp;tag12=0&amp;tag2=&amp;tag1=">
                         0
                       </a>
                       &nbsp;
@@ -151,7 +150,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status5">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=5&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=5&amp;tag12=0&amp;tag2=&amp;tag1=">
                         0
                       </a>
                       &nbsp;
@@ -160,7 +159,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status99">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=99&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=99&amp;tag12=0&amp;tag2=&amp;tag1=">
                         0
                       </a>
                       &nbsp;
@@ -169,7 +168,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status5stat">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=599&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=599&amp;tag12=0&amp;tag2=&amp;tag1=">
                         <b>0</b>
                       </a>
                       &nbsp;
@@ -178,7 +177,7 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1 center">
                     <span className="status98">
                       &nbsp;
-                      <a href="edit_words.php?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=98&amp;tag12=0&amp;tag2=&amp;tag1=">
+                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=98&amp;tag12=0&amp;tag2=&amp;tag1=">
                         <b>0</b>
                       </a>
                       &nbsp;
@@ -370,7 +369,7 @@ export function StatisticsComponent(): JSX.Element {
         <input
           type="button"
           value="<< Back"
-          // onClick="location.href='index.php';"
+          // onClick="location.href='index';"
         />
       </p>
     </>

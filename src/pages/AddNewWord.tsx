@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as ss from 'superstruct';
-import { LanguagesId, WordsValidatorNoId } from '../data/validators';
-import {
-  CheckAndSubmit,
-  parseNumMap,
-  RefMap,
-  ResetForm,
-  TRefMap,
-} from './Forms';
 import { RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { AddNewWordType, AddNewWordValidator } from '../data/parseMySqlDump';
+import { LanguagesId, WordsValidatorNoId } from '../data/validators';
+import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
 
 let STATUSES = {
   1: { abbr: '1', name: 'Learning' },
@@ -63,7 +57,7 @@ export function AddNewWord({
       <form
         name="newword"
         className="validate"
-        action="/edit_word.php"
+        action="/edit_word"
         method="post"
       >
         <input type="hidden" name="fromAnn" value="" />

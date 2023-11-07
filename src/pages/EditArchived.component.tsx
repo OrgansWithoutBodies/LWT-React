@@ -3,7 +3,7 @@ import { useData } from '../data/useAkita';
 import { Header } from './Header';
 // import { Gunzip } from 'browserify-zlib';
 
-export function RestoreFromBackup(
+export function EditArchivedTexts(
   backupFile: React.MutableRefObject<HTMLInputElement>
 ): void {
   const reader = new FileReader();
