@@ -26,9 +26,10 @@ export function LongTextVerify(): JSX.Element {
           <tbody>
             <tr>
               <td className="td1" colSpan={2}>
-                {/* TODO plural */}
-                This long text will be split into {shorterTexts.length} shorter
-                texts - as follows:
+                {shorterTexts.length > 1
+                  ? `This long text will be split into ${shorterTexts.length} shorter
+                texts - as follows:`
+                  : 'This text can fit as a single text'}
               </td>
             </tr>
             <tr>
@@ -36,13 +37,15 @@ export function LongTextVerify(): JSX.Element {
                 <input
                   type="button"
                   value="Cancel"
-                  // onClick="{resetDirty(); location.href='index';}"
+                  // TODO
+                  onClick="{resetDirty(); location.href='index';}"
                 />
                 &nbsp; | &nbsp;
                 <input
                   type="button"
                   value="Go Back"
-                  // onClick="{resetDirty(); history.back();}"
+                  // TODO
+                  onClick="{resetDirty(); history.back();}"
                 />
                 &nbsp; | &nbsp;
                 <input

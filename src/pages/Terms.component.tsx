@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { Header } from './Header';
 function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
   return (
     <select
       name="tag1"
-      // onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_words?page=1&amp;tag1=' + val;}"
+      onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_words?page=1&tag1=' + val;}"
     >
       <option value="" selected>
         [Filter off]
@@ -58,14 +59,16 @@ function TermsHeader(): JSX.Element {
 // TODO abstract out filterbox
 export function TermsFilterBox({
   numTerms,
+  currentPage,
 }: {
   numTerms: number;
+  currentPage: number;
 }): JSX.Element {
   const [{ languages, tags, texts }] = useData(['languages', 'tags', 'texts']);
+  const pageSize = 10;
   //   TODO
-  const numPages = Math.ceil(numTerms / 10);
-  const currentPage = 1;
-  const [filteredLanguage, setFilteredLanguage] = useState<number>();
+  const numPages = Math.ceil(numTerms / pageSize);
+  const navigate = useNavigate();
   return (
     <table className="tab1" cellSpacing="0" cellPadding={5}>
       <tbody>
@@ -77,7 +80,7 @@ export function TermsFilterBox({
             <input
               type="button"
               value="Reset All"
-              // onClick="resetAll('edit_words');"
+              onClick="resetAll('edit_words');"
             />
           </th>
         </tr>
@@ -90,7 +93,11 @@ export function TermsFilterBox({
             Text:
             <select
               name="text"
-              // onChange="{val=document.form1.text.options[document.form1.text.selectedIndex].value; location.href='edit_words?page=1&amp;text=' + val;}"
+              onChange={(event) => {
+                navigate(
+                  `/edit_words?page=${currentPage}&text=${event.target.value}`
+                );
+              }}
             >
               <option value="" selected>
                 [Filter off]
@@ -103,42 +110,53 @@ export function TermsFilterBox({
         </tr>
         <tr>
           <td className="td1 center" colSpan={2}>
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Status:
             <select
               name="status"
-              // onChange="{val=document.form1.status.options[document.form1.status.selectedIndex].value; location.href='edit_words?page=1&amp;status=' + val;}"
+              onChange={({ target: { value: selectedValue } }) => {
+                navigate(
+                  `/edit_words?page=${currentPage}&status=${selectedValue}`
+                );
+              }}
             >
               <option value="" selected>
                 [Filter off]
               </option>
-              <option value="1">Learning [1]</option>
-              <option value="2">Learning [2]</option>
-              <option value="3">Learning [3]</option>
-              <option value="4">Learning [4]</option>
-              <option value="5">Learned [5]</option>
+              {new Array(5).fill(0).map((_, ii) => {
+                const val = ii + 1;
+                return (
+                  <option value={val}>
+                    {val === 5 ? 'Learned' : 'Learning'} [{val}]
+                  </option>
+                );
+              })}
               <option value="99">Well Known [WKn]</option>
               <option value="98">Ignored [Ign]</option>
-              <option disabled>--------</option>
-              <option value="12">Learning [1..2]</option>
-              <option value="13">Learning [1..3]</option>
-              <option value="14">Learning [1..4]</option>
-              <option value="15">Learning/-ed [1..5]</option>
-              <option disabled>--------</option>
-              <option value="23">Learning [2..3]</option>
-              <option value="24">Learning [2..4]</option>
-              <option value="25">Learning/-ed [2..5]</option>
-              <option disabled>--------</option>
-              <option value="34">Learning [3..4]</option>
-              <option value="35">Learning/-ed [3..5]</option>
-              <option disabled>--------</option>
-              <option value="45">Learning/-ed [4..5]</option>
+              {new Array(4).fill(0).map((_, ii) => {
+                const val = ii + 1;
+                return (
+                  <>
+                    <option disabled>--------</option>
+                    {new Array(5 - val).fill(0).map((__, jj) => {
+                      const jVal = jj + 1;
+                      return (
+                        <option value={`${val}${jVal}`}>
+                          {val + jVal === 5 ? 'Learning/-ed' : 'Learning'} [
+                          {val}
+                          ..{val + jVal}]
+                        </option>
+                      );
+                    })}
+                  </>
+                );
+              })}
               <option disabled>--------</option>
               <option value="599">All known [5+WKn]</option>
             </select>
           </td>
           <td className="td1 center" colSpan={2}>
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Term, Rom., Transl. (Wildc.=*):
             <input type="text" name="query" value="" maxLength={50} size={15} />
             &nbsp;
@@ -146,28 +164,34 @@ export function TermsFilterBox({
               type="button"
               name="querybutton"
               value="Filter"
-              // onClick="{val=document.form1.query.value; location.href='edit_words?page=1&amp;query=' + val;}"
+              onChange={({ target: { value: selectedValue } }) => {
+                navigate(
+                  `/edit_words?page=${currentPage}&query=${selectedValue}`
+                );
+              }}
             />
             &nbsp;
             <input
               type="button"
               value="Clear"
-              // onClick="{location.href='edit_words?page=1&amp;query=';}"
+              onChange={() => {
+                navigate(`/edit_words?page=${currentPage}&query=`);
+              }}
             />
           </td>
         </tr>
         <tr>
           <td className="td1 center" colSpan={2}>
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Tag #1:
             <TagDropDown tags={tags} />
           </td>
           <td className="td1 center">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Tag #1 ..
             <select
               name="tag12"
-              // onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_words?page=1&amp;tag12=' + val;}"
+              onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_words?page=1&tag12=' + val;}"
             >
               <option value="0">... OR ...</option>
               <option value="1">... AND ...</option>
@@ -175,18 +199,18 @@ export function TermsFilterBox({
             .. Tag #2
           </td>
           <td className="td1 center">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Tag #2:
             <TagDropDown tags={tags} />
           </td>
         </tr>
         <tr>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             {numTerms} Terms
           </th>
           <th className="th1" colSpan={2}>
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             &nbsp; &nbsp;
             <Icon iconName="placeholder" alt="-" />
             &nbsp;
@@ -194,7 +218,7 @@ export function TermsFilterBox({
             &nbsp; Page
             <select
               name="page1"
-              // onChange="{val=document.form1.page1.options[document.form1.page1.selectedIndex].value; location.href='edit_words?page=' + val;}"
+              onChange="{val=document.form1.page1.options[document.form1.page1.selectedIndex].value; location.href='edit_words?page=' + val;}"
             >
               {[...new Array(numPages).keys()].map((pageNumber) => {
                 const isSelected = currentPage === pageNumber + 1;
@@ -216,11 +240,11 @@ export function TermsFilterBox({
             &nbsp; &nbsp;
           </th>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             Sort Order:
             <select
               name="sort"
-              // onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_words?page=1&amp;sort=' + val;}"
+              onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_words?page=1&sort=' + val;}"
             >
               <option value="1">Term A-Z</option>
               <option value="2">Translation A-Z</option>
@@ -239,20 +263,27 @@ export function TermsFilterBox({
   );
 }
 
-export function TermsFooter({ numTerms }: { numTerms: number }): JSX.Element {
-  const numPages = Math.ceil(numTerms / 10);
-  const [currentPage, setCurrentPage] = useState<number>(6);
+export function TermsFooter({
+  numTerms,
+  currentPage,
+}: {
+  numTerms: number;
+  currentPage: number;
+}): JSX.Element {
+  const pageSize = 10;
+  const numPages = Math.ceil(numTerms / pageSize);
+  const navigate = useNavigate();
   return (
     <table className="tab1" cellSpacing="0" cellPadding={5}>
       <tbody>
         <tr>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             {/* TODO plural */}
             {numTerms} Terms
           </th>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             &nbsp; &nbsp;
             <Icon iconName="placeholder" alt="-" />
             &nbsp;
@@ -260,9 +291,9 @@ export function TermsFooter({ numTerms }: { numTerms: number }): JSX.Element {
             {/* TODO abstract this into a page dropdown component? */}
             &nbsp; Page
             <select
-              name="page2"
-              onChange={({ target }) =>
-                setCurrentPage(Number.parseInt(target.value, 10))
+              name={`page${currentPage}`}
+              onChange={({ target: { value } }) =>
+                navigate(`/edit_words?page=${value}`)
               }
             >
               {[...new Array(numPages).keys()].map((pageNumber) => {
@@ -290,23 +321,27 @@ export function TermsFooter({ numTerms }: { numTerms: number }): JSX.Element {
   );
 }
 function TermLine({ word }: { word: Words }): JSX.Element {
+  const termID = word.WoID;
+  // TODO
+  const sentence = word.WoSentence;
+
   return (
     <tr>
       <td className="td1 center">
-        {/*a name="rec19517" */}
+        {/*a name="rec${termID}" */}
         <a>
           <input
             name="marked[]"
             type="checkbox"
             className="markcheck"
-            value="19517"
+            value={termID}
           />
         </a>
       </td>
       <td className="td1 center">
-        {/* nowrap="nowrap" */}
+        {/* style={{whiteSpace:"nowrap"}} */}
         &nbsp;
-        <a href="/edit_words?chg=19517">
+        <a href={`/edit_words?chg=${termID}`}>
           <Icon iconName="sticky-note--pencil" title="Edit" alt="Edit" />
         </a>
         &nbsp;
@@ -321,7 +356,7 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       <td className="td1">
         <span>{word.WoText}</span> /
         <span
-          id="roman19517"
+          id={`roman${termID}`}
           className="edit_area clickedit"
           title="Click to edit..."
         >
@@ -330,7 +365,7 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       </td>
       <td className="td1">
         <span
-          id="trans19517"
+          id={`trans${termID}`}
           className="edit_area clickedit"
           title="Click to edit..."
         >
@@ -340,14 +375,18 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       </td>
       <td className="td1 center">
         <b>
-          <Icon iconName="status-busy" title="(No valid sentence)" alt="No" />
+          {sentence !== undefined ? (
+            <Icon iconName="status-busy" title={`${sentence}`} alt="Yes" />
+          ) : (
+            <Icon iconName="status-busy" title="(No valid sentence)" alt="No" />
+          )}
         </b>
       </td>
       <td className="td1 center" title="Learning">
         1/1
       </td>
       <td className="td1 center">
-        {/* nowrap="nowrap" */}
+        {/* style={{whiteSpace:"nowrap"}} */}
         <span className="scorered">
           0
           <Icon iconName="status-busy" title="Test today!" alt="Test today!" />
@@ -357,14 +396,20 @@ function TermLine({ word }: { word: Words }): JSX.Element {
   );
 }
 // TODO "New New Term? - Set Language Filter first "
-export function Terms(): JSX.Element {
-  const [{ activeWords }] = useData(['activeWords']);
+export function Terms({ pageNum }: { pageNum: number }): JSX.Element {
+  const [{ activeWords, activeLanguage }] = useData([
+    'activeWords',
+    'activeLanguage',
+  ]);
 
   return (
     <>
+      <Header
+        title={`My ${activeLanguage?.LgName} Terms (Words and Expressions)`}
+      />
       {activeWords && (
         <>
-          <TermsFilterBox numTerms={activeWords.length} />
+          <TermsFilterBox numTerms={activeWords.length} currentPage={pageNum} />
           <table className="sortable tab1">
             <TermsHeader />
             <tbody>
@@ -373,7 +418,7 @@ export function Terms(): JSX.Element {
               })}
             </tbody>
           </table>
-          <TermsFooter numTerms={activeWords.length} />
+          <TermsFooter numTerms={activeWords.length} currentPage={0} />
         </>
       )}
     </>

@@ -3,6 +3,7 @@ import * as ss from 'superstruct';
 import { RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { AddNewWordType, AddNewWordValidator } from '../data/parseMySqlDump';
+import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
 
@@ -33,14 +34,20 @@ type SetBoolean = (value: boolean) => void;
 export function AddNewWord({
   word,
   langId,
+  isEdit = false,
 }: {
   word?: string;
+  isEdit?: boolean;
   langId: LanguagesId;
 }): JSX.Element {
   // TODO reset form on new word
   // TODO verify dialog on change
   const validator = AddNewWordValidator;
   const refMap = RefMap<AddNewWordType>(validator);
+  const [{ languages }] = useData(['languages']);
+  // TODO hashmap here avoid lookup
+  const langString = languages.find((lang) => lang.LgID === langId)?.LgName;
+  console.log(languages, langId);
   const [FormState, setFormState] = useState<{
     [key in keyof AddNewWordType]?: any;
   }>({});
@@ -86,9 +93,13 @@ export function AddNewWord({
 
         <table className="tab2" cellSpacing="0" cellPadding={5}>
           <tbody>
+            <tr>
+              <td className="td1 right">Language:</td>
+              <td className="td1">{langString}</td>
+            </tr>
             <tr title="Only change uppercase/lowercase!">
               <td className="td1 right">
-                <b>New Term:</b>
+                <b>{isEdit ? 'Edit' : 'New'} Term:</b>
               </td>
               <td className="td1">
                 <input
@@ -98,6 +109,7 @@ export function AddNewWord({
                   name="WoText"
                   id="wordfield"
                   ref={refMap.WoText}
+                  value={word}
                   defaultValue={FormState.WoText}
                   onChange={() =>
                     CheckErrors('WoText', refMap, setFormErrorLine('WoText'))
@@ -134,7 +146,7 @@ export function AddNewWord({
                   rows={3}
                 ></textarea>
               </td>
-            </tr>{' '}
+            </tr>
             {FormErrors.WoTranslation && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
@@ -157,9 +169,9 @@ export function AddNewWord({
                     <input
                       type="text"
                       maxLength={20}
-                      // onChange={(event) =>
-                      //   // handleFormChange('WoTranslation', event.target.value)
-                      // }
+                      onChange={(event) =>
+                        handleFormChange('WoTranslation', event.target.value)
+                      }
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
                       autoComplete="off"
@@ -181,9 +193,9 @@ export function AddNewWord({
                   type="text"
                   className="checkoutsidebmp"
                   // data_info="Romanization"
-                  // onChange={(event) =>
-                  //   handleFormChange('WoRomanization', event.target.value)
-                  // }
+                  onChange={(event) =>
+                    handleFormChange('WoRomanization', event.target.value)
+                  }
                   name="WoRomanization"
                   ref={refMap.WoRomanization}
                   value={FormState.WoRomanization}
@@ -267,27 +279,29 @@ export function AddNewWord({
                 <script type="text/javascript"></script>
                 Lookup Term:
                 <a
+                  // TODO custom dict
                   href="https://dict.naver.com/linedict/zhendict/dict.html#/cnen/search?query=%E5%AE%AA"
                   target="ru"
                 >
                   Dict1
                 </a>
                 <a
-                  href="http://chinesedictionary.mobi/?handler=QueryWorddict&amp;mwdqb=%E5%AE%AA"
+                  // TODO custom dict
+                  href="http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=%E5%AE%AA"
                   target="ru"
                 >
                   Dict2
                 </a>
                 <span
                   className="click"
-                  // onClick="owin('http://translate.google.com/?ie=UTF-8&amp;sl=zh&amp;tl=en&amp;text=%E5%AE%AA');"
+                  onClick="owin('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=%E5%AE%AA');"
                 >
                   GTr
                 </span>
                 | Sent.:
                 <span
                   className="click"
-                  // onClick="translateSentence2('http://translate.google.com/?ie=UTF-8&amp;sl=zh&amp;tl=en&amp;text=###',document.forms[0].WoSentence);"
+                  onClick="translateSentence2('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=###',document.forms[0].WoSentence);"
                 >
                   GTr
                 </span>
@@ -313,7 +327,7 @@ export function AddNewWord({
       <div id="exsent">
         <span
           className="click"
-          // onClick="do_ajax_show_sentences(2, '宪', 'document.forms[\'newword\'].WoSentence');"
+          onClick="do_ajax_show_sentences(2, '宪', 'document.forms[\'newword\'].WoSentence');"
         >
           <img
             src="icn/sticky-notes-stack.png"

@@ -45,7 +45,7 @@ export function BackupScreen(): JSX.Element {
           encType="multipart/form-data"
           action="/backup_restore"
           method="post"
-          // onsubmit="return confirm('Are you sure?');"
+          onSubmit="return confirm('Are you sure?');"
         >
           <table className="tab1" cellSpacing="0" cellPadding={5}>
             <tbody>
@@ -170,7 +170,7 @@ export function BackupScreen(): JSX.Element {
                   <input
                     type="button"
                     value="<< Back"
-                    // onClick="location.href='index';"
+                    onClick="location.href='index';"
                   />
                 </td>
               </tr>

@@ -14,6 +14,7 @@ function CreateIconMap() {
                 }
             });
             var namesString = iconFiles.reduce(function (prev, current) { return prev + current; }, '');
+            // if its stupid but it works, then is it actually stupid?🤔
             var fileString = 'export const IconNameMap=[' + namesString + '] as const;';
             fs.writeFile(srcDirectoryRoot + '/index.ts', fileString, function (err) {
                 if (err) {

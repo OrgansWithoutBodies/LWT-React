@@ -1,18 +1,18 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import { LoremIpsum } from '../ui-kit/LoremIpsum';
 import {
-  ArchivedTexts,
   ArchTextTags,
+  ArchivedTexts,
   Languages,
   Sentences,
   Settings,
   Tags,
   Tags2,
   TextItems,
-  Texts,
   TextTags,
-  Words,
+  Texts,
   WordTags,
+  Words,
 } from './parseMySqlDump';
 import { LanguagesId, Tags2Id, TagsId, TextsId, WordsId } from './validators';
 
@@ -108,15 +108,15 @@ export function createInitialState(): DataState {
       {
         TxText: LoremIpsum(300),
         TxTitle: 'title test',
-        TxID: 0 as TextsId,
+        TxID: 2 as TextsId,
         TxLgID: 0 as LanguagesId,
         TxAnnotatedText: '',
       },
     ],
     texttags: [
-      { TtT2ID: 0 as Tags2Id, TtTxID: 0 as TextsId },
-      { TtT2ID: 1 as Tags2Id, TtTxID: 0 as TextsId },
-      { TtT2ID: 1 as Tags2Id, TtTxID: 0 as TextsId },
+      { TtT2ID: 0 as Tags2Id, TtTxID: 2 as TextsId },
+      { TtT2ID: 1 as Tags2Id, TtTxID: 2 as TextsId },
+      { TtT2ID: 1 as Tags2Id, TtTxID: 2 as TextsId },
     ],
     words: [
       {
@@ -156,8 +156,8 @@ export function createInitialState(): DataState {
         WoStatus: 3,
 
         WoLgID: 0 as LanguagesId,
-        WoRomanization: 'test',
-        WoSentence: 'test test test',
+        WoRomanization: 'testrom',
+        WoSentence: 'test test 123',
         WoTranslation: 'english',
         WoCreated: '',
         WoTextLC: '',
@@ -189,8 +189,7 @@ export function createInitialState(): DataState {
 
         WoLgID: 0 as LanguagesId,
         WoRomanization: 'test',
-        WoSentence: 'test test test',
-        WoTranslation: 'english',
+        WoTranslation: 'english1',
         WoCreated: '',
         WoTextLC: '',
         WoStatusChanged: '',
@@ -205,8 +204,7 @@ export function createInitialState(): DataState {
 
         WoLgID: 0 as LanguagesId,
         WoRomanization: 'test',
-        WoSentence: 'test test test',
-        WoTranslation: 'english',
+        WoTranslation: 'english123',
         WoCreated: '',
         WoTextLC: '',
         WoStatusChanged: '',
@@ -220,9 +218,9 @@ export function createInitialState(): DataState {
         WoStatus: 99,
 
         WoLgID: 0 as LanguagesId,
-        WoRomanization: 'test',
+        WoRomanization: 'testrom',
         WoSentence: 'test test test',
-        WoTranslation: 'english',
+        WoTranslation: 'english test',
         WoCreated: '',
         WoTextLC: '',
         WoStatusChanged: '',

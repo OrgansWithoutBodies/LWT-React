@@ -1,18 +1,11 @@
-import { FloatingPortal } from '@floating-ui/react';
-import React, { useState } from 'react';
-import { TermStrength } from '../data/type';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
-import { AddNewTermTooltip, StrengthMap } from './AddNewTermTooltip';
+import { AddNewTermTooltip } from './AddNewTermTooltip';
 import {
-  Dimension2D,
   Popover,
-  PopoverClose,
-  PopoverContent,
   PopoverBody,
-  PopoverHeading,
+  PopoverContent,
   PopoverTrigger,
-  Tooltip,
 } from './Tooltip';
 
 // TODO map color from termstrength type

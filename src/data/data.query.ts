@@ -24,6 +24,7 @@ export class DataQuery extends Query<DataState> {
   public words = this.select('words');
   public wordtags = this.select('wordtags');
 
+  public numArchivedTexts = this.archivedtexts.pipe(count());
   // public archivedtextsLen = this.archivedtexts.pipe(count());
   // public archtexttagsLen = this.archtexttags.pipe(count());
   // public languagesLen = this.languages.pipe(count());

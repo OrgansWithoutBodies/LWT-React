@@ -37,7 +37,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   name="set-text-h-frameheight-no-audio"
                   // data_info="Height of left top frame without audioplayer"
-                  value="140"
+                  value={140}
                   maxLength={3}
                   size={3}
                 />
@@ -392,7 +392,7 @@ export function SettingsComponent(): JSX.Element {
 
             <tr>
               <th className="th1 center" rowSpan={5}>
-                Text, Term &amp;
+                Text, Term &
                 <br />
                 Tag Tables
               </th>
@@ -490,13 +490,13 @@ export function SettingsComponent(): JSX.Element {
                 <input
                   type="button"
                   value="<< Back"
-                  // onClick="{resetDirty(); location.href='index';}"
+                  onClick="{resetDirty(); location.href='index';}"
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input
                   type="button"
                   value="Reset all settings to default"
-                  // onClick="{resetDirty(); location.href='settings?op=reset';}"
+                  onClick="{resetDirty(); location.href='settings?op=reset';}"
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input type="submit" name="op" value="Save" />

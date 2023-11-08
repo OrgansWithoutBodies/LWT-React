@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Languages } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Header } from './Header';
@@ -20,6 +21,15 @@ function CAKTable({ rows, map }: { rows: any; map: CAKMap }): JSX.Element {
 }
 export function StatisticsComponent(): JSX.Element {
   const [{ languages }] = useData(['languages']);
+
+  const periods = [
+    'Today',
+    'Yesterday',
+    'Last 7 d',
+    'Last 30 d',
+    'Last 365 d',
+    'All Time',
+  ];
   return (
     <>
       <Header title="My Statistics" />
@@ -92,97 +102,52 @@ export function StatisticsComponent(): JSX.Element {
             </th>
           </tr>
           {languages.map((language) => {
+            const statuses = [
+              //               15
+              // ,14
+              1, 2, 3, 4, 5, 99, 599, 98,
+            ];
+
             return (
               <>
                 <tr>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
-                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a
+                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
+                    >
                       <b>TODO</b>
                     </a>
                   </td>
                   <td className="td1 center">
-                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=15&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a
+                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                    >
                       <b>TODO</b>
                     </a>
                   </td>
                   <td className="td1 center">
-                    <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=14&amp;tag12=0&amp;tag2=&amp;tag1=">
+                    <a
+                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                    >
                       <b>TODO</b>
                     </a>
                   </td>
-                  <td className="td1 center">
-                    <span className="status1">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=1&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        TODO
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status2">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=2&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        0
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=3&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        0
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status4">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=4&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        0
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=5&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        0
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status99">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=99&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        0
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=599&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        <b>0</b>
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status98">
-                      &nbsp;
-                      <a href="edit_words?page=1&amp;text=&amp;query=&amp;filterlang=10&amp;status=98&amp;tag12=0&amp;tag2=&amp;tag1=">
-                        <b>0</b>
-                      </a>
-                      &nbsp;
-                    </span>
-                  </td>
+                  {statuses.map((statusVal) => {
+                    return (
+                      <td className="td1 center">
+                        <span className={`status${statusVal}`}>
+                          &nbsp;
+                          <a
+                            href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                          >
+                            TODO
+                          </a>
+                          &nbsp;
+                        </span>
+                      </td>
+                    );
+                  })}
                 </tr>
               </>
             );
@@ -202,44 +167,24 @@ export function StatisticsComponent(): JSX.Element {
             <th className="th1" rowSpan={2}>
               Language
             </th>
-            <th className="th1" colSpan={3}>
-              Today
-            </th>
-            <th className="th1" colSpan={3}>
-              Yesterday
-            </th>
-            <th className="th1" colSpan={3}>
-              Last 7 d
-            </th>
-            <th className="th1" colSpan={3}>
-              Last 30 d
-            </th>
-            <th className="th1" colSpan={3}>
-              Last 365 d
-            </th>
-            <th className="th1" colSpan={3}>
-              All Time
-            </th>
+            {periods.map((period) => {
+              return (
+                <th className="th1" colSpan={3}>
+                  {period}
+                </th>
+              );
+            })}
           </tr>
           <tr>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
-            <th className="th1">C</th>
-            <th className="th1">A</th>
-            <th className="th1">K</th>
+            {periods.map(() => {
+              return (
+                <>
+                  <th className="th1">C</th>
+                  <th className="th1">A</th>
+                  <th className="th1">K</th>
+                </>
+              );
+            })}
           </tr>
           {languages.map((language) => {
             return (
@@ -366,16 +311,33 @@ export function StatisticsComponent(): JSX.Element {
         </tbody>
       </table>
       <p>
-        <input
-          type="button"
-          value="<< Back"
-          // onClick="location.href='index';"
-        />
+        <NavigateButton buttonText={'<< Back'} navigateTo={RouterPage.HOME} />
       </p>
     </>
   );
 }
+enum RouterPage {
+  HOME = '/',
+}
+export function NavigateButton({
+  buttonText,
+  navigateTo,
+}: {
+  buttonText: string;
+  navigateTo: RouterPage;
+}) {
+  const navigate = useNavigate();
 
+  return (
+    <input
+      type="button"
+      value={buttonText}
+      onClick={() => {
+        navigate(navigateTo);
+      }}
+    />
+  );
+}
 // $ct = get_first_value('select count(WoID) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoStatus in (1,2,3,4,5,99) and cast(WoCreated as date) = curdate()');
 // $at = get_first_value('select count(WoID) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoStatus in (1,2,3,4,5,99) and cast(WoStatusChanged as date) = curdate()');
 // $kt = get_first_value('select count(WoID) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoStatus in (5,99) and cast(WoStatusChanged as date) = curdate()');

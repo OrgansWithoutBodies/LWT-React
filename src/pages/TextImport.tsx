@@ -1,4 +1,3 @@
-import React from 'react';
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -21,7 +20,7 @@ export function ImportShortText(): JSX.Element {
       <p>&nbsp;</p>
       <h4>
         New Text
-        <a target="_blank" href="info.htm#howtotext">
+        <a target="_blank" href="info#howtotext">
           <img src="icn/question-frame.png" title="Help" alt="Help" />
         </a>
       </h4>
@@ -139,7 +138,7 @@ export function ImportShortText(): JSX.Element {
                   [Directory ".../lwt/media" does not yet exist.] &nbsp; &nbsp;
                   <span
                     className="click"
-                    // onClick="do_ajax_update_media_select();"
+                    onClick="do_ajax_update_media_select();"
                   >
                     <img
                       src="icn/arrow-circle-135.png"

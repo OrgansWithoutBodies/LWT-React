@@ -33,7 +33,7 @@ function LanguageLine({
     <tr>
       <td className="td1 center">
         <a
-        // href="save_setting_redirect?k=currentlanguage&amp;v=2&amp;u=edit_languages"
+          href={`save_setting_redirect?k=${'currentlanguage'}&v=${2}&u=${'edit_languages'}`}
         >
           <Icon
             onClick={() => {
@@ -69,7 +69,7 @@ function LanguageLine({
         <span
           className="click"
           onClick={() => dataService.deleteLanguage(language.LgID)}
-          // onClick="if (confirmDelete()) location.href='/edit_texts?del=47';"
+          onClick={`if (confirmDelete()) location.href='/edit_texts?del=${47}';`}
         >
           <Icon iconName="minus-button" title="Delete" alt="Delete" />
         </span>
@@ -77,11 +77,11 @@ function LanguageLine({
       </td>
       <td className="td1 center">{language.LgName}</td>
       <td className="td1 center">
-        <a href="edit_texts?page=1&amp;query=&amp;filterlang=2">
+        <a href={`edit_texts?page=${1}&query=&filterlang=${2}`}>
           {numTextsThisLanguage}
         </a>
         &nbsp;&nbsp;
-        <a href="/edit_languages?refresh=2">
+        <a href={`/edit_languages?refresh=${2}`}>
           <Icon
             iconName="lightning"
             title="Reparse Texts"
@@ -91,7 +91,9 @@ function LanguageLine({
       </td>
       <td className="td1 center">{numArchivedThisLanguage}</td>
       <td className="td1 center">
-        <a href="edit_words?page=1&amp;query=&amp;text=&amp;status=&amp;filterlang=2&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=">
+        <a
+          href={`edit_words?page=${1}&query=&text=&status=&filterlang=${2}&status=&tag12=${0}&tag2=&tag1=`}
+        >
           {numTermsThisLanguage}
         </a>
       </td>
@@ -117,7 +119,7 @@ export function LanguagesPage(): JSX.Element {
     <>
       <Header title="My Languages" link={''} />
       <p>
-        <a href="/edit_languages?new=1">
+        <a href={`/edit_languages?new=${1}`}>
           <Icon iconName="plus-button" title="New" alt="New" /> New Language ...
         </a>
       </p>

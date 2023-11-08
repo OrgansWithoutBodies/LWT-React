@@ -61,7 +61,7 @@ function LibraryHeader(): JSX.Element {
         <th className="th1 sorttable_nosort">
           Read
           <br />
-          &amp;&nbsp;Test
+          &&nbsp;Test
         </th>
         <th className="th1 sorttable_nosort">Actions</th>
         <th className="th1 clickable">
@@ -103,17 +103,25 @@ function LibraryHeader(): JSX.Element {
     </thead>
   );
 }
-function LibraryFooter({ numTexts }: { numTexts: number }): JSX.Element {
+function LibraryFooter({
+  numTexts,
+  currentPage,
+  numPages,
+}: {
+  numTexts: number;
+  currentPage: number;
+  numPages: number;
+}): JSX.Element {
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
         <tr>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             {numTexts} Texts
           </th>
           <th className="th1">
-            {/* nowrap="nowrap" */}
+            {/* style={{whiteSpace:"nowrap"}} */}
             &nbsp; &nbsp;
             <Icon iconName="placeholder" alt="-" />
             {/* {true}&nbsp; */}
@@ -121,15 +129,19 @@ function LibraryFooter({ numTexts }: { numTexts: number }): JSX.Element {
             {/* TODO pagination */}
             &nbsp; Page
             <select name="page2">
-              <option value="1">1</option>
-              <option value="2">2</option>
+              {new Array(numPages).fill(0).map((_, ii) => {
+                return <option value={ii + 1}>{ii + 1}</option>;
+              })}
             </select>
+            <a href={`edit_texts?page=${currentPage + 1}`}>
+              <Icon iconName="control" title="Next Page" alt="Next Page" />
+            </a>
             {/* selected="selected" of 2&nbsp; */}
-            <a href="edit_texts?page=2">
+            <a href={`edit_texts?page=${currentPage + 1}`}>
               <Icon iconName="control" title="Next Page" alt="Next Page" />
             </a>
             &nbsp;
-            <a href="edit_texts?page=2">
+            <a href={`edit_texts?page=${numPages}`}>
               <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
             </a>
             &nbsp; &nbsp;
@@ -154,29 +166,29 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
         </a>
       </td>
       <td className="td1 center">
-        {/* nowrap="nowrap" */}
+        {/* style={{whiteSpace:"nowrap"}} */}
         &nbsp;
-        <a href="do_text?start=2">
+        <a href={`do_text?start=${text.TxID}`}>
           <Icon iconName="book-open-bookmark" title="Read" alt="Read" />
         </a>
         &nbsp;
-        <a href="do_test?text=2">
+        <a href={`do_test?text=${text.TxID}`}>
           <Icon iconName="question-balloon" title="Test" alt="Test" />
         </a>
         &nbsp;
       </td>
       <td className="td1 center">
-        {/* nowrap="nowrap" */}
+        {/* style={{whiteSpace:"nowrap"}} */}
         &nbsp;
-        <a href="print_text?text=30">
+        <a href={`/print_text?text=${text.TxID}`}>
           <Icon iconName="printer" title="Print" alt="Print" />
         </a>
         &nbsp;
-        <a href="/edit_texts?arch=30">
+        <a href={`/edit_texts?arch=${text.TxID}`}>
           <Icon iconName="inbox-download" title="Archive" alt="Archive" />
         </a>
         &nbsp;
-        <a href="/edit_texts?chg=30">
+        <a href={`/edit_texts?chg=${text.TxID}`}>
           <Icon iconName="document--pencil" title="Edit" alt="Edit" />
         </a>
         &nbsp;
@@ -215,7 +227,8 @@ export function Library() {
     'textDetails',
     'activeLanguage',
   ]);
-
+  const pageSize = 10;
+  const numPages = textDetails ? Math.ceil(textDetails.length / pageSize) : 0;
   return (
     <>
       {activeLanguage && (
@@ -233,7 +246,75 @@ export function Library() {
                 })}
             </tbody>
           </table>
-          <LibraryFooter numTexts={textDetails ? textDetails.length : 0} />
+          <LibraryFooter
+            numTexts={textDetails ? textDetails.length : 0}
+            currentPage={0}
+            numPages={numPages}
+          />
+        </>
+      )}
+    </>
+  );
+}
+export function makePager({ currentpage, pages, script, formname, inst }: {}) {
+  return (
+    <>
+      {currentpage > 1 ? (
+        <>
+          <a href="<?php echo script; ?>?page=1">
+            <img
+              src="icn/control-stop-180.png"
+              title="First Page"
+              alt="First Page"
+            />
+          </a>
+          &nbsp;
+          <a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>">
+            <img
+              src="icn/control-180.png"
+              title="Previous Page"
+              alt="Previous Page"
+            />
+          </a>
+          &nbsp;
+        </>
+      ) : (
+        <>
+          &nbsp; &nbsp;
+          <img src="icn/placeholder.png" alt="-" />
+          &nbsp;
+          <img src="icn/placeholder.png" alt="-" />
+          &nbsp;
+        </>
+      )}
+      {pages === 1 ? (
+        '1'
+      ) : (
+        <select
+          name="page<?php echo inst; ?>"
+          onchange="{val=document.<?php echo formname; ?>.page<?php echo inst; ?>.options[document.<?php echo formname; ?>.page<?php echo inst; ?>.selectedIndex].value; location.href='<?php echo script; ?>?page=' + val;}"
+        >
+          {'<?php echo get_paging_selectoptions(currentpage, pages); ?>'}
+        </select>
+      )}{' '}
+      {' of '} {pages} {'&nbsp; '}
+      {currentpage < pages ? (
+        <>
+          <a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>">
+            <img src="icn/control.png" title="Next Page" alt="Next Page" />
+          </a>
+          &nbsp;
+          <a href="<?php echo script; ?>?page=<?php echo pages; ?>">
+            <img src="icn/control-stop.png" title="Last Page" alt="Last Page" />
+          </a>
+          &nbsp; &nbsp;
+        </>
+      ) : (
+        <>
+          <img src="icn/placeholder.png" alt="-" />
+          &nbsp;
+          <img src="icn/placeholder.png" alt="-" />
+          &nbsp; &nbsp;
         </>
       )}
     </>

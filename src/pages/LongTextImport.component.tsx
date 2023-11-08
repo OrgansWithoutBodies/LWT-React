@@ -162,7 +162,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="button"
                 value="Cancel"
-                // onClick="{resetDirty(); location.href='index';}"
+                onClick="{resetDirty(); location.href='index';}"
               />
               &nbsp; | &nbsp;
               <input

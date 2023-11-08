@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
@@ -30,13 +30,21 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
     <>
       <SplitPane split="vertical" minSize={50} defaultSize={'55%'}>
         <SplitPane split="horizontal" minSize={50} defaultSize={'20%'}>
-          <Header title={`READ ▶ ${text.TxTitle}`} readerIcons />
+          <Header
+            title={`READ ▶ ${text.TxTitle}`}
+            readerProps={{ nextTextID: 'Test1', prevTextString: 'test2' }}
+          />
           {/* TODO audio */}
           <Reader activeId={textId} setActiveWord={setActiveWord} />
         </SplitPane>
         <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
           {activeWord ? (
-            <AddNewWord word={activeWord} langId={text.TxLgID} />
+            <AddNewWord
+              word={activeWord}
+              langId={text.TxLgID}
+              // TODO
+              // isEdit={}
+            />
           ) : (
             <></>
           )}

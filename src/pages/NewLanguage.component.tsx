@@ -25,14 +25,13 @@ export function NewLanguage() {
     LgRightToLeft: parseNumMap,
     LgDict2URI: emptyToNullMap,
   };
-  console.log('TEST123', LanguagesValidatorNoId.schema);
   const validator = LanguagesValidatorNoId;
   const refMap = RefMap<LanguageNoId>(validator);
   return (
     <>
       <h4>
         New Language
-        <a target="_blank" href="info.htm#howtolang">
+        <a target="_blank" href="info#howtolang">
           <Icon iconName="question-frame" title="Help" alt="Help" />
         </a>
       </h4>
@@ -130,7 +129,7 @@ export function NewLanguage() {
                   type="text"
                   className="checkdicturl checkoutsidebmp"
                   name="LgGoogleTranslateURI"
-                  defaultValue="*http://translate.google.com/?ie=UTF-8&amp;sl=••&amp;tl=••&amp;text=###"
+                  defaultValue="*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###"
                   maxLength={200}
                   size={60}
                 />
@@ -309,11 +308,11 @@ export function NewLanguage() {
           the URIs must be <b>replaced</b> by the actual source and target
           language codes!
           <br />
-          <a href="info.htm#howtolang" target="_blank">
+          <a href="info#howtolang" target="_blank">
             Please read the documentation
           </a>
           . Languages with a <b>non-Latin alphabet need special attention</b>,
-          <a href="info.htm#langsetup" target="_blank">
+          <a href="info#langsetup" target="_blank">
             see also here
           </a>
           .

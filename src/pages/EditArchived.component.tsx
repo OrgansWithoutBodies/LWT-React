@@ -1,182 +1,259 @@
-import React, { useRef } from 'react';
 import { useData } from '../data/useAkita';
 import { Header } from './Header';
-// import { Gunzip } from 'browserify-zlib';
 
-export function EditArchivedTexts(
-  backupFile: React.MutableRefObject<HTMLInputElement>
-): void {
-  const reader = new FileReader();
-  const { files } = backupFile.current;
-  if (files) {
-    const buffer: string[] = [];
-    reader.onload = async (e) => {
-      const text = e.target.result;
-      // Gunzip.ungzip(text, function (err, dezipped) {
-      //   console.log(dezipped.toString());
-      // });
-      //     // decompression chunk ready, add it to the buffer
-      //     buffer.push(data.toString());
-      //   })
-      //   .on('end', function () {
-      //     // response and decompression complete, join the buffer and return
-      //     console.log(buffer.join(''));
-      //   }).
-
-      // console.log(text);
-      // alert(text);
-    };
-    const text = reader.readAsText(files[0]);
-    console.log('TEST123', text);
-  }
-}
-export function BackupScreen(): JSX.Element {
-  const [
-    ,
-    { downloadBackup, restoreFromBackup, emptyDatabase, installDemoDatabase },
-  ] = useData([]);
-  const restoreBackup = useRef();
+export function EditArchivedTexts(): JSX.Element {
+  const [{ languages, activeLanguage, numArchivedTexts }] = useData([
+    'languages',
+    'activeLanguage',
+    'numArchivedTexts',
+  ]);
+  const recno = numArchivedTexts;
   return (
     <>
       <body>
-        <Header title="Backup/Restore/Empty Database" />
+        <Header title={`My ${activeLanguage?.LgName} Text Archive`} />
         <p>&nbsp;</p>
+
         <form
-          encType="multipart/form-data"
-          action="/backup_restore"
-          method="post"
-          // onsubmit="return confirm('Are you sure?');"
+          name="form1"
+          action="#"
+          onSubmit="document.form1.querybutton.click(); return false;"
         >
-          <table className="tab1" cellSpacing="0" cellPadding={5}>
-            <tbody>
-              <tr>
-                <th className="th1 center">Backup</th>
-                <td className="td1">
-                  <p className="smallgray2">
-                    The database <i>lwt</i> (Default Table Set) will be exported
-                    to a gzipped SQL file.
-                    <br />
-                    Please keep this file in a safe place.
-                    <br />
-                    If necessary, you can recreate the database via the Restore
-                    function below.
-                    <br />
-                    Important: If the backup file is too large, the restore may
-                    not be possible (see limits below).
-                  </p>
-                  <p className="right">
-                    &nbsp;
-                    <br />
-                    <input
-                      type="button"
-                      name="backup"
-                      value="Download LWT Backup"
-                    />
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <th className="th1 center">Restore</th>
-                <td className="td1">
-                  <p className="smallgray2">
-                    The database <i>lwt</i> (Default Table Set) will be
-                    <b>replaced</b> by the data in the specified backup file
-                    <br />
-                    (gzipped or normal SQL file, created above).
-                    <br />
-                    <br />
-                    <span className="smallgray">
-                      Important: If the backup file is too large, the restore
-                      may not be possible.
-                      <br />
-                      Upload limits (in bytes):
-                      <b>post_max_size = 8M / upload_max_filesize = 2M</b>
-                      <br />
-                      If needed, increase in "" and restart server.
-                      <br />
-                      &nbsp;
-                    </span>
-                  </p>
-                  <p>
-                    <input name="thefile" type="file" ref={restoreBackup} />
-                  </p>
-                  <p className="right">
-                    &nbsp;
-                    <br />
-                    <span className="red2">
-                      YOU MAY LOSE DATA - BE CAREFUL: &nbsp; &nbsp; &nbsp;
-                    </span>
-                    <input
-                      type="button"
-                      name="restore"
-                      value="Restore from LWT Backup"
-                      onClick={() => RestoreFromBackup(restoreBackup)}
-                    />
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <th className="th1 center">
-                  Install
-                  <br />
-                  LWT
-                  <br />
-                  Demo
-                </th>
-                <td className="td1">
-                  <p className="smallgray2">
-                    The database <i>lwt</i> (Default Table Set) will be
-                    <b>replaced</b> by the LWT demo database.
-                  </p>
-                  <p className="right">
-                    &nbsp;
-                    <br />
-                    <input
-                      type="button"
-                      value="Install LWT Demo Database"
-                      onClick={installDemoDatabase}
-                    />
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <th className="th1 center">
-                  Empty
-                  <br />
-                  Database
-                </th>
-                <td className="td1">
-                  <p className="smallgray2">
-                    Empty (= <b>delete</b> the contents of) all tables - except
-                    the Settings - of your database <i>lwt</i> (Default Table
-                    Set).
-                  </p>
-                  <p className="right">
-                    &nbsp;
-                    <br />
-                    <span className="red2">
-                      YOU MAY LOSE DATA - BE CAREFUL: &nbsp; &nbsp; &nbsp;
-                    </span>
-                    <input
-                      type="submit"
-                      name="empty"
-                      value="Empty LWT Database"
-                    />
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td className="td1 right" colSpan={2}>
-                  <input
-                    type="button"
-                    value="<< Back"
-                    // onClick="location.href='index';"
-                  />
-                </td>
-              </tr>
-            </tbody>
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1" colSpan={4}>
+                Filter <img src="icn/funnel.png" title="Filter" alt="Filter" />
+                &nbsp;
+                <input
+                  type="button"
+                  value="Reset All"
+                  onClick="resetAll('edit_archivedtexts.php');"
+                />
+              </th>
+            </tr>
+            <tr>
+              <td className="td1 center" colSpan={2}>
+                Language:
+                <select
+                  name="filterlang"
+                  onChange="{setLang(document.form1.filterlang,'edit_archivedtexts.php');}"
+                >
+                  {languages.map((language) => {
+                    return (
+                      <option value={language.LgID}>{language.LgName}</option>
+                    );
+                  })}
+                  {/* <?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?> */}
+                </select>
+              </td>
+              <td className="td1 center" colSpan={2}>
+                Text Title (Wildc.=*):
+                <input
+                  type="text"
+                  name="query"
+                  value="<?php echo tohtml($currentquery); ?>"
+                  maxLength={50}
+                  size={15}
+                />
+                &nbsp;
+                <input
+                  type="button"
+                  name="querybutton"
+                  value="Filter"
+                  onClick="{val=document.form1.query.value; location.href='edit_archivedtexts.php?page=1&query=' + val;}"
+                />
+                &nbsp;
+                <input
+                  type="button"
+                  value="Clear"
+                  onClick="{location.href='edit_archivedtexts.php?page=1&query=';}"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td
+                className="td1 center"
+                colSpan={2}
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                Tag #1:
+                <select
+                  name="tag1"
+                  onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_archivedtexts.php?page=1&tag1=' + val;}"
+                >
+                  {/* <?php echo get_archivedtexttag_selectoptions($currenttag1,$currentlang); ?> */}
+                </select>
+              </td>
+              <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                Tag #1 ..{' '}
+                <select
+                  name="tag12"
+                  onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_archivedtexts.php?page=1&tag12=' + val;}"
+                >
+                  {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
+                </select>{' '}
+                .. Tag #2
+              </td>
+              <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                Tag #2:
+                <select
+                  name="tag2"
+                  onChange="{val=document.form1.tag2.options[document.form1.tag2.selectedIndex].value; location.href='edit_archivedtexts.php?page=1&tag2=' + val;}"
+                >
+                  {/* <?php echo get_archivedtexttag_selectoptions($currenttag2,$currentlang); ?> */}
+                </select>
+              </td>
+            </tr>
+            {/* <?php if($recno > 0) { ?>
+<tr>
+<th class="th1" style={{whiteSpace:"nowrap"}}>
+<?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?>
+</th>
+<th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
+<?php makePager ($currentpage, $pages, 'edit_archivedtexts.php', 'form1', 1); ?>
+</th>
+<th class="th1" style={{whiteSpace:"nowrap"}}>
+Sort Order:
+<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts.php?page=1&sort=' + val;}">
+  <?php echo get_textssort_selectoptions($currentsort); ?>
+</select>
+</th></tr>
+<?php } ?> */}
           </table>
         </form>
+        {/* 
+<?php
+if ($recno==0) {
+?>
+<p>No archived texts found.</p>
+<?php
+} else {
+?> */}
+        <form
+          name="form2"
+          action="<?php echo $_SERVER['PHP_SELF']; ?>"
+          method="post"
+        >
+          <input type="hidden" name="data" value="" />
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1" colSpan={2}>
+                Multi Actions{' '}
+                <img
+                  src="icn/lightning.png"
+                  title="Multi Actions"
+                  alt="Multi Actions"
+                />
+              </th>
+            </tr>
+            <tr>
+              <td className="td1 center">
+                <input
+                  type="button"
+                  value="Mark All"
+                  onClick="selectToggle(true,'form2');"
+                />
+                <input
+                  type="button"
+                  value="Mark None"
+                  onClick="selectToggle(false,'form2');"
+                />
+              </td>
+              <td className="td1 center">
+                Marked Texts:&nbsp;
+                <select
+                  name="markaction"
+                  id="markaction"
+                  disabled="disabled"
+                  onchange="multiActionGo(document.form2, document.form2.markaction);"
+                >
+                  {/* <?php echo get_multiplearchivedtextactions_selectoptions(); ?> */}
+                </select>
+              </td>
+            </tr>
+          </table>
+
+          <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1 sorttable_nosort">Mark</th>
+              <th className="th1 sorttable_nosort">Actions</th>
+              {/* <?php if ($currentlang == '') echo '<th class="th1 clickable">Lang.</th>'; ?> */}
+              <th className="th1 clickable">
+                Title [Tags] / Audio:&nbsp;
+                <img
+                  src="icn/speaker-volume.png"
+                  title="With Audio"
+                  alt="With Audio"
+                />
+                , Src.Link:&nbsp;
+                <img
+                  src="icn/chain.png"
+                  title="Source Link available"
+                  alt="Source Link available"
+                />
+                , Ann.Text:&nbsp;
+                <img
+                  src="icn/tick.png"
+                  title="Annotated Text available"
+                  alt="Annotated Text available"
+                />
+              </th>
+            </tr>
+            {/* 
+<?php
+
+$sql = 'select AtID, AtTitle, LgName, AtAudioURI, AtSourceURI, length(AtAnnotatedText) as annotlen, ifnull(concat(\'[\',group_concat(distinct T2Text order by T2Text separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'archivedtexts left JOIN ' . $tbpref . 'archtexttags ON AtID = AgAtID) left join ' . $tbpref . 'tags2 on T2ID = AgT2ID), ' . $tbpref . 'languages where LgID=AtLgID ' . $wh_lang . $wh_query . ' group by AtID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
+
+if ($debug) echo $sql;
+
+$res = do_mysqli_query($sql);
+while ($record = mysqli_fetch_assoc($res)) {
+	echo '<tr>';
+	echo '<td class="td1 center"><a name="rec' . $record['AtID'] . '"><input name="marked[]" class="markcheck"  type="checkbox" value="' . $record['AtID'] . '" ' . checkTest($record['AtID'], 'marked') . ' /></a></td>';
+	echo '<td style={{whiteSpace:"nowrap"}} class="td1 center">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '"><img src="icn/inbox-upload.png" title="Unarchive" alt="Unarchive" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['AtID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>&nbsp;</td>';
+	if ($currentlang == '') echo '<td class="td1 center">' . tohtml($record['LgName']) . '</td>';
+	echo '<td class="td1 center">' . tohtml($record['AtTitle']) . ' <span class="smallgray2">' . tohtml($record['taglist']) . '</span> &nbsp;' . (isset($record['AtAudioURI']) ? '<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />' : '') . (isset($record['AtSourceURI']) ? ' <a href="' . $record['AtSourceURI'] . '" target="_blank"><img src="icn/chain.png" title="Link to Text Source" alt="Link to Text Source" /></a>' : '') . ($record['annotlen'] ? ' <img src="icn/tick.png" title="Annotated Text available" alt="Annotated Text available" />' : '') . '</td>';
+	echo '</tr>';
+}
+mysqli_free_result($res);
+
+?> */}
+          </table>
+        </form>
+        {/* 
+<?php if( $pages > 1) { ?>
+<form name="form3" action="#">
+<table class="tab1" cellspacing={0} cellpadding={5}>
+<tr>
+<th class="th1" style={{whiteSpace:"nowrap"}}>
+<?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?>
+</th><th class="th1" style={{whiteSpace:"nowrap"}}>
+<?php makePager ($currentpage, $pages, 'edit_archivedtexts.php', 'form3', 2); ?>
+</th></tr></table>
+</form>
+<?php } ?>
+
+<?php
+
+}
+
+?> */}
+
+        <p>
+          <input
+            type="button"
+            value="Active Texts"
+            onClick="location.href='edit_texts.php?query=&page=1';"
+          />
+        </p>
+
+        {/* <?php
+
+}
+
+pageend();
+
+?> */}
       </body>
     </>
   );

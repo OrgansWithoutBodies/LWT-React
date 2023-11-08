@@ -1,17 +1,43 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
+import { TextsId } from '../data/validators';
 
 export function Header({
   afterDropdown,
   title,
   link = '/',
-  readerIcons = false,
+  readerProps = undefined,
 }: {
   afterDropdown?: string[];
   title: string;
   link?: string;
-  readerIcons?: boolean;
+  readerProps?: {
+    prevTextID: TextsId;
+    nextTextID: TextsId;
+
+    prevTextString: string;
+    nextTextString: string;
+  };
 }) {
   const logoSize = 48;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const headerValues = {
+    Home: 'index',
+    Texts: 'edit_texts',
+    'Text Archive': 'edit_archivedtexts',
+    'Text Tags': 'edit_texttags',
+    Languages: 'edit_languages',
+    Terms: 'edit_words',
+    'Term Tags': 'edit_tags',
+    Statistics: 'statistics',
+    'Text Check': 'check_text',
+    'Long Text': 'long_text_import',
+    'Term Import': 'upload_words',
+    'Backup/Restore': 'backup_restore',
+    Settings: 'settings',
+    Help: 'info',
+  };
   return (
     <>
       <h4>
@@ -27,53 +53,55 @@ export function Header({
           LWT
         </a>
         &nbsp; | &nbsp;
-        <select id="quickmenu">
-          {/* TODO add change here onselect */}
+        <select
+          id="quickmenu"
+          onChange={(val) => {
+            if (val.target.value === '') {
+              return;
+            }
+            // TODO validate?
+            navigate(`/${val.target.value}`);
+          }}
+        >
           <option value="">[Menu]</option>
-          <option value="index">Home</option>
-          <option value="edit_texts">Texts</option>
-          <option value="edit_archivedtexts">Text Archive</option>
-          <option value="edit_texttags">Text Tags</option>
-          <option value="edit_languages">Languages</option>
-          <option value="edit_words">Terms</option>
-          <option value="edit_tags">Term Tags</option>
-          <option value="statistics">Statistics</option>
-          <option value="check_text">Text Check</option>
-          <option value="long_text_import">Long Text Import</option>
-          <option value="upload_words">Term Import</option>
-          <option value="backup_restore">Backup/Restore</option>
-          <option value="settings">Settings</option>
-          <option value="INFO">Help</option>
+          {Object.keys(headerValues).map((key) => {
+            return (
+              <option
+                value={headerValues[key]}
+                selected={location.pathname === `/${headerValues[key]}`}
+              >
+                {key}
+              </option>
+            );
+          })}
         </select>
-        {readerIcons && (
+        {readerProps && (
           <>
             &nbsp; | &nbsp;
-            <a href="do_text?start=2" target="_top">
+            <a href={`do_text?start=${readerProps.prevTextID}`} target="_top">
               <Icon
                 iconName="navigation-180-button"
-                // TODO
-                title="Previous Text: The Man and the Dog (annotated version)"
-                alt="Previous Text: The Man and the Dog (annotated version)"
+                title={`Previous Text: ${readerProps.prevTextString}`}
+                alt={`Previous Text: ${readerProps.prevTextString}`}
               />
             </a>
-            <a href="do_text?start=14" target="_top">
+            <a href={`do_text?start=${readerProps.nextTextID}`} target="_top">
               <Icon
                 iconName="navigation-000-button"
-                // TODO
-                title="Next Text: 为什么反舰导弹近距离攻击反而不准？"
-                alt="Next Text: 为什么反舰导弹近距离攻击反而不准？"
+                title={`Next Text: ${readerProps.nextTextString}`}
+                alt={`Next Text: ${readerProps.nextTextString}`}
               />
             </a>
             &nbsp; | &nbsp;
-            <a href="do_test?text=11" target="_top">
+            <a href={`do_test?text=${11}`} target="_top">
               <Icon iconName="question-balloon" title="Test" alt="Test" />
             </a>
             &nbsp;
-            <a href="print_text?text=11" target="_top">
+            <a href={`print_text?text=${11}`} target="_top">
               <Icon iconName="printer" title="Print" alt="Print" />
               &nbsp;
             </a>
-            <a target="_top" href="edit_texts?chg=11">
+            <a target="_top" href={`edit_texts?chg=${11}`}>
               <Icon
                 iconName="document--pencil"
                 title="Edit Text"
@@ -81,7 +109,7 @@ export function Header({
               />
             </a>
             &nbsp; | &nbsp;
-            <a href="new_word?text=11&amp;lang=2" target="ro">
+            <a href={`new_word?text=${11}&lang=${2}`} target="ro">
               <Icon
                 iconName="sticky-note--plus"
                 title="New Term"

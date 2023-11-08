@@ -78,11 +78,11 @@ export function LandingPage() {
             <br />
           </li>
           <li>
-            <a href="info.htm">Help/Information</a>
+            <a href="info">Help/Information</a>
           </li>
-          <li>
+          {/* <li>
             <a href="mobile">Mobile LWT (Experimental)</a>
-          </li>
+          </li> */}
         </ul>
       </div>
 
@@ -136,7 +136,7 @@ export function LandingPage() {
                 <span
                   title="Manage Table Sets"
                   // TODO
-                  // onClick="location.href='table_set_management';"
+                  onClick="location.href='table_set_management';"
                   className="click"
                 >
                   <i>Default</i> Table Set

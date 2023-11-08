@@ -36,10 +36,14 @@ function ExpressionsLines({
   return (
     <>
       Expr:
-      {expressions.map((expressions, ii) => {
+      {expressions.map((expression, ii) => {
         return (
-          <a href="edit_mword?tid=44&amp;ord=55&amp;txt=这帮" target="ro">
-            {ii + 2}..{expressions}
+          // TODO numbers here
+          <a
+            href={`edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
+            target="ro"
+          >
+            {ii + 2}..{expression}
           </a>
         );
       })}
@@ -49,7 +53,6 @@ function ExpressionsLines({
 // TODO template vs url branded type
 function ApplyTemplate(templateStr: string, valueStr: string): string {
   const replaced = templateStr.replace('###', valueStr);
-  console.log('TEST123', replaced);
   return replaced;
 }
 function TranslateLines({
@@ -132,7 +135,7 @@ function TermTooltipHeader({
                 {/* <!-- <font lucida="" grande",arial,sans-serif,stheiti,"arial="" unicode="" ms",mingliu"="" size={3} face="" color="#FFFFFF"> --> */}
                 <a
                   style={{ color: 'yellow' }}
-                  href="edit_word?tid=44&amp;ord=55&amp;wid=369"
+                  href={`edit_word?tid=${44}&ord=${55}&wid=${369}`}
                   target="ro"
                 >
                   {headerTitle} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -159,24 +162,29 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
         <br />▶ Unknown [?]
       </b>
       <br />
-      <a href="insert_word_wellknown?tid=44&amp;ord=1504" target="ro">
+      <a href={`insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro">
         I know this term well
       </a>
       <br />
-      <a href="insert_word_ignore?tid=44&amp;ord=1504" target="ro">
+      <a href={`insert_word_ignore?tid=${44}&ord=${1504}`} target="ro">
         Ignore this term
       </a>
     </>
   );
 }
-export function KnownTermLines({ word }: { word: Words }): JSX.Element {
+export function KnownTermLines({
+  word,
+  tags,
+}: {
+  word: Words;
+  tags: string[];
+}): JSX.Element {
   return (
     <>
       <b>
         {word.WoText}
         <br />▶ {word.WoRomanization}
-        <br />
-        {/* TODO tags */}▶ {word.WoTranslation}, [HSK1]
+        <br />▶ {word.WoTranslation}, [{tags.join(', ')}]
         <br />▶{StrengthMap[ReverseStrengthMap[word.WoStatus]].status} [
         {ReverseStrengthMap[word.WoStatus]}]
       </b>
@@ -195,7 +203,7 @@ export function KnownTermLines({ word }: { word: Words }): JSX.Element {
         );
       })}
       <br />
-      <a href="edit_word?tid=44&amp;ord=55&amp;wid=369" target="ro">
+      <a href={`edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
         Edit term
       </a>
       |
@@ -216,6 +224,7 @@ export function AddNewTermTooltip({
   const newTerm = typeof word === 'string';
   const [{ languages }] = useData(['languages']);
   const language = languages.find((lang) => lang.LgID);
+  const expressions: string[] = [];
   if (!language) {
     return <></>;
   }
@@ -223,10 +232,10 @@ export function AddNewTermTooltip({
   // TODO on click on term, change other panes
   return (
     <table
-      width="260"
-      cellSpacing="0"
+      width={260}
+      cellSpacing={0}
       cellPadding={1}
-      // border={0}
+      border={0}
       color="#333399"
     >
       <tbody>
@@ -235,9 +244,9 @@ export function AddNewTermTooltip({
             <TermTooltipHeader headerTitle={newTerm ? 'New Word' : 'Word'} />
             <table
               width="100%"
-              cellSpacing="0"
+              cellSpacing={0}
               cellPadding={2}
-              // border={0}
+              border={0}
               color="#FFFFE8"
             >
               <tbody>
@@ -251,17 +260,7 @@ export function AddNewTermTooltip({
                       <KnownTermLines word={word} />
                     )}
                     <br />
-                    <ExpressionsLines
-                      expressions={[
-                        '帮家',
-                        '家伙',
-                        '伙好',
-                        '好脸',
-                        '他',
-                        '他们',
-                        '们歧',
-                      ]}
-                    />
+                    <ExpressionsLines expressions={expressions} />
                     <br />
                     <TranslateLines
                       word={wordStr}
