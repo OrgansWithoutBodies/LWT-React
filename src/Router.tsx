@@ -1,4 +1,3 @@
-import React from 'react';
 import { BackupScreen } from './pages/Backups.component';
 import { LandingPage } from './pages/LandingPage.component';
 import { LanguagesPage } from './pages/Languages.component';
@@ -6,7 +5,6 @@ import { Library } from './pages/Library.component';
 import ImportLongText from './pages/LongTextImport.component';
 import { LongTextVerify } from './pages/LongTextImportVerify.component';
 import { NewLanguage } from './pages/NewLanguage.component';
-import { Reader } from './pages/Reader.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { Terms } from './pages/Terms.component';
@@ -18,6 +16,7 @@ type Page = { url: string; name: string; component: JSX.Element };
 function Blank(): JSX.Element {
   return <></>;
 }
+// TODO use this component
 const ScreenUrlMap: { url: string; component: JSX.Element }[] = [
   { url: '/', component: <LandingPage /> },
   { url: '/languages', component: <LanguagesPage /> },

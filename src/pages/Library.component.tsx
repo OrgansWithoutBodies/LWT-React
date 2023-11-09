@@ -2,6 +2,7 @@ import { Icon } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
 import { Header } from './Header';
 
 export function MultiActions() {
@@ -12,11 +13,7 @@ export function MultiActions() {
           <tr>
             <th className="th1" colSpan={2}>
               Multi Actions
-              <Icon
-                iconName="lightning"
-                title="Multi Actions"
-                alt="Multi Actions"
-              />
+              <Icon src="lightning" title="Multi Actions" />
             </th>
           </tr>
           <tr>
@@ -66,19 +63,11 @@ function LibraryHeader(): JSX.Element {
         <th className="th1 sorttable_nosort">Actions</th>
         <th className="th1 clickable">
           Title [Tags] / Audio:&nbsp;
-          <Icon iconName="speaker-volume" title="With Audio" alt="With Audio" />
+          <Icon src="speaker-volume" title="With Audio" />
           , Src.Link:&nbsp;
-          <Icon
-            iconName="chain"
-            title="Source Link available"
-            alt="Source Link available"
-          />
+          <Icon src="chain" title="Source Link available" />
           , Ann.Text:&nbsp;
-          <Icon
-            iconName="tick"
-            title="Annotated Text available"
-            alt="Annotated Text available"
-          />
+          <Icon src="tick" title="Annotated Text available" />
         </th>
         <th className="th1 sorttable_numeric clickable">
           Total
@@ -123,9 +112,9 @@ function LibraryFooter({
           <th className="th1">
             {/* style={{whiteSpace:"nowrap"}} */}
             &nbsp; &nbsp;
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             {/* {true}&nbsp; */}
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             {/* TODO pagination */}
             &nbsp; Page
             <select name="page2">
@@ -133,17 +122,17 @@ function LibraryFooter({
                 return <option value={ii + 1}>{ii + 1}</option>;
               })}
             </select>
-            <a href={`edit_texts?page=${currentPage + 1}`}>
-              <Icon iconName="control" title="Next Page" alt="Next Page" />
-            </a>
+            <A href={`/edit_texts?page=${currentPage + 1}`}>
+              <Icon src="control" title="Next Page" />
+            </A>
             {/* selected="selected" of 2&nbsp; */}
-            <a href={`edit_texts?page=${currentPage + 1}`}>
-              <Icon iconName="control" title="Next Page" alt="Next Page" />
-            </a>
+            <A href={`/edit_texts?page=${currentPage + 1}`}>
+              <Icon src="control" title="Next Page" />
+            </A>
             &nbsp;
-            <a href={`edit_texts?page=${numPages}`}>
-              <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
-            </a>
+            <A href={`/edit_texts?page=${numPages}`}>
+              <Icon src="control-stop" title="Last Page" />
+            </A>
             &nbsp; &nbsp;
           </th>
         </tr>
@@ -155,7 +144,7 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
   return (
     <tr>
       <td className="td1 center">
-        <a>
+        <A>
           {/* name="rec2" */}
           <input
             name="marked[]"
@@ -163,40 +152,40 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
             type="checkbox"
             value="2"
           />
-        </a>
+        </A>
       </td>
       <td className="td1 center">
         {/* style={{whiteSpace:"nowrap"}} */}
         &nbsp;
-        <a href={`do_text?start=${text.TxID}`}>
-          <Icon iconName="book-open-bookmark" title="Read" alt="Read" />
-        </a>
+        <A href={`/do_text?start=${text.TxID}`}>
+          <Icon src="book-open-bookmark" title="Read" />
+        </A>
         &nbsp;
-        <a href={`do_test?text=${text.TxID}`}>
-          <Icon iconName="question-balloon" title="Test" alt="Test" />
-        </a>
+        <A href={`/do_test?text=${text.TxID}`}>
+          <Icon src="question-balloon" title="Test" />
+        </A>
         &nbsp;
       </td>
       <td className="td1 center">
         {/* style={{whiteSpace:"nowrap"}} */}
         &nbsp;
-        <a href={`/print_text?text=${text.TxID}`}>
-          <Icon iconName="printer" title="Print" alt="Print" />
-        </a>
+        <A href={`/print_text?text=${text.TxID}`}>
+          <Icon src="printer" title="Print" />
+        </A>
         &nbsp;
-        <a href={`/edit_texts?arch=${text.TxID}`}>
-          <Icon iconName="inbox-download" title="Archive" alt="Archive" />
-        </a>
+        <A href={`/edit_texts?arch=${text.TxID}`}>
+          <Icon src="inbox-download" title="Archive" />
+        </A>
         &nbsp;
-        <a href={`/edit_texts?chg=${text.TxID}`}>
-          <Icon iconName="document--pencil" title="Edit" alt="Edit" />
-        </a>
+        <A href={`/edit_texts?chg=${text.TxID}`}>
+          <Icon src="document--pencil" title="Edit" />
+        </A>
         &nbsp;
         <span
           className="click"
           onClick={() => dataService.deleteText(text.TxID)}
         >
-          <Icon iconName="minus-button" title="Delete" alt="Delete" />
+          <Icon src="minus-button" title="Delete" />
         </span>
         &nbsp;
       </td>
@@ -210,9 +199,9 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
               }) +
               ']'}
         </span>
-        {text.audioAvailable && <Icon iconName="speaker-volume" />}
-        {text.link && <Icon iconName="chain" />}
-        {text.annotatedAvailable && <Icon iconName="tick" />}
+        {text.audioAvailable && <Icon src="speaker-volume" />}
+        {text.link && <Icon src="chain" />}
+        {text.annotatedAvailable && <Icon src="tick" />}
       </td>
       <td className="td1 center">{text.totalWords}</td>
       <td className="td1 center">{text.saved}</td>
@@ -261,29 +250,23 @@ export function makePager({ currentpage, pages, script, formname, inst }: {}) {
     <>
       {currentpage > 1 ? (
         <>
-          <a href="<?php echo script; ?>?page=1">
-            <img
-              src="icn/control-stop-180.png"
-              title="First Page"
-              alt="First Page"
-            />
-          </a>
+          {/* TODO */}
+          <A href="<?php echo script; ?>?page=1">
+            <Icon src="control-stop-180" title="First Page" />
+          </A>
           &nbsp;
-          <a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>">
-            <img
-              src="icn/control-180.png"
-              title="Previous Page"
-              alt="Previous Page"
-            />
-          </a>
+          {/* TODO */}
+          <A href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>">
+            <Icon src="control-180" title="Previous Page" />
+          </A>
           &nbsp;
         </>
       ) : (
         <>
           &nbsp; &nbsp;
-          <img src="icn/placeholder.png" alt="-" />
+          <Icon src="placeholder" alt="-" />
           &nbsp;
-          <img src="icn/placeholder.png" alt="-" />
+          <Icon src="placeholder" alt="-" />
           &nbsp;
         </>
       )}
@@ -291,8 +274,10 @@ export function makePager({ currentpage, pages, script, formname, inst }: {}) {
         '1'
       ) : (
         <select
+          // TODO
           name="page<?php echo inst; ?>"
-          onchange="{val=document.<?php echo formname; ?>.page<?php echo inst; ?>.options[document.<?php echo formname; ?>.page<?php echo inst; ?>.selectedIndex].value; location.href='<?php echo script; ?>?page=' + val;}"
+          // TODO
+          onChange="{val=document.<?php echo formname; ?>.page<?php echo inst; ?>.options[document.<?php echo formname; ?>.page<?php echo inst; ?>.selectedIndex].value; location.href='<?php echo script; ?>?page=' + val;}"
         >
           {'<?php echo get_paging_selectoptions(currentpage, pages); ?>'}
         </select>
@@ -300,20 +285,22 @@ export function makePager({ currentpage, pages, script, formname, inst }: {}) {
       {' of '} {pages} {'&nbsp; '}
       {currentpage < pages ? (
         <>
-          <a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>">
-            <img src="icn/control.png" title="Next Page" alt="Next Page" />
-          </a>
+          {/* TODO */}
+          <A href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>">
+            <Icon src="control" title="Next Page" />
+          </A>
           &nbsp;
-          <a href="<?php echo script; ?>?page=<?php echo pages; ?>">
-            <img src="icn/control-stop.png" title="Last Page" alt="Last Page" />
-          </a>
+          {/* TODO */}
+          <A href="<?php echo script; ?>?page=<?php echo pages; ?>">
+            <Icon src="control-stop" title="Last Page" />
+          </A>
           &nbsp; &nbsp;
         </>
       ) : (
         <>
-          <img src="icn/placeholder.png" alt="-" />
+          <Icon src="placeholder" alt="-" />
           &nbsp;
-          <img src="icn/placeholder.png" alt="-" />
+          <Icon src="placeholder" alt="-" />
           &nbsp; &nbsp;
         </>
       )}

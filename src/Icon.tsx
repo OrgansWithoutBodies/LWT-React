@@ -1,14 +1,13 @@
-import React from 'react';
 import { IconNameMap } from './icons';
 
 export function Icon({
-  iconName,
+  src: iconName,
   title,
   alt,
   className,
   onClick,
 }: {
-  iconName: typeof IconNameMap[number];
+  src: typeof IconNameMap[number];
   title?: string;
   alt?: string;
   className?: string;
@@ -20,7 +19,8 @@ export function Icon({
       src={iconURI}
       className={className}
       title={title}
-      alt={alt}
+      // automatically add alt text if title is specified but no alt
+      alt={alt === undefined ? title : alt}
       onClick={onClick}
     />
   );
@@ -28,7 +28,7 @@ export function Icon({
 export function RequiredLineButton(): JSX.Element {
   return (
     <Icon
-      iconName="status-busy"
+      src="status-busy"
       title="Field must not be empty"
       alt="Field must not be empty"
     />

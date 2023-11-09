@@ -1,4 +1,6 @@
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { useAppContext } from '../useContext';
 
 export function LandingPage() {
@@ -18,6 +20,7 @@ export function LandingPage() {
     'activeLanguageId',
     'activeLanguage',
   ]);
+  const navigate = useInternalNavigate();
   return (
     <>
       <div>
@@ -33,55 +36,55 @@ export function LandingPage() {
 
         <ul>
           <li>
-            <a href="edit_texts">My Texts</a>
+            <A href="/edit_texts">My Texts</A>
           </li>
           <li>
-            <a href="edit_archivedtexts">My Text Archive</a>
+            <A href="/edit_archivedtexts">My Text Archive</A>
           </li>
           <li>
-            <a href="edit_texttags">My Text Tags</a> <br />
+            <A href="/edit_texttags">My Text Tags</A> <br />
             <br />
           </li>
           <li>
-            <a href="edit_languages">My Languages</a> <br />
+            <A href="/edit_languages">My Languages</A> <br />
             <br />
           </li>
           <li>
-            <a href="edit_words">My Terms (Words and Expressions)</a>
+            <A href="/edit_words">My Terms (Words and Expressions)</A>
           </li>
           <li>
-            <a href="edit_tags">My Term Tags</a> <br />
+            <A href="/edit_tags">My Term Tags</A> <br />
             <br />
           </li>
           <li>
-            <a href="statistics">My Statistics</a> <br />
+            <A href="/statistics">My Statistics</A> <br />
             <br />
           </li>
           <li>
-            <a href="check_text">Check a Text</a>
+            <A href="/check_text">Check a Text</A>
           </li>
           <li>
-            <a href="long_text_import">Long Text Import</a>
+            <A href="/long_text_import">Long Text Import</A>
           </li>
           <li>
-            <a href="upload_words">Import Terms</a>
+            <A href="/upload_words">Import Terms</A>
           </li>
           <li>
-            <a href="backup_restore">Backup/Restore/Empty Database</a>
+            <A href="/backup_restore">Backup/Restore/Empty Database</A>
             <br />
             <br />
           </li>
           <li>
-            <a href="settings">Settings/Preferences</a>
+            <A href="/settings">Settings/Preferences</A>
 
             <br />
             <br />
           </li>
           <li>
-            <a href="info">Help/Information</a>
+            <A href="/info">Help/Information</A>
           </li>
           {/* <li>
-            <a href="mobile">Mobile LWT (Experimental)</a>
+            <a href="/mobile">Mobile LWT (Experimental)</a>
           </li> */}
         </ul>
       </div>
@@ -136,7 +139,9 @@ export function LandingPage() {
                 <span
                   title="Manage Table Sets"
                   // TODO
-                  onClick="location.href='table_set_management';"
+                  onClick={() => {
+                    navigate('/table_set_management');
+                  }}
                   className="click"
                 >
                   <i>Default</i> Table Set

@@ -1,3 +1,4 @@
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 import { byteSizeOfString } from './utils';
 
@@ -7,6 +8,8 @@ export function LongTextVerify(): JSX.Element {
     { text: 'test1234' },
     { text: 'test1234帮' },
   ];
+  const navigate = useInternalNavigate();
+
   return (
     <>
       <Header title="Long Text Import" />
@@ -22,7 +25,7 @@ export function LongTextVerify(): JSX.Element {
         <input type="hidden" name="TxSourceURI" value="" />
         <input type="hidden" name="TextTags" value="null" />
         <input type="hidden" name="TextCount" value="12" />
-        <table className="tab3" cellSpacing="0" cellPadding={5}>
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
               <td className="td1" colSpan={2}>
@@ -37,8 +40,12 @@ export function LongTextVerify(): JSX.Element {
                 <input
                   type="button"
                   value="Cancel"
-                  // TODO
-                  onClick="{resetDirty(); location.href='index';}"
+                  onClick={() => {
+                    // TODO
+                    const resetDirty = () => {};
+                    resetDirty();
+                    navigate('/');
+                  }}
                 />
                 &nbsp; | &nbsp;
                 <input

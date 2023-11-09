@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { Languages } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 const CAKSlices = [
   'Today',
@@ -40,7 +41,7 @@ export function StatisticsComponent(): JSX.Element {
         <br />
         (Click on numbers to see the list of terms)
       </h4>
-      <table className="tab3" cellSpacing="0" cellPadding={5}>
+      <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
             <th className="th1">Language</th>
@@ -113,36 +114,36 @@ export function StatisticsComponent(): JSX.Element {
                 <tr>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
-                    <a
-                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
+                    <A
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
-                    </a>
+                    </A>
                   </td>
                   <td className="td1 center">
-                    <a
-                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                    <A
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
-                    </a>
+                    </A>
                   </td>
                   <td className="td1 center">
-                    <a
-                      href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                    <A
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
-                    </a>
+                    </A>
                   </td>
                   {statuses.map((statusVal) => {
                     return (
                       <td className="td1 center">
                         <span className={`status${statusVal}`}>
                           &nbsp;
-                          <a
-                            href={`edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                          <A
+                            href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
                           >
                             TODO
-                          </a>
+                          </A>
                           &nbsp;
                         </span>
                       </td>
@@ -161,7 +162,7 @@ export function StatisticsComponent(): JSX.Element {
         (Terms created (C), Terms changed status = Activity (A), Terms set to
         "Known" (K))
       </h4>
-      <table className="tab3" cellSpacing="0" cellPadding={5}>
+      <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
             <th className="th1" rowSpan={2}>
@@ -326,7 +327,7 @@ export function NavigateButton({
   buttonText: string;
   navigateTo: RouterPage;
 }) {
-  const navigate = useNavigate();
+  const navigate = useInternalNavigate();
 
   return (
     <input

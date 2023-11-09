@@ -1,13 +1,11 @@
 import React, { useRef } from 'react';
-import { LANGDEFS, LANGS } from '../data/wizardData';
-const $ = '';
+import { Icon } from '../Icon';
+import { LANGS } from '../data/wizardData';
 
-function wizard_exit() {
-  window.close();
-}
 function wizard_go(
   refL1: React.MutableRefObject<HTMLSelectElement | undefined>,
-  refL2: React.MutableRefObject<HTMLSelectElement | undefined>
+  refL2: React.MutableRefObject<HTMLSelectElement | undefined>,
+  onSuccess: () => void
 ) {
   const l1 = refL1.current?.value;
   const l2 = refL2.current?.value;
@@ -25,13 +23,6 @@ function wizard_go(
     return;
   }
 
-  const w = window.opener;
-  if (typeof w == 'undefined') {
-    alert('Language setting cannot be set. Please try again.');
-    wizard_exit();
-  }
-  // TODO input values
-  const context = w.document;
   // $('input[name="LgName"]', context).val(l2);
   // $('input[name="LgDict1URI"]', context).val(
   //   '*https://de.glosbe.com/' +
@@ -59,9 +50,15 @@ function wizard_go(
   // );
   // $('select[name="LgRemoveSpaces"]', context).val(LANGDEFS[l2].LgRemoveSpaces);
   // $('select[name="LgRightToLeft"]', context).val(LANGDEFS[l2].LgRightToLeft);
-  wizard_exit();
+  onSuccess();
 }
-export default function NewLanguageWizard(): JSX.Element {
+export default function NewLanguageWizard({
+  onSuccess,
+  onExit,
+}: {
+  onSuccess: () => void;
+  onExit: () => void;
+}): JSX.Element {
   const refL1 =
     useRef<HTMLSelectElement>() as React.MutableRefObject<HTMLSelectElement>;
   const refL2 =
@@ -70,11 +67,7 @@ export default function NewLanguageWizard(): JSX.Element {
     <>
       <div className="center">
         <p className="wizard">
-          <img
-            src="icn/wizard.png"
-            title="Language Settings Wizard"
-            alt="Language Settings Wizard"
-          />
+          <Icon src="wizard" title="Language Settings Wizard" />
         </p>
 
         <h3 className="wizard">Language Settings Wizard</h3>
@@ -110,12 +103,12 @@ export default function NewLanguageWizard(): JSX.Element {
             type="button"
             style={{ fontSize: '1.1em' }}
             value="Set Language Settings"
-            onClick={() => wizard_go(refL1, refL2)}
+            onClick={() => wizard_go(refL1, refL2, onSuccess)}
           />
         </p>
 
         <p className="wizard">
-          <input type="button" value="Cancel" onClick={wizard_exit} />
+          <input type="button" value="Cancel" onClick={() => onExit()} />
         </p>
       </div>
     </>

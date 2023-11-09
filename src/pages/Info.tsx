@@ -1,10 +1,24 @@
+import { A } from '../nav/InternalLink';
+
 export function InfoPage() {
   return (
     <>
       <body>
         <div
           id="floatdiv"
-          style="position: absolute; width: auto; height: auto; top: 44633.8px; padding: 5px; background: rgb(221, 221, 221); border: 1px solid rgb(136, 136, 136); z-index: 100; font-size: 10pt; text-align: center; left: 421px;"
+          style={{
+            position: 'absolute',
+            width: 'auto',
+            height: 'auto',
+            top: '44633.8px',
+            padding: '5px',
+            background: 'rgb(221, 221, 221)',
+            border: '1px solid rgb(136, 136, 136)',
+            zIndex: 100,
+            fontSize: '10pt',
+            textAlign: 'center',
+            left: '421px',
+          }}
         >
           <a href="#">↑ TOP ↑</a>
           <br />
@@ -58,16 +72,16 @@ $('#floatdiv').addFloating( {
 //]]> */}
         </script>
 
-        <div style="margin-right:100px;">
+        <div style={{ marginRight: '100px' }}>
           <h4>
-            <a href="index.php" target="_top">
+            <A href="/" target="_top">
               <img
                 src="img/lwt_icon_big.png"
                 className="lwtlogoright"
                 alt="Logo"
               />
               Learning with Texts
-            </a>
+            </A>
             <br />
             <br />
             <span className="bigger">Help/Information</span>
@@ -253,7 +267,7 @@ $('#floatdiv').addFloating( {
                     </li>
                     <li>
                       <a
-                        href="https://learning-with-texts.sourceforge.io/testdb/index.php"
+                        href="https://learning-with-texts.sourceforge.io/testdb/index"
                         target="_blank"
                       >
                         <b>START ONLINE DEMO</b>
@@ -402,7 +416,7 @@ $('#floatdiv').addFloating( {
                     </li>
                     <li>
                       <a
-                        href="https://forum.language-learners.org/viewtopic.php?f=19&t=1993"
+                        href="https://forum.language-learners.org/viewtopic?f=19&t=1993"
                         target="_blank"
                       >
                         Sites/Apps like Readlang, Lingq, Lingua.ly, etc.
@@ -410,7 +424,7 @@ $('#floatdiv').addFloating( {
                     </li>
                     <li>
                       <a
-                        href="https://forum.language-learners.org/viewtopic.php?f=19&t=5648"
+                        href="https://forum.language-learners.org/viewtopic?f=19&t=5648"
                         target="_blank"
                       >
                         Best dictionaries for use with LWT?
@@ -418,7 +432,7 @@ $('#floatdiv').addFloating( {
                     </li>
                     <li>
                       <a
-                        href="https://forum.language-learners.org/viewtopic.php?f=19&t=7156"
+                        href="https://forum.language-learners.org/viewtopic?f=19&t=7156"
                         target="_blank"
                       >
                         Getting the most out of LWT
@@ -982,7 +996,7 @@ $('#floatdiv').addFloating( {
                       <a href="http://mobiledetect.net/" target="_blank">
                         http://mobiledetect.net
                       </a>{' '}
-                      (php-mobile-detect/Mobile_Detect.php)
+                      (php-mobile-detect/Mobile_Detect)
                     </li>
 
                     <li>
@@ -1370,7 +1384,7 @@ $('#floatdiv').addFloating( {
                       "http://www.linguee.de/search?direction=auto&query=###ISO-8859-15###".
                       A list of encodings can be found{' '}
                       <a
-                        href="http://php.net/manual/en/mbstring.supported-encodings.php"
+                        href="http://php.net/manual/en/mbstring.supported-encodings"
                         target='_blank"'
                       >
                         here
@@ -1392,8 +1406,8 @@ $('#floatdiv').addFloating( {
                       </a>
                       ) has been closely integrated into LWT via the Glosbe API.
                       To use this dictionary, input the "special" dictionary
-                      link "<i>glosbe_api.php?from=...&dest=...&phrase=###</i>"
-                      (NO "http://" at the beginning!!) with <i>from</i>: "L2
+                      link "<i>glosbe_api?from=...&dest=...&phrase=###</i>" (NO
+                      "http://" at the beginning!!) with <i>from</i>: "L2
                       language code" (the language of your texts) and{' '}
                       <i>dest</i>: "L1 language code" (e.g. mother tongue). To
                       find the language codes, open{' '}
@@ -1411,7 +1425,7 @@ $('#floatdiv').addFloating( {
                       I recommend to use the LWT-integrated Glosbe dictionary as
                       the "Dictionary 1 URI". Note: I cannot guarantee that the
                       Glosbe API and this special integration will work in the
-                      future! glosbe_api.php is just an example how one can
+                      future! glosbe_api is just an example how one can
                       integrate a dictionary into LWT.
                       <br /> <br />
                       You don't know how and where to find a good web
@@ -2222,7 +2236,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 When you start using LWT, you store all your data in the
                 "Default Table Set" within the database you have defined in the
-                file "connect.inc.php" during the LWT installation.
+                file "connect.inc" during the LWT installation.
                 <br />
                 <br />
                 Beginning with LWT Version 1.5.3, you are able to create and to
@@ -2250,7 +2264,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 <br />
                 If you want "switch off" this feature, and use just one table
-                set, you may define the name in the file "connect.inc.php":
+                set, you may define the name in the file "connect.inc":
                 <br />
                 <br />
                 <b>$tbpref = "";</b> &nbsp; &nbsp; &nbsp; // only the default
@@ -2261,17 +2275,17 @@ $('#floatdiv').addFloating( {
                 table set "setname"
                 <br />
                 <br />
-                After adding such a line in the file "connect.inc.php", you are
-                not able to select, create or delete table sets anymore. Only
-                the one you have defined in "connect.inc.php" will be used.
-                Please observe the rules for table set names (see above)!!
+                After adding such a line in the file "connect.inc", you are not
+                able to select, create or delete table sets anymore. Only the
+                one you have defined in "connect.inc" will be used. Please
+                observe the rules for table set names (see above)!!
                 <br />
                 <br />
                 If more than one table set exists, and $tbpref was NOT set to a
-                fixed value in "connect.inc.php", you can select the desired
-                table set via "start.php" (use this as start page if several
-                people use their own table set), or by clicking on the LWT icon
-                or title in the LWT menu screen "index.php".
+                fixed value in "connect.inc", you can select the desired table
+                set via "start" (use this as start page if several people use
+                their own table set), or by clicking on the LWT icon or title in
+                the LWT menu screen "index".
                 <br />
                 <br />
                 By hovering over the LWT icon in the top left corner of every
@@ -2337,7 +2351,7 @@ $('#floatdiv').addFloating( {
                   <br />
                   Answer: Either the database (MySQL) is not running, or the
                   database connection parameters in{' '}
-                  <i>../htdocs/lwt/connect.inc.php</i> are wrong. Please
+                  <i>../htdocs/lwt/connect.inc</i> are wrong. Please
                   check/correct the database connection parameters and/or start
                   MySQL via the MAMP or EasyPHP control program/panel.
                   <br />
@@ -2353,9 +2367,9 @@ $('#floatdiv').addFloating( {
                   <br />
                   Answer: The Webserver and the database is running, but the
                   database connection parameter file{' '}
-                  <i>../htdocs/lwt/connect.inc.php</i> is not found. Please
-                  rename one of the connection files (according to your server)
-                  to <i>../htdocs/lwt/connect.inc.php</i>.
+                  <i>../htdocs/lwt/connect.inc</i> is not found. Please rename
+                  one of the connection files (according to your server) to{' '}
+                  <i>../htdocs/lwt/connect.inc</i>.
                   <br />
                   <br />
                 </li>
@@ -2477,7 +2491,7 @@ $('#floatdiv').addFloating( {
                   and about the characters that occur in the language you learn!
                   <br />
                   <br />
-                  <table className="tab3" cellSpacing="0" cellPadding="5">
+                  <table className="tab3" cellSpacing={0} cellPadding={5}>
                     <tbody>
                       <tr className="tr1">
                         <th className="th1">Language</th>
@@ -2728,7 +2742,7 @@ $('#floatdiv').addFloating( {
                 <li>
                   Key Bindings in the TEXT Frame
                   <br />
-                  <table className="tab3" cellSpacing="0" cellPadding="5">
+                  <table className="tab3" cellSpacing={0} cellPadding={5}>
                     <tbody>
                       <tr className="tr1">
                         <th className="th1">Key(s)</th>
@@ -2808,7 +2822,7 @@ $('#floatdiv').addFloating( {
                 <li>
                   Key Bindings in the TEST Frame
                   <br />
-                  <table className="tab3" cellSpacing="0" cellPadding="5">
+                  <table className="tab3" cellSpacing={0} cellPadding={5}>
                     <tbody>
                       <tr className="tr1">
                         <th className="th1">Key(s)</th>
@@ -2963,7 +2977,7 @@ $('#floatdiv').addFloating( {
                   <br />
                   jQuery library updated to v1.12.4.
                   <br />
-                  "Mobile_Detect.php" updated to v2.8.30.
+                  "Mobile_Detect" updated to v2.8.30.
                   <br />
                   LWT demo database updated.
                   <br />
@@ -2971,11 +2985,11 @@ $('#floatdiv').addFloating( {
                   <br />
                   Some minor glitches fixed.
                   <br />
-                  Glosbe API calls via "glosbe_api.php" in demo database and
+                  Glosbe API calls via "glosbe_api" in demo database and
                   language settings wizard removed - they often did not work due
-                  to API restrictions. The file "glosbe_api.php" is still
-                  supplied as an example of a close integration of a dictionary
-                  API into LWT.
+                  to API restrictions. The file "glosbe_api" is still supplied
+                  as an example of a close integration of a dictionary API into
+                  LWT.
                   <br />
                   <br />
                 </li>

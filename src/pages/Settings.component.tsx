@@ -1,16 +1,19 @@
 import { RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 
 // TODO abstract this out into a nested settings component
 export function SettingsComponent(): JSX.Element {
   const [{ settings }, { setViewerSettings }] = useData(['settings']);
+  const navigate = useInternalNavigate();
+
   return (
     <>
       <Header title="Settings/Preferences" />
       <p>&nbsp;</p>
       <form className="validate" action="/settings" method="post">
-        <table className="tab3" cellSpacing="0" cellPadding={5}>
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
               <th className="th1">Group</th>
@@ -490,13 +493,23 @@ export function SettingsComponent(): JSX.Element {
                 <input
                   type="button"
                   value="<< Back"
-                  onClick="{resetDirty(); location.href='index';}"
+                  onClick={() => {
+                    // TODO
+                    const resetDirty = () => {};
+                    resetDirty();
+                    navigate('/');
+                  }}
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input
                   type="button"
                   value="Reset all settings to default"
-                  onClick="{resetDirty(); location.href='settings?op=reset';}"
+                  onClick={() => {
+                    // TODO
+                    const resetDirty = () => {};
+                    resetDirty();
+                    navigate('/settings?op=reset');
+                  }}
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
                 <input type="submit" name="op" value="Save" />

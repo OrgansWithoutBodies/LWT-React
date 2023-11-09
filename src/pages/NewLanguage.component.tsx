@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import Modal from 'react-modal';
 import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Languages } from '../data/parseMySqlDump';
@@ -9,6 +11,8 @@ import {
   emptyToNullMap,
   parseNumMap,
 } from './Forms';
+import { Header } from './Header';
+import NewLanguageWizard from './Wizard.component';
 // TODO table component?
 // TODO map LangDef to Languages
 type LanguageNoId = Omit<Languages, 'LgID'>;
@@ -25,14 +29,16 @@ export function NewLanguage() {
     LgRightToLeft: parseNumMap,
     LgDict2URI: emptyToNullMap,
   };
+  const [wizardOpen, setWizardOpen] = useState<boolean>(false);
   const validator = LanguagesValidatorNoId;
   const refMap = RefMap<LanguageNoId>(validator);
   return (
     <>
+      <Header title="New Language" link={''} />
       <h4>
         New Language
         <a target="_blank" href="info#howtolang">
-          <Icon iconName="question-frame" title="Help" alt="Help" />
+          <Icon src="question-frame" title="Help" />
         </a>
       </h4>
       <form className="validate">
@@ -42,18 +48,23 @@ export function NewLanguage() {
             <tr>
               <td className="td1 center backlightyellow" colSpan={2}>
                 <Icon
-                  iconName="wizard"
+                  src="wizard"
                   title="Language Settings Wizard"
-                  alt="Language Settings Wizard"
                   className="click"
+                  onClick={() => {
+                    setWizardOpen(true);
+                  }}
                 />
-                {/* onClick="window.open('select_lang_pair', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
                 <br />
-                <span className="click">
-                  {/* click="window.open('select_lang_pair', 'wizard', 'width=400, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no');" */}
-                  <Icon iconName="arrow-000-medium" title="->" alt="->" />
+                <span
+                  className="click"
+                  onClick={() => {
+                    setWizardOpen(true);
+                  }}
+                >
+                  <Icon src="arrow-000-medium" title="->" />
                   <b>Language Settings Wizard</b>
-                  <Icon iconName="arrow-180-medium" title="<-" alt="<-" />
+                  <Icon src="arrow-180-medium" title="<-" />
                 </span>
                 <br />
                 <span className="smallgray">
@@ -260,11 +271,12 @@ export function NewLanguage() {
                 Export Template
                 <Icon
                   className="click"
-                  iconName="question-frame"
+                  src="question-frame"
                   title="Help"
-                  alt="Help"
+                  // TODO
+                  onClick="oewin('info_export_template.htm');"
                 />
-                :{/* onClick="oewin('info_export_template.htm');" */}
+                :
               </td>
               <td className="td1">
                 <input
@@ -292,6 +304,7 @@ export function NewLanguage() {
                   name="op"
                   value="Save"
                   onClick={() => {
+                    // TODO if successful navigate to list
                     CheckAndSubmit(refMap, preValidateMap, validator, (value) =>
                       dataService.addLanguage(value)
                     );
@@ -318,6 +331,31 @@ export function NewLanguage() {
           .
         </p>
       </form>
+      <Modal
+        isOpen={wizardOpen}
+        style={{
+          content: {
+            // TODO not hardcoded
+            backgroundColor: 'black',
+            width: '80%',
+            height: '80%',
+            left: '10%',
+            top: '10%',
+          },
+        }}
+        contentLabel="Wizard Modal"
+        className="center"
+      >
+        <NewLanguageWizard
+          onSuccess={() => {
+            // TODO payload
+            setWizardOpen(false);
+          }}
+          onExit={() => {
+            setWizardOpen(false);
+          }}
+        />
+      </Modal>
     </>
   );
 }

@@ -3,6 +3,7 @@ import { dataService } from '../data/data.service';
 import { Languages, Words } from '../data/parseMySqlDump';
 import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
 import { usePopoverContext } from './Tooltip';
 type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
@@ -39,12 +40,12 @@ function ExpressionsLines({
       {expressions.map((expression, ii) => {
         return (
           // TODO numbers here
-          <a
-            href={`edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
+          <A
+            href={`/edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
             target="ro"
           >
             {ii + 2}..{expression}
-          </a>
+          </A>
         );
       })}
     </>
@@ -126,21 +127,21 @@ function TermTooltipHeader({
 }): JSX.Element {
   return (
     <>
-      <table width="100%" cellSpacing="0" cellPadding={2}>
+      <table width="100%" cellSpacing={0} cellPadding={2}>
         {/* border={0} */}
         <tbody>
           <tr>
             <td>
               <b>
                 {/* <!-- <font lucida="" grande",arial,sans-serif,stheiti,"arial="" unicode="" ms",mingliu"="" size={3} face="" color="#FFFFFF"> --> */}
-                <a
+                <A
                   style={{ color: 'yellow' }}
-                  href={`edit_word?tid=${44}&ord=${55}&wid=${369}`}
+                  href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`}
                   target="ro"
                 >
                   {headerTitle} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   &nbsp;
-                </a>
+                </A>
                 {/* <!-- </font> --> */}
               </b>
             </td>
@@ -162,13 +163,13 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
         <br />▶ Unknown [?]
       </b>
       <br />
-      <a href={`insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro">
+      <A href={`/insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro">
         I know this term well
-      </a>
+      </A>
       <br />
-      <a href={`insert_word_ignore?tid=${44}&ord=${1504}`} target="ro">
+      <A href={`/insert_word_ignore?tid=${44}&ord=${1504}`} target="ro">
         Ignore this term
-      </a>
+      </A>
     </>
   );
 }
@@ -194,22 +195,22 @@ export function KnownTermLines({
           return <span title="Learned"> ◆</span>;
         }
         return (
-          <a
+          <A
             onClick={() => dataService.changeTermStrength(word.WoID, strength)}
             target="ro"
           >
             <span title={StrengthMap[strength].status}> [{strength}]</span>
-          </a>
+          </A>
         );
       })}
       <br />
-      <a href={`edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
+      <A href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
         Edit term
-      </a>
+      </A>
       |
-      <a onClick={() => dataService.deleteTerm(word.WoID)} target="ro">
+      <A onClick={() => dataService.deleteTerm(word.WoID)} target="ro">
         Delete term
-      </a>
+      </A>
     </>
   );
 }

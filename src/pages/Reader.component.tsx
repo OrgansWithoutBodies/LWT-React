@@ -31,7 +31,7 @@ export function Reader({
       <p
         style={{
           wordBreak: 'break-all',
-          // whiteSpace: 'nowrap',
+          whiteSpace: 'nowrap',
           fontSize: '200%',
           lineHeight: 1.4,
           marginBottom: '10px',

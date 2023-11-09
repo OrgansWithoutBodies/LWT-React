@@ -3,6 +3,7 @@ import { dataService } from '../data/data.service';
 import { ArchivedTexts, Languages, Texts, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
+import { A } from '../nav/InternalLink';
 import { Header } from './Header';
 
 function LanguageLine({
@@ -32,73 +33,66 @@ function LanguageLine({
   return (
     <tr>
       <td className="td1 center">
-        <a
+        {/* <A
           href={`save_setting_redirect?k=${'currentlanguage'}&v=${2}&u=${'edit_languages'}`}
-        >
-          <Icon
-            onClick={() => {
-              dataService.setActiveLanguage(thisRowActive ? null : id);
-            }}
-            iconName={thisRowActive ? 'exclamation-red' : 'tick-button'}
-            title={
-              thisRowActive ? 'Current Language' : 'Set as Current Language'
-            }
-            alt={thisRowActive ? 'Current Language' : 'Set as Current Language'}
-          />
-        </a>
+        > */}
+        <Icon
+          onClick={() => {
+            dataService.setActiveLanguage(thisRowActive ? null : id);
+          }}
+          src={thisRowActive ? 'exclamation-red' : 'tick-button'}
+          title={thisRowActive ? 'Current Language' : 'Set as Current Language'}
+        />
+        {/* </a> */}
       </td>
       <td className="td1 center">
-        <a href={`do_test?lang=${id}`}>
-          <Icon iconName={'question-balloon'} title="Test" alt="Test" />
-        </a>
+        <A href={`/do_test?lang=${id}`}>
+          <Icon src={'question-balloon'} title="Test" />
+        </A>
       </td>
       <td className="td1 center">
         &nbsp;
-        <a href={`print_text?text=${id}`}>
-          <Icon iconName="printer" title="Print" alt="Print" />
-        </a>
+        <A href={`/print_text?text=${id}`}>
+          <Icon src="printer" title="Print" />
+        </A>
         &nbsp;
-        <a href={`/edit_texts?arch=${id}`}>
-          <Icon iconName="inbox-download" title="Archive" alt="Archive" />
-        </a>
+        <A href={`/edit_texts?arch=${id}`}>
+          <Icon src="inbox-download" title="Archive" />
+        </A>
         &nbsp;
-        <a href={`/edit_texts?chg=${id}`}>
-          <Icon iconName="document--pencil" title="Edit" alt="Edit" />
-        </a>
+        <A href={`/edit_texts?chg=${id}`}>
+          <Icon src="document--pencil" title="Edit" />
+        </A>
         &nbsp;
         <span
           className="click"
           onClick={() => dataService.deleteLanguage(language.LgID)}
-          onClick={`if (confirmDelete()) location.href='/edit_texts?del=${47}';`}
+          // onClick={`if (confirmDelete()) location.href='/edit_texts?del=${47}';`}
         >
-          <Icon iconName="minus-button" title="Delete" alt="Delete" />
+          <Icon src="minus-button" title="Delete" />
         </span>
         &nbsp;
       </td>
       <td className="td1 center">{language.LgName}</td>
       <td className="td1 center">
-        <a href={`edit_texts?page=${1}&query=&filterlang=${2}`}>
+        <A href={`/edit_texts?page=${1}&query=&filterlang=${2}`}>
           {numTextsThisLanguage}
-        </a>
+        </A>
         &nbsp;&nbsp;
-        <a href={`/edit_languages?refresh=${2}`}>
-          <Icon
-            iconName="lightning"
-            title="Reparse Texts"
-            alt="Reparse Texts"
-          />
-        </a>
+        <A href={`/edit_languages?refresh=${2}`}>
+          <Icon src="lightning" title="Reparse Texts" />
+        </A>
       </td>
       <td className="td1 center">{numArchivedThisLanguage}</td>
       <td className="td1 center">
-        <a
-          href={`edit_words?page=${1}&query=&text=&status=&filterlang=${2}&status=&tag12=${0}&tag2=&tag1=`}
+        <A
+          href={`/edit_words?page=${1}&query=&text=&status=&filterlang=${2}&status=&tag12=${0}&tag2=&tag1=`}
         >
           {numTermsThisLanguage}
-        </a>
+        </A>
       </td>
       <td className="td1 center">
-        <Icon iconName="status" title="Yes" alt="Yes" />
+        <Icon src="status" title="Yes" />
       </td>
     </tr>
   );
@@ -117,11 +111,11 @@ export function LanguagesPage(): JSX.Element {
 
   return (
     <>
-      <Header title="My Languages" link={''} />
+      <Header title="My Languages" />
       <p>
-        <a href={`/edit_languages?new=${1}`}>
-          <Icon iconName="plus-button" title="New" alt="New" /> New Language ...
-        </a>
+        <A href={`/edit_languages?new=${1}`}>
+          <Icon src="plus-button" title="New" /> New Language ...
+        </A>
       </p>
       <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
         <thead>

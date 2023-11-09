@@ -11,6 +11,7 @@ import { LandingPage } from './pages/LandingPage.component';
 import React from 'react';
 import { AddNewWord } from './pages/AddNewWord';
 import { BackupScreen } from './pages/Backups.component';
+import { CheckText } from './pages/CheckText';
 import { EditArchivedTexts } from './pages/EditArchived.component';
 import { EditTags } from './pages/EditTags';
 import { EditTextTags } from './pages/EditTextTags';
@@ -18,7 +19,6 @@ import { InfoPage } from './pages/Info';
 import { LanguagesPage } from './pages/Languages.component';
 import { Library } from './pages/Library.component';
 import ImportLongText from './pages/LongTextImport.component';
-import { LongTextVerify } from './pages/LongTextImportVerify.component';
 import { NewLanguage } from './pages/NewLanguage.component';
 import { ReaderPage } from './pages/ReaderPage.component';
 import { SettingsComponent } from './pages/Settings.component';
@@ -85,19 +85,25 @@ trans
         {/* A <Routes> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Routes>
+          {/* TODO make internal a's just use navigate */}
+          {/* TODO 404 page */}
           <Route path="/" element={<LandingPage />} />
+          {/* <Route path="/select_lang_pair" element={<NewLanguageWizard />} /> */}
           <Route path="/index" element={<LandingPage />} />
           <Route path="/edit_words" element={<TermsWrapper />} />
           <Route path="/edit_texts" element={<LibraryWrapper />} />
           <Route path="/upload_words" element={<LibraryWrapper />} />
-          <Route path="/edit_archivedtexts" element={<EditArchivedTexts />} />
-          <Route path="/edit_tags" element={<EditTags />} />
-          <Route path="/edit_texttags" element={<EditTextTags />} />
+          <Route
+            path="/edit_archivedtexts"
+            element={<EditArchivedTextsWrapper />}
+          />
+          <Route path="/edit_tags" element={<EditTagsWrapper />} />
+          <Route path="/edit_texttags" element={<EditTextTagsWrapper />} />
           <Route path="/info" element={<InfoPage />} />
           <Route path="/backup_restore" element={<BackupScreen />} />
           <Route path="/edit_languages" element={<LanguagesWrapper />} />
           <Route path="/long_text_import" element={<ImportLongText />} />
-          <Route path="/check_text" element={<LongTextVerify />} />
+          <Route path="/check_text" element={<CheckText />} />
           <Route path="/statistics" element={<StatisticsComponent />} />
           <Route path="/new_word" element={<AddNewWordWrapper />} />
           <Route path="/settings" element={<SettingsComponent />} />
@@ -107,7 +113,6 @@ trans
       </Router>
       <>
         {/* 
-        <NewLanguageWizard />
         <ImportShortText />
         */}
       </>
@@ -128,8 +133,8 @@ function TermsWrapper() {
   const chgID = searchParams.get('chg');
   return (
     <Switch cond={chgID === null}>
-      <Terms />
-      <Terms />
+      <Terms pageNum={0} />
+      <Terms pageNum={0} />
     </Switch>
   );
 }
@@ -158,6 +163,21 @@ function LibraryWrapper() {
       <NewLanguage />
     </Switch>
   );
+}
+function EditArchivedTextsWrapper() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('query');
+  return <EditArchivedTexts query={query || ''} />;
+}
+function EditTextTagsWrapper() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('query');
+  return <EditTextTags query={query || ''} />;
+}
+function EditTagsWrapper() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('query');
+  return <EditTags query={query || ''} />;
 }
 function ReaderWrapper() {
   const [searchParams] = useSearchParams();

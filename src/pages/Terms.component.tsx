@@ -1,15 +1,20 @@
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
 function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
+  const navigate = useInternalNavigate();
   return (
     <select
       name="tag1"
-      onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_words?page=1&tag1=' + val;}"
+      // TODO
+      onChange={({ target: { value } }) => {
+        navigate(`/edit_words?page=1&tag1=${value}`);
+      }}
     >
       <option value="" selected>
         [Filter off]
@@ -68,18 +73,19 @@ export function TermsFilterBox({
   const pageSize = 10;
   //   TODO
   const numPages = Math.ceil(numTerms / pageSize);
-  const navigate = useNavigate();
+  const navigate = useInternalNavigate();
   return (
-    <table className="tab1" cellSpacing="0" cellPadding={5}>
+    <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
         <tr>
           <th className="th1" colSpan={4}>
             Filter
-            <Icon iconName="funnel" title="Filter" alt="Filter" />
+            <Icon src="funnel" title="Filter" />
             &nbsp;
             <input
               type="button"
               value="Reset All"
+              // TODO
               onClick="resetAll('edit_words');"
             />
           </th>
@@ -109,8 +115,11 @@ export function TermsFilterBox({
           </td>
         </tr>
         <tr>
-          <td className="td1 center" colSpan={2}>
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <td
+            style={{ whiteSpace: 'nowrap' }}
+            className="td1 center"
+            colSpan={2}
+          >
             Status:
             <select
               name="status"
@@ -155,8 +164,11 @@ export function TermsFilterBox({
               <option value="599">All known [5+WKn]</option>
             </select>
           </td>
-          <td className="td1 center" colSpan={2}>
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <td
+            style={{ whiteSpace: 'nowrap' }}
+            className="td1 center"
+            colSpan={2}
+          >
             Term, Rom., Transl. (Wildc.=*):
             <input type="text" name="query" value="" maxLength={50} size={15} />
             &nbsp;
@@ -181,44 +193,47 @@ export function TermsFilterBox({
           </td>
         </tr>
         <tr>
-          <td className="td1 center" colSpan={2}>
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <td
+            style={{ whiteSpace: 'nowrap' }}
+            className="td1 center"
+            colSpan={2}
+          >
             Tag #1:
             <TagDropDown tags={tags} />
           </td>
-          <td className="td1 center">
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
             Tag #1 ..
             <select
               name="tag12"
-              onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_words?page=1&tag12=' + val;}"
+              onChange={({ target: { value } }) => {
+                navigate(`/edit_words?page=1&tag12=${value}`);
+              }}
             >
               <option value="0">... OR ...</option>
               <option value="1">... AND ...</option>
             </select>
             .. Tag #2
           </td>
-          <td className="td1 center">
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
             Tag #2:
             <TagDropDown tags={tags} />
           </td>
         </tr>
         <tr>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
             {numTerms} Terms
           </th>
-          <th className="th1" colSpan={2}>
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <th className="th1" style={{ whiteSpace: 'nowrap' }} colSpan={2}>
             &nbsp; &nbsp;
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             &nbsp;
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             &nbsp; Page
             <select
               name="page1"
-              onChange="{val=document.form1.page1.options[document.form1.page1.selectedIndex].value; location.href='edit_words?page=' + val;}"
+              onChange={({ target: { value } }) => {
+                navigate(`/edit_words?page=${value}`);
+              }}
             >
               {[...new Array(numPages).keys()].map((pageNumber) => {
                 const isSelected = currentPage === pageNumber + 1;
@@ -230,21 +245,22 @@ export function TermsFilterBox({
               })}
             </select>
             of {numPages}&nbsp;
-            <a href="edit_words?page=2">
-              <Icon iconName="control" title="Next Page" alt="Next Page" />
-            </a>
+            <A href="/edit_words?page=2">
+              <Icon src="control" title="Next Page" />
+            </A>
             &nbsp;
-            <a href="edit_words?page=53">
-              <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
-            </a>
+            <A href="/edit_words?page=53">
+              <Icon src="control-stop" title="Last Page" />
+            </A>
             &nbsp; &nbsp;
           </th>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
             Sort Order:
             <select
               name="sort"
-              onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_words?page=1&sort=' + val;}"
+              onChange={({ target: { value } }) => {
+                navigate(`/edit_words?page=1&sort=${value}`);
+              }}
             >
               <option value="1">Term A-Z</option>
               <option value="2">Translation A-Z</option>
@@ -272,22 +288,19 @@ export function TermsFooter({
 }): JSX.Element {
   const pageSize = 10;
   const numPages = Math.ceil(numTerms / pageSize);
-  const navigate = useNavigate();
+  const navigate = useInternalNavigate();
   return (
-    <table className="tab1" cellSpacing="0" cellPadding={5}>
+    <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
         <tr>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
-            {/* TODO plural */}
-            {numTerms} Terms
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
+            {numTerms} Term{numTerms === 1 ? '' : 's'}
           </th>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
             &nbsp; &nbsp;
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             &nbsp;
-            <Icon iconName="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
             {/* TODO abstract this into a page dropdown component? */}
             &nbsp; Page
             <select
@@ -306,13 +319,13 @@ export function TermsFooter({
               })}
             </select>
             of {numPages}&nbsp;
-            <a href={`edit_words?page=${currentPage + 1}`}>
-              <Icon iconName="control" title="Next Page" alt="Next Page" />
-            </a>
+            <A href={`/edit_words?page=${currentPage + 1}`}>
+              <Icon src="control" title="Next Page" />
+            </A>
             &nbsp;
-            <a href={`edit_words?page=${numPages}`}>
-              <Icon iconName="control-stop" title="Last Page" alt="Last Page" />
-            </a>
+            <A href={`/edit_words?page=${numPages}`}>
+              <Icon src="control-stop" title="Last Page" />
+            </A>
             &nbsp; &nbsp;
           </th>
         </tr>
@@ -329,28 +342,27 @@ function TermLine({ word }: { word: Words }): JSX.Element {
     <tr>
       <td className="td1 center">
         {/*a name="rec${termID}" */}
-        <a>
+        <A>
           <input
             name="marked[]"
             type="checkbox"
             className="markcheck"
             value={termID}
           />
-        </a>
+        </A>
       </td>
-      <td className="td1 center">
-        {/* style={{whiteSpace:"nowrap"}} */}
+      <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
         &nbsp;
-        <a href={`/edit_words?chg=${termID}`}>
-          <Icon iconName="sticky-note--pencil" title="Edit" alt="Edit" />
-        </a>
+        <A href={`/edit_words?chg=${termID}`}>
+          <Icon src="sticky-note--pencil" title="Edit" />
+        </A>
         &nbsp;
-        <a
+        <A
           className="confirmdelete"
           onClick={() => dataService.deleteTerm(word.WoID)}
         >
-          <Icon iconName="minus-button" title="Delete" alt="Delete" />
-        </a>
+          <Icon src="minus-button" title="Delete" />
+        </A>
         &nbsp;
       </td>
       <td className="td1">
@@ -376,20 +388,19 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       <td className="td1 center">
         <b>
           {sentence !== undefined ? (
-            <Icon iconName="status-busy" title={`${sentence}`} alt="Yes" />
+            <Icon src="status-busy" title={`${sentence}`} alt="Yes" />
           ) : (
-            <Icon iconName="status-busy" title="(No valid sentence)" alt="No" />
+            <Icon src="status-busy" title="(No valid sentence)" alt="No" />
           )}
         </b>
       </td>
       <td className="td1 center" title="Learning">
         1/1
       </td>
-      <td className="td1 center">
-        {/* style={{whiteSpace:"nowrap"}} */}
+      <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
         <span className="scorered">
           0
-          <Icon iconName="status-busy" title="Test today!" alt="Test today!" />
+          <Icon src="status-busy" title="Test today!" />
         </span>
       </td>
     </tr>

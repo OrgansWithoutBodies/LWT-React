@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as ss from 'superstruct';
-import { RequiredLineButton } from '../Icon';
+import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { AddNewWordType, AddNewWordValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -91,7 +91,7 @@ export function AddNewWord({
         <input type="hidden" name="tid" value="11" />
         <input type="hidden" name="ord" value="7" />
 
-        <table className="tab2" cellSpacing="0" cellPadding={5}>
+        <table className="tab2" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
               <td className="td1 right">Language:</td>
@@ -278,6 +278,7 @@ export function AddNewWord({
               <td className="td1 right" colSpan={2}>
                 <script type="text/javascript"></script>
                 Lookup Term:
+                {/* external link */}
                 <a
                   // TODO custom dict
                   href="https://dict.naver.com/linedict/zhendict/dict.html#/cnen/search?query=%E5%AE%AA"
@@ -285,6 +286,7 @@ export function AddNewWord({
                 >
                   Dict1
                 </a>
+                {/* external link */}
                 <a
                   // TODO custom dict
                   href="http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=%E5%AE%AA"
@@ -294,6 +296,7 @@ export function AddNewWord({
                 </a>
                 <span
                   className="click"
+                  // TODO
                   onClick="owin('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=%E5%AE%AA');"
                 >
                   GTr
@@ -301,6 +304,7 @@ export function AddNewWord({
                 | Sent.:
                 <span
                   className="click"
+                  // TODO
                   onClick="translateSentence2('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=###',document.forms[0].WoSentence);"
                 >
                   GTr
@@ -327,13 +331,10 @@ export function AddNewWord({
       <div id="exsent">
         <span
           className="click"
+          // TODO
           onClick="do_ajax_show_sentences(2, '宪', 'document.forms[\'newword\'].WoSentence');"
         >
-          <img
-            src="icn/sticky-notes-stack.png"
-            title="Show Sentences"
-            alt="Show Sentences"
-          />
+          <Icon src="sticky-notes-stack" title="Show Sentences" />
           Show Sentences
         </span>
       </div>

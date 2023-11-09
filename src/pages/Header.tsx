@@ -1,6 +1,25 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { TextsId } from '../data/validators';
+import { A } from '../nav/InternalLink';
+import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
+
+export const headerValues = {
+  Home: 'index',
+  Texts: 'edit_texts',
+  'Text Archive': 'edit_archivedtexts',
+  'Text Tags': 'edit_texttags',
+  Languages: 'edit_languages',
+  Terms: 'edit_words',
+  'Term Tags': 'edit_tags',
+  Statistics: 'statistics',
+  'Text Check': 'check_text',
+  'Long Text': 'long_text_import',
+  'Term Import': 'upload_words',
+  'Backup/Restore': 'backup_restore',
+  Settings: 'settings',
+  Help: 'info',
+} as const;
 
 export function Header({
   afterDropdown,
@@ -10,7 +29,7 @@ export function Header({
 }: {
   afterDropdown?: string[];
   title: string;
-  link?: string;
+  link?: InternalPaths;
   readerProps?: {
     prevTextID: TextsId;
     nextTextID: TextsId;
@@ -20,28 +39,12 @@ export function Header({
   };
 }) {
   const logoSize = 48;
-  const navigate = useNavigate();
+  const navigate = useInternalNavigate();
   const location = useLocation();
-  const headerValues = {
-    Home: 'index',
-    Texts: 'edit_texts',
-    'Text Archive': 'edit_archivedtexts',
-    'Text Tags': 'edit_texttags',
-    Languages: 'edit_languages',
-    Terms: 'edit_words',
-    'Term Tags': 'edit_tags',
-    Statistics: 'statistics',
-    'Text Check': 'check_text',
-    'Long Text': 'long_text_import',
-    'Term Import': 'upload_words',
-    'Backup/Restore': 'backup_restore',
-    Settings: 'settings',
-    Help: 'info',
-  };
   return (
     <>
       <h4>
-        <a href={link} target="_top">
+        <A href={link} target="_top">
           <img
             className="lwtlogo"
             src="img/lwt_icon.svg"
@@ -51,7 +54,7 @@ export function Header({
             height={logoSize}
           />
           LWT
-        </a>
+        </A>
         &nbsp; | &nbsp;
         <select
           id="quickmenu"
@@ -78,44 +81,34 @@ export function Header({
         {readerProps && (
           <>
             &nbsp; | &nbsp;
-            <a href={`do_text?start=${readerProps.prevTextID}`} target="_top">
+            <A href={`/do_text?start=${readerProps.prevTextID}`} target="_top">
               <Icon
-                iconName="navigation-180-button"
+                src="navigation-180-button"
                 title={`Previous Text: ${readerProps.prevTextString}`}
-                alt={`Previous Text: ${readerProps.prevTextString}`}
               />
-            </a>
-            <a href={`do_text?start=${readerProps.nextTextID}`} target="_top">
+            </A>
+            <A href={`/do_text?start=${readerProps.nextTextID}`} target="_top">
               <Icon
-                iconName="navigation-000-button"
+                src="navigation-000-button"
                 title={`Next Text: ${readerProps.nextTextString}`}
-                alt={`Next Text: ${readerProps.nextTextString}`}
               />
-            </a>
+            </A>
             &nbsp; | &nbsp;
-            <a href={`do_test?text=${11}`} target="_top">
-              <Icon iconName="question-balloon" title="Test" alt="Test" />
-            </a>
+            <A href={`/do_test?text=${11}`} target="_top">
+              <Icon src="question-balloon" title="Test" />
+            </A>
             &nbsp;
-            <a href={`print_text?text=${11}`} target="_top">
-              <Icon iconName="printer" title="Print" alt="Print" />
+            <A href={`/print_text?text=${11}`} target="_top">
+              <Icon src="printer" title="Print" />
               &nbsp;
-            </a>
-            <a target="_top" href={`edit_texts?chg=${11}`}>
-              <Icon
-                iconName="document--pencil"
-                title="Edit Text"
-                alt="Edit Text"
-              />
-            </a>
+            </A>
+            <A target="_top" href={`/edit_texts?chg=${11}`}>
+              <Icon src="document--pencil" title="Edit Text" />
+            </A>
             &nbsp; | &nbsp;
-            <a href={`new_word?text=${11}&lang=${2}`} target="ro">
-              <Icon
-                iconName="sticky-note--plus"
-                title="New Term"
-                alt="New Term"
-              />
-            </a>
+            <A href={`/new_word?text=${11}&lang=${2}`} target="ro">
+              <Icon src="sticky-note--plus" title="New Term" />
+            </A>
           </>
         )}
       </h4>
@@ -126,7 +119,7 @@ export function Header({
           </tr>
         </tbody>
       </table>
-      {/* <h3>READ&nbsp;▶</h3></td><td className="width99pc"><h3>一中三宪 <a href="https://zh.wikipedia.org/wiki/%E4%B8%80%E4%B8%AD%E4%B8%89%E6%86%B2" target="_blank"><Icon iconName="chain" title="Text Source" alt="Text Source" /></a></h3> */}
+      {/* <h3>READ&nbsp;▶</h3></td><td className="width99pc"><h3>一中三宪 <A href="https://zh.wikipedia.org/wiki/%E4%B8%80%E4%B8%AD%E4%B8%89%E6%86%B2" target="_blank"><Icon iconName="chain" title="Text Source" /></A></h3> */}
     </>
   );
 }

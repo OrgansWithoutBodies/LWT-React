@@ -1,6 +1,8 @@
 import { RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { Header } from './Header';
 
 export default function ImportLongText(): JSX.Element {
   const [{ languages, tags, texts, activeLanguage }] = useData([
@@ -9,9 +11,11 @@ export default function ImportLongText(): JSX.Element {
     'texts',
     'activeLanguage',
   ]);
+  const navigate = useInternalNavigate();
 
   return (
     <>
+      <Header title={'Import Long Text'} />
       {/* <form enctype="multipart/form-data" className="validate" action="/long_text_import" method="post"> */}
       <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
@@ -162,7 +166,12 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="button"
                 value="Cancel"
-                onClick="{resetDirty(); location.href='index';}"
+                onClick={() => {
+                  // TODO
+                  const resetDirty = () => {};
+                  resetDirty();
+                  navigate('/');
+                }}
               />
               &nbsp; | &nbsp;
               <input

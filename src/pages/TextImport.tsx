@@ -1,7 +1,7 @@
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { RequiredLineButton } from '../Icon';
+import { Icon, RequiredLineButton } from '../Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { CheckAndSubmit, emptyToNullMap, RefMap, ResetForm } from './Forms';
 import { Header } from './Header';
@@ -21,11 +21,11 @@ export function ImportShortText(): JSX.Element {
       <h4>
         New Text
         <a target="_blank" href="info#howtotext">
-          <img src="icn/question-frame.png" title="Help" alt="Help" />
+          <Icon src="question-frame" title="Help" />
         </a>
       </h4>
       <form className="validate">
-        <table className="tab3" cellSpacing="0" cellPadding={5}>
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
               <td className="td1 right">Language:</td>
@@ -138,12 +138,12 @@ export function ImportShortText(): JSX.Element {
                   [Directory ".../lwt/media" does not yet exist.] &nbsp; &nbsp;
                   <span
                     className="click"
+                    // TODO
                     onClick="do_ajax_update_media_select();"
                   >
-                    <img
-                      src="icn/arrow-circle-135.png"
+                    <Icon
+                      src="arrow-circle-135"
                       title="Refresh Media Selection"
-                      alt="Refresh Media Selection"
                     />
                     Refresh
                   </span>

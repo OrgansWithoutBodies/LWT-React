@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useData } from '../data/useAkita';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 // import { Gunzip } from 'browserify-zlib';
 
@@ -35,6 +36,8 @@ export function BackupScreen(): JSX.Element {
     ,
     { downloadBackup, restoreFromBackup, emptyDatabase, installDemoDatabase },
   ] = useData([]);
+  const navigate = useInternalNavigate();
+
   const restoreBackup = useRef();
   return (
     <>
@@ -47,7 +50,7 @@ export function BackupScreen(): JSX.Element {
           method="post"
           onSubmit="return confirm('Are you sure?');"
         >
-          <table className="tab1" cellSpacing="0" cellPadding={5}>
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tbody>
               <tr>
                 <th className="th1 center">Backup</th>
@@ -170,7 +173,9 @@ export function BackupScreen(): JSX.Element {
                   <input
                     type="button"
                     value="<< Back"
-                    onClick="location.href='index';"
+                    onClick={() => {
+                      navigate('/');
+                    }}
                   />
                 </td>
               </tr>

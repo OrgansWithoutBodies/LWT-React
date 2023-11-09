@@ -1,17 +1,20 @@
 import { Icon } from '../Icon';
 import { useData } from '../data/useAkita';
+import { A } from '../nav/InternalLink';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 
-export function EditTextTags() {
+export function EditTextTags({ query }: { query: string }) {
   const [{ texttags }] = useData(['texttags']);
+  const navigate = useInternalNavigate();
+
   return (
     <>
       <Header title={'Edit Text Tags'} />
       <p>
-        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?new=1">
-          <img src="icn/plus-button.png" title="New" alt="New" /> New Text Tag
-          ...
-        </a>
+        <A ref="<?php echo $_SERVER['PHP_SELF']; ?>?new=1">
+          <Icon src="plus-button" title="New" alt="New" /> New Text Tag ...
+        </A>
       </p>
 
       <form
@@ -19,52 +22,59 @@ export function EditTextTags() {
         action="#"
         onSubmit="document.form1.querybutton.click(); return false;"
       >
-        <table className="tab1" cellspacing="0" cellpadding="5">
+        <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
-            <th className="th1" colspan="4">
-              Filter <img src="icn/funnel.png" title="Filter" alt="Filter" />
+            <th className="th1" colSpan={4}>
+              Filter <Icon src="funnel" title="Filter" />
               &nbsp;
               <input
                 type="button"
                 value="Reset All"
-                onClick="{location.href='edit_texttags.php?page=1&query=';}"
+                onClick={() => {
+                  navigate(`/edit_texttags?page=${1}&query=`);
+                }}
               />
             </th>
           </tr>
           <tr>
-            <td className="td1 center" colspan="4">
+            <td className="td1 center" colSpan={4}>
               Tag Text or Comment:
               <input
                 type="text"
                 name="query"
-                value="<?php echo tohtml($currentquery); ?>"
-                maxlength="50"
-                size="15"
+                value={query}
+                maxLength={50}
+                size={15}
               />
               &nbsp;
               <input
                 type="button"
                 name="querybutton"
                 value="Filter"
-                onClick="{val=document.form1.query.value; location.href='edit_texttags.php?page=1&query=' + val;}"
+                onClick={() => {
+                  navigate(`/edit_texttags?page=${1}&query=${query}`);
+                }}
               />
               &nbsp;
               <input
                 type="button"
                 value="Clear"
-                onClick="{location.href='edit_texttags.php?page=1&query=';}"
+                onClick={() => {
+                  navigate(`/edit_texttags?page=${1}&query=`);
+                }}
               />
             </td>
           </tr>
+          {/* TODO */}
           {/* <?php if($recno > 0) { ?>
 <tr>
-<th class="th1" colspan="1" style={{whiteSpace:"nowrap"}}>
+<th class="th1" colspan={1} style={{whiteSpace:"nowrap"}}>
 <?php echo $recno; ?> Tag<?php echo ($recno==1?'':'s'); ?>
-</th><th class="th1" colspan="2" style={{whiteSpace:"nowrap"}}>
-<?php makePager ($currentpage, $pages, 'edit_texttags.php', 'form1', 1); ?>
+</th><th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
+<?php makePager ($currentpage, $pages, 'edit_texttags', 'form1', 1); ?>
 </th><th class="th1" style={{whiteSpace:"nowrap"}}>
 Sort Order:
-<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texttags.php?page=1&sort=' + val;}"><?php echo get_tagsort_selectoptions($currentsort); ?></select>
+<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texttags?page=1&sort=' + val;}"><?php echo get_tagsort_selectoptions($currentsort); ?></select>
 </th></tr>
 <?php } ?> */}
         </table>
@@ -83,19 +93,14 @@ if ($recno==0) {
         method="post"
       >
         <input type="hidden" name="data" value="" />
-        <table className="tab1" cellspacing="0" cellpadding="5">
+        <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
-            <th className="th1 center" colspan="2">
-              Multi Actions{' '}
-              <img
-                src="icn/lightning.png"
-                title="Multi Actions"
-                alt="Multi Actions"
-              />
+            <th className="th1 center" colSpan={2}>
+              Multi Actions <Icon src="lightning" title="Multi Actions" />
             </th>
           </tr>
           <tr>
-            <td className="td1 center" colspan="2">
+            <td className="td1 center" colSpan={2}>
               <b>ALL</b>
               {/* <?php echo ($recno == 1 ? '1 Tag' : $recno . ' Tags'); ?>:&nbsp;  */}
               <select
@@ -111,11 +116,13 @@ if ($recno==0) {
               <input
                 type="button"
                 value="Mark All"
+                // TODO
                 onClick="selectToggle(true,'form2');"
               />
               <input
                 type="button"
                 value="Mark None"
+                // TODO
                 onClick="selectToggle(false,'form2');"
               />
             </td>
@@ -124,16 +131,18 @@ if ($recno==0) {
               <select
                 name="markaction"
                 id="markaction"
-                disabled="disabled"
-                onchange="multiActionGo(document.form2, document.form2.markaction);"
+                disabled
+                // TODO
+                onChange="multiActionGo(document.form2, document.form2.markaction);"
               >
+                {/* TODO */}
                 {/* <?php echo get_multipletagsactions_selectoptions(); ?> */}
               </select>
             </td>
           </tr>
         </table>
 
-        <table className="sortable tab1" cellspacing="0" cellpadding="5">
+        <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1 sorttable_nosort">Mark</th>
             <th className="th1 sorttable_nosort">Actions</th>
@@ -154,60 +163,58 @@ if ($recno==0) {
           {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
           {texttags.map((tag) => {
             const c = get_first_value(
-              'select count(*) as value from ',
-              'texttags where TtT2ID='.$record['T2ID']
+              'select count(*) as value from '
+              // 'texttags where TtT2ID='.$record['T2ID']
             );
             const ca = get_first_value(
-              'select count(*) as value from ',
-              'archtexttags where AgT2ID='.$record['T2ID']
+              'select count(*) as value from '
+              // 'archtexttags where AgT2ID='.$record['T2ID']
             );
             return (
               <tr>
                 {/* TODO */}
                 {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
                 <td className="td1 center">
-                  <a name="rec' . $record['T2ID'] . '">
+                  <A name="rec' . $record['T2ID'] . '">
                     <input
                       name="marked[]"
                       type="checkbox"
                       className="markcheck"
                       value="' . $record['T2ID'] . '"
                     />
-                  </a>
+                  </A>
                 </td>
                 <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                   &nbsp;
-                  <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['T2ID'] . '">
-                    <Icon
-                      iconName={'document--pencil'}
-                      title="Edit"
-                      alt="Edit"
-                    />
-                  </a>
+                  <A ref="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['T2ID'] . '">
+                    <Icon src={'document--pencil'} title="Edit" />
+                  </A>
                   &nbsp;{' '}
-                  <a
+                  <A
                     className="confirmdelete"
-                    href="' . $_SERVER['PHP_SELF'] . '?del=' . $record['T2ID'] . '"
+                    ref="' . $_SERVER['PHP_SELF'] . '?del=' . $record['T2ID'] . '"
                   >
-                    <Icon iconName="minus-button" title="Delete" alt="Delete" />
-                  </a>
+                    <Icon src="minus-button" title="Delete" />
+                  </A>
                   &nbsp;
                 </td>
+                {/* TODO */}
                 <td className="td1 center"> . {tohtml($record['T2Text'])}</td>
                 <td className="td1 center">
                   {' '}
-                  . {tohtml($record['T2Comment'])}
+                  {/* TODO */}. {tohtml($record['T2Comment'])}
                 </td>
                 <td className="td1 center">
                   {' '}
                   .{' '}
                   {c > 0 ? (
-                    <a
-                      href={`edit_texts.php?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
+                    <A
+                      ref={`edit_texts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
+                      // TODO
                     >
                       {' '}
                       {c}{' '}
-                    </a>
+                    </A>
                   ) : (
                     '0'
                   )}{' '}
@@ -217,12 +224,12 @@ if ($recno==0) {
                   {' '}
                   .{' '}
                   {ca > 0 ? (
-                    <a
-                      href={`edit_archivedtexts.php?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
+                    <A
+                      // TODO
+                      ref={`edit_archivedtexts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
                     >
-                      {' '}
-                      {ca}{' '}
-                    </a>
+                      {ca}
+                    </A>
                   ) : (
                     '0'
                   )}{' '}
@@ -233,27 +240,19 @@ if ($recno==0) {
           })}
         </table>
       </form>
-      {/* 
+      {/* TODO */}
+      {/*       
 // <?php if( $pages > 1) { ?>
 // <form name="form3" action="#">
-// <table class="tab1" cellspacing="0" cellpadding="5">
+// <table class="tab1" cellspacing={0} cellpadding={5}>
 // <tr>
 // <th class="th1" style={{whiteSpace:"nowrap"}}>
 // <?php echo $recno; ?> Tag<?php echo ($recno==1?'':'s'); ?>
 // </th><th class="th1" style={{whiteSpace:"nowrap"}}>
-// <?php makePager ($currentpage, $pages, 'edit_texttags.php', 'form3', 2); ?>
+// <?php makePager ($currentpage, $pages, 'edit_texttags', 'form3', 2); ?>
 // </th></tr></table>
 // </form>
-// <?php } ?>
-
-// <?php
-// }
-
-// }
-
-// pageend();
-
-// ?> */}
+// <?php } ?> */}
     </>
   );
 }
