@@ -15,8 +15,9 @@ import { AddNewWord } from './pages/AddNewWord';
 import { BackupScreen } from './pages/Backups.component';
 import { CheckText } from './pages/CheckText';
 import { EditArchivedTexts } from './pages/EditArchived.component';
-import { EditTags } from './pages/EditTags';
-import { EditTextTags } from './pages/EditTextTags';
+import { EditLanguage } from './pages/EditLanguage.component';
+import { EditTags, NewTag } from './pages/EditTags';
+import { EditTextTag, EditTextTags, NewTextTag } from './pages/EditTextTags';
 import { InfoPage } from './pages/Info';
 import { LanguagesPage } from './pages/Languages.component';
 import { Library } from './pages/Library.component';
@@ -25,7 +26,7 @@ import { NewLanguage } from './pages/NewLanguage.component';
 import { ReaderPage } from './pages/ReaderPage.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
-import { Terms } from './pages/Terms.component';
+import { ChangeTerm, Terms } from './pages/Terms.component';
 import { ImportShortText } from './pages/TextImport';
 import { createColors } from './styles';
 import { AppContext, useAppContext } from './useContext';
@@ -139,12 +140,13 @@ function TermsWrapper() {
   const sort = searchParams.get('sort');
   const status = searchParams.get('status');
   return (
-    <Switch on={chgID === null}>
+    <Switch on={chgID !== null}>
       <Terms
         pageNum={0}
         sort={sort ? Number.parseInt(sort) : null}
         status={status ? Number.parseInt(status) : null}
       />
+      <ChangeTerm chgID={Number.parseInt(chgID)} />
       {/* <Terms
         pageNum={0}
         sort={Number.parseInt(sort)}
@@ -156,9 +158,13 @@ function TermsWrapper() {
 function LanguagesWrapper() {
   const [searchParams] = useSearchParams();
   const isNew = searchParams.get('new') === '1';
+  const chgID = searchParams.get('chg');
   return (
     <Switch on={isNew}>
-      <LanguagesPage />
+      <Switch on={chgID !== null}>
+        <LanguagesPage />
+        <EditLanguage chgID={Number.parseInt(chgID)} />
+      </Switch>
       <NewLanguage />
     </Switch>
   );
@@ -173,6 +179,7 @@ function LibraryWrapper() {
   const [searchParams] = useSearchParams();
   // const chgID = searchParams.get('chg');
   const archID = searchParams.get('arch');
+  const page = searchParams.get('page');
   const isNew = searchParams.get('new') === '1';
 
   if (archID !== null) {
@@ -181,7 +188,7 @@ function LibraryWrapper() {
   console.log('new', isNew);
   return (
     <Switch on={isNew}>
-      <Library />
+      <Library currentPage={page !== null ? Number.parseInt(page) : 0} />
       <ImportShortText />
       {/* <Switch on={chgID === null}> */}
       {/* <NewLanguage /> */}
@@ -197,17 +204,30 @@ function EditArchivedTextsWrapper() {
 function EditTextTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
+  const isNew = searchParams.get('new') === '1';
+  const chgID = searchParams.get('chg');
 
   return (
-    <Switch on={isNew === '1'}>
-      <EditTextTags query={query || ''} />
+    <Switch on={isNew}>
+      <Switch on={chgID !== null}>
+        <EditTextTags query={query || ''} />
+        <EditTextTag chgID={Number.parseInt(chgID)} />
+      </Switch>
+      <NewTextTag />
     </Switch>
   );
 }
 function EditTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
-  return <EditTags query={query || ''} />;
+  const isNew = searchParams.get('new') === '1';
+  console.log(query);
+  return (
+    <Switch on={isNew}>
+      <EditTags query={query || ''} />
+      <NewTag />
+    </Switch>
+  );
 }
 function ReaderWrapper() {
   const [searchParams] = useSearchParams();

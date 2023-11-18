@@ -18,7 +18,12 @@ export function LanguageDropdown({
   const [{ languages }] = useData(['languages']);
 
   return (
-    <select name={name} className="notempty setfocus" ref={dropdownRef}>
+    <select
+      name={name}
+      value={defaultValue}
+      className="notempty setfocus"
+      ref={dropdownRef}
+    >
       <option value="-1">[{header}]</option>
       {languages.map((language) => {
         return <option value={language.LgID}>{language.LgName}</option>;

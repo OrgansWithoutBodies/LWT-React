@@ -52,22 +52,22 @@ function LanguageLine({
       </td>
       <td className="td1 center">
         &nbsp;
-        <A href={`/print_text?text=${id}`}>
+        {/* <A href={`/print_text?text=${id}`}>
           <Icon src="printer" title="Print" />
-        </A>
+        </A> */}
         &nbsp;
-        <A href={`/edit_texts?arch=${id}`}>
+        <A href={`/edit_languages?arch=${id}`}>
           <Icon src="inbox-download" title="Archive" />
         </A>
         &nbsp;
-        <A href={`/edit_texts?chg=${id}`}>
+        <A href={`/edit_languages?chg=${id}`}>
           <Icon src="document--pencil" title="Edit" />
         </A>
         &nbsp;
         <span
           className="click"
           onClick={() => dataService.deleteLanguage(language.LgID)}
-          // onClick={`if (confirmDelete()) location.href='/edit_texts?del=${47}';`}
+          // onClick={`if (confirmDelete()) location.href='/edit_languages?del=${47}';`}
         >
           <Icon src="minus-button" title="Delete" />
         </span>
@@ -75,11 +75,12 @@ function LanguageLine({
       </td>
       <td className="td1 center">{language.LgName}</td>
       <td className="td1 center">
-        <A href={`/edit_texts?page=${1}&query=&filterlang=${2}`}>
+        <A href={`/edit_languages?page=${1}&query=&filterlang=${2}`}>
           {numTextsThisLanguage}
         </A>
         &nbsp;&nbsp;
         <A href={`/edit_languages?refresh=${2}`}>
+          {/* . $_SERVER['PHP_SELF'] . '?refresh=' . $record['LgID'] . ' */}
           <Icon src="lightning" title="Reparse Texts" />
         </A>
       </td>
@@ -97,8 +98,6 @@ function LanguageLine({
     </tr>
   );
 }
-const UP_ARROW = '▴' as const;
-const DOWN_ARROW = '▾' as const;
 export function LanguagesPage(): JSX.Element {
   const [{ languages, activeLanguageId, texts, words, archivedtexts }] =
     useData([

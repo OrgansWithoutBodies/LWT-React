@@ -6,14 +6,14 @@ import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
 
 export const headerValuesTemp = {
   index: { params: [] },
-  edit_texts: { params: ['new'] },
-  edit_archivedtexts: { params: [] },
-  edit_texttags: { params: [] },
-  edit_languages: { params: [] },
+  edit_texts: { params: ['page', 'new'] },
+  edit_archivedtexts: { params: ['page'] },
+  edit_texttags: { params: ['page'] },
+  edit_languages: { params: ['page'] },
   edit_words: {
     params: ['page', 'status', 'query', 'tag12', 'tag1', 'sort', 'text'],
   },
-  edit_tags: { params: [] },
+  edit_tags: { params: ['page'] },
   statistics: { params: [] },
   check_text: { params: [] },
   long_text_import: { params: [] },

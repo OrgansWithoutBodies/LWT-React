@@ -5,14 +5,18 @@ import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 
 export function EditTextTags({ query }: { query: string }) {
-  const [{ texttags }] = useData(['texttags']);
+  const [{ tags2, archtexttags, texttags }] = useData([
+    'tags2',
+    'archtexttags',
+    'texttags',
+  ]);
   const navigate = useInternalNavigate();
 
   return (
     <>
       <Header title={'Edit Text Tags'} />
       <p>
-        <A ref="<?php echo $_SERVER['PHP_SELF']; ?>?new=1">
+        <A href="/edit_texttags?new=1">
           <Icon src="plus-button" title="New" alt="New" /> New Text Tag ...
         </A>
       </p>
@@ -161,15 +165,13 @@ if ($recno==0) {
           </tr>
 
           {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
-          {texttags.map((tag) => {
-            const c = get_first_value(
-              'select count(*) as value from '
-              // 'texttags where TtT2ID='.$record['T2ID']
-            );
-            const ca = get_first_value(
-              'select count(*) as value from '
-              // 'archtexttags where AgT2ID='.$record['T2ID']
-            );
+          {tags2.map((tag) => {
+            const c = texttags.filter(({ TtT2ID }) => {
+              return tag.T2ID === TtT2ID;
+            }).length;
+            const ca = archtexttags.filter(({ AgT2ID }) => {
+              return tag.T2ID === AgT2ID;
+            }).length;
             return (
               <tr>
                 {/* TODO */}
@@ -186,54 +188,44 @@ if ($recno==0) {
                 </td>
                 <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                   &nbsp;
-                  <A ref="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['T2ID'] . '">
+                  <A href={`/edit_texttags?chg=${tag.T2ID}`}>
                     <Icon src={'document--pencil'} title="Edit" />
                   </A>
                   &nbsp;{' '}
                   <A
+                    href={`/edit_texttags?del=${tag.T2ID}`}
                     className="confirmdelete"
-                    ref="' . $_SERVER['PHP_SELF'] . '?del=' . $record['T2ID'] . '"
                   >
                     <Icon src="minus-button" title="Delete" />
                   </A>
                   &nbsp;
                 </td>
                 {/* TODO */}
-                <td className="td1 center"> . {tohtml($record['T2Text'])}</td>
+                <td className="td1 center">{tag.T2Text}</td>
+                <td className="td1 center">{tag.T2Comment}</td>
                 <td className="td1 center">
-                  {' '}
-                  {/* TODO */}. {tohtml($record['T2Comment'])}
-                </td>
-                <td className="td1 center">
-                  {' '}
-                  .{' '}
                   {c > 0 ? (
                     <A
-                      ref={`edit_texts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
-                      // TODO
+                    // TODO
+                    // ref={`edit_texts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
                     >
-                      {' '}
-                      {c}{' '}
+                      {c}
                     </A>
                   ) : (
                     '0'
-                  )}{' '}
-                  .{' '}
+                  )}
                 </td>
                 <td className="td1 center">
-                  {' '}
-                  .{' '}
                   {ca > 0 ? (
                     <A
-                      // TODO
-                      ref={`edit_archivedtexts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
+                    // TODO
+                    // ref={`edit_archivedtexts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
                     >
                       {ca}
                     </A>
                   ) : (
                     '0'
-                  )}{' '}
-                  .{' '}
+                  )}
                 </td>
               </tr>
             );
@@ -253,6 +245,143 @@ if ($recno==0) {
 // </th></tr></table>
 // </form>
 // <?php } ?> */}
+    </>
+  );
+}
+
+export function NewTextTag() {
+  return (
+    <>
+      <Header title={'My Term Tags'} />
+      <h4>New Tag</h4>
+      <script
+        type="text/javascript"
+        src="js/unloadformcheck.js"
+        charSet="utf-8"
+      ></script>
+      <form
+        name="newtag"
+        className="validate"
+        action="<?php echo $_SERVER['PHP_SELF']; ?>"
+        method="post"
+      >
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Tag:</td>
+            <td className="td1">
+              <input
+                className="notempty setfocus noblanksnocomma checkoutsidebmp"
+                type="text"
+                name="T2Text"
+                data_info="Tag"
+                value=""
+                maxlength={20}
+                size={20}
+              />{' '}
+              <img
+                src="icn/status-busy.png"
+                title="Field must not be empty"
+                alt="Field must not be empty"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Comment:</td>
+            <td className="td1">
+              <textarea
+                className="textarea-noreturn checklength checkoutsidebmp"
+                data_maxlength={200}
+                data_info="Comment"
+                name="T2Comment"
+                cols={40}
+                rows={3}
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              <input
+                type="button"
+                value="Cancel"
+                onClick="{resetDirty(); location.href='edit_texttags.php';}"
+              />
+              <input type="submit" name="op" value="Save" />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </>
+  );
+}
+export function EditTextTag({ chgID }: { chgID: number }) {
+  const [{ tags2 }] = useData(['tags2']);
+  const changingTag = tags2.find(({ T2ID }) => {
+    return chgID === T2ID;
+  });
+  return (
+    <>
+      <Header title={'My Term Tags'} />
+      <h4>Edit Tag</h4>
+      <script
+        type="text/javascript"
+        src="js/unloadformcheck.js"
+        charSet="utf-8"
+      ></script>
+      <form
+        name="edittag"
+        className="validate"
+        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
+        method="post"
+      >
+        <input type="hidden" name="T2ID" value={changingTag?.T2ID} />
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Tag:</td>
+            <td className="td1">
+              <input
+                data_info="Tag"
+                class="notempty setfocus noblanksnocomma checkoutsidebmp"
+                type="text"
+                name="T2Text"
+                value={changingTag?.T2Text}
+                maxlength={20}
+                size={20}
+              />{' '}
+              <img
+                src="icn/status-busy.png"
+                title="Field must not be empty"
+                alt="Field must not be empty"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Comment:</td>
+            <td className="td1">
+              <textarea
+                className="textarea-noreturn checklength checkoutsidebmp"
+                data_maxlength={200}
+                data_info="Comment"
+                name="T2Comment"
+                value={changingTag?.T2Comment}
+                cols={40}
+                rows={3}
+              >
+                {/* <?php echo tohtml($record['T2Comment']); ?> */}
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              <input
+                type="button"
+                value="Cancel"
+                onClick="{resetDirty(); location.href='edit_texttags.php#rec<?php echo $_REQUEST['chg']; ?>'};"
+              />
+              <input type="submit" name="op" value="Change" />
+            </td>
+          </tr>
+        </table>
+      </form>
     </>
   );
 }

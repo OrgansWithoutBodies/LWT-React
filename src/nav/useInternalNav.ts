@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { headerValues, headerValuesTemp } from '../pages/Header';
-type InternalPathsFromHeader = typeof headerValues[keyof typeof headerValues];
+type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
 type NonHeaderLinks =
   | ''
@@ -31,7 +31,7 @@ export const useInternalNavigate: () => (url: InternalPaths) => void = () => {
 };
 
 type PathParams =
-  typeof headerValuesTemp[keyof typeof headerValuesTemp]['params'][number];
+  (typeof headerValuesTemp)[keyof typeof headerValuesTemp]['params'][number];
 export const useUpdateParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -47,6 +47,7 @@ export const useUpdateParams = () => {
       })
   );
   return (params: { [path in PathParams]?: string | null }) => {
+    console.log(params);
     const filteredParams: { [path in PathParams]?: string } =
       Object.fromEntries(
         Object.entries({ ...currentParams, ...params }).filter(

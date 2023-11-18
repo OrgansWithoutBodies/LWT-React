@@ -6,6 +6,7 @@ import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
+import { Pager } from './Library.component';
 export const enum Sorting {
   'Term A-Z' = 1,
   'Translation A-Z' = 2,
@@ -79,8 +80,8 @@ export function TermsFilterBox({
   currentPage: number;
 }): JSX.Element {
   const [{ languages, tags, texts }] = useData(['languages', 'tags', 'texts']);
-  const pageSize = 10;
   //   TODO
+  const pageSize = 10;
   const numPages = Math.ceil(numTerms / pageSize);
   const navigate = useInternalNavigate();
   const updateParams = useUpdateParams();
@@ -124,13 +125,15 @@ export function TermsFilterBox({
         </tr>
         <tr>
           <td
-            style={{ whiteSpace: 'nowrap' }}
+            // style={{ whiteSpace: 'nowrap' }}
             className="td1 center"
             colSpan={2}
           >
             Status:
             <select
               name="status"
+              // TODO
+              // defaultValue={}
               onChange={({ target: { value: selectedValue } }) => {
                 updateParams({ status: selectedValue });
               }}
@@ -235,31 +238,7 @@ export function TermsFilterBox({
             <Icon src="placeholder" alt="-" />
             &nbsp;
             <Icon src="placeholder" alt="-" />
-            &nbsp; Page
-            <select
-              name="page1"
-              onChange={({ target: { value } }) => {
-                navigate(`/edit_words?page=${value}`);
-              }}
-            >
-              {[...new Array(numPages).keys()].map((pageNumber) => {
-                const isSelected = currentPage === pageNumber + 1;
-                return (
-                  <option value={pageNumber + 1} selected={isSelected}>
-                    {pageNumber + 1}
-                  </option>
-                );
-              })}
-            </select>
-            of {numPages}&nbsp;
-            <A href={`/edit_words?page=${2}`}>
-              <Icon src="control" title="Next Page" />
-            </A>
-            &nbsp;
-            <A href={`/edit_words?page=${53}`}>
-              <Icon src="control-stop" title="Last Page" />
-            </A>
-            &nbsp; &nbsp;
+            <Pager currentPage={currentPage} numPages={numPages} />
           </th>
           <th style={{ whiteSpace: 'nowrap' }} className="th1">
             Sort Order:
@@ -293,7 +272,7 @@ export function TermsFooter({
   numTerms: number;
   currentPage: number;
 }): JSX.Element {
-  const pageSize = 10;
+  const pageSize = 2;
   const numPages = Math.ceil(numTerms / pageSize);
   const navigate = useInternalNavigate();
   return (
@@ -308,32 +287,7 @@ export function TermsFooter({
             <Icon src="placeholder" alt="-" />
             &nbsp;
             <Icon src="placeholder" alt="-" />
-            {/* TODO abstract this into a page dropdown component? */}
-            &nbsp; Page
-            <select
-              name={`page${currentPage}`}
-              onChange={({ target: { value } }) =>
-                navigate(`/edit_words?page=${value}`)
-              }
-            >
-              {[...new Array(numPages).keys()].map((pageNumber) => {
-                const isSelected = currentPage === pageNumber + 1;
-                return (
-                  <option value={pageNumber + 1} selected={isSelected}>
-                    {pageNumber + 1}
-                  </option>
-                );
-              })}
-            </select>
-            of {numPages}&nbsp;
-            <A href={`/edit_words?page=${currentPage + 1}`}>
-              <Icon src="control" title="Next Page" />
-            </A>
-            &nbsp;
-            <A href={`/edit_words?page=${numPages}`}>
-              <Icon src="control-stop" title="Last Page" />
-            </A>
-            &nbsp; &nbsp;
+            <Pager currentPage={currentPage} numPages={numPages} />
           </th>
         </tr>
       </tbody>
@@ -495,6 +449,7 @@ export function Terms({
 
   const sortedWords =
     sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
+  const currentPage = pageNum !== null ? pageNum : 1;
   return (
     <>
       <Header
@@ -504,7 +459,7 @@ export function Terms({
         <>
           <TermsFilterBox
             numTerms={sortedWords.length}
-            currentPage={pageNum !== null ? pageNum : 1}
+            currentPage={currentPage}
           />
           <table className="sortable tab1">
             <TermsHeader />
@@ -514,9 +469,158 @@ export function Terms({
               })}
             </tbody>
           </table>
-          <TermsFooter numTerms={sortedWords.length} currentPage={0} />
+          <TermsFooter
+            numTerms={sortedWords.length}
+            currentPage={currentPage}
+          />
         </>
       )}
+    </>
+  );
+}
+export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
+  const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
+  const term = words.find((val) => {
+    return val.WoID === chgID;
+  });
+  return (
+    <>
+      <Header
+        title={`My ${activeLanguage?.LgName} Terms (Words and Expressions)`}
+      />
+
+      <h4>Edit Term</h4>
+      <script
+        type="text/javascript"
+        src="js/unloadformcheck.js"
+        charSet="utf-8"
+      ></script>
+      <form
+        name="editword"
+        className="validate"
+        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
+        method="post"
+      >
+        <input type="hidden" name="WoID" value={term?.WoID} />
+        <input
+          type="hidden"
+          name="WoLgID"
+          id="langfield"
+          value={term?.WoLgID}
+        />
+        <input type="hidden" name="WoOldStatus" value={term?.WoStatus} />
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Language:</td>
+            <td className="td1">
+              {/* TODO */}
+              {/* <?php echo tohtml($record['LgName']); ?> */}
+            </td>
+          </tr>
+          <tr title="Normally only change uppercase/lowercase here!">
+            <td className="td1 right">Term:</td>
+            <td className="td1">
+              <input
+                // <?php echo $scrdir; ?>
+                className="notempty setfocus checkoutsidebmp"
+                data_info="Term"
+                type="text"
+                name="WoText"
+                id="wordfield"
+                value={term?.WoText}
+                maxlength={250}
+                size={40}
+              />{' '}
+              <Icon src="status-busy" title="Field must not be empty" />
+            </td>
+          </tr>
+          {/* <?php print_similar_terms_tabrow(); ?> */}
+          <tr>
+            <td className="td1 right">Translation:</td>
+            <td className="td1">
+              <textarea
+                className="textarea-noreturn checklength checkoutsidebmp"
+                data_maxlength={500}
+                data_info="Translation"
+                name="WoTranslation"
+                cols={40}
+                rows={3}
+              >
+                {/* <?php echo tohtml($transl); ?> */}
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Tags:</td>
+            <td className="td1">
+              {/* <?php echo getWordTags($record['WoID']); ?> */}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Romaniz.:</td>
+            <td className="td1">
+              <input
+                type="text"
+                className="checkoutsidebmp"
+                data_info="Romanization"
+                name="WoRomanization"
+                maxlength={100}
+                size={40}
+                value={term?.WoRomanization}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">
+              Sentence
+              <br />
+              Term in {'{...}'}:
+            </td>
+            <td className="td1">
+              <textarea
+                // <?php echo $scrdir; ?>
+                className="textarea-noreturn checklength checkoutsidebmp"
+                data_maxlength={1000}
+                data_info="Sentence"
+                name="WoSentence"
+                cols={40}
+                rows={3}
+              >
+                {/* <?php echo tohtml(repl_tab_nl($record['WoSentence'])); ?> */}
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Status:</td>
+            <td className="td1">
+              {/* <?php echo get_wordstatus_radiooptions($record['WoStatus']); ?> */}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              {' '}
+              &nbsp;
+              {/* <?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoSentence','document.forms[\'editword\'].WoText'); ?> */}
+              &nbsp; &nbsp;
+              <input
+                type="button"
+                value="Cancel"
+                onClick="{resetDirty(); location.href='edit_words.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+              />
+              <input type="submit" name="op" value="Change" />
+            </td>
+          </tr>
+        </table>
+      </form>
+      <div id="exsent">
+        <span
+          className="click"
+          // onClick="do_ajax_show_sentences(<?php echo $record['LgID']; ?>, <?php echo prepare_textdata_js($wordlc) . ', ' . prepare_textdata_js("document.forms['editword'].WoSentence"); ?>);"
+        >
+          <Icon src="sticky-notes-stack" title="Show Sentences" /> Show
+          Sentences
+        </span>
+      </div>
     </>
   );
 }

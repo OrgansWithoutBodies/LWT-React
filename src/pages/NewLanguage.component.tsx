@@ -34,7 +34,7 @@ export function NewLanguage() {
   const refMap = RefMap<LanguageNoId>(validator);
   return (
     <>
-      <Header title="New Language" link={''} />
+      <Header title="New Language" />
       <h4>
         New Language
         <a target="_blank" href="info#howtolang">

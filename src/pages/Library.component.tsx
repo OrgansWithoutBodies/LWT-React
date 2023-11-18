@@ -125,24 +125,7 @@ function LibraryFooter({
               {/* {true}&nbsp; */}
               <Icon src="placeholder" alt="-" />
               {/* TODO pagination */}
-              &nbsp; Page
-              <select name="page2">
-                {new Array(numPages).fill(0).map((_, ii) => {
-                  return <option value={ii + 1}>{ii + 1}</option>;
-                })}
-              </select>
-              <A href={`/edit_texts?page=${currentPage + 1}`}>
-                <Icon src="control" title="Next Page" />
-              </A>
-              {/* selected="selected" of 2&nbsp; */}
-              <A href={`/edit_texts?page=${currentPage + 1}`}>
-                <Icon src="control" title="Next Page" />
-              </A>
-              &nbsp;
-              <A href={`/edit_texts?page=${numPages}`}>
-                <Icon src="control-stop" title="Last Page" />
-              </A>
-              &nbsp; &nbsp;
+              <Pager currentPage={currentPage} numPages={numPages} />
             </th>
           </tr>
         </tbody>
@@ -221,7 +204,7 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
   );
 }
 
-export function Library() {
+export function Library({ currentPage }: { currentPage: number }) {
   const [{ textDetails, activeLanguage }] = useData([
     'textDetails',
     'activeLanguage',
@@ -262,7 +245,7 @@ export function Library() {
           </table>
           <LibraryFooter
             numTexts={textDetails ? textDetails.length : 0}
-            currentPage={0}
+            currentPage={currentPage}
             numPages={numPages}
           />
         </>
@@ -270,18 +253,23 @@ export function Library() {
     </>
   );
 }
-export function makePager({ currentpage, pages, script, formname, inst }: {}) {
+export function Pager({
+  currentPage: currentPage,
+  numPages,
+}: {
+  currentPage: number;
+  numPages: number;
+}) {
+  const updateParams = useUpdateParams();
   return (
     <>
-      {currentpage > 1 ? (
+      {currentPage > 1 ? (
         <>
-          {/* TODO */}
-          <A href="<?php echo script; ?>?page=1">
+          <A onClick={() => updateParams({ page: '1' })}>
             <Icon src="control-stop-180" title="First Page" />
           </A>
           &nbsp;
-          {/* TODO */}
-          <A href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>">
+          <A onClick={() => updateParams({ page: `${currentPage - 1}` })}>
             <Icon src="control-180" title="Previous Page" />
           </A>
           &nbsp;
@@ -295,28 +283,31 @@ export function makePager({ currentpage, pages, script, formname, inst }: {}) {
           &nbsp;
         </>
       )}
-      {pages === 1 ? (
+      {numPages === 1 ? (
         '1'
       ) : (
         <select
-          // TODO
-          name="page<?php echo inst; ?>"
-          // TODO
-          onChange="{val=document.<?php echo formname; ?>.page<?php echo inst; ?>.options[document.<?php echo formname; ?>.page<?php echo inst; ?>.selectedIndex].value; location.href='<?php echo script; ?>?page=' + val;}"
+          name={`page${currentPage}`}
+          onChange={({ target: { value } }) => updateParams({ page: value })}
         >
-          {'<?php echo get_paging_selectoptions(currentpage, pages); ?>'}
+          {[...new Array(numPages).keys()].map((pageNumber) => {
+            const isSelected = currentPage === pageNumber + 1;
+            return (
+              <option value={pageNumber + 1} selected={isSelected}>
+                {pageNumber + 1}
+              </option>
+            );
+          })}
         </select>
-      )}{' '}
-      {' of '} {pages} {'&nbsp; '}
-      {currentpage < pages ? (
+      )}
+      {`of ${numPages}&nbsp;`}
+      {currentPage < numPages ? (
         <>
-          {/* TODO */}
-          <A href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>">
+          <A onClick={() => updateParams({ page: `${currentPage + 1}` })}>
             <Icon src="control" title="Next Page" />
           </A>
           &nbsp;
-          {/* TODO */}
-          <A href="<?php echo script; ?>?page=<?php echo pages; ?>">
+          <A onClick={() => updateParams({ page: `${numPages}` })}>
             <Icon src="control-stop" title="Last Page" />
           </A>
           &nbsp; &nbsp;
