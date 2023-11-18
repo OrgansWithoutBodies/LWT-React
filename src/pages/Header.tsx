@@ -4,6 +4,24 @@ import { TextsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
 
+export const headerValuesTemp = {
+  index: { params: [] },
+  edit_texts: { params: ['new'] },
+  edit_archivedtexts: { params: [] },
+  edit_texttags: { params: [] },
+  edit_languages: { params: [] },
+  edit_words: {
+    params: ['page', 'status', 'query', 'tag12', 'tag1', 'sort', 'text'],
+  },
+  edit_tags: { params: [] },
+  statistics: { params: [] },
+  check_text: { params: [] },
+  long_text_import: { params: [] },
+  upload_words: { params: [] },
+  backup_restore: { params: [] },
+  settings: { params: [] },
+  info: { params: [] },
+} as const;
 export const headerValues = {
   Home: 'index',
   Texts: 'edit_texts',
@@ -66,7 +84,7 @@ export function Header({
             navigate(`/${val.target.value}`);
           }}
         >
-          <option value="">[Menu]</option>
+          <option disabled>[Menu]</option>
           {Object.keys(headerValues).map((key) => {
             return (
               <option

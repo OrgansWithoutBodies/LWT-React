@@ -3,49 +3,57 @@ import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
+import { useUpdateParams } from '../nav/useInternalNav';
 import { Header } from './Header';
 
 export function MultiActions() {
   return (
     <>
-      <table className="tab1" cellSpacing={0} cellPadding={5}>
-        <tbody>
-          <tr>
-            <th className="th1" colSpan={2}>
-              Multi Actions
-              <Icon src="lightning" title="Multi Actions" />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center">
-              <input type="button" value="Mark All" />
-              {/* onClick="selectToggle(true,'form2');" */}
-              <input type="button" value="Mark None" />
-              {/* onClick="selectToggle(false,'form2');" */}
-            </td>
-            <td className="td1 center">
-              Marked Texts
-              <select name="markaction" id="markaction" disabled={true}>
-                {/* onchange="multiActionGo(document.form2, document.form2.markaction);" */}
-                <option value=""></option>
-                {/* selected="selected" */}
-                <option disabled={true}>------------</option>
-                <option value="test">Test Marked Texts</option>
-                <option disabled={true}>------------</option>
-                <option value="addtag">Add Tag</option>
-                <option value="deltag">Remove Tag</option>
-                <option disabled={true}>------------</option>
-                <option value="rebuild">Reparse Texts</option>
-                <option value="setsent">Set Term Sentences</option>
-                <option disabled={true}>------------</option>
-                <option value="arch">Archive Marked Texts</option>
-                <option disabled={true}>------------</option>
-                <option value="del">Delete Marked Texts</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <form
+        name="form1"
+        action="#"
+        // TODO
+        onSubmit="document.form1.querybutton.click(); return false;"
+      >
+        <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <tbody>
+            <tr>
+              <th className="th1" colSpan={2}>
+                Multi Actions
+                <Icon src="lightning" title="Multi Actions" />
+              </th>
+            </tr>
+            <tr>
+              <td className="td1 center">
+                <input type="button" value="Mark All" />
+                {/* onClick="selectToggle(true,'form2');" */}
+                <input type="button" value="Mark None" />
+                {/* onClick="selectToggle(false,'form2');" */}
+              </td>
+              <td className="td1 center">
+                Marked Texts
+                <select name="markaction" id="markaction" disabled={true}>
+                  {/* onchange="multiActionGo(document.form2, document.form2.markaction);" */}
+                  <option value=""></option>
+                  {/* selected="selected" */}
+                  <option disabled={true}>------------</option>
+                  <option value="test">Test Marked Texts</option>
+                  <option disabled={true}>------------</option>
+                  <option value="addtag">Add Tag</option>
+                  <option value="deltag">Remove Tag</option>
+                  <option disabled={true}>------------</option>
+                  <option value="rebuild">Reparse Texts</option>
+                  <option value="setsent">Set Term Sentences</option>
+                  <option disabled={true}>------------</option>
+                  <option value="arch">Archive Marked Texts</option>
+                  <option disabled={true}>------------</option>
+                  <option value="del">Delete Marked Texts</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
     </>
   );
 }
@@ -102,42 +110,44 @@ function LibraryFooter({
   numPages: number;
 }): JSX.Element {
   return (
-    <table className="tab1" cellSpacing={0} cellPadding={5}>
-      <tbody>
-        <tr>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
-            {numTexts} Texts
-          </th>
-          <th className="th1">
-            {/* style={{whiteSpace:"nowrap"}} */}
-            &nbsp; &nbsp;
-            <Icon src="placeholder" alt="-" />
-            {/* {true}&nbsp; */}
-            <Icon src="placeholder" alt="-" />
-            {/* TODO pagination */}
-            &nbsp; Page
-            <select name="page2">
-              {new Array(numPages).fill(0).map((_, ii) => {
-                return <option value={ii + 1}>{ii + 1}</option>;
-              })}
-            </select>
-            <A href={`/edit_texts?page=${currentPage + 1}`}>
-              <Icon src="control" title="Next Page" />
-            </A>
-            {/* selected="selected" of 2&nbsp; */}
-            <A href={`/edit_texts?page=${currentPage + 1}`}>
-              <Icon src="control" title="Next Page" />
-            </A>
-            &nbsp;
-            <A href={`/edit_texts?page=${numPages}`}>
-              <Icon src="control-stop" title="Last Page" />
-            </A>
-            &nbsp; &nbsp;
-          </th>
-        </tr>
-      </tbody>
-    </table>
+    <>
+      <table className="tab1" cellSpacing={0} cellPadding={5}>
+        <tbody>
+          <tr>
+            <th className="th1">
+              {/* style={{whiteSpace:"nowrap"}} */}
+              {numTexts} Texts
+            </th>
+            <th className="th1">
+              {/* style={{whiteSpace:"nowrap"}} */}
+              &nbsp; &nbsp;
+              <Icon src="placeholder" alt="-" />
+              {/* {true}&nbsp; */}
+              <Icon src="placeholder" alt="-" />
+              {/* TODO pagination */}
+              &nbsp; Page
+              <select name="page2">
+                {new Array(numPages).fill(0).map((_, ii) => {
+                  return <option value={ii + 1}>{ii + 1}</option>;
+                })}
+              </select>
+              <A href={`/edit_texts?page=${currentPage + 1}`}>
+                <Icon src="control" title="Next Page" />
+              </A>
+              {/* selected="selected" of 2&nbsp; */}
+              <A href={`/edit_texts?page=${currentPage + 1}`}>
+                <Icon src="control" title="Next Page" />
+              </A>
+              &nbsp;
+              <A href={`/edit_texts?page=${numPages}`}>
+                <Icon src="control-stop" title="Last Page" />
+              </A>
+              &nbsp; &nbsp;
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </>
   );
 }
 function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
@@ -218,14 +228,29 @@ export function Library() {
   ]);
   const pageSize = 10;
   const numPages = textDetails ? Math.ceil(textDetails.length / pageSize) : 0;
+  const paramUpdater = useUpdateParams();
   return (
     <>
+      <Header
+        title={activeLanguage ? `My ${activeLanguage.LgName} Texts` : ''}
+      />
+      <p>
+        <A href={`/edit_texts?new=${1}`}>
+          <img src="icn/plus-button.png" title="New" alt="New" /> New Text ...
+        </A>{' '}
+        &nbsp; | &nbsp;
+        <A href="/long_text_import">
+          <img
+            src="icn/plus-button.png"
+            title="Long Text Import"
+            alt="Long Text Import"
+          />{' '}
+          Long Text Import ...
+        </A>
+      </p>
+
       {activeLanguage && (
         <>
-          <Header
-            title={activeLanguage ? `My ${activeLanguage.LgName} Texts` : ''}
-          />
-
           <table className="sortable tab1">
             <LibraryHeader />
             <tbody>

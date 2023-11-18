@@ -9,6 +9,8 @@ import { AppVariables } from './meta';
 import { LandingPage } from './pages/LandingPage.component';
 
 import React from 'react';
+import { dataService } from './data/data.service';
+import { TextsId } from './data/validators';
 import { AddNewWord } from './pages/AddNewWord';
 import { BackupScreen } from './pages/Backups.component';
 import { CheckText } from './pages/CheckText';
@@ -24,6 +26,7 @@ import { ReaderPage } from './pages/ReaderPage.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { Terms } from './pages/Terms.component';
+import { ImportShortText } from './pages/TextImport';
 import { createColors } from './styles';
 import { AppContext, useAppContext } from './useContext';
 
@@ -85,25 +88,26 @@ trans
         {/* A <Routes> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Routes>
-          {/* TODO make internal a's just use navigate */}
           {/* TODO 404 page */}
           <Route path="/" element={<LandingPage />} />
           {/* <Route path="/select_lang_pair" element={<NewLanguageWizard />} /> */}
           <Route path="/index" element={<LandingPage />} />
+          <Route path="/check_text" element={<CheckText />} />
+          <Route path="/backup_restore" element={<BackupScreen />} />
+          <Route path="/info" element={<InfoPage />} />
+
           <Route path="/edit_words" element={<TermsWrapper />} />
           <Route path="/edit_texts" element={<LibraryWrapper />} />
-          <Route path="/upload_words" element={<LibraryWrapper />} />
+          {/* TODO */}
+          {/* <Route path="/upload_words" element={<LibraryWrapper />} /> */}
           <Route
             path="/edit_archivedtexts"
             element={<EditArchivedTextsWrapper />}
           />
           <Route path="/edit_tags" element={<EditTagsWrapper />} />
           <Route path="/edit_texttags" element={<EditTextTagsWrapper />} />
-          <Route path="/info" element={<InfoPage />} />
-          <Route path="/backup_restore" element={<BackupScreen />} />
           <Route path="/edit_languages" element={<LanguagesWrapper />} />
           <Route path="/long_text_import" element={<ImportLongText />} />
-          <Route path="/check_text" element={<CheckText />} />
           <Route path="/statistics" element={<StatisticsComponent />} />
           <Route path="/new_word" element={<AddNewWordWrapper />} />
           <Route path="/settings" element={<SettingsComponent />} />
@@ -121,30 +125,41 @@ trans
 }
 
 export function Switch({
-  cond,
+  on,
   children,
-}: { cond: boolean } & React.PropsWithChildren) {
+}: { on: boolean } & React.PropsWithChildren) {
   const [firstChild, secondChild] = React.Children.toArray(children);
-  return cond ? firstChild : secondChild;
+  return on ? secondChild : firstChild;
 }
 export default App;
 function TermsWrapper() {
   const [searchParams] = useSearchParams();
+  // TODO add wrapper for hook to break out params easier/integrate w controller
   const chgID = searchParams.get('chg');
+  const sort = searchParams.get('sort');
+  const status = searchParams.get('status');
   return (
-    <Switch cond={chgID === null}>
-      <Terms pageNum={0} />
-      <Terms pageNum={0} />
+    <Switch on={chgID === null}>
+      <Terms
+        pageNum={0}
+        sort={sort ? Number.parseInt(sort) : null}
+        status={status ? Number.parseInt(status) : null}
+      />
+      {/* <Terms
+        pageNum={0}
+        sort={Number.parseInt(sort)}
+        status={Number.parseInt(status)}
+      /> */}
     </Switch>
   );
 }
 function LanguagesWrapper() {
   const [searchParams] = useSearchParams();
-  const isNew = searchParams.get('new');
+  const isNew = searchParams.get('new') === '1';
   return (
-    <Switch cond={isNew !== null && Number.parseInt(isNew) === 1}>
-      <NewLanguage />
+    <Switch on={isNew}>
       <LanguagesPage />
+      <NewLanguage />
     </Switch>
   );
 }
@@ -156,11 +171,21 @@ function AddNewWordWrapper() {
 }
 function LibraryWrapper() {
   const [searchParams] = useSearchParams();
-  const chgID = searchParams.get('chg');
+  // const chgID = searchParams.get('chg');
+  const archID = searchParams.get('arch');
+  const isNew = searchParams.get('new') === '1';
+
+  if (archID !== null) {
+    dataService.archiveText(Number.parseInt(archID) as TextsId);
+  }
+  console.log('new', isNew);
   return (
-    <Switch cond={chgID === null}>
+    <Switch on={isNew}>
       <Library />
-      <NewLanguage />
+      <ImportShortText />
+      {/* <Switch on={chgID === null}> */}
+      {/* <NewLanguage /> */}
+      {/* </Switch> */}
     </Switch>
   );
 }
@@ -172,7 +197,12 @@ function EditArchivedTextsWrapper() {
 function EditTextTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
-  return <EditTextTags query={query || ''} />;
+
+  return (
+    <Switch on={isNew === '1'}>
+      <EditTextTags query={query || ''} />
+    </Switch>
+  );
 }
 function EditTagsWrapper() {
   const [searchParams] = useSearchParams();

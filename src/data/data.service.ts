@@ -8,7 +8,14 @@ import {
   Words,
 } from './parseMySqlDump';
 import { TermStrengthOrUnknown } from './type';
-import { LanguagesId, Tags2Id, TagsId, TextsId, WordsId } from './validators';
+import {
+  ArchivedTextsId,
+  LanguagesId,
+  Tags2Id,
+  TagsId,
+  TextsId,
+  WordsId,
+} from './validators';
 type LongTextForm = {};
 
 function IDIsUnique<TBrand extends number>(
@@ -169,8 +176,50 @@ export class DataService {
     window.alert('TODO INSTALLING DEMO');
   }
 
-  public archiveText() {
-    window.alert('TODO ARCHIVETEXT');
+  public archiveText(archID: TextsId) {
+    // TODO hashmap
+    /**
+     * 	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'], 
+		"Text items deleted");
+	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'], 
+		"Sentences deleted");
+	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
+	$id = get_last_key();
+	runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");	
+	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
+	$message = $message4 . " / " . $message1 . " / " . $message2 . " / " . $message3;
+	adjust_autoincr('texts','TxID');
+	adjust_autoincr('sentences','SeID');
+	adjust_autoincr('textitems','TiID');
+	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
+     */
+    this.dataStore.update(({ texts, archivedtexts, ...state }) => {
+      const archIndex = texts.findIndex((text) => {
+        return text.TxID === archID;
+      });
+      const toArchive = texts[archIndex];
+      console.log('TEST123', toArchive, archIndex, texts, archID);
+      const poppedTexts = [
+        ...texts.slice(0, archIndex),
+        ...texts.slice(archIndex + 1),
+      ];
+      return {
+        ...state,
+        texts: poppedTexts,
+        archivedtexts: [
+          ...archivedtexts,
+          {
+            AtAnnotatedText: toArchive.TxAnnotatedText,
+            AtAudioURI: toArchive.TxAudioURI,
+            AtID: toArchive.TxID as any as ArchivedTextsId,
+            AtLgID: toArchive.TxLgID,
+            AtSourceURI: toArchive.TxSourceURI,
+            AtText: toArchive.TxText,
+            AtTitle: toArchive.TxTitle,
+          },
+        ],
+      };
+    });
   }
   public unarchiveText() {
     window.alert('TODO UNARCHIVETEXT');

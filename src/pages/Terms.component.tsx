@@ -3,17 +3,26 @@ import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
+export const enum Sorting {
+  'Term A-Z' = 1,
+  'Translation A-Z' = 2,
+  'Newest first' = 3,
+  'Oldest first' = 7,
+  'Status' = 4,
+  'Score Value (%)' = 5,
+  'Word Count Active Texts' = 6,
+}
 function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
-  const navigate = useInternalNavigate();
+  const updateParams = useUpdateParams();
   return (
     <select
       name="tag1"
-      // TODO
       onChange={({ target: { value } }) => {
-        navigate(`/edit_words?page=1&tag1=${value}`);
+        // navigate(`/edit_words?page=1&tag1=${value}`);
+        updateParams({ tag1: value });
       }}
     >
       <option value="" selected>
@@ -74,6 +83,7 @@ export function TermsFilterBox({
   //   TODO
   const numPages = Math.ceil(numTerms / pageSize);
   const navigate = useInternalNavigate();
+  const updateParams = useUpdateParams();
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
@@ -99,13 +109,11 @@ export function TermsFilterBox({
             Text:
             <select
               name="text"
-              onChange={(event) => {
-                navigate(
-                  `/edit_words?page=${currentPage}&text=${event.target.value}`
-                );
+              onChange={({ target: { value } }) => {
+                updateParams({ text: value === '-1' ? null : value });
               }}
             >
-              <option value="" selected>
+              <option value={-1} selected>
                 [Filter off]
               </option>
               {texts.map((text) => {
@@ -124,9 +132,7 @@ export function TermsFilterBox({
             <select
               name="status"
               onChange={({ target: { value: selectedValue } }) => {
-                navigate(
-                  `/edit_words?page=${currentPage}&status=${selectedValue}`
-                );
+                updateParams({ status: selectedValue });
               }}
             >
               <option value="" selected>
@@ -177,8 +183,9 @@ export function TermsFilterBox({
               name="querybutton"
               value="Filter"
               onChange={({ target: { value: selectedValue } }) => {
-                navigate(
-                  `/edit_words?page=${currentPage}&query=${selectedValue}`
+                updateParams(
+                  { query: selectedValue }
+                  // `/edit_words?page=${currentPage}&query=${selectedValue}`
                 );
               }}
             />
@@ -206,7 +213,7 @@ export function TermsFilterBox({
             <select
               name="tag12"
               onChange={({ target: { value } }) => {
-                navigate(`/edit_words?page=1&tag12=${value}`);
+                navigate(`/edit_words?page=${1}&tag12=${value}`);
               }}
             >
               <option value="0">... OR ...</option>
@@ -245,11 +252,11 @@ export function TermsFilterBox({
               })}
             </select>
             of {numPages}&nbsp;
-            <A href="/edit_words?page=2">
+            <A href={`/edit_words?page=${2}`}>
               <Icon src="control" title="Next Page" />
             </A>
             &nbsp;
-            <A href="/edit_words?page=53">
+            <A href={`/edit_words?page=${53}`}>
               <Icon src="control-stop" title="Last Page" />
             </A>
             &nbsp; &nbsp;
@@ -335,13 +342,11 @@ export function TermsFooter({
 }
 function TermLine({ word }: { word: Words }): JSX.Element {
   const termID = word.WoID;
-  // TODO
   const sentence = word.WoSentence;
 
   return (
     <tr>
-      <td className="td1 center">
-        {/*a name="rec${termID}" */}
+      <td name="rec${termID}" className="td1 center">
         <A>
           <input
             name="marked[]"
@@ -406,30 +411,110 @@ function TermLine({ word }: { word: Words }): JSX.Element {
     </tr>
   );
 }
+const sortingMethod = (
+  sort: Sorting
+): ((termA: Words, termB: Words) => 1 | -1 | 0) => {
+  switch (sort) {
+    case Sorting['Oldest first']:
+      return (a, b) => {
+        return a.WoCreated > b.WoCreated
+          ? 1
+          : a.WoCreated < b.WoCreated
+          ? -1
+          : 0;
+      };
+    case Sorting['Newest first']:
+      return (a, b) => {
+        return a.WoCreated > b.WoCreated
+          ? -1
+          : a.WoCreated < b.WoCreated
+          ? 1
+          : 0;
+      };
+    // TODO
+    case Sorting['Score Value (%)']:
+      return (a, b) => {
+        return a.WoCreated > b.WoCreated
+          ? -1
+          : a.WoCreated < b.WoCreated
+          ? 1
+          : 0;
+      };
+    case Sorting['Status']:
+      return (a, b) => {
+        return a.WoStatus > b.WoStatus ? -1 : a.WoStatus < b.WoStatus ? 1 : 0;
+      };
+    // TODO
+    case Sorting['Term A-Z']:
+      return (a, b) => {
+        return a.WoText > b.WoText ? -1 : a.WoText < b.WoText ? 1 : 0;
+      };
+    // TODO
+    case Sorting['Translation A-Z']:
+      return (a, b) => {
+        return a.WoTranslation > b.WoTranslation
+          ? 1
+          : a.WoTranslation < b.WoTranslation
+          ? -1
+          : 0;
+      };
+    // TODO
+    case Sorting['Word Count Active Texts']:
+      return (a, b) => {
+        return a.WoCreated > b.WoCreated
+          ? -1
+          : a.WoCreated < b.WoCreated
+          ? 1
+          : 0;
+      };
+  }
+};
 // TODO "New New Term? - Set Language Filter first "
-export function Terms({ pageNum }: { pageNum: number }): JSX.Element {
+export function Terms({
+  pageNum = null,
+  sort = null,
+  status = null,
+}: {
+  pageNum: number | null;
+  status: number | null;
+  sort: Sorting | null;
+}): JSX.Element {
   const [{ activeWords, activeLanguage }] = useData([
     'activeWords',
     'activeLanguage',
   ]);
 
+  if (!activeWords || !activeLanguage) {
+    return <></>;
+  }
+
+  const filteredWords =
+    status !== null
+      ? activeWords.filter((val) => val.WoStatus === status)
+      : activeWords;
+
+  const sortedWords =
+    sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
   return (
     <>
       <Header
         title={`My ${activeLanguage?.LgName} Terms (Words and Expressions)`}
       />
-      {activeWords && (
+      {sortedWords && (
         <>
-          <TermsFilterBox numTerms={activeWords.length} currentPage={pageNum} />
+          <TermsFilterBox
+            numTerms={sortedWords.length}
+            currentPage={pageNum !== null ? pageNum : 1}
+          />
           <table className="sortable tab1">
             <TermsHeader />
             <tbody>
-              {activeWords.map((word) => {
+              {sortedWords.map((word) => {
                 return <TermLine word={word} />;
               })}
             </tbody>
           </table>
-          <TermsFooter numTerms={activeWords.length} currentPage={0} />
+          <TermsFooter numTerms={sortedWords.length} currentPage={0} />
         </>
       )}
     </>

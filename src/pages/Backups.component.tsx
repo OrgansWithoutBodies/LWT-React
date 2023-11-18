@@ -41,7 +41,7 @@ export function BackupScreen(): JSX.Element {
   const restoreBackup = useRef();
   return (
     <>
-      <body>
+      <>
         <Header title="Backup/Restore/Empty Database" />
         <p>&nbsp;</p>
         <form
@@ -182,7 +182,7 @@ export function BackupScreen(): JSX.Element {
             </tbody>
           </table>
         </form>
-      </body>
+      </>
     </>
   );
 }

@@ -17,7 +17,7 @@ export function A({
           return nav(href);
         };
   return (
-    <a {...rest} onClick={onClick}>
+    <a {...rest} className="a" onClick={onClick}>
       {children}
     </a>
   );

@@ -293,6 +293,17 @@ export const createColors = (variant: StyleVariant): CSSObject => {
     'a:hover': {
       color: Colors.wrong,
     },
+    '.a': {
+      textDecoration: 'none',
+      cursor: 'pointer',
+      color: Colors.wrong,
+    },
+    '.a:focus': {
+      color: Colors.str3,
+    },
+    '.a:hover': {
+      color: Colors.str3,
+    },
     img: {
       border: '0pt none',
     },

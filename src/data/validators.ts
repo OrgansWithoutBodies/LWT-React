@@ -17,7 +17,7 @@ const URLValidator = () =>
 const URLTemplateValidator = (): ss.Struct<any, any> =>
   ss.string() && ss.define('urlTemplate', isValidURLTemplate);
 
-const TimestampValidator = () => ss.string();
+const TimestampValidator = () => ss.number();
 // TODO valid reference key id
 const archivedtextsId = brandedNumber('archivedtextsId' as const);
 const archtexttagsId = brandedNumber('archtexttagsId' as const);
@@ -240,6 +240,8 @@ export const WordsValidator = ss.object({
   // WoCreated: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   // KEY `WoCreated` (`WoCreated`),
   WoCreated: TimestampValidator(),
+  // TODO make into unix timestamp ms
+  // WoCreated: TimestampValidator(),
   // WoStatusChanged: timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   // KEY `WoStatusChanged` (`WoStatusChanged`),
   WoStatusChanged: TimestampValidator(),
