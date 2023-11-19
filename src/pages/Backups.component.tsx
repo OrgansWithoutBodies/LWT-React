@@ -93,6 +93,7 @@ export function BackupScreen(): JSX.Element {
                       may not be possible.
                       <br />
                       Upload limits (in bytes):
+                      {/* TODO see if these limits can be surpassed */}
                       <b>post_max_size = 8M / upload_max_filesize = 2M</b>
                       <br />
                       If needed, increase in "" and restart server.

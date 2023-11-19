@@ -517,7 +517,7 @@ export function SettingsComponent(): JSX.Element {
             </tr>
           </tbody>
         </table>
-      </form>{' '}
+      </form>
     </>
   );
 }

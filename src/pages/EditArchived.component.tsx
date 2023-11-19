@@ -1,10 +1,19 @@
 import { useRef } from 'react';
 import { Icon } from '../Icon';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { Pager } from '../ui-kit/Pager';
 import { Header } from './Header';
+import { confirmDelete } from './utils';
 
-export function EditArchivedTexts({ query }: { query: string }): JSX.Element {
+export function EditArchivedTexts({
+  query,
+  currentPage,
+}: {
+  query: string;
+  currentPage: number;
+}): JSX.Element {
   const [{ languages, activeLanguage, numArchivedTexts, archivedtexts }] =
     useData([
       'languages',
@@ -12,6 +21,7 @@ export function EditArchivedTexts({ query }: { query: string }): JSX.Element {
       'numArchivedTexts',
       'archivedtexts',
     ]);
+  const numPages = 10;
   const recno = numArchivedTexts;
   const navigate = useInternalNavigate();
   const queryRef = useRef<HTMLInputElement | undefined>();
@@ -105,7 +115,7 @@ export function EditArchivedTexts({ query }: { query: string }): JSX.Element {
               </select>
             </td>
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-              Tag #1 ..{' '}
+              Tag #1 ..
               <select
                 name="tag12"
                 onChange={({ target: { value: val } }) =>
@@ -113,7 +123,7 @@ export function EditArchivedTexts({ query }: { query: string }): JSX.Element {
                 }
               >
                 {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
-              </select>{' '}
+              </select>
               .. Tag #2
             </td>
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
@@ -241,46 +251,39 @@ if (recno==0) {
                     &nbsp;
                     <span
                       className="click"
-                      onClick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['AtID'] . '\';"
+                      // onClick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['AtID'] . '\';"
+                      // TODO del url pattern uniformly?
+                      onClick={() => {
+                        if (confirmDelete()) {
+                          dataService.deleteArchivedText(text.AtID);
+                        }
+                      }}
                     >
                       <Icon src="minus-button" title="Delete" />
                     </span>
                     &nbsp;
                   </td>
                   {/* TODO */}
-                  {/* {$currentlang === '' && (
-                      <th class="th1 clickable">Lang.</th>
-                    )} */}
+                  {activeLanguage === null && (
+                    <th className="th1 clickable">Lang.</th>
+                  )}
                   <td className="td1 center">. tohtml($record['LgName']) .</td>
                   <td className="td1 center">
-                    {/* . tohtml($record['AtTitle']) . ' */}
+                    {text.AtTitle}
                     <span className="smallgray2">
                       {/* . tohtml($record['taglist']) . */}
-                    </span>{' '}
-                    &nbsp;' .{/* TODO */}
-                    {/* {isset($record['AtAudioURI']) ? (
-                        <Icon src="speaker-volume" title="With Audio" />
-                      ) : (
-                        <></>
-                      )}{' '}
-                      .
-                      {isset($record['AtSourceURI']) ? (
-                        <a
-                          href="' . $record['AtSourceURI'] . '"
-                          target="_blank"
-                        >
-                          <Icon src="chain" title="Link to Text Source" />
-                        </a>
-                      ) : (
-                        <> </>
-                      )}{' '}
-                      .
-                      {$record['annotlen'] ? (
-                        <Icon src="tick" title="Annotated Text available" />
-                      ) : (
-                        <></>
-                      )}{' '} */}
-                    .
+                    </span>
+                    {text.AtAudioURI && (
+                      <Icon src="speaker-volume" title="With Audio" />
+                    )}
+                    {text.AtSourceURI && (
+                      <a href="' . $record['AtSourceURI'] . '" target="_blank">
+                        <Icon src="chain" title="Link to Text Source" />
+                      </a>
+                    )}
+                    {text.AtAnnotatedText && (
+                      <Icon src="tick" title="Annotated Text available" />
+                    )}
                   </td>
                 </tr>
               </>
@@ -307,7 +310,7 @@ if (recno==0) {
 }
 
 ?> */}
-
+      <Pager currentPage={currentPage} numPages={numPages} />
       <p>
         <input
           type="button"

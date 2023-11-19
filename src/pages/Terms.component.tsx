@@ -5,8 +5,10 @@ import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { Pager } from '../ui-kit/Pager';
+import { usePager } from '../usePager';
 import { Header } from './Header';
-import { Pager } from './Library.component';
+import { confirmDelete } from './utils';
 export const enum Sorting {
   'Term A-Z' = 1,
   'Translation A-Z' = 2,
@@ -22,7 +24,6 @@ function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
     <select
       name="tag1"
       onChange={({ target: { value } }) => {
-        // navigate(`/edit_words?page=1&tag1=${value}`);
         updateParams({ tag1: value });
       }}
     >
@@ -188,7 +189,7 @@ export function TermsFilterBox({
               onChange={({ target: { value: selectedValue } }) => {
                 updateParams(
                   { query: selectedValue }
-                  // `/edit_words?page=${currentPage}&query=${selectedValue}`
+                  // `/edit_wors?page=${currentPage}&query=${selectedValue}`
                 );
               }}
             />
@@ -317,8 +318,11 @@ function TermLine({ word }: { word: Words }): JSX.Element {
         </A>
         &nbsp;
         <A
-          className="confirmdelete"
-          onClick={() => dataService.deleteTerm(word.WoID)}
+          onClick={() => {
+            if (confirmDelete()) {
+              dataService.deleteTerm(word.WoID);
+            }
+          }}
         >
           <Icon src="minus-button" title="Delete" />
         </A>
@@ -423,7 +427,6 @@ const sortingMethod = (
       };
   }
 };
-// TODO "New New Term? - Set Language Filter first "
 export function Terms({
   pageNum = null,
   sort = null,
@@ -437,7 +440,7 @@ export function Terms({
     'activeWords',
     'activeLanguage',
   ]);
-
+  console.log(activeWords);
   if (!activeWords || !activeLanguage) {
     return <></>;
   }
@@ -450,6 +453,8 @@ export function Terms({
   const sortedWords =
     sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
   const currentPage = pageNum !== null ? pageNum : 1;
+
+  const { dataOnPage: displayedWords } = usePager(sortedWords, currentPage, 10);
   return (
     <>
       <Header
@@ -464,7 +469,7 @@ export function Terms({
           <table className="sortable tab1">
             <TermsHeader />
             <tbody>
-              {sortedWords.map((word) => {
+              {displayedWords.map((word) => {
                 return <TermLine word={word} />;
               })}
             </tbody>
@@ -513,6 +518,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
+              {term?.WoLgID}
               {/* TODO */}
               {/* <?php echo tohtml($record['LgName']); ?> */}
             </td>
@@ -530,7 +536,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 value={term?.WoText}
                 maxlength={250}
                 size={40}
-              />{' '}
+              />
               <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
@@ -546,13 +552,14 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 cols={40}
                 rows={3}
               >
-                {/* <?php echo tohtml($transl); ?> */}
+                {term?.WoTranslation}
               </textarea>
             </td>
           </tr>
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
+              {/* TODO */}
               {/* <?php echo getWordTags($record['WoID']); ?> */}
             </td>
           </tr>
@@ -578,6 +585,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
             </td>
             <td className="td1">
               <textarea
+                // TODO
                 // <?php echo $scrdir; ?>
                 className="textarea-noreturn checklength checkoutsidebmp"
                 data_maxlength={1000}
@@ -586,20 +594,18 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 cols={40}
                 rows={3}
               >
-                {/* <?php echo tohtml(repl_tab_nl($record['WoSentence'])); ?> */}
+                {term?.WoSentence}
               </textarea>
             </td>
           </tr>
           <tr>
             <td className="td1 right">Status:</td>
-            <td className="td1">
-              {/* <?php echo get_wordstatus_radiooptions($record['WoStatus']); ?> */}
-            </td>
+            <td className="td1">{term?.WoStatus}</td>
           </tr>
           <tr>
             <td className="td1 right" colSpan={2}>
-              {' '}
               &nbsp;
+              {/* TODO */}
               {/* <?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoSentence','document.forms[\'editword\'].WoText'); ?> */}
               &nbsp; &nbsp;
               <input
@@ -615,6 +621,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
       <div id="exsent">
         <span
           className="click"
+          // TODO
           // onClick="do_ajax_show_sentences(<?php echo $record['LgID']; ?>, <?php echo prepare_textdata_js($wordlc) . ', ' . prepare_textdata_js("document.forms['editword'].WoSentence"); ?>);"
         >
           <Icon src="sticky-notes-stack" title="Show Sentences" /> Show

@@ -47,14 +47,12 @@ export const useUpdateParams = () => {
       })
   );
   return (params: { [path in PathParams]?: string | null }) => {
-    console.log(params);
     const filteredParams: { [path in PathParams]?: string } =
       Object.fromEntries(
         Object.entries({ ...currentParams, ...params }).filter(
           ([_, val]) => val !== null
         )
       );
-    console.log(filteredParams);
     setSearchParams(filteredParams);
   };
   // searchParams.get()

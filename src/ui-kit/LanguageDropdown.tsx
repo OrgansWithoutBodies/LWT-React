@@ -6,13 +6,13 @@ export function LanguageDropdown({
   header = 'Choose...',
   name = 'LgID',
   defaultValue,
-  onSelect,
+  onChange,
   dropdownRef,
 }: {
   header?: string;
   name?: string;
   defaultValue?: LanguagesId;
-  onSelect?: (value: number) => void;
+  onChange?: (value: LanguagesId) => void;
   dropdownRef?: React.MutableRefObject<any>;
 }): JSX.Element {
   const [{ languages }] = useData(['languages']);
@@ -22,6 +22,7 @@ export function LanguageDropdown({
       name={name}
       value={defaultValue}
       className="notempty setfocus"
+      onChange={onChange}
       ref={dropdownRef}
     >
       <option value="-1">[{header}]</option>

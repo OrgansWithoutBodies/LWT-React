@@ -120,12 +120,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="preface" id="preface">
                   Preface
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -178,12 +178,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="current" id="current">
                   Current Version
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -202,12 +202,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="links" id="links">
                   Important Links
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -293,35 +293,35 @@ $('#floatdiv').addFloating( {
                       Street-Smart Language Learning™: Using Learning with Texts
                       with Anki 2 (in five parts):
                       <br />
-                      Part{' '}
+                      Part
                       <a
                         href="http://www.streetsmartlanguagelearning.com/2012/12/using-learning-with-texts-with-anki-2.html"
                         target="_blank"
                       >
                         1
-                      </a>{' '}
-                      /{' '}
+                      </a>
+                      /
                       <a
                         href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2.html"
                         target="_blank"
                       >
                         2
-                      </a>{' '}
-                      /{' '}
+                      </a>
+                      /
                       <a
                         href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_8.html"
                         target="_blank"
                       >
                         3
-                      </a>{' '}
-                      /{' '}
+                      </a>
+                      /
                       <a
                         href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_15.html"
                         target="_blank"
                       >
                         4
-                      </a>{' '}
-                      /{' '}
+                      </a>
+                      /
                       <a
                         href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_21.html"
                         target="_blank"
@@ -453,27 +453,27 @@ $('#floatdiv').addFloating( {
                             target="_blank"
                           >
                             FLTR - Foreign Language Text Reader
-                          </a>{' '}
+                          </a>
                           (Open Source Java Desktop Application).
                         </li>
                         <li>
                           <a href="http://lingq.com" target="_blank">
                             LingQ.com
-                          </a>{' '}
+                          </a>
                           (Web based service with tutoring. An account costs US$
                           10 per month).
                         </li>
                         <li>
                           <a href="http://lingro.com/" target="_blank">
                             lingro.com
-                          </a>{' '}
+                          </a>
                           (An on-line environment that allows anyone learning a
                           language to quickly look up and learn the vocabulary).
                         </li>
                         <li>
                           <a href="http://readlang.com/" target="_blank">
                             readlang.com
-                          </a>{' '}
+                          </a>
                           (An on-line service where you can import articles,
                           read and translate them, and learn new words. Price:
                           US$ 5 per month or US$ 48 per year).
@@ -486,7 +486,7 @@ $('#floatdiv').addFloating( {
                         <li>
                           <a href="http://tinyurl.com/cbpndlt" target="_blank">
                             GoogleDocs Spreadsheet
-                          </a>{' '}
+                          </a>
                           with recommendations for LWT Language Settings
                           ("Templates")
                           <br />
@@ -518,12 +518,12 @@ $('#floatdiv').addFloating( {
                             target="_blank"
                           >
                             "Jieba" Chinese text segmentation
-                          </a>{' '}
+                          </a>
                           (
                           <a href="https://www.python.org/" target="_blank">
                             Python
-                          </a>{' '}
-                          needed). Usage: Download, unzip, run:{' '}
+                          </a>
+                          needed). Usage: Download, unzip, run:
                           <i>
                             python -m jieba -d '&nbsp;' input.txt &gt;output.txt
                           </i>
@@ -538,12 +538,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="abstract" id="abstract">
                   Abstract
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -555,26 +555,26 @@ $('#floatdiv').addFloating( {
                     target="_blank"
                   >
                     <i>Learning with Texts</i> (LWT)
-                  </a>{' '}
+                  </a>
                   is a tool for Language Learning, inspired by:
                   <ul>
                     <li>
                       <a href="http://sdkrashen.com" target="_blank">
                         Stephen Krashen's
-                      </a>{' '}
+                      </a>
                       principles in Second Language Acquisition,
                     </li>
 
                     <li>
-                      Steve Kaufmann's{' '}
+                      Steve Kaufmann's
                       <a href="http://lingq.com" target="_blank">
                         LingQ
-                      </a>{' '}
+                      </a>
                       System and
                     </li>
 
                     <li>
-                      ideas from Khatzumoto, published at{' '}
+                      ideas from Khatzumoto, published at
                       <a
                         href="http://www.alljapaneseallthetime.com"
                         target="_blank"
@@ -607,10 +607,10 @@ $('#floatdiv').addFloating( {
 
                 <li>
                   Import of terms in TSV/CSV format, export in TSV format, and
-                  export to{' '}
+                  export to
                   <a href="http://ankisrs.net" target="_blank">
                     Anki
-                  </a>{' '}
+                  </a>
                   (prepared for cloze tests), are also possible.
                   <br />
                   <br />
@@ -620,30 +620,30 @@ $('#floatdiv').addFloating( {
                   <b>
                     <u>MOST IMPORTANT:</u>
                     <br />
-                    <br /> To run LWT, you'll need:{' '}
+                    <br /> To run LWT, you'll need:
                   </b>
                   <br />
                   <br />
                   <b>(1) A modern web browser.</b>
-                  <br />I recommend (in this order){' '}
+                  <br />I recommend (in this order)
                   <ul>
                     <li>
                       <a href="http://www.google.com/chrome/" target="_blank">
                         Chrome
                       </a>
-                      ,{' '}
+                      ,
                     </li>
                     <li>
                       <a href="http://www.mozilla.org/firefox/" target="_blank">
                         Firefox
                       </a>
-                      ,{' '}
+                      ,
                     </li>
                     <li>
                       <a href="http://www.apple.com/safari/" target="_blank">
                         Safari
                       </a>
-                      , or{' '}
+                      , or
                     </li>
                     <li>
                       <a
@@ -664,37 +664,37 @@ $('#floatdiv').addFloating( {
                     <li>
                       <a href="http://www.easyphp.org/" target="_blank">
                         EasyPHP
-                      </a>{' '}
-                      or{' '}
+                      </a>
+                      or
                       <a
                         href="https://www.apachefriends.org/download.html"
                         target="_blank"
                       >
                         XAMPP
-                      </a>{' '}
-                      (Windows), or{' '}
+                      </a>
+                      (Windows), or
                     </li>
                     <li>
                       <a href="http://mamp.info/en/index.html" target="_blank">
                         MAMP
-                      </a>{' '}
+                      </a>
                       (macOS), or
                     </li>
                     <li>
-                      a{' '}
+                      a
                       <a
                         href="http://en.wikipedia.org/wiki/LAMP_%28software_bundle%29"
                         target="_blank"
                       >
                         LAMP (Linux-Apache-MySQL-PHP) server
-                      </a>{' '}
+                      </a>
                       (Linux).
                     </li>
                   </ul>
                   <br />
                   <b>(3) The LWT Application.</b>
                   <br />
-                  The ZIP Archive <i>lwt_v_x_y.zip</i> can be downloaded{' '}
+                  The ZIP Archive <i>lwt_v_x_y.zip</i> can be downloaded
                   <a
                     href="http://sourceforge.net/projects/learning-with-texts/files/"
                     target="_blank"
@@ -711,12 +711,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="features" id="features">
                   Features
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -785,21 +785,21 @@ $('#floatdiv').addFloating( {
 
                 <li>
                   <b>New since Version 1.5.0:</b> Create and edit an improved
-                  annotated text version (a{' '}
+                  annotated text version (a
                   <a
                     target="_blank"
                     href="http://learnanylanguage.wikia.com/wiki/Hyperliteral_translations"
                   >
                     hyperliteral translation
-                  </a>{' '}
-                  as{' '}
+                  </a>
+                  as
                   <a
                     target="_blank"
                     href="http://en.wikipedia.org/wiki/Interlinear_gloss"
                   >
                     interlinear text
                   </a>
-                  ) for online or offline learning. Read more{' '}
+                  ) for online or offline learning. Read more
                   <a href="#il">here</a>.
                 </li>
 
@@ -821,25 +821,25 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="restrictions" id="restrictions">
                   Restrictions
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
             <dd>
               <ul>
                 <li>
-                  Texts and vocabulary terms with Unicode characters outside the{' '}
+                  Texts and vocabulary terms with Unicode characters outside the
                   <a
                     href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane"
                     target="_blank"
                   >
                     Basic Multilingual Plane
-                  </a>{' '}
+                  </a>
                   (BMP; U+0000 to U+FFFF), i.e. with Unicode characters U+10000
                   and higher, are not supported. Therefore, characters for
                   almost all modern languages, and a large number of symbols,
@@ -852,12 +852,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="license" id="license">
                   (Un-) License
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -889,7 +889,7 @@ $('#floatdiv').addFloating( {
                   <br />
                   Please read also the <a href="#disclaimer">disclaimer</a>.
                   <br />
-                  For more information, please refer to{' '}
+                  For more information, please refer to
                   <a href="http://unlicense.org/" target="_blank">
                     http://unlicense.org/
                   </a>
@@ -903,107 +903,107 @@ $('#floatdiv').addFloating( {
                   software, have different licenses:
                   <ul>
                     <li>
-                      jQuery, jQueryUI - Copyright © John Resig et.al.,{' '}
+                      jQuery, jQueryUI - Copyright © John Resig et.al.,
                       <a href="http://jquery.org/license" target="_blank">
                         http://jquery.org/license
-                      </a>{' '}
+                      </a>
                       (js/jquery.js, js/jquery-ui.min.js)
                     </li>
 
                     <li>
-                      jQuery.ScrollTo - Copyright © Ariel Flesler,{' '}
+                      jQuery.ScrollTo - Copyright © Ariel Flesler,
                       <a href="http://flesler.blogspot.com" target="_blank">
                         http://flesler.blogspot.com
-                      </a>{' '}
+                      </a>
                       (js/jquery.scrollTo.min.js)
                     </li>
 
                     <li>
                       Jeditable - jQuery in-place edit plugin - Copyright © Mika
-                      Tuupola, Dylan Verheul,{' '}
+                      Tuupola, Dylan Verheul,
                       <a
                         href="http://www.appelsiini.net/projects/jeditable"
                         target="_blank"
                       >
                         http://www.appelsiini.net/projects/jeditable
-                      </a>{' '}
+                      </a>
                       (js/jquery.jeditable.mini.js)
                     </li>
 
                     <li>
-                      jQueryUI Tag-it! - Copyright © Levy Carneiro Jr.,{' '}
+                      jQueryUI Tag-it! - Copyright © Levy Carneiro Jr.,
                       <a
                         href="http://aehlke.github.com/tag-it/"
                         target="_blank"
                       >
                         http://aehlke.github.com/tag-it/
-                      </a>{' '}
+                      </a>
                       (js/tag-it.js)
                     </li>
 
                     <li>
-                      оverLIB 4.22 - Copyright © Erik Bоsrup,{' '}
+                      оverLIB 4.22 - Copyright © Erik Bоsrup,
                       <a href="http://www.bosrup.com/" target="_blank">
                         http://www.bosrup.com/
-                      </a>{' '}
+                      </a>
                       (js/overlib/...)
                     </li>
 
                     <li>
-                      sorttable - Copyright © Stuart Langridge,{' '}
+                      sorttable - Copyright © Stuart Langridge,
                       <a
                         href="http://www.kryogenix.org/code/browser/sorttable/"
                         target="_blank"
                       >
                         http://www.kryogenix.org/code/browser/sorttable/
-                      </a>{' '}
+                      </a>
                       (js/sorttable/...)
                     </li>
 
                     <li>
-                      CountUp - Copyright © Praveen Lobo,{' '}
+                      CountUp - Copyright © Praveen Lobo,
                       <a
                         href="http://PraveenLobo.com/techblog/javascript-countup-timer/"
                         target="_blank"
                       >
                         http://PraveenLobo.com/techblog/javascript-countup-timer/
-                      </a>{' '}
+                      </a>
                       (js/countuptimer.js)
                     </li>
 
                     <li>
-                      jPlayer - Copyright © Happyworm Ltd,{' '}
+                      jPlayer - Copyright © Happyworm Ltd,
                       <a href="http://www.jplayer.org/about/" target="_blank">
                         http://www.jplayer.org/about/
-                      </a>{' '}
+                      </a>
                       (js/jquery.jplayer.min.js, js/Jplayer.swf,
                       css/jplayer_skin/...)
                     </li>
 
                     <li>
-                      Floating Menu - Copyright © JTricks.com,{' '}
+                      Floating Menu - Copyright © JTricks.com,
                       <a
                         href="http://www.jtricks.com/licensing.html"
                         target="_blank"
                       >
                         http://www.jtricks.com/licensing.html
-                      </a>{' '}
+                      </a>
                       (js/floating.js)
                     </li>
 
                     <li>
-                      mobiledetect - Copyright © Șerban Ghiță & Victor Stanciu,{' '}
+                      mobiledetect - Copyright © Șerban Ghiță & Victor Stanciu,
                       <a href="http://mobiledetect.net/" target="_blank">
                         http://mobiledetect.net
-                      </a>{' '}
+                      </a>
                       (php-mobile-detect/Mobile_Detect)
                     </li>
 
                     <li>
-                      iUI - Copyright © iUI,{' '}
+                      iUI - Copyright © iUI,
                       <a href="http://www.iui-js.org/" target="_blank">
                         http://www.iui-js.org/
-                      </a>{' '}
+                      </a>
                       (iui)
                     </li>
                   </ul>
@@ -1011,11 +1011,11 @@ $('#floatdiv').addFloating( {
                 </li>
 
                 <li>
-                  The icons in the "icn" subdirectory are Copyright ©{' '}
+                  The icons in the "icn" subdirectory are Copyright ©
                   <a href="http://p.yusukekamiyamane.com/" target="_blank">
                     Yusuke Kamiyamane
                   </a>
-                  . All rights reserved. Licensed under a{' '}
+                  . All rights reserved. Licensed under a
                   <a
                     href="http://creativecommons.org/licenses/by/3.0/"
                     target="_blank"
@@ -1023,11 +1023,11 @@ $('#floatdiv').addFloating( {
                     Creative Commons Attribution 3.0 license
                   </a>
                   . The wizard icon "wizard.png" is the "Free Wizard Icon", free
-                  for commercial use, from{' '}
+                  for commercial use, from
                   <a href="http://www.icojam.com/blog/?p=159" target="_blank">
                     icojam.com
-                  </a>{' '}
-                  (Author:{' '}
+                  </a>
+                  (Author:
                   <a href="http://www.icojam.com" target="_blank">
                     IcoJam / Andrew Zhebrakov
                   </a>
@@ -1042,14 +1042,14 @@ $('#floatdiv').addFloating( {
                   <ul>
                     <li>
                       Chinese: The Man and the Dog - Copyright © Praxis Language
-                      LLC, now ChinesePod Ltd.,{' '}
+                      LLC, now ChinesePod Ltd.,
                       <a
                         href="http://chinesepod.com/lessons/the-man-and-the-dog"
                         target="_blank"
                       >
                         Source
                       </a>
-                      , MP3 licensed under a{' '}
+                      , MP3 licensed under a
                       <a
                         href="http://creativecommons.org/licenses/by/3.0/"
                         target="_blank"
@@ -1061,21 +1061,21 @@ $('#floatdiv').addFloating( {
 
                     <li>
                       German: Die Leiden des jungen Werther by Johann Wolfgang
-                      von Goethe - in the{' '}
+                      von Goethe - in the
                       <a
                         href="http://www.gutenberg.org/wiki/Gutenberg:The_Project_Gutenberg_License"
                         target="_blank"
                       >
                         Public Domain
                       </a>
-                      , Source:{' '}
+                      , Source:
                       <a
                         href="http://www.gutenberg.org/ebooks/2407"
                         target="_blank"
                       >
                         Text
                       </a>
-                      ,{' '}
+                      ,
                       <a
                         href="http://www.gutenberg.org/ebooks/19794"
                         target="_blank"
@@ -1087,7 +1087,7 @@ $('#floatdiv').addFloating( {
 
                     <li>
                       French: Mon premier don du sang - Copyright © France
-                      Bienvenue,{' '}
+                      Bienvenue,
                       <a
                         href="http://francebienvenue1.wordpress.com/2011/06/18/generosite/"
                         target="_blank"
@@ -1109,12 +1109,12 @@ $('#floatdiv').addFloating( {
             </dd>
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="disclaimer" id="disclaimer">
                   Disclaimer
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -1136,12 +1136,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="install" id="install">
                   Installation on MS Windows, macOS, Linux
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -1152,12 +1152,12 @@ $('#floatdiv').addFloating( {
                     target="_blank"
                     href="http://learning-with-texts.sourceforge.io/LWT_INSTALLATION.txt"
                   >
-                    Please follow the up-to-date instructions{' '}
+                    Please follow the up-to-date instructions
                     <b>
                       <u>
                         <bigger>HERE</bigger>
                       </u>
-                    </b>{' '}
+                    </b>
                     (you must be online!).
                   </a>
                   <br />
@@ -1168,12 +1168,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="learn" id="learn">
                   How to learn with LWT
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -1185,17 +1185,17 @@ $('#floatdiv').addFloating( {
                   look for beginner courses or podcasts in the Internet.
                 </li>
                 <li>
-                  You don't know where to find texts with audio? The{' '}
+                  You don't know where to find texts with audio? The
                   <a href="http://lingq.com" target="_blank">
                     LingQ Library
-                  </a>{' '}
-                  has many (only a free registration is needed). Or look into{' '}
+                  </a>
+                  has many (only a free registration is needed). Or look into
                   <a
                     href="https://www.lingq.com/en/forum/updates-tips-and-known-issues/where-to-find-good-content-to-import/"
                     target="_blank"
                   >
                     this thread
-                  </a>{' '}
+                  </a>
                   in the LingQ Forum, you will find there lots of great links to
                   resources. Or click (within the LingQ library) on "My Imports"
                   - you will find a list of links of "Suggested resources".
@@ -1232,7 +1232,7 @@ $('#floatdiv').addFloating( {
                 </li>
                 <li>That's it. It's that simple. </li>
                 <li>
-                  If you want to know more, watch{' '}
+                  If you want to know more, watch
                   <a
                     href="http://www.youtube.com/user/lingosteve"
                     target="_blank"
@@ -1248,12 +1248,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="howto" id="howto">
                   How to use
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -1325,13 +1325,13 @@ $('#floatdiv').addFloating( {
                   <b>
                     If you are new to the system, use the "Language Settings
                     Wizard" first.
-                  </b>{' '}
+                  </b>
                   You only select your native (L1) and study (L2) languages, and
                   let the wizard set all language settings that are marked in
                   yellow. You can always adjust the settings afterwards.
                   <br />
                   <br />
-                  <b>Explainations of the input fields</b> - please read also{' '}
+                  <b>Explainations of the input fields</b> - please read also
                   <a href="#langsetup">this section</a>:
                   <br />
                   <br />
@@ -1363,13 +1363,13 @@ $('#floatdiv').addFloating( {
                       examples. The link to Google Translate is
                       "http://translate.google.com/?ie=UTF-8&sl=..&tl=..&text=###",
                       where the two-character codes after "sl=" andThe three
-                      Uniform Resource Identifiers "tl=" designate the{' '}
+                      Uniform Resource Identifiers "tl=" designate the
                       <a
                         href="http://www.iana.org/assignments/language-subtag-registry"
                         target='_blank"'
                       >
                         language codes (or "subtags")
-                      </a>{' '}
+                      </a>
                       for the source and the target language. But a different
                       third web dictionary is of course possible, but sentence
                       translations may not work.
@@ -1382,7 +1382,7 @@ $('#floatdiv').addFloating( {
                       Example: Linguee expects the searchword in ISO-8859-15,
                       not in UTF-8, so you define it this way:
                       "http://www.linguee.de/search?direction=auto&query=###ISO-8859-15###".
-                      A list of encodings can be found{' '}
+                      A list of encodings can be found
                       <a
                         href="http://php.net/manual/en/mbstring.supported-encodings"
                         target='_blank"'
@@ -1408,12 +1408,12 @@ $('#floatdiv').addFloating( {
                       To use this dictionary, input the "special" dictionary
                       link "<i>glosbe_api?from=...&dest=...&phrase=###</i>" (NO
                       "http://" at the beginning!!) with <i>from</i>: "L2
-                      language code" (the language of your texts) and{' '}
+                      language code" (the language of your texts) and
                       <i>dest</i>: "L1 language code" (e.g. mother tongue). To
-                      find the language codes, open{' '}
+                      find the language codes, open
                       <a href="http://glosbe.com/all-languages" target="_blank">
                         this page
-                      </a>{' '}
+                      </a>
                       to select the "from" (L2) language. On the next page,
                       select the "L2 - L1" language pair. The URL of the next
                       page shows the two language codes, here as an example
@@ -1472,25 +1472,25 @@ $('#floatdiv').addFloating( {
                       following space or newline!). The space can be omitted
                       (and it is normally), if you set "Make each character a
                       word" to Yes (see below). Whether you include here ":" and
-                      ";" - that's your decision. See also{' '}
+                      ";" - that's your decision. See also
                       <a href="#langsetup">this table</a>. Characters can be
-                      also defined in{' '}
+                      also defined in
                       <a
                         href="http://en.wikipedia.org/wiki/Unicode"
                         target="_blank"
                       >
                         Unicode
-                      </a>{' '}
+                      </a>
                       form: "\x{'....'}"; the Chinese/Japanese full stop "。" is
                       then "\x{3002}" (always without "). Please inform yourself
-                      about Unicode{' '}
+                      about Unicode
                       <a
                         href="http://en.wikipedia.org/wiki/Unicode"
                         target="_blank"
                       >
                         here (general information)
-                      </a>{' '}
-                      and{' '}
+                      </a>
+                      and
                       <a
                         href="http://unicode.coeurlumiere.com/"
                         target="_blank"
@@ -1515,15 +1515,15 @@ $('#floatdiv').addFloating( {
                       "RegExp Word Characters" is a list of characters OR
                       character ranges "x-y" that defines all characters in a
                       word, e.g. English: "a-zA-Z", German: "a-zA-ZaöüÄÖÜß",
-                      Chinese: 一-龥. See also{' '}
+                      Chinese: 一-龥. See also
                       <a href="#langsetup">this table</a>. Characters can be
-                      also defined in{' '}
+                      also defined in
                       <a
                         href="http://en.wikipedia.org/wiki/Unicode"
                         target="_blank"
                       >
                         Unicode
-                      </a>{' '}
+                      </a>
                       form: "\x{'....'}"; the Chinese/Japanese character "one"
                       "一" is then "\x{4}" (always without "). So the above
                       specification for the range of characters in Chinese
@@ -1536,7 +1536,7 @@ $('#floatdiv').addFloating( {
                     "Make each character a word" is a special option for
                     Chinese, etc. This makes EVERY character a single word
                     (normally words are split by any non-word character or a
-                    space). See also <a href="#langsetup">this table</a>.<br />{' '}
+                    space). See also <a href="#langsetup">this table</a>.<br />
                     <br />
                   </li>
                   <li>
@@ -1555,7 +1555,7 @@ $('#floatdiv').addFloating( {
                     controls "Flexible" Term Exports for the terms of that
                     language. It consists of a string of characters. Some parts
                     of this string are placeholders that are replaced by the
-                    actual term data,{' '}
+                    actual term data,
                     <a target="_blank" href="info_export_template.htm">
                       see this table
                     </a>
@@ -1567,7 +1567,7 @@ $('#floatdiv').addFloating( {
                   </li>
                 </li>
                 <br />
-                To understand all these options, please study also{' '}
+                To understand all these options, please study also
                 <a href="#langsetup">this</a>, look at the examples and play
                 around with different settings and different texts.
                 <br />
@@ -1689,7 +1689,7 @@ $('#floatdiv').addFloating( {
                 see "Exp: 2..xx 3..yy 4..zz ...". Just click on the number of
                 words (2..9) of the desired expression you want to save. The
                 dictionary links for multi word expressions are always in the
-                edit frame! You can also use the Keyboard in the text frame, see{' '}
+                edit frame! You can also use the Keyboard in the text frame, see
                 <a href="#keybind">Key Bindings</a>. Double clicking on a word
                 sets the audio position approximately to the text position, if
                 an audio was defined. The other audio controls are
@@ -1764,7 +1764,7 @@ $('#floatdiv').addFloating( {
                 This is Test #1 or #4: L2 -&gt; L1 (recognition) - to train your
                 ability to recognize a L2 term. You may test within sentence
                 context (Button "..[L2].."), or just the term (Button "[L2]").
-                You can also use the Keyboard in the test frame, see{' '}
+                You can also use the Keyboard in the test frame, see
                 <a href="#keybind">Key Bindings</a>.
                 <br />
                 <br />
@@ -1780,7 +1780,7 @@ $('#floatdiv').addFloating( {
                 This is Test #2 or #5: L1 -&gt; L2 (recall) - to train your
                 ability to produce a term from L1. You may test within sentence
                 context (Button "..[L1].."), or just the term (Button "[L1]").
-                You can also use the Keyboard in the test frame, see{' '}
+                You can also use the Keyboard in the test frame, see
                 <a href="#keybind">Key Bindings</a>.
                 <br />
                 <br />
@@ -1860,7 +1860,7 @@ $('#floatdiv').addFloating( {
                 </b>
                 <br />
                 <br />
-                <b>Motivation:</b> Annotated texts (as{' '}
+                <b>Motivation:</b> Annotated texts (as
                 <a
                   target="_blank"
                   href="http://en.wikipedia.org/wiki/Interlinear_gloss"
@@ -1868,27 +1868,27 @@ $('#floatdiv').addFloating( {
                   interlinear text
                 </a>
                 ) have been used for language learning for a long time. One
-                example are the word-by-word translations in{' '}
+                example are the word-by-word translations in
                 <a target="_blank" href="http://en.assimil.com/">
                   Assimil
-                </a>{' '}
-                courses. The German{' '}
+                </a>
+                courses. The German
                 <a
                   target="_blank"
                   href="http://web.archive.org/web/20070223080453/http://195.149.74.241/BIRKENBIHL/PDF/MethodEnglish.pdf"
                 >
                   V. F. Birkenbihl
-                </a>{' '}
-                proposes the creation of interlinear word-by-word or{' '}
+                </a>
+                proposes the creation of interlinear word-by-word or
                 <a
                   target="_blank"
                   href="http://learnanylanguage.wikia.com/wiki/Hyperliteral_translations"
                 >
                   hyperliteral
-                </a>{' '}
+                </a>
                 translations (calling this creation "decoding") in foreign
                 language learning. Learning Latin or Ancient Greek via
-                interlinear texts is quite old as you can see in{' '}
+                interlinear texts is quite old as you can see in
                 <a
                   target="_blank"
                   href="http://www.youtube.com/watch?v=XnEKnezLXJg"
@@ -1899,7 +1899,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 <br />
                 LWT's old "Print Screen" offers annotations, but it displays ALL
-                translations of a term. The <i>Improved Annotated Text</i>{' '}
+                translations of a term. The <i>Improved Annotated Text</i>
                 feature enables you to select the best translation for every
                 word in the text. As a result, you create an L1 word-by-word
                 translation that is displayed above the L2 text. This
@@ -1983,9 +1983,7 @@ $('#floatdiv').addFloating( {
                 term/romanization/translation (wildcard * possible) or term
                 tag(s). Different sort orders are possible. You can do "multi
                 actions" only on the marked or on all terms (on all pages!).
-                "Se?" displays a green dot if a valid sentences with {
-                  '{term}'
-                }{' '}
+                "Se?" displays a green dot if a valid sentences with {'{term}'}
                 exists. "Stat/Days" displays the status and the number of days
                 since the last status change. The score of a term is a rough
                 measure (in percent) how well you know a term. Read more about
@@ -2073,7 +2071,7 @@ $('#floatdiv').addFloating( {
                     <ul>
                       <li>
                         They have been parsed and tokenized according to the
-                        rules defined for the language.{' '}
+                        rules defined for the language.
                       </li>
                       <li>
                         The result is stored in a cache of sentences and text
@@ -2199,7 +2197,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 <br />
                 In this screen you can adjust the program according to your
-                needs. The geometric properties of the <i>Read Text</i> and{' '}
+                needs. The geometric properties of the <i>Read Text</i> and
                 <i>Test</i> screens can be changed. This is important because
                 different browsers and font sizes may result in an unpleasant
                 viewing experience. The waiting time to display the next test
@@ -2226,7 +2224,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 <br />
                 <b>WARNING:</b> The use of the "Multiple LWT table sets" feature
-                on an external web server may cause a{' '}
+                on an external web server may cause a
                 <b>monstrous database size</b> if some users import many or
                 large texts. Without further improvements (e. g. user quotas,
                 etc.), LWT with activated "Multiple LWT table sets" is in its
@@ -2301,12 +2299,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="faq" id="faq">
                   Questions and Answers
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2350,7 +2348,7 @@ $('#floatdiv').addFloating( {
                   <br />
                   <br />
                   Answer: Either the database (MySQL) is not running, or the
-                  database connection parameters in{' '}
+                  database connection parameters in
                   <i>../htdocs/lwt/connect.inc</i> are wrong. Please
                   check/correct the database connection parameters and/or start
                   MySQL via the MAMP or EasyPHP control program/panel.
@@ -2366,9 +2364,9 @@ $('#floatdiv').addFloating( {
                   <br />
                   <br />
                   Answer: The Webserver and the database is running, but the
-                  database connection parameter file{' '}
+                  database connection parameter file
                   <i>../htdocs/lwt/connect.inc</i> is not found. Please rename
-                  one of the connection files (according to your server) to{' '}
+                  one of the connection files (according to your server) to
                   <i>../htdocs/lwt/connect.inc</i>.
                   <br />
                   <br />
@@ -2391,7 +2389,7 @@ $('#floatdiv').addFloating( {
                   <br />
                   <br />
                   Answer 2: The PHP "mbstring" extension is not installed.
-                  Please install it;{' '}
+                  Please install it;
                   <a
                     href="https://askubuntu.com/questions/491629/how-to-install-php-mbstring-extension-in-ubuntu"
                     target="_blank"
@@ -2408,12 +2406,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="ipad" id="ipad">
                   Setup for Tablets
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2421,7 +2419,7 @@ $('#floatdiv').addFloating( {
               <ul>
                 <li>
                   If you want to use LWT on a tablet: that's possible (even the
-                  audio player works!).{' '}
+                  audio player works!).
                 </li>
                 <li>
                   In "Settings/Preferences", set the "Frame Set Display Mode" to
@@ -2448,12 +2446,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="langsetup" id="langsetup">
                   Language Setup
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2477,17 +2475,17 @@ $('#floatdiv').addFloating( {
                 </li>
 
                 <li>
-                  Please inform yourself about Unicode{' '}
+                  Please inform yourself about Unicode
                   <a
                     href="http://en.wikipedia.org/wiki/Unicode"
                     target="_blank"
                   >
                     here (general information)
-                  </a>{' '}
-                  and{' '}
+                  </a>
+                  and
                   <a href="http://unicode.coeurlumiere.com/" target="_blank">
                     here (Table of Unicode characters)
-                  </a>{' '}
+                  </a>
                   and about the characters that occur in the language you learn!
                   <br />
                   <br />
@@ -2647,12 +2645,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="termscores" id="termscores">
                   Term Scores
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2722,12 +2720,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="keybind" id="keybind">
                   Key Bindings
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2881,12 +2879,12 @@ $('#floatdiv').addFloating( {
             {/* <!-- ================================================================ --> */}
 
             <dt>
-              ▶{' '}
+              ▶
               <b>
                 <a name="history" id="history">
                   Changelog
                 </a>
-              </b>{' '}
+              </b>
               - <a href="#">[↑]</a>
             </dt>
 
@@ -2929,20 +2927,20 @@ $('#floatdiv').addFloating( {
                   The old links [lwt.sf.net], [lwt.sourceforge.net] or
                   [sourceforge.net/projects/lwt] are no longer valid!
                   <br />
-                  The new links are now{' '}
+                  The new links are now
                   <a
                     href="https://learning-with-texts.sourceforge.io"
                     target="_blank"
                   >
                     learning-with-texts.sourceforge.io
-                  </a>{' '}
-                  (documentation and demo database) and{' '}
+                  </a>
+                  (documentation and demo database) and
                   <a
                     href="https://sourceforge.net/projects/learning-with-texts"
                     target="_blank"
                   >
                     sourceforge.net/projects/learning-with-texts
-                  </a>{' '}
+                  </a>
                   (project home and downloads).
                   <br />
                   <br />
@@ -3047,7 +3045,7 @@ $('#floatdiv').addFloating( {
                       target="_blank"
                     >
                       "Learning with Texts" (LWT)
-                    </a>{' '}
+                    </a>
                     is released into the Public Domain. This applies worldwide.
                     <br />
                     In case this is not legally possible, any entity is granted

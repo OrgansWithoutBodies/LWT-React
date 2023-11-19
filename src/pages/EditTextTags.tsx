@@ -1,10 +1,12 @@
 import { Icon } from '../Icon';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
+import { confirmDelete } from './utils';
 
-export function EditTextTags({ query }: { query: string }) {
+export function DisplayTextTags({ query }: { query: string }) {
   const [{ tags2, archtexttags, texttags }] = useData([
     'tags2',
     'archtexttags',
@@ -191,10 +193,14 @@ if ($recno==0) {
                   <A href={`/edit_texttags?chg=${tag.T2ID}`}>
                     <Icon src={'document--pencil'} title="Edit" />
                   </A>
-                  &nbsp;{' '}
+                  &nbsp;
                   <A
                     href={`/edit_texttags?del=${tag.T2ID}`}
-                    className="confirmdelete"
+                    onClick={() => {
+                      if (confirmDelete()) {
+                        dataService.deleteTagFromText(tag.T2ID);
+                      }
+                    }}
                   >
                     <Icon src="minus-button" title="Delete" />
                   </A>
@@ -277,12 +283,8 @@ export function NewTextTag() {
                 value=""
                 maxlength={20}
                 size={20}
-              />{' '}
-              <img
-                src="icn/status-busy.png"
-                title="Field must not be empty"
-                alt="Field must not be empty"
               />
+              <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
           <tr>
@@ -346,12 +348,8 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 value={changingTag?.T2Text}
                 maxlength={20}
                 size={20}
-              />{' '}
-              <img
-                src="icn/status-busy.png"
-                title="Field must not be empty"
-                alt="Field must not be empty"
               />
+              <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
           <tr>
@@ -366,7 +364,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 cols={40}
                 rows={3}
               >
-                {/* <?php echo tohtml($record['T2Comment']); ?> */}
+                {changingTag?.T2Comment}
               </textarea>
             </td>
           </tr>
@@ -375,6 +373,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
               <input
                 type="button"
                 value="Cancel"
+                // TODO
                 onClick="{resetDirty(); location.href='edit_texttags.php#rec<?php echo $_REQUEST['chg']; ?>'};"
               />
               <input type="submit" name="op" value="Change" />

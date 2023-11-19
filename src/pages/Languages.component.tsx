@@ -5,6 +5,7 @@ import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { Header } from './Header';
+import { confirmDelete } from './utils';
 
 function LanguageLine({
   language,
@@ -56,18 +57,17 @@ function LanguageLine({
           <Icon src="printer" title="Print" />
         </A> */}
         &nbsp;
-        <A href={`/edit_languages?arch=${id}`}>
-          <Icon src="inbox-download" title="Archive" />
-        </A>
-        &nbsp;
         <A href={`/edit_languages?chg=${id}`}>
           <Icon src="document--pencil" title="Edit" />
         </A>
         &nbsp;
         <span
           className="click"
-          onClick={() => dataService.deleteLanguage(language.LgID)}
-          // onClick={`if (confirmDelete()) location.href='/edit_languages?del=${47}';`}
+          onClick={() => {
+            if (confirmDelete()) {
+              dataService.deleteLanguage(language.LgID);
+            }
+          }}
         >
           <Icon src="minus-button" title="Delete" />
         </span>

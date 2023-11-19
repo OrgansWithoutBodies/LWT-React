@@ -40,8 +40,8 @@ export function CheckText(): JSX.Element {
                 <textarea
                   name="TxText"
                   className="notempty checkbytes checkoutsidebmp"
-                  // data_maxlength="65000"
-                  // data_info="Text"
+                  data_maxlength="65000"
+                  data_info="Text"
                   cols={60}
                   rows={20}
                 ></textarea>

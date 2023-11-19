@@ -157,7 +157,6 @@ function TermTooltipHeader({
 export function UnknownTermLines({ word }: { word: string }): JSX.Element {
   return (
     <>
-      {' '}
       <b>
         {word}
         <br />▶ Unknown [?]

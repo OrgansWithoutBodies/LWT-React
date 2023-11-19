@@ -1,24 +1,33 @@
 import { useRef } from 'react';
 import { Icon } from '../Icon';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { Pager } from '../ui-kit/Pager';
 import { Header } from './Header';
+import { confirmDelete } from './utils';
 
-export function EditTags({ query }: { query: string }): JSX.Element {
+export function DisplayTags({
+  query,
+
+  currentPage,
+}: {
+  query: string;
+  currentPage: number;
+}): JSX.Element {
   const [{ wordtags }] = useData(['wordtags']);
   const restoreBackup = useRef();
   const navigate = useInternalNavigate();
   const tagCount = wordtags.length;
   const recno = wordtags.length;
   // TODO
-  const pages = 10;
+  const numPages = 10;
   const queryRef = useRef<HTMLInputElement>(null);
   return (
     <>
-      <Header />
+      <Header title={'Word Tags'} />
       <p>
-        {/* TODO */}
         <A href="/edit_tags?new=1">
           <Icon src="plus-button" title="New" /> New Term Tag ...
         </A>
@@ -70,7 +79,6 @@ export function EditTags({ query }: { query: string }): JSX.Element {
               <input
                 type="button"
                 value="Clear"
-                // TODO
                 onClick={() => {
                   navigate(`/edit_tags?page=${1}&query=`);
                 }}
@@ -185,10 +193,14 @@ if (recno==0) {
                   >
                     <Icon src="document--pencil" title="Edit" />
                   </A>
-                  &nbsp;{' '}
+                  &nbsp;
                   <A
                     className="confirmdelete"
-                    // TODO
+                    onClick={() => {
+                      if (confirmDelete()) {
+                        dataService.deleteTagFromTerm(tag.WtTgID);
+                      }
+                    }}
                     // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
                   >
                     <Icon src="minus-button" title="Delete" />
@@ -196,7 +208,7 @@ if (recno==0) {
                   &nbsp;
                 </td>
                 <td className="td1 center"> . tohtml(record['TgText']) . </td>
-                <td className="td1 center">{/* {tag.TgComment} */}</td>
+                <td className="td1 center">{tag.TgComment}</td>
                 <td className="td1 center">
                   {tagCount > 0 ? (
                     <A
@@ -213,7 +225,7 @@ if (recno==0) {
           })}
         </table>
       </form>
-      {pages > 1 && (
+      {numPages > 1 && (
         <form name="form3" action="#">
           <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tr>
@@ -226,6 +238,7 @@ if (recno==0) {
         </form>
       )}
 
+      <Pager currentPage={currentPage} numPages={numPages} />
       {/* <?php if( pages > 1) { ?>
 <form name="form3" action="#">
 <table className="tab1" cellspacing={0} cellpadding={5}>
@@ -265,12 +278,8 @@ export function NewTag() {
                 value=""
                 maxlength={20}
                 size={20}
-              />{' '}
-              <img
-                src="icn/status-busy.png"
-                title="Field must not be empty"
-                alt="Field must not be empty"
               />
+              <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
           <tr>
@@ -291,6 +300,7 @@ export function NewTag() {
               <input
                 type="button"
                 value="Cancel"
+                // TODO
                 onClick="{resetDirty(); location.href='edit_tags.php';}"
               />
               <input type="submit" name="op" value="Save" />

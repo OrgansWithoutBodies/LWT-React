@@ -54,6 +54,7 @@ export class DataQuery extends Query<DataState> {
   public activeWords = combineLatest([this.activeLanguageId, this.words]).pipe(
     map(([activeLanguageId, words]) => {
       return words.filter((word) => {
+        console.log(word.WoLgID, activeLanguageId);
         return word.WoLgID === activeLanguageId;
       });
     })

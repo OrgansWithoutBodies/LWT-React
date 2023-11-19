@@ -1,6 +1,8 @@
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { useAppContext } from '../useContext';
 
 export function LandingPage() {
@@ -25,9 +27,18 @@ export function LandingPage() {
     <>
       <div>
         <div>
-          <div>Language:</div>
+          <div>
+            Language:
+            <LanguageDropdown
+              onChange={(val) => {
+                dataService.setActiveLanguage(val);
+              }}
+              defaultValue={activeLanguageId}
+            />
+          </div>
           {activeLanguage && (
             <div>
+              {/* TODO */}
               My last Text (in
               {' ' + activeLanguage.LgName})
             </div>
@@ -109,7 +120,7 @@ export function LandingPage() {
                   target="_blank"
                 >
                   "Learning with Texts" (LWT)
-                </a>{' '}
+                </a>
                 is free and unencumbered software released
                 <br />
                 into the
@@ -117,12 +128,10 @@ export function LandingPage() {
                   href="https://en.wikipedia.org/wiki/Public_domain_software"
                   target="_blank"
                 >
-                  {' '}
                   PUBLIC DOMAIN
                 </a>
                 . LWT React Port is as well. Feel free
                 <a href="http://unlicense.org/" target="_blank">
-                  {' '}
                   More information and detailed Unlicense ...
                 </a>
                 <br />
@@ -134,7 +143,7 @@ export function LandingPage() {
                 >
                   Database
                 </a>
-                {/* TODO server url & type? */}: <i>lwt</i> on{' '}
+                {/* TODO server url & type? */}: <i>lwt</i> on
                 <i>{dbBackend}</i> /
                 <span
                   title="Manage Table Sets"

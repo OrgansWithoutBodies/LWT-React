@@ -11,10 +11,10 @@ export function EditLanguage({ chgID }: { chgID: number }) {
     <>
       <Header title={''} />
       <h4>
-        Edit Language{' '}
+        Edit Language
         <a target="_blank" href="info.htm#howtolang">
           <Icon src="question-frame" title="Help" />
-        </a>{' '}
+        </a>
       </h4>
       <script
         type="text/javascript"
@@ -43,7 +43,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 value={changingLang?.LgName}
                 maxlength={40}
                 size={40}
-              />{' '}
+              />
               <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
@@ -58,7 +58,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 maxLength={200}
                 size={60}
                 data_info="Dictionary 1 URI"
-              />{' '}
+              />
               <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
@@ -123,7 +123,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 maxLength={500}
                 size={60}
                 data_info="RegExp Split Sentences"
-              />{' '}
+              />
               <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
@@ -152,7 +152,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 value={changingLang?.LgRegexpWordCharacters}
                 maxlength={500}
                 size={60}
-              />{' '}
+              />
               <Icon src="status-busy" title="Field must not be empty" />
             </td>
           </tr>
@@ -161,7 +161,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
             <td className="td1">
               <select name="LgSplitEachChar">
                 {/* <?php echo get_yesno_selectoptions($record['LgSplitEachChar']); ?> */}
-              </select>{' '}
+              </select>
               (e.g. for Chinese, Japanese, etc.)
             </td>
           </tr>
@@ -170,7 +170,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
             <td className="td1">
               <select name="LgRemoveSpaces">
                 {/* <?php echo get_yesno_selectoptions($record['LgRemoveSpaces']); ?> */}
-              </select>{' '}
+              </select>
               (e.g. for Chinese, Japanese, etc.)
             </td>
           </tr>
@@ -179,19 +179,19 @@ export function EditLanguage({ chgID }: { chgID: number }) {
             <td className="td1">
               <select name="LgRightToLeft">
                 {/* <?php echo get_yesno_selectoptions($record['LgRightToLeft']); ?> */}
-              </select>{' '}
+              </select>
               (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
             </td>
           </tr>
           <tr>
             <td className="td1 right">
-              Export Template{' '}
+              Export Template
               <Icon
                 src="question-frame"
                 title="Help"
                 className="click"
                 onClick="oewin('info_export_template.htm');"
-              />{' '}
+              />
               :
             </td>
             <td className="td1">

@@ -1,9 +1,12 @@
+import { useRef, useState } from 'react';
 import { Icon } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-import { useUpdateParams } from '../nav/useInternalNav';
+import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
+import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { Pager } from '../ui-kit/Pager';
 import { Header } from './Header';
 
 export function MultiActions() {
@@ -26,13 +29,16 @@ export function MultiActions() {
             <tr>
               <td className="td1 center">
                 <input type="button" value="Mark All" />
+                {/* TODO */}
                 {/* onClick="selectToggle(true,'form2');" */}
                 <input type="button" value="Mark None" />
+                {/* TODO */}
                 {/* onClick="selectToggle(false,'form2');" */}
               </td>
               <td className="td1 center">
                 Marked Texts
                 <select name="markaction" id="markaction" disabled={true}>
+                  {/* TODO */}
                   {/* onchange="multiActionGo(document.form2, document.form2.markaction);" */}
                   <option value=""></option>
                   {/* selected="selected" */}
@@ -114,17 +120,13 @@ function LibraryFooter({
       <table className="tab1" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
-            <th className="th1">
-              {/* style={{whiteSpace:"nowrap"}} */}
+            <th style={{ whiteSpace: 'nowrap' }} className="th1">
               {numTexts} Texts
             </th>
-            <th className="th1">
-              {/* style={{whiteSpace:"nowrap"}} */}
+            <th style={{ whiteSpace: 'nowrap' }} className="th1">
               &nbsp; &nbsp;
               <Icon src="placeholder" alt="-" />
-              {/* {true}&nbsp; */}
               <Icon src="placeholder" alt="-" />
-              {/* TODO pagination */}
               <Pager currentPage={currentPage} numPages={numPages} />
             </th>
           </tr>
@@ -147,8 +149,7 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
           />
         </A>
       </td>
-      <td className="td1 center">
-        {/* style={{whiteSpace:"nowrap"}} */}
+      <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
         &nbsp;
         <A href={`/do_text?start=${text.TxID}`}>
           <Icon src="book-open-bookmark" title="Read" />
@@ -159,8 +160,7 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
         </A>
         &nbsp;
       </td>
-      <td className="td1 center">
-        {/* style={{whiteSpace:"nowrap"}} */}
+      <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
         &nbsp;
         <A href={`/print_text?text=${text.TxID}`}>
           <Icon src="printer" title="Print" />
@@ -204,7 +204,13 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
   );
 }
 
-export function Library({ currentPage }: { currentPage: number }) {
+export function Library({
+  currentPage,
+  query = null,
+}: {
+  currentPage: number;
+  query: string | null;
+}) {
   const [{ textDetails, activeLanguage }] = useData([
     'textDetails',
     'activeLanguage',
@@ -212,6 +218,11 @@ export function Library({ currentPage }: { currentPage: number }) {
   const pageSize = 10;
   const numPages = textDetails ? Math.ceil(textDetails.length / pageSize) : 0;
   const paramUpdater = useUpdateParams();
+  const navigator = useInternalNavigate();
+  const queryRef = useRef<HTMLInputElement | undefined>();
+  // TODO
+  const [selectedTags, setSelectedTags] = useState([]);
+
   return (
     <>
       <Header
@@ -219,19 +230,141 @@ export function Library({ currentPage }: { currentPage: number }) {
       />
       <p>
         <A href={`/edit_texts?new=${1}`}>
-          <img src="icn/plus-button.png" title="New" alt="New" /> New Text ...
-        </A>{' '}
+          <Icon src="plus-button" title="New" /> New Text ...
+        </A>
         &nbsp; | &nbsp;
         <A href="/long_text_import">
-          <img
-            src="icn/plus-button.png"
-            title="Long Text Import"
-            alt="Long Text Import"
-          />{' '}
-          Long Text Import ...
+          <Icon src="plus-button" title="Long Text Import" /> Long Text Import
+          ...
         </A>
       </p>
 
+      <form
+        name="form1"
+        action="#"
+        onSubmit="document.form1.querybutton.click(); return false;"
+      >
+        <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <th className="th1" colSpan={4}>
+              Filter <Icon src="funnel" title="Filter" />
+              &nbsp;
+              <input
+                type="button"
+                value="Reset All"
+                // TODO
+                onClick="resetAll('edit_texts.php');"
+              />
+            </th>
+          </tr>
+          <tr>
+            <td className="td1 center" colSpan={2}>
+              Language:
+              {/* onChange="{setLang(document.form1.filterlang,'edit_texts.php');}" */}
+              {/* name="filterlang" */}
+              <LanguageDropdown defaultValue={activeLanguage?.LgID} />
+            </td>
+            <td className="td1 center" colSpan={2}>
+              Text Title (Wildc.=*):
+              <input
+                type="text"
+                name="query"
+                ref={queryRef}
+                defaultValue={query || ''}
+                maxLength={50}
+                size={15}
+              />
+              &nbsp;
+              <input
+                type="button"
+                name="querybutton"
+                value="Filter"
+                onClick={() =>
+                  navigator(
+                    `/edit_texts?page=1&query=${queryRef.current?.value || ''}`
+                  )
+                }
+              />
+              &nbsp;
+              <input
+                type="button"
+                value="Clear"
+                onClick={() => {
+                  navigator('/edit_texts?page=1&query=');
+                  queryRef.current.value = '';
+                }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="td1 center"
+              colSpan={2}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              Tag #1:
+              <select
+                name="tag1"
+                // TODO
+                onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag1=' + val;}"
+              >
+                {/* TODO */}
+                {/* <?php echo get_texttag_selectoptions($currenttag1,$currentlang); ?> */}
+              </select>
+            </td>
+            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+              Tag #1 ..
+              <select
+                name="tag12"
+                // TODO
+                onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag12=' + val;}"
+              >
+                {/* TODO */}
+                {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
+              </select>
+              .. Tag #2
+            </td>
+            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+              Tag #2:
+              <select
+                name="tag2"
+                // TODO
+                onChange="{val=document.form1.tag2.options[document.form1.tag2.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag2=' + val;}"
+              >
+                {/* TODO */}
+                {/* <?php echo get_texttag_selectoptions($currenttag2,$currentlang); ?> */}
+              </select>
+            </td>
+          </tr>
+
+          {/* TODO */}
+          {/* <?php if($recno > 0) { ?> */}
+          <tr>
+            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
+              {/* TODO */}
+              {/* <?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?> */}
+            </th>
+            <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
+              {/* TODO */}
+              <Pager currentPage={currentPage} numPages={numPages} />
+              {/* <?php makePager ($currentpage, $pages, 'edit_texts.php', 'form1', 1); ?> */}
+            </th>
+            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
+              Sort Order:
+              <select
+                name="sort"
+                // TODO
+                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&amp;sort=' + val;}"
+              >
+                {/* TODO */}
+                {/* <?php echo get_textssort_selectoptions($currentsort); ?> */}
+              </select>
+            </th>
+          </tr>
+        </table>
+      </form>
+
+      <MultiActions />
       {activeLanguage && (
         <>
           <table className="sortable tab1">
@@ -248,76 +381,6 @@ export function Library({ currentPage }: { currentPage: number }) {
             currentPage={currentPage}
             numPages={numPages}
           />
-        </>
-      )}
-    </>
-  );
-}
-export function Pager({
-  currentPage: currentPage,
-  numPages,
-}: {
-  currentPage: number;
-  numPages: number;
-}) {
-  const updateParams = useUpdateParams();
-  return (
-    <>
-      {currentPage > 1 ? (
-        <>
-          <A onClick={() => updateParams({ page: '1' })}>
-            <Icon src="control-stop-180" title="First Page" />
-          </A>
-          &nbsp;
-          <A onClick={() => updateParams({ page: `${currentPage - 1}` })}>
-            <Icon src="control-180" title="Previous Page" />
-          </A>
-          &nbsp;
-        </>
-      ) : (
-        <>
-          &nbsp; &nbsp;
-          <Icon src="placeholder" alt="-" />
-          &nbsp;
-          <Icon src="placeholder" alt="-" />
-          &nbsp;
-        </>
-      )}
-      {numPages === 1 ? (
-        '1'
-      ) : (
-        <select
-          name={`page${currentPage}`}
-          onChange={({ target: { value } }) => updateParams({ page: value })}
-        >
-          {[...new Array(numPages).keys()].map((pageNumber) => {
-            const isSelected = currentPage === pageNumber + 1;
-            return (
-              <option value={pageNumber + 1} selected={isSelected}>
-                {pageNumber + 1}
-              </option>
-            );
-          })}
-        </select>
-      )}
-      {`of ${numPages}&nbsp;`}
-      {currentPage < numPages ? (
-        <>
-          <A onClick={() => updateParams({ page: `${currentPage + 1}` })}>
-            <Icon src="control" title="Next Page" />
-          </A>
-          &nbsp;
-          <A onClick={() => updateParams({ page: `${numPages}` })}>
-            <Icon src="control-stop" title="Last Page" />
-          </A>
-          &nbsp; &nbsp;
-        </>
-      ) : (
-        <>
-          <Icon src="placeholder" alt="-" />
-          &nbsp;
-          <Icon src="placeholder" alt="-" />
-          &nbsp; &nbsp;
         </>
       )}
     </>
