@@ -1,27 +1,23 @@
+import { ImgHTMLAttributes } from 'react';
 import { IconNameMap } from './icons';
 
 export function Icon({
   src: iconName,
   title,
   alt,
-  className,
-  onClick,
+  ...rest
 }: {
-  src: typeof IconNameMap[number];
+  src: (typeof IconNameMap)[number];
   title?: string;
   alt?: string;
-  className?: string;
-  onClick?: () => void;
-}): JSX.Element {
+} & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
   const iconURI = `icn/${iconName}.png`;
   return (
     <img
+      {...rest}
       src={iconURI}
-      className={className}
-      title={title}
       // automatically add alt text if title is specified but no alt
       alt={alt === undefined ? title : alt}
-      onClick={onClick}
     />
   );
 }

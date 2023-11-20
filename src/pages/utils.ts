@@ -696,9 +696,9 @@ export function confirmDelete(): boolean {
 // 		<!-- TBPREF  : "<?php echo tohtml($tbpref); ?>" -->
 // 		<script type="text/javascript">
 // 		//<![CDATA[
-// 		<?php echo "var STATUSES = " . json_encode(get_statuses()) . ";\n"; ?>
-// 		<?php echo "var TAGS = " . json_encode(get_tags()) . ";\n"; ?>
-// 		<?php echo "var TEXTTAGS = " . json_encode(get_texttags()) . ";\n"; ?>
+// 		<?php echo "const STATUSES = " . json_encode(get_statuses()) . ";\n"; ?>
+// 		<?php echo "const TAGS = " . json_encode(get_tags()) . ";\n"; ?>
+// 		<?php echo "const TEXTTAGS = " . json_encode(get_texttags()) . ";\n"; ?>
 // 		//]]>
 // 		</script>
 // 		<script type="text/javascript" src="js/pgm.js" charset="utf-8"></script>
@@ -888,7 +888,7 @@ export function confirmDelete(): boolean {
 
 // function quickMenu()
 // {
-// 	?><select id="quickmenu" onchange="{var qm = document.getElementById('quickmenu'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}">
+// 	?><select id="quickmenu" onchange="{const qm = document.getElementById('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}">
 // 	<option value="" selected="selected">[Menu]</option>
 // 	<option value="index">Home</option>
 // 	<option value="edit_texts">Texts</option>
@@ -2701,13 +2701,13 @@ export function confirmDelete(): boolean {
 
 // // -------------------------------------------------------------
 
-// function echodebug($var, $text)
+// function echodebug($const, $text)
 // {
 // 	global $debug;
 // 	if (!$debug)
 // 		return;
 // 	echo "<pre> **DEBUGGING** " . tohtml($text) . ' = [[[';
-// 	print_r($var);
+// 	print_r($const);
 // 	echo "]]]\n--------------</pre>";
 // }
 
@@ -3333,20 +3333,20 @@ export function confirmDelete(): boolean {
 // 		}
 
 // 		function set_new_playerseconds() {
-// 			var newval = ($("#backtime :selected").val());
+// 			const newval = ($("#backtime :selected").val());
 // 			do_ajax_save_setting('currentplayerseconds',newval);
 // 			// console.log("set_new_playerseconds="+newval);
 // 		}
 
 // 		function set_new_playbackrate() {
-// 			var newval = ($("#playbackrate :selected").val());
+// 			const newval = ($("#playbackrate :selected").val());
 // 			do_ajax_save_setting('currentplaybackrate',newval);
 // 			$("#jquery_jplayer_1").jPlayer("option","playbackRate", newval*0.1);
 // 			// console.log("set_new_playbackrate="+newval);
 // 		}
 
 // 		function set_current_playbackrate() {
-// 			var val = ($("#playbackrate :selected").val());
+// 			const val = ($("#playbackrate :selected").val());
 // 			$("#jquery_jplayer_1").jPlayer("option","playbackRate", val*0.1);
 // 			// console.log("set_current_playbackrate="+val);
 // 		}
@@ -3370,17 +3370,17 @@ export function confirmDelete(): boolean {
 // 		}
 
 // 		function click_back() {
-// 			var t = parseInt($("#playTime").text(),10);
-// 			var b = parseInt($("#backtime").val(),10);
-// 			var nt = t - b;
+// 			const t = parseInt($("#playTime").text(),10);
+// 			const b = parseInt($("#backtime").val(),10);
+// 			const nt = t - b;
 // 			if (nt < 0) nt = 0;
 // 			$("#jquery_jplayer_1").jPlayer("play", nt);
 // 		}
 
 // 		function click_forw() {
-// 			var t = parseInt($("#playTime").text(),10);
-// 			var b = parseInt($("#backtime").val(),10);
-// 			var nt = t + b;
+// 			const t = parseInt($("#playTime").text(),10);
+// 			const b = parseInt($("#backtime").val(),10);
+// 			const nt = t + b;
 // 			$("#jquery_jplayer_1").jPlayer("play", nt);
 // 		}
 
@@ -3390,7 +3390,7 @@ export function confirmDelete(): boolean {
 // 		}
 
 // 		function click_slower() {
-// 			var val = ($("#playbackrate :selected").val());
+// 			const val = ($("#playbackrate :selected").val());
 // 			if (val > 5) {
 // 				val--;
 // 				$("#playbackrate").val(val);
@@ -3399,7 +3399,7 @@ export function confirmDelete(): boolean {
 // 		}
 
 // 		function click_faster() {
-// 			var val = ($("#playbackrate :selected").val());
+// 			const val = ($("#playbackrate :selected").val());
 // 			if (val < 15) {
 // 				val++;
 // 				$("#playbackrate").val(val);
@@ -3768,3 +3768,68 @@ export function confirmDelete(): boolean {
 // // -------------------------------------------------------------
 
 // ?>
+
+export function multiActionGo(
+  form: undefined | HTMLFormElement,
+  sel: undefined | HTMLSelectElement
+) {
+  if (typeof form != 'undefined' && typeof sel != 'undefined') {
+    const v = sel.value;
+    const t = sel.options[sel.selectedIndex].text;
+    if (typeof v == 'string') {
+      if (v == 'addtag' || v == 'deltag') {
+        let notok = 1;
+        let answer: string | null = '';
+        while (notok) {
+          answer = prompt(
+            '*** ' +
+              t +
+              ' ***\n\n*** ' +
+              $('input.markcheck:checked').length +
+              ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
+            answer
+          );
+          if (typeof answer == 'object') answer = '';
+          if (answer.indexOf(' ') > 0 || answer.indexOf(',') > 0) {
+            alert('Please no spaces or commas!');
+          } else if (answer.length > 20) {
+            alert('Please no tags longer than 20 char.!');
+          } else {
+            notok = 0;
+          }
+        }
+        if (answer != '') {
+          form.data.value = answer;
+          form.submit();
+        }
+      } else if (
+        v == 'del' ||
+        v == 'smi1' ||
+        v == 'spl1' ||
+        v == 's1' ||
+        v == 's5' ||
+        v == 's98' ||
+        v == 's99' ||
+        v == 'today' ||
+        v == 'delsent' ||
+        v == 'lower' ||
+        v == 'cap'
+      ) {
+        const answer = confirm(
+          '*** ' +
+            t +
+            ' ***\n\n*** ' +
+            // TODO
+            $('input.markcheck:checked').length +
+            ' Record(s) will be affected ***\n\nAre you sure?'
+        );
+        if (answer) {
+          form.submit();
+        }
+      } else {
+        form.submit();
+      }
+    }
+    sel.value = '';
+  }
+}

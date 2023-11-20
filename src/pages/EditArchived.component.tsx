@@ -1,9 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
+import { LanguagesId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
+import { usePager } from '../usePager';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
 
@@ -21,7 +24,19 @@ export function EditArchivedTexts({
       'numArchivedTexts',
       'archivedtexts',
     ]);
-  const numPages = 10;
+  const pageSize = 15;
+
+  const [filterLanguage, setFilterLanguage] = useState<LanguagesId | null>(
+    null
+  );
+  console.log(archivedtexts);
+  const { dataOnPage, numPages } = usePager(
+    archivedtexts.filter(({ AtLgID }) => {
+      return filterLanguage === null ? true : AtLgID === filterLanguage;
+    }),
+    currentPage,
+    pageSize
+  );
   const recno = numArchivedTexts;
   const navigate = useInternalNavigate();
   const queryRef = useRef<HTMLInputElement | undefined>();
@@ -51,19 +66,14 @@ export function EditArchivedTexts({
           <tr>
             <td className="td1 center" colSpan={2}>
               Language:
-              <select
-                name="filterlang"
-                // TODO
-                onChange="{setLang(document.form1.filterlang,'edit_archivedtexts');}"
-              >
-                {languages.map((language) => {
-                  return (
-                    <option value={language.LgID}>{language.LgName}</option>
-                  );
-                })}
-                {/* <?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?> */}
-              </select>
+              <LanguageDropdown
+                onChange={(val) => {
+                  setFilterLanguage(val);
+                }}
+              />
+              {/* <?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?> */}
             </td>
+
             <td className="td1 center" colSpan={2}>
               Text Title (Wildc.=*):
               <input
@@ -214,6 +224,12 @@ if (recno==0) {
             <th className="th1 sorttable_nosort">Mark</th>
             <th className="th1 sorttable_nosort">Actions</th>
             {/* TODO */}
+            {filterLanguage === null && (
+              <>
+                {/* TODO */}
+                <th className="th1 clickable">Lang.</th>
+              </>
+            )}
             {/* <?php if ($currentlang == '') echo <th class="th1 clickable">Lang.</th>; ?> */}
             <th className="th1 clickable">
               Title [Tags] / Audio:&nbsp;
@@ -224,7 +240,7 @@ if (recno==0) {
               <Icon src="tick" title="Annotated Text available" />
             </th>
           </tr>
-          {archivedtexts.map((text) => {
+          {dataOnPage.map((text) => {
             return (
               <>
                 <tr>
@@ -263,11 +279,12 @@ if (recno==0) {
                     </span>
                     &nbsp;
                   </td>
-                  {/* TODO */}
-                  {activeLanguage === null && (
-                    <th className="th1 clickable">Lang.</th>
+                  {filterLanguage === null && (
+                    <>
+                      {/* TODO */}
+                      <td className="td1 center">{text.AtLgID}</td>
+                    </>
                   )}
-                  <td className="td1 center">. tohtml($record['LgName']) .</td>
                   <td className="td1 center">
                     {text.AtTitle}
                     <span className="smallgray2">
@@ -304,7 +321,7 @@ if (recno==0) {
 </th></tr></table>
 </form>
 <?php } ?>
-
+`
 <?php
 
 }

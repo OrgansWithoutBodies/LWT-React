@@ -3,13 +3,15 @@ import { Icon } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
+import { TextsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
+import { usePager } from '../usePager';
 import { Header } from './Header';
 
-export function MultiActions() {
+export function TextMultiActions() {
   return (
     <>
       <form
@@ -207,16 +209,25 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
 export function Library({
   currentPage,
   query = null,
+  filterTag1 = null,
+  filterTag2 = null,
 }: {
   currentPage: number;
   query: string | null;
+  filterTag1: number | null;
+  filterTag2: number | null;
 }) {
-  const [{ textDetails, activeLanguage }] = useData([
+  const [{ textDetails, activeLanguage, tags2 }] = useData([
     'textDetails',
     'activeLanguage',
+    'tags2',
   ]);
-  const pageSize = 10;
-  const numPages = textDetails ? Math.ceil(textDetails.length / pageSize) : 0;
+  const pageSize = 15;
+  const { numPages, dataOnPage } = usePager(
+    textDetails || [],
+    currentPage,
+    pageSize
+  );
   const paramUpdater = useUpdateParams();
   const navigator = useInternalNavigate();
   const queryRef = useRef<HTMLInputElement | undefined>();
@@ -252,8 +263,11 @@ export function Library({
               <input
                 type="button"
                 value="Reset All"
-                // TODO
-                onClick="resetAll('edit_texts.php');"
+                // onClick="resetAll('edit_texts.php');"
+                onClick={() => {
+                  // TODO reset fields
+                  navigator('/edit_texts');
+                }}
               />
             </th>
           </tr>
@@ -262,7 +276,12 @@ export function Library({
               Language:
               {/* onChange="{setLang(document.form1.filterlang,'edit_texts.php');}" */}
               {/* name="filterlang" */}
-              <LanguageDropdown defaultValue={activeLanguage?.LgID} />
+              <LanguageDropdown
+                onChange={(val) => {
+                  dataService.setActiveLanguage(val);
+                }}
+                defaultValue={activeLanguage?.LgID}
+              />
             </td>
             <td className="td1 center" colSpan={2}>
               Text Title (Wildc.=*):
@@ -291,7 +310,9 @@ export function Library({
                 value="Clear"
                 onClick={() => {
                   navigator('/edit_texts?page=1&query=');
-                  queryRef.current.value = '';
+                  if (queryRef.current) {
+                    queryRef.current.value = '';
+                  }
                 }}
               />
             </td>
@@ -304,12 +325,28 @@ export function Library({
             >
               Tag #1:
               <select
+                defaultValue={filterTag1 !== null ? filterTag1 : undefined}
                 name="tag1"
-                // TODO
-                onChange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag1=' + val;}"
+                onChange={(val) => {
+                  navigator(`/edit_texts?tag1=${val.target.value}`);
+                }}
               >
-                {/* TODO */}
-                {/* <?php echo get_texttag_selectoptions($currenttag1,$currentlang); ?> */}
+                <option value="">[Filter off]</option>
+                {tags2
+                  .filter((tag) => {
+                    console.log(tag);
+                    return true;
+                  })
+                  .map((tag) => {
+                    return <option value={tag.T2ID}> {tag.T2Text}</option>;
+                  })}
+                <option disabled>--------</option>
+                <option
+                  value="-1"
+                  // " . get_selected($v, -1) . "
+                >
+                  UNTAGGED
+                </option>
               </select>
             </td>
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
@@ -327,12 +364,28 @@ export function Library({
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
               <select
+                defaultValue={filterTag2 !== null ? filterTag2 : undefined}
                 name="tag2"
-                // TODO
-                onChange="{val=document.form1.tag2.options[document.form1.tag2.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag2=' + val;}"
+                onChange={(val) => {
+                  navigator(`/edit_texts?tag2=${val.target.value}`);
+                }}
               >
-                {/* TODO */}
-                {/* <?php echo get_texttag_selectoptions($currenttag2,$currentlang); ?> */}
+                <option value="">[Filter off]</option>
+                {tags2
+                  .filter((tag) => {
+                    console.log(tag);
+                    return true;
+                  })
+                  .map((tag) => {
+                    return <option value={tag.T2ID}> {tag.T2Text}</option>;
+                  })}
+                <option disabled>--------</option>
+                <option
+                  value="-1"
+                  // " . get_selected($v, -1) . "
+                >
+                  UNTAGGED
+                </option>
               </select>
             </td>
           </tr>
@@ -357,6 +410,7 @@ export function Library({
                 onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&amp;sort=' + val;}"
               >
                 {/* TODO */}
+                {/* title-a-z/newest/oldest */}
                 {/* <?php echo get_textssort_selectoptions($currentsort); ?> */}
               </select>
             </th>
@@ -364,14 +418,14 @@ export function Library({
         </table>
       </form>
 
-      <MultiActions />
+      <TextMultiActions />
       {activeLanguage && (
         <>
           <table className="sortable tab1">
             <LibraryHeader />
             <tbody>
-              {textDetails &&
-                textDetails.map((text) => {
+              {dataOnPage &&
+                dataOnPage.map((text) => {
                   return <LibraryRow text={text} />;
                 })}
             </tbody>
@@ -383,6 +437,168 @@ export function Library({
           />
         </>
       )}
+    </>
+  );
+}
+export function EditText({ chgID }: { chgID: TextsId }) {
+  const [{ texts }] = useData(['texts']);
+  const editingText = texts.find(({ TxID }) => {
+    return TxID === chgID;
+  });
+  return (
+    <>
+      <Header title={'My Texts'} />
+      <h4>
+        Edit Text{' '}
+        <a target="_blank" href="info.htm#howtotext">
+          <Icon src="question-frame" title="Help" />
+        </a>
+      </h4>
+      <script
+        type="text/javascript"
+        src="js/unloadformcheck.js"
+        charSet="utf-8"
+      ></script>
+      <form
+        className="validate"
+        // TODO
+        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
+        method="post"
+      >
+        <input type="hidden" name="TxID" value={chgID} />
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Language:</td>
+            <td className="td1">
+              <LanguageDropdown defaultValue={editingText?.TxLgID} />
+              {/* <select name="TxLgID" className="notempty setfocus"> */}
+              {/* <?php
+		echo get_languages_selectoptions($record['TxLgID'],"[Choose...]");
+		?> */}
+              {/* </select>{' '} */}
+              <Icon src="status-busy" title="Field must not be empty" />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Title:</td>
+            <td className="td1">
+              <input
+                type="text"
+                className="notempty checkoutsidebmp"
+                data_info="Title"
+                name="TxTitle"
+                value={editingText?.TxTitle}
+                maxlength={200}
+                size={60}
+              />{' '}
+              <Icon src="status-busy" title="Field must not be empty" />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">
+              Text:
+              <br />
+              <br />
+              (max.
+              <br />
+              65,000
+              <br />
+              bytes)
+            </td>
+            <td className="td1">
+              <textarea
+                // TODO
+
+                // function getScriptDirectionTag($lid)
+                // {
+                // 	global $tbpref;
+                // 	if (!isset($lid))
+                // 		return '';
+                // 	if (trim($lid) == '')
+                // 		return '';
+                // 	if (!is_numeric($lid))
+                // 		return '';
+                // 	$r = get_first_value("select LgRightToLeft as value from " . $tbpref . "languages where LgID='" . $lid . "'");
+                // 	if (isset($r)) {
+                // 		if ($r)
+                // 			return ' dir="rtl" ';
+                // 	}
+                // 	return '';
+                // }
+                //  <?php echo getScriptDirectionTag($record['TxLgID']); ?>
+                name="TxText"
+                className="notempty checkbytes checkoutsidebmp"
+                data_maxlength={65000}
+                data_info="Text"
+                cols={60}
+                rows={20}
+              >
+                {editingText?.TxText}
+              </textarea>{' '}
+              <Icon src="status-busy" title="Field must not be empty" />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Ann.Text:</td>
+            <td className="td1">
+              {/* TODO */}
+              {/* <?php echo ($record['annotlen'] ? '<Icon src="tick.png" title="With Improved Annotation" alt="With Improved Annotation" /> Exists - May be partially or fully lost if you change the text!<br /><input type="button" value="Print/Edit..." onclick="location.href=\'print_impr_text.php?text=' . $_REQUEST['chg'] . '\';" />' : '<img src="icn/cross" title="No Improved Annotation" />'); ?> */}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Source URI:</td>
+            <td className="td1">
+              <input
+                type="text"
+                className="checkurl checkoutsidebmp"
+                data_info="Source URI"
+                name="TxSourceURI"
+                value={editingText?.TxSourceURI}
+                maxlength={1000}
+                size={60}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Tags:</td>
+            <td className="td1">
+              {/* TODO */}
+              {/* <?php echo getTextTags($_REQUEST['chg']); ?> */}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Audio-URI:</td>
+            <td className="td1">
+              <input
+                type="text"
+                className="checkoutsidebmp"
+                data_info="Audio-URI"
+                name="TxAudioURI"
+                value={editingText?.TxAudioURI}
+                maxlength={200}
+                size={60}
+              />
+              <span id="mediaselect">
+                {/* TODO */}
+                {/* <?php echo selectmediapath('TxAudioURI'); ?> */}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              <input
+                type="button"
+                value="Cancel"
+                // TODO
+                onClick="{resetDirty(); location.href='edit_texts.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+              />
+              <input type="submit" name="op" value="Check" />
+              <input type="submit" name="op" value="Change" />
+              <input type="submit" name="op" value="Change and Open" />
+            </td>
+          </tr>
+        </table>
+      </form>
     </>
   );
 }

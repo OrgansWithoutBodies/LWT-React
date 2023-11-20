@@ -11,6 +11,7 @@ import { LandingPage } from './pages/LandingPage.component';
 import React from 'react';
 import { UploadWords } from './UploadWords.component';
 import { dataService } from './data/data.service';
+import { useData } from './data/useAkita';
 import { TextsId } from './data/validators';
 import { AddNewWord } from './pages/AddNewWord';
 import { BackupScreen } from './pages/Backups.component';
@@ -21,10 +22,11 @@ import { DisplayTags, NewTag } from './pages/EditTags';
 import { DisplayTextTags, EditTextTag, NewTextTag } from './pages/EditTextTags';
 import { InfoPage } from './pages/Info';
 import { LanguagesPage } from './pages/Languages.component';
-import { Library } from './pages/Library.component';
+import { EditText, Library } from './pages/Library.component';
 import ImportLongText from './pages/LongTextImport.component';
 import { NewLanguage } from './pages/NewLanguage.component';
-import { ReaderPage } from './pages/ReaderPage.component';
+import { PrintText } from './pages/PrintText.component';
+import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { ChangeTerm, Terms } from './pages/Terms.component';
@@ -115,6 +117,7 @@ trans
           <Route path="/settings" element={<SettingsComponent />} />
           <Route path="/do_text" element={<ReaderWrapper />} />
           <Route path="/do_test" element={<TestWrapper />} />
+          <Route path="/print_text" element={<PrintTextWrapper />} />
           <Route path="/upload_words" element={<UploadWordsWrapper />} />
         </Routes>
       </Router>
@@ -136,19 +139,26 @@ export function Switch({
 }
 export default App;
 function TermsWrapper() {
+  const [{ activeLanguageId }] = useData(['activeLanguageId']);
   const [searchParams] = useSearchParams();
   // TODO add wrapper for hook to break out params easier/integrate w controller
   const chgID = searchParams.get('chg');
   const sort = searchParams.get('sort');
   const status = searchParams.get('status');
   const page = searchParams.get('page');
+  // TODO just set active lang here?
+  const filterlang = searchParams.get('filterlang');
 
   return (
     <Switch on={chgID !== null}>
       <Terms
-        pageNum={Number.parseInt(page)}
+        filterlang={
+          filterlang !== null ? Number.parseInt(filterlang) : activeLanguageId
+        }
+        pageNum={page !== null ? Number.parseInt(page) : 1}
         sort={sort ? Number.parseInt(sort) : null}
         status={status ? Number.parseInt(status) : null}
+        textFilter={0}
       />
       <ChangeTerm chgID={Number.parseInt(chgID)} />
       {/* <Terms
@@ -166,10 +176,24 @@ function UploadWordsWrapper() {
     </>
   );
 }
+function PrintTextWrapper() {
+  const [searchParams] = useSearchParams();
+  const text = searchParams.get('text');
+  return (
+    <>
+      <PrintText textID={Number.parseInt(text)} />
+    </>
+  );
+}
 function LanguagesWrapper() {
   const [searchParams] = useSearchParams();
   const isNew = searchParams.get('new') === '1';
   const chgID = searchParams.get('chg');
+  const refreshID = searchParams.get('refresh');
+
+  if (refreshID !== null) {
+    dataService.reparseText(Number.parseInt(refreshID) as TextsId);
+  }
   return (
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
@@ -188,26 +212,36 @@ function AddNewWordWrapper() {
 }
 function LibraryWrapper() {
   const [searchParams] = useSearchParams();
-  // const chgID = searchParams.get('chg');
+  const chgID = searchParams.get('chg');
   const archID = searchParams.get('arch');
   const page = searchParams.get('page');
   const query = searchParams.get('query');
+  const refreshID = searchParams.get('refresh');
+  const filterTag1 = searchParams.get('tag1');
+  const filterTag2 = searchParams.get('tag2');
   const isNew = searchParams.get('new') === '1';
 
+  // TODO
+  // const [, { archiveText, reparseAllTextsForLanguage }] = useData([]);
   if (archID !== null) {
     dataService.archiveText(Number.parseInt(archID) as TextsId);
+  }
+  if (refreshID !== null) {
+    dataService.reparseText(Number.parseInt(refreshID) as TextsId);
   }
   console.log('new', isNew);
   return (
     <Switch on={isNew}>
-      <Library
-        currentPage={page !== null ? Number.parseInt(page) : 0}
-        query={query}
-      />
+      <Switch on={chgID !== null}>
+        <Library
+          currentPage={page !== null ? Number.parseInt(page) : 1}
+          query={query}
+          filterTag1={filterTag1 !== null ? Number.parseInt(filterTag1) : null}
+          filterTag2={filterTag2 !== null ? Number.parseInt(filterTag2) : null}
+        />
+        <EditText chgID={Number.parseInt(chgID)} />
+      </Switch>
       <ImportShortText />
-      {/* <Switch on={chgID === null}> */}
-      {/* <NewLanguage /> */}
-      {/* </Switch> */}
     </Switch>
   );
 }
@@ -218,7 +252,7 @@ function EditArchivedTextsWrapper() {
   return (
     <EditArchivedTexts
       query={query || ''}
-      currentPage={Number.parseInt(page)}
+      currentPage={page !== null ? Number.parseInt(page) : 1}
     />
   );
 }
@@ -244,10 +278,12 @@ function EditTagsWrapper() {
   const isNew = searchParams.get('new') === '1';
   const page = searchParams.get('page');
 
-  console.log(query);
   return (
     <Switch on={isNew}>
-      <DisplayTags query={query || ''} currentPage={Number.parseInt(page)} />
+      <DisplayTags
+        query={query || ''}
+        currentPage={page !== null ? Number.parseInt(page) : 1}
+      />
       <NewTag />
     </Switch>
   );
@@ -266,7 +302,7 @@ function TestWrapper() {
   const textID = searchParams.get('text');
   // TODO sanitize
   // TODO verify exists
-  const sanitizedParam = Number.parseInt(start);
+  const sanitizedParam = Number.parseInt(textID);
   console.log('TEST123-start', sanitizedParam);
-  return <ReaderPage textId={sanitizedParam} />;
+  return <TesterPage textId={sanitizedParam} />;
 }

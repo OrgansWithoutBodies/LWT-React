@@ -75,20 +75,18 @@ function LanguageLine({
       </td>
       <td className="td1 center">{language.LgName}</td>
       <td className="td1 center">
-        <A href={`/edit_languages?page=${1}&query=&filterlang=${2}`}>
+        <A href={`/edit_languages?filterlang=${language.LgID}`}>
           {numTextsThisLanguage}
         </A>
         &nbsp;&nbsp;
-        <A href={`/edit_languages?refresh=${2}`}>
+        <A href={`/edit_languages?refresh=${language.LgID}`}>
           {/* . $_SERVER['PHP_SELF'] . '?refresh=' . $record['LgID'] . ' */}
           <Icon src="lightning" title="Reparse Texts" />
         </A>
       </td>
       <td className="td1 center">{numArchivedThisLanguage}</td>
       <td className="td1 center">
-        <A
-          href={`/edit_words?page=${1}&query=&text=&status=&filterlang=${2}&status=&tag12=${0}&tag2=&tag1=`}
-        >
+        <A href={`/edit_words?filterlang=${language.LgID}`}>
           {numTermsThisLanguage}
         </A>
       </td>

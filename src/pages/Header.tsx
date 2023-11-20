@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { Icon } from '../Icon';
-import { TextsId } from '../data/validators';
+import { LanguagesId, TextsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
 
@@ -54,6 +54,9 @@ export function Header({
 
     prevTextString: string;
     nextTextString: string;
+
+    textID: TextsId;
+    langID: LanguagesId;
   };
 }) {
   const logoSize = 48;
@@ -112,19 +115,22 @@ export function Header({
               />
             </A>
             &nbsp; | &nbsp;
-            <A href={`/do_test?text=${11}`} target="_top">
+            <A href={`/do_test?text=${readerProps.textID}`} target="_top">
               <Icon src="question-balloon" title="Test" />
             </A>
             &nbsp;
-            <A href={`/print_text?text=${11}`} target="_top">
+            <A href={`/print_text?text=${readerProps.textID}`} target="_top">
               <Icon src="printer" title="Print" />
               &nbsp;
             </A>
-            <A target="_top" href={`/edit_texts?chg=${11}`}>
+            <A target="_top" href={`/edit_texts?chg=${readerProps.textID}`}>
               <Icon src="document--pencil" title="Edit Text" />
             </A>
             &nbsp; | &nbsp;
-            <A href={`/new_word?text=${11}&lang=${2}`} target="ro">
+            <A
+              href={`/new_word?text=${readerProps.textID}&lang=${readerProps.langID}`}
+              target="ro"
+            >
               <Icon src="sticky-note--plus" title="New Term" />
             </A>
           </>

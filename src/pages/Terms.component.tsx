@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { LanguagesId, WordsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
@@ -76,13 +78,19 @@ function TermsHeader(): JSX.Element {
 export function TermsFilterBox({
   numTerms,
   currentPage,
+  filterlang,
 }: {
+  filterlang: LanguagesId | null;
   numTerms: number;
   currentPage: number;
 }): JSX.Element {
-  const [{ languages, tags, texts }] = useData(['languages', 'tags', 'texts']);
+  const [{ activeLanguageId, tags, texts }] = useData([
+    'activeLanguageId',
+    'tags',
+    'texts',
+  ]);
   //   TODO
-  const pageSize = 10;
+  const pageSize = 15;
   const numPages = Math.ceil(numTerms / pageSize);
   const navigate = useInternalNavigate();
   const updateParams = useUpdateParams();
@@ -105,7 +113,13 @@ export function TermsFilterBox({
         <tr>
           <td className="td1 center" colSpan={2}>
             Language:
-            <LanguageDropdown header="Filter off" />
+            <LanguageDropdown
+              onChange={(val) => {
+                dataService.setActiveLanguage(val);
+              }}
+              defaultValue={filterlang !== null ? filterlang : undefined}
+              header="Filter off"
+            />
           </td>
           <td className="td1 center" colSpan={2}>
             Text:
@@ -118,15 +132,19 @@ export function TermsFilterBox({
               <option value={-1} selected>
                 [Filter off]
               </option>
-              {texts.map((text) => {
-                return <option value={text.TxID}>{text.TxTitle}</option>;
-              })}
+              {texts
+                .filter(({ TxLgID }) => {
+                  TxLgID === activeLanguageId;
+                })
+                .map((text) => {
+                  return <option value={text.TxID}>{text.TxTitle}</option>;
+                })}
             </select>
           </td>
         </tr>
         <tr>
           <td
-            // style={{ whiteSpace: 'nowrap' }}
+            style={{ whiteSpace: 'nowrap' }}
             className="td1 center"
             colSpan={2}
           >
@@ -187,10 +205,7 @@ export function TermsFilterBox({
               name="querybutton"
               value="Filter"
               onChange={({ target: { value: selectedValue } }) => {
-                updateParams(
-                  { query: selectedValue }
-                  // `/edit_wors?page=${currentPage}&query=${selectedValue}`
-                );
+                updateParams({ query: selectedValue });
               }}
             />
             &nbsp;
@@ -269,12 +284,12 @@ export function TermsFilterBox({
 export function TermsFooter({
   numTerms,
   currentPage,
+  numPages,
 }: {
   numTerms: number;
   currentPage: number;
+  numPages: number;
 }): JSX.Element {
-  const pageSize = 2;
-  const numPages = Math.ceil(numTerms / pageSize);
   const navigate = useInternalNavigate();
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
@@ -295,10 +310,19 @@ export function TermsFooter({
     </table>
   );
 }
-function TermLine({ word }: { word: Words }): JSX.Element {
+function TermLine({
+  word,
+  onSelect,
+  isSelected,
+}: {
+  word: Words;
+  isSelected: boolean;
+  onSelect: (term: WordsId, checked: boolean) => void;
+}): JSX.Element {
   const termID = word.WoID;
   const sentence = word.WoSentence;
 
+  // console.log('TERMLINE', word, word.WoRomanization);
   return (
     <tr>
       <td name="rec${termID}" className="td1 center">
@@ -307,7 +331,11 @@ function TermLine({ word }: { word: Words }): JSX.Element {
             name="marked[]"
             type="checkbox"
             className="markcheck"
+            checked={isSelected}
             value={termID}
+            onChange={({ target: { checked } }) => {
+              onSelect(word.WoID, checked);
+            }}
           />
         </A>
       </td>
@@ -317,15 +345,15 @@ function TermLine({ word }: { word: Words }): JSX.Element {
           <Icon src="sticky-note--pencil" title="Edit" />
         </A>
         &nbsp;
-        <A
+        <Icon
           onClick={() => {
             if (confirmDelete()) {
               dataService.deleteTerm(word.WoID);
             }
           }}
-        >
-          <Icon src="minus-button" title="Delete" />
-        </A>
+          src="minus-button"
+          title="Delete"
+        />
         &nbsp;
       </td>
       <td className="td1">
@@ -350,8 +378,8 @@ function TermLine({ word }: { word: Words }): JSX.Element {
       </td>
       <td className="td1 center">
         <b>
-          {sentence !== undefined ? (
-            <Icon src="status-busy" title={`${sentence}`} alt="Yes" />
+          {sentence !== null ? (
+            <Icon src="status" title={`${sentence}`} alt="Yes" />
           ) : (
             <Icon src="status-busy" title="(No valid sentence)" alt="No" />
           )}
@@ -429,32 +457,59 @@ const sortingMethod = (
 };
 export function Terms({
   pageNum = null,
+  filterlang = null,
   sort = null,
   status = null,
+  textFilter,
+  tag1,
+  tag12,
+  tag2,
 }: {
+  textFilter: number | null;
   pageNum: number | null;
+  filterlang: number | null;
   status: number | null;
+  tag1: number | null;
+  tag12: 0 | 1;
+  tag2: number | null;
   sort: Sorting | null;
 }): JSX.Element {
-  const [{ activeWords, activeLanguage }] = useData([
-    'activeWords',
-    'activeLanguage',
-  ]);
-  console.log(activeWords);
-  if (!activeWords || !activeLanguage) {
+  const pageSize = 15;
+  const [selectedTerms, setSelectedTerms] = useState<WordsId[]>([]);
+  const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
+  if (!activeLanguage) {
     return <></>;
   }
 
-  const filteredWords =
-    status !== null
-      ? activeWords.filter((val) => val.WoStatus === status)
-      : activeWords;
+  const filteredWords = words.filter((val) => {
+    const isRightText =
+      textFilter === null
+        ? true
+        : // TODO - find if in target text
+          // : Number.parseInt(val.WoText) === textFilter;
+          true;
+    const isRightStatus = status === null ? true : val.WoStatus === status;
+    const isRightLang = filterlang === null ? true : val.WoLgID === filterlang;
+    // const isRightTag1 = tag1 === null ? true : val.WoLgID === filterlang;
+    // const isRightTag2 = tag2 === null ? true : val.WoLgID === filterlang;
+    const isRightTag1 = true;
+    const isRightTag2 = true;
 
+    const compoundTagStatement =
+      tag12 === 0 ? isRightTag1 || isRightTag2 : isRightTag1 && isRightTag2;
+
+    return isRightStatus && isRightText && isRightLang && compoundTagStatement;
+  });
+
+  console.log({ filteredWords, filterlang });
   const sortedWords =
     sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
   const currentPage = pageNum !== null ? pageNum : 1;
-
-  const { dataOnPage: displayedWords } = usePager(sortedWords, currentPage, 10);
+  const { dataOnPage: displayedWords, numPages } = usePager(
+    sortedWords,
+    currentPage,
+    pageSize
+  );
   return (
     <>
       <Header
@@ -465,16 +520,43 @@ export function Terms({
           <TermsFilterBox
             numTerms={sortedWords.length}
             currentPage={currentPage}
+            filterlang={filterlang}
+          />
+          <TermMultiActions
+            selectedTerms={selectedTerms}
+            onSelectAll={() =>
+              setSelectedTerms(sortedWords.map((term) => term.WoID))
+            }
+            onSelectNone={() => setSelectedTerms([])}
           />
           <table className="sortable tab1">
             <TermsHeader />
             <tbody>
               {displayedWords.map((word) => {
-                return <TermLine word={word} />;
+                return (
+                  <TermLine
+                    word={word}
+                    onSelect={(val, checked) => {
+                      console.log(val);
+                      if (checked) {
+                        setSelectedTerms([...selectedTerms, val]);
+                      } else {
+                        setSelectedTerms(
+                          selectedTerms.slice(
+                            selectedTerms.indexOf(val),
+                            selectedTerms.indexOf(val) + 1
+                          )
+                        );
+                      }
+                    }}
+                    isSelected={selectedTerms.includes(word.WoID)}
+                  />
+                );
               })}
             </tbody>
           </table>
           <TermsFooter
+            numPages={numPages}
             numTerms={sortedWords.length}
             currentPage={currentPage}
           />
@@ -628,6 +710,89 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
           Sentences
         </span>
       </div>
+    </>
+  );
+}
+
+// TODO
+export function TermMultiActions({
+  selectedTerms,
+  onSelectAll,
+  onSelectNone,
+}: {
+  selectedTerms: WordsId[];
+  onSelectAll: () => void;
+  onSelectNone: () => void;
+}) {
+  return (
+    <>
+      <form
+        name="form1"
+        action="#"
+        // TODO
+        onSubmit="document.form1.querybutton.click(); return false;"
+      >
+        <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <tbody>
+            <tr>
+              <th className="th1" colSpan={2}>
+                Multi Actions
+                <Icon src="lightning" title="Multi Actions" />
+              </th>
+            </tr>
+            <tr>
+              <td className="td1 center">
+                <input type="button" value="Mark All" onClick={onSelectAll} />
+                <input type="button" value="Mark None" onClick={onSelectNone} />
+              </td>
+              <td className="td1 center">
+                Marked Texts
+                <select
+                  name="markaction"
+                  id="markaction"
+                  disabled={selectedTerms.length === 0}
+                >
+                  <GetAllWordsActionsSelectOptions />
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </>
+  );
+}
+function GetAllWordsActionsSelectOptions() {
+  return (
+    <>
+      <option value="" selected>
+        [Choose...]
+      </option>
+      <option disabled>------------</option>
+      <option value="testall">Test ALL Terms</option>
+      <option disabled>------------</option>
+      <option value="spl1all">Increase Status by 1 [+1]</option>
+      <option value="smi1all">Reduce Status by 1 [-1]</option>
+      <option disabled>------------</option>
+      {/* get_set_status_option(1, "all"
+ get_set_status_option(5, "all"
+ get_set_status_option(99, "all"
+ get_set_status_option(98, "all" */}
+      <option disabled>------------</option>
+      <option value="todayall">Set Status Date to Today</option>
+      <option disabled>------------</option>
+      <option value="lowerall">Set ALL Terms to Lowercase</option>
+      <option value="capall">Capitalize ALL Terms</option>
+      <option value="delsentall">Delete Sentences of ALL Terms</option>
+      <option disabled>------------</option>
+      <option value="addtagall">Add Tag</option>
+      <option value="deltagall">Remove Tag</option>
+      <option disabled>------------</option>
+      <option value="expall">Export ALL Terms (Anki)</option>
+      <option value="expall2">Export ALL Terms (TSV)</option>
+      <option value="expall3">Export ALL Terms (Flexible)</option>
+      <option disabled>------------</option>
+      <option value="delall">Delete ALL Terms</option>
     </>
   );
 }

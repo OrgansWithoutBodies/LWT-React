@@ -37,6 +37,7 @@ console.log(demoDB);
 export function createInitialState(): DataState {
   return {
     ...demoDB,
+    wordtags: [],
     // TODO save in cookie/local storage?
     activeLanguageId: 1 as LanguagesId,
   };

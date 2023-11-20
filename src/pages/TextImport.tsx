@@ -2,6 +2,7 @@ import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Icon, RequiredLineButton } from '../Icon';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { CheckAndSubmit, emptyToNullMap, RefMap, ResetForm } from './Forms';
 import { Header } from './Header';
@@ -10,7 +11,7 @@ export function ImportShortText(): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;
   const refMap = RefMap(validator);
-
+  const navigator = useInternalNavigate();
   return (
     <>
       <Header
@@ -189,7 +190,7 @@ export function ImportShortText(): JSX.Element {
         <input
           type="button"
           value="Long Text Import"
-          onClick={() => window.alert('TODO')}
+          onClick={() => navigator('/long_text_import')}
         />
       </p>
 

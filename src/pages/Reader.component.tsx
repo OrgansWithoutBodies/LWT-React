@@ -30,50 +30,55 @@ export function Reader({
     <div id="thetext">
       <p
         style={{
-          wordBreak: 'break-all',
-          whiteSpace: 'nowrap',
+          // wordBreak: 'break-all',
+          // whiteSpace: 'nowrap',
           fontSize: '200%',
           lineHeight: 1.4,
           marginBottom: '10px',
         }}
       >
         {activeText &&
-          activeText.TxText.split('. ').map((sentence) => {
-            return sentence.split(' ').map((rawTerm, ii) => {
-              const term = rawTerm
-                .toLowerCase()
-                .replace('.', '')
-                .replace(',', '');
-              const foundWord = words.find(
-                (word) => word.WoText.toLowerCase() === term
-              );
-              // TODO non-highlighted words (ie punctuation)
-              const termStatus = foundWord
-                ? ` status${foundWord.WoStatus}`
-                : ' status0';
-              return (
-                // TODO make sure works w mobile
-                // TODO only one tooltip open at a time
-                <Popover>
-                  <PopoverContent className="Popover">
-                    <PopoverBody>
-                      <AddNewTermTooltip
-                        word={foundWord || term}
-                        sentence={sentence}
-                      />
-                    </PopoverBody>
-                  </PopoverContent>
+          // TODO
+          activeText.TxText.split('\n').map((par) =>
+            par.split('. ').map((sentence) => {
+              return sentence.split(' ').map((rawTerm, ii) => {
+                const term = rawTerm
+                  .toLowerCase()
+                  .replace('.', '')
+                  .replace(',', '');
+                const foundWord = words.find(
+                  (word) => word.WoText.toLowerCase() === term
+                );
+                // TODO non-highlighted words (ie punctuation)
+                const termStatus = foundWord
+                  ? ` status${foundWord.WoStatus}`
+                  : ' status0';
+                return (
+                  // TODO make sure works w mobile
+                  // TODO only one tooltip open at a time
+                  <Popover>
+                    <PopoverContent className="Popover">
+                      <PopoverBody>
+                        <AddNewTermTooltip
+                          word={foundWord || term}
+                          sentence={sentence}
+                        />
+                      </PopoverBody>
+                    </PopoverContent>
 
-                  <PopoverTrigger
-                    onClickWord={() => setActiveWord(foundWord?.WoText || term)}
-                    termStatus={termStatus}
-                  >
-                    {term}
-                  </PopoverTrigger>
-                </Popover>
-              );
-            });
-          })}
+                    <PopoverTrigger
+                      onClickWord={() =>
+                        setActiveWord(foundWord?.WoText || term)
+                      }
+                      termStatus={termStatus}
+                    >
+                      {term}
+                    </PopoverTrigger>
+                  </Popover>
+                );
+              });
+            })
+          )}
       </p>
     </div>
   );

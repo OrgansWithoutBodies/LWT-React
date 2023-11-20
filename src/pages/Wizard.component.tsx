@@ -5,7 +5,7 @@ import { LANGS } from '../data/wizardData';
 function wizard_go(
   refL1: React.MutableRefObject<HTMLSelectElement | undefined>,
   refL2: React.MutableRefObject<HTMLSelectElement | undefined>,
-  onSuccess: () => void
+  onSuccess: (l1: string, l2: string) => void
 ) {
   const l1 = refL1.current?.value;
   const l2 = refL2.current?.value;
@@ -50,13 +50,13 @@ function wizard_go(
   // );
   // $('select[name="LgRemoveSpaces"]', context).val(LANGDEFS[l2].LgRemoveSpaces);
   // $('select[name="LgRightToLeft"]', context).val(LANGDEFS[l2].LgRightToLeft);
-  onSuccess();
+  onSuccess(l1, l2);
 }
 export default function NewLanguageWizard({
   onSuccess,
   onExit,
 }: {
-  onSuccess: () => void;
+  onSuccess: (l1: string, l2: string) => void;
   onExit: () => void;
 }): JSX.Element {
   const refL1 =

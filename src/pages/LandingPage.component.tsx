@@ -31,6 +31,7 @@ export function LandingPage() {
             Language:
             <LanguageDropdown
               onChange={(val) => {
+                console.log(val);
                 dataService.setActiveLanguage(val);
               }}
               defaultValue={activeLanguageId}

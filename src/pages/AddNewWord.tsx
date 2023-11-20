@@ -2,7 +2,11 @@ import { useState } from 'react';
 import * as ss from 'superstruct';
 import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
-import { AddNewWordType, AddNewWordValidator } from '../data/parseMySqlDump';
+import {
+  AddNewWordType,
+  AddNewWordValidator,
+  Words,
+} from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
@@ -34,10 +38,10 @@ type SetBoolean = (value: boolean) => void;
 export function AddNewWord({
   word,
   langId,
-  isEdit = false,
+  existingTerm = undefined,
 }: {
   word?: string;
-  isEdit?: boolean;
+  existingTerm?: Words;
   langId: LanguagesId;
 }): JSX.Element {
   // TODO reset form on new word
@@ -58,7 +62,9 @@ export function AddNewWord({
     (key: keyof AddNewWordType): SetBoolean =>
     (value) =>
       setFormErrors({ ...FormErrors, [key]: value });
-  console.log('TEST123-form', FormErrors);
+  console.log('TEST123-form', existingTerm);
+  const isEdit = existingTerm !== undefined;
+  const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
   return (
     <>
       <form
@@ -73,7 +79,7 @@ export function AddNewWord({
           name="WoLgID"
           ref={refMap.WoLgID}
           id="langfield"
-          value={langId}
+          value={langId as any}
         />
         <input
           type="hidden"
@@ -237,39 +243,69 @@ export function AddNewWord({
                     type="radio"
                     name="WoStatus"
                     value="1"
-                    checked
+                    checked={termStatus === '1'}
                     ref={refMap.WoStatus}
                   />
                   1&nbsp;
                 </span>
                 <span className="status2" title="Learning">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="2" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    checked={termStatus === '2'}
+                    value="2"
+                  />
                   2&nbsp;
                 </span>
                 <span className="status3" title="Learning">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="3" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    checked={termStatus === '3'}
+                    value="3"
+                  />
                   3&nbsp;
                 </span>
                 <span className="status4" title="Learning">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="4" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    checked={termStatus === '4'}
+                    value="4"
+                  />
                   4&nbsp;
                 </span>
                 <span className="status5" title="Learned">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="5" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    checked={termStatus === '5'}
+                    value="5"
+                  />
                   5&nbsp;
                 </span>
                 <span className="status99" title="Well Known">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="99" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    checked={termStatus === '99'}
+                    value="99"
+                  />
                   WKn&nbsp;
                 </span>
                 <span className="status98" title="Ignored">
                   &nbsp;
-                  <input type="radio" name="WoStatus" value="98" />
+                  <input
+                    type="radio"
+                    name="WoStatus"
+                    value="98"
+                    checked={termStatus === '98'}
+                  />
                   Ign&nbsp;
                 </span>
               </td>
@@ -315,6 +351,7 @@ export function AddNewWord({
                   name="op"
                   value="Save"
                   onClick={() => {
+                    console.log('SAVING');
                     CheckAndSubmit(
                       refMap,
                       { WoStatus: parseNumMap },

@@ -1,12 +1,13 @@
 export function usePager<TDate>(
   data: TDate[],
-  pageSize: number,
-  page: number
+  page: number,
+  pageSize: number
   // ): { page: number; setPage: (num: number) => void; dataOnPage: TDate[] } {
-): { dataOnPage: TDate[] } {
+): { numPages: number; dataOnPage: TDate[] } {
   //   const [page, setPage] = useState<number>(0);
-
-  const dataOnPage = data.slice(pageSize * page, pageSize * (page + 1));
+  const dataOnPage = data.slice(pageSize * (page - 1), pageSize * page);
+  const numPages = Math.ceil(data.length / pageSize);
   //   return { page, setPage, dataOnPage };
-  return { dataOnPage };
+  console.log('PAGER', { data, page, pageSize, dataOnPage });
+  return { dataOnPage, numPages };
 }

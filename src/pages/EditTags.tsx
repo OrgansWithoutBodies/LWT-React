@@ -5,6 +5,7 @@ import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Pager } from '../ui-kit/Pager';
+import { usePager } from '../usePager';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
 
@@ -16,13 +17,15 @@ export function DisplayTags({
   query: string;
   currentPage: number;
 }): JSX.Element {
-  const [{ wordtags }] = useData(['wordtags']);
+  // TODO
+  const pageSize = 15;
+
+  const [{ tags }] = useData(['tags']);
   const restoreBackup = useRef();
   const navigate = useInternalNavigate();
-  const tagCount = wordtags.length;
-  const recno = wordtags.length;
-  // TODO
-  const numPages = 10;
+  const tagCount = tags.length;
+  const recno = tags.length;
+  const { dataOnPage, numPages } = usePager(tags, currentPage, pageSize);
   const queryRef = useRef<HTMLInputElement>(null);
   return (
     <>
@@ -170,12 +173,12 @@ if (recno==0) {
             <th className="th1 clickable">Tag Comment</th>
             <th className="th1 clickable">Terms With Tag</th>
           </tr>
-          {wordtags.map((tag) => {
+          {dataOnPage.map((tag) => {
             return (
               <tr>
                 {/* ' . checkTest(record['TgID'], 'marked') . ' */}
                 <td className="td1 center">
-                  // TODO
+                  {/* TODO */}
                   <A name="rec' . record['TgID'] . '">
                     <input
                       name="marked[]"
@@ -194,28 +197,24 @@ if (recno==0) {
                     <Icon src="document--pencil" title="Edit" />
                   </A>
                   &nbsp;
-                  <A
-                    className="confirmdelete"
+                  <Icon
                     onClick={() => {
+                      // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
                       if (confirmDelete()) {
                         dataService.deleteTagFromTerm(tag.WtTgID);
                       }
                     }}
-                    // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
-                  >
-                    <Icon src="minus-button" title="Delete" />
-                  </A>
+                    src="minus-button"
+                    title="Delete"
+                  />
                   &nbsp;
                 </td>
-                <td className="td1 center"> . tohtml(record['TgText']) . </td>
+                <td className="td1 center">{tag.TgText}</td>
                 <td className="td1 center">{tag.TgComment}</td>
                 <td className="td1 center">
+                  {/* TODO should be counting with this tag */}
                   {tagCount > 0 ? (
-                    <A
-                      href={`/edit_words?page=1&query=&text=&status=&filterlang=&status=&tag12=0&tag2=&tag1=`}
-                    >
-                      {tagCount}
-                    </A>
+                    <A href={`/edit_words?tag1=${tag.TgID}`}>{tagCount}</A>
                   ) : (
                     '0'
                   )}

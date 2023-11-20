@@ -52,7 +52,7 @@ export const LANGS = [
   'Turkish',
   'Ukrainian',
 ] as const;
-export const LANGDEFS: Record<typeof LANGS[number], LangDef> = {
+export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
   Afrikaans: {
     LgGlosbeKey: 'af',
     LgGTransKey: 'af',
@@ -480,7 +480,7 @@ export const LANGDEFS: Record<typeof LANGS[number], LangDef> = {
   },
 };
 function WizardDataToNewLanguageData(
-  lang: typeof LANGS[number]
+  lang: (typeof LANGS)[number]
 ): AddNewLanguageType {
   const wizardData: LangDef = LANGDEFS[lang];
   return {

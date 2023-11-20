@@ -164,6 +164,7 @@ export function BackupScreen(): JSX.Element {
                     <input
                       type="submit"
                       name="empty"
+                      onClick={emptyDatabase}
                       value="Empty LWT Database"
                     />
                   </p>

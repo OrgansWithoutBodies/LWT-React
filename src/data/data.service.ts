@@ -233,7 +233,14 @@ export class DataService {
     window.alert('TODO REPARSETEXT');
   }
   public reparseAllTextsForLanguage(langId: LanguagesId) {
-    window.alert('TODO REPARSEALLTEXTSFORLANGUAGE');
+    const { texts } = this.dataStore.getValue();
+    texts
+      .filter((text) => {
+        return text.TxLgID === langId;
+      })
+      .forEach((text) => {
+        this.reparseText(text.TxID);
+      });
   }
 
   // These are only needed locally

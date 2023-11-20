@@ -4,6 +4,7 @@ import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Languages } from '../data/parseMySqlDump';
 import { LanguagesValidatorNoId } from '../data/validators';
+import { LANGDEFS } from '../data/wizardData';
 import {
   CheckAndSubmit,
   RefMap,
@@ -347,8 +348,29 @@ export function NewLanguage() {
         className="center"
       >
         <NewLanguageWizard
-          onSuccess={() => {
+          onSuccess={(l1, l2) => {
             // TODO payload
+            const originSpec = LANGDEFS[l1 as keyof typeof LANGDEFS];
+            const targetSpec = LANGDEFS[l2 as keyof typeof LANGDEFS];
+            refMap['LgName'].current.value = l2;
+            refMap['LgDict1URI'].current.value = targetSpec.LgGlosbeKey;
+            refMap['LgGoogleTranslateURI'].current.value =
+              targetSpec.LgGTransKey;
+            refMap['LgTextSize'].current.value = targetSpec.LgTextSize;
+            refMap['LgRegexpWordCharacters'].current.value =
+              targetSpec.LgRegexpWordCharacters;
+            refMap['LgRegexpSplitSentences'].current.value =
+              targetSpec.LgRegexpSplitSentences;
+
+            refMap['LgSplitEachChar'].current.value = targetSpec.LgSplitEachChar
+              ? 1
+              : 0;
+            refMap['LgRemoveSpaces'].current.value = targetSpec.LgRemoveSpaces
+              ? 1
+              : 0;
+            refMap['LgRightToLeft'].current.value = targetSpec.LgRightToLeft
+              ? 1
+              : 0;
             setWizardOpen(false);
           }}
           onExit={() => {

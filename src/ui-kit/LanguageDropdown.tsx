@@ -22,12 +22,18 @@ export function LanguageDropdown({
       name={name}
       value={defaultValue}
       className="notempty setfocus"
-      onChange={onChange}
+      onChange={(val) => onChange(Number.parseInt(val.target.value))}
       ref={dropdownRef}
     >
-      <option value="-1">[{header}]</option>
+      <option key={-1} value="-1">
+        [{header}]
+      </option>
       {languages.map((language) => {
-        return <option value={language.LgID}>{language.LgName}</option>;
+        return (
+          <option key={language.LgID} value={language.LgID}>
+            {language.LgName}
+          </option>
+        );
       })}
     </select>
   );

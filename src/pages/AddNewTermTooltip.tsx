@@ -194,12 +194,12 @@ export function KnownTermLines({
           return <span title="Learned"> ◆</span>;
         }
         return (
-          <A
+          <span
             onClick={() => dataService.changeTermStrength(word.WoID, strength)}
-            target="ro"
+            title={StrengthMap[strength].status}
           >
-            <span title={StrengthMap[strength].status}> [{strength}]</span>
-          </A>
+            [{strength}]
+          </span>
         );
       })}
       <br />
