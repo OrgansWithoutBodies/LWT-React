@@ -11,7 +11,7 @@ const CAKSlices = [
   'Last 365 d',
   'All Time',
 ] as const;
-type CAKMap = Record<typeof CAKSlices[number], () => number>;
+type CAKMap = Record<(typeof CAKSlices)[number], () => number>;
 function CAKRow({ language }: { language: Languages }): JSX.Element {
   return <></>;
 }
@@ -115,21 +115,27 @@ export function StatisticsComponent(): JSX.Element {
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
                     <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                        language.LgID
+                      }&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
                     </A>
                   </td>
                   <td className="td1 center">
                     <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                        language.LgID
+                      }&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
                     </A>
                   </td>
                   <td className="td1 center">
                     <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                        language.LgID
+                      }&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
                     >
                       <b>TODO</b>
                     </A>
@@ -140,7 +146,9 @@ export function StatisticsComponent(): JSX.Element {
                         <span className={`status${statusVal}`}>
                           &nbsp;
                           <A
-                            href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${10}&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                            href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                              language.LgID
+                            }&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
                           >
                             TODO
                           </A>

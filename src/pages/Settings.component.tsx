@@ -39,7 +39,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right setfocus"
                   type="text"
                   name="set-text-h-frameheight-no-audio"
-                  // data_info="Height of left top frame without audioplayer"
+                  data_info="Height of left top frame without audioplayer"
                   value={140}
                   maxLength={3}
                   size={3}
@@ -63,7 +63,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-text-h-frameheight-with-audio"
-                  // data_info="Height of left top frame with audioplayer"
+                  data_info="Height of left top frame with audioplayer"
                   value="200"
                   maxLength={3}
                   size={3}
@@ -83,7 +83,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-text-l-framewidth-percent"
-                  // data_info="Width of left frames"
+                  data_info="Width of left frames"
                   value="50"
                   maxLength={2}
                   size={2}
@@ -103,7 +103,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-text-r-frameheight-percent"
-                  // data_info="Height of right top frame"
+                  data_info="Height of right top frame"
                   value="50"
                   maxLength={2}
                   size={2}
@@ -128,7 +128,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-test-h-frameheight"
-                  // data_info="Height of left top frame"
+                  data_info="Height of left top frame"
                   value="140"
                   maxLength={3}
                   size={3}
@@ -148,7 +148,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-test-l-framewidth-percent"
-                  // data_info="Width of left frames"
+                  data_info="Width of left frames"
                   value="50"
                   maxLength={2}
                   size={2}
@@ -168,7 +168,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-test-r-frameheight-percent"
-                  // data_info="Height of right top frame"
+                  data_info="Height of right top frame"
                   value="50"
                   maxLength={2}
                   size={2}
@@ -193,7 +193,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   name="set-test-main-frame-waiting-time"
-                  // data_info="Waiting time after assessment to display next test"
+                  data_info="Waiting time after assessment to display next test"
                   value="0"
                   maxLength={4}
                   size={4}
@@ -216,7 +216,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   name="set-test-edit-frame-waiting-time"
-                  // data_info="Waiting Time to clear the message/edit frame"
+                  data_info="Waiting Time to clear the message/edit frame"
                   value="500"
                   maxLength={8}
                   size={8}
@@ -354,7 +354,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   name="set-similar-terms-count"
-                  // data_info="Similar terms to be displayed while adding/editing a term"
+                  data_info="Similar terms to be displayed while adding/editing a term"
                   value="0"
                   maxLength={1}
                   size={1}
@@ -405,7 +405,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-texts-per-page"
-                  // data_info="Texts per Page"
+                  data_info="Texts per Page"
                   value="10"
                   maxLength={4}
                   size={4}
@@ -441,7 +441,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-archivedtexts-per-page"
-                  // data_info="Archived Texts per Page"
+                  data_info="Archived Texts per Page"
                   value="100"
                   maxLength={4}
                   size={4}
@@ -459,7 +459,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-terms-per-page"
-                  // data_info="Terms per Page"
+                  data_info="Terms per Page"
                   value="100"
                   maxLength={4}
                   size={4}
@@ -477,7 +477,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   name="set-tags-per-page"
-                  // data_info="Tags per Page"
+                  data_info="Tags per Page"
                   value="100"
                   maxLength={4}
                   size={4}

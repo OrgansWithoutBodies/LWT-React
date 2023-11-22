@@ -25,6 +25,25 @@ export function LandingPage() {
   const navigate = useInternalNavigate();
   return (
     <>
+      {languages.length === 0 && (
+        <table className="tab3" cellSpacing="0" cellPadding="5">
+          <tr>
+            <th className="th1">
+              Hint: The database seems to be empty.
+              <br />
+              <a href="install_demo.php">
+                You may install the LWT demo database,
+              </a>
+              <br />
+              or
+              <br />
+              <A href="/edit_languages?new=1">
+                define the first language you want to learn.
+              </A>
+            </th>
+          </tr>
+        </table>
+      )}
       <div>
         <div>
           <div>

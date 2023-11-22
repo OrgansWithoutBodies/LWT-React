@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
 import { AddNewTermTooltip } from './AddNewTermTooltip';
@@ -20,15 +22,24 @@ import {
 export function Reader({
   activeId,
   setActiveWord,
+  activeWord,
 }: {
   activeId: TextsId;
-  setActiveWord: (word: string) => void;
+  setActiveWord: (word: Words | { newWord: string } | null) => void;
+  activeWord: Words | { newWord: string } | null;
 }): JSX.Element {
-  const [{ texts, words }] = useData(['texts', 'words']);
+  const [{ texts, words, parsedTexts }] = useData([
+    'texts',
+    'words',
+    'parsedTexts',
+  ]);
+  const [tooltipOpen, setTooltipOpen] = useState<null | number>(null);
   const activeText = texts.find((text) => text.TxID === activeId);
+  const activeParsedText = parsedTexts[activeId];
   return (
     <div id="thetext">
       <p
+        onClick={() => setTooltipOpen(null)}
         style={{
           // wordBreak: 'break-all',
           // whiteSpace: 'nowrap',
@@ -37,48 +48,55 @@ export function Reader({
           marginBottom: '10px',
         }}
       >
-        {activeText &&
-          // TODO
-          activeText.TxText.split('\n').map((par) =>
-            par.split('. ').map((sentence) => {
-              return sentence.split(' ').map((rawTerm, ii) => {
-                const term = rawTerm
-                  .toLowerCase()
-                  .replace('.', '')
-                  .replace(',', '');
-                const foundWord = words.find(
-                  (word) => word.WoText.toLowerCase() === term
-                );
-                // TODO non-highlighted words (ie punctuation)
-                const termStatus = foundWord
-                  ? ` status${foundWord.WoStatus}`
-                  : ' status0';
-                return (
-                  // TODO make sure works w mobile
-                  // TODO only one tooltip open at a time
-                  <Popover>
-                    <PopoverContent className="Popover">
-                      <PopoverBody>
-                        <AddNewTermTooltip
-                          word={foundWord || term}
-                          sentence={sentence}
-                        />
-                      </PopoverBody>
-                    </PopoverContent>
-
+        <Popover open={tooltipOpen !== null}>
+          {tooltipOpen && activeWord !== null && (
+            <PopoverContent className="Popover">
+              <PopoverBody>
+                <AddNewTermTooltip
+                  word={
+                    'WoText' in activeWord ? activeWord : activeWord.newWord
+                  }
+                  sentence={'sentence'}
+                  onClose={() => setTooltipOpen(null)}
+                />
+              </PopoverBody>
+            </PopoverContent>
+          )}
+          {activeText &&
+            // TODO
+            activeParsedText.map((term, ii) => {
+              const foundWord = words.find(
+                (word) => word.WoText.toLowerCase() === term.text.toLowerCase()
+              );
+              // TODO non-highlighted words (ie punctuation)
+              const termStatus = foundWord
+                ? ` status${foundWord.WoStatus}`
+                : ' status0';
+              const { isTerm } = term;
+              return (
+                // TODO make sure works w mobile
+                <>
+                  {isTerm ? (
                     <PopoverTrigger
-                      onClickWord={() =>
-                        setActiveWord(foundWord?.WoText || term)
-                      }
+                      onClickWord={() => {
+                        setActiveWord(
+                          foundWord !== undefined
+                            ? foundWord
+                            : { newWord: term.text }
+                        );
+                        setTooltipOpen(ii);
+                      }}
                       termStatus={termStatus}
                     >
-                      {term}
+                      {term.text}
                     </PopoverTrigger>
-                  </Popover>
-                );
-              });
-            })
-          )}
+                  ) : (
+                    <>{term.text}</>
+                  )}
+                </>
+              );
+            })}
+        </Popover>{' '}
       </p>
     </div>
   );

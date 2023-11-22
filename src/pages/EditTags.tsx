@@ -1,11 +1,14 @@
 import { useRef } from 'react';
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
+import { Tags } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { TagsId, TagsValidator } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
+import { CheckAndSubmit, RefMap, emptyToNullMap, identityMap } from './Forms';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
 
@@ -51,7 +54,7 @@ export function DisplayTags({
                 type="button"
                 value="Reset All"
                 onClick={() => {
-                  navigate(`/edit_tags?page=${1}&query=`);
+                  navigate(`/edit_tags?page=${1}`);
                 }}
               />
             </th>
@@ -190,10 +193,7 @@ if (recno==0) {
                 </td>
                 <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                   &nbsp;
-                  <A
-                  // TODO
-                  // ref={`' . _SERVER['PHP_SELF'] . '?chg=' . record['TgID'] . '`}
-                  >
+                  <A href={`/edit_tags?chg=${tag.TgID}`}>
                     <Icon src="document--pencil" title="Edit" />
                   </A>
                   &nbsp;
@@ -250,6 +250,17 @@ if (recno==0) {
   );
 }
 export function NewTag() {
+  const preValidateMap: {
+    [key in keyof Tags]?: (value: string) => any | null;
+  } = {
+    TgText: identityMap,
+    TgComment: emptyToNullMap,
+  };
+  const validator = TagsValidator;
+  const refMap = RefMap<Tags>(validator);
+
+  const navigator = useInternalNavigate();
+  Comment;
   return (
     <>
       <Header title={'My Term Tags'} />
@@ -273,8 +284,7 @@ export function NewTag() {
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
                 name="TgText"
-                data_info="Tag"
-                value=""
+                ref={refMap.TgText}
                 maxlength={20}
                 size={20}
               />
@@ -287,7 +297,7 @@ export function NewTag() {
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
                 data_maxlength={200}
-                data_info="Comment"
+                ref={refMap.TgComment}
                 name="TgComment"
                 cols={40}
                 rows={3}
@@ -302,7 +312,116 @@ export function NewTag() {
                 // TODO
                 onClick="{resetDirty(); location.href='edit_tags.php';}"
               />
-              <input type="submit" name="op" value="Save" />
+              <input
+                type="button"
+                name="op"
+                value="Save"
+                onClick={() => {
+                  CheckAndSubmit(
+                    refMap,
+                    preValidateMap,
+                    validator,
+                    (value) => {
+                      dataService.addTag(value);
+                      navigator('/edit_tags');
+                    },
+                    'TgID'
+                  );
+                }}
+              />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </>
+  );
+}
+export function EditTag({ chgId }: { chgId: TagsId }) {
+  const [{ tags }] = useData(['tags']);
+  const changingTag = tags.find(({ TgID }) => {
+    return TgID === chgId;
+  });
+  const preValidateMap: {
+    [key in keyof Tags]?: (value: string) => any | null;
+  } = {
+    TgText: identityMap,
+    TgComment: emptyToNullMap,
+  };
+  const validator = TagsValidator;
+  const refMap = RefMap<Tags>(validator);
+
+  const navigator = useInternalNavigate();
+  Comment;
+  return (
+    <>
+      <Header title={'My Term Tags'} />
+      <h4>Edit Tag</h4>
+      <script
+        type="text/javascript"
+        src="js/unloadformcheck.js"
+        charSet="utf-8"
+      ></script>
+      <form
+        name="newtag"
+        className="validate"
+        // action="<?php echo $_SERVER['PHP_SELF']; ?>"
+        method="post"
+      >
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Tag:</td>
+            <td className="td1">
+              <input
+                className="notempty setfocus noblanksnocomma checkoutsidebmp"
+                type="text"
+                name="TgText"
+                defaultValue={changingTag?.TgText}
+                ref={refMap.TgText}
+                maxlength={20}
+                size={20}
+              />
+              <Icon src="status-busy" title="Field must not be empty" />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Comment:</td>
+            <td className="td1">
+              <textarea
+                className="textarea-noreturn checklength checkoutsidebmp"
+                data_maxlength={200}
+                ref={refMap.TgComment}
+                name="TgComment"
+                cols={40}
+                defaultValue={changingTag?.TgComment}
+                rows={3}
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              <input
+                type="button"
+                value="Cancel"
+                // TODO
+                onClick="{resetDirty(); location.href='edit_tags.php';}"
+              />
+              <input
+                type="button"
+                name="op"
+                value="Save"
+                onClick={() => {
+                  CheckAndSubmit(
+                    refMap,
+                    preValidateMap,
+                    validator,
+                    (value) => {
+                      dataService.editTag(changingTag?.TgID, value);
+                      navigator('/edit_tags');
+                    },
+                    'TgID'
+                  );
+                }}
+              />
             </td>
           </tr>
         </table>

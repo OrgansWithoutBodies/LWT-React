@@ -4,7 +4,6 @@ import { Languages, Words } from '../data/parseMySqlDump';
 import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-import { usePopoverContext } from './Tooltip';
 type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   0: 0,
@@ -107,12 +106,25 @@ function TranslateLines({
   );
 }
 const TermTooltipClose = React.forwardRef<HTMLDivElement>(function PopoverClose(
-  { children, ...props },
+  {
+    // children,
+    onClose,
+    ...props
+  }: React.PropsWithChildren<{ onClose: () => void }>,
   ref
 ) {
-  const { setOpen } = usePopoverContext();
+  // const { setOpen } = usePopoverContext();
   return (
-    <div {...props} ref={ref} onClick={() => setOpen(false)}>
+    <div
+      className="click"
+      {...props}
+      ref={ref}
+      onClick={() => {
+        console.log('CLOSE');
+        // setOpen(false);
+        onClose();
+      }}
+    >
       {/* <!-- <font size={1} face="Verdana,Arial,Helvetica" color="#FFFFFF"> --> */}
       Close
       {/* </font>  */}
@@ -122,7 +134,9 @@ const TermTooltipClose = React.forwardRef<HTMLDivElement>(function PopoverClose(
 
 function TermTooltipHeader({
   headerTitle,
+  onClose,
 }: {
+  onClose: () => void;
   headerTitle: string;
 }): JSX.Element {
   return (
@@ -146,7 +160,7 @@ function TermTooltipHeader({
               </b>
             </td>
             <td align="right">
-              <TermTooltipClose />
+              <TermTooltipClose onClose={onClose} />
             </td>
           </tr>
         </tbody>
@@ -185,8 +199,11 @@ export function KnownTermLines({
         {word.WoText}
         <br />▶ {word.WoRomanization}
         <br />▶ {word.WoTranslation}, [{tags.join(', ')}]
-        <br />▶{StrengthMap[ReverseStrengthMap[word.WoStatus]].status} [
-        {ReverseStrengthMap[word.WoStatus]}]
+        <br />▶{/* TODO why undef */}
+        {StrengthMap[ReverseStrengthMap[word.WoStatus]]
+          ? StrengthMap[ReverseStrengthMap[word.WoStatus]].status
+          : ''}{' '}
+        [{ReverseStrengthMap[word.WoStatus]}]
       </b>
       St:
       {TermStrengths.map((strength) => {
@@ -217,9 +234,11 @@ export function KnownTermLines({
 export function AddNewTermTooltip({
   word,
   sentence,
+  onClose,
 }: {
   word: Words | string;
   sentence: string;
+  onClose: () => void;
 }): JSX.Element {
   const newTerm = typeof word === 'string';
   const [{ languages }] = useData(['languages']);
@@ -228,6 +247,7 @@ export function AddNewTermTooltip({
   if (!language) {
     return <></>;
   }
+  console.log('TEST123-tooltip', word, sentence, newTerm);
   const wordStr = newTerm ? word : word.WoText;
   // TODO on click on term, change other panes
   return (
@@ -236,18 +256,23 @@ export function AddNewTermTooltip({
       cellSpacing={0}
       cellPadding={1}
       border={0}
-      color="#333399"
+      style={{
+        backgroundColor: '#333399',
+      }}
     >
       <tbody>
         <tr>
           <td>
-            <TermTooltipHeader headerTitle={newTerm ? 'New Word' : 'Word'} />
+            <TermTooltipHeader
+              headerTitle={newTerm ? 'New Word' : 'Word'}
+              onClose={onClose}
+            />
             <table
               width="100%"
               cellSpacing={0}
               cellPadding={2}
               border={0}
-              color="#FFFFE8"
+              style={{ backgroundColor: '#FFFFE8', color: '#000000' }}
             >
               <tbody>
                 <tr>
@@ -257,7 +282,7 @@ export function AddNewTermTooltip({
                     {newTerm ? (
                       <UnknownTermLines word={word} />
                     ) : (
-                      <KnownTermLines word={word} />
+                      <KnownTermLines word={word} tags={[]} />
                     )}
                     <br />
                     <ExpressionsLines expressions={expressions} />

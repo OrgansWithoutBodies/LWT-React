@@ -78,20 +78,16 @@ function TermsHeader(): JSX.Element {
 export function TermsFilterBox({
   numTerms,
   currentPage,
-  filterlang,
+  activeLanguageId,
+  numPages,
 }: {
-  filterlang: LanguagesId | null;
+  activeLanguageId: LanguagesId | null;
   numTerms: number;
+  numPages: number;
   currentPage: number;
 }): JSX.Element {
-  const [{ activeLanguageId, tags, texts }] = useData([
-    'activeLanguageId',
-    'tags',
-    'texts',
-  ]);
-  //   TODO
-  const pageSize = 15;
-  const numPages = Math.ceil(numTerms / pageSize);
+  const [{ tags, texts }] = useData(['tags', 'texts']);
+  // TODO usePager available here - contextprovider?
   const navigate = useInternalNavigate();
   const updateParams = useUpdateParams();
   return (
@@ -115,9 +111,15 @@ export function TermsFilterBox({
             Language:
             <LanguageDropdown
               onChange={(val) => {
-                dataService.setActiveLanguage(val);
+                if (val === -1) {
+                  dataService.setActiveLanguage(null);
+                } else {
+                  dataService.setActiveLanguage(val);
+                }
               }}
-              defaultValue={filterlang !== null ? filterlang : undefined}
+              defaultValue={
+                activeLanguageId !== null ? activeLanguageId : undefined
+              }
               header="Filter off"
             />
           </td>
@@ -132,13 +134,14 @@ export function TermsFilterBox({
               <option value={-1} selected>
                 [Filter off]
               </option>
-              {texts
-                .filter(({ TxLgID }) => {
-                  TxLgID === activeLanguageId;
-                })
-                .map((text) => {
-                  return <option value={text.TxID}>{text.TxTitle}</option>;
-                })}
+              {(activeLanguageId !== null
+                ? texts.filter(({ TxLgID }) => {
+                    return TxLgID === activeLanguageId;
+                  })
+                : texts
+              ).map((text) => {
+                return <option value={text.TxID}>{text.TxTitle}</option>;
+              })}
             </select>
           </td>
         </tr>
@@ -457,7 +460,7 @@ const sortingMethod = (
 };
 export function Terms({
   pageNum = null,
-  filterlang = null,
+  // filterlang = null,
   sort = null,
   status = null,
   textFilter,
@@ -467,7 +470,7 @@ export function Terms({
 }: {
   textFilter: number | null;
   pageNum: number | null;
-  filterlang: number | null;
+  // filterlang: LanguagesId | null;
   status: number | null;
   tag1: number | null;
   tag12: 0 | 1;
@@ -476,11 +479,16 @@ export function Terms({
 }): JSX.Element {
   const pageSize = 15;
   const [selectedTerms, setSelectedTerms] = useState<WordsId[]>([]);
-  const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
-  if (!activeLanguage) {
-    return <></>;
-  }
-
+  const [{ words, activeLanguage }] = useData([
+    'words',
+    'activeLanguage',
+    // 'texttags',
+  ]);
+  // if (!activeLanguage) {
+  //   return <></>;
+  // }
+  // const textTagsMatchingTag1=texttags.filter((tag)=>tag.TtTxID===)
+  const navigator = useInternalNavigate();
   const filteredWords = words.filter((val) => {
     const isRightText =
       textFilter === null
@@ -489,7 +497,8 @@ export function Terms({
           // : Number.parseInt(val.WoText) === textFilter;
           true;
     const isRightStatus = status === null ? true : val.WoStatus === status;
-    const isRightLang = filterlang === null ? true : val.WoLgID === filterlang;
+    const isRightLang =
+      activeLanguage === null ? true : val.WoLgID === activeLanguage?.LgID;
     // const isRightTag1 = tag1 === null ? true : val.WoLgID === filterlang;
     // const isRightTag2 = tag2 === null ? true : val.WoLgID === filterlang;
     const isRightTag1 = true;
@@ -501,7 +510,6 @@ export function Terms({
     return isRightStatus && isRightText && isRightLang && compoundTagStatement;
   });
 
-  console.log({ filteredWords, filterlang });
   const sortedWords =
     sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
   const currentPage = pageNum !== null ? pageNum : 1;
@@ -513,14 +521,31 @@ export function Terms({
   return (
     <>
       <Header
-        title={`My ${activeLanguage?.LgName} Terms (Words and Expressions)`}
+        title={`My ${
+          activeLanguage?.LgName || ''
+        } Terms (Words and Expressions)`}
       />
+      {activeLanguage !== undefined ? (
+        <p>
+          <A href={`/edit_words?new=1&lang=${activeLanguage.LgID}`}>
+            <Icon src="plus-button" title="New" />
+            New {activeLanguage.LgName} Term ...
+          </A>
+        </p>
+      ) : (
+        <p>
+          <Icon src="plus-button" title="New" /> New Term? - Set Language Filter
+          first ...
+        </p>
+      )}
+
       {sortedWords && (
         <>
           <TermsFilterBox
+            activeLanguageId={activeLanguage?.LgID}
             numTerms={sortedWords.length}
             currentPage={currentPage}
-            filterlang={filterlang}
+            numPages={numPages}
           />
           <TermMultiActions
             selectedTerms={selectedTerms}
@@ -693,6 +718,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
               <input
                 type="button"
                 value="Cancel"
+                // TODO
                 onClick="{resetDirty(); location.href='edit_words.php#rec<?php echo $_REQUEST['chg']; ?>';}"
               />
               <input type="submit" name="op" value="Change" />
@@ -796,3 +822,19 @@ function GetAllWordsActionsSelectOptions() {
     </>
   );
 }
+
+// function getWordTags($wid)
+// {
+// 	global $tbpref;
+// 	$r = '<ul id="termtags">';
+// 	if ($wid > 0) {
+// 		$sql = 'select TgText from ' . $tbpref . 'wordtags, ' . $tbpref . 'tags where TgID = WtTgID and WtWoID = ' . $wid . ' order by TgText';
+// 		$res = do_mysqli_query($sql);
+// 		while ($record = mysqli_fetch_assoc($res)) {
+// 			$r .= '<li>' . tohtml($record["TgText"]) . '</li>';
+// 		}
+// 		mysqli_free_result($res);
+// 	}
+// 	$r .= '</ul>';
+// 	return $r;
+// }

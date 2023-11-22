@@ -16,7 +16,7 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 export type Dimension2D<T = number> = { x: T; y: T };
 export function Tooltip({ visible }: { visible: boolean }): JSX.Element {
   const { x, y, refs, strategy, context, elements } = useFloating({
@@ -90,6 +90,7 @@ export function usePopover({
   const data = useFloating({
     placement,
     open,
+
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
     middleware: [
@@ -179,9 +180,11 @@ export const PopoverTrigger = React.forwardRef<
   propRef
 ) {
   const context = usePopoverContext();
+  console.log(context.refs);
   const childrenRef = (children as any).ref;
-  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
+  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+  const divRef = useRef<HTMLSpanElement>();
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
@@ -195,17 +198,22 @@ export const PopoverTrigger = React.forwardRef<
     );
   }
   const { ...refProps } = context.getReferenceProps(props);
+  if (context.open) {
+    console.log('TRIGGER', context.open, refProps);
+  }
 
   return (
     <span
       // https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx
       className={`click word wsty${termStatus}`}
-      ref={ref}
+      ref={divRef}
       // The user can style the trigger based on the state
       data-state={context.open ? 'open' : 'closed'}
       {...refProps}
       onClick={(event) => {
+        context.refs.setPositionReference(divRef.current!);
         onClickWord();
+        event.stopPropagation();
       }}
     >
       {children}
@@ -219,13 +227,14 @@ export const PopoverContent = React.forwardRef<
 >(function PopoverContent(props, propRef) {
   const { context: floatingContext, ...context } = usePopoverContext();
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
-
+  console.log('POPOVER', context.open);
   return (
     <FloatingPortal>
       {context.open && (
         <FloatingFocusManager context={floatingContext} modal={context.modal}>
           <div
             ref={ref}
+            id={'TEST123-TOOLTIP'}
             style={{
               position: context.strategy,
               top: context.y ?? 0,

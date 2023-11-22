@@ -24,6 +24,8 @@ export class DataQuery extends Query<DataState> {
   public words = this.select('words');
   public wordtags = this.select('wordtags');
 
+  public parsedTexts = this.select('parsedTexts');
+
   public numArchivedTexts = this.archivedtexts.pipe(count());
   // public archivedtextsLen = this.archivedtexts.pipe(count());
   // public archtexttagsLen = this.archtexttags.pipe(count());
@@ -64,6 +66,11 @@ export class DataQuery extends Query<DataState> {
     this.activeLanguageId,
   ]).pipe(
     map(([texts, activeLanguageId]) => {
+      console.log('QUERY', { texts });
+
+      if (activeLanguageId === null) {
+        return texts;
+      }
       return texts.filter((text) => text.TxLgID === activeLanguageId);
     })
   );
@@ -101,6 +108,7 @@ export class DataQuery extends Query<DataState> {
     this.tags2,
   ]).pipe(
     map(([textsForActiveLanguage, texttags, tags]) => {
+      console.log({ textsForActiveLanguage });
       return textsForActiveLanguage.map((text) => {
         return {
           TxID: text.TxID,

@@ -1,3 +1,5 @@
+import { Languages } from '../data/parseMySqlDump';
+
 export function byteSizeOfString(str: string): number {
   return new Blob([str]).size;
 }
@@ -60,7 +62,7 @@ export function confirmDelete(): boolean {
 // 	if (count($vn) < 3)
 // 		my_die('Wrong version: ' . $v);
 // 	for ($i = 0; $i < 3; $i++)
-// 		$r .= substr('000' . $vn[$i], -3);
+// 		$r += substr('000' . $vn[$i], -3);
 // 	return $r; // 'vxxxyyyzzz' wenn version = x.y.z
 // }
 
@@ -241,7 +243,7 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = '';
 // 	$r = "<option value=\"\"" . get_selected($v, '');
-// 	$r .= ">[Filter off]</option>";
+// 	$r += ">[Filter off]</option>";
 // 	if ($l == '')
 // 		$sql = "select TgID, TgText from " . $tbpref . "words, " . $tbpref . "tags, " . $tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID group by TgID order by TgText";
 // 	else
@@ -251,12 +253,12 @@ export function confirmDelete(): boolean {
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		$d = $record["TgText"];
 // 		$cnt++;
-// 		$r .= "<option value=\"" . $record["TgID"] . "\"" . get_selected($v, $record["TgID"]) . ">" . tohtml($d) . "</option>";
+// 		$r += "<option value=\"" . $record["TgID"] . "\"" . get_selected($v, $record["TgID"]) . ">" . tohtml($d) . "</option>";
 // 	}
 // 	mysqli_free_result($res);
 // 	if ($cnt > 0) {
-// 		$r .= "<option disabled=\"disabled\">--------</option>";
-// 		$r .= "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
+// 		$r += "<option disabled=\"disabled\">--------</option>";
+// 		$r += "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return $r;
 // }
@@ -269,7 +271,7 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = '';
 // 	$r = "<option value=\"\"" . get_selected($v, '');
-// 	$r .= ">[Filter off]</option>";
+// 	$r += ">[Filter off]</option>";
 // 	if ($l == '')
 // 		$sql = "select T2ID, T2Text from " . $tbpref . "texts, " . $tbpref . "tags2, " . $tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text";
 // 	else
@@ -279,12 +281,12 @@ export function confirmDelete(): boolean {
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		$d = $record["T2Text"];
 // 		$cnt++;
-// 		$r .= "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
+// 		$r += "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
 // 	}
 // 	mysqli_free_result($res);
 // 	if ($cnt > 0) {
-// 		$r .= "<option disabled=\"disabled\">--------</option>";
-// 		$r .= "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
+// 		$r += "<option disabled=\"disabled\">--------</option>";
+// 		$r += "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return $r;
 // }
@@ -297,7 +299,7 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = '';
 // 	$r = "<option value=\"\"" . get_selected($v, '');
-// 	$r .= ">[Filter off]</option>";
+// 	$r += ">[Filter off]</option>";
 // 	if ($l == '')
 // 		$sql = "select T2ID, T2Text from " . $tbpref . "archivedtexts, " . $tbpref . "tags2, " . $tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID group by T2ID order by T2Text";
 // 	else
@@ -307,12 +309,12 @@ export function confirmDelete(): boolean {
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		$d = $record["T2Text"];
 // 		$cnt++;
-// 		$r .= "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
+// 		$r += "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
 // 	}
 // 	mysqli_free_result($res);
 // 	if ($cnt > 0) {
-// 		$r .= "<option disabled=\"disabled\">--------</option>";
-// 		$r .= "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
+// 		$r += "<option disabled=\"disabled\">--------</option>";
+// 		$r += "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return $r;
 // }
@@ -411,11 +413,11 @@ export function confirmDelete(): boolean {
 // 		$sql = 'select TgText from ' . $tbpref . 'wordtags, ' . $tbpref . 'tags where TgID = WtTgID and WtWoID = ' . $wid . ' order by TgText';
 // 		$res = do_mysqli_query($sql);
 // 		while ($record = mysqli_fetch_assoc($res)) {
-// 			$r .= '<li>' . tohtml($record["TgText"]) . '</li>';
+// 			$r += '<li>' . tohtml($record["TgText"]) . '</li>';
 // 		}
 // 		mysqli_free_result($res);
 // 	}
-// 	$r .= '</ul>';
+// 	$r += '</ul>';
 // 	return $r;
 // }
 
@@ -429,11 +431,11 @@ export function confirmDelete(): boolean {
 // 		$sql = 'select T2Text from ' . $tbpref . 'texttags, ' . $tbpref . 'tags2 where T2ID = TtT2ID and TtTxID = ' . $tid . ' order by T2Text';
 // 		$res = do_mysqli_query($sql);
 // 		while ($record = mysqli_fetch_assoc($res)) {
-// 			$r .= '<li>' . tohtml($record["T2Text"]) . '</li>';
+// 			$r += '<li>' . tohtml($record["T2Text"]) . '</li>';
 // 		}
 // 		mysqli_free_result($res);
 // 	}
-// 	$r .= '</ul>';
+// 	$r += '</ul>';
 // 	return $r;
 // }
 
@@ -447,11 +449,11 @@ export function confirmDelete(): boolean {
 // 		$sql = 'select T2Text from ' . $tbpref . 'archtexttags, ' . $tbpref . 'tags2 where T2ID = AgT2ID and AgAtID = ' . $tid . ' order by T2Text';
 // 		$res = do_mysqli_query($sql);
 // 		while ($record = mysqli_fetch_assoc($res)) {
-// 			$r .= '<li>' . tohtml($record["T2Text"]) . '</li>';
+// 			$r += '<li>' . tohtml($record["T2Text"]) . '</li>';
 // 		}
 // 		mysqli_free_result($res);
 // 	}
-// 	$r .= '</ul>';
+// 	$r += '</ul>';
 // 	return $r;
 // }
 
@@ -739,16 +741,16 @@ export function confirmDelete(): boolean {
 // 	$url = parse_url("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 // 	$r = $url["scheme"] . "://" . $url["host"];
 // 	if (isset($url["port"]))
-// 		$r .= ":" . $url["port"];
+// 		$r += ":" . $url["port"];
 // 	if (isset($url["path"])) {
 // 		$b = basename($url["path"]);
 // 		if (substr($b, -4) == ".php" || substr($b, -4) == ".htm" || substr($b, -5) == ".html")
-// 			$r .= dirname($url["path"]);
+// 			$r += dirname($url["path"]);
 // 		else
-// 			$r .= $url["path"];
+// 			$r += $url["path"];
 // 	}
 // 	if (substr($r, -1) !== "/")
-// 		$r .= "/";
+// 		$r += "/";
 // 	return $r;
 // }
 
@@ -815,12 +817,12 @@ export function confirmDelete(): boolean {
 // 	}
 // 	$r = '<br /> or choose a file in ".../' . basename(getcwd()) . '/media" (only mp3, ogg, wav files shown): ' . $msg;
 // 	if ($msg == '') {
-// 		$r .= '<br /><select name="Dir" onchange="{val=this.form.Dir.options[this.form.Dir.selectedIndex].value; if (val != \'\') this.form.' . $f . '.value = val; this.form.Dir.value=\'\';}">';
-// 		$r .= '<option value="">[Choose...]</option>';
-// 		$r .= selectmediapathoptions('media');
-// 		$r .= '</select> ';
+// 		$r += '<br /><select name="Dir" onchange="{val=this.form.Dir.options[this.form.Dir.selectedIndex].value; if (val != \'\') this.form.' . $f . '.value = val; this.form.Dir.value=\'\';}">';
+// 		$r += '<option value="">[Choose...]</option>';
+// 		$r += selectmediapathoptions('media');
+// 		$r += '</select> ';
 // 	}
-// 	$r .= ' &nbsp; &nbsp; <span class="click" onclick="do_ajax_update_media_select();"><img src="icn/arrow-circle-135.png" title="Refresh Media Selection" alt="Refresh Media Selection" /> Refresh</span>';
+// 	$r += ' &nbsp; &nbsp; <span class="click" onclick="do_ajax_update_media_select();"><img src="icn/arrow-circle-135.png" title="Refresh Media Selection" alt="Refresh Media Selection" /> Refresh</span>';
 // 	return $r;
 // }
 
@@ -842,14 +844,14 @@ export function confirmDelete(): boolean {
 // 					(strcasecmp($ex, '.ogg') == 0) ||
 // 					(strcasecmp($ex, '.wav') == 0)
 // 				)
-// 					$r .= '<option value="' . tohtml($dir . '/' . $entry) . '">' . tohtml($dir . '/' . $entry) . '</option>';
+// 					$r += '<option value="' . tohtml($dir . '/' . $entry) . '">' . tohtml($dir . '/' . $entry) . '</option>';
 // 			}
 // 		}
 // 	}
 // 	foreach ($mediadir as $entry) {
 // 		if (substr($entry, 0, 1) != '.') {
 // 			if (is_dir($dir . '/' . $entry))
-// 				$r .= selectmediapathoptions($dir . '/' . $entry);
+// 				$r += selectmediapathoptions($dir . '/' . $entry);
 // 		}
 // 	}
 // 	return $r;
@@ -863,8 +865,8 @@ export function confirmDelete(): boolean {
 // 		$v = 5;
 // 	$r = '';
 // 	for ($i = 1; $i <= 10; $i++) {
-// 		$r .= "<option value=\"" . $i . "\"" . get_selected($v, $i);
-// 		$r .= ">" . $i . " sec</option>";
+// 		$r += "<option value=\"" . $i . "\"" . get_selected($v, $i);
+// 		$r += ">" . $i . " sec</option>";
 // 	}
 // 	return $r;
 // }
@@ -878,8 +880,8 @@ export function confirmDelete(): boolean {
 // 	$r = '';
 // 	for ($i = 5; $i <= 15; $i++) {
 // 		$text = ($i < 10 ? (' 0.' . $i . ' x ') : (' 1.' . ($i - 10) . ' x '));
-// 		$r .= "<option value=\"" . $i . "\"" . get_selected($v, $i);
-// 		$r .= ">&nbsp;" . $text . "&nbsp;</option>";
+// 		$r += "<option value=\"" . $i . "\"" . get_selected($v, $i);
+// 		$r += ">&nbsp;" . $text . "&nbsp;</option>";
 // 	}
 // 	return $r;
 // }
@@ -1212,11 +1214,11 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = "0";
 // 	$r = "<option value=\"0\"" . get_selected($v, "0");
-// 	$r .= ">Auto</option>";
-// 	$r .= "<option value=\"1\"" . get_selected($v, "1");
-// 	$r .= ">Force Non-Mobile</option>";
-// 	$r .= "<option value=\"2\"" . get_selected($v, "2");
-// 	$r .= ">Force Mobile</option>";
+// 	$r += ">Auto</option>";
+// 	$r += "<option value=\"1\"" . get_selected($v, "1");
+// 	$r += ">Force Non-Mobile</option>";
+// 	$r += "<option value=\"2\"" . get_selected($v, "2");
+// 	$r += ">Force Mobile</option>";
 // 	return $r;
 // }
 
@@ -1227,11 +1229,11 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 1;
 // 	$r = "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">Just ONE</option>";
-// 	$r .= "<option value=\"2\"" . get_selected($v, 2);
-// 	$r .= ">TWO (+previous)</option>";
-// 	$r .= "<option value=\"3\"" . get_selected($v, 3);
-// 	$r .= ">THREE (+previous,+next)</option>";
+// 	$r += ">Just ONE</option>";
+// 	$r += "<option value=\"2\"" . get_selected($v, 2);
+// 	$r += ">TWO (+previous)</option>";
+// 	$r += "<option value=\"3\"" . get_selected($v, 3);
+// 	$r += ">THREE (+previous,+next)</option>";
 // 	return $r;
 // }
 
@@ -1463,8 +1465,8 @@ export function confirmDelete(): boolean {
 // 		$d = $record["LgName"];
 // 		if (strlen($d) > 30)
 // 			$d = substr($d, 0, 30) . "...";
-// 		$r .= "<option value=\"" . $record["LgID"] . "\" " . get_selected($v, $record["LgID"]);
-// 		$r .= ">" . tohtml($d) . "</option>";
+// 		$r += "<option value=\"" . $record["LgID"] . "\" " . get_selected($v, $record["LgID"]);
+// 		$r += ">" . tohtml($d) . "</option>";
 // 	}
 // 	mysqli_free_result($res);
 // 	return $r;
@@ -1477,13 +1479,13 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 100;
 // 	$r = "<option value=\"100\"" . get_selected($v, 100);
-// 	$r .= ">100 %</option>";
-// 	$r .= "<option value=\"150\"" . get_selected($v, 150);
-// 	$r .= ">150 %</option>";
-// 	$r .= "<option value=\"200\"" . get_selected($v, 200);
-// 	$r .= ">200 %</option>";
-// 	$r .= "<option value=\"250\"" . get_selected($v, 250);
-// 	$r .= ">250 %</option>";
+// 	$r += ">100 %</option>";
+// 	$r += "<option value=\"150\"" . get_selected($v, 150);
+// 	$r += ">150 %</option>";
+// 	$r += "<option value=\"200\"" . get_selected($v, 200);
+// 	$r += ">200 %</option>";
+// 	$r += "<option value=\"250\"" . get_selected($v, 250);
+// 	$r += ">250 %</option>";
 // 	return $r;
 // }
 
@@ -1496,11 +1498,11 @@ export function confirmDelete(): boolean {
 // 	$r = "";
 // 	$statuses = get_statuses();
 // 	foreach ($statuses as $n => $status) {
-// 		$r .= '<span class="status' . $n . '" title="' . tohtml($status["name"]) . '">';
-// 		$r .= '&nbsp;<input type="radio" name="WoStatus" value="' . $n . '"';
+// 		$r += '<span class="status' . $n . '" title="' . tohtml($status["name"]) . '">';
+// 		$r += '&nbsp;<input type="radio" name="WoStatus" value="' . $n . '"';
 // 		if ($v == $n)
-// 			$r .= ' checked="checked"';
-// 		$r .= ' />' . tohtml($status["abbr"]) . "&nbsp;</span> ";
+// 			$r += ' checked="checked"';
+// 		$r += ' />' . tohtml($status["abbr"]) . "&nbsp;</span> ";
 // 	}
 // 	return $r;
 // }
@@ -1517,61 +1519,61 @@ export function confirmDelete(): boolean {
 // 	}
 // 	$r = "";
 // 	if ($all && $off) {
-// 		$r .= "<option value=\"\"" . get_selected($v, '');
-// 		$r .= ">[Filter off]</option>";
+// 		$r += "<option value=\"\"" . get_selected($v, '');
+// 		$r += ">[Filter off]</option>";
 // 	}
 // 	$statuses = get_statuses();
 // 	foreach ($statuses as $n => $status) {
 // 		if ($not9899 && ($n == 98 || $n == 99))
 // 			continue;
-// 		$r .= "<option value =\"" . $n . "\"" . get_selected($v, $n);
-// 		$r .= ">" . tohtml($status['name']) . " [" .
+// 		$r += "<option value =\"" . $n . "\"" . get_selected($v, $n);
+// 		$r += ">" . tohtml($status['name']) . " [" .
 // 			tohtml($status['abbr']) . "]</option>";
 // 	}
 // 	if ($all) {
-// 		$r .= '<option disabled="disabled">--------</option>';
+// 		$r += '<option disabled="disabled">--------</option>';
 // 		$status_1_name = tohtml($statuses[1]["name"]);
 // 		$status_1_abbr = tohtml($statuses[1]["abbr"]);
-// 		$r .= "<option value=\"12\"" . get_selected($v, 12);
-// 		$r .= ">" . $status_1_name . " [" . $status_1_abbr . ".." .
+// 		$r += "<option value=\"12\"" . get_selected($v, 12);
+// 		$r += ">" . $status_1_name . " [" . $status_1_abbr . ".." .
 // 			tohtml($statuses[2]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"13\"" . get_selected($v, 13);
-// 		$r .= ">" . $status_1_name . " [" . $status_1_abbr . ".." .
+// 		$r += "<option value=\"13\"" . get_selected($v, 13);
+// 		$r += ">" . $status_1_name . " [" . $status_1_abbr . ".." .
 // 			tohtml($statuses[3]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"14\"" . get_selected($v, 14);
-// 		$r .= ">" . $status_1_name . " [" . $status_1_abbr . ".." .
+// 		$r += "<option value=\"14\"" . get_selected($v, 14);
+// 		$r += ">" . $status_1_name . " [" . $status_1_abbr . ".." .
 // 			tohtml($statuses[4]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"15\"" . get_selected($v, 15);
-// 		$r .= ">Learning/-ed [" . $status_1_abbr . ".." .
+// 		$r += "<option value=\"15\"" . get_selected($v, 15);
+// 		$r += ">Learning/-ed [" . $status_1_abbr . ".." .
 // 			tohtml($statuses[5]["abbr"]) . "]</option>";
-// 		$r .= '<option disabled="disabled">--------</option>';
+// 		$r += '<option disabled="disabled">--------</option>';
 // 		$status_2_name = tohtml($statuses[2]["name"]);
 // 		$status_2_abbr = tohtml($statuses[2]["abbr"]);
-// 		$r .= "<option value=\"23\"" . get_selected($v, 23);
-// 		$r .= ">" . $status_2_name . " [" . $status_2_abbr . ".." .
+// 		$r += "<option value=\"23\"" . get_selected($v, 23);
+// 		$r += ">" . $status_2_name . " [" . $status_2_abbr . ".." .
 // 			tohtml($statuses[3]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"24\"" . get_selected($v, 24);
-// 		$r .= ">" . $status_2_name . " [" . $status_2_abbr . ".." .
+// 		$r += "<option value=\"24\"" . get_selected($v, 24);
+// 		$r += ">" . $status_2_name . " [" . $status_2_abbr . ".." .
 // 			tohtml($statuses[4]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"25\"" . get_selected($v, 25);
-// 		$r .= ">Learning/-ed [" . $status_2_abbr . ".." .
+// 		$r += "<option value=\"25\"" . get_selected($v, 25);
+// 		$r += ">Learning/-ed [" . $status_2_abbr . ".." .
 // 			tohtml($statuses[5]["abbr"]) . "]</option>";
-// 		$r .= '<option disabled="disabled">--------</option>';
+// 		$r += '<option disabled="disabled">--------</option>';
 // 		$status_3_name = tohtml($statuses[3]["name"]);
 // 		$status_3_abbr = tohtml($statuses[3]["abbr"]);
-// 		$r .= "<option value=\"34\"" . get_selected($v, 34);
-// 		$r .= ">" . $status_3_name . " [" . $status_3_abbr . ".." .
+// 		$r += "<option value=\"34\"" . get_selected($v, 34);
+// 		$r += ">" . $status_3_name . " [" . $status_3_abbr . ".." .
 // 			tohtml($statuses[4]["abbr"]) . "]</option>";
-// 		$r .= "<option value=\"35\"" . get_selected($v, 35);
-// 		$r .= ">Learning/-ed [" . $status_3_abbr . ".." .
+// 		$r += "<option value=\"35\"" . get_selected($v, 35);
+// 		$r += ">Learning/-ed [" . $status_3_abbr . ".." .
 // 			tohtml($statuses[5]["abbr"]) . "]</option>";
-// 		$r .= '<option disabled="disabled">--------</option>';
-// 		$r .= "<option value=\"45\"" . get_selected($v, 45);
-// 		$r .= ">Learning/-ed [" . tohtml($statuses[4]["abbr"]) . ".." .
+// 		$r += '<option disabled="disabled">--------</option>';
+// 		$r += "<option value=\"45\"" . get_selected($v, 45);
+// 		$r += ">Learning/-ed [" . tohtml($statuses[4]["abbr"]) . ".." .
 // 			tohtml($statuses[5]["abbr"]) . "]</option>";
-// 		$r .= '<option disabled="disabled">--------</option>';
-// 		$r .= "<option value=\"599\"" . get_selected($v, 599);
-// 		$r .= ">All known [" . tohtml($statuses[5]["abbr"]) . "+" .
+// 		$r += '<option disabled="disabled">--------</option>';
+// 		$r += "<option value=\"599\"" . get_selected($v, 599);
+// 		$r += ">All known [" . tohtml($statuses[5]["abbr"]) . "+" .
 // 			tohtml($statuses[99]["abbr"]) . "]</option>";
 // 	}
 // 	return $r;
@@ -1583,8 +1585,8 @@ export function confirmDelete(): boolean {
 // {
 // 	$r = "";
 // 	for ($i = 1; $i <= $pages; $i++) {
-// 		$r .= "<option value=\"" . $i . "\"" . get_selected($i, $currentpage);
-// 		$r .= ">$i</option>";
+// 		$r += "<option value=\"" . $i . "\"" . get_selected($i, $currentpage);
+// 		$r += ">$i</option>";
 // 	}
 // 	return $r;
 // }
@@ -1596,19 +1598,19 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 1;
 // 	$r = "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">Term A-Z</option>";
-// 	$r .= "<option value=\"2\"" . get_selected($v, 2);
-// 	$r .= ">Translation A-Z</option>";
-// 	$r .= "<option value=\"3\"" . get_selected($v, 3);
-// 	$r .= ">Newest first</option>";
-// 	$r .= "<option value=\"7\"" . get_selected($v, 7);
-// 	$r .= ">Oldest first</option>";
-// 	$r .= "<option value=\"4\"" . get_selected($v, 4);
-// 	$r .= ">Status</option>";
-// 	$r .= "<option value=\"5\"" . get_selected($v, 5);
-// 	$r .= ">Score Value (%)</option>";
-// 	$r .= "<option value=\"6\"" . get_selected($v, 6);
-// 	$r .= ">Word Count Active Texts</option>";
+// 	$r += ">Term A-Z</option>";
+// 	$r += "<option value=\"2\"" . get_selected($v, 2);
+// 	$r += ">Translation A-Z</option>";
+// 	$r += "<option value=\"3\"" . get_selected($v, 3);
+// 	$r += ">Newest first</option>";
+// 	$r += "<option value=\"7\"" . get_selected($v, 7);
+// 	$r += ">Oldest first</option>";
+// 	$r += "<option value=\"4\"" . get_selected($v, 4);
+// 	$r += ">Status</option>";
+// 	$r += "<option value=\"5\"" . get_selected($v, 5);
+// 	$r += ">Score Value (%)</option>";
+// 	$r += "<option value=\"6\"" . get_selected($v, 6);
+// 	$r += ">Word Count Active Texts</option>";
 // 	return $r;
 // }
 
@@ -1619,13 +1621,13 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 1;
 // 	$r = "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">Tag Text A-Z</option>";
-// 	$r .= "<option value=\"2\"" . get_selected($v, 2);
-// 	$r .= ">Tag Comment A-Z</option>";
-// 	$r .= "<option value=\"3\"" . get_selected($v, 3);
-// 	$r .= ">Newest first</option>";
-// 	$r .= "<option value=\"4\"" . get_selected($v, 4);
-// 	$r .= ">Oldest first</option>";
+// 	$r += ">Tag Text A-Z</option>";
+// 	$r += "<option value=\"2\"" . get_selected($v, 2);
+// 	$r += ">Tag Comment A-Z</option>";
+// 	$r += "<option value=\"3\"" . get_selected($v, 3);
+// 	$r += ">Newest first</option>";
+// 	$r += "<option value=\"4\"" . get_selected($v, 4);
+// 	$r += ">Oldest first</option>";
 // 	return $r;
 // }
 
@@ -1636,11 +1638,11 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 1;
 // 	$r = "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">Title A-Z</option>";
-// 	$r .= "<option value=\"2\"" . get_selected($v, 2);
-// 	$r .= ">Newest first</option>";
-// 	$r .= "<option value=\"3\"" . get_selected($v, 3);
-// 	$r .= ">Oldest first</option>";
+// 	$r += ">Title A-Z</option>";
+// 	$r += "<option value=\"2\"" . get_selected($v, 2);
+// 	$r += ">Newest first</option>";
+// 	$r += "<option value=\"3\"" . get_selected($v, 3);
+// 	$r += ">Oldest first</option>";
 // 	return $r;
 // }
 
@@ -1651,9 +1653,9 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 0;
 // 	$r = "<option value=\"0\"" . get_selected($v, 0);
-// 	$r .= ">No</option>";
-// 	$r .= "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">Yes</option>";
+// 	$r += ">No</option>";
+// 	$r += "<option value=\"1\"" . get_selected($v, 1);
+// 	$r += ">Yes</option>";
 // 	return $r;
 // }
 
@@ -1664,9 +1666,9 @@ export function confirmDelete(): boolean {
 // 	if (!isset($v))
 // 		$v = 0;
 // 	$r = "<option value=\"0\"" . get_selected($v, 0);
-// 	$r .= ">... OR ...</option>";
-// 	$r .= "<option value=\"1\"" . get_selected($v, 1);
-// 	$r .= ">... AND ...</option>";
+// 	$r += ">... OR ...</option>";
+// 	$r += "<option value=\"1\"" . get_selected($v, 1);
+// 	$r += ">... AND ...</option>";
 // 	return $r;
 // }
 
@@ -1707,31 +1709,31 @@ export function confirmDelete(): boolean {
 // function get_multiplewordsactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"test\">Test Marked Terms</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"spl1\">Increase Status by 1 [+1]</option>";
-// 	$r .= "<option value=\"smi1\">Reduce Status by 1 [-1]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= get_set_status_option(1);
-// 	$r .= get_set_status_option(5);
-// 	$r .= get_set_status_option(99);
-// 	$r .= get_set_status_option(98);
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"today\">Set Status Date to Today</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"lower\">Set Marked Terms to Lowercase</option>";
-// 	$r .= "<option value=\"cap\">Capitalize Marked Terms</option>";
-// 	$r .= "<option value=\"delsent\">Delete Sentences of Marked Terms</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"addtag\">Add Tag</option>";
-// 	$r .= "<option value=\"deltag\">Remove Tag</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"exp\">Export Marked Terms (Anki)</option>";
-// 	$r .= "<option value=\"exp2\">Export Marked Terms (TSV)</option>";
-// 	$r .= "<option value=\"exp3\">Export Marked Terms (Flexible)</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"del\">Delete Marked Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"test\">Test Marked Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"spl1\">Increase Status by 1 [+1]</option>";
+// 	$r += "<option value=\"smi1\">Reduce Status by 1 [-1]</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += get_set_status_option(1);
+// 	$r += get_set_status_option(5);
+// 	$r += get_set_status_option(99);
+// 	$r += get_set_status_option(98);
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"today\">Set Status Date to Today</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"lower\">Set Marked Terms to Lowercase</option>";
+// 	$r += "<option value=\"cap\">Capitalize Marked Terms</option>";
+// 	$r += "<option value=\"delsent\">Delete Sentences of Marked Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"addtag\">Add Tag</option>";
+// 	$r += "<option value=\"deltag\">Remove Tag</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"exp\">Export Marked Terms (Anki)</option>";
+// 	$r += "<option value=\"exp2\">Export Marked Terms (TSV)</option>";
+// 	$r += "<option value=\"exp3\">Export Marked Terms (Flexible)</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"del\">Delete Marked Terms</option>";
 // 	return $r;
 // }
 
@@ -1740,7 +1742,7 @@ export function confirmDelete(): boolean {
 // function get_multipletagsactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option value=\"del\">Delete Marked Tags</option>";
+// 	$r += "<option value=\"del\">Delete Marked Tags</option>";
 // 	return $r;
 // }
 
@@ -1749,31 +1751,31 @@ export function confirmDelete(): boolean {
 // function get_allwordsactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"testall\">Test ALL Terms</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"spl1all\">Increase Status by 1 [+1]</option>";
-// 	$r .= "<option value=\"smi1all\">Reduce Status by 1 [-1]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= get_set_status_option(1, "all");
-// 	$r .= get_set_status_option(5, "all");
-// 	$r .= get_set_status_option(99, "all");
-// 	$r .= get_set_status_option(98, "all");
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"todayall\">Set Status Date to Today</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"lowerall\">Set ALL Terms to Lowercase</option>";
-// 	$r .= "<option value=\"capall\">Capitalize ALL Terms</option>";
-// 	$r .= "<option value=\"delsentall\">Delete Sentences of ALL Terms</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"addtagall\">Add Tag</option>";
-// 	$r .= "<option value=\"deltagall\">Remove Tag</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"expall\">Export ALL Terms (Anki)</option>";
-// 	$r .= "<option value=\"expall2\">Export ALL Terms (TSV)</option>";
-// 	$r .= "<option value=\"expall3\">Export ALL Terms (Flexible)</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"delall\">Delete ALL Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"testall\">Test ALL Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"spl1all\">Increase Status by 1 [+1]</option>";
+// 	$r += "<option value=\"smi1all\">Reduce Status by 1 [-1]</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += get_set_status_option(1, "all");
+// 	$r += get_set_status_option(5, "all");
+// 	$r += get_set_status_option(99, "all");
+// 	$r += get_set_status_option(98, "all");
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"todayall\">Set Status Date to Today</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"lowerall\">Set ALL Terms to Lowercase</option>";
+// 	$r += "<option value=\"capall\">Capitalize ALL Terms</option>";
+// 	$r += "<option value=\"delsentall\">Delete Sentences of ALL Terms</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"addtagall\">Add Tag</option>";
+// 	$r += "<option value=\"deltagall\">Remove Tag</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"expall\">Export ALL Terms (Anki)</option>";
+// 	$r += "<option value=\"expall2\">Export ALL Terms (TSV)</option>";
+// 	$r += "<option value=\"expall3\">Export ALL Terms (Flexible)</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"delall\">Delete ALL Terms</option>";
 // 	return $r;
 // }
 
@@ -1782,7 +1784,7 @@ export function confirmDelete(): boolean {
 // function get_alltagsactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option value=\"delall\">Delete ALL Tags</option>";
+// 	$r += "<option value=\"delall\">Delete ALL Tags</option>";
 // 	return $r;
 // }
 
@@ -1791,18 +1793,18 @@ export function confirmDelete(): boolean {
 // function get_multipletextactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"test\">Test Marked Texts</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"addtag\">Add Tag</option>";
-// 	$r .= "<option value=\"deltag\">Remove Tag</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"rebuild\">Reparse Texts</option>";
-// 	$r .= "<option value=\"setsent\">Set Term Sentences</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"arch\">Archive Marked Texts</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"del\">Delete Marked Texts</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"test\">Test Marked Texts</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"addtag\">Add Tag</option>";
+// 	$r += "<option value=\"deltag\">Remove Tag</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"rebuild\">Reparse Texts</option>";
+// 	$r += "<option value=\"setsent\">Set Term Sentences</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"arch\">Archive Marked Texts</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"del\">Delete Marked Texts</option>";
 // 	return $r;
 // }
 
@@ -1811,13 +1813,13 @@ export function confirmDelete(): boolean {
 // function get_multiplearchivedtextactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"addtag\">Add Tag</option>";
-// 	$r .= "<option value=\"deltag\">Remove Tag</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"unarch\">Unarchive Marked Texts</option>";
-// 	$r .= "<option disabled=\"disabled\">------------</option>";
-// 	$r .= "<option value=\"del\">Delete Marked Texts</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"addtag\">Add Tag</option>";
+// 	$r += "<option value=\"deltag\">Remove Tag</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"unarch\">Unarchive Marked Texts</option>";
+// 	$r += "<option disabled=\"disabled\">------------</option>";
+// 	$r += "<option value=\"del\">Delete Marked Texts</option>";
 // 	return $r;
 // }
 
@@ -1835,14 +1837,14 @@ export function confirmDelete(): boolean {
 // 	else
 // 		$l = "and TxLgID=" . $lang;
 // 	$r = "<option value=\"\"" . get_selected($v, '');
-// 	$r .= ">[Filter off]</option>";
+// 	$r += ">[Filter off]</option>";
 // 	$sql = "select TxID, TxTitle, LgName from " . $tbpref . "languages, " . $tbpref . "texts where LgID = TxLgID " . $l . " order by LgName, TxTitle";
 // 	$res = do_mysqli_query($sql);
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		$d = $record["TxTitle"];
 // 		if (mb_strlen($d, 'UTF-8') > 30)
 // 			$d = mb_substr($d, 0, 30, 'UTF-8') . "...";
-// 		$r .= "<option value=\"" . $record["TxID"] . "\"" . get_selected($v, $record["TxID"]) . ">" . tohtml(($lang != "" ? "" : ($record["LgName"] . ": ")) . $d) . "</option>";
+// 		$r += "<option value=\"" . $record["TxID"] . "\"" . get_selected($v, $record["TxID"]) . ">" . tohtml(($lang != "" ? "" : ($record["LgName"] . ": ")) . $d) . "</option>";
 // 	}
 // 	mysqli_free_result($res);
 // 	return $r;
@@ -1946,7 +1948,7 @@ export function confirmDelete(): boolean {
 // 	$r = '';
 // 	foreach ($liste as $v) {
 // 		if ($v != -1)
-// 			$r .= ':not(.status' . $v . ')';
+// 			$r += ':not(.status' . $v . ')';
 // 	}
 // 	return $r;
 // }
@@ -1976,9 +1978,9 @@ export function confirmDelete(): boolean {
 // 		if (($pos2 - $pos - 3) > 1) { // 2 ### found
 // 			$enc = trim(substr($url, $pos + 3, $pos2 - $pos - 3));
 // 			$r = substr($url, 0, $pos);
-// 			$r .= urlencode(mb_convert_encoding($trm, $enc, 'UTF-8'));
+// 			$r += urlencode(mb_convert_encoding($trm, $enc, 'UTF-8'));
 // 			if (($pos2 + 3) < strlen($url))
-// 				$r .= substr($url, $pos2 + 3);
+// 				$r += substr($url, $pos2 + 3);
 // 		} elseif ($pos == $pos2) { // 1 ### found
 // 			$r = str_replace("###", ($trm == '' ? '+' : urlencode($trm)), $url);
 // 		}
@@ -2001,17 +2003,17 @@ export function confirmDelete(): boolean {
 // 	mysqli_free_result($res);
 // 	$r = '';
 // 	if ($openfirst) {
-// 		$r .= '<script type="text/javascript">';
-// 		$r .= "\n//<![CDATA[\n";
-// 		$r .= makeOpenDictStrJS(createTheDictLink($wb1, $word));
-// 		$r .= "//]]>\n</script>\n";
+// 		$r += '<script type="text/javascript">';
+// 		$r += "\n//<![CDATA[\n";
+// 		$r += makeOpenDictStrJS(createTheDictLink($wb1, $word));
+// 		$r += "//]]>\n</script>\n";
 // 	}
-// 	$r .= 'Lookup Term: ';
-// 	$r .= makeOpenDictStr(createTheDictLink($wb1, $word), "Dict1");
+// 	$r += 'Lookup Term: ';
+// 	$r += makeOpenDictStr(createTheDictLink($wb1, $word), "Dict1");
 // 	if ($wb2 != "")
-// 		$r .= makeOpenDictStr(createTheDictLink($wb2, $word), "Dict2");
+// 		$r += makeOpenDictStr(createTheDictLink($wb2, $word), "Dict2");
 // 	if ($wb3 != "")
-// 		$r .= makeOpenDictStr(createTheDictLink($wb3, $word), "GTr") . ' | Sent.: ' . makeOpenDictStrDynSent($wb3, $sentctljs, "GTr");
+// 		$r += makeOpenDictStr(createTheDictLink($wb3, $word), "GTr") . ' | Sent.: ' . makeOpenDictStrDynSent($wb3, $sentctljs, "GTr");
 // 	return $r;
 // }
 
@@ -2079,12 +2081,12 @@ export function confirmDelete(): boolean {
 // 		$wb3 = substr($wb3, 1);
 // 	mysqli_free_result($res);
 // 	$r = '';
-// 	$r .= 'Lookup Term: ';
-// 	$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb1) . ',' . $wordctljs . ');">Dict1</span> ';
+// 	$r += 'Lookup Term: ';
+// 	$r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb1) . ',' . $wordctljs . ');">Dict1</span> ';
 // 	if ($wb2 != "")
-// 		$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb2) . ',' . $wordctljs . ');">Dict2</span> ';
+// 		$r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb2) . ',' . $wordctljs . ');">Dict2</span> ';
 // 	if ($wb3 != "")
-// 		$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="translateSentence2(' . prepare_textdata_js($wb3) . ',' . $sentctljs . ');">GTr</span>';
+// 		$r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="translateSentence2(' . prepare_textdata_js($wb3) . ',' . $sentctljs . ');">GTr</span>';
 // 	return $r;
 // }
 
@@ -2107,12 +2109,12 @@ export function confirmDelete(): boolean {
 // 		$wb3 = substr($wb3, 1);
 // 	mysqli_free_result($res);
 // 	$r = '<span class="smaller">';
-// 	$r .= '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb1) . ',' . $wordctljs . ');">[1]</span> ';
+// 	$r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb1) . ',' . $wordctljs . ');">[1]</span> ';
 // 	if ($wb2 != "")
-// 		$r .= '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb2) . ',' . $wordctljs . ');">[2]</span> ';
+// 		$r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb2) . ',' . $wordctljs . ');">[2]</span> ';
 // 	if ($wb3 != "")
-// 		$r .= '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">[G]</span>';
-// 	$r .= '</span>';
+// 		$r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">[G]</span>';
+// 	$r += '</span>';
 // 	return $r;
 // }
 
@@ -2148,12 +2150,12 @@ export function confirmDelete(): boolean {
 
 // 	mysqli_free_result($res);
 // 	$r = '';
-// 	$r .= 'Lookup Term: ';
-// 	$r .= '<span class="click" onclick="' . $f1 . ',' . $wordctljs . ');">Dict1</span> ';
+// 	$r += 'Lookup Term: ';
+// 	$r += '<span class="click" onclick="' . $f1 . ',' . $wordctljs . ');">Dict1</span> ';
 // 	if ($wb2 != "")
-// 		$r .= '<span class="click" onclick="' . $f2 . ',' . $wordctljs . ');">Dict2</span> ';
+// 		$r += '<span class="click" onclick="' . $f2 . ',' . $wordctljs . ');">Dict2</span> ';
 // 	if ($wb3 != "")
-// 		$r .= '<span class="click" onclick="' . $f3 . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="' . $f4 . ',' . $sentctljs . ');">GTr</span>';
+// 		$r += '<span class="click" onclick="' . $f3 . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="' . $f4 . ',' . $sentctljs . ');">GTr</span>';
 // 	return $r;
 // }
 
@@ -2179,9 +2181,9 @@ export function confirmDelete(): boolean {
 // 	for ($i = 0; $i < strlen($string); $i++) {
 // 		$h = dechex(ord($string[$i]));
 // 		if (strlen($h) == 1)
-// 			$hex .= "0" . $h;
+// 			$hex += "0" . $h;
 // 		else
-// 			$hex .= $h;
+// 			$hex += $h;
 // 	}
 // 	return strtoupper($hex);
 // }
@@ -2202,9 +2204,9 @@ export function confirmDelete(): boolean {
 // 			($o > 90 && $o < 97) ||
 // 			($o > 122 && $o < 165)
 // 		)
-// 			$r .= '¤' . strToHex($c);
+// 			$r += '¤' . strToHex($c);
 // 		else
-// 			$r .= $c;
+// 			$r += $c;
 // 	}
 // 	return $r;
 // }
@@ -2229,7 +2231,7 @@ export function confirmDelete(): boolean {
 // 		)
 // 		);
 // 		$sent2 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">', str_replace("}", '</span>', $sent));
-// 		$x .= $span1 . tohtml(repl_tab_nl($record["WoText"])) . $span2 . "\t" .
+// 		$x += $span1 . tohtml(repl_tab_nl($record["WoText"])) . $span2 . "\t" .
 // 			tohtml(repl_tab_nl($record["WoTranslation"])) . "\t" .
 // 			tohtml(repl_tab_nl($record["WoRomanization"])) . "\t" .
 // 			$span1 . $sent1 . $span2 . "\t" .
@@ -2254,7 +2256,7 @@ export function confirmDelete(): boolean {
 // 	$res = do_mysqli_query($sql);
 // 	$x = '';
 // 	while ($record = mysqli_fetch_assoc($res)) {
-// 		$x .= repl_tab_nl($record["WoText"]) . "\t" .
+// 		$x += repl_tab_nl($record["WoText"]) . "\t" .
 // 			repl_tab_nl($record["WoTranslation"]) . "\t" .
 // 			repl_tab_nl($record["WoSentence"]) . "\t" .
 // 			repl_tab_nl($record["WoRomanization"]) . "\t" .
@@ -2325,7 +2327,7 @@ export function confirmDelete(): boolean {
 // 			$xx = str_replace('\\n', "\n", $xx);
 // 			$xx = str_replace('\\r', "\r", $xx);
 // 			$xx = str_replace('\\\\', '\\', $xx);
-// 			$x .= $xx;
+// 			$x += $xx;
 // 		}
 // 	}
 // 	mysqli_free_result($res);
@@ -2350,11 +2352,11 @@ export function confirmDelete(): boolean {
 // 		}
 // 		if ($c == '{') {
 // 			$on = 1;
-// 			$r .= '[...]';
+// 			$r += '[...]';
 // 			continue;
 // 		}
 // 		if ($on == 0) {
-// 			$r .= $c;
+// 			$r += $c;
 // 		}
 // 	}
 // 	return $r;
@@ -2383,12 +2385,12 @@ export function confirmDelete(): boolean {
 // 			$on = 0;
 // 		if ($on) {
 // 			if (preg_match('/[' . $regexword . ']/u', $c)) {
-// 				$r .= '•';
+// 				$r += '•';
 // 			} else {
-// 				$r .= $c;
+// 				$r += $c;
 // 			}
 // 		} else {
-// 			$r .= $c;
+// 			$r += $c;
 // 		}
 // 		if ($c == '{')
 // 			$on = 1;
@@ -2449,11 +2451,11 @@ export function confirmDelete(): boolean {
 // 	if ($mode > 1) {
 // 		$prevseid = get_first_value('select SeID as value from ' . $tbpref . 'sentences where SeID < ' . $seid . ' and SeTxID = ' . $txtid . " and trim(SeText) not in ('¶','') order by SeID desc");
 // 		if (isset($prevseid))
-// 			$seidlist .= ',' . $prevseid;
+// 			$seidlist += ',' . $prevseid;
 // 		if ($mode > 2) {
 // 			$nextseid = get_first_value('select SeID as value from ' . $tbpref . 'sentences where SeID > ' . $seid . ' and SeTxID = ' . $txtid . " and trim(SeText) not in ('¶','') order by SeID asc");
 // 			if (isset($nextseid))
-// 				$seidlist .= ',' . $nextseid;
+// 				$seidlist += ',' . $nextseid;
 // 		}
 // 	}
 // 	$sql2 = 'SELECT TiText, TiTextLC, TiWordCount, TiIsNotWord FROM ' . $tbpref . 'textitems WHERE TiSeID in (' . $seidlist . ') and TiTxID=' . $txtid . ' order by TiOrder asc, TiWordCount desc';
@@ -2466,27 +2468,27 @@ export function confirmDelete(): boolean {
 // 		if ($record2['TiIsNotWord'] == 1) {
 // 			$jump--;
 // 			if ($jump < 0) {
-// 				$sejs .= $record2['TiText'];
-// 				$se .= tohtml($record2['TiText']);
+// 				$sejs += $record2['TiText'];
+// 				$se += tohtml($record2['TiText']);
 // 			}
 // 		} else {
 // 			if (($jump - 1) < 0) {
 // 				if ($notfound) {
 // 					if ($record2['TiTextLC'] == $wordlc) {
-// 						$sejs .= '{';
-// 						$se .= '<b>';
-// 						$sejs .= $record2['TiText'];
-// 						$se .= tohtml($record2['TiText']);
-// 						$sejs .= '}';
-// 						$se .= '</b>';
+// 						$sejs += '{';
+// 						$se += '<b>';
+// 						$sejs += $record2['TiText'];
+// 						$se += tohtml($record2['TiText']);
+// 						$sejs += '}';
+// 						$se += '</b>';
 // 						$notfound = 0;
 // 						$jump = ($record2['TiWordCount'] - 1) * 2;
 // 					}
 // 				}
 // 				if ($record2['TiWordCount'] == 1) {
 // 					if ($notfound) {
-// 						$sejs .= $record2['TiText'];
-// 						$se .= tohtml($record2['TiText']);
+// 						$sejs += $record2['TiText'];
+// 						$se += tohtml($record2['TiText']);
 // 						$jump = 0;
 // 					} else {
 // 						$notfound = 1;
@@ -2511,17 +2513,17 @@ export function confirmDelete(): boolean {
 // 	$r = '<p><b>Sentences in active texts with <i>' . tohtml($wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
 // 	$sql = 'SELECT DISTINCT SeID, SeText FROM ' . $tbpref . 'sentences, ' . $tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax($wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . $lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
 // 	$res = do_mysqli_query($sql);
-// 	$r .= '<p>';
+// 	$r += '<p>';
 // 	$last = '';
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		if ($last != $record['SeText']) {
 // 			$sent = getSentence($record['SeID'], $wordlc, $mode);
-// 			$r .= '<span class="click" onclick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . $sent[0] . '<br />';
+// 			$r += '<span class="click" onclick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . $sent[0] . '<br />';
 // 		}
 // 		$last = $record['SeText'];
 // 	}
 // 	mysqli_free_result($res);
-// 	$r .= '</p>';
+// 	$r += '</p>';
 // 	return $r;
 // }
 
@@ -2743,7 +2745,7 @@ export function confirmDelete(): boolean {
 // 	}
 // 	$s = preg_replace('/\s{2,}/u', ' ', $s);
 // 	if ($id == -1)
-// 		$r .= "<div style=\"margin-right:50px;\"><h4>Text</h4><p " . ($rtlScript ? 'dir="rtl"' : '') . ">" . str_replace("¶", "<br /><br />", tohtml($s)) . "</p>";
+// 		$r += "<div style=\"margin-right:50px;\"><h4>Text</h4><p " . ($rtlScript ? 'dir="rtl"' : '') . ">" . str_replace("¶", "<br /><br />", tohtml($s)) . "</p>";
 
 // 	$s = str_replace('{', '[', $s); // because of sent. spc. char
 // 	$s = str_replace('}', ']', $s);
@@ -2771,7 +2773,7 @@ export function confirmDelete(): boolean {
 // 			if ($s[$i] != '') {
 // 				$pos = strpos($splitSentence, $s[$i]);
 // 				while ($pos !== false && $i > 0) {
-// 					$s[$i - 1] .= " " . $s[$i];
+// 					$s[$i - 1] += " " . $s[$i];
 // 					for ($j = $i + 1; $j < $l; $j++)
 // 						$s[$j - 1] = $s[$j];
 // 					array_pop($s);
@@ -2807,10 +2809,10 @@ export function confirmDelete(): boolean {
 
 // 		$wordList = array();
 // 		$wordSeps = array();
-// 		$r .= "<h4>Sentences</h4><ol>";
+// 		$r += "<h4>Sentences</h4><ol>";
 // 		$sentNumber = 0;
 // 		foreach ($textLines as $value) {
-// 			$r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces($value, $removeSpaces)) . "</li>";
+// 			$r += "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces($value, $removeSpaces)) . "</li>";
 // 			$lineWords[$sentNumber] = preg_split('/([^' . $termchar . ']{1,})/u', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
 // 			$l = count($lineWords[$sentNumber]);
 // 			for ($i = 0; $i < $l; $i++) {
@@ -2834,7 +2836,7 @@ export function confirmDelete(): boolean {
 // 			}
 // 			$sentNumber += 1;
 // 		}
-// 		$r .= "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
+// 		$r += "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
 // 		ksort($wordList);
 // 		$anz = 0;
 // 		foreach ($wordList as $key => $value) {
@@ -2844,21 +2846,21 @@ export function confirmDelete(): boolean {
 // 			if ($trans == "*")
 // 				$trans = "";
 // 			if ($trans != "")
-// 				$r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml($key) . "] — " . $value[0] . " - " . tohtml(repl_tab_nl($trans)) . "</span></li>";
+// 				$r += "<li " . ($rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml($key) . "] — " . $value[0] . " - " . tohtml(repl_tab_nl($trans)) . "</span></li>";
 // 			else
-// 				$r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml($key) . "] — " . $value[0] . "</li>";
+// 				$r += "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml($key) . "] — " . $value[0] . "</li>";
 // 			$anz++;
 // 		}
-// 		$r .= "</ul><p>TOTAL: " . $anz . "</p><h4>Non-Word List</h4><ul>";
+// 		$r += "</ul><p>TOTAL: " . $anz . "</p><h4>Non-Word List</h4><ul>";
 // 		if (array_key_exists('', $wordSeps))
 // 			unset($wordSeps['']);
 // 		ksort($wordSeps);
 // 		$anz = 0;
 // 		foreach ($wordSeps as $key => $value) {
-// 			$r .= "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml($key)) . "] — " . $value . "</li>";
+// 			$r += "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml($key)) . "] — " . $value . "</li>";
 // 			$anz++;
 // 		}
-// 		$r .= "</ul><p>TOTAL: " . $anz . "</p></div>";
+// 		$r += "</ul><p>TOTAL: " . $anz . "</p></div>";
 // 		return $r;
 // 	}
 
@@ -2901,7 +2903,7 @@ export function confirmDelete(): boolean {
 // 					$cnt = 0;
 // 					for ($j = $i + 1; $j < $l; $j++) {
 // 						if ($lineWords[$sentNumber][$j] != '') {
-// 							$rest .= $lineWords[$sentNumber][$j];
+// 							$rest += $lineWords[$sentNumber][$j];
 // 							$cnt++;
 // 							if ($cnt == 2) {
 // 								$rest2 = $rest;
@@ -2945,25 +2947,25 @@ export function confirmDelete(): boolean {
 // 				$lfdnr++;
 // 				$lfdnr1++;
 // 				if ($lfdnr1 > 1)
-// 					$sqltext .= ',';
-// 				$sqltext .= '(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 1, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($lineWords[$sentNumber][$i], $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($term, $removeSpaces)) . ',' . $isnotwort . ')';
+// 					$sqltext += ',';
+// 				$sqltext += '(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 1, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($lineWords[$sentNumber][$i], $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($term, $removeSpaces)) . ',' . $isnotwort . ')';
 // 				if ($isnotwort == 0) {
 // 					if ($rest2 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 2, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest2, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc2, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 2, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest2, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc2, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest3 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 3, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest3, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc3, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 3, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest3, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc3, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest4 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 4, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest4, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc4, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 4, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest4, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc4, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest5 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 5, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest5, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc5, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 5, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest5, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc5, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest6 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 6, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest6, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc6, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 6, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest6, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc6, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest7 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 7, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest7, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc7, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 7, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest7, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc7, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest8 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 8, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest8, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc8, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 8, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest8, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc8, $removeSpaces)) . ',' . $isnotwort . ')';
 // 					if ($rest9 != '')
-// 						$sqltext .= ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 9, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest9, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc9, $removeSpaces)) . ',' . $isnotwort . ')';
+// 						$sqltext += ',(' . $lid . ',' . $id . ',' . $sentid . ',' . $lfdnr . ', 9, ' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($rest9, $removeSpaces)) . ',' . convert_string_to_sqlsyntax_notrim_nonull(remove_spaces($restlc9, $removeSpaces)) . ',' . $isnotwort . ')';
 // 				}
 // 			}
 // 		}
@@ -3070,7 +3072,7 @@ export function confirmDelete(): boolean {
 // 		if ($newvals[0] > -1) {
 // 			$key = $newvals[0] . "\t";
 // 			if (isset($newvals[1]))
-// 				$key .= $newvals[1];
+// 				$key += $newvals[1];
 // 			if (array_key_exists($key, $oldtrans)) {
 // 				$newvals[3] = $oldtrans[$key];
 // 			}
@@ -3078,7 +3080,7 @@ export function confirmDelete(): boolean {
 // 		} else {
 // 			$item = $newitem;
 // 		}
-// 		$ann .= $item . "\n";
+// 		$ann += $item . "\n";
 // 	}
 // 	$dummy = runsql('update ' . $tbpref . 'texts set ' .
 // 		'TxAnnotatedText = ' . convert_string_to_sqlsyntax($ann) . ' where TxID = ' . $textid, "");
@@ -3125,7 +3127,7 @@ export function confirmDelete(): boolean {
 // 		}
 // 	} // while
 // 	mysqli_free_result($res);
-// 	$ann .= process_term($savenonterm, $saveterm, $savetrans, $savewordid, $order);
+// 	$ann += process_term($savenonterm, $saveterm, $savetrans, $savewordid, $order);
 // 	return $ann;
 // }
 
@@ -3488,9 +3490,9 @@ export function confirmDelete(): boolean {
 // 	$inlist = '(';
 // 	while ($record = mysqli_fetch_assoc($res)) {
 // 		if ($inlist == '(')
-// 			$inlist .= $record['TiSeID'];
+// 			$inlist += $record['TiSeID'];
 // 		else
-// 			$inlist .= ',' . $record['TiSeID'];
+// 			$inlist += ',' . $record['TiSeID'];
 // 	}
 // 	mysqli_free_result($res);
 // 	if ($inlist == '(')
@@ -3521,19 +3523,19 @@ export function confirmDelete(): boolean {
 // 		}
 
 // 		if ($notword != 0) { // NOT A TERM
-// 			$out .= "$('#" . $spanid . "',context)." . $hidetag . "\n";
+// 			$out += "$('#" . $spanid . "',context)." . $hidetag . "\n";
 // 		} else { // A TERM
 // 			if ($actcode > 1) { // A MULTIWORD FOUND
 // 				if ($termex) { // MULTIWORD FOUND - DISPLAY
 // 					if ($hideuntil == -1)
 // 						$hideuntil = $order + ($actcode - 1) * 2;
-// 					$out .= "$('#" . $spanid . "',context)." . $hidetag . "\n";
+// 					$out += "$('#" . $spanid . "',context)." . $hidetag . "\n";
 // 				} else { // MULTIWORD PLACEHOLDER - NO DISPLAY
-// 					$out .= "$('#" . $spanid . "',context).addClass('hide');\n";
+// 					$out += "$('#" . $spanid . "',context).addClass('hide');\n";
 // 				}
 // 			} // ($actcode > 1) -- A MULTIWORD FOUND
 // 			else { // ($actcode == 1)  -- A WORD FOUND
-// 				$out .= "$('#" . $spanid . "',context)." . $hidetag . "\n";
+// 				$out += "$('#" . $spanid . "',context)." . $hidetag . "\n";
 // 			}
 // 		}
 // 	} //  MAIN LOOP
@@ -3759,7 +3761,7 @@ export function confirmDelete(): boolean {
 // // *******************************************************************
 // // IF PREFIX IS NOT '', THEN ADD A '_', TO ENSURE NO IDENTICAL NAMES
 // if ($tbpref !== '')
-// 	$tbpref .= "_";
+// 	$tbpref += "_";
 // // *******************************************************************
 
 // // check/update db
@@ -3785,6 +3787,7 @@ export function multiActionGo(
             '*** ' +
               t +
               ' ***\n\n*** ' +
+              // TODO
               $('input.markcheck:checked').length +
               ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
             answer
@@ -3832,4 +3835,83 @@ export function multiActionGo(
     }
     sel.value = '';
   }
+}
+
+export function splitCheckText(text: string, language: Languages, id) {
+  const {
+    LgRemoveSpaces: removeSpaces,
+    LgSplitEachChar: splitEachChar,
+    LgRegexpSplitSentences: splitSentence,
+    LgExceptionsSplitSentences: noSentenceEnd,
+    LgRegexpWordCharacters: termchar,
+    LgRightToLeft: rtlScript,
+    LgCharacterSubstitutions,
+  } = language;
+  // list of 'A=B' equations
+  const replace = LgCharacterSubstitutions.split('|');
+  let s = text
+    .replace('\r\n', '\n')
+    .replace('\n', ' ¶ ')
+    .replace('\t', ' ')
+    .trim();
+  if (splitEachChar) {
+    // add space after anything not a space
+    s = s.replace(/([^\s])/u, '$1 ');
+  }
+  // replace any multiple spaces with single space
+  s = s.replace(/\s{2,}/u, ' ');
+  // TODO r here
+  s = s.replace('{', '[').replace('}', ']');
+  replace.forEach((repEquation) => {
+    const repChars = repEquation.split('=');
+    if (repChars.length >= 2) {
+      s = s.replace(repChars[0].trim(), repChars[1].trim());
+    }
+  });
+
+  s = s.trim();
+
+  if (noSentenceEnd !== '') {
+    const reNoSplit = new RegExp(`/(${noSentenceEnd})\\s`, 'g');
+    s = s.replace(reNoSplit, '$1-');
+  }
+  const reSplitSentence = new RegExp(`([${splitSentence}¶])`, 'g');
+  s = s
+    // \n seems to be used as an intermediate char here?
+    .replace(reSplitSentence, '$1\n')
+    .replace(' ¶\n', '\n¶\n')
+    .replace('‧', ' ')
+    .trim();
+  const sArray = s.split('\n').map((sent) => sent.trim());
+  // .filter((val) => val !== '');
+  const l = sArray.length;
+  sArray.map((val) => {
+    const pos = val.indexOf(splitSentence);
+    // go through each paragraph, step through until asentence splitter is found
+    const cleanedVal = val.trim();
+  });
+  if (id === -2) {
+    return sArray;
+  }
+  if (id === -1) {
+    // const wordSeps = [];
+    const parsedList: { text: string; isTerm: boolean }[] = [];
+
+    const reTermMatch = new RegExp(`([^${termchar}]{1,})`, 'g');
+    const wordList = sArray
+      .map((val) => {
+        return val
+          .split(reTermMatch)
+          .filter((term) => term !== '')
+          .map((term) => {
+            return { isTerm: !reTermMatch.test(term), text: term.trim() };
+          });
+      })
+      .flat();
+
+    // wordList.forEach();
+    return wordList;
+  }
+  console.log('REPARSE', s);
+  return s;
 }

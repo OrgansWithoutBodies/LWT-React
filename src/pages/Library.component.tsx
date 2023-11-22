@@ -11,7 +11,13 @@ import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
 import { Header } from './Header';
 
-export function TextMultiActions() {
+export function TextMultiActions({
+  onSelectAll,
+  onSelectNone,
+}: {
+  onSelectAll: () => void;
+  onSelectNone: () => void;
+}) {
   return (
     <>
       <form
@@ -30,12 +36,8 @@ export function TextMultiActions() {
             </tr>
             <tr>
               <td className="td1 center">
-                <input type="button" value="Mark All" />
-                {/* TODO */}
-                {/* onClick="selectToggle(true,'form2');" */}
-                <input type="button" value="Mark None" />
-                {/* TODO */}
-                {/* onClick="selectToggle(false,'form2');" */}
+                <input type="button" value="Mark All" onClick={onSelectAll} />
+                <input type="button" value="Mark None" onClick={onSelectNone} />
               </td>
               <td className="td1 center">
                 Marked Texts
@@ -131,13 +133,57 @@ function LibraryFooter({
               <Icon src="placeholder" alt="-" />
               <Pager currentPage={currentPage} numPages={numPages} />
             </th>
+            <th style={{ whiteSpace: 'nowrap' }} className="th1">
+              &nbsp; &nbsp;
+              <Icon src="placeholder" alt="-" />
+              <Icon src="placeholder" alt="-" />
+              <ResizePage
+                pageSize={15}
+                onPageResize={function (newSize: number): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </th>
           </tr>
         </tbody>
       </table>
     </>
   );
 }
-function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
+function ResizePage({
+  pageSize,
+  onPageResize,
+}: {
+  pageSize: number;
+  onPageResize: (newSize: number) => void;
+}) {
+  const numberOptions = 15;
+  const options = new Array(numberOptions).fill(0).map((_, ii) => (ii + 1) * 5);
+  return (
+    <>
+      #/Page:{' '}
+      <select
+        value={pageSize}
+        onChange={(val) => onPageResize(Number.parseInt(val))}
+      >
+        {options.map((val) => {
+          return <option value={val}>{val}</option>;
+        })}
+      </select>
+    </>
+  );
+}
+
+function LibraryRow({
+  text,
+  isSelected,
+  toggleSelect,
+}: {
+  text: TextDetailRow;
+  isSelected: boolean;
+  toggleSelect: () => void;
+}): JSX.Element {
+  console.log('LIBRARYROW', text);
   return (
     <tr>
       <td className="td1 center">
@@ -147,6 +193,8 @@ function LibraryRow({ text }: { text: TextDetailRow }): JSX.Element {
             name="marked[]"
             className="markcheck"
             type="checkbox"
+            checked={isSelected}
+            onChange={() => toggleSelect()}
             value="2"
           />
         </A>
@@ -217,9 +265,10 @@ export function Library({
   filterTag1: number | null;
   filterTag2: number | null;
 }) {
-  const [{ textDetails, activeLanguage, tags2 }] = useData([
+  const [{ textDetails, activeLanguage, texttags, tags2 }] = useData([
     'textDetails',
     'activeLanguage',
+    'texttags',
     'tags2',
   ]);
   const pageSize = 15;
@@ -232,7 +281,7 @@ export function Library({
   const navigator = useInternalNavigate();
   const queryRef = useRef<HTMLInputElement | undefined>();
   // TODO
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTexts, setSelectedTexts] = useState<Set<TextsId>>(new Set());
 
   return (
     <>
@@ -277,8 +326,13 @@ export function Library({
               {/* onChange="{setLang(document.form1.filterlang,'edit_texts.php');}" */}
               {/* name="filterlang" */}
               <LanguageDropdown
+                header="Filter off"
                 onChange={(val) => {
-                  dataService.setActiveLanguage(val);
+                  if (val === -1) {
+                    dataService.setActiveLanguage(null);
+                  } else {
+                    dataService.setActiveLanguage(val);
+                  }
                 }}
                 defaultValue={activeLanguage?.LgID}
               />
@@ -327,18 +381,55 @@ export function Library({
               <select
                 defaultValue={filterTag1 !== null ? filterTag1 : undefined}
                 name="tag1"
-                onChange={(val) => {
-                  navigator(`/edit_texts?tag1=${val.target.value}`);
+                onChange={({ target: { value } }) => {
+                  paramUpdater({ tag1: value });
                 }}
               >
                 <option value="">[Filter off]</option>
-                {tags2
+                {/* ----------------------------------------------
+
+function get_texttag_selectoptions($v, $l)
+{
+	global $tbpref;
+	if (!isset($v))
+		$v = '';
+	$r = "<option value=\"\"" . get_selected($v, '');
+	$r .= ">[Filter off]</option>";
+	if ($l == '')
+		$sql = "select T2ID, T2Text from " . $tbpref . "texts, " . $tbpref . "tags2, " . $tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text";
+	else
+		$sql = "select T2ID, T2Text from " . $tbpref . "texts, " . $tbpref . "tags2, " . $tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID and TxLgID = " . $l . " group by T2ID order by T2Text";
+	$res = do_mysqli_query($sql);
+	$cnt = 0;
+	while ($record = mysqli_fetch_assoc($res)) {
+		$d = $record["T2Text"];
+		$cnt++;
+		$r .= "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
+	}
+	mysqli_free_result($res);
+	if ($cnt > 0) {
+		$r .= "<option disabled=\"disabled\">--------</option>";
+		$r .= "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
+	}
+	return $r;
+}
+ */}
+                {texttags
                   .filter((tag) => {
                     console.log(tag);
                     return true;
                   })
                   .map((tag) => {
-                    return <option value={tag.T2ID}> {tag.T2Text}</option>;
+                    return (
+                      <option value={tag.TtTxID}>
+                        {' '}
+                        {
+                          tags2.find(({ T2ID }) => {
+                            return tag.TtT2ID === T2ID;
+                          })?.T2Text
+                        }
+                      </option>
+                    );
                   })}
                 <option disabled>--------</option>
                 <option
@@ -354,7 +445,10 @@ export function Library({
               <select
                 name="tag12"
                 // TODO
-                onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag12=' + val;}"
+                // onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag12=' + val;}"
+                onChange={({ target: { value } }) => {
+                  paramUpdater({ tag12: value });
+                }}
               >
                 {/* TODO */}
                 {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
@@ -366,12 +460,12 @@ export function Library({
               <select
                 defaultValue={filterTag2 !== null ? filterTag2 : undefined}
                 name="tag2"
-                onChange={(val) => {
-                  navigator(`/edit_texts?tag2=${val.target.value}`);
+                onChange={({ target: { value } }) => {
+                  paramUpdater({ tag2: value });
                 }}
               >
-                <option value="">[Filter off]</option>
-                {tags2
+                <option value="-1">[Filter off]</option>
+                {texttags
                   .filter((tag) => {
                     console.log(tag);
                     return true;
@@ -418,15 +512,36 @@ export function Library({
         </table>
       </form>
 
-      <TextMultiActions />
-      {activeLanguage && (
+      <TextMultiActions
+        onSelectAll={() =>
+          setSelectedTexts(new Set(textDetails.map((text) => text.TxID)))
+        }
+        onSelectNone={() => setSelectedTexts(new Set())}
+      />
+      {
         <>
           <table className="sortable tab1">
             <LibraryHeader />
             <tbody>
               {dataOnPage &&
                 dataOnPage.map((text) => {
-                  return <LibraryRow text={text} />;
+                  const isSelected = selectedTexts.has(text.TxID);
+                  return (
+                    <LibraryRow
+                      isSelected={isSelected}
+                      text={text}
+                      toggleSelect={() => {
+                        if (!isSelected) {
+                          return setSelectedTexts(
+                            new Set([...selectedTexts, text.TxID])
+                          );
+                        }
+                        const setToRemove = new Set([...selectedTexts]);
+                        setToRemove.delete(text.TxID);
+                        setSelectedTexts(setToRemove);
+                      }}
+                    />
+                  );
                 })}
             </tbody>
           </table>
@@ -436,7 +551,7 @@ export function Library({
             numPages={numPages}
           />
         </>
-      )}
+      }
     </>
   );
 }

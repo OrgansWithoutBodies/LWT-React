@@ -9,7 +9,6 @@ import { AppVariables } from './meta';
 import { LandingPage } from './pages/LandingPage.component';
 
 import React from 'react';
-import { UploadWords } from './UploadWords.component';
 import { dataService } from './data/data.service';
 import { useData } from './data/useAkita';
 import { TextsId } from './data/validators';
@@ -18,7 +17,7 @@ import { BackupScreen } from './pages/Backups.component';
 import { CheckText } from './pages/CheckText';
 import { EditArchivedTexts } from './pages/EditArchived.component';
 import { EditLanguage } from './pages/EditLanguage.component';
-import { DisplayTags, NewTag } from './pages/EditTags';
+import { DisplayTags, EditTag, NewTag } from './pages/EditTags';
 import { DisplayTextTags, EditTextTag, NewTextTag } from './pages/EditTextTags';
 import { InfoPage } from './pages/Info';
 import { LanguagesPage } from './pages/Languages.component';
@@ -31,6 +30,7 @@ import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { ChangeTerm, Terms } from './pages/Terms.component';
 import { ImportShortText } from './pages/TextImport';
+import { UploadWords } from './pages/UploadWords.component';
 import { createColors } from './styles';
 import { AppContext, useAppContext } from './useContext';
 
@@ -43,10 +43,14 @@ function GlobalStyle(): JSX.Element {
 
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
-
+  const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
+(12/12 tables dropped/created, 355 records added), 0 failed.`;
   return (
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
+      <p id="hide3" className="msgblue" style={{ display: 'none' }}>
+        +++ {notifyMessage} +++
+      </p>
       <Router>
         {/* 
 all_words_wellknown
@@ -64,6 +68,7 @@ do_text_text
 do_text
 edit_archivedtexts
 edit_languages
+// TODO
 edit_mword
 edit_tword
 edit_word
@@ -71,6 +76,7 @@ glosbe_api
 inline_edit
 insert_word_ignore
 insert_word_wellknown
+// TODO
 install_demo 
 long_text_import
 mobile
@@ -149,23 +155,41 @@ function TermsWrapper() {
   // TODO just set active lang here?
   const filterlang = searchParams.get('filterlang');
 
+  const isNew = searchParams.get('new') === '1';
+  const lang = searchParams.get('lang');
+  // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
+  if (filterlang === '') {
+    if (activeLanguageId !== null) {
+      console.log('FILTER', filterlang, activeLanguageId);
+      dataService.setActiveLanguage(null);
+    }
+  } else if (
+    filterlang !== null &&
+    Number.parseInt(filterlang) !== activeLanguageId
+  ) {
+    dataService.setActiveLanguage(Number.parseInt(filterlang));
+  }
   return (
-    <Switch on={chgID !== null}>
-      <Terms
-        filterlang={
-          filterlang !== null ? Number.parseInt(filterlang) : activeLanguageId
-        }
-        pageNum={page !== null ? Number.parseInt(page) : 1}
-        sort={sort ? Number.parseInt(sort) : null}
-        status={status ? Number.parseInt(status) : null}
-        textFilter={0}
-      />
-      <ChangeTerm chgID={Number.parseInt(chgID)} />
-      {/* <Terms
+    <Switch on={isNew}>
+      <Switch on={chgID !== null}>
+        <Terms
+          filterlang={activeLanguageId}
+          pageNum={page !== null ? Number.parseInt(page) : 1}
+          sort={sort ? Number.parseInt(sort) : null}
+          status={status ? Number.parseInt(status) : null}
+          textFilter={0}
+          tag1={null}
+          tag12={0}
+          tag2={null}
+        />
+        <ChangeTerm chgID={Number.parseInt(chgID)} />
+        {/* <Terms
         pageNum={0}
         sort={Number.parseInt(sort)}
         status={Number.parseInt(status)}
       /> */}
+      </Switch>
+      <AddNewWord langId={Number.parseInt(lang)} />
     </Switch>
   );
 }
@@ -216,7 +240,7 @@ function LibraryWrapper() {
   const archID = searchParams.get('arch');
   const page = searchParams.get('page');
   const query = searchParams.get('query');
-  const refreshID = searchParams.get('refresh');
+  // const refreshID = searchParams.get('refresh');
   const filterTag1 = searchParams.get('tag1');
   const filterTag2 = searchParams.get('tag2');
   const isNew = searchParams.get('new') === '1';
@@ -226,9 +250,9 @@ function LibraryWrapper() {
   if (archID !== null) {
     dataService.archiveText(Number.parseInt(archID) as TextsId);
   }
-  if (refreshID !== null) {
-    dataService.reparseText(Number.parseInt(refreshID) as TextsId);
-  }
+  // if (refreshID !== null) {
+  //   dataService.reparseText(Number.parseInt(refreshID) as TextsId);
+  // }
   console.log('new', isNew);
   return (
     <Switch on={isNew}>
@@ -245,6 +269,65 @@ function LibraryWrapper() {
     </Switch>
   );
 }
+{
+  /* <p><input type="button" value="&lt;&lt; Back" onclick="history.back();" /></p> */
+}
+// op === 'check';
+// $wordList = array();
+// $wordSeps = array();
+// $r .= "<h4>Sentences</h4><ol>";
+// $sentNumber = 0;
+// foreach ($textLines as $value) {
+//   $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces($value, $removeSpaces)) . "</li>";
+//   $lineWords[$sentNumber] = preg_split('/([^' . $termchar . ']{1,})/u', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+//   $l = count($lineWords[$sentNumber]);
+//   for ($i = 0; $i < $l; $i++) {
+//     $term = mb_strtolower($lineWords[$sentNumber][$i], 'UTF-8');
+//     if ($term != '') {
+//       if ($i % 2 == 0) {
+//         if (array_key_exists($term, $wordList)) {
+//           $wordList[$term][0]++;
+//           $wordList[$term][1][] = $sentNumber;
+//         } else {
+//           $wordList[$term] = array(1, array($sentNumber));
+//         }
+//       } else {
+//         $ww = remove_spaces($term, $removeSpaces);
+//         if (array_key_exists($ww, $wordSeps))
+//           $wordSeps[$ww]++;
+//         else
+//           $wordSeps[$ww] = 1;
+//       }
+//     }
+//   }
+//   $sentNumber += 1;
+// }
+// $r .= "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
+// ksort($wordList);
+// $anz = 0;
+// foreach ($wordList as $key => $value) {
+//   $trans = get_first_value("select WoTranslation as value from " . $tbpref . "words where WoLgID = " . $lid . " and WoTextLC = " . convert_string_to_sqlsyntax($key));
+//   if (!isset($trans))
+//     $trans = "";
+//   if ($trans == "*")
+//     $trans = "";
+//   if ($trans != "")
+//     $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml($key) . "] — " . $value[0] . " - " . tohtml(repl_tab_nl($trans)) . "</span></li>";
+//   else
+//     $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml($key) . "] — " . $value[0] . "</li>";
+//   $anz++;
+// }
+// $r .= "</ul><p>TOTAL: " . $anz . "</p><h4>Non-Word List</h4><ul>";
+// if (array_key_exists('', $wordSeps))
+//   unset($wordSeps['']);
+// ksort($wordSeps);
+// $anz = 0;
+// foreach ($wordSeps as $key => $value) {
+//   $r .= "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml($key)) . "] — " . $value . "</li>";
+//   $anz++;
+// }
+// $r .= "</ul><p>TOTAL: " . $anz . "</p></div>";
+// return $r;
 function EditArchivedTextsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
@@ -277,14 +360,18 @@ function EditTagsWrapper() {
   const query = searchParams.get('query');
   const isNew = searchParams.get('new') === '1';
   const page = searchParams.get('page');
+  const chgId = searchParams.get('chg');
 
   return (
-    <Switch on={isNew}>
-      <DisplayTags
-        query={query || ''}
-        currentPage={page !== null ? Number.parseInt(page) : 1}
-      />
-      <NewTag />
+    <Switch on={chgId !== null}>
+      <Switch on={isNew}>
+        <DisplayTags
+          query={query || ''}
+          currentPage={page !== null ? Number.parseInt(page) : 1}
+        />
+        <NewTag />
+      </Switch>
+      <EditTag chgId={Number.parseInt(chgId)} />
     </Switch>
   );
 }
@@ -300,9 +387,30 @@ function ReaderWrapper() {
 function TestWrapper() {
   const [searchParams] = useSearchParams();
   const textID = searchParams.get('text');
-  // TODO sanitize
+  const lang = searchParams.get('lang');
+  // TODO sanitize more
   // TODO verify exists
-  const sanitizedParam = Number.parseInt(textID);
-  console.log('TEST123-start', sanitizedParam);
-  return <TesterPage textId={sanitizedParam} />;
+  const sanitizedText = textID !== null ? Number.parseInt(textID) : null;
+  console.log('TEST123-start', sanitizedText);
+  return (
+    <TesterPage
+      langId={lang !== null ? Number.parseInt(lang) : null}
+      textId={sanitizedText}
+    />
+  );
 }
+
+// TODO
+// function error_message_with_hide($msg, $noback)
+// {
+// 	if (trim($msg) == '')
+// 		return '';
+// 	if (substr($msg, 0, 5) == "Error")
+// 		return '<p class="red">*** ' . tohtml($msg) . ' ***' .
+// 			($noback ?
+// 				'' :
+// 				'<br /><input type="button" value="&lt;&lt; Go back and correct &lt;&lt;" onclick="history.back();" />') .
+// 			'</p>';
+// 	else
+// 		return '<p id="hide3" class="msgblue">+++ ' . tohtml($msg) . ' +++</p>';
+// }

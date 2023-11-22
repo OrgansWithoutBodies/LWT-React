@@ -1,18 +1,22 @@
+import { useState } from 'react';
 import { RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
+import { LanguagesId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
 
 export default function ImportLongText(): JSX.Element {
-  const [{ languages, tags, texts, activeLanguage }] = useData([
+  const [{ languages, tags, texts, activeLanguageId }] = useData([
     'languages',
     'tags',
     'texts',
-    'activeLanguage',
+    'activeLanguageId',
   ]);
   const navigate = useInternalNavigate();
-
+  const [formLanguage, setFormLanguage] = useState<LanguagesId | null>(
+    activeLanguageId
+  );
   return (
     <>
       <Header title={'Import Long Text'} />
@@ -23,7 +27,8 @@ export default function ImportLongText(): JSX.Element {
             <td className="td1 right">Language:</td>
             <td className="td1">
               <LanguageDropdown
-                defaultValue={activeLanguage ? activeLanguage.LgID : undefined}
+                defaultValue={formLanguage ? formLanguage : undefined}
+                onChange={(val) => setFormLanguage(val)}
               />
               <RequiredLineButton />
             </td>
@@ -34,7 +39,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="notempty checkoutsidebmp"
-                // data_info="Title"
+                data_info="Title"
                 name="TxTitle"
                 value=""
                 maxLength={200}
@@ -55,7 +60,7 @@ export default function ImportLongText(): JSX.Element {
               <br />
               <textarea
                 className="checkoutsidebmp"
-                // data_info="Upload"
+                data_info="Upload"
                 name="Upload"
                 cols={60}
                 rows={15}
@@ -104,7 +109,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="notempty posintnumber"
-                // data_info="Maximum Sentences per Text"
+                data_info="Maximum Sentences per Text"
                 name="maxsent"
                 value="50"
                 maxLength={3}
@@ -129,7 +134,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="checkurl checkoutsidebmp"
-                // data_info="Source URI"
+                data_info="Source URI"
                 name="TxSourceURI"
                 value=""
                 maxLength={1000}

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { Icon } from '../Icon';
+import { Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { TextsId } from '../data/validators';
+import { LanguagesId, TextsId } from '../data/validators';
 import { AddNewWord } from './AddNewWord';
 import { Header } from './Header';
 import { Reader } from './Reader.component';
@@ -22,8 +23,16 @@ function Pane3() {
 export function ReaderPage({ textId }: { textId: TextsId }) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
-  const [activeWord, setActiveWord] = useState<string | null>();
+  const [activeWord, setActiveWord] = useState<
+    Words | { newWord: string } | null
+  >(null);
   const text = texts.find((text) => text.TxID === textId);
+  const activeText =
+    activeWord === null
+      ? null
+      : 'newWord' in activeWord
+      ? activeWord.newWord
+      : activeWord.WoText;
   if (!text) {
     return <></>;
   }
@@ -48,14 +57,19 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
           />
           {/* TODO Show All */}
           {/* TODO audio */}
-          <Reader activeId={textId} setActiveWord={setActiveWord} />
+          <Reader
+            activeId={textId}
+            setActiveWord={setActiveWord}
+            activeWord={activeWord}
+          />
         </SplitPane>
         <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
-          {activeWord ? (
+          {activeWord && 'newWord' in activeWord ? (
             <AddNewWord
-              word={activeWord}
+              word={activeText}
               langId={text.TxLgID}
-              existingTerm={words.find(({ WoText }) => activeWord === WoText)}
+              // TODO horribly inefficient
+              existingTerm={words.find(({ WoText }) => activeText === WoText)}
             />
           ) : (
             <></>
@@ -67,11 +81,22 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
   );
 }
 type Modality = 0 | 1 | 2 | 3 | 4 | 5 | 'table' | null;
-export function TesterPage({ textId }: { textId: TextsId }) {
+export function TesterPage({
+  langId,
+  textId,
+}: {
+  textId: TextsId | null;
+  langId: LanguagesId | null;
+}) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
   const [activeWord, setActiveWord] = useState<string | null>();
-  const text = texts.find((text) => text.TxID === textId);
+
+  // TODO
+  const text =
+    textId !== null
+      ? texts.find((text) => text.TxID === textId)
+      : texts.find((text) => text.TxLgID === langId);
 
   const [testModality, setTestModality] = useState<Modality>(null);
   if (!text) {
@@ -87,6 +112,7 @@ export function TesterPage({ textId }: { textId: TextsId }) {
           defaultSize={'20%'}
         >
           <>
+            <Header title={''} />
             <p style={{ marginBottom: 0 }}>
               <input
                 type="button"
@@ -146,11 +172,10 @@ export function Tester({ modality }: { modality: Modality }) {
   const [numCorrect, setNumCorrect] = useState(0);
   const [numWrong, setNumWrong] = useState(0);
   const [numNotTested, setNumNotTested] = useState(10);
+  //
   const [secondsSinceStart, setSecondsSinceStart] = useState<number>(0);
-  if (modality === null) {
-    return <></>;
-  }
 
+  useEffect(() => {});
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
   const b_notyet = l_notyet == 0 ? '' : 'borderl';

@@ -1,10 +1,18 @@
 import { StrengthMap } from '../pages/AddNewTermTooltip';
-import { dataStore, DataStore } from './data.storage';
+import { splitCheckText } from '../pages/utils';
+import {
+  ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY,
+  createDemoDBInitialState,
+  dataStore,
+  DataStore,
+} from './data.storage';
 
 import {
   AddNewTextType,
   AddNewWordType,
   LanguageNoId,
+  Tags,
+  Tags2,
   Words,
 } from './parseMySqlDump';
 import { TermStrengthOrUnknown } from './type';
@@ -57,23 +65,71 @@ export class DataService {
   }
 
   public addText(text: AddNewTextType) {
+    let maxId = null;
     this.dataStore.update((state) => {
       const ids = state.texts.map((text) => text.TxID);
-      const maxId = Math.max(...ids) + 1;
-      if (IDIsUnique(maxId, ids)) {
-        return {
-          ...state,
-          texts: [
-            ...state.texts,
-            {
-              ...text,
-              TxID: maxId,
-              // TODO
-              TxAnnotatedText: '',
-            },
-          ],
-        };
-      }
+      maxId = Math.max(...ids) + 1;
+      return {
+        ...state,
+        texts: [
+          ...state.texts,
+          {
+            ...text,
+            TxID: maxId,
+            // TODO
+            TxAnnotatedText: '',
+          },
+        ],
+      };
+    });
+    return maxId;
+  }
+  public addTag(tag: Tags) {
+    this.dataStore.update((state) => {
+      const ids = state.tags.map((tag) => tag.TgID);
+      const maxId = (Math.max(...ids) + 1) as TagsId;
+      return {
+        ...state,
+        tags: [
+          ...state.tags,
+          {
+            ...tag,
+            TgID: maxId,
+          },
+        ],
+      };
+    });
+  }
+  public editTag(chgId: TagsId, tag: Tags) {
+    this.dataStore.update((state) => {
+      const ids = state.tags.map((tag) => tag.TgID);
+      const maxId = (Math.max(...ids) + 1) as TagsId;
+      return {
+        ...state,
+        tags: [
+          ...state.tags,
+          {
+            ...tag,
+            TgID: maxId,
+          },
+        ],
+      };
+    });
+  }
+  public addTextTag(tag: Tags2) {
+    this.dataStore.update((state) => {
+      const ids = state.tags2.map((tag) => tag.T2ID);
+      const maxId = (Math.max(...ids) + 1) as Tags2Id;
+      return {
+        ...state,
+        tags2: [
+          ...state.tags2,
+          {
+            ...tag,
+            T2ID: maxId,
+          },
+        ],
+      };
     });
   }
   public deleteText(textId: TextsId) {
@@ -98,7 +154,7 @@ export class DataService {
               ...word,
               WoID: maxId,
               // TODO
-              WoStatusChanged: new Date().toTimeString(),
+              WoStatusChanged: Date.now(),
               WoTodayScore: 0,
               WoTomorrowScore: 0,
               // TODO ? whats this
@@ -159,8 +215,31 @@ export class DataService {
   public addLongText(longTextForm: LongTextForm) {
     window.alert('TODO ADDLONGTEXT');
   }
-  public addMultipleTerms() {
-    window.alert('TODO ADDMULTIPLETERMS');
+  public addMultipleTerms(terms: Words[]) {
+    this.dataStore.update((state) => {
+      const ids = state.words.map((word) => word.WoID);
+      const maxId = Math.max(...ids) + 1;
+      if (IDIsUnique(maxId, ids)) {
+        return {
+          ...state,
+          words: [
+            ...state.words,
+            ...terms.map((word, ii) => {
+              return {
+                ...word,
+                WoID: maxId + ii,
+                // TODO
+                WoStatusChanged: Date.now(),
+                WoTodayScore: 0,
+                WoTomorrowScore: 0,
+                // TODO ? whats this
+                WoRandom: 0,
+              };
+            }),
+          ],
+        };
+      }
+    });
   }
 
   public restoreFromBackup() {
@@ -170,10 +249,28 @@ export class DataService {
     window.alert('TODO DOWNLOADING BACKUP');
   }
   public emptyDatabase() {
-    window.alert('TODO EMPTYING DB');
+    this.dataStore.update((state) => {
+      return {
+        settings: state.settings,
+        activeLanguageId: null,
+        archivedtexts: [],
+        archtexttags: [],
+        languages: [],
+        parsedTexts: [],
+        sentences: [],
+        tags2: [],
+        tags: [],
+        textitems: [],
+        texts: [],
+        texttags: [],
+        words: [],
+        wordtags: [],
+      };
+    });
+    console.log('TEST123', this.dataStore.getValue());
   }
   public installDemoDatabase() {
-    window.alert('TODO INSTALLING DEMO');
+    this.dataStore.update(() => createDemoDBInitialState());
   }
 
   public archiveText(archID: TextsId) {
@@ -230,7 +327,17 @@ export class DataService {
   }
 
   public reparseText(textId: TextsId) {
-    window.alert('TODO REPARSETEXT');
+    const { texts, languages } = this.dataStore.getValue();
+    const parsingText = texts.find(({ TxID }) => {
+      return TxID === textId;
+    });
+    const parsingLanguage = languages.find(({ LgID }) => {
+      return LgID === parsingText?.TxLgID;
+    });
+    const parsedText = splitCheckText(parsingText?.TxText, parsingLanguage, -1);
+    this.dataStore.update(({ parsedTexts, ...rest }) => {
+      return { ...rest, parsedTexts: { ...parsedTexts, [textId]: parsedText } };
+    });
   }
   public reparseAllTextsForLanguage(langId: LanguagesId) {
     const { texts } = this.dataStore.getValue();
@@ -243,8 +350,9 @@ export class DataService {
       });
   }
 
-  // These are only needed locally
+  // These are only needed locally afaict
   public setActiveLanguage(langId: LanguagesId | null) {
+    localStorage.setItem(ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY, `${langId}`);
     this.dataStore.update((state) => {
       return { ...state, activeLanguageId: langId };
     });

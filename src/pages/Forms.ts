@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { ObjectSchema } from 'superstruct/dist/utils';
 import * as ss from 'superstruct';
+import { ObjectSchema } from 'superstruct/dist/utils';
 
 export function Form<TSchema extends ObjectSchema>({
   validator,
@@ -33,7 +33,7 @@ export function Form<TSchema extends ObjectSchema>({
 //     <input type="submit" />
 //   </form>
 // );
-const identityMap = (val: string) => val;
+export const identityMap = (val: string) => val;
 
 export const parseNumMap = (value: string) => Number.parseInt(value, 10);
 export const emptyToNullMap = (value: string) =>
@@ -84,21 +84,33 @@ export function ResetForm<TForm>(refMap: TRefMap<TForm>) {
 export function CheckAndSubmit<TForm>(
   refMap: TRefMap<TForm>,
   preValidateMap: {
-    [key in keyof TForm]?: (value: string) => any | null;
+    [key in keyof TForm]?: (
+      value: string,
+      refMap: TRefMap<TForm>
+    ) => any | null;
   },
   validator: ss.Struct<{ [key in keyof TForm]: any }>,
-  takeValidatedObject: (value: { [key in keyof TForm]: any }) => void
+  takeValidatedObject: (value: { [key in keyof TForm]: any }) => void,
+  omit: keyof TForm | null = null
 ) {
   const values = Object.fromEntries(
-    (Object.keys(refMap) as (keyof typeof refMap)[]).map((refKey) => {
-      return [
-        refKey,
-        (preValidateMap[refKey] || identityMap)(refMap[refKey].current?.value),
-      ];
-    })
+    (Object.keys(refMap) as (keyof typeof refMap)[])
+      .filter((val) => omit === null || val !== omit)
+      .map((refKey) => {
+        console.log(refKey);
+        return [
+          refKey,
+          (preValidateMap[refKey] || identityMap)(
+            refMap[refKey].current?.value,
+            refMap
+          ),
+        ];
+      })
   );
 
-  const [validationErrors, postValidationObj] = validator.validate(values);
+  const [validationErrors, postValidationObj] = ss
+    .omit(validator, [omit])
+    .validate(values);
 
   console.log('TEST123', validationErrors, postValidationObj);
   if (!validationErrors && postValidationObj) {

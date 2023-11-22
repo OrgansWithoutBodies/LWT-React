@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
+import { confirmDelete } from './utils';
 // import { Gunzip } from 'browserify-zlib';
 
 export function RestoreFromBackup(
@@ -138,7 +140,11 @@ export function BackupScreen(): JSX.Element {
                     <input
                       type="button"
                       value="Install LWT Demo Database"
-                      onClick={installDemoDatabase}
+                      onClick={() => {
+                        if (confirmDelete()) {
+                          dataService.installDemoDatabase();
+                        }
+                      }}
                     />
                   </p>
                 </td>
@@ -162,9 +168,13 @@ export function BackupScreen(): JSX.Element {
                       YOU MAY LOSE DATA - BE CAREFUL: &nbsp; &nbsp; &nbsp;
                     </span>
                     <input
-                      type="submit"
+                      type="button"
                       name="empty"
-                      onClick={emptyDatabase}
+                      onClick={() => {
+                        if (confirmDelete()) {
+                          dataService.emptyDatabase();
+                        }
+                      }}
                       value="Empty LWT Database"
                     />
                   </p>

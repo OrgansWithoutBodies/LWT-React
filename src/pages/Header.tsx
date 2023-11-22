@@ -11,7 +11,16 @@ export const headerValuesTemp = {
   edit_texttags: { params: ['page'] },
   edit_languages: { params: ['page'] },
   edit_words: {
-    params: ['page', 'status', 'query', 'tag12', 'tag1', 'sort', 'text'],
+    params: [
+      'page',
+      'status',
+      'query',
+      'tag12',
+      'tag1',
+      'tag2',
+      'sort',
+      'text',
+    ],
   },
   edit_tags: { params: ['page'] },
   statistics: { params: [] },

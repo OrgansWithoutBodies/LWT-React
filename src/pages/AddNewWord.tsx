@@ -9,9 +9,12 @@ import {
 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
+import { Header } from './Header';
+import { owin, translateSentence2 } from './translateSentence2';
 
-let STATUSES = {
+const STATUSES = {
   1: { abbr: '1', name: 'Learning' },
   2: { abbr: '2', name: 'Learning' },
   3: { abbr: '3', name: 'Learning' },
@@ -49,9 +52,10 @@ export function AddNewWord({
   const validator = AddNewWordValidator;
   const refMap = RefMap<AddNewWordType>(validator);
   const [{ languages }] = useData(['languages']);
+  const navigator = useInternalNavigate();
   // TODO hashmap here avoid lookup
-  const langString = languages.find((lang) => lang.LgID === langId)?.LgName;
-  console.log(languages, langId);
+  const lang = languages.find((lang) => lang.LgID === langId);
+  const langString = lang?.LgName;
   const [FormState, setFormState] = useState<{
     [key in keyof AddNewWordType]?: any;
   }>({});
@@ -62,11 +66,12 @@ export function AddNewWord({
     (key: keyof AddNewWordType): SetBoolean =>
     (value) =>
       setFormErrors({ ...FormErrors, [key]: value });
-  console.log('TEST123-form', existingTerm);
+  console.log('TEST123-form', { existingTerm, lang, langId });
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
   return (
     <>
+      <Header />
       <form
         name="newword"
         className="validate"
@@ -79,7 +84,7 @@ export function AddNewWord({
           name="WoLgID"
           ref={refMap.WoLgID}
           id="langfield"
-          value={langId as any}
+          value={langId}
         />
         <input
           type="hidden"
@@ -90,9 +95,10 @@ export function AddNewWord({
         />
         <input
           type="hidden"
+          // TODO this is what is matched against
           name="WoTextLC"
           ref={refMap.WoTextLC}
-          value={word}
+          value={word?.toLowerCase()}
         />
         <input type="hidden" name="tid" value="11" />
         <input type="hidden" name="ord" value="7" />
@@ -110,7 +116,7 @@ export function AddNewWord({
               <td className="td1">
                 <input
                   className="notempty checkoutsidebmp"
-                  // data_info="New Term"
+                  data_info="New Term"
                   type="text"
                   name="WoText"
                   id="wordfield"
@@ -146,8 +152,8 @@ export function AddNewWord({
                     )
                   }
                   className="setfocus textarea-noreturn checklength checkoutsidebmp"
-                  // data_maxlength="500"
-                  // data_info="Translation"
+                  data_maxlength="500"
+                  data_info="Translation"
                   cols={35}
                   rows={3}
                 ></textarea>
@@ -198,7 +204,7 @@ export function AddNewWord({
                 <input
                   type="text"
                   className="checkoutsidebmp"
-                  // data_info="Romanization"
+                  data_info="Romanization"
                   onChange={(event) =>
                     handleFormChange('WoRomanization', event.target.value)
                   }
@@ -226,8 +232,8 @@ export function AddNewWord({
                 <textarea
                   name="WoSentence"
                   className="textarea-noreturn checklength checkoutsidebmp"
-                  // data_maxlength="1000"
-                  // data_info="Sentence"
+                  data_maxlength="1000"
+                  data_info="Sentence"
                   cols={35}
                   rows={3}
                   ref={refMap.WoSentence}
@@ -332,16 +338,27 @@ export function AddNewWord({
                 </a>
                 <span
                   className="click"
-                  // TODO
-                  onClick="owin('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=%E5%AE%AA');"
+                  onClick={() => {
+                    owin(
+                      // TODO url
+                      `http://translate.google.com/?ie=UTF-8&sl=${
+                        lang?.LgGoogleTranslateURI
+                      }&tl=en&text=${'TEST'}`
+                    );
+                  }}
                 >
                   GTr
                 </span>
                 | Sent.:
                 <span
                   className="click"
-                  // TODO
-                  onClick="translateSentence2('http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=###',document.forms[0].WoSentence);"
+                  onClick={() => {
+                    translateSentence2(
+                      // TODO url
+                      `http://translate.google.com/?ie=UTF-8&sl=${lang?.LgGoogleTranslateURI}&tl=en&text=###`,
+                      refMap.WoSentence.current
+                    );
+                  }}
                 >
                   GTr
                 </span>
@@ -354,9 +371,20 @@ export function AddNewWord({
                     console.log('SAVING');
                     CheckAndSubmit(
                       refMap,
-                      { WoStatus: parseNumMap },
+                      {
+                        WoStatus: parseNumMap,
+                        WoLgID: parseNumMap,
+                        WoCreated: () => {
+                          return Date.now();
+                        },
+                        WoTextLC: (_, refMap) =>
+                          refMap['WoText'].current.value.toLowerCase(),
+                      },
                       validator,
-                      (value) => dataService.addTerm(value)
+                      (value) => {
+                        dataService.addTerm(value);
+                        navigator('/edit_words');
+                      }
                     );
                   }}
                 />
@@ -384,3 +412,63 @@ export function AddNewWord({
     </>
   );
 }
+
+function SentencesForWord() {
+  return (
+    <>
+      <p>
+        <b>
+          Sentences in active texts with{' '}
+          <i>{/* TODO */}' . tohtml($wordlc) . '</i>
+        </b>
+      </p>
+      <p>
+        (Click on <Icon src="tick-button" title="Choose" /> to copy sentence
+        into above term)
+      </p>
+      <p>
+        <span
+          className="click"
+          // TODO
+          onClick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"
+        >
+          <Icon src="tick-button" title="Choose" />
+        </span>{' '}
+        &nbsp;
+        {/* TODO */}
+        ' . $sent[0] . '
+        <br />
+      </p>
+    </>
+  );
+}
+// function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
+//   $('#exsent').html('<img src="icn/waiting2.gif" />');
+//   $.post(
+//     'ajax_show_sentences.php',
+//     { lang: lang, word: word, ctl: ctl },
+//     function (data: any) {
+//       $('#exsent').html(data);
+//     }
+//   );
+// }
+
+// function get20Sentences($lang, $wordlc, $jsctlname, $mode)
+// {
+// 	global $tbpref;
+// 	$r = '<p><b>Sentences in active texts with <i>' . tohtml($wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
+// 	$sql = 'SELECT DISTINCT SeID, SeText FROM ' . $tbpref . 'sentences, ' . $tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax($wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . $lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
+// 	$res = do_mysqli_query($sql);
+// 	$r .= '<p>';
+// 	$last = '';
+// 	while ($record = mysqli_fetch_assoc($res)) {
+// 		if ($last != $record['SeText']) {
+// 			$sent = getSentence($record['SeID'], $wordlc, $mode);
+// 			$r .= '<span class="click" onclick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . $sent[0] . '<br />';
+// 		}
+// 		$last = $record['SeText'];
+// 	}
+// 	mysqli_free_result($res);
+// 	$r .= '</p>';
+// 	return $r;
+// }

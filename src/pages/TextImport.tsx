@@ -4,7 +4,13 @@ import { useData } from '../data/useAkita';
 import { Icon, RequiredLineButton } from '../Icon';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { CheckAndSubmit, emptyToNullMap, RefMap, ResetForm } from './Forms';
+import {
+  CheckAndSubmit,
+  emptyToNullMap,
+  parseNumMap,
+  RefMap,
+  ResetForm,
+} from './Forms';
 import { Header } from './Header';
 
 export function ImportShortText(): JSX.Element {
@@ -46,7 +52,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="notempty checkoutsidebmp"
-                  // data_info="Title"
+                  data_info="Title"
                   name="TxTitle"
                   ref={refMap.TxTitle}
                   defaultValue=""
@@ -72,8 +78,8 @@ export function ImportShortText(): JSX.Element {
                   name="TxText"
                   ref={refMap.TxText}
                   className="notempty checkbytes checkoutsidebmp"
-                  // data_maxlength="65000"
-                  // data_info="Text"
+                  data_maxlength="65000"
+                  data_info="Text"
                   cols={60}
                   rows={20}
                 ></textarea>
@@ -86,7 +92,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="checkurl checkoutsidebmp"
-                  // data_info="Source URI"
+                  data_info="Source URI"
                   name="TxSourceURI"
                   ref={refMap.TxSourceURI}
                   defaultValue=""
@@ -125,7 +131,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="checkoutsidebmp"
-                  // data_info="Audio-URI"
+                  data_info="Audio-URI"
                   name="TxAudioURI"
                   ref={refMap.TxAudioURI}
                   defaultValue=""
@@ -156,7 +162,10 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="button"
                   value="Cancel"
-                  onClick={() => ResetForm(refMap)}
+                  onClick={() => {
+                    ResetForm(refMap);
+                    navigator(`/edit_texts`);
+                  }}
                 />
                 <input type="submit" name="op" value="Check" />
                 <input
@@ -167,15 +176,45 @@ export function ImportShortText(): JSX.Element {
                     CheckAndSubmit(
                       refMap,
                       {
+                        TxLgID: parseNumMap,
                         TxAudioURI: emptyToNullMap,
                         TxSourceURI: emptyToNullMap,
                       },
                       validator,
-                      (value) => dataService.addText(value)
+                      (value) => {
+                        const textId = dataService.addText(value);
+                        if (textId !== null) {
+                          dataService.reparseText(textId);
+                          navigator(`/edit_texts`);
+                        }
+                        // todo something if null?
+                      }
                     );
                   }}
                 />
-                <input type="submit" name="op" value="Save and Open" />
+                <input
+                  type="button"
+                  name="op"
+                  value="Save and Open"
+                  onClick={() => {
+                    CheckAndSubmit(
+                      refMap,
+                      {
+                        TxLgID: parseNumMap,
+                        TxAudioURI: emptyToNullMap,
+                        TxSourceURI: emptyToNullMap,
+                      },
+                      validator,
+                      (value) => {
+                        const textId = dataService.addText(value);
+                        if (textId !== null) {
+                          dataService.reparseText(textId);
+                          navigator(`/do_text?start=${textId}`);
+                        }
+                      }
+                    );
+                  }}
+                />
               </td>
             </tr>
           </tbody>

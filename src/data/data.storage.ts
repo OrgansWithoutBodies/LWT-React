@@ -14,7 +14,7 @@ import {
   WordTags,
   Words,
 } from './parseMySqlDump';
-import { LanguagesId } from './validators';
+import { LanguagesId, TextsId } from './validators';
 
 export interface DataState {
   archivedtexts: ArchivedTexts[];
@@ -31,22 +31,33 @@ export interface DataState {
   wordtags: WordTags[];
 
   activeLanguageId: LanguagesId | null;
+  parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
 }
-console.log(demoDB);
-// TODO persist
-export function createInitialState(): DataState {
+export const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = 'ACTIVE_LANG_ID' as const;
+// TODO persist - 'dataStrategy' as a build flag for different compile targets
+
+export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,
+    parsedTexts: [],
     wordtags: [],
-    // TODO save in cookie/local storage?
-    activeLanguageId: 1 as LanguagesId,
   };
 }
 
 @StoreConfig({ name: 'data' })
 export class DataStore extends Store<DataState> {
   constructor() {
-    super(createInitialState());
+    const localActiveLanguageID = localStorage.getItem(
+      ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY
+    );
+    console.log('local', localActiveLanguageID);
+    super({
+      ...createDemoDBInitialState(),
+      activeLanguageId:
+        localActiveLanguageID === null
+          ? null
+          : Number.parseInt(localActiveLanguageID),
+    });
   }
 }
 

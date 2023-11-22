@@ -1,8 +1,11 @@
 import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
+import { Tags2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { Tags2Validator } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
 
@@ -195,14 +198,17 @@ if ($recno==0) {
                   </A>
                   &nbsp;
                   <A
-                    href={`/edit_texttags?del=${tag.T2ID}`}
-                    onClick={() => {
-                      if (confirmDelete()) {
-                        dataService.deleteTagFromText(tag.T2ID);
-                      }
-                    }}
+                  // href={`/edit_texttags?del=${tag.T2ID}`}
                   >
-                    <Icon src="minus-button" title="Delete" />
+                    <Icon
+                      onClick={() => {
+                        if (confirmDelete()) {
+                          dataService.deleteTagFromText(tag.T2ID);
+                        }
+                      }}
+                      src="minus-button"
+                      title="Delete"
+                    />
                   </A>
                   &nbsp;
                 </td>
@@ -256,9 +262,12 @@ if ($recno==0) {
 }
 
 export function NewTextTag() {
+  const validator = Tags2Validator;
+  const refMap = RefMap<Tags2>(validator);
+  const navigator = useInternalNavigate();
   return (
     <>
-      <Header title={'My Term Tags'} />
+      <Header title={'My Text Tags'} />
       <h4>New Tag</h4>
       <script
         type="text/javascript"
@@ -279,8 +288,8 @@ export function NewTextTag() {
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
                 name="T2Text"
+                ref={refMap.T2Text}
                 data_info="Tag"
-                value=""
                 maxlength={20}
                 size={20}
               />
@@ -295,6 +304,7 @@ export function NewTextTag() {
                 data_maxlength={200}
                 data_info="Comment"
                 name="T2Comment"
+                ref={refMap.T2Comment}
                 cols={40}
                 rows={3}
               ></textarea>
@@ -307,7 +317,24 @@ export function NewTextTag() {
                 value="Cancel"
                 onClick="{resetDirty(); location.href='edit_texttags.php';}"
               />
-              <input type="submit" name="op" value="Save" />
+              <input
+                type="button"
+                name="op"
+                value="Save"
+                onClick={() => {
+                  console.log('SAVING');
+                  CheckAndSubmit(
+                    refMap,
+                    {},
+                    validator,
+                    (value) => {
+                      dataService.addTextTag(value);
+                      navigator('/edit_texttags');
+                    },
+                    'T2ID'
+                  );
+                }}
+              />
             </td>
           </tr>
         </table>
@@ -320,9 +347,13 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   const changingTag = tags2.find(({ T2ID }) => {
     return chgID === T2ID;
   });
+
+  const validator = Tags2Validator;
+  const refMap = RefMap<Tags2>(validator);
+  const navigator = useInternalNavigate();
   return (
     <>
-      <Header title={'My Term Tags'} />
+      <Header title={'My Text Tags'} />
       <h4>Edit Tag</h4>
       <script
         type="text/javascript"
@@ -345,6 +376,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 class="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
                 name="T2Text"
+                ref={refMap.T2Text}
                 value={changingTag?.T2Text}
                 maxlength={20}
                 size={20}
@@ -360,6 +392,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 data_maxlength={200}
                 data_info="Comment"
                 name="T2Comment"
+                ref={refMap.T2Comment}
                 value={changingTag?.T2Comment}
                 cols={40}
                 rows={3}
@@ -376,7 +409,24 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 // TODO
                 onClick="{resetDirty(); location.href='edit_texttags.php#rec<?php echo $_REQUEST['chg']; ?>'};"
               />
-              <input type="submit" name="op" value="Change" />
+              <input
+                type="button"
+                name="op"
+                value="Change"
+                onClick={() => {
+                  console.log('SAVING');
+                  CheckAndSubmit(
+                    refMap,
+                    {},
+                    validator,
+                    (value) => {
+                      dataService.addTextTag(value);
+                      navigator('/edit_texttags');
+                    },
+                    'T2ID'
+                  );
+                }}
+              />
             </td>
           </tr>
         </table>

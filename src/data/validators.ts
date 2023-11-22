@@ -21,7 +21,7 @@ const TimestampValidator = () => ss.number();
 // TODO valid reference key id
 const archivedtextsId = brandedNumber('archivedtextsId' as const);
 const archtexttagsId = brandedNumber('archtexttagsId' as const);
-const languagesId = brandedNumber('languagesId' as const);
+export const languagesId = brandedNumber('languagesId' as const);
 const sentencesId = brandedNumber('sentencesId' as const);
 const settingsId = brandedNumber('settingsId' as const);
 const tagsId = brandedNumber('tagsId' as const);
@@ -234,7 +234,7 @@ export const WordsValidator = ss.object({
   // KEY `WoTranslation` (`WoTranslation`(333)),
   WoTranslation: ss.nonempty(ss.string()),
   // WoRomanization: varchar(100) DEFAULT NULL,
-  WoRomanization: ss.nonempty(ss.string()),
+  WoRomanization: ss.optional(ss.string()),
   // WoSentence: varchar(1000) DEFAULT NULL,
   WoSentence: ss.optional(ss.string()),
   // WoCreated: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

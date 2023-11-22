@@ -26,19 +26,36 @@ export function EditArchivedTexts({
     ]);
   const pageSize = 15;
 
-  const [filterLanguage, setFilterLanguage] = useState<LanguagesId | null>(
-    null
+  const [filterLanguageID, setFilterLanguage] = useState<LanguagesId | null>(
+    activeLanguage ? activeLanguage.LgID : null
   );
-  console.log(archivedtexts);
+
+  const filterLanguage = languages.map((lang) => {
+    return lang.LgID === filterLanguageID;
+  });
+  const filteredTexts =
+    filterLanguageID !== null
+      ? archivedtexts.filter(({ AtLgID }) => {
+          return AtLgID === filterLanguageID;
+        })
+      : archivedtexts;
+  console.log({
+    activeLanguage,
+    filterLanguage: filterLanguageID,
+    archivedtexts,
+    filteredTexts,
+  });
   const { dataOnPage, numPages } = usePager(
-    archivedtexts.filter(({ AtLgID }) => {
-      return filterLanguage === null ? true : AtLgID === filterLanguage;
-    }),
+    filteredTexts,
     currentPage,
     pageSize
   );
   const recno = numArchivedTexts;
   const navigate = useInternalNavigate();
+  const { onSelectAll, onSelectNone, onSelect, selectedValues } = useSelection(
+    archivedtexts,
+    'AtID'
+  );
   const queryRef = useRef<HTMLInputElement | undefined>();
   return (
     <>
@@ -68,7 +85,11 @@ export function EditArchivedTexts({
               Language:
               <LanguageDropdown
                 onChange={(val) => {
-                  setFilterLanguage(val);
+                  if (val === -1) {
+                    setFilterLanguage(null);
+                  } else {
+                    setFilterLanguage(val);
+                  }
                 }}
               />
               {/* <?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?> */}
@@ -103,7 +124,7 @@ export function EditArchivedTexts({
               <input
                 type="button"
                 value="Clear"
-                onClick={() => navigate(`/edit_archivedtexts?page=1&query=`)}
+                onClick={() => navigate(`/edit_archivedtexts`)}
               />
             </td>
           </tr>
@@ -190,25 +211,15 @@ if (recno==0) {
           </tr>
           <tr>
             <td className="td1 center">
-              <input
-                type="button"
-                value="Mark All"
-                // TODO
-                onClick="selectToggle(true,'form2');"
-              />
-              <input
-                type="button"
-                value="Mark None"
-                // TODO
-                onClick="selectToggle(false,'form2');"
-              />
+              <input type="button" value="Mark All" onClick={onSelectAll} />
+              <input type="button" value="Mark None" onClick={onSelectNone} />
             </td>
             <td className="td1 center">
               Marked Texts:&nbsp;
               <select
                 name="markaction"
                 id="markaction"
-                disabled
+                disabled={selectedValues.size === 0}
                 // TODO
                 onChange="multiActionGo(document.form2, document.form2.markaction);"
               >
@@ -224,7 +235,7 @@ if (recno==0) {
             <th className="th1 sorttable_nosort">Mark</th>
             <th className="th1 sorttable_nosort">Actions</th>
             {/* TODO */}
-            {filterLanguage === null && (
+            {filterLanguageID === null && (
               <>
                 {/* TODO */}
                 <th className="th1 clickable">Lang.</th>
@@ -241,6 +252,10 @@ if (recno==0) {
             </th>
           </tr>
           {dataOnPage.map((text) => {
+            const languageForLine = languages.find(
+              (lang) => lang.LgID === text.AtLgID
+            );
+            const isChecked = selectedValues.has(text.AtID);
             return (
               <>
                 <tr>
@@ -250,6 +265,8 @@ if (recno==0) {
                         name="marked[]"
                         className="markcheck"
                         type="checkbox"
+                        onChange={() => onSelect(text, !isChecked)}
+                        checked={isChecked}
                         value="' . $record['AtID'] . '"
                       />
                     </a>
@@ -279,10 +296,9 @@ if (recno==0) {
                     </span>
                     &nbsp;
                   </td>
-                  {filterLanguage === null && (
+                  {filterLanguageID === null && (
                     <>
-                      {/* TODO */}
-                      <td className="td1 center">{text.AtLgID}</td>
+                      <td className="td1 center">{languageForLine?.LgName}</td>
                     </>
                   )}
                   <td className="td1 center">
@@ -337,4 +353,26 @@ if (recno==0) {
       </p>
     </>
   );
+}
+function useSelection<TData extends object, TKey extends keyof TData>(
+  data: TData[],
+  key: TKey
+) {
+  const [selectedValues, setSelectedValues] = useState<Set<TData[TKey]>>(
+    new Set()
+  );
+  return {
+    selectedValues,
+    onSelectAll: () => setSelectedValues(new Set(data.map((val) => val[key]))),
+    onSelectNone: () => setSelectedValues(new Set()),
+    onSelect: (val: TData, selecting: boolean) => {
+      if (selecting) {
+        return setSelectedValues(new Set([...selectedValues, val[key]]));
+      }
+      const newSet = new Set([...selectedValues]);
+      newSet.delete(val[key]);
+      setSelectedValues(newSet);
+      return;
+    },
+  };
 }

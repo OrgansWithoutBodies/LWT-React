@@ -31,68 +31,107 @@ function LanguageLine({
   const numArchivedThisLanguage = archivedtexts.filter(
     (text) => text.AtLgID === id
   ).length;
+  const TdTh = ({ children }: React.PropsWithChildren<object>) => {
+    if (thisRowActive) {
+      return <th className="th1 center">{children}</th>;
+    }
+    return <td className="td1 center">{children}</td>;
+  };
   return (
     <tr>
-      <td className="td1 center">
-        {/* <A
-          href={`save_setting_redirect?k=${'currentlanguage'}&v=${2}&u=${'edit_languages'}`}
-        > */}
-        <Icon
-          onClick={() => {
-            dataService.setActiveLanguage(thisRowActive ? null : id);
-          }}
-          src={thisRowActive ? 'exclamation-red' : 'tick-button'}
-          title={thisRowActive ? 'Current Language' : 'Set as Current Language'}
-        />
-        {/* </a> */}
-      </td>
-      <td className="td1 center">
+      {thisRowActive ? (
+        <th className="th1">
+          <Icon
+            onClick={() => {
+              dataService.setActiveLanguage(thisRowActive ? null : id);
+            }}
+            src={'exclamation-red'}
+            title={'Current Language'}
+          />
+        </th>
+      ) : (
+        <td className="td1 center">
+          <Icon
+            onClick={() => {
+              dataService.setActiveLanguage(thisRowActive ? null : id);
+            }}
+            src={'tick-button'}
+            title={'Set as Current Language'}
+          />
+        </td>
+      )}
+      <TdTh>
         <A href={`/do_test?lang=${id}`}>
           <Icon src={'question-balloon'} title="Test" />
         </A>
-      </td>
-      <td className="td1 center">
-        &nbsp;
-        {/* <A href={`/print_text?text=${id}`}>
-          <Icon src="printer" title="Print" />
-        </A> */}
+      </TdTh>
+      <TdTh>
         &nbsp;
         <A href={`/edit_languages?chg=${id}`}>
           <Icon src="document--pencil" title="Edit" />
         </A>
         &nbsp;
-        <span
-          className="click"
-          onClick={() => {
-            if (confirmDelete()) {
-              dataService.deleteLanguage(language.LgID);
-            }
-          }}
-        >
-          <Icon src="minus-button" title="Delete" />
-        </span>
+        {numTermsThisLanguage === 0 &&
+        numArchivedThisLanguage === 0 &&
+        numTextsThisLanguage === 0 ? (
+          <span
+            className="click"
+            //         if ($textcount == 0 && $archtextcount == 0 && $wordcount == 0)
+            // 	echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';
+            // else
+            // 	echo '&nbsp; <img src="icn/placeholder.png" title="Delete not possible" alt="Delete not possible" />';
+
+            onClick={() => {
+              if (confirmDelete()) {
+                dataService.deleteLanguage(language.LgID);
+              }
+            }}
+          >
+            <Icon src="minus-button" title="Delete" />
+          </span>
+        ) : (
+          <Icon src="placeholder" title="Delete not possible" />
+        )}
         &nbsp;
-      </td>
-      <td className="td1 center">{language.LgName}</td>
-      <td className="td1 center">
-        <A href={`/edit_languages?filterlang=${language.LgID}`}>
-          {numTextsThisLanguage}
-        </A>
-        &nbsp;&nbsp;
-        <A href={`/edit_languages?refresh=${language.LgID}`}>
-          {/* . $_SERVER['PHP_SELF'] . '?refresh=' . $record['LgID'] . ' */}
-          <Icon src="lightning" title="Reparse Texts" />
-        </A>
-      </td>
-      <td className="td1 center">{numArchivedThisLanguage}</td>
-      <td className="td1 center">
+      </TdTh>
+      <TdTh>{language.LgName}</TdTh>
+      <TdTh>
+        {numTextsThisLanguage !== 0 ? (
+          <>
+            <A href={`/edit_texts?filterlang=${language.LgID}`}>
+              {numTextsThisLanguage}
+            </A>
+            &nbsp;&nbsp;
+            <A href={`/edit_languages?refresh=${language.LgID}`}>
+              {/* . $_SERVER['PHP_SELF'] . '?refresh=' . $record['LgID'] . ' */}
+              <Icon src="lightning" title="Reparse Texts" />
+            </A>
+          </>
+        ) : (
+          0
+        )}
+      </TdTh>
+      <TdTh>
+        {numArchivedThisLanguage !== 0 ? (
+          <A href={`/edit_archivedtexts?filterlang=${language.LgID}`}>
+            {numArchivedThisLanguage}
+          </A>
+        ) : (
+          0
+        )}
+      </TdTh>
+      <TdTh>
         <A href={`/edit_words?filterlang=${language.LgID}`}>
           {numTermsThisLanguage}
         </A>
-      </td>
-      <td className="td1 center">
-        <Icon src="status" title="Yes" />
-      </td>
+      </TdTh>
+      <TdTh>
+        {language.LgExportTemplate !== undefined ? (
+          <Icon src="status" title="Yes" />
+        ) : (
+          <Icon src="status-busy" title="No" />
+        )}
+      </TdTh>
     </tr>
   );
 }

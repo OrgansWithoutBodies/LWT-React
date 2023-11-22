@@ -5,6 +5,7 @@ import { dataService } from '../data/data.service';
 import { Languages } from '../data/parseMySqlDump';
 import { LanguagesValidatorNoId } from '../data/validators';
 import { LANGDEFS } from '../data/wizardData';
+import { useInternalNavigate } from '../nav/useInternalNav';
 import {
   CheckAndSubmit,
   RefMap,
@@ -31,6 +32,7 @@ export function NewLanguage() {
     LgDict2URI: emptyToNullMap,
   };
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
+  const navigator = useInternalNavigate();
   const validator = LanguagesValidatorNoId;
   const refMap = RefMap<LanguageNoId>(validator);
   return (
@@ -305,9 +307,14 @@ export function NewLanguage() {
                   name="op"
                   value="Save"
                   onClick={() => {
-                    // TODO if successful navigate to list
-                    CheckAndSubmit(refMap, preValidateMap, validator, (value) =>
-                      dataService.addLanguage(value)
+                    CheckAndSubmit(
+                      refMap,
+                      preValidateMap,
+                      validator,
+                      (value) => {
+                        dataService.addLanguage(value);
+                        navigator('/edit_languages');
+                      }
                     );
                   }}
                 />
@@ -353,9 +360,12 @@ export function NewLanguage() {
             const originSpec = LANGDEFS[l1 as keyof typeof LANGDEFS];
             const targetSpec = LANGDEFS[l2 as keyof typeof LANGDEFS];
             refMap['LgName'].current.value = l2;
-            refMap['LgDict1URI'].current.value = targetSpec.LgGlosbeKey;
-            refMap['LgGoogleTranslateURI'].current.value =
-              targetSpec.LgGTransKey;
+            refMap[
+              'LgDict1URI'
+            ].current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
+            refMap[
+              'LgGoogleTranslateURI'
+            ].current.value = `*http://translate.google.com/?ie=UTF-8&sl=${targetSpec.LgGTransKey}&tl=${originSpec.LgGTransKey}&text=###`;
             refMap['LgTextSize'].current.value = targetSpec.LgTextSize;
             refMap['LgRegexpWordCharacters'].current.value =
               targetSpec.LgRegexpWordCharacters;
