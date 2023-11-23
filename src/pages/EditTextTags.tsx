@@ -7,6 +7,7 @@ import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
+import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
 
 export function DisplayTextTags({ query }: { query: string }) {
@@ -16,6 +17,10 @@ export function DisplayTextTags({ query }: { query: string }) {
     'texttags',
   ]);
   const navigate = useInternalNavigate();
+  const { onSelectAll, onSelectNone, checkboxPropsForEntry } = useSelection(
+    tags2,
+    'T2ID'
+  );
 
   return (
     <>
@@ -126,13 +131,13 @@ if ($recno==0) {
                 type="button"
                 value="Mark All"
                 // TODO
-                onClick="selectToggle(true,'form2');"
+                onClick={onSelectAll}
               />
               <input
                 type="button"
                 value="Mark None"
                 // TODO
-                onClick="selectToggle(false,'form2');"
+                onClick={onSelectNone}
               />
             </td>
             <td className="td1 center">
@@ -187,6 +192,7 @@ if ($recno==0) {
                       name="marked[]"
                       type="checkbox"
                       className="markcheck"
+                      {...checkboxPropsForEntry(tag)}
                       value="' . $record['T2ID'] . '"
                     />
                   </A>

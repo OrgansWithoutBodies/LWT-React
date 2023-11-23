@@ -21,7 +21,10 @@ function CAKTable({ rows, map }: { rows: any; map: CAKMap }): JSX.Element {
   return <></>;
 }
 export function StatisticsComponent(): JSX.Element {
-  const [{ languages }] = useData(['languages']);
+  const [{ languages, languageStatusStatistics }] = useData([
+    'languages',
+    'languageStatusStatistics',
+  ]);
 
   const periods = [
     'Today',
@@ -31,6 +34,7 @@ export function StatisticsComponent(): JSX.Element {
     'Last 365 d',
     'All Time',
   ];
+  console.log('TEST123', languageStatusStatistics);
   return (
     <>
       <Header title="My Statistics" />
@@ -114,49 +118,48 @@ export function StatisticsComponent(): JSX.Element {
                 <tr>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
-                    <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
-                        language.LgID
-                      }&status=${''}tag12=${0}&tag2=${''}&tag1${''}=`}
-                    >
-                      <b>TODO</b>
+                    <A href={`/edit_words?filterlang=${language.LgID}`}>
+                      <b>{languageStatusStatistics[language.LgID]['total']}</b>
                     </A>
                   </td>
                   <td className="td1 center">
                     <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                      href={`/edit_words?filterlang=${
                         language.LgID
-                      }&status=${15}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                      }&status=${15}`}
                     >
-                      <b>TODO</b>
+                      <b> {languageStatusStatistics[language.LgID][15]}</b>
                     </A>
                   </td>
                   <td className="td1 center">
                     <A
-                      href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
+                      href={`/edit_words?filterlang=${
                         language.LgID
-                      }&status=${14}&tag12=${0}&tag2=${''}&tag1${''}=`}
+                      }&status=${14}`}
                     >
-                      <b>TODO</b>
+                      <b>{languageStatusStatistics[language.LgID][14]}</b>
                     </A>
                   </td>
-                  {statuses.map((statusVal) => {
-                    return (
-                      <td className="td1 center">
-                        <span className={`status${statusVal}`}>
-                          &nbsp;
-                          <A
-                            href={`/edit_words?page=${1}&text=${''}&query=${''}&filterlang=${
-                              language.LgID
-                            }&status=${statusVal}&tag12=${0}&tag2=${''}&tag1${''}=`}
-                          >
-                            TODO
-                          </A>
-                          &nbsp;
-                        </span>
-                      </td>
-                    );
-                  })}
+                  {languageStatusStatistics &&
+                    statuses.map((statusVal) => {
+                      return (
+                        <td className="td1 center">
+                          <span className={`status${statusVal}`}>
+                            &nbsp;
+                            <A
+                              href={`/edit_words?filterlang=${language.LgID}&status=${statusVal}`}
+                            >
+                              {
+                                languageStatusStatistics[language.LgID][
+                                  statusVal
+                                ]
+                              }
+                            </A>
+                            &nbsp;
+                          </span>
+                        </td>
+                      );
+                    })}
                 </tr>
               </>
             );
@@ -201,40 +204,13 @@ export function StatisticsComponent(): JSX.Element {
                 <tr>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
-                    <span className="status1">&nbsp;0&nbsp;</span>
+                    <span className="status1">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
-                    <span className="status3">&nbsp;0&nbsp;</span>
+                    <span className="status3">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;0&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
                     <span className="status1">&nbsp;TODO&nbsp;</span>
@@ -243,7 +219,7 @@ export function StatisticsComponent(): JSX.Element {
                     <span className="status3">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
                     <span className="status1">&nbsp;TODO&nbsp;</span>
@@ -252,7 +228,34 @@ export function StatisticsComponent(): JSX.Element {
                     <span className="status3">&nbsp;TODO&nbsp;</span>
                   </td>
                   <td className="td1 center">
-                    <span className="status5stat">&nbsp;0&nbsp;</span>
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status1">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status3">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status1">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status3">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status1">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status3">&nbsp;TODO&nbsp;</span>
+                  </td>
+                  <td className="td1 center">
+                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
                   </td>
                 </tr>
               </>
@@ -263,58 +266,58 @@ export function StatisticsComponent(): JSX.Element {
               <b>TOTAL</b>
             </th>
             <th className="th1 center">
-              <span className="status1">&nbsp;0&nbsp;</span>
+              <span className="status1">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status3">&nbsp;0&nbsp;</span>
+              <span className="status3">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status5stat">&nbsp;0&nbsp;</span>
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status1">&nbsp;40&nbsp;</span>
-            </th>
-            <th className="th1 center">
-              <span className="status3">&nbsp;47&nbsp;</span>
-            </th>
-            <th className="th1 center">
-              <span className="status5stat">&nbsp;0&nbsp;</span>
-            </th>
-            <th className="th1 center">
-              <span className="status1">&nbsp;40&nbsp;</span>
+              <span className="status1">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
               <span className="status3">&nbsp;47&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status5stat">&nbsp;0&nbsp;</span>
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status1">&nbsp;108&nbsp;</span>
+              <span className="status1">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status3">&nbsp;186&nbsp;</span>
+              <span className="status3">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status5stat">&nbsp;0&nbsp;</span>
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status1">&nbsp;19143&nbsp;</span>
+              <span className="status1">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status3">&nbsp;19143&nbsp;</span>
+              <span className="status3">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status5stat">&nbsp;89&nbsp;</span>
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status1">&nbsp;19258&nbsp;</span>
+              <span className="status1">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status3">&nbsp;19258&nbsp;</span>
+              <span className="status3">&nbsp;TODO&nbsp;</span>
             </th>
             <th className="th1 center">
-              <span className="status5stat">&nbsp;134&nbsp;</span>
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
+            </th>
+            <th className="th1 center">
+              <span className="status1">&nbsp;TODO&nbsp;</span>
+            </th>
+            <th className="th1 center">
+              <span className="status3">&nbsp;TODO&nbsp;</span>
+            </th>
+            <th className="th1 center">
+              <span className="status5stat">&nbsp;TODO&nbsp;</span>
             </th>
           </tr>
         </tbody>

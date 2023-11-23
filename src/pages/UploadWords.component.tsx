@@ -220,7 +220,7 @@ export function UploadWords() {
                 <input
                   type="button"
                   value="BACKUP"
-                  onClick="location.href='backup_restore.php';"
+                  onClickCapture={() => navigator('/backup_restore')}
                 />{' '}
                 MAY BE ADVISABLE!
                 <br />
@@ -230,7 +230,7 @@ export function UploadWords() {
               <input
                 type="button"
                 value="&lt;&lt; Back"
-                onClick="location.href='index.php';"
+                onClickCapture={() => navigator('/')}
               />{' '}
               &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp;{' '}
               <input

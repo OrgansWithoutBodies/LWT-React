@@ -317,6 +317,7 @@ export const createColors = (variant: StyleVariant): CSSObject => {
     '.msgblue': {
       color: Colors.highlightColor0,
       fontWeight: 'bold',
+      padding: '3px',
       backgroundColor: Colors.off1,
       textAlign: 'center',
       fontSize: '120%',

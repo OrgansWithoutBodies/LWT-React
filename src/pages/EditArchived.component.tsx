@@ -8,6 +8,7 @@ import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
 import { Header } from './Header';
+import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
 
 export function EditArchivedTexts({
@@ -52,10 +53,8 @@ export function EditArchivedTexts({
   );
   const recno = numArchivedTexts;
   const navigate = useInternalNavigate();
-  const { onSelectAll, onSelectNone, onSelect, selectedValues } = useSelection(
-    archivedtexts,
-    'AtID'
-  );
+  const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
+    useSelection(archivedtexts, 'AtID');
   const queryRef = useRef<HTMLInputElement | undefined>();
   return (
     <>
@@ -255,7 +254,6 @@ if (recno==0) {
             const languageForLine = languages.find(
               (lang) => lang.LgID === text.AtLgID
             );
-            const isChecked = selectedValues.has(text.AtID);
             return (
               <>
                 <tr>
@@ -265,8 +263,7 @@ if (recno==0) {
                         name="marked[]"
                         className="markcheck"
                         type="checkbox"
-                        onChange={() => onSelect(text, !isChecked)}
-                        checked={isChecked}
+                        {...checkboxPropsForEntry(text)}
                         value="' . $record['AtID'] . '"
                       />
                     </a>
@@ -353,26 +350,4 @@ if (recno==0) {
       </p>
     </>
   );
-}
-function useSelection<TData extends object, TKey extends keyof TData>(
-  data: TData[],
-  key: TKey
-) {
-  const [selectedValues, setSelectedValues] = useState<Set<TData[TKey]>>(
-    new Set()
-  );
-  return {
-    selectedValues,
-    onSelectAll: () => setSelectedValues(new Set(data.map((val) => val[key]))),
-    onSelectNone: () => setSelectedValues(new Set()),
-    onSelect: (val: TData, selecting: boolean) => {
-      if (selecting) {
-        return setSelectedValues(new Set([...selectedValues, val[key]]));
-      }
-      const newSet = new Set([...selectedValues]);
-      newSet.delete(val[key]);
-      setSelectedValues(newSet);
-      return;
-    },
-  };
 }

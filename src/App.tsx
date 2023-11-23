@@ -43,14 +43,29 @@ function GlobalStyle(): JSX.Element {
 
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
-  const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
-(12/12 tables dropped/created, 355 records added), 0 failed.`;
+  const [{ notificationMessageDisplay, notificationMessage }] = useData([
+    'notificationMessageDisplay',
+    'notificationMessage',
+  ]);
+  console.log('msg', { notificationMessage });
+  //   const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
+  // (12/12 tables dropped/created, 355 records added), 0 failed.`;
   return (
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
-      <p id="hide3" className="msgblue" style={{ display: 'none' }}>
-        +++ {notifyMessage} +++
-      </p>
+      {notificationMessage && (
+        <p
+          id="hide3"
+          className="msgblue"
+          style={{
+            display: notificationMessageDisplay === 0 ? 'none' : undefined,
+            maxHeight: 100,
+            height: `${notificationMessageDisplay}%`,
+          }}
+        >
+          +++ {notificationMessage?.txt} +++
+        </p>
+      )}
       <Router>
         {/* 
 all_words_wellknown

@@ -10,6 +10,7 @@ import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
 import { CheckAndSubmit, RefMap, emptyToNullMap, identityMap } from './Forms';
 import { Header } from './Header';
+import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
 
 export function DisplayTags({
@@ -29,6 +30,10 @@ export function DisplayTags({
   const tagCount = tags.length;
   const recno = tags.length;
   const { dataOnPage, numPages } = usePager(tags, currentPage, pageSize);
+  const { checkboxPropsForEntry, onSelectAll, onSelectNone } = useSelection(
+    tags,
+    'TgID'
+  );
   const queryRef = useRef<HTMLInputElement>(null);
   return (
     <>
@@ -139,18 +144,8 @@ if (recno==0) {
           </tr>
           <tr>
             <td className="td1 center">
-              <input
-                type="button"
-                value="Mark All"
-                // TODO
-                onClick="selectToggle(true,'form2');"
-              />
-              <input
-                type="button"
-                value="Mark None"
-                // TODO
-                onClick="selectToggle(false,'form2');"
-              />
+              <input type="button" value="Mark All" onClick={onSelectAll} />
+              <input type="button" value="Mark None" onClick={onSelectNone} />
             </td>
             <td className="td1 center">
               Marked Tags:&nbsp;
@@ -186,6 +181,7 @@ if (recno==0) {
                     <input
                       name="marked[]"
                       type="checkbox"
+                      {...checkboxPropsForEntry(tag)}
                       className="markcheck"
                       value="' . record['TgID'] . '"
                     />

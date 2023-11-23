@@ -1,6 +1,11 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import demoDB from '../demo_db.json';
 import {
+  PersistanceStrategy,
+  PersistedValueGetter,
+  PersistenceStrategies,
+} from './PersistedValueGetter';
+import {
   ArchTextTags,
   ArchivedTexts,
   Languages,
@@ -32,33 +37,52 @@ export interface DataState {
 
   activeLanguageId: LanguagesId | null;
   parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
+
+  notificationMessage: null | { txt: string; time };
 }
-export const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = 'ACTIVE_LANG_ID' as const;
-// TODO persist - 'dataStrategy' as a build flag for different compile targets
+export const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = 'activeLanguageId' as const;
+
+// TODO decide this on compile w DI token
+const MyPersistanceStrategy = PersistanceStrategy.LocalStorage;
+export const MyPersistanceHandles =
+  PersistenceStrategies[MyPersistanceStrategy];
 
 export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,
     parsedTexts: [],
     wordtags: [],
+    notificationMessage: null,
   };
 }
 
 @StoreConfig({ name: 'data' })
 export class DataStore extends Store<DataState> {
   constructor() {
-    const localActiveLanguageID = localStorage.getItem(
-      ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY
-    );
-    console.log('local', localActiveLanguageID);
-    super({
-      ...createDemoDBInitialState(),
-      activeLanguageId:
-        localActiveLanguageID === null
-          ? null
-          : Number.parseInt(localActiveLanguageID),
-    });
+    const { get: persistGetter } = MyPersistanceHandles;
+    // TODO type issues
+    super(getPersistedData(persistGetter));
   }
 }
 
 export const dataStore = new DataStore();
+function getPersistedData(
+  persistGetter: PersistedValueGetter
+): Partial<DataState> {
+  return {
+    settings: persistGetter('settings', []),
+    activeLanguageId: persistGetter('activeLanguageId', null),
+    archivedtexts: persistGetter('archivedtexts', []),
+    archtexttags: persistGetter('archtexttags', []),
+    languages: persistGetter('languages', []),
+    parsedTexts: persistGetter('parsedTexts', []),
+    sentences: persistGetter('sentences', []),
+    tags2: persistGetter('tags2', []),
+    tags: persistGetter('tags', []),
+    textitems: persistGetter('textitems', []),
+    texts: persistGetter('texts', []),
+    texttags: persistGetter('texttags', []),
+    words: persistGetter('words', []),
+    wordtags: persistGetter('wordtags', []),
+  };
+}

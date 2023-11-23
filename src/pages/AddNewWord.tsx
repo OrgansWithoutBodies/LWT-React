@@ -52,6 +52,7 @@ export function AddNewWord({
   const validator = AddNewWordValidator;
   const refMap = RefMap<AddNewWordType>(validator);
   const [{ languages }] = useData(['languages']);
+  ``;
   const navigator = useInternalNavigate();
   // TODO hashmap here avoid lookup
   const lang = languages.find((lang) => lang.LgID === langId);
@@ -100,6 +101,7 @@ export function AddNewWord({
           ref={refMap.WoTextLC}
           value={word?.toLowerCase()}
         />
+        {/* TODO */}
         <input type="hidden" name="tid" value="11" />
         <input type="hidden" name="ord" value="7" />
 

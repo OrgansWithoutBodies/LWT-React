@@ -58,6 +58,7 @@ function CheckErrors<TForm extends {}>(
 // HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 export type TRefMap<TForm> = Record<keyof TForm, React.MutableRefObject<any>>;
+// TODO 'clearAll' handle
 export function RefMap<TForm>(
   validator: ss.Struct<{ [key in keyof TForm]: any }>
 ): TRefMap<TForm> {
