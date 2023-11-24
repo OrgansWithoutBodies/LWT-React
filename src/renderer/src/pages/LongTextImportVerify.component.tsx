@@ -1,5 +1,6 @@
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
+import { resetDirty } from './Terms.component';
 import { byteSizeOfString } from './utils';
 
 export function LongTextVerify(): JSX.Element {
@@ -51,8 +52,10 @@ export function LongTextVerify(): JSX.Element {
                 <input
                   type="button"
                   value="Go Back"
-                  // TODO
-                  onClick="{resetDirty(); history.back();}"
+                  onClick={() => {
+                    resetDirty();
+                    history.back();
+                  }}
                 />
                 &nbsp; | &nbsp;
                 <input

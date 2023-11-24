@@ -1,31 +1,53 @@
-import { useRef, useState } from 'react';
-import { Icon } from '../Icon';
+import { useRef } from 'react';
+import { Icon, RequiredLineButton } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { TextsId } from '../data/validators';
+import { TextsId, TextsValidator } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
+import { RefMap } from './Forms';
 import { Header } from './Header';
-
+import { FormInput, resetDirty } from './Terms.component';
+import { useSelection } from './useSelection';
+const TextMultiAction = {
+  test: (selectedValues: Set<TextsId>) => {
+    console.log('test');
+  },
+  addtag: (selectedValues: Set<TextsId>) => {
+    console.log('addtag');
+  },
+  deltag: (selectedValues: Set<TextsId>) => {
+    console.log('deltag');
+  },
+  rebuild: (selectedValues: Set<TextsId>) => {
+    console.log('rebuild');
+  },
+  setsent: (selectedValues: Set<TextsId>) => {
+    console.log('setsent');
+  },
+  arch: (selectedValues: Set<TextsId>) => {
+    console.log('arch');
+  },
+  del: (selectedValues: Set<TextsId>) => {
+    console.log('del');
+  },
+};
 export function TextMultiActions({
   onSelectAll,
   onSelectNone,
+  selectedValues,
 }: {
+  selectedValues: Set<TextsId>;
   onSelectAll: () => void;
   onSelectNone: () => void;
 }) {
   return (
     <>
-      <form
-        name="form1"
-        action="#"
-        // TODO
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1" action="#">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -41,23 +63,32 @@ export function TextMultiActions({
               </td>
               <td className="td1 center">
                 Marked Texts
-                <select name="markaction" id="markaction" disabled={true}>
-                  {/* TODO */}
-                  {/* onchange="multiActionGo(document.form2, document.form2.markaction);" */}
+                <select
+                  name="markaction"
+                  id="markaction"
+                  disabled={selectedValues.size === 0}
+                  onChange={({ target: { value } }) => {
+                    {
+                      /* TODO */
+                    }
+                    TextMultiAction[value as keyof typeof TextMultiAction](
+                      selectedValues
+                    );
+                  }}
+                >
                   <option value=""></option>
-                  {/* selected="selected" */}
                   <option disabled={true}>------------</option>
-                  <option value="test">Test Marked Texts</option>
+                  <option value={'test'}>Test Marked Texts</option>
                   <option disabled={true}>------------</option>
-                  <option value="addtag">Add Tag</option>
-                  <option value="deltag">Remove Tag</option>
+                  <option value={'addtag'}>Add Tag</option>
+                  <option value={'deltag'}>Remove Tag</option>
                   <option disabled={true}>------------</option>
-                  <option value="rebuild">Reparse Texts</option>
-                  <option value="setsent">Set Term Sentences</option>
+                  <option value={'rebuild'}>Reparse Texts</option>
+                  <option value={'setsent'}>Set Term Sentences</option>
                   <option disabled={true}>------------</option>
-                  <option value="arch">Archive Marked Texts</option>
+                  <option value={'arch'}>Archive Marked Texts</option>
                   <option disabled={true}>------------</option>
-                  <option value="del">Delete Marked Texts</option>
+                  <option value={'del'}>Delete Marked Texts</option>
                 </select>
               </td>
             </tr>
@@ -176,14 +207,13 @@ function ResizePage({
 
 function LibraryRow({
   text,
-  isSelected,
-  toggleSelect,
+  checked,
+  onChange,
 }: {
   text: TextDetailRow;
-  isSelected: boolean;
-  toggleSelect: () => void;
+  checked: boolean;
+  onChange: () => void;
 }): JSX.Element {
-  console.log('LIBRARYROW', text);
   return (
     <tr>
       <td className="td1 center">
@@ -193,8 +223,8 @@ function LibraryRow({
             name="marked[]"
             className="markcheck"
             type="checkbox"
-            checked={isSelected}
-            onChange={() => toggleSelect()}
+            checked={checked}
+            onChange={() => onChange()}
             value="2"
           />
         </A>
@@ -281,7 +311,13 @@ export function Library({
   const navigator = useInternalNavigate();
   const queryRef = useRef<HTMLInputElement | undefined>();
   // TODO
-  const [selectedTexts, setSelectedTexts] = useState<Set<TextsId>>(new Set());
+  const {
+    selectedValues,
+    onSelectAll,
+    onSelectNone,
+    onSelect,
+    checkboxPropsForEntry,
+  } = useSelection(textDetails, 'TxID');
 
   return (
     <>
@@ -299,11 +335,7 @@ export function Library({
         </A>
       </p>
 
-      <form
-        name="form1"
-        action="#"
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1" colSpan={4}>
@@ -471,7 +503,7 @@ function get_texttag_selectoptions($v, $l)
                     return true;
                   })
                   .map((tag) => {
-                    return <option value={tag.T2ID}> {tag.T2Text}</option>;
+                    return <option value={tag.TtT2ID}> {tag.T2Text}</option>;
                   })}
                 <option disabled>--------</option>
                 <option
@@ -513,10 +545,9 @@ function get_texttag_selectoptions($v, $l)
       </form>
 
       <TextMultiActions
-        onSelectAll={() =>
-          setSelectedTexts(new Set(textDetails.map((text) => text.TxID)))
-        }
-        onSelectNone={() => setSelectedTexts(new Set())}
+        onSelectAll={onSelectAll}
+        onSelectNone={onSelectNone}
+        selectedValues={selectedValues}
       />
       {
         <>
@@ -525,22 +556,8 @@ function get_texttag_selectoptions($v, $l)
             <tbody>
               {dataOnPage &&
                 dataOnPage.map((text) => {
-                  const isSelected = selectedTexts.has(text.TxID);
                   return (
-                    <LibraryRow
-                      isSelected={isSelected}
-                      text={text}
-                      toggleSelect={() => {
-                        if (!isSelected) {
-                          return setSelectedTexts(
-                            new Set([...selectedTexts, text.TxID])
-                          );
-                        }
-                        const setToRemove = new Set([...selectedTexts]);
-                        setToRemove.delete(text.TxID);
-                        setSelectedTexts(setToRemove);
-                      }}
-                    />
+                    <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
                   );
                 })}
             </tbody>
@@ -560,6 +577,12 @@ export function EditText({ chgID }: { chgID: TextsId }) {
   const editingText = texts.find(({ TxID }) => {
     return TxID === chgID;
   });
+  if (!editingText) {
+    throw new Error('Invalid change ID');
+  }
+  const validator = TextsValidator;
+  const navigator = useInternalNavigate();
+  const refMap = RefMap(validator);
   return (
     <>
       <Header title={'My Texts'} />
@@ -569,44 +592,40 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <Icon src="question-frame" title="Help" />
         </a>
       </h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         className="validate"
         // TODO
         action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
         method="post"
       >
-        <input type="hidden" name="TxID" value={chgID} />
+        <FormInput
+          refMap={refMap}
+          type="hidden"
+          entryKey="TxID"
+          fixedEntry={editingText}
+        />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
               <LanguageDropdown defaultValue={editingText?.TxLgID} />
-              {/* <select name="TxLgID" className="notempty setfocus"> */}
-              {/* <?php
-		echo get_languages_selectoptions($record['TxLgID'],"[Choose...]");
-		?> */}
-              {/* </select>{' '} */}
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Title:</td>
             <td className="td1">
-              <input
+              <FormInput
                 type="text"
+                refMap={refMap}
                 className="notempty checkoutsidebmp"
-                data_info="Title"
-                name="TxTitle"
-                value={editingText?.TxTitle}
-                maxlength={200}
+                // data_info="Title"
+                entryKey="TxTitle"
+                defaultEntry={editingText}
+                maxLength={200}
                 size={60}
               />{' '}
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -643,14 +662,14 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                 //  <?php echo getScriptDirectionTag($record['TxLgID']); ?>
                 name="TxText"
                 className="notempty checkbytes checkoutsidebmp"
-                data_maxlength={65000}
-                data_info="Text"
+                maxLength={65000}
+                // data_info="Text"
                 cols={60}
                 rows={20}
               >
                 {editingText?.TxText}
               </textarea>{' '}
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -663,13 +682,13 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Source URI:</td>
             <td className="td1">
-              <input
+              <FormInput
                 type="text"
                 className="checkurl checkoutsidebmp"
-                data_info="Source URI"
-                name="TxSourceURI"
-                value={editingText?.TxSourceURI}
-                maxlength={1000}
+                // data_info="Source URI"
+                entryKey="TxSourceURI"
+                defaultEntry={editingText}
+                maxLength={1000}
                 size={60}
               />
             </td>
@@ -684,13 +703,13 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Audio-URI:</td>
             <td className="td1">
-              <input
+              <FormInput
                 type="text"
                 className="checkoutsidebmp"
-                data_info="Audio-URI"
-                name="TxAudioURI"
-                value={editingText?.TxAudioURI}
-                maxlength={200}
+                // data_info="Audio-URI"
+                entryKey="TxAudioURI"
+                defaultEntry={editingText}
+                maxLength={200}
                 size={60}
               />
               <span id="mediaselect">
@@ -704,12 +723,14 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <input
                 type="button"
                 value="Cancel"
-                // TODO
-                onClick="{resetDirty(); location.href='edit_texts.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+                onClick={() => {
+                  resetDirty();
+                  navigator(`/edit_texts.php#rec${chgID}`);
+                }}
               />
-              <input type="submit" name="op" value="Check" />
-              <input type="submit" name="op" value="Change" />
-              <input type="submit" name="op" value="Change and Open" />
+              <input type="button" name="op" value="Check" />
+              <input type="button" name="op" value="Change" />
+              <input type="button" name="op" value="Change and Open" />
             </td>
           </tr>
         </table>

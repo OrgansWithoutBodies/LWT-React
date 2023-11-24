@@ -9,7 +9,7 @@ import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
 import { Header } from './Header';
 import { useSelection } from './useSelection';
-import { confirmDelete } from './utils';
+import { confirmDelete, get_archivedtexttag_selectoptions } from './utils';
 
 export function EditArchivedTexts({
   query,
@@ -31,21 +31,15 @@ export function EditArchivedTexts({
     activeLanguage ? activeLanguage.LgID : null
   );
 
-  const filterLanguage = languages.map((lang) => {
-    return lang.LgID === filterLanguageID;
-  });
+  // const filterLanguage = languages.map((lang) => {
+  //   return lang.LgID === filterLanguageID;
+  // });
   const filteredTexts =
     filterLanguageID !== null
       ? archivedtexts.filter(({ AtLgID }) => {
           return AtLgID === filterLanguageID;
         })
       : archivedtexts;
-  console.log({
-    activeLanguage,
-    filterLanguage: filterLanguageID,
-    archivedtexts,
-    filteredTexts,
-  });
   const { dataOnPage, numPages } = usePager(
     filteredTexts,
     currentPage,
@@ -60,12 +54,7 @@ export function EditArchivedTexts({
     <>
       <Header title={`My ${activeLanguage?.LgName} Text Archive`} />
       <p>&nbsp;</p>
-      <form
-        name="form1"
-        action="#"
-        // TODO
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1" colSpan={4}>
@@ -137,9 +126,11 @@ export function EditArchivedTexts({
               <select
                 name="tag1"
                 onChange={({ target: { value: val } }) =>
-                  navigate(`/edit_archivedtexts?page=1&tag1=${val}`)
+                  // TODO paramUpdater
+                  navigate(`/edit_archivedtexts?tag1=${val}`)
                 }
               >
+                {get_archivedtexttag_selectoptions('', '')}
                 {/* TODO */}
                 {/* <?php echo get_archivedtexttag_selectoptions($currenttag1,$currentlang); ?> */}
               </select>
@@ -149,7 +140,7 @@ export function EditArchivedTexts({
               <select
                 name="tag12"
                 onChange={({ target: { value: val } }) =>
-                  navigate(`/edit_archivedtexts?page=1&tag12=${val}`)
+                  navigate(`/edit_archivedtexts?tag12=${val}`)
                 }
               >
                 {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
@@ -161,6 +152,7 @@ export function EditArchivedTexts({
               <select
                 name="tag2"
                 onChange={({ target: { value: val } }) =>
+                  // TODO paramUpdater
                   navigate(`/edit_archivedtexts?page=1&tag2=${val}`)
                 }
               >

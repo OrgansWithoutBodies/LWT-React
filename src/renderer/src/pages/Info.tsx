@@ -93,7 +93,7 @@ $('#floatdiv').addFloating( {
               id="topicjump"
               onChange="{var qm = document.getElementById('topicjump'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { location.href = '#' + val;}}"
             >
-              <option value="" selected="selected">
+              <option value="" selected>
                 [Select...]
               </option>
               <option value="preface">Preface</option>

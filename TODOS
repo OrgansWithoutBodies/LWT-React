@@ -1,3 +1,5 @@
+- Tatoeba/Lute
+- logging
 - differentiate 'legacy' & 'extended'
 - be able to have images in texts?
 - auto read pdf (if has outline)
@@ -14,9 +16,7 @@
 - tests that compare to original php?
 - have an interface to change db backend?
 - filter component
--
-
----
+- ***
 
 PORT:
 

@@ -5,6 +5,7 @@ import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
 type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
+// TODO dedupe with STATUSES
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   0: 0,
   1: 1,

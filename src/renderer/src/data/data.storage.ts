@@ -1,7 +1,7 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import demoDB from '../demo_db.json';
+import { AppVariables } from '../meta';
 import {
-  PersistanceStrategy,
   PersistedValueGetter,
   PersistenceStrategies,
 } from './PersistedValueGetter';
@@ -43,7 +43,7 @@ export interface DataState {
 export const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = 'activeLanguageId' as const;
 
 // TODO decide this on compile w DI token
-const MyPersistanceStrategy = PersistanceStrategy.LocalStorage;
+const MyPersistanceStrategy = AppVariables.persistMethod;
 export const MyPersistanceHandles =
   PersistenceStrategies[MyPersistanceStrategy];
 

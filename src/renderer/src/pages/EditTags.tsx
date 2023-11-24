@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Icon } from '../Icon';
+import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -10,6 +10,8 @@ import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
 import { CheckAndSubmit, RefMap, emptyToNullMap, identityMap } from './Forms';
 import { Header } from './Header';
+import { NavigateButton } from './Statistics.component';
+import { FormInput, resetDirty } from './Terms.component';
 import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
 
@@ -25,7 +27,6 @@ export function DisplayTags({
   const pageSize = 15;
 
   const [{ tags }] = useData(['tags']);
-  const restoreBackup = useRef();
   const navigate = useInternalNavigate();
   const tagCount = tags.length;
   const recno = tags.length;
@@ -44,23 +45,15 @@ export function DisplayTags({
         </A>
       </p>
 
-      <form
-        name="form1"
-        action="#"
-        // TODO
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1" colSpan={4}>
               Filter <Icon src="funnel" title="Filter" />
               &nbsp;
-              <input
-                type="button"
+              <NavigateButton
                 value="Reset All"
-                onClick={() => {
-                  navigate(`/edit_tags?page=${1}`);
-                }}
+                navigateTo={`/edit_tags?page=${1}`}
               />
             </th>
           </tr>
@@ -197,7 +190,7 @@ if (recno==0) {
                     onClick={() => {
                       // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
                       if (confirmDelete()) {
-                        dataService.deleteTagFromTerm(tag.WtTgID);
+                        dataService.deleteTagFromTerm(tag.TgID);
                       }
                     }}
                     src="minus-button"
@@ -261,11 +254,6 @@ export function NewTag() {
     <>
       <Header title={'My Term Tags'} />
       <h4>New Tag</h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         name="newtag"
         className="validate"
@@ -276,15 +264,15 @@ export function NewTag() {
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <input
+              <FormInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
-                name="TgText"
-                ref={refMap.TgText}
-                maxlength={20}
+                entryKey="TgText"
+                refMap={refMap}
+                maxLength={20}
                 size={20}
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -292,7 +280,7 @@ export function NewTag() {
             <td className="td1">
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={200}
+                maxLength={200}
                 ref={refMap.TgComment}
                 name="TgComment"
                 cols={40}
@@ -305,8 +293,10 @@ export function NewTag() {
               <input
                 type="button"
                 value="Cancel"
-                // TODO
-                onClick="{resetDirty(); location.href='edit_tags.php';}"
+                onClick={() => {
+                  resetDirty();
+                  navigator('/edit_tags');
+                }}
               />
               <input
                 type="button"
@@ -337,6 +327,9 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
   const changingTag = tags.find(({ TgID }) => {
     return TgID === chgId;
   });
+  if (!changingTag) {
+    throw new Error('Invalid Tag ID');
+  }
   const preValidateMap: {
     [key in keyof Tags]?: (value: string) => any | null;
   } = {
@@ -352,11 +345,6 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
     <>
       <Header title={'My Term Tags'} />
       <h4>Edit Tag</h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         name="newtag"
         className="validate"
@@ -367,16 +355,16 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <input
+              <FormInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
-                name="TgText"
-                defaultValue={changingTag?.TgText}
-                ref={refMap.TgText}
-                maxlength={20}
+                entryKey="TgText"
+                defaultEntry={changingTag}
+                refMap={refMap}
+                maxLength={20}
                 size={20}
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -384,11 +372,11 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
             <td className="td1">
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={200}
+                maxLength={200}
                 ref={refMap.TgComment}
                 name="TgComment"
                 cols={40}
-                defaultValue={changingTag?.TgComment}
+                defaultValue={changingTag.TgComment}
                 rows={3}
               ></textarea>
             </td>
@@ -398,8 +386,10 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
               <input
                 type="button"
                 value="Cancel"
-                // TODO
-                onClick="{resetDirty(); location.href='edit_tags.php';}"
+                onClick={() => {
+                  resetDirty();
+                  navigator('/edit_tags');
+                }}
               />
               <input
                 type="button"
@@ -411,7 +401,7 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
                     preValidateMap,
                     validator,
                     (value) => {
-                      dataService.editTag(changingTag?.TgID, value);
+                      dataService.editTag(changingTag.TgID, value);
                       navigator('/edit_tags');
                     },
                     'TgID'

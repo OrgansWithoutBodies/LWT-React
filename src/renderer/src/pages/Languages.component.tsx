@@ -103,7 +103,6 @@ function LanguageLine({
             </A>
             &nbsp;&nbsp;
             <A href={`/edit_languages?refresh=${language.LgID}`}>
-              {/* . $_SERVER['PHP_SELF'] . '?refresh=' . $record['LgID'] . ' */}
               <Icon src="lightning" title="Reparse Texts" />
             </A>
           </>

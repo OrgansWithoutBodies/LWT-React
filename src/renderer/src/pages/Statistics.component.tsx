@@ -1,7 +1,7 @@
 import { Languages } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 const CAKSlices = [
   'Today',
@@ -106,64 +106,67 @@ export function StatisticsComponent(): JSX.Element {
               (98)
             </th>
           </tr>
-          {languages.map((language) => {
-            const statuses = [
-              //               15
-              // ,14
-              1, 2, 3, 4, 5, 99, 599, 98,
-            ];
+          {languageStatusStatistics &&
+            languages.map((language) => {
+              const statuses = [
+                //               15
+                // ,14
+                1, 2, 3, 4, 5, 99, 599, 98,
+              ];
 
-            return (
-              <>
-                <tr>
-                  <td className="td1">{language.LgName}</td>
-                  <td className="td1 center">
-                    <A href={`/edit_words?filterlang=${language.LgID}`}>
-                      <b>{languageStatusStatistics[language.LgID]['total']}</b>
-                    </A>
-                  </td>
-                  <td className="td1 center">
-                    <A
-                      href={`/edit_words?filterlang=${
-                        language.LgID
-                      }&status=${15}`}
-                    >
-                      <b> {languageStatusStatistics[language.LgID][15]}</b>
-                    </A>
-                  </td>
-                  <td className="td1 center">
-                    <A
-                      href={`/edit_words?filterlang=${
-                        language.LgID
-                      }&status=${14}`}
-                    >
-                      <b>{languageStatusStatistics[language.LgID][14]}</b>
-                    </A>
-                  </td>
-                  {languageStatusStatistics &&
-                    statuses.map((statusVal) => {
-                      return (
-                        <td className="td1 center">
-                          <span className={`status${statusVal}`}>
-                            &nbsp;
-                            <A
-                              href={`/edit_words?filterlang=${language.LgID}&status=${statusVal}`}
-                            >
-                              {
-                                languageStatusStatistics[language.LgID][
-                                  statusVal
-                                ]
-                              }
-                            </A>
-                            &nbsp;
-                          </span>
-                        </td>
-                      );
-                    })}
-                </tr>
-              </>
-            );
-          })}
+              return (
+                <>
+                  <tr>
+                    <td className="td1">{language.LgName}</td>
+                    <td className="td1 center">
+                      <A href={`/edit_words?filterlang=${language.LgID}`}>
+                        <b>
+                          {languageStatusStatistics[language.LgID]['total']}
+                        </b>
+                      </A>
+                    </td>
+                    <td className="td1 center">
+                      <A
+                        href={`/edit_words?filterlang=${
+                          language.LgID
+                        }&status=${15}`}
+                      >
+                        <b> {languageStatusStatistics[language.LgID][15]}</b>
+                      </A>
+                    </td>
+                    <td className="td1 center">
+                      <A
+                        href={`/edit_words?filterlang=${
+                          language.LgID
+                        }&status=${14}`}
+                      >
+                        <b>{languageStatusStatistics[language.LgID][14]}</b>
+                      </A>
+                    </td>
+                    {languageStatusStatistics &&
+                      statuses.map((statusVal) => {
+                        return (
+                          <td className="td1 center">
+                            <span className={`status${statusVal}`}>
+                              &nbsp;
+                              <A
+                                href={`/edit_words?filterlang=${language.LgID}&status=${statusVal}`}
+                              >
+                                {
+                                  languageStatusStatistics[language.LgID][
+                                    statusVal
+                                  ]
+                                }
+                              </A>
+                              &nbsp;
+                            </span>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                </>
+              );
+            })}
         </tbody>
       </table>
 
@@ -323,7 +326,7 @@ export function StatisticsComponent(): JSX.Element {
         </tbody>
       </table>
       <p>
-        <NavigateButton buttonText={'<< Back'} navigateTo={RouterPage.HOME} />
+        <NavigateButton value={'<< Back'} navigateTo={RouterPage.HOME} />
       </p>
     </>
   );
@@ -332,18 +335,18 @@ enum RouterPage {
   HOME = '/',
 }
 export function NavigateButton({
-  buttonText,
+  value,
   navigateTo,
 }: {
-  buttonText: string;
-  navigateTo: RouterPage;
+  value: string;
+  navigateTo: InternalPaths;
 }) {
   const navigate = useInternalNavigate();
 
   return (
     <input
       type="button"
-      value={buttonText}
+      value={value}
       onClick={() => {
         navigate(navigateTo);
       }}

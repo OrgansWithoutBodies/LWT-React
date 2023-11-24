@@ -120,7 +120,9 @@ const VariantMap: Record<StyleVariant, ColorSchema> = {
   dark: DarkColors,
   light: DefaultColors,
 };
-export const createColors = (variant: StyleVariant): CSSObject => {
+export const createColors = (
+  variant: StyleVariant
+): Record<'body' | string, CSSObject> => {
   const Colors = VariantMap[variant];
   return {
     input: {

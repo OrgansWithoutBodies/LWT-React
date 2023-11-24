@@ -10,6 +10,9 @@ function wizard_go(
   const l1 = refL1.current?.value;
   const l2 = refL2.current?.value;
 
+  if (l1 === undefined || l2 === undefined) {
+    throw new Error('Undefined refs');
+  }
   if (l1 == '') {
     alert('Please choose your native language (L1)!');
     return;

@@ -293,6 +293,11 @@ export function confirmDelete(): boolean {
 
 // // -------------------------------------------------------------
 
+// TODO
+export function get_archivedtexttag_selectoptions($v: string, $l: string) {
+  console.log($v, $l);
+  return '';
+}
 // function get_archivedtexttag_selectoptions($v, $l)
 // {
 // 	global $tbpref;
@@ -3788,7 +3793,7 @@ export function multiActionGo(
               t +
               ' ***\n\n*** ' +
               // TODO
-              $('input.markcheck:checked').length +
+              'input.markcheck:checked'.length +
               ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
             answer
           );
@@ -3823,7 +3828,7 @@ export function multiActionGo(
             t +
             ' ***\n\n*** ' +
             // TODO
-            $('input.markcheck:checked').length +
+            'input.markcheck:checked'.length +
             ' Record(s) will be affected ***\n\nAre you sure?'
         );
         if (answer) {
@@ -3837,7 +3842,7 @@ export function multiActionGo(
   }
 }
 
-export function splitCheckText(text: string, language: Languages, id) {
+export function splitCheckText(text: string, language: Languages, id: number) {
   const {
     LgRemoveSpaces: removeSpaces,
     LgSplitEachChar: splitEachChar,

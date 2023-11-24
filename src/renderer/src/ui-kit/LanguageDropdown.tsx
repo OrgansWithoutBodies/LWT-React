@@ -22,7 +22,9 @@ export function LanguageDropdown({
       name={name}
       value={defaultValue}
       className="notempty setfocus"
-      onChange={(val) => onChange(Number.parseInt(val.target.value))}
+      onChange={(val) =>
+        onChange ? onChange(Number.parseInt(val.target.value)) : () => {}
+      }
       ref={dropdownRef}
     >
       <option key={-1} value="-1">

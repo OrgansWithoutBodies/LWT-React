@@ -52,7 +52,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="notempty checkoutsidebmp"
-                  data_info="Title"
+                  // data_info="Title"
                   name="TxTitle"
                   ref={refMap.TxTitle}
                   defaultValue=""
@@ -78,8 +78,9 @@ export function ImportShortText(): JSX.Element {
                   name="TxText"
                   ref={refMap.TxText}
                   className="notempty checkbytes checkoutsidebmp"
-                  data_maxlength="65000"
-                  data_info="Text"
+                  // TODO move these to validators
+                  maxLength={65000}
+                  // data_info="Text"
                   cols={60}
                   rows={20}
                 ></textarea>
@@ -92,7 +93,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="checkurl checkoutsidebmp"
-                  data_info="Source URI"
+                  // data_info="Source URI"
                   name="TxSourceURI"
                   ref={refMap.TxSourceURI}
                   defaultValue=""
@@ -131,7 +132,7 @@ export function ImportShortText(): JSX.Element {
                 <input
                   type="text"
                   className="checkoutsidebmp"
-                  data_info="Audio-URI"
+                  // data_info="Audio-URI"
                   name="TxAudioURI"
                   ref={refMap.TxAudioURI}
                   defaultValue=""

@@ -17,6 +17,16 @@ const URLValidator = () =>
 const URLTemplateValidator = (): ss.Struct<any, any> =>
   ss.string() && ss.define('urlTemplate', isValidURLTemplate);
 
+const NumberInListValidator = <TNum extends Readonly<number[]>>(
+  numbers: TNum
+) =>
+  ss.refine<TNum[number], null>(
+    ss.number() as ss.Struct<TNum[number], null>,
+    'Zero or One',
+    (val) => numbers.includes(val)
+  );
+const BooleanNumberValidator = NumberInListValidator([0, 1] as const);
+
 const TimestampValidator = () => ss.number();
 // TODO valid reference key id
 const archivedtextsId = brandedNumber('archivedtextsId' as const);
@@ -31,7 +41,6 @@ const textsId = brandedNumber('textsId' as const);
 const texttagsId = brandedNumber('texttagsId' as const);
 const wordsId = brandedNumber('wordsId' as const);
 const wordtagsId = brandedNumber('wordtagsId' as const);
-
 export type ArchivedTextsId = typeof archivedtextsId.TYPE;
 export type ArchTextTagsId = typeof archtexttagsId.TYPE;
 export type LanguagesId = typeof languagesId.TYPE;
@@ -74,6 +83,7 @@ export const ArchTextTagsValidator = ss.object({
   // KEY (`AgAtID`,`AgT2ID`),
 });
 
+export const textSizes = [100, 150, 200, 250] as const;
 export const LanguagesValidator = ss.object({
   // LgID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // KEY (`LgID`),
@@ -91,7 +101,7 @@ export const LanguagesValidator = ss.object({
   // LgExportTemplate: varchar(1000) DEFAULT NULL,
   LgExportTemplate: ss.optional(ss.string()),
   // LgTextSize: int(5) unsigned NOT NULL DEFAULT '100',
-  LgTextSize: ss.number(),
+  LgTextSize: NumberInListValidator(textSizes),
   // LgCharacterSubstitutions: varchar(500) NOT NULL,
   LgCharacterSubstitutions: ss.nonempty(ss.string()),
   // LgRegexpSplitSentences: varchar(500) NOT NULL,
@@ -101,11 +111,11 @@ export const LanguagesValidator = ss.object({
   // LgRegexpWordCharacters: varchar(500) NOT NULL,
   LgRegexpWordCharacters: ss.nonempty(ss.string()),
   // LgRemoveSpaces: int(1) unsigned NOT NULL DEFAULT '0',
-  LgRemoveSpaces: ss.number(),
+  LgRemoveSpaces: BooleanNumberValidator,
   // LgSplitEachChar: int(1) unsigned NOT NULL DEFAULT '0',
-  LgSplitEachChar: ss.number(),
+  LgSplitEachChar: BooleanNumberValidator,
   // LgRightToLeft: int(1) unsigned NOT NULL DEFAULT '0',
-  LgRightToLeft: ss.number(),
+  LgRightToLeft: BooleanNumberValidator,
 });
 export const LanguagesValidatorNoId = ss.omit(LanguagesValidator, ['LgID']);
 export const SentencesValidator = ss.object({

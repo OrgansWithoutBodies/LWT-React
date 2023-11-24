@@ -1,7 +1,7 @@
 import { parse } from 'papaparse';
 import { useRef } from 'react';
 import * as ss from 'superstruct';
-import { Icon } from '../Icon';
+import { RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Words } from '../data/parseMySqlDump';
 import { languagesId } from '../data/validators';
@@ -47,14 +47,9 @@ export function UploadWords() {
 
   return (
     <>
-      <Header />
-      <form
-        encType="multipart/form-data"
-        className="validate"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>"
-        method="post"
-        onSubmit="{return confirm ('Did you double-check everything?\nAre you sure?');}"
-      >
+      {/* TODO */}
+      <Header title={''} />
+      <form encType="multipart/form-data" className="validate">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 center">
@@ -63,7 +58,7 @@ export function UploadWords() {
             <td className="td1">
               {/* <select name="LgID" className="notempty setfocus"> */}
               <LanguageDropdown dropdownRef={refMap.lang} />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -79,7 +74,7 @@ export function UploadWords() {
               <b>Field Delimiter "D":</b>
               <br />
               <select name="Tab">
-                <option value="c" selected="selected">
+                <option value="c" selected>
                   Comma "," [CSV File, LingQ]
                 </option>
                 <option value="t">TAB (ASCII 9) [TSV File]</option>
@@ -91,7 +86,7 @@ export function UploadWords() {
               <br />
               "C1":{' '}
               <select ref={refMap.c1} name="Col1">
-                <option value="w" selected="selected">
+                <option value="w" selected>
                   Term
                 </option>
                 <option value="t">Translation</option>
@@ -104,7 +99,7 @@ export function UploadWords() {
               "C2":{' '}
               <select ref={refMap.c2} name="Col2">
                 <option value="w">Term</option>
-                <option value="t" selected="selected">
+                <option value="t" selected>
                   Translation
                 </option>
                 <option value="r">Romanization</option>
@@ -120,7 +115,7 @@ export function UploadWords() {
                 <option value="r">Romanization</option>
                 <option value="s">Sentence</option>
                 <option value="g">Tag List</option>
-                <option value="x" selected="selected">
+                <option value="x" selected>
                   Don't import
                 </option>
               </select>
@@ -132,7 +127,7 @@ export function UploadWords() {
                 <option value="r">Romanization</option>
                 <option value="s">Sentence</option>
                 <option value="g">Tag List</option>
-                <option value="x" selected="selected">
+                <option value="x" selected>
                   Don't import
                 </option>
               </select>
@@ -144,7 +139,7 @@ export function UploadWords() {
                 <option value="r">Romanization</option>
                 <option value="s">Sentence</option>
                 <option value="g">Tag List</option>
-                <option value="x" selected="selected">
+                <option value="x" selected>
                   Don't import
                 </option>
               </select>
@@ -158,7 +153,7 @@ export function UploadWords() {
               :
               <select name="Over">
                 {/* TODO */}
-                <option value="0" selected="selected">
+                <option value="0" selected>
                   No
                 </option>
                 <option value="1">Yes</option>
@@ -188,7 +183,7 @@ export function UploadWords() {
               <textarea
                 // TODO
                 className="checkoutsidebmp"
-                data_info="Upload"
+                // data_info="Upload"
                 name="Upload"
                 cols={60}
                 rows={25}
@@ -210,7 +205,7 @@ export function UploadWords() {
                   ))}
                 {/* <?php echo get_wordstatus_selectoptions(NULL,false,false); ?> */}
               </select>{' '}
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -238,6 +233,13 @@ export function UploadWords() {
                 name="op"
                 value="Import"
                 onClick={async () => {
+                  if (
+                    !window.confirm(
+                      'Did you double-check everything?\nAre you sure?'
+                    )
+                  ) {
+                    return;
+                  }
                   CheckAndSubmit(
                     refMap,
                     {
@@ -272,24 +274,20 @@ export function UploadWords() {
                         },
                         [] as [number, Exclude<TermName, 'x'>][]
                       );
-                      const dataToCareAbout = Object.fromEntries(
-                        colIndsToCareAbout.map(([ind, colType]) => [
-                          ind,
-                          { colType, data: [] as string[] },
-                        ])
-                      );
                       const parsedTerms = data.data.map((row) => {
                         const term = Object.fromEntries(
                           colIndsToCareAbout.map(([ind, colKey]) => {
                             return [
                               ColumnImportMode[colKey].termParam,
                               row[ind],
+                            ] as [
+                              (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
+                              Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
                             ];
                           })
                         );
                         return term as Words;
                       });
-                      console.log('data', parsedTerms);
                       dataService.addMultipleTerms(parsedTerms);
                     }
                   );

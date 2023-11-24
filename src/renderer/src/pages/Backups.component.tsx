@@ -1,46 +1,14 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { dataService } from '../data/data.service';
-import { useData } from '../data/useAkita';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
-// import { Gunzip } from 'browserify-zlib';
 
-export function RestoreFromBackup(
-  backupFile: React.MutableRefObject<HTMLInputElement>
-): void {
-  const reader = new FileReader();
-  const { files } = backupFile.current;
-  if (files) {
-    const buffer: string[] = [];
-    reader.onload = async (e) => {
-      const text = e.target.result;
-      // Gunzip.ungzip(text, function (err, dezipped) {
-      //   console.log(dezipped.toString());
-      // });
-      //     // decompression chunk ready, add it to the buffer
-      //     buffer.push(data.toString());
-      //   })
-      //   .on('end', function () {
-      //     // response and decompression complete, join the buffer and return
-      //     console.log(buffer.join(''));
-      //   }).
-
-      // console.log(text);
-      // alert(text);
-    };
-    const text = reader.readAsText(files[0]);
-    console.log('TEST123', text);
-  }
-}
 export function BackupScreen(): JSX.Element {
-  const [
-    ,
-    { downloadBackup, restoreFromBackup, emptyDatabase, installDemoDatabase },
-  ] = useData([]);
+  // const [] = useData([]);
   const navigate = useInternalNavigate();
 
-  const restoreBackup = useRef();
+  const restoreBackup = useRef<HTMLInputElement>();
   return (
     <>
       <>
@@ -50,6 +18,7 @@ export function BackupScreen(): JSX.Element {
           encType="multipart/form-data"
           action="/backup_restore"
           method="post"
+          // TODO where is this triggered
           onSubmit="return confirm('Are you sure?');"
         >
           <table className="tab1" cellSpacing={0} cellPadding={5}>
@@ -117,7 +86,16 @@ export function BackupScreen(): JSX.Element {
                       type="button"
                       name="restore"
                       value="Restore from LWT Backup"
-                      onClick={() => RestoreFromBackup(restoreBackup)}
+                      onClick={() => {
+                        if (
+                          restoreBackup.current &&
+                          restoreBackup.current.files
+                        ) {
+                          dataService.restoreFromBackup(
+                            restoreBackup.current.files[0]
+                          );
+                        }
+                      }}
                     />
                   </p>
                 </td>

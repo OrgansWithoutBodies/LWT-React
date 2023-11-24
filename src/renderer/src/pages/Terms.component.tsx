@@ -1,16 +1,24 @@
-import { useState } from 'react';
-import { Icon } from '../Icon';
+import { InputHTMLAttributes } from 'react';
+import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { LanguagesId, WordsId } from '../data/validators';
+import { LanguagesId, WordsId, WordsValidator } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { usePager } from '../usePager';
+import { do_ajax_show_sentences } from './AddNewWord';
+import { RefMap, TRefMap } from './Forms';
 import { Header } from './Header';
+import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
+
+// TODO
+export const resetDirty = () => {};
+export const setDirty = () => {};
+
 export const enum Sorting {
   'Term A-Z' = 1,
   'Translation A-Z' = 2,
@@ -293,7 +301,6 @@ export function TermsFooter({
   currentPage: number;
   numPages: number;
 }): JSX.Element {
-  const navigate = useInternalNavigate();
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
@@ -478,7 +485,6 @@ export function Terms({
   sort: Sorting | null;
 }): JSX.Element {
   const pageSize = 15;
-  const [selectedTerms, setSelectedTerms] = useState<WordsId[]>([]);
   const [{ words, activeLanguage }] = useData([
     'words',
     'activeLanguage',
@@ -488,7 +494,7 @@ export function Terms({
   //   return <></>;
   // }
   // const textTagsMatchingTag1=texttags.filter((tag)=>tag.TtTxID===)
-  const navigator = useInternalNavigate();
+  // const navigator = useInternalNavigate();
   const filteredWords = words.filter((val) => {
     const isRightText =
       textFilter === null
@@ -513,6 +519,10 @@ export function Terms({
   const sortedWords =
     sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
   const currentPage = pageNum !== null ? pageNum : 1;
+  const { onSelectAll, onSelectNone, selectedValues, onSelect } = useSelection(
+    filteredWords,
+    'WoID'
+  );
   const { dataOnPage: displayedWords, numPages } = usePager(
     sortedWords,
     currentPage,
@@ -542,17 +552,17 @@ export function Terms({
       {sortedWords && (
         <>
           <TermsFilterBox
-            activeLanguageId={activeLanguage?.LgID}
+            activeLanguageId={
+              activeLanguage !== undefined ? activeLanguage.LgID : null
+            }
             numTerms={sortedWords.length}
             currentPage={currentPage}
             numPages={numPages}
           />
           <TermMultiActions
-            selectedTerms={selectedTerms}
-            onSelectAll={() =>
-              setSelectedTerms(sortedWords.map((term) => term.WoID))
-            }
-            onSelectNone={() => setSelectedTerms([])}
+            selectedTerms={selectedValues}
+            onSelectAll={onSelectAll}
+            onSelectNone={onSelectNone}
           />
           <table className="sortable tab1">
             <TermsHeader />
@@ -561,20 +571,8 @@ export function Terms({
                 return (
                   <TermLine
                     word={word}
-                    onSelect={(val, checked) => {
-                      console.log(val);
-                      if (checked) {
-                        setSelectedTerms([...selectedTerms, val]);
-                      } else {
-                        setSelectedTerms(
-                          selectedTerms.slice(
-                            selectedTerms.indexOf(val),
-                            selectedTerms.indexOf(val) + 1
-                          )
-                        );
-                      }
-                    }}
-                    isSelected={selectedTerms.includes(word.WoID)}
+                    onSelect={onSelect}
+                    isSelected={selectedValues.has(word.WoID)}
                   />
                 );
               })}
@@ -595,6 +593,10 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const term = words.find((val) => {
     return val.WoID === chgID;
   });
+  const validator = WordsValidator;
+  const refMap = RefMap(validator);
+  const navigator = useInternalNavigate();
+  const WoInput = buildFormInput(refMap, term);
   return (
     <>
       <Header
@@ -602,59 +604,43 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
       />
 
       <h4>Edit Term</h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
-      <form
-        name="editword"
-        className="validate"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
-        method="post"
-      >
-        <input type="hidden" name="WoID" value={term?.WoID} />
-        <input
-          type="hidden"
-          name="WoLgID"
-          id="langfield"
-          value={term?.WoLgID}
-        />
+      <form name="editword" className="validate">
+        <WoInput type="hidden" entryKey={'WoID'} fixed />
+        <WoInput type="hidden" entryKey={'WoLgID'} fixed />
         <input type="hidden" name="WoOldStatus" value={term?.WoStatus} />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Language:</td>
-            <td className="td1">
-              {term?.WoLgID}
-              {/* TODO */}
-              {/* <?php echo tohtml($record['LgName']); ?> */}
-            </td>
+            {/* TODO not necessarily active */}
+            <td className="td1">{activeLanguage?.LgName}</td>
           </tr>
           <tr title="Normally only change uppercase/lowercase here!">
             <td className="td1 right">Term:</td>
             <td className="td1">
-              <input
+              <WoInput
+                // TODO whats this
                 // <?php echo $scrdir; ?>
                 className="notempty setfocus checkoutsidebmp"
-                data_info="Term"
                 type="text"
-                name="WoText"
-                id="wordfield"
-                value={term?.WoText}
-                maxlength={250}
+                // id="wordfield"
+                // data_info="Term"
+                entryKey={'WoText'}
+                maxLength={250}
                 size={40}
+                default
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
+          {/* TODO */}
           {/* <?php print_similar_terms_tabrow(); ?> */}
           <tr>
             <td className="td1 right">Translation:</td>
             <td className="td1">
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={500}
-                data_info="Translation"
+                maxLength={500}
+                // data_info="Translation"
                 name="WoTranslation"
                 cols={40}
                 rows={3}
@@ -673,14 +659,13 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right">Romaniz.:</td>
             <td className="td1">
-              <input
+              <WoInput
                 type="text"
                 className="checkoutsidebmp"
-                data_info="Romanization"
-                name="WoRomanization"
-                maxlength={100}
+                maxLength={100}
                 size={40}
-                value={term?.WoRomanization}
+                entryKey="WoRomanization"
+                default
               />
             </td>
           </tr>
@@ -695,8 +680,8 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 // TODO
                 // <?php echo $scrdir; ?>
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={1000}
-                data_info="Sentence"
+                maxLength={1000}
+                // data_info="Sentence"
                 name="WoSentence"
                 cols={40}
                 rows={3}
@@ -718,10 +703,13 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
               <input
                 type="button"
                 value="Cancel"
-                // TODO
-                onClick="{resetDirty(); location.href='edit_words.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+                onClick={() => {
+                  resetDirty();
+                  // TODO #
+                  navigator(`/edit_words#rec${chgID}`);
+                }}
               />
-              <input type="submit" name="op" value="Change" />
+              <input type="button" value="Change" />
             </td>
           </tr>
         </table>
@@ -730,7 +718,14 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
         <span
           className="click"
           // TODO
-          // onClick="do_ajax_show_sentences(<?php echo $record['LgID']; ?>, <?php echo prepare_textdata_js($wordlc) . ', ' . prepare_textdata_js("document.forms['editword'].WoSentence"); ?>);"
+          onClick={() => {
+            do_ajax_show_sentences(
+              term?.WoLgID,
+              term?.WoTextLC,
+              term?.WoSentence
+            );
+            // "do_ajax_show_sentences(<?php echo $record['LgID']; ?>, <?php echo prepare_textdata_js($wordlc) . ', ' . prepare_textdata_js("document.forms['editword'].WoSentence"); ?>);"
+          }}
         >
           <Icon src="sticky-notes-stack" title="Show Sentences" /> Show
           Sentences
@@ -740,24 +735,18 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   );
 }
 
-// TODO
 export function TermMultiActions({
   selectedTerms,
   onSelectAll,
   onSelectNone,
 }: {
-  selectedTerms: WordsId[];
+  selectedTerms: Set<WordsId>;
   onSelectAll: () => void;
   onSelectNone: () => void;
 }) {
   return (
     <>
-      <form
-        name="form1"
-        action="#"
-        // TODO
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -776,7 +765,9 @@ export function TermMultiActions({
                 <select
                   name="markaction"
                   id="markaction"
-                  disabled={selectedTerms.length === 0}
+                  // TODO
+                  onChange={() => {}}
+                  disabled={selectedTerms.size === 0}
                 >
                   <GetAllWordsActionsSelectOptions />
                 </select>
@@ -795,6 +786,7 @@ function GetAllWordsActionsSelectOptions() {
         [Choose...]
       </option>
       <option disabled>------------</option>
+      // TODO actions
       <option value="testall">Test ALL Terms</option>
       <option disabled>------------</option>
       <option value="spl1all">Increase Status by 1 [+1]</option>
@@ -838,3 +830,60 @@ function GetAllWordsActionsSelectOptions() {
 // 	$r .= '</ul>';
 // 	return $r;
 // }
+
+export function buildFormInput<
+  TKey extends string,
+  TData extends Record<TKey, any>
+>(refMap: TRefMap<TData>, entry?: TData) {
+  // TODO useFormContext? for shared without build
+  return (
+    args: Omit<
+      Parameters<typeof FormInput>[0],
+      'refMap' | 'defaultEntry' | 'fixedEntry'
+    > & { fixed?: boolean; default?: boolean }
+  ) => (
+    <FormInput
+      {...args}
+      refMap={refMap}
+      fixedEntry={args.fixed ? entry : undefined}
+      defaultEntry={args.default ? entry : undefined}
+    />
+  );
+}
+export function FormInput<
+  TKey extends string,
+  TData extends Record<TKey, any>
+>({
+  // TODO nonoptional add dot
+  // TODO errorlines
+  entryKey,
+  refMap,
+  defaultEntry,
+  fixedEntry,
+  ...nativeProps
+}: Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'defaultValue' | 'id' | 'ref' | 'name'
+> & {
+  entryKey: TKey;
+  // TODO need refmap if fixed entry?
+  refMap: TRefMap<TData>;
+  defaultEntry?: TData;
+  fixedEntry?: TData;
+}) {
+  // const { maxLength } = nativeProps;
+  if (fixedEntry && defaultEntry) {
+    throw new Error("Can't have fixed and default set!");
+  }
+  return (
+    <input
+      defaultValue={
+        defaultEntry === undefined ? undefined : defaultEntry[entryKey]
+      }
+      value={fixedEntry === undefined ? undefined : fixedEntry[entryKey]}
+      name={entryKey}
+      ref={refMap[entryKey]}
+      {...nativeProps}
+    />
+  );
+}

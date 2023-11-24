@@ -58,22 +58,22 @@ function CheckErrors<TForm extends {}>(
 // HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 export type TRefMap<TForm> = Record<keyof TForm, React.MutableRefObject<any>>;
+//  & { clearAll: () => void };
 // TODO 'clearAll' handle
 export function RefMap<TForm>(
   validator: ss.Struct<{ [key in keyof TForm]: any }>
 ): TRefMap<TForm> {
   const values = Object.keys(validator.schema);
-  return Object.fromEntries(
+  const individualRefs = Object.fromEntries(
     values.map((key) => [
       key,
       useRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(),
     ])
-  ) as Record<
-    keyof TForm,
-    React.MutableRefObject<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  >;
+  ) as TRefMap<TForm>;
+  individualRefs['clearAll'] = () => {
+    values.forEach((val) => (individualRefs[val].current.value = ''));
+  };
+  return individualRefs;
 }
 // TODO can pass in default values to reset to
 export function ResetForm<TForm>(refMap: TRefMap<TForm>) {

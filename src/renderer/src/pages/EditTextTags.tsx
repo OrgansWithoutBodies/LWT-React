@@ -1,4 +1,4 @@
-import { Icon } from '../Icon';
+import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -7,6 +7,7 @@ import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
+import { FormInput, resetDirty } from './Terms.component';
 import { useSelection } from './useSelection';
 import { confirmDelete } from './utils';
 
@@ -31,11 +32,7 @@ export function DisplayTextTags({ query }: { query: string }) {
         </A>
       </p>
 
-      <form
-        name="form1"
-        action="#"
-        onSubmit="document.form1.querybutton.click(); return false;"
-      >
+      <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1" colSpan={4}>
@@ -45,7 +42,8 @@ export function DisplayTextTags({ query }: { query: string }) {
                 type="button"
                 value="Reset All"
                 onClick={() => {
-                  navigate(`/edit_texttags?page=${1}&query=`);
+                  // refMap;
+                  // navigate(`/edit_texttags?page=${1}&query=`);
                 }}
               />
             </th>
@@ -275,11 +273,6 @@ export function NewTextTag() {
     <>
       <Header title={'My Text Tags'} />
       <h4>New Tag</h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         name="newtag"
         className="validate"
@@ -290,16 +283,16 @@ export function NewTextTag() {
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <input
+              <FormInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
-                name="T2Text"
-                ref={refMap.T2Text}
-                data_info="Tag"
-                maxlength={20}
+                entryKey="T2Text"
+                refMap={refMap}
+                // data_info="Tag"
+                maxLength={20}
                 size={20}
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -307,13 +300,13 @@ export function NewTextTag() {
             <td className="td1">
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={200}
-                data_info="Comment"
+                maxLength={200}
+                // data_info="Comment"
                 name="T2Comment"
                 ref={refMap.T2Comment}
                 cols={40}
                 rows={3}
-              ></textarea>
+              />
             </td>
           </tr>
           <tr>
@@ -321,7 +314,10 @@ export function NewTextTag() {
               <input
                 type="button"
                 value="Cancel"
-                onClick="{resetDirty(); location.href='edit_texttags.php';}"
+                onClick={() => {
+                  resetDirty();
+                  navigator('/edit_texttags');
+                }}
               />
               <input
                 type="button"
@@ -361,11 +357,6 @@ export function EditTextTag({ chgID }: { chgID: number }) {
     <>
       <Header title={'My Text Tags'} />
       <h4>Edit Tag</h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         name="edittag"
         className="validate"
@@ -378,16 +369,16 @@ export function EditTextTag({ chgID }: { chgID: number }) {
             <td className="td1 right">Tag:</td>
             <td className="td1">
               <input
-                data_info="Tag"
-                class="notempty setfocus noblanksnocomma checkoutsidebmp"
+                // data_info="Tag"
+                className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
                 name="T2Text"
                 ref={refMap.T2Text}
                 value={changingTag?.T2Text}
-                maxlength={20}
+                maxLength={20}
                 size={20}
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -395,8 +386,8 @@ export function EditTextTag({ chgID }: { chgID: number }) {
             <td className="td1">
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
-                data_maxlength={200}
-                data_info="Comment"
+                maxLength={200}
+                // data_info="Comment"
                 name="T2Comment"
                 ref={refMap.T2Comment}
                 value={changingTag?.T2Comment}
@@ -412,15 +403,16 @@ export function EditTextTag({ chgID }: { chgID: number }) {
               <input
                 type="button"
                 value="Cancel"
-                // TODO
-                onClick="{resetDirty(); location.href='edit_texttags.php#rec<?php echo $_REQUEST['chg']; ?>'};"
+                onClick={() => {
+                  resetDirty();
+                  navigator(`/edit_texttags.php#rec${chgID}`);
+                }}
               />
               <input
                 type="button"
                 name="op"
                 value="Change"
                 onClick={() => {
-                  console.log('SAVING');
                   CheckAndSubmit(
                     refMap,
                     {},

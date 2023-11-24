@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { AppVariables, TAppContext } from './meta';
 
 export function setupAppContext(context: TAppContext) {

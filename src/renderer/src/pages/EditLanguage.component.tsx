@@ -1,113 +1,119 @@
-import { Icon } from '../Icon';
+import { Icon, RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
+import { LanguagesValidator } from '../data/validators';
+import { useInternalNavigate } from '../nav/useInternalNav';
+import { RefMap, TRefMap } from './Forms';
 import { Header } from './Header';
+import { TextSizeSelect } from './NewLanguage.component';
+import { buildFormInput, resetDirty } from './Terms.component';
 
 export function EditLanguage({ chgID }: { chgID: number }) {
   const [{ languages }] = useData(['languages']);
   const changingLang = languages.find(({ LgID }) => {
     return LgID === chgID;
   });
+  if (!changingLang) {
+    throw new Error('Invalid Change ID!');
+  }
+  const validator = LanguagesValidator;
+  const navigator = useInternalNavigate();
+  const refMap = RefMap(validator);
+  const LgInput = buildFormInput(refMap, changingLang);
+
   return (
     <>
-      <Header title={''} />
+      <Header title={'TODO'} />
       <h4>
         Edit Language
         <a target="_blank" href="info.htm#howtolang">
           <Icon src="question-frame" title="Help" />
         </a>
       </h4>
-      <script
-        type="text/javascript"
-        src="js/unloadformcheck.js"
-        charSet="utf-8"
-      ></script>
       <form
         className="validate"
         // action={<?php echo $_SERVER['PHP_SELF']; ?>}
-        method="post"
-        onSubmit="return check_dupl_lang(
-      <?php echo $_REQUEST['chg']; ?>
-      );"
+        // method="post"
+        // TODO
+        //   onSubmit="return check_dupl_lang(
+        // <?php echo $_REQUEST['chg']; ?>
+        // );"
       >
-        <input type="hidden" name="LgID" value={chgID} />
+        <LgInput type="hidden" entryKey="LgID" fixed />
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Study Language "L2":</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="notempty setfocus checkoutsidebmp"
-                data_info="Study Language"
-                name="LgName"
-                id="LgName"
-                value={changingLang?.LgName}
-                maxlength={40}
+                // data_info="Study Language"
+                entryKey="LgName"
+                maxLength={40}
                 size={40}
+                default
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Dictionary 1 URI:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="notempty checkdicturl checkoutsidebmp"
-                name="LgDict1URI"
-                value={changingLang?.LgDict1URI}
+                entryKey="LgDict1URI"
+                default
                 maxLength={200}
                 size={60}
-                data_info="Dictionary 1 URI"
+                // data_info="Dictionary 1 URI"
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Dictionary 2 URI:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="checkdicturl checkoutsidebmp"
-                name="LgDict2URI"
-                value={changingLang?.LgDict2URI}
+                entryKey="LgDict2URI"
+                default
                 maxLength={200}
                 size={60}
-                data_info="Dictionary 2 URI"
+                // data_info="Dictionary 2 URI"
               />
             </td>
           </tr>
           <tr>
             <td className="td1 right">GoogleTranslate URI:</td>
             <td className="td1">
-              <input
+              <LgInput
+                default
                 type="text"
                 className="checkdicturl checkoutsidebmp"
-                name="LgGoogleTranslateURI"
-                value={changingLang?.LgGoogleTranslateURI}
+                entryKey="LgGoogleTranslateURI"
                 maxLength={200}
                 size={60}
-                data_info="GoogleTranslate URI"
+                // data_info="GoogleTranslate URI"
               />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Text Size:</td>
             <td className="td1">
-              <select name="LgTextSize">
-                {/* <?php echo get_languagessize_selectoptions($record['LgTextSize']); ?> */}
-              </select>
+              <TextSizeSelect entryKey={'LgTextSize'} refMap={refMap} />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Character Substitutions:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                data_info="Character Substitutions"
-                name="LgCharacterSubstitutions"
-                value={changingLang?.LgCharacterSubstitutions}
-                maxlength={500}
+                // data_info="Character Substitutions"
+                entryKey="LgCharacterSubstitutions"
+                default
+                maxLength={500}
                 size={60}
               />
             </td>
@@ -115,28 +121,28 @@ export function EditLanguage({ chgID }: { chgID: number }) {
           <tr>
             <td className="td1 right">RegExp Split Sentences:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="notempty checkoutsidebmp"
-                name="LgRegexpSplitSentences"
-                value={changingLang?.LgRegexpSplitSentences}
+                entryKey="LgRegexpSplitSentences"
+                default
                 maxLength={500}
                 size={60}
-                data_info="RegExp Split Sentences"
+                // data_info="RegExp Split Sentences"
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Exceptions Split Sentences:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                data_info="Exceptions Split Sentences"
-                name="LgExceptionsSplitSentences"
-                value={changingLang?.LgExceptionsSplitSentences}
-                maxlength={500}
+                // data_info="Exceptions Split Sentences"
+                entryKey="LgExceptionsSplitSentences"
+                default
+                maxLength={500}
                 size={60}
               />
             </td>
@@ -144,42 +150,48 @@ export function EditLanguage({ chgID }: { chgID: number }) {
           <tr>
             <td className="td1 right">RegExp Word Characters:</td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="notempty checkoutsidebmp"
-                data_info="RegExp Word Characters"
-                name="LgRegexpWordCharacters"
-                value={changingLang?.LgRegexpWordCharacters}
-                maxlength={500}
+                // data_info="RegExp Word Characters"
+                entryKey="LgRegexpWordCharacters"
+                default
+                maxLength={500}
                 size={60}
               />
-              <Icon src="status-busy" title="Field must not be empty" />
+              <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Make each character a word:</td>
             <td className="td1">
-              <select name="LgSplitEachChar">
-                {/* <?php echo get_yesno_selectoptions($record['LgSplitEachChar']); ?> */}
-              </select>
+              <SelectBoolean
+                selKey={'LgSplitEachChar'}
+                entry={changingLang}
+                refMap={refMap}
+              />
               (e.g. for Chinese, Japanese, etc.)
             </td>
           </tr>
           <tr>
             <td className="td1 right">Remove spaces:</td>
             <td className="td1">
-              <select name="LgRemoveSpaces">
-                {/* <?php echo get_yesno_selectoptions($record['LgRemoveSpaces']); ?> */}
-              </select>
+              <SelectBoolean
+                selKey={'LgRemoveSpaces'}
+                entry={changingLang}
+                refMap={refMap}
+              />
               (e.g. for Chinese, Japanese, etc.)
             </td>
           </tr>
           <tr>
             <td className="td1 right">Right-To-Left Script:</td>
             <td className="td1">
-              <select name="LgRightToLeft">
-                {/* <?php echo get_yesno_selectoptions($record['LgRightToLeft']); ?> */}
-              </select>
+              <SelectBoolean
+                selKey={'LgRightToLeft'}
+                entry={changingLang}
+                refMap={refMap}
+              />
               (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
             </td>
           </tr>
@@ -190,18 +202,19 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 src="question-frame"
                 title="Help"
                 className="click"
+                // TODO
                 onClick="oewin('info_export_template.htm');"
               />
               :
             </td>
             <td className="td1">
-              <input
+              <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                data_info="Export Template"
-                name="LgExportTemplate"
-                value={changingLang?.LgExportTemplate}
-                maxlength={1000}
+                // data_info="Export Template"
+                entryKey="LgExportTemplate"
+                default
+                maxLength={1000}
                 size={60}
               />
             </td>
@@ -211,9 +224,18 @@ export function EditLanguage({ chgID }: { chgID: number }) {
               <input
                 type="button"
                 value="Cancel"
-                onClick="{resetDirty(); location.href='edit_languages.php';}"
+                onClick={() => {
+                  resetDirty();
+                  navigator('/edit_languages');
+                }}
               />
-              <input type="submit" name="op" value="Change" />
+              <input
+                type="button"
+                value="Change"
+                onClick={() => {
+                  refMap;
+                }}
+              />
             </td>
           </tr>
         </table>
@@ -225,5 +247,29 @@ export function EditLanguage({ chgID }: { chgID: number }) {
         </p>
       </form>
     </>
+  );
+}
+function SelectBoolean<
+  TSelKey extends string,
+  TEntry extends Record<TSelKey, 0 | 1>
+>({
+  entry,
+  selKey,
+  refMap,
+}: {
+  entry: TEntry;
+  selKey: TSelKey;
+  refMap: TRefMap<TEntry>;
+}) {
+  const entryVal = entry[selKey];
+  return (
+    <select ref={refMap[selKey]} name={selKey}>
+      <option value={0} selected={entryVal === 0}>
+        No
+      </option>
+      <option value={1} selected={entryVal === 1}>
+        Yes
+      </option>
+    </select>
   );
 }

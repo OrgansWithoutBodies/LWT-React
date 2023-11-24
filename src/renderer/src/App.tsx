@@ -11,7 +11,7 @@ import { LandingPage } from './pages/LandingPage.component';
 import React from 'react';
 import { dataService } from './data/data.service';
 import { useData } from './data/useAkita';
-import { TextsId } from './data/validators';
+import { LanguagesId, TextsId } from './data/validators';
 import { AddNewWord } from './pages/AddNewWord';
 import { BackupScreen } from './pages/Backups.component';
 import { CheckText } from './pages/CheckText';
@@ -33,6 +33,15 @@ import { ImportShortText } from './pages/TextImport';
 import { UploadWords } from './pages/UploadWords.component';
 import { createColors } from './styles';
 import { AppContext, useAppContext } from './useContext';
+
+declare global {
+  interface NumberConstructor {
+    parseInt<TNum extends number = number>(
+      string: string,
+      radix?: number
+    ): TNum;
+  }
+}
 
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
@@ -120,7 +129,6 @@ trans
           <Route path="/check_text" element={<CheckText />} />
           <Route path="/backup_restore" element={<BackupScreen />} />
           <Route path="/info" element={<InfoPage />} />
-
           <Route path="/edit_words" element={<TermsWrapper />} />
           <Route path="/edit_texts" element={<LibraryWrapper />} />
           {/* TODO */}
@@ -151,6 +159,7 @@ trans
   );
 }
 
+// TODO typewise enforce conditional (typeguard?)
 export function Switch({
   on,
   children,
@@ -175,20 +184,18 @@ function TermsWrapper() {
   // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
   if (filterlang === '') {
     if (activeLanguageId !== null) {
-      console.log('FILTER', filterlang, activeLanguageId);
       dataService.setActiveLanguage(null);
     }
   } else if (
     filterlang !== null &&
     Number.parseInt(filterlang) !== activeLanguageId
   ) {
-    dataService.setActiveLanguage(Number.parseInt(filterlang));
+    dataService.setActiveLanguage(Number.parseInt<LanguagesId>(filterlang));
   }
   return (
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
         <Terms
-          filterlang={activeLanguageId}
           pageNum={page !== null ? Number.parseInt(page) : 1}
           sort={sort ? Number.parseInt(sort) : null}
           status={status ? Number.parseInt(status) : null}
@@ -197,14 +204,14 @@ function TermsWrapper() {
           tag12={0}
           tag2={null}
         />
-        <ChangeTerm chgID={Number.parseInt(chgID)} />
+        <ChangeTerm chgID={Number.parseInt(chgID!)} />
         {/* <Terms
         pageNum={0}
         sort={Number.parseInt(sort)}
         status={Number.parseInt(status)}
       /> */}
       </Switch>
-      <AddNewWord langId={Number.parseInt(lang)} />
+      <AddNewWord langId={Number.parseInt(lang!)} />
     </Switch>
   );
 }
@@ -220,7 +227,7 @@ function PrintTextWrapper() {
   const text = searchParams.get('text');
   return (
     <>
-      <PrintText textID={Number.parseInt(text)} />
+      <PrintText textID={Number.parseInt(text!)} />
     </>
   );
 }
@@ -237,7 +244,7 @@ function LanguagesWrapper() {
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
         <LanguagesPage />
-        <EditLanguage chgID={Number.parseInt(chgID)} />
+        <EditLanguage chgID={Number.parseInt(chgID!)} />
       </Switch>
       <NewLanguage />
     </Switch>
@@ -245,8 +252,11 @@ function LanguagesWrapper() {
 }
 function AddNewWordWrapper() {
   const [searchParams] = useSearchParams();
-  const textID = searchParams.get('text');
+  // const textID = searchParams.get('text');
   const langID = searchParams.get('lang');
+  if (langID === null) {
+    throw new Error('Need To Specify Language ID');
+  }
   return <AddNewWord langId={Number.parseInt(langID)} />;
 }
 function LibraryWrapper() {
@@ -263,7 +273,7 @@ function LibraryWrapper() {
   // TODO
   // const [, { archiveText, reparseAllTextsForLanguage }] = useData([]);
   if (archID !== null) {
-    dataService.archiveText(Number.parseInt(archID) as TextsId);
+    dataService.archiveText(Number.parseInt(archID));
   }
   // if (refreshID !== null) {
   //   dataService.reparseText(Number.parseInt(refreshID) as TextsId);
@@ -278,7 +288,7 @@ function LibraryWrapper() {
           filterTag1={filterTag1 !== null ? Number.parseInt(filterTag1) : null}
           filterTag2={filterTag2 !== null ? Number.parseInt(filterTag2) : null}
         />
-        <EditText chgID={Number.parseInt(chgID)} />
+        <EditText chgID={Number.parseInt(chgID!)} />
       </Switch>
       <ImportShortText />
     </Switch>
@@ -364,7 +374,7 @@ function EditTextTagsWrapper() {
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
         <DisplayTextTags query={query || ''} />
-        <EditTextTag chgID={Number.parseInt(chgID)} />
+        <EditTextTag chgID={Number.parseInt(chgID!)} />
       </Switch>
       <NewTextTag />
     </Switch>
@@ -386,7 +396,7 @@ function EditTagsWrapper() {
         />
         <NewTag />
       </Switch>
-      <EditTag chgId={Number.parseInt(chgId)} />
+      <EditTag chgId={Number.parseInt(chgId!)} />
     </Switch>
   );
 }
@@ -395,9 +405,7 @@ function ReaderWrapper() {
   const start = searchParams.get('start');
   // TODO sanitize
   // TODO verify exists
-  const sanitizedParam = Number.parseInt(start);
-  console.log('TEST123-start', sanitizedParam);
-  return <ReaderPage textId={sanitizedParam} />;
+  return <ReaderPage textId={Number.parseInt(start!)} />;
 }
 function TestWrapper() {
   const [searchParams] = useSearchParams();
@@ -405,12 +413,10 @@ function TestWrapper() {
   const lang = searchParams.get('lang');
   // TODO sanitize more
   // TODO verify exists
-  const sanitizedText = textID !== null ? Number.parseInt(textID) : null;
-  console.log('TEST123-start', sanitizedText);
   return (
     <TesterPage
       langId={lang !== null ? Number.parseInt(lang) : null}
-      textId={sanitizedText}
+      textId={textID !== null ? Number.parseInt(textID) : null}
     />
   );
 }

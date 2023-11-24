@@ -41,6 +41,7 @@ export function Reader({
       <p
         onClick={() => setTooltipOpen(null)}
         style={{
+          // TODO
           // wordBreak: 'break-all',
           // whiteSpace: 'nowrap',
           fontSize: '200%',
@@ -68,13 +69,11 @@ export function Reader({
               const foundWord = words.find(
                 (word) => word.WoText.toLowerCase() === term.text.toLowerCase()
               );
-              // TODO non-highlighted words (ie punctuation)
               const termStatus = foundWord
                 ? ` status${foundWord.WoStatus}`
                 : ' status0';
               const { isTerm } = term;
               return (
-                // TODO make sure works w mobile
                 <>
                   {isTerm ? (
                     <PopoverTrigger
@@ -100,9 +99,4 @@ export function Reader({
       </p>
     </div>
   );
-}
-
-{
-  /* <span id="ID-12-1" class=" click word wsty status0 TERM石" data_pos="7" data_order="12" data_trans="" data_rom="" data_status="0" data_wid="" data_mw2="石破" data_mw3="石破天" data_mw4="石破天惊" data_mw5="石破天惊民" data_mw6="石破天惊民主" data_mw7="石破天惊民主化" data_mw8="石破天惊民主化列" data_mw9="石破天惊民主化列车" title="石
-▶ Unknown [?]">石</span> */
 }

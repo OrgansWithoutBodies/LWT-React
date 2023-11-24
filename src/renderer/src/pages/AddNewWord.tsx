@@ -12,17 +12,19 @@ import { LanguagesId, WordsValidatorNoId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
 import { Header } from './Header';
+import { FormInput, buildFormInput } from './Terms.component';
 import { owin, translateSentence2 } from './translateSentence2';
 
-const STATUSES = {
-  1: { abbr: '1', name: 'Learning' },
-  2: { abbr: '2', name: 'Learning' },
-  3: { abbr: '3', name: 'Learning' },
-  4: { abbr: '4', name: 'Learning' },
-  5: { abbr: '5', name: 'Learned' },
-  99: { abbr: 'WKn', name: 'Well Known' },
-  98: { abbr: 'Ign', name: 'Ignored' },
-};
+// TODO
+// const STATUSES = {
+//   1: { abbr: '1', name: 'Learning' },
+//   2: { abbr: '2', name: 'Learning' },
+//   3: { abbr: '3', name: 'Learning' },
+//   4: { abbr: '4', name: 'Learning' },
+//   5: { abbr: '5', name: 'Learned' },
+//   99: { abbr: 'WKn', name: 'Well Known' },
+//   98: { abbr: 'Ign', name: 'Ignored' },
+// };
 function CheckErrors(
   keyChanged: keyof AddNewWordType,
   refMap: TRefMap<AddNewWordType>,
@@ -52,7 +54,6 @@ export function AddNewWord({
   const validator = AddNewWordValidator;
   const refMap = RefMap<AddNewWordType>(validator);
   const [{ languages }] = useData(['languages']);
-  ``;
   const navigator = useInternalNavigate();
   // TODO hashmap here avoid lookup
   const lang = languages.find((lang) => lang.LgID === langId);
@@ -68,11 +69,12 @@ export function AddNewWord({
     (value) =>
       setFormErrors({ ...FormErrors, [key]: value });
   console.log('TEST123-form', { existingTerm, lang, langId });
+  const WoInput = buildFormInput(refMap, { WoText: word || '' });
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
   return (
     <>
-      <Header />
+      <Header title={'TODO'} />
       <form
         name="newword"
         className="validate"
@@ -92,11 +94,11 @@ export function AddNewWord({
           name="WoCreated"
           ref={refMap.WoCreated}
           id="langfield"
+          // TODO
           value={langId}
         />
         <input
           type="hidden"
-          // TODO this is what is matched against
           name="WoTextLC"
           ref={refMap.WoTextLC}
           value={word?.toLowerCase()}
@@ -116,16 +118,17 @@ export function AddNewWord({
                 <b>{isEdit ? 'Edit' : 'New'} Term:</b>
               </td>
               <td className="td1">
-                <input
+                <WoInput
                   className="notempty checkoutsidebmp"
-                  data_info="New Term"
+                  // data_info="New Term"
                   type="text"
-                  name="WoText"
-                  id="wordfield"
-                  ref={refMap.WoText}
-                  value={word}
-                  defaultValue={FormState.WoText}
+                  entryKey="WoText"
+                  // id="wordfield"
+                  // value={word}
+                  default
+                  // defaultEntry={FormState}
                   onChange={() =>
+                    // TODO bring into buildFormInput
                     CheckErrors('WoText', refMap, setFormErrorLine('WoText'))
                   }
                   size={35}
@@ -133,6 +136,7 @@ export function AddNewWord({
                 <RequiredLineButton />
               </td>
             </tr>
+            {/* TODO bring logic into formlines */}
             {FormErrors.WoText && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
@@ -154,8 +158,8 @@ export function AddNewWord({
                     )
                   }
                   className="setfocus textarea-noreturn checklength checkoutsidebmp"
-                  data_maxlength="500"
-                  data_info="Translation"
+                  maxLength={500}
+                  // data_info="Translation"
                   cols={35}
                   rows={3}
                 ></textarea>
@@ -203,16 +207,16 @@ export function AddNewWord({
             <tr>
               <td className="td1 right">Romaniz.:</td>
               <td className="td1">
-                <input
+                <FormInput
                   type="text"
                   className="checkoutsidebmp"
-                  data_info="Romanization"
+                  // data_info="Romanization"
                   onChange={(event) =>
+                    // TODO
                     handleFormChange('WoRomanization', event.target.value)
                   }
-                  name="WoRomanization"
-                  ref={refMap.WoRomanization}
-                  value={FormState.WoRomanization}
+                  entryKey="WoRomanization"
+                  refMap={refMap}
                   maxLength={100}
                   size={35}
                 />
@@ -234,8 +238,8 @@ export function AddNewWord({
                 <textarea
                   name="WoSentence"
                   className="textarea-noreturn checklength checkoutsidebmp"
-                  data_maxlength="1000"
-                  data_info="Sentence"
+                  maxLength={1000}
+                  // data_info="Sentence"
                   cols={35}
                   rows={3}
                   ref={refMap.WoSentence}
@@ -398,8 +402,14 @@ export function AddNewWord({
       <div id="exsent">
         <span
           className="click"
-          // TODO
-          onClick="do_ajax_show_sentences(2, '宪', 'document.forms[\'newword\'].WoSentence');"
+          onClick={() => {
+            do_ajax_show_sentences(
+              // TODO values
+              2,
+              '宪',
+              "document.forms['newword'].WoSentence"
+            );
+          }}
         >
           <Icon src="sticky-notes-stack" title="Show Sentences" />
           Show Sentences
@@ -444,16 +454,17 @@ function SentencesForWord() {
     </>
   );
 }
-// function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
-//   $('#exsent').html('<img src="icn/waiting2.gif" />');
-//   $.post(
-//     'ajax_show_sentences.php',
-//     { lang: lang, word: word, ctl: ctl },
-//     function (data: any) {
-//       $('#exsent').html(data);
-//     }
-//   );
-// }
+export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
+  // ('#exsent').html('<img src="icn/waiting2.gif" />');
+  console.log(lang, word, ctl);
+  // post(
+  //   'ajax_show_sentences.php',
+  //   { lang: lang, word: word, ctl: ctl },
+  //   function (data: any) {
+  //     ('#exsent').html(data);
+  //   }
+  // );
+}
 
 // function get20Sentences($lang, $wordlc, $jsctlname, $mode)
 // {

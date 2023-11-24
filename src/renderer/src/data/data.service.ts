@@ -71,6 +71,17 @@ export class DataService {
     });
     this.persistChange('languages');
   }
+  public deleteArchivedText(textId: ArchivedTextsId) {
+    this.dataStore.update((state) => {
+      return {
+        ...state,
+        archivedtexts: state.archivedtexts.filter(
+          (language) => language.AtID !== textId
+        ),
+      };
+    });
+    this.persistChange('archivedtexts');
+  }
 
   public addText(text: AddNewTextType) {
     let maxId = null;
@@ -267,9 +278,31 @@ export class DataService {
     this.persistChange('words');
   }
 
-  public restoreFromBackup() {
-    window.alert('TODO RESTORING FROM BACKUP');
+  public restoreFromBackup(file: File) {
+    window.alert('TODO RESTORING FROM BACKUP ' + file.name);
+    // import { Gunzip } from 'browserify-zlib';
+    const reader = new FileReader();
+    const buffer: string[] = [];
+    reader.onload = async (e) => {
+      const text = e.target.result;
+      // Gunzip.ungzip(text, function (err, dezipped) {
+      //   console.log(dezipped.toString());
+      // });
+      //     // decompression chunk ready, add it to the buffer
+      //     buffer.push(data.toString());
+      //   })
+      //   .on('end', function () {
+      //     // response and decompression complete, join the buffer and return
+      //     console.log(buffer.join(''));
+      //   }).
+
+      // console.log(text);
+      // alert(text);
+    };
+    const text = reader.readAsText(file);
+    console.log('TEST123', text);
   }
+
   public downloadBackup() {
     const {
       archivedtexts,

@@ -1,26 +1,23 @@
-import React from 'react';
-import { useData } from '../data/useAkita';
+// export function LanguageDropdown({
+//   header = 'Choose...',
+//   name = 'LgID',
+//   onSelect,
+// }: {
+//   header?: string;
+//   name?: string;
+//   onSelect?: (value: number) => void;
+// }): JSX.Element {
+//   const [{ languages }] = useData(['languages']);
 
-export function LanguageDropdown({
-  header = 'Choose...',
-  name = 'LgID',
-  onSelect,
-}: {
-  header?: string;
-  name?: string;
-  onSelect?: (value: number) => void;
-}): JSX.Element {
-  const [{ languages }] = useData(['languages']);
-
-  return (
-    <select name={name} className="notempty setfocus">
-      <option value="-1">[{header}]</option>
-      {languages.map((language) => {
-        return <option value={language.LgID}>{language.LgName}</option>;
-      })}
-    </select>
-  );
-}
+//   return (
+//     <select name={name} className="notempty setfocus">
+//       <option value="-1">[{header}]</option>
+//       {languages.map((language) => {
+//         return <option value={language.LgID}>{language.LgName}</option>;
+//       })}
+//     </select>
+//   );
+// }
 
 {
   /* <select

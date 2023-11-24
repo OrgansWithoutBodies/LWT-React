@@ -4,16 +4,25 @@ import { TextsId } from '../data/validators';
 import { Header } from './Header';
 
 export function PrintText({ textID }: { textID: TextsId }) {
-  const [{ texts }] = useData(['texts']);
+  const [{ texts, languages }] = useData(['texts', 'languages']);
   const showingText = texts.find(({ TxID }) => {
     return TxID === textID;
   });
+  if (!showingText) {
+    throw new Error('invalid Text ID!');
+  }
+  const language = languages.find(({ LgID }) => {
+    return LgID === showingText.TxLgID;
+  });
+  if (!language) {
+    throw new Error('invalid Text Language ID!');
+  }
   return (
     <>
       <div className="noprint">
         <Header
-          title={`PRINT&nbsp▶${showingText?.TxTitle} ${
-            showingText?.TxSourceURI ? (
+          title={`PRINT&nbsp▶${showingText.TxTitle} ${
+            showingText.TxSourceURI ? (
               <a href={showingText.TxSourceURI} target="_blank">
                 <Icon src="chain" title="Text Source" />
               </a>
@@ -119,12 +128,13 @@ export function PrintText({ textID }: { textID: TextsId }) {
         // " . ($rtlScript ? ' dir="rtl"' : '') . "
       >
         <p
-        // style="font-size:' . $textsize . '%line-height: 1.35 margin-bottom: 10px "
+          style={{ fontSize: language.LgTextSize }}
+          // style="font-size:' . $textsize . '%line-height: 1.35 margin-bottom: 10px "
         >
-          {showingText?.TxTitle}
+          {showingText.TxTitle}
           <br />
           <br />
-          {showingText?.TxText}
+          {showingText.TxText}
         </p>
       </div>
     </>

@@ -26,14 +26,12 @@ export function LandingPage() {
   return (
     <>
       {languages.length === 0 && (
-        <table className="tab3" cellSpacing="0" cellPadding="5">
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1">
               Hint: The database seems to be empty.
               <br />
-              <a href="install_demo.php">
-                You may install the LWT demo database,
-              </a>
+              <A href="/install_demo">You may install the LWT demo database,</A>
               <br />
               or
               <br />
@@ -53,7 +51,9 @@ export function LandingPage() {
                 console.log(val);
                 dataService.setActiveLanguage(val);
               }}
-              defaultValue={activeLanguageId}
+              defaultValue={
+                activeLanguageId !== null ? activeLanguageId : undefined
+              }
             />
           </div>
           {activeLanguage && (
@@ -114,6 +114,7 @@ export function LandingPage() {
           <li>
             <A href="/info">Help/Information</A>
           </li>
+          {/* TODO */}
           {/* <li>
             <a href="/mobile">Mobile LWT (Experimental)</a>
           </li> */}

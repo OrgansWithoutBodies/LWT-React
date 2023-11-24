@@ -1,4 +1,4 @@
-import { DataState } from './data.storage';
+import type { DataState } from './data.storage';
 
 export type PersistedValueGetter<
   TKey extends keyof DataState = keyof DataState

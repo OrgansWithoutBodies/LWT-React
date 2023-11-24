@@ -1,3 +1,4 @@
+import { PersistanceStrategy } from './data/PersistedValueGetter';
 import { StyleVariant } from './styles';
 
 type VersionNumber =
@@ -29,13 +30,17 @@ type AppVersion =
 export type TAppContext = AppVersion & {
   styleVariant: StyleVariant;
 
+  persistMethod: PersistanceStrategy;
+  isMobile: boolean;
+
   dbBackend: 'SQLite' | 'MySQL' | 'Postgres';
   dbVersion: string;
 
   server: string;
   serverVersion: string;
 
-  frontend: string;
+  //
+  frontend: 'React';
   frontendVersion: string;
   frontendSource: string;
 
@@ -46,8 +51,11 @@ export type TAppContext = AppVersion & {
 };
 export const AppVariables: TAppContext = {
   versionNumber: 'LEGACY-0.0.0',
-  releaseDate: 'January 99 2023',
+  releaseDate: 'November 31 2023',
   styleVariant: 'dark',
+
+  isMobile: false,
+  persistMethod: PersistanceStrategy.LocalStorage,
 
   dbBackend: 'SQLite',
   dbVersion: '1.0.0',

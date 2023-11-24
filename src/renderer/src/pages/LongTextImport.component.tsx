@@ -39,7 +39,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="notempty checkoutsidebmp"
-                data_info="Title"
+                // data_info="Title"
                 name="TxTitle"
                 value=""
                 maxLength={200}
@@ -60,7 +60,7 @@ export default function ImportLongText(): JSX.Element {
               <br />
               <textarea
                 className="checkoutsidebmp"
-                data_info="Upload"
+                // data_info="Upload"
                 name="Upload"
                 cols={60}
                 rows={15}
@@ -109,7 +109,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="notempty posintnumber"
-                data_info="Maximum Sentences per Text"
+                // data_info="Maximum Sentences per Text"
                 name="maxsent"
                 value="50"
                 maxLength={3}
@@ -134,7 +134,7 @@ export default function ImportLongText(): JSX.Element {
               <input
                 type="text"
                 className="checkurl checkoutsidebmp"
-                data_info="Source URI"
+                // data_info="Source URI"
                 name="TxSourceURI"
                 value=""
                 maxLength={1000}
@@ -173,7 +173,9 @@ export default function ImportLongText(): JSX.Element {
                 value="Cancel"
                 onClick={() => {
                   // TODO
-                  const resetDirty = () => {};
+                  const resetDirty = () => {
+                    // ** You have unsaved changes! **
+                  };
                   resetDirty();
                   navigate('/');
                 }}

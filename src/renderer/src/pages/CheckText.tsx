@@ -1,15 +1,9 @@
-import { Icon } from '../Icon';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { RequiredLineButton } from '../Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
+import { NavigateButton } from './Statistics.component';
 
 export function CheckText(): JSX.Element {
-  const shorterTexts = [
-    { text: 'test123' },
-    { text: 'test1234' },
-    { text: 'test1234帮' },
-  ];
-  const navigate = useInternalNavigate();
   return (
     <>
       <Header title="Check Text" />
@@ -22,7 +16,7 @@ export function CheckText(): JSX.Element {
               <td className="td1 right">Language:</td>
               <td className="td1">
                 <LanguageDropdown />
-                <Icon src="status-busy" title="Field must not be empty" />
+                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -40,23 +34,17 @@ export function CheckText(): JSX.Element {
                 <textarea
                   name="TxText"
                   className="notempty checkbytes checkoutsidebmp"
-                  data_maxlength="65000"
-                  data_info="Text"
+                  maxLength={65000}
+                  // data_info="Text"
                   cols={60}
                   rows={20}
                 ></textarea>
-                <Icon src="status-busy" title="Field must not be empty" />
+                <RequiredLineButton />
               </td>
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
-                <input
-                  type="button"
-                  value="<< Back"
-                  onClick={() => {
-                    navigate('/');
-                  }}
-                />
+                <NavigateButton value="<< Back" navigateTo="/" />
                 <input type="submit" name="op" value="Check" />
               </td>
             </tr>

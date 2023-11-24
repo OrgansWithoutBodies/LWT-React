@@ -3,17 +3,19 @@ import Modal from 'react-modal';
 import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Languages } from '../data/parseMySqlDump';
+import { TextSize } from '../data/type';
 import { LanguagesValidatorNoId } from '../data/validators';
 import { LANGDEFS } from '../data/wizardData';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import {
   CheckAndSubmit,
   RefMap,
-  ResetForm,
+  TRefMap,
   emptyToNullMap,
   parseNumMap,
 } from './Forms';
 import { Header } from './Header';
+import { buildFormInput, resetDirty } from './Terms.component';
 import NewLanguageWizard from './Wizard.component';
 // TODO table component?
 // TODO map LangDef to Languages
@@ -35,6 +37,15 @@ export function NewLanguage() {
   const navigator = useInternalNavigate();
   const validator = LanguagesValidatorNoId;
   const refMap = RefMap<LanguageNoId>(validator);
+  const LgInput = buildFormInput(refMap, {
+    LgRegexpWordCharacters: 'a-zA-ZÀ-ÖØ-öø-ȳ',
+    LgExportTemplate: '$y\t$t\n',
+    LgExceptionsSplitSentences: 'Mr.|Dr.|[A-Z].|Vd.|Vds.',
+    LgRegexpSplitSentences: '.!?:;"',
+    LgGoogleTranslateURI:
+      '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
+    LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
+  });
   return (
     <>
       <Header title="New Language" />
@@ -88,97 +99,78 @@ export function NewLanguage() {
                 Study Language "L2":
               </td>
               <td className="td1">
-                <input
-                  ref={refMap.LgName}
+                <LgInput
                   type="text"
                   className="notempty setfocus checkoutsidebmp"
-                  name="LgName"
-                  id="LgName"
-                  defaultValue=""
+                  entryKey="LgName"
                   maxLength={40}
                   size={40}
                 />
-                {/* data_info="Study Language" */}
+                {/* // data_info="Study Language" */}
                 <RequiredLineButton />
               </td>
             </tr>
             <tr>
               <td className="td1 right backlightyellow">Dictionary 1 URI:</td>
               <td className="td1">
-                <input
-                  ref={refMap.LgDict1URI}
+                <LgInput
                   type="text"
                   className="checkdicturl notempty checkoutsidebmp"
-                  name="LgDict1URI"
-                  defaultValue=""
+                  entryKey="LgDict1URI"
                   maxLength={200}
+                  // data_info="Dictionary 1 URI"
                   size={60}
                 />
-                {/* data_info="Dictionary 1 URI" */}
                 <RequiredLineButton />
               </td>
             </tr>
             <tr>
               <td className="td1 right">Dictionary 2 URI:</td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
                   className="checkdicturl checkoutsidebmp"
-                  name="LgDict2URI"
-                  ref={refMap.LgDict2URI}
-                  defaultValue=""
+                  entryKey="LgDict2URI"
                   maxLength={200}
+                  // data_info="Dictionary 2 URI"
                   size={60}
                 />
               </td>
-              {/* data_info="Dictionary 2 URI" */}
             </tr>
             <tr>
               <td className="td1 right backlightyellow">
                 GoogleTranslate URI:
               </td>
               <td className="td1">
-                <input
-                  ref={refMap.LgGoogleTranslateURI}
+                <LgInput
                   type="text"
                   className="checkdicturl checkoutsidebmp"
-                  name="LgGoogleTranslateURI"
-                  defaultValue="*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###"
+                  entryKey="LgGoogleTranslateURI"
                   maxLength={200}
                   size={60}
+                  default
                 />
-                {/* data_info="GoogleTranslate URI" */}
+                {/* // data_info="GoogleTranslate URI" */}
               </td>
             </tr>
             <tr>
               <td className="td1 right backlightyellow">Text Size:</td>
               <td className="td1">
-                <select
-                  name="LgTextSize"
-                  className="notempty"
-                  ref={refMap.LgTextSize}
-                >
-                  <option value="100">100 %</option>
-                  <option value="150">150 %</option>
-                  {/* selected */}
-                  <option value="200">200 %</option>
-                  <option value="250">250 %</option>
-                </select>
+                <TextSizeSelect refMap={refMap} entryKey={'LgTextSize'} />
               </td>
             </tr>
             <tr>
               <td className="td1 right">Character Substitutions:</td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
-                  ref={refMap.LgCharacterSubstitutions}
                   className="checkoutsidebmp"
-                  name="LgCharacterSubstitutions"
-                  defaultValue="´='|`='|’='|‘='|...=…|..=‥"
+                  entryKey="LgCharacterSubstitutions"
                   maxLength={500}
                   size={60}
+                  default
                 />
-                {/* data_info="Character Substitutions" */}
+                {/* // data_info="Character Substitutions" */}
               </td>
             </tr>
             <tr>
@@ -186,49 +178,46 @@ export function NewLanguage() {
                 RegExp Split Sentences:
               </td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
-                  ref={refMap.LgRegexpSplitSentences}
                   className="notempty checkoutsidebmp"
-                  name="LgRegexpSplitSentences"
-                  defaultValue=".!?:;"
+                  entryKey="LgRegexpSplitSentences"
+                  default
                   maxLength={500}
                   size={60}
                 />
-                {/* data_info="RegExp Split Sentences" */}
+                {/* // data_info="RegExp Split Sentences" */}
                 <RequiredLineButton />
               </td>
             </tr>
             <tr>
               <td className="td1 right">Exceptions Split Sentences:</td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
-                  ref={refMap.LgExceptionsSplitSentences}
                   className="checkoutsidebmp"
-                  name="LgExceptionsSplitSentences"
-                  defaultValue="Mr.|Dr.|[A-Z].|Vd.|Vds."
+                  entryKey="LgExceptionsSplitSentences"
+                  default
                   maxLength={500}
                   size={60}
                 />
               </td>
-              {/* data_info="Exceptions Split Sentences" */}
+              {/* // data_info="Exceptions Split Sentences" */}
             </tr>
             <tr>
               <td className="td1 right backlightyellow">
                 RegExp Word Characters:
               </td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
                   className="notempty checkoutsidebmp"
-                  name="LgRegexpWordCharacters"
-                  ref={refMap.LgRegexpWordCharacters}
-                  defaultValue="a-zA-ZÀ-ÖØ-öø-ȳ"
+                  entryKey="LgRegexpWordCharacters"
+                  default
                   maxLength={500}
                   size={60}
                 />
-                {/* data_info="RegExp Word Characters" */}
+                {/* // data_info="RegExp Word Characters" */}
                 <RequiredLineButton />
               </td>
             </tr>
@@ -282,26 +271,27 @@ export function NewLanguage() {
                 :
               </td>
               <td className="td1">
-                <input
+                <LgInput
                   type="text"
                   className="checkoutsidebmp"
-                  name="LgExportTemplate"
-                  ref={refMap.LgExportTemplate}
-                  defaultValue="$y\t$t\n"
+                  entryKey="LgExportTemplate"
+                  default
                   maxLength={1000}
                   size={60}
                 />
               </td>
-              {/* data_info="Export Template" */}
+              {/* // data_info="Export Template" */}
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
                 <input
                   type="button"
                   value="Cancel"
-                  onClick={() => ResetForm(refMap)}
+                  onClick={() => {
+                    resetDirty();
+                    navigator('/edit_languages');
+                  }}
                 />
-                {/* onClick="{resetDirty(); location.href='edit_languages';}" */}
                 <input
                   type="button"
                   name="op"
@@ -389,5 +379,31 @@ export function NewLanguage() {
         />
       </Modal>
     </>
+  );
+}
+export function TextSizeSelect<
+  TData extends Record<string, unknown>,
+  TKey extends keyof TData
+>({
+  refMap,
+  entryKey,
+  defaultValue = 100,
+}: {
+  refMap: TRefMap<TData>;
+  entryKey: TKey;
+  defaultValue?: TextSize;
+}) {
+  return (
+    <select
+      name={entryKey as string}
+      className="notempty"
+      ref={refMap[entryKey]}
+      defaultValue={defaultValue}
+    >
+      <option value="100">100 %</option>
+      <option value="150">150 %</option>
+      <option value="200">200 %</option>
+      <option value="250">250 %</option>
+    </select>
   );
 }

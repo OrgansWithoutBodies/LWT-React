@@ -1,26 +1,12 @@
+import { textSizes } from './validators';
+
 type BrandedString<TBrand extends string> = string & { __brand: TBrand };
 type URL = BrandedString<'URL'>;
-type TextSize = 100 | 150 | 200 | 250;
+export type TextSize = (typeof textSizes)[number];
 export const TermStrengths = [1, 2, 3, 4, 5, 'WKn', 'Ign'] as const;
-export type TermStrength = typeof TermStrengths[number];
+export type TermStrength = (typeof TermStrengths)[number];
 export type TermStrengthOrUnknown = TermStrength | 0;
 type LanguageId = BrandedString<'Language ID'>;
-export type Language = {
-  id: LanguageId;
-  name: string;
-  dict1Url: URL;
-  dict2Url?: URL;
-  gTranUrl?: URL;
-  textSize?: TextSize;
-  characterSubs?: string;
-  regexpSplitSent: string;
-  exceptionsSplitSent?: string;
-  regexpWordChar: string;
-  eachCharWord: boolean;
-  remSpaces: boolean;
-  rtlScript: boolean;
-  exportTemplate?: string;
-};
 
 type TextId = BrandedString<'Text ID'>;
 type Tag = string;
