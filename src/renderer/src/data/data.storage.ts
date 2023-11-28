@@ -25,6 +25,7 @@ export interface DataState {
   archivedtexts: ArchivedTexts[];
   archtexttags: ArchTextTags[];
   languages: Languages[];
+
   sentences: Sentences[];
   settings: Settings[];
   tags: Tags[];
@@ -50,6 +51,7 @@ export const MyPersistanceHandles =
 export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,
+    activeLanguageId: null,
     parsedTexts: [],
     wordtags: [],
     notificationMessage: null,

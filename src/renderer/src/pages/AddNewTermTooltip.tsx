@@ -231,7 +231,7 @@ export function KnownTermLines({
     </>
   );
 }
-// TODO why not working
+
 export function AddNewTermTooltip({
   word,
   sentence,

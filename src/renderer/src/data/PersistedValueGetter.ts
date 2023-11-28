@@ -42,6 +42,7 @@ export enum PersistanceStrategy {
   LocalStorage,
   RestAPI,
   // TODO Authorized RestAPI
+  // TODO local sql server (if electron app) https://www.npmjs.com/package/electron-store
 }
 
 export const PersistenceStrategies: Record<

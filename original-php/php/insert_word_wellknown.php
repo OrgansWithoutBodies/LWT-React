@@ -35,24 +35,24 @@ Call: insert_word_wellknown.php?tid=[textid]&ord=[textpos]
 Ignore single word (new term with status 99)
 ***************************************************************/
 
-require_once( 'settings.inc.php' );
-require_once( 'connect.inc.php' );
-require_once( 'dbutils.inc.php' );
-require_once( 'utilities.inc.php' );
+require_once('settings.inc.php');
+require_once('connect.inc.php');
+require_once('dbutils.inc.php');
+require_once('utilities.inc.php');
 
 $word = get_first_value("select TiText as value from " . $tbpref . "textitems where TiWordCount = 1 and TiTxID = " . $_REQUEST['tid'] . " and TiOrder = " . $_REQUEST['ord']);
 
-$wordlc =	mb_strtolower($word, 'UTF-8');
+$wordlc = mb_strtolower($word, 'UTF-8');
 
 $langid = get_first_value("select TxLgID as value from " . $tbpref . "texts where TxID = " . $_REQUEST['tid']);
 
-pagestart("Term: " . $word,false);
+pagestart("Term: " . $word, false);
 
-$m1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoTextLC, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
-$langid . ', ' . 
-convert_string_to_sqlsyntax($word) . ', ' . 
-convert_string_to_sqlsyntax($wordlc) . ', 99, NOW(), ' .  
-make_score_random_insert_update('id') . ')','Term added');
+$m1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoTextLC, WoStatus, WoStatusChanged,' . make_score_random_insert_update('iv') . ') values( ' .
+    $langid . ', ' .
+    convert_string_to_sqlsyntax($word) . ', ' .
+    convert_string_to_sqlsyntax($wordlc) . ', 99, NOW(), ' .
+    make_score_random_insert_update('id') . ')', 'Term added');
 $wid = get_last_key();
 
 echo "<p>OK, you know this term well!</p>";
@@ -61,19 +61,18 @@ $hex = strToClassName($wordlc);
 
 ?>
 <script type="text/javascript">
-//<![CDATA[
-var context = window.parent.frames['l'].document;
-var contexth = window.parent.frames['h'].document;
-var title = make_tooltip(<?php echo prepare_textdata_js($word); ?>,'*','','99');
-$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('status99 word<?php echo $wid; ?>').attr('data_status','99').attr('data_wid','<?php echo $wid; ?>').attr('title',title);
-$('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
-window.parent.frames['l'].focus();
-window.parent.frames['l'].setTimeout('cClick()', 100);
-//]]>
+    //<![CDATA[
+    var context = window.parent.frames['l'].document;
+    var contexth = window.parent.frames['h'].document;
+    var title = make_tooltip(<?php echo prepare_textdata_js($word); ?>, '*', '', '99');
+    $('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('status99 word<?php echo $wid; ?>').attr('data_status', '99').attr('data_wid', '<?php echo $wid; ?>').attr('title', title);
+    $('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
+    window.parent.frames['l'].focus();
+    window.parent.frames['l'].setTimeout('cClick()', 100);
+    //]]>
 </script>
 <?php
 
 pageend();
 
-?> 
-
+?>

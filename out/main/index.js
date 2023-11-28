@@ -95,6 +95,9 @@ const VariantMap = {
 const createColors = (variant) => {
   const Colors = VariantMap[variant];
   return {
+    hr: {
+      border: "1px solid rgb(128, 128, 128)"
+    },
     input: {
       backgroundColor: `${Colors.lum6}`,
       color: `${Colors.lum0}`
@@ -598,12 +601,7 @@ const createColors = (variant) => {
 };
 let mainWindow;
 function createWindow() {
-  mainWindow = new electron.BrowserWindow({
-    // transparent: true,
-    backgroundMaterial: "acrylic"
-    // frame: false,
-    // backgroundColor: '#FF0000',
-  });
+  mainWindow = new electron.BrowserWindow({});
   mainWindow.setIcon(electron.nativeImage.createFromDataURL(icon));
   const style = createColors(AppVariables.styleVariant);
   console.log(style["body"].backgroundColor);
@@ -654,15 +652,6 @@ function createWindow() {
     {
       label: "Edit",
       submenu: [
-        // {
-        //   role: 'undo',
-        // },
-        // {
-        //   role: 'redo',
-        // },
-        // {
-        //   type: 'separator',
-        // },
         {
           role: "cut"
         },
@@ -718,7 +707,10 @@ function createWindow() {
       role: "help",
       submenu: [
         {
-          label: "Learn More"
+          label: "Learn More",
+          click: (_, window2) => {
+            window2?.loadURL("http://localhost:5173/info");
+          }
         }
       ]
     }

@@ -1,15 +1,15 @@
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { Icon, RequiredLineButton } from '../Icon';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import {
   CheckAndSubmit,
-  emptyToNullMap,
-  parseNumMap,
   RefMap,
   ResetForm,
+  emptyToNullMap,
+  parseNumMap,
 } from './Forms';
 import { Header } from './Header';
 
@@ -42,6 +42,7 @@ export function ImportShortText(): JSX.Element {
                   defaultValue={
                     activeLanguage ? activeLanguage.LgID : undefined
                   }
+                  onChange={(val) => dataService.setActiveLanguage(val)}
                 />
                 <RequiredLineButton />
               </td>
@@ -83,7 +84,7 @@ export function ImportShortText(): JSX.Element {
                   // data_info="Text"
                   cols={60}
                   rows={20}
-                ></textarea>
+                />
                 <RequiredLineButton />
               </td>
             </tr>

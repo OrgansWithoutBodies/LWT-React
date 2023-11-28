@@ -1,18 +1,20 @@
 import { useRef } from 'react';
-import { Icon, RequiredLineButton } from '../Icon';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { TextsId, TextsValidator } from '../data/validators';
+import { usePager } from '../hooks/usePager';
+import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
-import { usePager } from '../usePager';
+import { resetAll } from './EditArchived.component';
 import { RefMap } from './Forms';
 import { Header } from './Header';
-import { FormInput, resetDirty } from './Terms.component';
-import { useSelection } from './useSelection';
+import { TagAndOr, TagDropDown, resetDirty } from './Terms.component';
+import { buildFormInput } from './buildFormInput';
 const TextMultiAction = {
   test: (selectedValues: Set<TextsId>) => {
     console.log('test');
@@ -68,9 +70,7 @@ export function TextMultiActions({
                   id="markaction"
                   disabled={selectedValues.size === 0}
                   onChange={({ target: { value } }) => {
-                    {
-                      /* TODO */
-                    }
+                    /* TODO */
                     TextMultiAction[value as keyof typeof TextMultiAction](
                       selectedValues
                     );
@@ -295,13 +295,15 @@ export function Library({
   filterTag1: number | null;
   filterTag2: number | null;
 }) {
-  const [{ textDetails, activeLanguage, texttags, tags2 }] = useData([
+  const [{ textDetails, activeLanguage, texttags, tags2, settings }] = useData([
     'textDetails',
     'activeLanguage',
     'texttags',
     'tags2',
+    'settings',
   ]);
-  const pageSize = 15;
+  const pageSize = settings['set-texts-per-page'] || -1;
+
   const { numPages, dataOnPage } = usePager(
     textDetails || [],
     currentPage,
@@ -319,6 +321,7 @@ export function Library({
     checkboxPropsForEntry,
   } = useSelection(textDetails, 'TxID');
 
+  const recno = textDetails.length;
   return (
     <>
       <Header
@@ -344,9 +347,8 @@ export function Library({
               <input
                 type="button"
                 value="Reset All"
-                // onClick="resetAll('edit_texts.php');"
                 onClick={() => {
-                  // TODO reset fields
+                  resetAll('edit_texts');
                   navigator('/edit_texts');
                 }}
               />
@@ -355,9 +357,8 @@ export function Library({
           <tr>
             <td className="td1 center" colSpan={2}>
               Language:
-              {/* onChange="{setLang(document.form1.filterlang,'edit_texts.php');}" */}
-              {/* name="filterlang" */}
               <LanguageDropdown
+                name="filterlang"
                 header="Filter off"
                 onChange={(val) => {
                   if (val === -1) {
@@ -410,43 +411,8 @@ export function Library({
               style={{ whiteSpace: 'nowrap' }}
             >
               Tag #1:
-              <select
-                defaultValue={filterTag1 !== null ? filterTag1 : undefined}
-                name="tag1"
-                onChange={({ target: { value } }) => {
-                  paramUpdater({ tag1: value });
-                }}
-              >
-                <option value="">[Filter off]</option>
-                {/* ----------------------------------------------
-
-function get_texttag_selectoptions($v, $l)
-{
-	global $tbpref;
-	if (!isset($v))
-		$v = '';
-	$r = "<option value=\"\"" . get_selected($v, '');
-	$r .= ">[Filter off]</option>";
-	if ($l == '')
-		$sql = "select T2ID, T2Text from " . $tbpref . "texts, " . $tbpref . "tags2, " . $tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text";
-	else
-		$sql = "select T2ID, T2Text from " . $tbpref . "texts, " . $tbpref . "tags2, " . $tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID and TxLgID = " . $l . " group by T2ID order by T2Text";
-	$res = do_mysqli_query($sql);
-	$cnt = 0;
-	while ($record = mysqli_fetch_assoc($res)) {
-		$d = $record["T2Text"];
-		$cnt++;
-		$r .= "<option value=\"" . $record["T2ID"] . "\"" . get_selected($v, $record["T2ID"]) . ">" . tohtml($d) . "</option>";
-	}
-	mysqli_free_result($res);
-	if ($cnt > 0) {
-		$r .= "<option disabled=\"disabled\">--------</option>";
-		$r .= "<option value=\"-1\"" . get_selected($v, -1) . ">UNTAGGED</option>";
-	}
-	return $r;
-}
- */}
-                {texttags
+              <TagDropDown tags={tags2} tagKey={'tag1'} />
+              {/* {texttags
                   .filter((tag) => {
                     console.log(tag);
                     return true;
@@ -462,57 +428,16 @@ function get_texttag_selectoptions($v, $l)
                         }
                       </option>
                     );
-                  })}
-                <option disabled>--------</option>
-                <option
-                  value="-1"
-                  // " . get_selected($v, -1) . "
-                >
-                  UNTAGGED
-                </option>
-              </select>
+                  })} */}
             </td>
-            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-              Tag #1 ..
-              <select
-                name="tag12"
-                // TODO
-                // onChange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag12=' + val;}"
-                onChange={({ target: { value } }) => {
-                  paramUpdater({ tag12: value });
-                }}
-              >
-                {/* TODO */}
-                {/* <?php echo get_andor_selectoptions($currenttag12); ?> */}
-              </select>
-              .. Tag #2
-            </td>
+            <TagAndOr
+              onChange={({ target: { value } }) => {
+                paramUpdater({ tag12: value });
+              }}
+            />
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
-              <select
-                defaultValue={filterTag2 !== null ? filterTag2 : undefined}
-                name="tag2"
-                onChange={({ target: { value } }) => {
-                  paramUpdater({ tag2: value });
-                }}
-              >
-                <option value="-1">[Filter off]</option>
-                {texttags
-                  .filter((tag) => {
-                    console.log(tag);
-                    return true;
-                  })
-                  .map((tag) => {
-                    return <option value={tag.TtT2ID}> {tag.T2Text}</option>;
-                  })}
-                <option disabled>--------</option>
-                <option
-                  value="-1"
-                  // " . get_selected($v, -1) . "
-                >
-                  UNTAGGED
-                </option>
-              </select>
+              <TagDropDown tags={tags2} tagKey={'tag2'} />
             </td>
           </tr>
 
@@ -520,13 +445,10 @@ function get_texttag_selectoptions($v, $l)
           {/* <?php if($recno > 0) { ?> */}
           <tr>
             <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-              {/* TODO */}
-              {/* <?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?> */}
+              {`${recno} Text${recno === 1 ? '' : 's'}`}
             </th>
             <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-              {/* TODO */}
               <Pager currentPage={currentPage} numPages={numPages} />
-              {/* <?php makePager ($currentpage, $pages, 'edit_texts.php', 'form1', 1); ?> */}
             </th>
             <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
               Sort Order:
@@ -583,6 +505,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
   const refMap = RefMap(validator);
+  const TxInput = buildFormInput(refMap, editingText);
   return (
     <>
       <Header title={'My Texts'} />
@@ -598,30 +521,24 @@ export function EditText({ chgID }: { chgID: TextsId }) {
         action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
         method="post"
       >
-        <FormInput
-          refMap={refMap}
-          type="hidden"
-          entryKey="TxID"
-          fixedEntry={editingText}
-        />
+        <TxInput type="hidden" entryKey="TxID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
-              <LanguageDropdown defaultValue={editingText?.TxLgID} />
+              <LanguageDropdown defaultValue={editingText.TxLgID} />
               <RequiredLineButton />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Title:</td>
             <td className="td1">
-              <FormInput
+              <TxInput
                 type="text"
-                refMap={refMap}
                 className="notempty checkoutsidebmp"
                 // data_info="Title"
                 entryKey="TxTitle"
-                defaultEntry={editingText}
+                default
                 maxLength={200}
                 size={60}
               />{' '}
@@ -666,9 +583,8 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                 // data_info="Text"
                 cols={60}
                 rows={20}
-              >
-                {editingText?.TxText}
-              </textarea>{' '}
+                defaultValue={editingText.TxText}
+              />
               <RequiredLineButton />
             </td>
           </tr>
@@ -682,12 +598,12 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Source URI:</td>
             <td className="td1">
-              <FormInput
+              <TxInput
                 type="text"
                 className="checkurl checkoutsidebmp"
                 // data_info="Source URI"
                 entryKey="TxSourceURI"
-                defaultEntry={editingText}
+                default
                 maxLength={1000}
                 size={60}
               />
@@ -703,12 +619,12 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Audio-URI:</td>
             <td className="td1">
-              <FormInput
+              <TxInput
                 type="text"
                 className="checkoutsidebmp"
                 // data_info="Audio-URI"
                 entryKey="TxAudioURI"
-                defaultEntry={editingText}
+                default
                 maxLength={200}
                 size={60}
               />
@@ -728,9 +644,27 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                   navigator(`/edit_texts.php#rec${chgID}`);
                 }}
               />
-              <input type="button" name="op" value="Check" />
-              <input type="button" name="op" value="Change" />
-              <input type="button" name="op" value="Change and Open" />
+              <input
+                type="button"
+                onClick={() => {
+                  window.alert('TODO');
+                }}
+                value="Check"
+              />
+              <input
+                type="button"
+                onClick={() => {
+                  window.alert('TODO');
+                }}
+                value="Change"
+              />
+              <input
+                type="button"
+                onClick={() => {
+                  window.alert('TODO');
+                }}
+                value="Change and Open"
+              />
             </td>
           </tr>
         </table>

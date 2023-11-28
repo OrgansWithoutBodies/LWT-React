@@ -1744,15 +1744,6 @@ export function get_archivedtexttag_selectoptions($v: string, $l: string) {
 
 // // -------------------------------------------------------------
 
-// function get_multipletagsactions_selectoptions()
-// {
-// 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r += "<option value=\"del\">Delete Marked Tags</option>";
-// 	return $r;
-// }
-
-// // -------------------------------------------------------------
-
 // function get_allwordsactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
@@ -1786,15 +1777,6 @@ export function get_archivedtexttag_selectoptions($v: string, $l: string) {
 
 // // -------------------------------------------------------------
 
-// function get_alltagsactions_selectoptions()
-// {
-// 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r += "<option value=\"delall\">Delete ALL Tags</option>";
-// 	return $r;
-// }
-
-// // -------------------------------------------------------------
-
 // function get_multipletextactions_selectoptions()
 // {
 // 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
@@ -1808,21 +1790,6 @@ export function get_archivedtexttag_selectoptions($v: string, $l: string) {
 // 	$r += "<option value=\"setsent\">Set Term Sentences</option>";
 // 	$r += "<option disabled=\"disabled\">------------</option>";
 // 	$r += "<option value=\"arch\">Archive Marked Texts</option>";
-// 	$r += "<option disabled=\"disabled\">------------</option>";
-// 	$r += "<option value=\"del\">Delete Marked Texts</option>";
-// 	return $r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_multiplearchivedtextactions_selectoptions()
-// {
-// 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	$r += "<option disabled=\"disabled\">------------</option>";
-// 	$r += "<option value=\"addtag\">Add Tag</option>";
-// 	$r += "<option value=\"deltag\">Remove Tag</option>";
-// 	$r += "<option disabled=\"disabled\">------------</option>";
-// 	$r += "<option value=\"unarch\">Unarchive Marked Texts</option>";
 // 	$r += "<option disabled=\"disabled\">------------</option>";
 // 	$r += "<option value=\"del\">Delete Marked Texts</option>";
 // 	return $r;
@@ -1965,33 +1932,6 @@ export function get_archivedtexttag_selectoptions($v: string, $l: string) {
 // 	$pos = array_search($status, $array);
 // 	if ($pos !== FALSE)
 // 		$array[$pos] = -1;
-// }
-
-// // -------------------------------------------------------------
-
-// function createTheDictLink($u, $t)
-// {
-// 	// Case 1: url without any ###: append UTF-8-term
-// 	// Case 2: url with one ###: substitute UTF-8-term
-// 	// Case 3: url with two ###enc###: substitute enc-encoded-term
-// 	// see http://php.net/manual/en/mbstring.supported-encodings.php for supported encodings
-// 	$url = trim($u);
-// 	$trm = trim($t);
-// 	$pos = stripos($url, '###');
-// 	if ($pos !== false) { // ### found
-// 		$pos2 = strripos($url, '###');
-// 		if (($pos2 - $pos - 3) > 1) { // 2 ### found
-// 			$enc = trim(substr($url, $pos + 3, $pos2 - $pos - 3));
-// 			$r = substr($url, 0, $pos);
-// 			$r += urlencode(mb_convert_encoding($trm, $enc, 'UTF-8'));
-// 			if (($pos2 + 3) < strlen($url))
-// 				$r += substr($url, $pos2 + 3);
-// 		} elseif ($pos == $pos2) { // 1 ### found
-// 			$r = str_replace("###", ($trm == '' ? '+' : urlencode($trm)), $url);
-// 		}
-// 	} else // no ### found
-// 		$r = $url . urlencode($trm);
-// 	return $r;
 // }
 
 // // -------------------------------------------------------------
@@ -3785,30 +3725,9 @@ export function multiActionGo(
     const t = sel.options[sel.selectedIndex].text;
     if (typeof v == 'string') {
       if (v == 'addtag' || v == 'deltag') {
-        let notok = 1;
-        let answer: string | null = '';
-        while (notok) {
-          answer = prompt(
-            '*** ' +
-              t +
-              ' ***\n\n*** ' +
-              // TODO
-              'input.markcheck:checked'.length +
-              ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
-            answer
-          );
-          if (typeof answer == 'object') answer = '';
-          if (answer.indexOf(' ') > 0 || answer.indexOf(',') > 0) {
-            alert('Please no spaces or commas!');
-          } else if (answer.length > 20) {
-            alert('Please no tags longer than 20 char.!');
-          } else {
-            notok = 0;
-          }
-        }
+        const answer: string | null = verifyAddTagWindow(t);
         if (answer != '') {
-          form.data.value = answer;
-          form.submit();
+          return { tagChange: answer };
         }
       } else if (
         v == 'del' ||
@@ -3832,14 +3751,112 @@ export function multiActionGo(
             ' Record(s) will be affected ***\n\nAre you sure?'
         );
         if (answer) {
-          form.submit();
+          return true;
         }
       } else {
-        form.submit();
+        return true;
       }
     }
     sel.value = '';
   }
+}
+// TODO pipe into here
+// if (isset($_REQUEST['markaction'])) {
+// 	$markaction = $_REQUEST['markaction'];
+// 	$actiondata = stripTheSlashesIfNeeded(getreq('data'));
+// 	$message = "Multiple Actions: 0";
+// 	if (isset($_REQUEST['marked'])) {
+// 		if (is_array($_REQUEST['marked'])) {
+// 			$l = count($_REQUEST['marked']);
+// 			if ($l > 0 ) {
+// 				$list = "(" . $_REQUEST['marked'][0];
+// 				for ($i=1; $i<$l; $i++) $list .= "," . $_REQUEST['marked'][$i];
+// 				$list .= ")";
+// 				if ($markaction == 'del') {
+// 					$message = runsql('delete from ' . $tbpref . 'words where WoID in ' . $list, "Deleted");
+// 					adjust_autoincr('words','WoID');
+// 					runsql("DELETE " . $tbpref . "wordtags FROM (" . $tbpref . "wordtags LEFT JOIN " . $tbpref . "words on WtWoID = WoID) WHERE WoID IS NULL",'');
+// 				}
+// 				elseif ($markaction == 'addtag' ) {
+// 					$message = addtaglist($actiondata,$list);
+// 				}
+// 				elseif ($markaction == 'deltag' ) {
+// 					$message = removetaglist($actiondata,$list);
+// 					header("Location: edit_words.php");
+// 					exit();
+// 				}
+// 				elseif ($markaction == 'spl1' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=WoStatus+1, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoStatus in (1,2,3,4) and WoID in ' . $list, "Updated Status (+1)");
+// 				}
+// 				elseif ($markaction == 'smi1' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=WoStatus-1, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoStatus in (2,3,4,5) and WoID in ' . $list, "Updated Status (-1)");
+// 				}
+// 				elseif ($markaction == 's5' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=5, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status (=5)");
+// 				}
+// 				elseif ($markaction == 's1' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=1, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status (=1)");
+// 				}
+// 				elseif ($markaction == 's99' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=99, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status (=99)");
+// 				}
+// 				elseif ($markaction == 's98' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatus=98, WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status (=98)");
+// 				}
+// 				elseif ($markaction == 'today' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status Date (= Now)");
+// 				}
+// 				elseif ($markaction == 'delsent' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoSentence = NULL where WoID in ' . $list, "Term Sentence(s) deleted");
+// 				}
+// 				elseif ($markaction == 'lower' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoText = WoTextLC where WoID in ' . $list, "Term(s) set to lowercase");
+// 				}
+// 				elseif ($markaction == 'cap' ) {
+// 					$message = runsql('update ' . $tbpref . 'words set WoText = CONCAT(UPPER(LEFT(WoTextLC,1)),SUBSTRING(WoTextLC,2)) where WoID in ' . $list, "Term(s) capitalized");
+// 				}
+// 				elseif ($markaction == 'exp' ) {
+// 					anki_export('select distinct WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID AND WoTranslation != \'\' AND WoTranslation != \'*\' and WoSentence like concat(\'%{\',WoText,\'}%\') and WoID in ' . $list . ' group by WoID');
+// 				}
+// 				elseif ($markaction == 'exp2' ) {
+// 					tsv_export('select distinct WoID, LgName, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
+// 				}
+// 				elseif ($markaction == 'exp3' ) {
+// 					flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTextLC, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
+// 				}
+// 				elseif ($markaction == 'test' ) {
+// 					$_SESSION['testsql'] = ' ' . $tbpref . 'words where WoID in ' . $list . ' ';
+// 					header("Location: do_test.php?selection=1");
+// 					exit();
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+function verifyAddTagWindow(t: string) {
+  let notok = 1;
+  let answer: string | null = '';
+  while (notok) {
+    answer = prompt(
+      '*** ' +
+        t +
+        ' ***\n\n*** ' +
+        // TODO
+        'input.markcheck:checked'.length +
+        ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
+      answer
+    );
+    if (typeof answer == 'object') answer = '';
+    if (answer.indexOf(' ') > 0 || answer.indexOf(',') > 0) {
+      alert('Please no spaces or commas!');
+    } else if (answer.length > 20) {
+      alert('Please no tags longer than 20 char.!');
+    } else {
+      notok = 0;
+    }
+  }
+  return answer;
 }
 
 export function splitCheckText(text: string, language: Languages, id: number) {
@@ -3853,6 +3870,7 @@ export function splitCheckText(text: string, language: Languages, id: number) {
     LgCharacterSubstitutions,
   } = language;
   // list of 'A=B' equations
+  console.log('TEST123-split', LgCharacterSubstitutions, language);
   const replace = LgCharacterSubstitutions.split('|');
   let s = text
     .replace('\r\n', '\n')
@@ -3920,3 +3938,5 @@ export function splitCheckText(text: string, language: Languages, id: number) {
   console.log('REPARSE', s);
   return s;
 }
+// TODO
+export function check_dupl_lang() {}

@@ -1,12 +1,23 @@
 import { useState } from 'react';
-import { RequiredLineButton } from '../Icon';
+import * as ss from 'superstruct';
+import { dataService } from '../data/data.service';
+import { Texts } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { LanguagesId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { CheckAndSubmit, RefMap, parseNumMap } from './Forms';
 import { Header } from './Header';
+import { LongTextVerify } from './LongTextImportVerify.component';
+import { resetDirty } from './Terms.component';
+import { buildFormInput } from './buildFormInput';
+import { splitCheckText } from './utils';
 
-export default function ImportLongText(): JSX.Element {
+export default function ImportLongText({
+  onSetVerify,
+}: {
+  onSetVerify: (verify: LongTextType) => void;
+}): JSX.Element {
   const [{ languages, tags, texts, activeLanguageId }] = useData([
     'languages',
     'tags',
@@ -14,21 +25,26 @@ export default function ImportLongText(): JSX.Element {
     'activeLanguageId',
   ]);
   const navigate = useInternalNavigate();
-  const [formLanguage, setFormLanguage] = useState<LanguagesId | null>(
-    activeLanguageId
-  );
+  const validator = ss.object({
+    TxText: ss.string(),
+    TxLgID: ss.number(),
+    TxTitle: ss.string(),
+  });
+  const refMap = RefMap(validator);
+  const TxInput = buildFormInput(refMap);
+
   return (
     <>
       <Header title={'Import Long Text'} />
-      {/* <form enctype="multipart/form-data" className="validate" action="/long_text_import" method="post"> */}
       <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
               <LanguageDropdown
-                defaultValue={formLanguage ? formLanguage : undefined}
-                onChange={(val) => setFormLanguage(val)}
+                defaultValue={activeLanguageId ? activeLanguageId : undefined}
+                onChange={(val) => dataService.setActiveLanguage(val)}
+                dropdownRef={refMap.TxLgID}
               />
               <RequiredLineButton />
             </td>
@@ -36,12 +52,11 @@ export default function ImportLongText(): JSX.Element {
           <tr>
             <td className="td1 right">Title:</td>
             <td className="td1">
-              <input
+              <TxInput
                 type="text"
                 className="notempty checkoutsidebmp"
                 // data_info="Title"
-                name="TxTitle"
-                value=""
+                entryKey="TxTitle"
                 maxLength={200}
                 size={60}
               />
@@ -51,6 +66,7 @@ export default function ImportLongText(): JSX.Element {
           <tr>
             <td className="td1 right">Text:</td>
             <td className="td1">
+              {/* TODO validate one not both specified (XOR) */}
               Either specify a <b>File to upload</b>:<br />
               <input name="thefile" type="file" />
               <br />
@@ -60,11 +76,12 @@ export default function ImportLongText(): JSX.Element {
               <br />
               <textarea
                 className="checkoutsidebmp"
+                ref={refMap.TxText}
                 // data_info="Upload"
                 name="Upload"
                 cols={60}
                 rows={15}
-              ></textarea>
+              />
               <p className="smallgray">
                 If the text is too long, the import may not be possible.
                 <br />
@@ -85,9 +102,13 @@ export default function ImportLongText(): JSX.Element {
               Paragraphs:
             </td>
             <td className="td1">
-              <select name="paragraph_handling">
-                {/* TODO */}
-                {/* <option value="1" selected> */}
+              <select
+                name="paragraph_handling"
+                defaultValue={'1'}
+                onChange={() => {
+                  // TODO
+                }}
+              >
                 <option value="1">ONE NEWLINE: Paragraph ends</option>
                 <option value="2">
                   TWO NEWLINEs: Paragraph ends. Single NEWLINE converted to
@@ -131,12 +152,11 @@ export default function ImportLongText(): JSX.Element {
           <tr>
             <td className="td1 right">Source URI:</td>
             <td className="td1">
-              <input
+              <TxInput
                 type="text"
                 className="checkurl checkoutsidebmp"
                 // data_info="Source URI"
-                name="TxSourceURI"
-                value=""
+                entryKey="TxSourceURI"
                 maxLength={1000}
                 size={60}
               />
@@ -172,19 +192,46 @@ export default function ImportLongText(): JSX.Element {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  // TODO
-                  const resetDirty = () => {
-                    // ** You have unsaved changes! **
-                  };
                   resetDirty();
                   navigate('/');
                 }}
               />
               &nbsp; | &nbsp;
               <input
-                type="submit"
-                name="op"
+                type="button"
                 value="NEXT STEP: Check the Texts"
+                onClick={() => {
+                  console.log('LONGIMPORT', refMap.TxText.current);
+
+                  CheckAndSubmit(
+                    refMap,
+                    { TxLgID: parseNumMap },
+                    validator,
+                    ({ TxText, TxLgID, TxTitle }) => {
+                      // TODO
+                      // console.log(TxLgID);
+                      const splitTexts = splitCheckText(
+                        TxText,
+                        languages.find((lang) => {
+                          return lang.LgID === TxLgID;
+                        })!,
+                        -2
+                      ) as string[];
+                      console.log(splitTexts);
+                      onSetVerify(
+                        splitTexts.map((text, ii) => {
+                          return {
+                            TxText: text,
+                            TxLgID,
+                            TxTitle: `${TxTitle} [${ii + 1}/${
+                              splitTexts.length
+                            }]`,
+                          };
+                        })
+                      );
+                    }
+                  );
+                }}
               />
             </td>
           </tr>
@@ -194,7 +241,21 @@ export default function ImportLongText(): JSX.Element {
     </>
   );
 }
-
+// TODO flesh out
+export type LongTextType = Pick<Texts, 'TxText' | 'TxLgID' | 'TxTitle'>[];
+export function LongText() {
+  const [verifying, setVerifying] = useState<LongTextType | null>(null);
+  const isVerify = verifying !== null;
+  return (
+    <>
+      {isVerify ? (
+        <LongTextVerify verifying={verifying} />
+      ) : (
+        <ImportLongText onSetVerify={setVerifying} />
+      )}
+    </>
+  );
+}
 {
   /* <p class="smallgray">Import of a <b>single text</b>, max. 65,000 bytes long, with optional audio:</p><p><input type="button" value="Standard Text Import" onClick="location.href='edit_texts?new=1';"> </p>
 

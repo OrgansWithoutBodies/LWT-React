@@ -39,13 +39,10 @@ export type TAppContext = AppVersion & {
   server: string;
   serverVersion: string;
 
-  //
   frontend: 'React';
   frontendVersion: string;
   frontendSource: string;
 
-  // TODO sync up text to audio
-  // TODO download audio from youtube
   // TODO can get wizard data from google sheet
   wizardDataUri: string;
 };

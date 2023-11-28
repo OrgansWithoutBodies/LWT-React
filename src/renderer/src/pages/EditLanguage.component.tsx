@@ -1,13 +1,20 @@
-import { Icon, RequiredLineButton } from '../Icon';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { LanguagesValidator } from '../data/validators';
+import { LanguagesId, LanguagesValidator } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
-import { RefMap, TRefMap } from './Forms';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
+import { CheckAndSubmit, RefMap, TRefMap } from './Forms';
 import { Header } from './Header';
-import { TextSizeSelect } from './NewLanguage.component';
-import { buildFormInput, resetDirty } from './Terms.component';
+import {
+  TextSizeSelect,
+  languagePreValidateMap,
+  oewin,
+} from './NewLanguage.component';
+import { resetDirty } from './Terms.component';
+import { buildFormInput } from './buildFormInput';
+import { check_dupl_lang } from './utils';
 
-export function EditLanguage({ chgID }: { chgID: number }) {
+export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   const [{ languages }] = useData(['languages']);
   const changingLang = languages.find(({ LgID }) => {
     return LgID === chgID;
@@ -29,15 +36,7 @@ export function EditLanguage({ chgID }: { chgID: number }) {
           <Icon src="question-frame" title="Help" />
         </a>
       </h4>
-      <form
-        className="validate"
-        // action={<?php echo $_SERVER['PHP_SELF']; ?>}
-        // method="post"
-        // TODO
-        //   onSubmit="return check_dupl_lang(
-        // <?php echo $_REQUEST['chg']; ?>
-        // );"
-      >
+      <form className="validate">
         <LgInput type="hidden" entryKey="LgID" fixed />
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>
@@ -202,8 +201,9 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 src="question-frame"
                 title="Help"
                 className="click"
-                // TODO
-                onClick="oewin('info_export_template.htm');"
+                onClick={() => {
+                  oewin('info_export_template.htm');
+                }}
               />
               :
             </td>
@@ -233,7 +233,16 @@ export function EditLanguage({ chgID }: { chgID: number }) {
                 type="button"
                 value="Change"
                 onClick={() => {
-                  refMap;
+                  check_dupl_lang();
+                  CheckAndSubmit(
+                    refMap,
+                    languagePreValidateMap,
+                    validator,
+                    (value) => {
+                      dataService.editLanguage(chgID, value);
+                      navigator('/edit_words');
+                    }
+                  );
                 }}
               />
             </td>

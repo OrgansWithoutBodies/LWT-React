@@ -36,33 +36,34 @@ Database Utility Functions
 
 // -------------------------------------------------------------
 
-function do_mysqli_query($sql) {
+function do_mysqli_query($sql)
+{
 	$res = mysqli_query($GLOBALS['DBCONNECTION'], $sql);
 	if ($res == FALSE) {
 		echo '</select></p></div><div style="padding: 1em; color:red; font-size:120%; background-color:#CEECF5;">' .
-			'<p><b>Fatal Error in SQL Query:</b> ' . 
-			tohtml($sql) . 
-			'</p>' . 
-			'<p><b>Error Code &amp; Message:</b> [' . 
-			mysqli_errno($GLOBALS['DBCONNECTION']) . 
-			'] ' . 
-			tohtml(mysqli_error($GLOBALS['DBCONNECTION'])) . 
+			'<p><b>Fatal Error in SQL Query:</b> ' .
+			tohtml($sql) .
+			'</p>' .
+			'<p><b>Error Code &amp; Message:</b> [' .
+			mysqli_errno($GLOBALS['DBCONNECTION']) .
+			'] ' .
+			tohtml(mysqli_error($GLOBALS['DBCONNECTION'])) .
 			"</p></div><hr /><pre>Backtrace:\n\n";
-		debug_print_backtrace ();
+		debug_print_backtrace();
 		echo '</pre><hr />';
 		die('</body></html>');
-	}
-	else
+	} else
 		return $res;
 }
 
 // -------------------------------------------------------------
 
-function runsql($sql, $m, $sqlerrdie = TRUE) {
+function runsql($sql, $m, $sqlerrdie = TRUE)
+{
 	if ($sqlerrdie)
 		$res = do_mysqli_query($sql);
 	else
-		$res = mysqli_query($GLOBALS['DBCONNECTION'], $sql);		
+		$res = mysqli_query($GLOBALS['DBCONNECTION'], $sql);
 	if ($res == FALSE) {
 		$message = "Error: " . mysqli_error($GLOBALS['DBCONNECTION']);
 	} else {
@@ -74,10 +75,11 @@ function runsql($sql, $m, $sqlerrdie = TRUE) {
 
 // -------------------------------------------------------------
 
-function get_first_value($sql) {
-	$res = do_mysqli_query($sql);		
+function get_first_value($sql)
+{
+	$res = do_mysqli_query($sql);
 	$record = mysqli_fetch_assoc($res);
-	if ($record) 
+	if ($record)
 		$d = $record["value"];
 	else
 		$d = NULL;

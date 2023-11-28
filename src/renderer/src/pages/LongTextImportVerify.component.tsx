@@ -1,14 +1,15 @@
+import { dataService } from '../data/data.service';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
+import { LongTextType } from './LongTextImport.component';
 import { resetDirty } from './Terms.component';
 import { byteSizeOfString } from './utils';
 
-export function LongTextVerify(): JSX.Element {
-  const shorterTexts = [
-    { text: 'test123' },
-    { text: 'test1234' },
-    { text: 'test1234帮' },
-  ];
+export function LongTextVerify({
+  verifying,
+}: {
+  verifying: LongTextType;
+}): JSX.Element {
   const navigate = useInternalNavigate();
 
   return (
@@ -22,7 +23,7 @@ export function LongTextVerify(): JSX.Element {
         method="post"
       >
         <input type="hidden" name="LgID" value="2" />
-        <input type="hidden" name="TxTitle" value="fdasfdsa" />
+        <input type="hidden" name="TxTitle" value="TODO" />
         <input type="hidden" name="TxSourceURI" value="" />
         <input type="hidden" name="TextTags" value="null" />
         <input type="hidden" name="TextCount" value="12" />
@@ -30,8 +31,8 @@ export function LongTextVerify(): JSX.Element {
           <tbody>
             <tr>
               <td className="td1" colSpan={2}>
-                {shorterTexts.length > 1
-                  ? `This long text will be split into ${shorterTexts.length} shorter
+                {verifying.length > 1
+                  ? `This long text will be split into ${verifying.length} shorter
                 texts - as follows:`
                   : 'This text can fit as a single text'}
               </td>
@@ -42,8 +43,6 @@ export function LongTextVerify(): JSX.Element {
                   type="button"
                   value="Cancel"
                   onClick={() => {
-                    // TODO
-                    const resetDirty = () => {};
                     resetDirty();
                     navigate('/');
                   }}
@@ -59,14 +58,18 @@ export function LongTextVerify(): JSX.Element {
                 />
                 &nbsp; | &nbsp;
                 <input
-                  type="submit"
-                  name="op"
-                  value={`Create ${shorterTexts.length} texts`}
+                  type="button"
+                  value={`Create ${verifying.length} texts`}
+                  onClick={() => {
+                    verifying.forEach((text) => {
+                      dataService.addText(text);
+                    });
+                  }}
                 />
               </td>
             </tr>
 
-            {shorterTexts.map((text, ii) => {
+            {verifying.map(({ TxText }, ii) => {
               return (
                 <tr>
                   <td className="td1 right">
@@ -76,14 +79,18 @@ export function LongTextVerify(): JSX.Element {
                     <br />
                     Length:
                     <br />
-                    {byteSizeOfString(text.text)}
+                    {byteSizeOfString(TxText)}
                     <br />
                     Bytes
                   </td>
                   <td className="td1">
-                    <textarea readOnly name="text[0]" cols={60} rows={10}>
-                      {text.text}
-                    </textarea>
+                    <textarea
+                      readOnly
+                      name={`text[${ii}]`}
+                      cols={60}
+                      rows={10}
+                      defaultValue={TxText}
+                    />
                   </td>
                 </tr>
               );

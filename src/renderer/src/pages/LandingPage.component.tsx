@@ -1,9 +1,9 @@
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
+import { useAppContext } from '../hooks/useContext';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { useAppContext } from '../useContext';
 
 export function LandingPage() {
   const {

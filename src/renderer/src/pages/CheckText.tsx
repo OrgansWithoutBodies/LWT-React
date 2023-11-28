@@ -1,4 +1,4 @@
-import { RequiredLineButton } from '../Icon';
+import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Header } from './Header';
 import { NavigateButton } from './Statistics.component';
@@ -38,14 +38,21 @@ export function CheckText(): JSX.Element {
                   // data_info="Text"
                   cols={60}
                   rows={20}
-                ></textarea>
+                />
                 <RequiredLineButton />
               </td>
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
                 <NavigateButton value="<< Back" navigateTo="/" />
-                <input type="submit" name="op" value="Check" />
+                <input
+                  type="button"
+                  name="op"
+                  value="Check"
+                  onClick={() => {
+                    window.alert('TODO');
+                  }}
+                />
               </td>
             </tr>
           </tbody>

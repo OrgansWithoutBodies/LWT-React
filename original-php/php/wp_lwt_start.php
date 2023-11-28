@@ -39,15 +39,15 @@ Cookies must be enabled. A session cookie will be set.
 The lwt installation must be in sub directory "lwt" under
 the WordPress main drectory.
 In the "lwt" directory, "connect.inc.php" must contain 
-           include "wp_logincheck.inc.php"; 
+		   include "wp_logincheck.inc.php"; 
 at the end!
 To properly log out from both WordPress and LWT, use:
 http://...path-to-wp-blog.../lwt/wp_lwt_stop.php
 ***************************************************************/
 
-require_once( '../wp-load.php' );
+require_once('../wp-load.php');
 
-if (is_user_logged_in()){
+if (is_user_logged_in()) {
 	global $current_user;
 
 	get_currentuserinfo();
@@ -56,8 +56,7 @@ if (is_user_logged_in()){
 	setcookie('LWT-WP-User', $wpuser, 0, '/');
 	header("Location: ./index.php");
 	exit;
-}
-else { 
+} else {
 	setcookie('LWT-WP-User', $wpuser, time() - 1000, '/');
 	header("Location: ../wp-login.php?redirect_to=./lwt/wp_lwt_start.php");
 	exit;

@@ -1,11 +1,11 @@
 import { parse } from 'papaparse';
 import { useRef } from 'react';
 import * as ss from 'superstruct';
-import { RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Words } from '../data/parseMySqlDump';
 import { languagesId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { StrengthMap } from './AddNewTermTooltip';
 import { CheckAndSubmit } from './Forms';
@@ -187,7 +187,7 @@ export function UploadWords() {
                 name="Upload"
                 cols={60}
                 rows={25}
-              ></textarea>
+              />
             </td>
           </tr>
           <tr>

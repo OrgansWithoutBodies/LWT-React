@@ -35,16 +35,16 @@ Call: display_impr_text_text.php?text=[textid]
 Display an improved annotated text (text frame)
 ***************************************************************/
 
-require_once( 'settings.inc.php' );
-require_once( 'connect.inc.php' );
-require_once( 'dbutils.inc.php' );
-require_once( 'utilities.inc.php' );
+require_once('settings.inc.php');
+require_once('connect.inc.php');
+require_once('dbutils.inc.php');
+require_once('utilities.inc.php');
 
-$textid = getreq('text')+0;
+$textid = getreq('text') + 0;
 $ann = get_first_value("select TxAnnotatedText as value from " . $tbpref . "texts where TxID = " . $textid);
 $ann_exists = (strlen($ann) > 0);
 
-if(($textid==0) || (! $ann_exists)) {
+if (($textid == 0) || (!$ann_exists)) {
 	header("Location: edit_texts.php");
 	exit();
 }
@@ -64,41 +64,41 @@ $removeSpaces = $record['LgRemoveSpaces'];
 $rtlScript = $record['LgRightToLeft'];
 mysqli_free_result($res);
 
-saveSetting('currenttext',$textid);
+saveSetting('currenttext', $textid);
 
 pagestart_nobody('Display');
 
 ?>
 <script type="text/javascript">
-//<![CDATA[
+	//<![CDATA[
 
-function click_ann() {
-	if($(this).css('color') == 'rgb(200, 220, 240)') {
-		$(this).css('color','#006699');
-		$(this).css('background-color','white');
+	function click_ann() {
+		if ($(this).css('color') == 'rgb(200, 220, 240)') {
+			$(this).css('color', '#006699');
+			$(this).css('background-color', 'white');
+		}
+		else {
+			$(this).css('color', '#C8DCF0');
+			$(this).css('background-color', '#C8DCF0');
+		}
 	}
-	else {
-		$(this).css('color','#C8DCF0');
-		$(this).css('background-color','#C8DCF0');
-	}
-}
 
-function click_text() {
-	if($(this).css('color') == 'rgb(229, 228, 226)') {
-		$(this).css('color','black');
-		$(this).css('background-color','white');
+	function click_text() {
+		if ($(this).css('color') == 'rgb(229, 228, 226)') {
+			$(this).css('color', 'black');
+			$(this).css('background-color', 'white');
+		}
+		else {
+			$(this).css('color', '#E5E4E2');
+			$(this).css('background-color', '#E5E4E2');
+		}
 	}
-	else {
-		$(this).css('color','#E5E4E2');
-		$(this).css('background-color','#E5E4E2');
-	}
-}
 
-$(document).ready(function(){
-  $('.anntransruby2').click(click_ann);
-  $('.anntermruby').click(click_text);
-});
-//]]>
+	$(document).ready(function () {
+		$('.anntransruby2').click(click_ann);
+		$('.anntermruby').click(click_text);
+	});
+	//]]>
 </script>
 
 <?php
@@ -119,18 +119,22 @@ foreach ($items as $item) {
 			if ($vals[2] !== '') {
 				$wid = $vals[2] + 0;
 				$rom = get_first_value("select WoRomanization as value from " . $tbpref . "words where WoID = " . $wid);
-				if (! isset($rom)) $rom = '';
+				if (!isset($rom))
+					$rom = '';
 			}
 		}
-		if ($c > 3) $trans = $vals[3];
-		if ($trans == '*') $trans = $vals[1] . " "; // <- U+200A HAIR SPACE
+		if ($c > 3)
+			$trans = $vals[3];
+		if ($trans == '*')
+			$trans = $vals[1] . " "; // <- U+200A HAIR SPACE
 		echo ' <ruby><rb><span class="click anntermruby" style="color:black;"' . ($rom == '' ? '' : (' title="' . tohtml($rom) . '"')) . '>' . tohtml($vals[1]) . '</span></rb><rt><span class="click anntransruby2">' . tohtml($trans) . '</span></rt></ruby> ';
 	} else {
-		if (count($vals) >= 2) 
+		if (count($vals) >= 2)
 			echo str_replace(
-			"¶",
-			'</p><p style="font-size:' . $textsize . '%;line-height: 1.3; margin-bottom: 10px;">',
-			" " . tohtml($vals[1]));
+				"¶",
+				'</p><p style="font-size:' . $textsize . '%;line-height: 1.3; margin-bottom: 10px;">',
+				" " . tohtml($vals[1])
+			);
 	}
 }
 

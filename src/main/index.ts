@@ -5,20 +5,15 @@ import { createColors } from '../renderer/src/styles';
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    // transparent: true,
-    backgroundMaterial: 'acrylic',
-    // frame: false,
-    // backgroundColor: '#FF0000',
-  });
+  mainWindow = new BrowserWindow({});
   mainWindow.setIcon(nativeImage.createFromDataURL(icon));
   const style = createColors(AppVariables.styleVariant);
-  // TODO
+  // TODO bgcolor
   console.log(style['body'].backgroundColor!);
-  // mainWindow.setBackgroundColor('#FF0000');
   mainWindow.blur();
   window;
   // Vite dev server URL
+  // TODO option
   mainWindow.loadURL('http://localhost:5173');
   mainWindow.on('closed', () => (mainWindow = null));
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -65,15 +60,6 @@ function createWindow() {
     {
       label: 'Edit',
       submenu: [
-        // {
-        //   role: 'undo',
-        // },
-        // {
-        //   role: 'redo',
-        // },
-        // {
-        //   type: 'separator',
-        // },
         {
           role: 'cut',
         },
@@ -133,6 +119,9 @@ function createWindow() {
       submenu: [
         {
           label: 'Learn More',
+          click: (_, window) => {
+            window?.loadURL('http://localhost:5173/info');
+          },
         },
       ],
     },

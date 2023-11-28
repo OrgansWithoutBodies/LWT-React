@@ -1,38 +1,22 @@
 import { useState } from 'react';
 import Modal from 'react-modal';
 import { dataService } from '../data/data.service';
-import { Languages } from '../data/parseMySqlDump';
-import { TextSize } from '../data/type';
 import { LanguagesValidatorNoId } from '../data/validators';
 import { LANGDEFS } from '../data/wizardData';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import {
-  CheckAndSubmit,
-  RefMap,
-  TRefMap,
-  emptyToNullMap,
-  parseNumMap,
-} from './Forms';
+import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
+import {
+  LanguageNoId,
+  TextSizeSelect,
+  languagePreValidateMap,
+  oewin,
+} from './NewLanguage.component';
 import { resetDirty } from './Terms.component';
 import NewLanguageWizard from './Wizard.component';
 import { buildFormInput } from './buildFormInput';
-import { check_dupl_lang } from './utils';
 
-// TODO table component?
-type LanguageNoId = Omit<Languages, 'LgID'>;
-export const languagePreValidateMap: {
-  [key in keyof LanguageNoId]?: (
-    value: string
-  ) => number | string | undefined | null;
-} = {
-  LgTextSize: parseNumMap,
-  LgRemoveSpaces: parseNumMap,
-  LgSplitEachChar: parseNumMap,
-  LgRightToLeft: parseNumMap,
-  LgDict2URI: emptyToNullMap,
-};
 export function NewLanguage() {
   // languages type map
   // TODO form component?
@@ -62,6 +46,7 @@ export function NewLanguage() {
         </a>
       </h4>
       <form className="validate">
+        {/* onsubmit="return check_dupl_lang(0);" */}
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -387,40 +372,5 @@ export function NewLanguage() {
         />
       </Modal>
     </>
-  );
-}
-export function TextSizeSelect<
-  TData extends Record<string, unknown>,
-  TKey extends keyof TData
->({
-  refMap,
-  entryKey,
-  defaultValue = 100,
-}: {
-  refMap: TRefMap<TData>;
-  entryKey: TKey;
-  defaultValue?: TextSize;
-}) {
-  return (
-    <select
-      name={entryKey as string}
-      className="notempty"
-      ref={refMap[entryKey]}
-      defaultValue={defaultValue}
-    >
-      <option value="100">100 %</option>
-      <option value="150">150 %</option>
-      <option value="200">200 %</option>
-      <option value="250">250 %</option>
-    </select>
-  );
-}
-
-export function oewin(url: string | URL | undefined) {
-  // TODO
-  window.open(
-    url,
-    'editwin',
-    'width=800, height=600, scrollbars=yes, menubar=no, resizable=yes, status=no'
   );
 }

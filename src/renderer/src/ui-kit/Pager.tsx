@@ -1,5 +1,5 @@
-import { Icon } from '../Icon';
 import { useUpdateParams } from '../nav/useInternalNav';
+import { Icon } from './Icon';
 
 export function Pager({
   currentPage: currentPage,

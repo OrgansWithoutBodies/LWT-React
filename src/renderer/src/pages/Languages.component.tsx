@@ -1,9 +1,9 @@
-import { Icon } from '../Icon';
 import { dataService } from '../data/data.service';
 import { ArchivedTexts, Languages, Texts, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
 import { A } from '../nav/InternalLink';
+import { Icon } from '../ui-kit/Icon';
 import { Header } from './Header';
 import { confirmDelete } from './utils';
 

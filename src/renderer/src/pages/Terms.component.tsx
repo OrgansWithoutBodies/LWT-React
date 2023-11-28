@@ -1,22 +1,37 @@
-import { InputHTMLAttributes } from 'react';
-import { Icon, RequiredLineButton } from '../Icon';
+import { useMemo } from 'react';
 import { dataService } from '../data/data.service';
-import { Tags, Words } from '../data/parseMySqlDump';
+import { Tags, Tags2, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { LanguagesId, WordsId, WordsValidator } from '../data/validators';
+import {
+  LanguagesId,
+  TagsId,
+  TextsId,
+  WordsId,
+  WordsValidator,
+  WordsValidatorNoId,
+} from '../data/validators';
+import { usePager } from '../hooks/usePager';
+import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
+import {
+  PathParams,
+  useInternalNavigate,
+  useUpdateParams,
+} from '../nav/useInternalNav';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
-import { usePager } from '../usePager';
-import { do_ajax_show_sentences } from './AddNewWord';
-import { RefMap, TRefMap } from './Forms';
+import { StatusRadioButtons, do_ajax_show_sentences } from './AddNewWordPane';
+import { resetAll } from './EditArchived.component';
+import { RefMap } from './Forms';
 import { Header } from './Header';
-import { useSelection } from './useSelection';
+import { WordTagsSelectDropdown, buildFormInput } from './buildFormInput';
 import { confirmDelete } from './utils';
 
 // TODO
-export const resetDirty = () => {};
+export const resetDirty = () => {
+  // ** You have unsaved changes! **
+};
 export const setDirty = () => {};
 
 export const enum Sorting {
@@ -28,21 +43,33 @@ export const enum Sorting {
   'Score Value (%)' = 5,
   'Word Count Active Texts' = 6,
 }
-function TagDropDown({ tags }: { tags: Tags[] }): JSX.Element {
+const isTags = (tags: Tags[] | Tags2[]): tags is Tags[] => 'TgID' in tags[0];
+// TODO tagKey type restricted to path param
+export function TagDropDown({
+  tags,
+  tagKey,
+}: {
+  tags: Tags[] | Tags2[];
+  tagKey: PathParams;
+}): JSX.Element {
   const updateParams = useUpdateParams();
   return (
     <select
       name="tag1"
       onChange={({ target: { value } }) => {
-        updateParams({ tag1: value });
+        updateParams({ [tagKey]: value });
       }}
     >
       <option value="" selected>
         [Filter off]
       </option>
-      {tags.map((tag) => {
-        return <option value={tag.TgID}>{tag.TgText}</option>;
-      })}
+      {isTags(tags)
+        ? tags.map((tag) => {
+            return <option value={tag.TgID}>{tag.TgText}</option>;
+          })
+        : tags.map((tag) => {
+            return <option value={tag.T2ID}>{tag.T2Text}</option>;
+          })}
 
       <option disabled>--------</option>
       <option value="-1">UNTAGGED</option>
@@ -88,14 +115,17 @@ export function TermsFilterBox({
   currentPage,
   activeLanguageId,
   numPages,
+  tag12,
 }: {
   activeLanguageId: LanguagesId | null;
   numTerms: number;
   numPages: number;
   currentPage: number;
+  tag12: 0 | 1;
 }): JSX.Element {
   const [{ tags, texts }] = useData(['tags', 'texts']);
   // TODO usePager available here - contextprovider?
+  // TODO why would need pager in filter box?
   const navigate = useInternalNavigate();
   const updateParams = useUpdateParams();
   return (
@@ -109,8 +139,7 @@ export function TermsFilterBox({
             <input
               type="button"
               value="Reset All"
-              // TODO
-              onClick="resetAll('edit_words');"
+              onClick={() => resetAll('edit_words')}
             />
           </th>
         </tr>
@@ -236,24 +265,17 @@ export function TermsFilterBox({
             colSpan={2}
           >
             Tag #1:
-            <TagDropDown tags={tags} />
+            <TagDropDown tags={tags} tagKey={'tag1'} />
           </td>
-          <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
-            Tag #1 ..
-            <select
-              name="tag12"
-              onChange={({ target: { value } }) => {
-                navigate(`/edit_words?page=${1}&tag12=${value}`);
-              }}
-            >
-              <option value="0">... OR ...</option>
-              <option value="1">... AND ...</option>
-            </select>
-            .. Tag #2
-          </td>
+          <TagAndOr
+            defaultValue={tag12}
+            onChange={({ target: { value } }) => {
+              navigate(`/edit_words?page=${1}&tag12=${value}`);
+            }}
+          />
           <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
             Tag #2:
-            <TagDropDown tags={tags} />
+            <TagDropDown tags={tags} tagKey={'tag2'} />
           </td>
         </tr>
         <tr>
@@ -271,15 +293,15 @@ export function TermsFilterBox({
             Sort Order:
             <select
               name="sort"
+              defaultValue={'3'}
               onChange={({ target: { value } }) => {
+                // TODO udpate params
                 navigate(`/edit_words?page=1&sort=${value}`);
               }}
             >
               <option value="1">Term A-Z</option>
               <option value="2">Translation A-Z</option>
-              <option value="3" selected>
-                Newest first
-              </option>
+              <option value="3">Newest first</option>
               <option value="7">Oldest first</option>
               <option value="4">Status</option>
               <option value="5">Score Value (%)</option>
@@ -289,6 +311,25 @@ export function TermsFilterBox({
         </tr>
       </tbody>
     </table>
+  );
+}
+
+export function TagAndOr({
+  onChange,
+  defaultValue,
+}: {
+  onChange: (arg: { target: { value: '0' | '1' } }) => void;
+  defaultValue?: 0 | 1;
+}) {
+  return (
+    <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
+      Tag #1 ..
+      <select defaultValue={defaultValue} name="tag12" onChange={onChange}>
+        <option value={0}>... OR ...</option>
+        <option value={1}>... AND ...</option>
+      </select>
+      .. Tag #2
+    </td>
   );
 }
 
@@ -472,30 +513,37 @@ export function Terms({
   status = null,
   textFilter,
   tag1,
-  tag12,
+  tag12 = 0,
   tag2,
 }: {
-  textFilter: number | null;
+  textFilter: TextsId | null;
   pageNum: number | null;
   // filterlang: LanguagesId | null;
+  // TODO statusVal
   status: number | null;
-  tag1: number | null;
-  tag12: 0 | 1;
-  tag2: number | null;
+  // TODO tagID
+  tag1: TagsId | null;
+  tag12?: 0 | 1;
+  tag2: TagsId | null;
   sort: Sorting | null;
 }): JSX.Element {
-  const pageSize = 15;
-  const [{ words, activeLanguage }] = useData([
+  const [{ words, activeLanguage, settings, wordtags }] = useData([
     'words',
     'activeLanguage',
+    'settings',
+    'wordtags',
     // 'texttags',
   ]);
+  const pageSize = settings['set-terms-per-page'] || -1;
   // if (!activeLanguage) {
   //   return <></>;
   // }
   // const textTagsMatchingTag1=texttags.filter((tag)=>tag.TtTxID===)
   // const navigator = useInternalNavigate();
   const filteredWords = words.filter((val) => {
+    const allTagsForThisWord = wordtags.filter(({ WtWoID }) => {
+      return WtWoID === val.WoID;
+    });
     const isRightText =
       textFilter === null
         ? true
@@ -505,13 +553,26 @@ export function Terms({
     const isRightStatus = status === null ? true : val.WoStatus === status;
     const isRightLang =
       activeLanguage === null ? true : val.WoLgID === activeLanguage?.LgID;
-    // const isRightTag1 = tag1 === null ? true : val.WoLgID === filterlang;
-    // const isRightTag2 = tag2 === null ? true : val.WoLgID === filterlang;
-    const isRightTag1 = true;
-    const isRightTag2 = true;
+    const isRightTag1 =
+      tag1 === null
+        ? true
+        : allTagsForThisWord.find((val) => {
+            return val.WtTgID === tag1;
+          });
+    const isRightTag2 =
+      tag2 === null
+        ? true
+        : allTagsForThisWord.find((val) => {
+            return val.WtTgID === tag2;
+          });
 
+    // TODO account for both tags empty
     const compoundTagStatement =
-      tag12 === 0 ? isRightTag1 || isRightTag2 : isRightTag1 && isRightTag2;
+      tag12 === 0
+        ? // need an extra check to avoid sticking when only one tag is specified? I think
+
+          isRightTag1 || (tag2 === null ? false : isRightTag2)
+        : isRightTag1 && isRightTag2;
 
     return isRightStatus && isRightText && isRightLang && compoundTagStatement;
   });
@@ -552,6 +613,7 @@ export function Terms({
       {sortedWords && (
         <>
           <TermsFilterBox
+            tag12={tag12}
             activeLanguageId={
               activeLanguage !== undefined ? activeLanguage.LgID : null
             }
@@ -588,6 +650,7 @@ export function Terms({
     </>
   );
 }
+
 export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
   const term = words.find((val) => {
@@ -596,7 +659,12 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const validator = WordsValidator;
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
-  const WoInput = buildFormInput(refMap, term);
+  const WoInput = useMemo(() => {
+    return buildFormInput(refMap, term);
+  }, [term]);
+  if (!term) {
+    throw new Error('Invalid Change ID!');
+  }
   return (
     <>
       <Header
@@ -607,7 +675,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
       <form name="editword" className="validate">
         <WoInput type="hidden" entryKey={'WoID'} fixed />
         <WoInput type="hidden" entryKey={'WoLgID'} fixed />
-        <input type="hidden" name="WoOldStatus" value={term?.WoStatus} />
+        <input type="hidden" name="WoOldStatus" value={term.WoStatus} />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Language:</td>
@@ -644,16 +712,14 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 name="WoTranslation"
                 cols={40}
                 rows={3}
-              >
-                {term?.WoTranslation}
-              </textarea>
+                defaultValue={term.WoTranslation}
+              />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              {/* TODO */}
-              {/* <?php echo getWordTags($record['WoID']); ?> */}
+              <WordTagsSelectDropdown wordID={term.WoID} />
             </td>
           </tr>
           <tr>
@@ -685,14 +751,13 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 name="WoSentence"
                 cols={40}
                 rows={3}
-              >
-                {term?.WoSentence}
-              </textarea>
+                defaultValue={term.WoSentence}
+              />
             </td>
           </tr>
           <tr>
             <td className="td1 right">Status:</td>
-            <td className="td1">{term?.WoStatus}</td>
+            <td className="td1">{term.WoStatus}</td>
           </tr>
           <tr>
             <td className="td1 right" colSpan={2}>
@@ -719,12 +784,148 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
           className="click"
           // TODO
           onClick={() => {
-            do_ajax_show_sentences(
-              term?.WoLgID,
-              term?.WoTextLC,
-              term?.WoSentence
-            );
+            do_ajax_show_sentences(term.WoLgID, term.WoTextLC, term.WoSentence);
             // "do_ajax_show_sentences(<?php echo $record['LgID']; ?>, <?php echo prepare_textdata_js($wordlc) . ', ' . prepare_textdata_js("document.forms['editword'].WoSentence"); ?>);"
+          }}
+        >
+          <Icon src="sticky-notes-stack" title="Show Sentences" /> Show
+          Sentences
+        </span>
+      </div>
+    </>
+  );
+}
+export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
+  const [{ languages }] = useData(['languages']);
+  const language = languages.find((val) => {
+    return val.LgID === langId;
+  });
+  if (!language) {
+    throw new Error('Invalid Language ID!');
+  }
+  const validator = WordsValidatorNoId;
+  const refMap = RefMap(validator);
+  const navigator = useInternalNavigate();
+  const WoInput = buildFormInput(refMap, { WoLgID: langId });
+  return (
+    <>
+      <Header title={`TODO`} />
+
+      <h4>New Term</h4>
+      <form name="newword" className="validate">
+        <WoInput type="hidden" entryKey={'WoLgID'} fixed />
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Language:</td>
+            {/* TODO not necessarily active */}
+            <td className="td1">{language.LgName}</td>
+          </tr>
+          <tr title="Normally only change uppercase/lowercase here!">
+            <td className="td1 right">Term:</td>
+            <td className="td1">
+              <WoInput
+                // TODO whats this
+                // <?php echo $scrdir; ?>
+                className="notempty setfocus checkoutsidebmp"
+                type="text"
+                // id="wordfield"
+                // data_info="Term"
+                entryKey={'WoText'}
+                maxLength={250}
+                size={40}
+              />
+              <RequiredLineButton />
+            </td>
+          </tr>
+          {/* TODO */}
+          {/* <?php print_similar_terms_tabrow(); ?> */}
+          <tr>
+            <td className="td1 right">Translation:</td>
+            <td className="td1">
+              <textarea
+                className="textarea-noreturn checklength checkoutsidebmp"
+                maxLength={500}
+                // data_info="Translation"
+                name="WoTranslation"
+                cols={40}
+                rows={3}
+                ref={refMap.WoTranslation}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Tags:</td>
+            <td className="td1">
+              {/* TODO */}
+              {/* <?php echo getWordTags($record['WoID']); ?> */}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Romaniz.:</td>
+            <td className="td1">
+              <WoInput
+                type="text"
+                className="checkoutsidebmp"
+                maxLength={100}
+                size={40}
+                entryKey="WoRomanization"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">
+              Sentence
+              <br />
+              Term in {'{...}'}:
+            </td>
+            <td className="td1">
+              <textarea
+                // TODO
+                // <?php echo $scrdir; ?>
+                className="textarea-noreturn checklength checkoutsidebmp"
+                maxLength={1000}
+                // data_info="Sentence"
+                name="WoSentence"
+                cols={40}
+                rows={3}
+                ref={refMap.WoSentence}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Status:</td>
+            <StatusRadioButtons termStatus={'1'} refMap={refMap} />
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              &nbsp;
+              {/* TODO */}
+              {/* <?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoSentence','document.forms[\'editword\'].WoText'); ?> */}
+              &nbsp; &nbsp;
+              <input
+                type="button"
+                value="Cancel"
+                onClick={() => {
+                  resetDirty();
+                  navigator(`/edit_words`);
+                }}
+              />
+              <input type="button" value="Change" />
+            </td>
+          </tr>
+        </table>
+      </form>
+      <div id="exsent">
+        <span
+          className="click"
+          // TODO
+          onClick={() => {
+            // TODO prepare_textdata_js
+            do_ajax_show_sentences(
+              refMap.WoLgID.current.value,
+              refMap.WoTextLC.current.value,
+              refMap.WoSentence.current.value
+            );
           }}
         >
           <Icon src="sticky-notes-stack" title="Show Sentences" /> Show
@@ -812,78 +1013,5 @@ function GetAllWordsActionsSelectOptions() {
       <option disabled>------------</option>
       <option value="delall">Delete ALL Terms</option>
     </>
-  );
-}
-
-// function getWordTags($wid)
-// {
-// 	global $tbpref;
-// 	$r = '<ul id="termtags">';
-// 	if ($wid > 0) {
-// 		$sql = 'select TgText from ' . $tbpref . 'wordtags, ' . $tbpref . 'tags where TgID = WtTgID and WtWoID = ' . $wid . ' order by TgText';
-// 		$res = do_mysqli_query($sql);
-// 		while ($record = mysqli_fetch_assoc($res)) {
-// 			$r .= '<li>' . tohtml($record["TgText"]) . '</li>';
-// 		}
-// 		mysqli_free_result($res);
-// 	}
-// 	$r .= '</ul>';
-// 	return $r;
-// }
-
-export function buildFormInput<
-  TKey extends string,
-  TData extends Record<TKey, any>
->(refMap: TRefMap<TData>, entry?: TData) {
-  // TODO useFormContext? for shared without build
-  return (
-    args: Omit<
-      Parameters<typeof FormInput>[0],
-      'refMap' | 'defaultEntry' | 'fixedEntry'
-    > & { fixed?: boolean; default?: boolean }
-  ) => (
-    <FormInput
-      {...args}
-      refMap={refMap}
-      fixedEntry={args.fixed ? entry : undefined}
-      defaultEntry={args.default ? entry : undefined}
-    />
-  );
-}
-export function FormInput<
-  TKey extends string,
-  TData extends Record<TKey, any>
->({
-  // TODO nonoptional add dot
-  // TODO errorlines
-  entryKey,
-  refMap,
-  defaultEntry,
-  fixedEntry,
-  ...nativeProps
-}: Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'defaultValue' | 'id' | 'ref' | 'name'
-> & {
-  entryKey: TKey;
-  // TODO need refmap if fixed entry?
-  refMap: TRefMap<TData>;
-  defaultEntry?: TData;
-  fixedEntry?: TData;
-}) {
-  // const { maxLength } = nativeProps;
-  if (fixedEntry && defaultEntry) {
-    throw new Error("Can't have fixed and default set!");
-  }
-  return (
-    <input
-      defaultValue={
-        defaultEntry === undefined ? undefined : defaultEntry[entryKey]
-      }
-      value={fixedEntry === undefined ? undefined : fixedEntry[entryKey]}
-      name={entryKey}
-      ref={refMap[entryKey]}
-      {...nativeProps}
-    />
   );
 }

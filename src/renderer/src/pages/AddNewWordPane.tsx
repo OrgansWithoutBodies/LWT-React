@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import * as ss from 'superstruct';
-import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import {
   AddNewWordType,
@@ -10,37 +9,15 @@ import {
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
-import { Header } from './Header';
-import { FormInput, buildFormInput } from './Terms.component';
+import { FormInput, buildFormInput } from './buildFormInput';
 import { owin, translateSentence2 } from './translateSentence2';
 
-// TODO
-// const STATUSES = {
-//   1: { abbr: '1', name: 'Learning' },
-//   2: { abbr: '2', name: 'Learning' },
-//   3: { abbr: '3', name: 'Learning' },
-//   4: { abbr: '4', name: 'Learning' },
-//   5: { abbr: '5', name: 'Learned' },
-//   99: { abbr: 'WKn', name: 'Well Known' },
-//   98: { abbr: 'Ign', name: 'Ignored' },
-// };
-function CheckErrors(
-  keyChanged: keyof AddNewWordType,
-  refMap: TRefMap<AddNewWordType>,
-  setFieldError: (val: boolean) => void
-) {
-  const error = ss
-    .pick(WordsValidatorNoId, [keyChanged])
-    .validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
-  console.log('TEST123-Val', keyChanged, refMap[keyChanged], error);
-  if (!error) {
-    return setFieldError(false);
-  }
-  return setFieldError(true);
-}
-type SetBoolean = (value: boolean) => void;
-export function AddNewWord({
+/**
+ * This is only called from inside the reader, rly more of a pane than a component
+ */
+export function AddNewWordPane({
   word,
   langId,
   existingTerm = undefined,
@@ -57,10 +34,6 @@ export function AddNewWord({
   const navigator = useInternalNavigate();
   // TODO hashmap here avoid lookup
   const lang = languages.find((lang) => lang.LgID === langId);
-  const langString = lang?.LgName;
-  const [FormState, setFormState] = useState<{
-    [key in keyof AddNewWordType]?: any;
-  }>({});
   const [FormErrors, setFormErrors] = useState<{
     [key in keyof AddNewWordType]?: boolean;
   }>({ WoText: false });
@@ -72,15 +45,14 @@ export function AddNewWord({
   const WoInput = buildFormInput(refMap, { WoText: word || '' });
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
+
+  if (!lang) {
+    throw new Error('Incorrect Language Set!');
+  }
+  const langString = lang.LgName;
   return (
     <>
-      <Header title={'TODO'} />
-      <form
-        name="newword"
-        className="validate"
-        action="/edit_word"
-        method="post"
-      >
+      <form name="newword" className="validate">
         <input type="hidden" name="fromAnn" value="" />
         <input
           type="hidden"
@@ -94,16 +66,16 @@ export function AddNewWord({
           name="WoCreated"
           ref={refMap.WoCreated}
           id="langfield"
-          // TODO
+          // TODO add creation val
           value={langId}
         />
         <input
           type="hidden"
           name="WoTextLC"
           ref={refMap.WoTextLC}
-          value={word?.toLowerCase()}
+          // value={word?.toLowerCase()}
         />
-        {/* TODO */}
+        {/* TODO what are these */}
         <input type="hidden" name="tid" value="11" />
         <input type="hidden" name="ord" value="7" />
 
@@ -148,7 +120,7 @@ export function AddNewWord({
               <td className="td1">
                 <textarea
                   name="WoTranslation"
-                  value={FormState.WoTranslation}
+                  // value={FormState.WoTranslation}
                   ref={refMap.WoTranslation}
                   onChange={() =>
                     CheckErrors(
@@ -162,7 +134,7 @@ export function AddNewWord({
                   // data_info="Translation"
                   cols={35}
                   rows={3}
-                ></textarea>
+                />
               </td>
             </tr>
             {FormErrors.WoTranslation && (
@@ -211,10 +183,6 @@ export function AddNewWord({
                   type="text"
                   className="checkoutsidebmp"
                   // data_info="Romanization"
-                  onChange={(event) =>
-                    // TODO
-                    handleFormChange('WoRomanization', event.target.value)
-                  }
                   entryKey="WoRomanization"
                   refMap={refMap}
                   maxLength={100}
@@ -243,83 +211,13 @@ export function AddNewWord({
                   cols={35}
                   rows={3}
                   ref={refMap.WoSentence}
-                ></textarea>
+                />
               </td>
             </tr>
             <tr>
               <td className="td1 right">Status:</td>
               <td className="td1">
-                <span className="status1" title="Learning">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    value="1"
-                    checked={termStatus === '1'}
-                    ref={refMap.WoStatus}
-                  />
-                  1&nbsp;
-                </span>
-                <span className="status2" title="Learning">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    checked={termStatus === '2'}
-                    value="2"
-                  />
-                  2&nbsp;
-                </span>
-                <span className="status3" title="Learning">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    checked={termStatus === '3'}
-                    value="3"
-                  />
-                  3&nbsp;
-                </span>
-                <span className="status4" title="Learning">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    checked={termStatus === '4'}
-                    value="4"
-                  />
-                  4&nbsp;
-                </span>
-                <span className="status5" title="Learned">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    checked={termStatus === '5'}
-                    value="5"
-                  />
-                  5&nbsp;
-                </span>
-                <span className="status99" title="Well Known">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    checked={termStatus === '99'}
-                    value="99"
-                  />
-                  WKn&nbsp;
-                </span>
-                <span className="status98" title="Ignored">
-                  &nbsp;
-                  <input
-                    type="radio"
-                    name="WoStatus"
-                    value="98"
-                    checked={termStatus === '98'}
-                  />
-                  Ign&nbsp;
-                </span>
+                <StatusRadioButtons termStatus={termStatus} refMap={refMap} />
               </td>
             </tr>
             <tr>
@@ -328,29 +226,21 @@ export function AddNewWord({
                 Lookup Term:
                 {/* external link */}
                 <a
-                  // TODO custom dict
-                  href="https://dict.naver.com/linedict/zhendict/dict.html#/cnen/search?query=%E5%AE%AA"
+                  href={replaceTemplate(lang.LgDict1URI, word)}
+                  // TODO whats this
                   target="ru"
                 >
                   Dict1
                 </a>
+                {/* TODO */}
                 {/* external link */}
-                <a
-                  // TODO custom dict
-                  href="http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=%E5%AE%AA"
-                  target="ru"
-                >
+                <a href={replaceTemplate(lang.LgDict2URI, word)} target="ru">
                   Dict2
                 </a>
                 <span
                   className="click"
                   onClick={() => {
-                    owin(
-                      // TODO url
-                      `http://translate.google.com/?ie=UTF-8&sl=${
-                        lang?.LgGoogleTranslateURI
-                      }&tl=en&text=${'TEST'}`
-                    );
+                    owin(replaceTemplate(lang.LgGoogleTranslateURI, word));
                   }}
                 >
                   GTr
@@ -359,9 +249,11 @@ export function AddNewWord({
                 <span
                   className="click"
                   onClick={() => {
+                    // TODO
+                    // replaceTemplate(lang.LgGoogleTranslateURI, word)
                     translateSentence2(
                       // TODO url
-                      `http://translate.google.com/?ie=UTF-8&sl=${lang?.LgGoogleTranslateURI}&tl=en&text=###`,
+                      `http://translate.google.com/?ie=UTF-8&sl=${lang.LgGoogleTranslateURI}&tl=en&text=###`,
                       refMap.WoSentence.current
                     );
                   }}
@@ -371,7 +263,6 @@ export function AddNewWord({
                 &nbsp; &nbsp; &nbsp;
                 <input
                   type="button"
-                  name="op"
                   value="Save"
                   onClick={() => {
                     console.log('SAVING');
@@ -419,19 +310,136 @@ export function AddNewWord({
         className="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all"
         id="ui-id-1"
         tabIndex={0}
-        // style="display: none"
       ></ul>
     </>
   );
 }
 
-function SentencesForWord() {
+function replaceTemplate(templateStr: string, word: string): string {
+  // TODO could start with *
+  return templateStr.replace('###', word);
+}
+
+// TODO
+// const STATUSES = {
+//   1: { abbr: '1', name: 'Learning' },
+//   2: { abbr: '2', name: 'Learning' },
+//   3: { abbr: '3', name: 'Learning' },
+//   4: { abbr: '4', name: 'Learning' },
+//   5: { abbr: '5', name: 'Learned' },
+//   99: { abbr: 'WKn', name: 'Well Known' },
+//   98: { abbr: 'Ign', name: 'Ignored' },
+// };
+export function CheckErrors(
+  keyChanged: keyof AddNewWordType,
+  refMap: TRefMap<AddNewWordType>,
+  setFieldError: (val: boolean) => void
+) {
+  const error = ss
+    .pick(WordsValidatorNoId, [keyChanged])
+    .validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
+  console.log('TEST123-Val', keyChanged, refMap[keyChanged], error);
+  if (!error) {
+    return setFieldError(false);
+  }
+  return setFieldError(true);
+}
+type SetBoolean = (value: boolean) => void;
+/**
+ * This is only called from inside the reader, rly more of a pane than a component
+ */
+
+export function StatusRadioButtons({
+  termStatus,
+  refMap,
+}: {
+  termStatus: string;
+  refMap: TRefMap<AddNewWordType>;
+}) {
+  return (
+    <>
+      <span className="status1" title="Learning">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          value="1"
+          defaultChecked={termStatus === '1'}
+          ref={refMap.WoStatus}
+        />
+        1&nbsp;
+      </span>
+      <span className="status2" title="Learning">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          defaultChecked={termStatus === '2'}
+          value="2"
+        />
+        2&nbsp;
+      </span>
+      <span className="status3" title="Learning">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          defaultChecked={termStatus === '3'}
+          value="3"
+        />
+        3&nbsp;
+      </span>
+      <span className="status4" title="Learning">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          defaultChecked={termStatus === '4'}
+          value="4"
+        />
+        4&nbsp;
+      </span>
+      <span className="status5" title="Learned">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          defaultChecked={termStatus === '5'}
+          value="5"
+        />
+        5&nbsp;
+      </span>
+      <span className="status99" title="Well Known">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          defaultChecked={termStatus === '99'}
+          value="99"
+        />
+        WKn&nbsp;
+      </span>
+      <span className="status98" title="Ignored">
+        &nbsp;
+        <input
+          type="radio"
+          name="WoStatus"
+          value="98"
+          defaultChecked={termStatus === '98'}
+        />
+        Ign&nbsp;
+      </span>
+    </>
+  );
+}
+
+/* TODO get sentences*/
+function SentencesForWord({ word }: { word: Words }) {
   return (
     <>
       <p>
         <b>
-          Sentences in active texts with{' '}
-          <i>{/* TODO */}' . tohtml($wordlc) . '</i>
+          Sentences in active texts with <i>{word.WoTextLC}</i>
         </b>
       </p>
       <p>

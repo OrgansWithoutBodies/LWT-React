@@ -125,6 +125,9 @@ export const createColors = (
 ): Record<'body' | string, CSSObject> => {
   const Colors = VariantMap[variant];
   return {
+    hr: {
+      border: '1px solid rgb(128, 128, 128)',
+    },
     input: {
       backgroundColor: `${Colors.lum6}`,
       color: `${Colors.lum0}`,

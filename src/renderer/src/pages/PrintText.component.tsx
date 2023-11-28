@@ -1,6 +1,6 @@
-import { Icon } from '../Icon';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
+import { Icon } from '../ui-kit/Icon';
 import { Header } from './Header';
 
 export function PrintText({ textID }: { textID: TextsId }) {

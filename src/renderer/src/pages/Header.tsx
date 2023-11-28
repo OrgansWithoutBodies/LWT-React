@@ -1,12 +1,14 @@
 import { useLocation } from 'react-router-dom';
-import { Icon } from '../Icon';
 import { LanguagesId, TextsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
+import { Icon } from '../ui-kit/Icon';
 
 export const headerValuesTemp = {
   index: { params: [] },
-  edit_texts: { params: ['page', 'new'] },
+  edit_texts: {
+    params: ['chg', 'arch', 'page', 'query', 'tag1', 'tag2', 'new'],
+  },
   edit_archivedtexts: { params: ['page'] },
   edit_texttags: { params: ['page'] },
   edit_languages: { params: ['page'] },
@@ -17,20 +19,30 @@ export const headerValuesTemp = {
       'query',
       'tag12',
       'tag1',
+      'chg',
+      'new',
       'tag2',
       'sort',
       'text',
+      'filterlang',
+      'lang',
     ],
   },
-  edit_tags: { params: ['page'] },
+  edit_tags: { params: ['query', 'new', 'page', 'chg'] },
   statistics: { params: [] },
   check_text: { params: [] },
+  new_word: { params: [] },
+  do_text: { params: [] },
+  do_test: { params: [] },
   long_text_import: { params: [] },
   upload_words: { params: [] },
   backup_restore: { params: [] },
   settings: { params: [] },
   info: { params: [] },
+  print_text: { params: ['text'] },
 } as const;
+
+// TODO merge into prev obj
 export const headerValues = {
   Home: 'index',
   Texts: 'edit_texts',

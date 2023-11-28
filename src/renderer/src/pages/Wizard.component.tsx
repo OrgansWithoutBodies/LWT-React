@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { Icon } from '../Icon';
 import { LANGS } from '../data/wizardData';
+import { Icon } from '../ui-kit/Icon';
 
 function wizard_go(
   refL1: React.MutableRefObject<HTMLSelectElement | undefined>,

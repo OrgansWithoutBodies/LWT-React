@@ -12,27 +12,28 @@ import React from 'react';
 import { dataService } from './data/data.service';
 import { useData } from './data/useAkita';
 import { LanguagesId, TextsId } from './data/validators';
-import { AddNewWord } from './pages/AddNewWord';
+import { AppContext, useAppContext } from './hooks/useContext';
+import { AddNewWordPane } from './pages/AddNewWordPane';
 import { BackupScreen } from './pages/Backups.component';
 import { CheckText } from './pages/CheckText';
-import { EditArchivedTexts } from './pages/EditArchived.component';
+import { EditArchivedTexts } from './pages/EditArchivedTexts';
 import { EditLanguage } from './pages/EditLanguage.component';
 import { DisplayTags, EditTag, NewTag } from './pages/EditTags';
 import { DisplayTextTags, EditTextTag, NewTextTag } from './pages/EditTextTags';
+import { headerValuesTemp } from './pages/Header';
 import { InfoPage } from './pages/Info';
 import { LanguagesPage } from './pages/Languages.component';
 import { EditText, Library } from './pages/Library.component';
-import ImportLongText from './pages/LongTextImport.component';
-import { NewLanguage } from './pages/NewLanguage.component';
+import { LongText } from './pages/LongTextImport.component';
+import { NewLanguage } from './pages/NewLanguage';
 import { PrintText } from './pages/PrintText.component';
 import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
-import { ChangeTerm, Terms } from './pages/Terms.component';
+import { AddTerm, ChangeTerm, Terms } from './pages/Terms.component';
 import { ImportShortText } from './pages/TextImport';
 import { UploadWords } from './pages/UploadWords.component';
 import { createColors } from './styles';
-import { AppContext, useAppContext } from './useContext';
 
 declare global {
   interface NumberConstructor {
@@ -42,6 +43,17 @@ declare global {
     ): TNum;
   }
 }
+
+// function InternalRoute({
+//   path,
+//   ...args
+// }: RouteProps & {
+//   path: '/' | `/${keyof typeof headerValuesTemp}`;
+// }): JSX.Element {
+//   path;
+//   // TODO useInternalParams hook called here
+//   return <Route path={path} {...args} />;
+// }
 
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
@@ -140,7 +152,7 @@ trans
           <Route path="/edit_tags" element={<EditTagsWrapper />} />
           <Route path="/edit_texttags" element={<EditTextTagsWrapper />} />
           <Route path="/edit_languages" element={<LanguagesWrapper />} />
-          <Route path="/long_text_import" element={<ImportLongText />} />
+          <Route path="/long_text_import" element={<LongText />} />
           <Route path="/statistics" element={<StatisticsComponent />} />
           <Route path="/new_word" element={<AddNewWordWrapper />} />
           <Route path="/settings" element={<SettingsComponent />} />
@@ -168,19 +180,34 @@ export function Switch({
   return on ? secondChild : firstChild;
 }
 export default App;
-function TermsWrapper() {
-  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+export function useInternalParams<
+  TPageKey extends keyof typeof headerValuesTemp,
+  TPageParams extends (typeof headerValuesTemp)[TPageKey]['params'][number]
+>(pageKey: TPageKey): Record<TPageParams, string | null> {
   const [searchParams] = useSearchParams();
-  // TODO add wrapper for hook to break out params easier/integrate w controller
-  const chgID = searchParams.get('chg');
-  const sort = searchParams.get('sort');
-  const status = searchParams.get('status');
-  const page = searchParams.get('page');
-  // TODO just set active lang here?
-  const filterlang = searchParams.get('filterlang');
+  return Object.fromEntries(
+    headerValuesTemp[pageKey].params.map((val) => {
+      return [val, searchParams.get(val)] as [TPageParams, string | null];
+    })
+  );
+}
+function TermsWrapper() {
+  const {
+    filterlang,
+    new: newVal,
+    page,
+    sort,
+    chg,
+    tag1,
+    status,
+    tag12,
+    tag2,
+    text,
+    lang,
+  } = useInternalParams('edit_words');
+  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+  const isNew = newVal === '1';
 
-  const isNew = searchParams.get('new') === '1';
-  const lang = searchParams.get('lang');
   // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
   if (filterlang === '') {
     if (activeLanguageId !== null) {
@@ -194,24 +221,23 @@ function TermsWrapper() {
   }
   return (
     <Switch on={isNew}>
-      <Switch on={chgID !== null}>
+      <Switch on={chg !== null}>
         <Terms
           pageNum={page !== null ? Number.parseInt(page) : 1}
           sort={sort ? Number.parseInt(sort) : null}
           status={status ? Number.parseInt(status) : null}
-          textFilter={0}
-          tag1={null}
-          tag12={0}
-          tag2={null}
+          textFilter={text === null ? null : Number.parseInt<TextsId>(text)}
+          tag1={tag1 === null ? null : Number.parseInt(tag1)}
+          tag12={
+            tag12 === null || !['0', '1'].includes(tag12)
+              ? null
+              : Number.parseInt<0 | 1>(tag12)
+          }
+          tag2={tag2 === null ? null : Number.parseInt(tag2)}
         />
-        <ChangeTerm chgID={Number.parseInt(chgID!)} />
-        {/* <Terms
-        pageNum={0}
-        sort={Number.parseInt(sort)}
-        status={Number.parseInt(status)}
-      /> */}
+        <ChangeTerm chgID={Number.parseInt(chg!)} />
       </Switch>
-      <AddNewWord langId={Number.parseInt(lang!)} />
+      <AddTerm langId={Number.parseInt(lang!)} />
     </Switch>
   );
 }
@@ -223,11 +249,13 @@ function UploadWordsWrapper() {
   );
 }
 function PrintTextWrapper() {
-  const [searchParams] = useSearchParams();
-  const text = searchParams.get('text');
+  const { text } = useInternalParams('print_text');
+  if (text === null) {
+    throw new Error('Need To Specify Text ID');
+  }
   return (
     <>
-      <PrintText textID={Number.parseInt(text!)} />
+      <PrintText textID={Number.parseInt(text)} />
     </>
   );
 }
@@ -250,6 +278,10 @@ function LanguagesWrapper() {
     </Switch>
   );
 }
+
+{
+  /* TODO this only accessed from inside reader, doesnt fit pattern to have own route  */
+}
 function AddNewWordWrapper() {
   const [searchParams] = useSearchParams();
   // const textID = searchParams.get('text');
@@ -257,38 +289,39 @@ function AddNewWordWrapper() {
   if (langID === null) {
     throw new Error('Need To Specify Language ID');
   }
-  return <AddNewWord langId={Number.parseInt(langID)} />;
+  return <AddNewWordPane langId={Number.parseInt(langID)} />;
 }
 function LibraryWrapper() {
-  const [searchParams] = useSearchParams();
-  const chgID = searchParams.get('chg');
-  const archID = searchParams.get('arch');
-  const page = searchParams.get('page');
-  const query = searchParams.get('query');
-  // const refreshID = searchParams.get('refresh');
-  const filterTag1 = searchParams.get('tag1');
-  const filterTag2 = searchParams.get('tag2');
-  const isNew = searchParams.get('new') === '1';
-
+  const {
+    chg,
+    arch,
+    page,
+    query,
+    tag1,
+    tag2,
+    new: newVal,
+  } = useInternalParams('edit_texts');
+  const isNew = newVal === '1';
+  if (arch !== null) {
+    dataService.archiveText(Number.parseInt(arch));
+  }
   // TODO
   // const [, { archiveText, reparseAllTextsForLanguage }] = useData([]);
-  if (archID !== null) {
-    dataService.archiveText(Number.parseInt(archID));
-  }
   // if (refreshID !== null) {
   //   dataService.reparseText(Number.parseInt(refreshID) as TextsId);
   // }
   console.log('new', isNew);
   return (
     <Switch on={isNew}>
-      <Switch on={chgID !== null}>
+      <Switch on={chg !== null}>
         <Library
           currentPage={page !== null ? Number.parseInt(page) : 1}
           query={query}
-          filterTag1={filterTag1 !== null ? Number.parseInt(filterTag1) : null}
-          filterTag2={filterTag2 !== null ? Number.parseInt(filterTag2) : null}
+          // TODO maybe force these names to be the same for easier compacting
+          filterTag1={tag1 !== null ? Number.parseInt(tag1) : null}
+          filterTag2={tag2 !== null ? Number.parseInt(tag2) : null}
         />
-        <EditText chgID={Number.parseInt(chgID!)} />
+        <EditText chgID={Number.parseInt(chg!)} />
       </Switch>
       <ImportShortText />
     </Switch>
@@ -369,11 +402,15 @@ function EditTextTagsWrapper() {
   const query = searchParams.get('query');
   const isNew = searchParams.get('new') === '1';
   const chgID = searchParams.get('chg');
+  const page = searchParams.get('page');
 
   return (
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
-        <DisplayTextTags query={query || ''} />
+        <DisplayTextTags
+          page={page !== null ? Number.parseInt(page) : undefined}
+          query={query || ''}
+        />
         <EditTextTag chgID={Number.parseInt(chgID!)} />
       </Switch>
       <NewTextTag />

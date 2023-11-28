@@ -30,7 +30,7 @@ export const useInternalNavigate: () => (url: InternalPaths) => void = () => {
   };
 };
 
-type PathParams =
+export type PathParams =
   (typeof headerValuesTemp)[keyof typeof headerValuesTemp]['params'][number];
 export const useUpdateParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,7 +42,7 @@ export const useUpdateParams = () => {
       .map((param) => {
         return [param, searchParams.get(param)];
       })
-      .filter(([_, val]) => {
+      .filter(([, val]) => {
         return val !== null;
       })
   );
@@ -50,7 +50,7 @@ export const useUpdateParams = () => {
     const filteredParams: { [path in PathParams]?: string } =
       Object.fromEntries(
         Object.entries({ ...currentParams, ...params }).filter(
-          ([_, val]) => val !== null
+          ([, val]) => val !== null
         )
       );
     setSearchParams(filteredParams);

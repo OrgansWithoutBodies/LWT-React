@@ -8,6 +8,7 @@ import { useInternalNavigate } from '../nav/useInternalNav';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
+import { resetAll } from './EditArchived.component';
 import { GetMultipleArchivedTextActionsSelectOptions } from './EditTextTags';
 import { Header } from './Header';
 import { TagAndOr, TagDropDown } from './Terms.component';
@@ -26,7 +27,6 @@ export function EditArchivedTexts({
       'activeLanguage',
       'numArchivedTexts',
       'archivedtexts',
-      // TODO archivedTags?
       'tags',
     ]);
   const pageSize = 15;
@@ -54,10 +54,9 @@ export function EditArchivedTexts({
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(archivedtexts, 'AtID');
   const queryRef = useRef<HTMLInputElement | undefined>();
-
   return (
     <>
-      <Header title={`My ${activeLanguage?.LgName} Text Archive`} />
+      <Header title={`My ${activeLanguage?.LgName || ''} Text Archive`} />
       <p>&nbsp;</p>
       <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
@@ -76,15 +75,15 @@ export function EditArchivedTexts({
             <td className="td1 center" colSpan={2}>
               Language:
               <LanguageDropdown
+                header={'[Filter off]'}
                 onChange={(val) => {
                   if (val === -1) {
-                    setFilterLanguage(null);
+                    dataService.setActiveLanguage(null);
                   } else {
-                    setFilterLanguage(val);
+                    dataService.setActiveLanguage(val);
                   }
                 }}
               />
-              {/* <?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?> */}
             </td>
 
             <td className="td1 center" colSpan={2}>
@@ -102,6 +101,8 @@ export function EditArchivedTexts({
                 type="button"
                 name="querybutton"
                 value="Filter"
+                // TODO
+                // onClick="{val=document.form1.query.value; location.href='edit_archivedtexts?page=1&query=' + val;}"
                 onClick={() =>
                   navigate(
                     `/edit_archivedtexts?page=1&query=${
@@ -139,31 +140,26 @@ export function EditArchivedTexts({
           </tr>
           {/* TODO */}
           {/* <?php if(recno > 0) { ?>
-<tr>
-<th class="th1" style={{whiteSpace:"nowrap"}}>
-<?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
-</th>
-<th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
-<?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form1', 1); ?>
-</th>
-<th class="th1" style={{whiteSpace:"nowrap"}}>
-Sort Order:
-<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts?page=1&sort=' + val;}">
-  <?php echo get_textssort_selectoptions($currentsort); ?>
-</select>
-</th></tr>
-<?php } ?> */}
+  <tr>
+  <th class="th1" style={{whiteSpace:"nowrap"}}>
+  <?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
+  </th>
+  <th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
+  <?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form1', 1); ?>
+  </th>
+  <th class="th1" style={{whiteSpace:"nowrap"}}>
+  Sort Order:
+  <select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts?page=1&sort=' + val;}">
+    <?php echo get_textssort_selectoptions($currentsort); ?>
+  </select>
+  </th></tr>
+  <?php } ?> */}
         </table>
       </form>
       {recno === 0 ? (
         <p>No archived texts found.</p>
       ) : (
-        <form
-          name="form2"
-          // TODO
-          action="<?php echo $_SERVER['PHP_SELF']; ?>"
-          method="post"
-        >
+        <form name="form2">
           <input type="hidden" name="data" value="" />
           <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tr>
@@ -189,9 +185,7 @@ Sort Order:
                       val
                     );
                   }}
-                  // onChange="multiActionGo(document.form2, document.form2.markaction);"
                 >
-                  {/* TODO */}
                   <GetMultipleArchivedTextActionsSelectOptions />
                 </select>
               </td>
@@ -268,6 +262,7 @@ Sort Order:
                     <td className="td1 center">
                       {text.AtTitle}
                       <span className="smallgray2">
+                        {/* TODO */}
                         {/* . tohtml($record['taglist']) . */}
                       </span>
                       {text.AtAudioURI && (
@@ -293,24 +288,24 @@ Sort Order:
         </form>
       )}
       {/* TODO */}
-      {/* 
-<?php if( $pages > 1) { ?>
-  <form name="form3" action="#">
-  <table class="tab1" cellspacing={0} cellpadding={5}>
-<tr>
-<th class="th1" style={{whiteSpace:"nowrap"}}>
-<?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
-</th><th class="th1" style={{whiteSpace:"nowrap"}}>
-<?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form3', 2); ?>
-</th></tr></table>
-</form>
-<?php } ?>
-`
-<?php
-
-}
-
-?> */}
+      {/*
+      <?php if( $pages > 1) { ?>
+        <form name="form3" action="#">
+        <table class="tab1" cellspacing={0} cellpadding={5}>
+      <tr>
+      <th class="th1" style={{whiteSpace:"nowrap"}}>
+      <?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
+      </th><th class="th1" style={{whiteSpace:"nowrap"}}>
+      <?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form3', 2); ?>
+      </th></tr></table>
+      </form>
+      <?php } ?>
+      `
+      <?php
+      
+      }
+      
+      ?> */}
       <Pager currentPage={currentPage} numPages={numPages} />
       <p>
         <input
@@ -321,8 +316,4 @@ Sort Order:
       </p>
     </>
   );
-}
-
-export function resetAll(refMap: string): void {
-  window.alert('TODO Function not implemented.');
 }

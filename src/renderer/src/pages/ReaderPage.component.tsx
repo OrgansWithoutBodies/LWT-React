@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import SplitPane from 'react-split-pane';
-import { Icon } from '../Icon';
 import { Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
-import { AddNewWord } from './AddNewWord';
+import { Icon } from '../ui-kit/Icon';
+import { AddNewWordPane } from './AddNewWordPane';
 import { Header } from './Header';
 import { Reader } from './Reader.component';
+import { escape_html_chars, make_tooltip } from './escape_html_chars';
 
 // TODO
 //  confirmation screen
@@ -20,6 +21,7 @@ function Pane3() {
     </div>
   );
 }
+// TODO I Know All
 export function ReaderPage({ textId }: { textId: TextsId }) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
@@ -65,7 +67,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
         </SplitPane>
         <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
           {activeWord && 'newWord' in activeWord ? (
-            <AddNewWord
+            <AddNewWordPane
               word={activeText}
               langId={text.TxLgID}
               // TODO horribly inefficient
@@ -153,7 +155,7 @@ export function TesterPage({
         <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
           {/* TODO RHS panes */}
           {activeWord ? (
-            <AddNewWord
+            <AddNewWordPane
               word={activeWord}
               langId={text.TxLgID}
               existingTerm={words.find(({ WoText }) => activeWord === WoText)}
@@ -168,14 +170,29 @@ export function TesterPage({
   );
 }
 
+export function make_overlib_link_change_status_test(
+  wid: string,
+  plusminus: string,
+  text: string
+) {
+  return (
+    ' <a href=\x22set_test_status.php?wid=' +
+    wid +
+    '&amp;stchange=' +
+    plusminus +
+    '\x22 target=\x22ro\x22>' +
+    text +
+    '</a> '
+  );
+}
 export function Tester({ modality }: { modality: Modality }) {
+  const [testingWord, setTestingWord] = useState<Words | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
   const [numWrong, setNumWrong] = useState(0);
   const [numNotTested, setNumNotTested] = useState(10);
   //
-  const [secondsSinceStart, setSecondsSinceStart] = useState<number>(0);
 
-  useEffect(() => {});
+  const timer = useTimer(1000);
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
   const b_notyet = l_notyet == 0 ? '' : 'borderl';
@@ -186,9 +203,12 @@ export function Tester({ modality }: { modality: Modality }) {
 
   return (
     <>
+      {testingWord && <RunTestForWord word={testingWord} />}
       <div id="footer">
         <Icon src="clock" title="Elapsed Time" />
-        <span id="timer" title="Elapsed Time"></span>
+        <span id="timer" title="Elapsed Time">
+          {timer}
+        </span>
         &nbsp; &nbsp; &nbsp;
         <Icon
           className={b_notyet}
@@ -227,4 +247,98 @@ export function Tester({ modality }: { modality: Modality }) {
       </div>
     </>
   );
+}
+function useTimer(intervalInMs: number) {
+  const [time, setTime] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(
+      () => setTime(new Date().getTime() - time),
+      intervalInMs
+    );
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+  return time;
+}
+
+function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {
+  return (
+    <>
+      <center>
+        <hr size={1} />
+        {status >= 1 && status <= 5 && (
+          <>
+            {/* make_overlib_link_change_status_test */}
+            <Icon src="thumb-up" title="Got it!" /> Got it! [
+            {`${status} ▶ ${status + 1}`}]
+            <hr size={1} />
+            {/* make_overlib_link_change_status_test */}
+            <Icon src="thumb" title="Oops!" /> Oops! [
+            {`${status} ▶ ${status - 1}`}]
+            <hr size={1} />
+            <b>{/* make_overlib_link_change_status_alltest(wid,stat) */}</b>
+            <br />
+            {/* // </center> */}
+          </>
+        )}
+      </center>
+      <hr size={1} />
+      <b>{escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b>
+      <br />
+      <a href="edit_tword.php?wid=" target="ro">
+        Edit term
+      </a>
+      <br />
+      {createTheDictLink(wblink1, txt, 'Dict1', 'Lookup Term: ')}
+      {createTheDictLink(wblink2, txt, 'Dict2', '')}
+      {createTheDictLink(wblink3, txt, 'GTr', '')}
+      {/* TODO */}
+      {/* createTheDictLink(wblink3,sent,'GTr','
+      <br />
+      Lookup Sentence:'), */}
+    </>
+  );
+}
+
+// TODO
+export function createTheDictLink(u: string, w: string, t: string, b: string) {
+  const url = u.trim();
+  const trm = w.trim();
+  const txt = t.trim();
+  const txtbefore = b.trim();
+  let r = '';
+  if (url != '' && txt != '') {
+    if (url.substr(0, 1) == '*') {
+      r =
+        ' ' +
+        txtbefore +
+        " <span class=\x22click\x22 onclick=\x22owin('" +
+        createTheDictUrl(url.substring(1), escape_apostrophes(trm)) +
+        "');\x22>" +
+        txt +
+        '</span> ';
+    } else {
+      r =
+        ' ' +
+        txtbefore +
+        ' <a href=\x22' +
+        createTheDictUrl(url, trm) +
+        '\x22 target=\x22ru\x22>' +
+        txt +
+        '</a> ';
+    }
+  }
+  return r;
+}
+
+function createTheDictUrl(u: string, w: string) {
+  const url = u.trim();
+  const trm = w.trim();
+  const r = 'trans.php?x=2&i=' + escape(u) + '&t=' + w;
+  return r;
+}
+
+function escape_apostrophes(s: string) {
+  return s.replace(/'/g, "\\'");
 }

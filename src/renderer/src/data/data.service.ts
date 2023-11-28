@@ -13,6 +13,7 @@ import {
   AddNewTextType,
   AddNewWordType,
   LanguageNoId,
+  Languages,
   Tags,
   Tags2,
   Words,
@@ -141,6 +142,25 @@ export class DataService {
     });
     this.persistChange('tags');
   }
+  public editLanguage(chgId: LanguagesId, newData: Languages) {
+    window.alert('TODO-editLanguage' + chgId);
+    // this.dataStore.update((state) => {
+    //   const ids = state.tags.map((tag) => tag.TgID);
+    //   const maxId = (Math.max(...ids) + 1) as TagsId;
+    //   return {
+    //     ...state,
+    //     notificationMessage: { txt: `Edited Tag ${tag.TgText}` },
+    //     tags: [
+    //       ...state.tags,
+    //       {
+    //         ...tag,
+    //         TgID: maxId,
+    //       },
+    //     ],
+    //   };
+    // });
+    // this.persistChange('tags');
+  }
   public addTextTag(tag: Tags2) {
     this.dataStore.update((state) => {
       const ids = state.tags2.map((tag) => tag.T2ID);
@@ -232,8 +252,20 @@ export class DataService {
     }));
     this.persistChange('wordtags');
   }
-  public deleteTagFromTerm() {
-    window.alert('TODO DELETETAGFROMTERM');
+  public deleteTermTag(tagId: TagsId) {
+    this.dataStore.update(({ wordtags, tags, ...rest }) => {
+      return {
+        ...rest,
+        wordtags: wordtags.filter(({ WtTgID }) => {
+          return WtTgID !== tagId;
+        }),
+        tags: tags.filter(({ TgID }) => {
+          return TgID !== tagId;
+        }),
+      };
+    });
+    this.persistChange('wordtags');
+    this.persistChange('tags');
   }
 
   public addTagToText(tagId: Tags2Id, textId: TextsId) {
@@ -243,8 +275,25 @@ export class DataService {
     }));
     this.persistChange('texttags');
   }
-  public deleteTagFromText() {
-    window.alert('TODO DELETETAGFROMTEXT');
+  public deleteTextTag(tagId: Tags2Id) {
+    this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => {
+      return {
+        ...rest,
+        texttags: texttags.filter(({ TtT2ID }) => {
+          return TtT2ID !== tagId;
+        }),
+        archtexttags: archtexttags.filter(({ AgT2ID }) => {
+          return AgT2ID !== tagId;
+        }),
+        tags2: tags2.filter(({ T2ID }) => {
+          return T2ID !== tagId;
+        }),
+      };
+    });
+    // TODO persist multiple at a time
+    this.persistChange('tags2');
+    this.persistChange('texttags');
+    this.persistChange('archtexttags');
   }
 
   public addLongText(longTextForm: LongTextForm) {
@@ -434,6 +483,7 @@ export class DataService {
       };
     });
     this.persistChange('archivedtexts');
+    this.persistChange('texts');
   }
   public unarchiveText() {
     window.alert('TODO UNARCHIVETEXT');

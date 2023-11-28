@@ -35,10 +35,10 @@ Call: do_text_header.php?text=[textid]
 Show text header frame
 ***************************************************************/
 
-require_once( 'settings.inc.php' );
-require_once( 'connect.inc.php' );
-require_once( 'dbutils.inc.php' );
-require_once( 'utilities.inc.php' );
+require_once('settings.inc.php');
+require_once('connect.inc.php');
+require_once('dbutils.inc.php');
+require_once('utilities.inc.php');
 
 $textid = getreq('text');
 $sql = 'select TxLgID, TxTitle, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $textid;
@@ -46,17 +46,18 @@ $res = do_mysqli_query($sql);
 $record = mysqli_fetch_assoc($res);
 
 $audio = $record['TxAudioURI'];
-if(!isset($audio)) $audio='';
-$audio=trim($audio);
+if (!isset($audio))
+    $audio = '';
+$audio = trim($audio);
 
 $title = $record['TxTitle'];
 $sourceURI = $record['TxSourceURI'];
 $langid = $record['TxLgID'];
-mysqli_free_result($res); 
+mysqli_free_result($res);
 
-saveSetting('currenttext',$textid);
+saveSetting('currenttext', $textid);
 
-pagestart_nobody(tohtml($title),$addcss='html, body {margin-bottom:0;}');
+pagestart_nobody(tohtml($title), $addcss = 'html, body {margin-bottom:0;}');
 echo '<h4>';
 echo '<a href="edit_texts.php" target="_top">';
 echo_lwt_logo();
@@ -70,14 +71,23 @@ echo '</h4><table><tr><td><h3>READ&nbsp;▶</h3></td><td class="width99pc"><h3>'
 $showAll = getSettingZeroOrOne('showallwords', 1);
 
 ?>
-<table class="width99pc"><tr><td class="center" colspan="7" style="padding:2px 5px 5px 5px;" nowrap="nowrap">TO DO: <span id="learnstatus"><?php echo texttodocount2($_REQUEST['text']); ?></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="[Show All] = ON: ALL terms are shown, and all multi-word terms are shown as superscripts before the first word. The superscript indicates the number of words in the multi-word term. 
-[Show All] = OFF: Multi-word terms now hide single words and shorter or overlapping multi-word terms.">Show All&nbsp;<input type="checkbox" id="showallwords" <?php echo get_checked($showAll); ?> /></span><span id="thetextid" class="hide"><?php echo $textid; ?></span></td></tr>
+<table class="width99pc">
+    <tr>
+        <td class="center" colspan="7" style="padding:2px 5px 5px 5px;" nowrap="nowrap">TO DO: <span id="learnstatus">
+                <?php echo texttodocount2($_REQUEST['text']); ?>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="[Show All] = ON: ALL terms are shown, and all multi-word terms are shown as superscripts before the first word. The superscript indicates the number of words in the multi-word term. 
+[Show All] = OFF: Multi-word terms now hide single words and shorter or overlapping multi-word terms.">Show
+                All&nbsp;<input type="checkbox" id="showallwords" <?php echo get_checked($showAll); ?> /></span><span
+                id="thetextid" class="hide">
+                <?php echo $textid; ?>
+            </span></td>
+    </tr>
 
-<?php
+    <?php
 
-makeAudioPlayer($audio);
+    makeAudioPlayer($audio);
 
-?>
+    ?>
 </table>
 <?php
 

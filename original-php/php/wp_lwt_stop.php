@@ -38,7 +38,7 @@ http://...path-to-wp-blog.../lwt/wp_lwt_stop.php
 (such a link is also provided on the LWT home page 'index.php')
 ***************************************************************/
 
-require_once( '../wp-load.php' );
+require_once('../wp-load.php');
 
 wp_logout();
 setcookie('LWT-WP-User', $wpuser, time() - 1000, '/');

@@ -577,12 +577,12 @@ function framesetheader($title)
 	@header('Cache-Control: no-cache, must-revalidate, max-age=0');
 	@header('Pragma: no-cache');
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+			<html xmlns="http://www.w3.org/1999/xhtml">
+			<head>
+				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-	<!-- ***********************************************************
+			<!-- ***********************************************************
 	"Learning with Texts" (LWT) is free and unencumbered software 
 	released into the PUBLIC DOMAIN.
 
@@ -612,9 +612,9 @@ function framesetheader($title)
 	For more information, please refer to [http://unlicense.org/].
 	************************************************************ -->
 
-		<title>LWT :: <?php echo tohtml($title); ?></title>
-	</head>
-<?php
+				<title>LWT :: <?php echo tohtml($title); ?></title>
+			</head>
+		<?php
 }
 
 // -------------------------------------------------------------
@@ -628,12 +628,12 @@ function pagestart_nobody($titletext, $addcss = '')
 	@header('Cache-Control: no-cache, must-revalidate, max-age=0');
 	@header('Pragma: no-cache');
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			<html xmlns="http://www.w3.org/1999/xhtml">
+			<head>
+				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	
-	<!-- ***********************************************************
+			<!-- ***********************************************************
 	"Learning with Texts" (LWT) is free and unencumbered software 
 	released into the PUBLIC DOMAIN.
 
@@ -663,47 +663,47 @@ function pagestart_nobody($titletext, $addcss = '')
 	For more information, please refer to [http://unlicense.org/].
 	************************************************************ -->
 
-		<meta name="viewport" content="width=900" />
-		<link rel="apple-touch-icon" href="img/apple-touch-icon-57x57.png" />
-		<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
-		<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
-		<link rel="apple-touch-startup-image" href="img/apple-touch-startup.png">
-		<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta name="viewport" content="width=900" />
+				<link rel="apple-touch-icon" href="img/apple-touch-icon-57x57.png" />
+				<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
+				<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
+				<link rel="apple-touch-startup-image" href="img/apple-touch-startup.png">
+				<meta name="apple-mobile-web-app-capable" content="yes" />
 	
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
-		<link rel="stylesheet" type="text/css" href="css/styles.css">
-		<style type="text/css">
-		<?php echo $addcss . "\n"; ?>
-		</style>
+				<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+				<link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
+				<link rel="stylesheet" type="text/css" href="css/styles.css">
+				<style type="text/css">
+				<?php echo $addcss . "\n"; ?>
+				</style>
 	
-		<script type="text/javascript" src="js/jquery.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/jquery.scrollTo.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/jquery-ui.min.js"  charset="utf-8"></script>
-		<script type="text/javascript" src="js/tag-it.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/jquery.jeditable.mini.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/sorttable/sorttable.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/countuptimer.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/overlib/overlib_mini.js" charset="utf-8"></script>
-		<!-- URLBASE : "<?php echo tohtml(url_base()); ?>" -->
-		<!-- TBPREF  : "<?php echo tohtml($tbpref); ?>" -->
-		<script type="text/javascript">
-		//<![CDATA[
-		<?php echo "var STATUSES = " . json_encode(get_statuses()) . ";\n"; ?>
-		<?php echo "var TAGS = " . json_encode(get_tags()) . ";\n"; ?>
-		<?php echo "var TEXTTAGS = " . json_encode(get_texttags()) . ";\n"; ?>
-		//]]>
-		</script>
-		<script type="text/javascript" src="js/pgm.js" charset="utf-8"></script>
-		<script type="text/javascript" src="js/jq_pgm.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/jquery.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/jquery.scrollTo.min.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/jquery-ui.min.js"  charset="utf-8"></script>
+				<script type="text/javascript" src="js/tag-it.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/jquery.jeditable.mini.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/sorttable/sorttable.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/countuptimer.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/overlib/overlib_mini.js" charset="utf-8"></script>
+				<!-- URLBASE : "<?php echo tohtml(url_base()); ?>" -->
+				<!-- TBPREF  : "<?php echo tohtml($tbpref); ?>" -->
+				<script type="text/javascript">
+				//<![CDATA[
+				<?php echo "var STATUSES = " . json_encode(get_statuses()) . ";\n"; ?>
+				<?php echo "var TAGS = " . json_encode(get_tags()) . ";\n"; ?>
+				<?php echo "var TEXTTAGS = " . json_encode(get_texttags()) . ";\n"; ?>
+				//]]>
+				</script>
+				<script type="text/javascript" src="js/pgm.js" charset="utf-8"></script>
+				<script type="text/javascript" src="js/jq_pgm.js" charset="utf-8"></script>
 	
-		<title>LWT :: <?php echo $titletext; ?></title>
-	</head>
-	<body>
-	<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-	<?php
-	if ($debug)
-		showRequest();
+				<title>LWT :: <?php echo $titletext; ?></title>
+			</head>
+			<body>
+			<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+			<?php
+			if ($debug)
+				showRequest();
 }
 
 // -------------------------------------------------------------
@@ -882,22 +882,22 @@ function get_playbackrate_selectoptions($v)
 function quickMenu()
 {
 	?><select id="quickmenu" onchange="{var qm = document.getElementById('quickmenu'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}">
-	<option value="" selected="selected">[Menu]</option>
-	<option value="index">Home</option>
-	<option value="edit_texts">Texts</option>
-	<option value="edit_archivedtexts">Text Archive</option>
-	<option value="edit_texttags">Text Tags</option>
-	<option value="edit_languages">Languages</option>
-	<option value="edit_words">Terms</option>
-	<option value="edit_tags">Term Tags</option>
-	<option value="statistics">Statistics</option>
-	<option value="check_text">Text Check</option>
-	<option value="long_text_import">Long Text Import</option>
-	<option value="upload_words">Term Import</option>
-	<option value="backup_restore">Backup/Restore</option>
-	<option value="settings">Settings</option>
-	<option value="INFO">Help</option>
-	</select><?php
+			<option value="" selected="selected">[Menu]</option>
+			<option value="index">Home</option>
+			<option value="edit_texts">Texts</option>
+			<option value="edit_archivedtexts">Text Archive</option>
+			<option value="edit_texttags">Text Tags</option>
+			<option value="edit_languages">Languages</option>
+			<option value="edit_words">Terms</option>
+			<option value="edit_tags">Term Tags</option>
+			<option value="statistics">Statistics</option>
+			<option value="check_text">Text Check</option>
+			<option value="long_text_import">Long Text Import</option>
+			<option value="upload_words">Term Import</option>
+			<option value="backup_restore">Backup/Restore</option>
+			<option value="settings">Settings</option>
+			<option value="INFO">Help</option>
+			</select><?php
 }
 
 // -------------------------------------------------------------
@@ -908,7 +908,7 @@ function error_message_with_hide($msg, $noback)
 		return '';
 	if (substr($msg, 0, 5) == "Error")
 		return '<p class="red">*** ' . tohtml($msg) . ' ***' .
-			($noback ? 
+			($noback ?
 				'' :
 				'<br /><input type="button" value="&lt;&lt; Go back and correct &lt;&lt;" onclick="history.back();" />') .
 			'</p>';
@@ -1847,37 +1847,37 @@ function makePager($currentpage, $pages, $script, $formname, $inst)
 {
 	if ($currentpage > 1) {
 		?>
-		&nbsp; &nbsp;<a href="<?php echo $script; ?>?page=1"><img src="icn/control-stop-180.png" title="First Page" alt="First Page" /></a>&nbsp;
-		<a href="<?php echo $script; ?>?page=<?php echo $currentpage - 1; ?>"><img  src="icn/control-180.png" title="Previous Page" alt="Previous Page" /></a>&nbsp;
-	<?php
+						&nbsp; &nbsp;<a href="<?php echo $script; ?>?page=1"><img src="icn/control-stop-180.png" title="First Page" alt="First Page" /></a>&nbsp;
+						<a href="<?php echo $script; ?>?page=<?php echo $currentpage - 1; ?>"><img  src="icn/control-180.png" title="Previous Page" alt="Previous Page" /></a>&nbsp;
+					<?php
 	} else {
 		?>
-		&nbsp; &nbsp;<img src="icn/placeholder.png" alt="-" />&nbsp;
-		<img src="icn/placeholder.png" alt="-" />&nbsp;
-	<?php
+						&nbsp; &nbsp;<img src="icn/placeholder.png" alt="-" />&nbsp;
+						<img src="icn/placeholder.png" alt="-" />&nbsp;
+					<?php
 	}
 	?>
-	Page
-	<?php
-	if ($pages == 1)
-		echo '1';
-	else {
-		?>
-		<select name="page<?php echo $inst; ?>" onchange="{val=document.<?php echo $formname; ?>.page<?php echo $inst; ?>.options[document.<?php echo $formname; ?>.page<?php echo $inst; ?>.selectedIndex].value; location.href='<?php echo $script; ?>?page=' + val;}"><?php echo get_paging_selectoptions($currentpage, $pages); ?></select>
-	<?php
-	}
-	echo ' of ' . $pages . '&nbsp; ';
-	if ($currentpage < $pages) {
-		?>
-		<a href="<?php echo $script; ?>?page=<?php echo $currentpage + 1; ?>"><img src="icn/control.png" title="Next Page" alt="Next Page" /></a>&nbsp;
-		<a href="<?php echo $script; ?>?page=<?php echo $pages; ?>"><img src="icn/control-stop.png" title="Last Page" alt="Last Page" /></a>&nbsp; &nbsp;
-	<?php
-	} else {
-		?>
-		<img src="icn/placeholder.png" alt="-" />&nbsp;
-		<img src="icn/placeholder.png" alt="-" />&nbsp; &nbsp; 
-	<?php
-	}
+			Page
+			<?php
+			if ($pages == 1)
+				echo '1';
+			else {
+				?>
+						<select name="page<?php echo $inst; ?>" onchange="{val=document.<?php echo $formname; ?>.page<?php echo $inst; ?>.options[document.<?php echo $formname; ?>.page<?php echo $inst; ?>.selectedIndex].value; location.href='<?php echo $script; ?>?page=' + val;}"><?php echo get_paging_selectoptions($currentpage, $pages); ?></select>
+					<?php
+			}
+			echo ' of ' . $pages . '&nbsp; ';
+			if ($currentpage < $pages) {
+				?>
+						<a href="<?php echo $script; ?>?page=<?php echo $currentpage + 1; ?>"><img src="icn/control.png" title="Next Page" alt="Next Page" /></a>&nbsp;
+						<a href="<?php echo $script; ?>?page=<?php echo $pages; ?>"><img src="icn/control-stop.png" title="Last Page" alt="Last Page" /></a>&nbsp; &nbsp;
+					<?php
+			} else {
+				?>
+						<img src="icn/placeholder.png" alt="-" />&nbsp;
+						<img src="icn/placeholder.png" alt="-" />&nbsp; &nbsp; 
+					<?php
+			}
 }
 
 // -------------------------------------------------------------
@@ -2216,10 +2216,14 @@ function anki_export($sql)
 		$lpar = ($rtlScript ? ']' : '[');
 		$rpar = ($rtlScript ? '[' : ']');
 		$sent = tohtml(repl_tab_nl($record["WoSentence"]));
-		$sent1 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">' . $lpar, str_replace(
-			"}", $rpar . '</span>',
-			mask_term_in_sentence($sent, $record["LgRegexpWordCharacters"])
-		)
+		$sent1 = str_replace(
+			"{",
+			'<span style="font-weight:600; color:#0000ff;">' . $lpar,
+			str_replace(
+				"}",
+				$rpar . '</span>',
+				mask_term_in_sentence($sent, $record["LgRegexpWordCharacters"])
+			)
 		);
 		$sent2 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">', str_replace("}", '</span>', $sent));
 		$x .= $span1 . tohtml(repl_tab_nl($record["WoText"])) . $span2 . "\t" .
@@ -2591,45 +2595,45 @@ function get_setting_data()
 	if (!$setting_data) {
 		$setting_data = array(
 			'set-text-h-frameheight-no-audio' =>
-			array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
+				array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
 			'set-text-h-frameheight-with-audio' =>
-			array("dft" => '200', "num" => 1, "min" => 10, "max" => 999),
+				array("dft" => '200', "num" => 1, "min" => 10, "max" => 999),
 			'set-text-l-framewidth-percent' =>
-			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
+				array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 			'set-text-r-frameheight-percent' =>
-			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
+				array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 			'set-test-h-frameheight' =>
-			array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
+				array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
 			'set-test-l-framewidth-percent' =>
-			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
+				array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 			'set-test-r-frameheight-percent' =>
-			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
+				array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 			'set-test-main-frame-waiting-time' =>
-			array("dft" => '0', "num" => 1, "min" => 0, "max" => 9999),
+				array("dft" => '0', "num" => 1, "min" => 0, "max" => 9999),
 			'set-test-edit-frame-waiting-time' =>
-			array("dft" => '500', "num" => 1, "min" => 0, "max" => 99999999),
+				array("dft" => '500', "num" => 1, "min" => 0, "max" => 99999999),
 			'set-test-sentence-count' =>
-			array("dft" => '1', "num" => 0),
+				array("dft" => '1', "num" => 0),
 			'set-term-sentence-count' =>
-			array("dft" => '1', "num" => 0),
+				array("dft" => '1', "num" => 0),
 			'set-archivedtexts-per-page' =>
-			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
+				array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
 			'set-texts-per-page' =>
-			array("dft" => '10', "num" => 1, "min" => 1, "max" => 9999),
+				array("dft" => '10', "num" => 1, "min" => 1, "max" => 9999),
 			'set-terms-per-page' =>
-			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
+				array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
 			'set-tags-per-page' =>
-			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
+				array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
 			'set-show-text-word-counts' =>
-			array("dft" => '1', "num" => 0),
+				array("dft" => '1', "num" => 0),
 			'set-text-visit-statuses-via-key' =>
-			array("dft" => '', "num" => 0),
+				array("dft" => '', "num" => 0),
 			'set-term-translation-delimiters' =>
-			array("dft" => '/;|', "num" => 0),
+				array("dft" => '/;|', "num" => 0),
 			'set-mobile-display-mode' =>
-			array("dft" => '0', "num" => 0),
+				array("dft" => '0', "num" => 0),
 			'set-similar-terms-count' =>
-			array("dft" => '0', "num" => 1, "min" => 0, "max" => 9)
+				array("dft" => '0', "num" => 1, "min" => 0, "max" => 9)
 		);
 	}
 	return $setting_data;
@@ -2649,7 +2653,8 @@ function reparse_all_texts()
 	while ($record = mysqli_fetch_assoc($res)) {
 		$id = $record['TxID'];
 		splitCheckText(
-			get_first_value('select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), $record['TxLgID'],
+			get_first_value('select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id),
+			$record['TxLgID'],
 			$id
 		);
 	}
@@ -3260,193 +3265,193 @@ function makeAudioPlayer($audio)
 		$playerskin = "jplayer.blue.monday.modified";
 		$repeatMode = getSettingZeroOrOne('currentplayerrepeatmode', 0);
 		?>
-		<link type="text/css" href="css/jplayer_skin/<?php echo $playerskin; ?>.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
-		<table align="center" style="margin-top:5px;" cellspacing="0" cellpadding="0">
-		<tr>
-		<td class="center borderleft" style="padding-left:10px;">
-		<span id="do-single" class="click<?php echo ($repeatMode ? '' : ' hide'); ?>"><img src="icn/arrow-repeat.png" alt="Toggle Repeat (Now ON)" title="Toogle Repeat (Now ON)" style="width:24px;height:24px;" /></span><span id="do-repeat" class="click<?php echo ($repeatMode ? ' hide' : ''); ?>"><img src="icn/arrow-norepeat.png" alt="Toggle Repeat (Now OFF)" title="Toggle Repeat (Now OFF)" style="width:24px;height:24px;" /></span>
-		</td>
-		<td class="center bordermiddle">&nbsp;</td>
-		<td class="bordermiddle">
-		<div id="jquery_jplayer_1" class="jp-jplayer">
-		</div>
-		<div id="jp_container_1" class="jp-audio">
-			<div class="jp-type-single">
-				<div class="jp-gui jp-interface">
-					<ul class="jp-controls">
-						<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-						<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-						<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-						<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-						<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-					</ul>
-					<div class="jp-progress">
-						<div class="jp-seek-bar">
-							<div class="jp-play-bar"></div>
+						<link type="text/css" href="css/jplayer_skin/<?php echo $playerskin; ?>.css" rel="stylesheet" />
+						<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+						<table align="center" style="margin-top:5px;" cellspacing="0" cellpadding="0">
+						<tr>
+						<td class="center borderleft" style="padding-left:10px;">
+						<span id="do-single" class="click<?php echo ($repeatMode ? '' : ' hide'); ?>"><img src="icn/arrow-repeat.png" alt="Toggle Repeat (Now ON)" title="Toogle Repeat (Now ON)" style="width:24px;height:24px;" /></span><span id="do-repeat" class="click<?php echo ($repeatMode ? ' hide' : ''); ?>"><img src="icn/arrow-norepeat.png" alt="Toggle Repeat (Now OFF)" title="Toggle Repeat (Now OFF)" style="width:24px;height:24px;" /></span>
+						</td>
+						<td class="center bordermiddle">&nbsp;</td>
+						<td class="bordermiddle">
+						<div id="jquery_jplayer_1" class="jp-jplayer">
 						</div>
-					</div>
-					<div class="jp-volume-bar">
-						<div class="jp-volume-bar-value"></div>
-					</div>
-					<div class="jp-time-holder">
-						<div class="jp-current-time"></div>
-						<div class="jp-duration"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		</td>
-		<td class="center bordermiddle">&nbsp;</td>
-		<td class="center bordermiddle">
-		<?php
-		$currentplayerseconds = getSetting('currentplayerseconds');
-		if ($currentplayerseconds == '')
-			$currentplayerseconds = 5;
-		?>
-		<select id="backtime" name="backtime"><?php echo get_seconds_selectoptions($currentplayerseconds); ?></select><br />
-		<span id="backbutt" class="click"><img src="icn/arrow-circle-225-left.png" alt="Rewind n seconds" title="Rewind n seconds" /></span>&nbsp;&nbsp;<span id="forwbutt" class="click"><img src="icn/arrow-circle-315.png" alt="Forward n seconds" title="Forward n seconds" /></span>
-		<span id="playTime" class="hide"></span>
-		</td>
-		<td class="center bordermiddle">&nbsp;</td>
-		<td class="center borderright" style="padding-right:10px;">
-		<?php
-		$currentplaybackrate = getSetting('currentplaybackrate');
-		if ($currentplaybackrate == '')
-			$currentplaybackrate = 10;
-		?>
-		<select id="playbackrate" name="playbackrate"><?php echo get_playbackrate_selectoptions($currentplaybackrate); ?></select><br />
-		<span id="slower" class="click"><img src="icn/minus.png" alt="Slower" title="Slower" style="margin-top:3px" /></span>&nbsp;<span id="stdspeed" class="click"><img src="icn/status-away.png" alt="Normal" title="Normal" style="margin-top:3px" /></span>&nbsp;<span id="faster" class="click"><img src="icn/plus.png" alt="Faster" title="Faster" style="margin-top:3px" /></span>
-		</td>
-		</tr>
-		<script type="text/javascript">
-		//<![CDATA[
+						<div id="jp_container_1" class="jp-audio">
+							<div class="jp-type-single">
+								<div class="jp-gui jp-interface">
+									<ul class="jp-controls">
+										<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+										<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+										<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+										<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+										<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+									</ul>
+									<div class="jp-progress">
+										<div class="jp-seek-bar">
+											<div class="jp-play-bar"></div>
+										</div>
+									</div>
+									<div class="jp-volume-bar">
+										<div class="jp-volume-bar-value"></div>
+									</div>
+									<div class="jp-time-holder">
+										<div class="jp-current-time"></div>
+										<div class="jp-duration"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</td>
+						<td class="center bordermiddle">&nbsp;</td>
+						<td class="center bordermiddle">
+						<?php
+						$currentplayerseconds = getSetting('currentplayerseconds');
+						if ($currentplayerseconds == '')
+							$currentplayerseconds = 5;
+						?>
+						<select id="backtime" name="backtime"><?php echo get_seconds_selectoptions($currentplayerseconds); ?></select><br />
+						<span id="backbutt" class="click"><img src="icn/arrow-circle-225-left.png" alt="Rewind n seconds" title="Rewind n seconds" /></span>&nbsp;&nbsp;<span id="forwbutt" class="click"><img src="icn/arrow-circle-315.png" alt="Forward n seconds" title="Forward n seconds" /></span>
+						<span id="playTime" class="hide"></span>
+						</td>
+						<td class="center bordermiddle">&nbsp;</td>
+						<td class="center borderright" style="padding-right:10px;">
+						<?php
+						$currentplaybackrate = getSetting('currentplaybackrate');
+						if ($currentplaybackrate == '')
+							$currentplaybackrate = 10;
+						?>
+						<select id="playbackrate" name="playbackrate"><?php echo get_playbackrate_selectoptions($currentplaybackrate); ?></select><br />
+						<span id="slower" class="click"><img src="icn/minus.png" alt="Slower" title="Slower" style="margin-top:3px" /></span>&nbsp;<span id="stdspeed" class="click"><img src="icn/status-away.png" alt="Normal" title="Normal" style="margin-top:3px" /></span>&nbsp;<span id="faster" class="click"><img src="icn/plus.png" alt="Faster" title="Faster" style="margin-top:3px" /></span>
+						</td>
+						</tr>
+						<script type="text/javascript">
+						//<![CDATA[
 
-		function new_pos(p) {
-			$("#jquery_jplayer_1").jPlayer("playHead", p);
-		}
+						function new_pos(p) {
+							$("#jquery_jplayer_1").jPlayer("playHead", p);
+						}
 
-		function set_new_playerseconds() {
-			var newval = ($("#backtime :selected").val());
-			do_ajax_save_setting('currentplayerseconds',newval); 
-			// console.log("set_new_playerseconds="+newval);
-		}
+						function set_new_playerseconds() {
+							var newval = ($("#backtime :selected").val());
+							do_ajax_save_setting('currentplayerseconds',newval); 
+							// console.log("set_new_playerseconds="+newval);
+						}
 
-		function set_new_playbackrate() {
-			var newval = ($("#playbackrate :selected").val());
-			do_ajax_save_setting('currentplaybackrate',newval); 
-			$("#jquery_jplayer_1").jPlayer("option","playbackRate", newval*0.1);
-			// console.log("set_new_playbackrate="+newval);
-		}
+						function set_new_playbackrate() {
+							var newval = ($("#playbackrate :selected").val());
+							do_ajax_save_setting('currentplaybackrate',newval); 
+							$("#jquery_jplayer_1").jPlayer("option","playbackRate", newval*0.1);
+							// console.log("set_new_playbackrate="+newval);
+						}
 
-		function set_current_playbackrate() {
-			var val = ($("#playbackrate :selected").val());
-			$("#jquery_jplayer_1").jPlayer("option","playbackRate", val*0.1);
-			// console.log("set_current_playbackrate="+val);
-		}
+						function set_current_playbackrate() {
+							var val = ($("#playbackrate :selected").val());
+							$("#jquery_jplayer_1").jPlayer("option","playbackRate", val*0.1);
+							// console.log("set_current_playbackrate="+val);
+						}
 
-		function click_single() {
-			$("#jquery_jplayer_1").unbind($.jPlayer.event.ended + ".jp-repeat");
-			$("#do-single").addClass('hide');
-			$("#do-repeat").removeClass('hide');
-			do_ajax_save_setting('currentplayerrepeatmode','0');
-			return false;
-		}
+						function click_single() {
+							$("#jquery_jplayer_1").unbind($.jPlayer.event.ended + ".jp-repeat");
+							$("#do-single").addClass('hide');
+							$("#do-repeat").removeClass('hide');
+							do_ajax_save_setting('currentplayerrepeatmode','0');
+							return false;
+						}
 
-		function click_repeat() {
-			$("#jquery_jplayer_1").bind($.jPlayer.event.ended + ".jp-repeat", function(event) { 
-				$(this).jPlayer("play"); 
-			});
-			$("#do-repeat").addClass('hide');
-			$("#do-single").removeClass('hide');
-			do_ajax_save_setting('currentplayerrepeatmode','1');
-			return false;
-		}
+						function click_repeat() {
+							$("#jquery_jplayer_1").bind($.jPlayer.event.ended + ".jp-repeat", function(event) { 
+								$(this).jPlayer("play"); 
+							});
+							$("#do-repeat").addClass('hide');
+							$("#do-single").removeClass('hide');
+							do_ajax_save_setting('currentplayerrepeatmode','1');
+							return false;
+						}
 
-		function click_back() {
-			var t = parseInt($("#playTime").text(),10);
-			var b = parseInt($("#backtime").val(),10);
-			var nt = t - b;
-			if (nt < 0) nt = 0;
-			$("#jquery_jplayer_1").jPlayer("play", nt);
-		}
+						function click_back() {
+							var t = parseInt($("#playTime").text(),10);
+							var b = parseInt($("#backtime").val(),10);
+							var nt = t - b;
+							if (nt < 0) nt = 0;
+							$("#jquery_jplayer_1").jPlayer("play", nt);
+						}
 
-		function click_forw() {
-			var t = parseInt($("#playTime").text(),10);
-			var b = parseInt($("#backtime").val(),10);
-			var nt = t + b;
-			$("#jquery_jplayer_1").jPlayer("play", nt);
-		}
+						function click_forw() {
+							var t = parseInt($("#playTime").text(),10);
+							var b = parseInt($("#backtime").val(),10);
+							var nt = t + b;
+							$("#jquery_jplayer_1").jPlayer("play", nt);
+						}
 
-		function click_stdspeed() {
-			$("#playbackrate").val(10);
-			set_new_playbackrate();
-		}
+						function click_stdspeed() {
+							$("#playbackrate").val(10);
+							set_new_playbackrate();
+						}
 
-		function click_slower() {
-			var val = ($("#playbackrate :selected").val());
-			if (val > 5) {
-				val--;
-				$("#playbackrate").val(val);
-				set_new_playbackrate();
-			}
-		}
+						function click_slower() {
+							var val = ($("#playbackrate :selected").val());
+							if (val > 5) {
+								val--;
+								$("#playbackrate").val(val);
+								set_new_playbackrate();
+							}
+						}
 
-		function click_faster() {
-			var val = ($("#playbackrate :selected").val());
-			if (val < 15) {
-				val++;
-				$("#playbackrate").val(val);
-				set_new_playbackrate();
-			}
-		}
+						function click_faster() {
+							var val = ($("#playbackrate :selected").val());
+							if (val < 15) {
+								val++;
+								$("#playbackrate").val(val);
+								set_new_playbackrate();
+							}
+						}
 
-		$(document).ready(function(){
-			  $("#jquery_jplayer_1").jPlayer({
-			ready: function () {
-			  $(this).jPlayer("setMedia", { <?php
-			  $audio = trim($audio);
-			  if (strcasecmp(substr($audio, -4), '.mp3') == 0) {
-				  echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
-			  } elseif (strcasecmp(substr($audio, -4), '.ogg') == 0) {
-				  echo 'oga: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
-				  	'mp3: ' . prepare_textdata_js(encodeURI($audio));
-			  } elseif (strcasecmp(substr($audio, -4), '.wav') == 0) {
-				  echo 'wav: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
-				  	'mp3: ' . prepare_textdata_js(encodeURI($audio));
-			  } else {
-				  echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
-			  }
-			  ?> });
-			},
-			swfPath: "js",
-			noVolume: {ipad: /^no$/, iphone: /^no$/, ipod: /^no$/, android_pad: /^no$/, android_phone: /^no$/, blackberry: /^no$/, windows_ce: /^no$/, iemobile: /^no$/, webos: /^no$/, playbook: /^no$/}
-		  });
+						$(document).ready(function(){
+							  $("#jquery_jplayer_1").jPlayer({
+							ready: function () {
+							  $(this).jPlayer("setMedia", { <?php
+							  $audio = trim($audio);
+							  if (strcasecmp(substr($audio, -4), '.mp3') == 0) {
+								  echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
+							  } elseif (strcasecmp(substr($audio, -4), '.ogg') == 0) {
+								  echo 'oga: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
+								  	'mp3: ' . prepare_textdata_js(encodeURI($audio));
+							  } elseif (strcasecmp(substr($audio, -4), '.wav') == 0) {
+								  echo 'wav: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
+								  	'mp3: ' . prepare_textdata_js(encodeURI($audio));
+							  } else {
+								  echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
+							  }
+							  ?> });
+							},
+							swfPath: "js",
+							noVolume: {ipad: /^no$/, iphone: /^no$/, ipod: /^no$/, android_pad: /^no$/, android_phone: /^no$/, blackberry: /^no$/, windows_ce: /^no$/, iemobile: /^no$/, webos: /^no$/, playbook: /^no$/}
+						  });
   
-		  $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) { 
-			  $("#playTime").text(Math.floor(event.jPlayer.status.currentTime));
-			});
+						  $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) { 
+							  $("#playTime").text(Math.floor(event.jPlayer.status.currentTime));
+							});
   
-		  $("#jquery_jplayer_1").bind($.jPlayer.event.play, function(event) { 
-			  set_current_playbackrate();
-			  // console.log("play");
-			});
+						  $("#jquery_jplayer_1").bind($.jPlayer.event.play, function(event) { 
+							  set_current_playbackrate();
+							  // console.log("play");
+							});
   
-		  $("#slower").click(click_slower);
-		  $("#faster").click(click_faster);
-		  $("#stdspeed").click(click_stdspeed);
-		  $("#backbutt").click(click_back);
-		  $("#forwbutt").click(click_forw);
-		  $("#do-single").click(click_single);
-		  $("#do-repeat").click(click_repeat);
-		  $("#playbackrate").change(set_new_playbackrate);
-		  $("#backtime").change(set_new_playerseconds);
+						  $("#slower").click(click_slower);
+						  $("#faster").click(click_faster);
+						  $("#stdspeed").click(click_stdspeed);
+						  $("#backbutt").click(click_back);
+						  $("#forwbutt").click(click_forw);
+						  $("#do-single").click(click_single);
+						  $("#do-repeat").click(click_repeat);
+						  $("#playbackrate").change(set_new_playbackrate);
+						  $("#backtime").change(set_new_playerseconds);
   
-  		<?php echo ($repeatMode ? "click_repeat();\n" : ''); ?>
-		});
-		//]]>
-		</script>
-	<?php
+				  		<?php echo ($repeatMode ? "click_repeat();\n" : ''); ?>
+						});
+						//]]>
+						</script>
+					<?php
 	} // if (isset($audio))
 }
 

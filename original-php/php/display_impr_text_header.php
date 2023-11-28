@@ -35,10 +35,10 @@ Call: display_impr_text_header.php?text=[textid]
 Display an improved annotated text (top frame)
 ***************************************************************/
 
-require_once( 'settings.inc.php' );
-require_once( 'connect.inc.php' );
-require_once( 'dbutils.inc.php' );
-require_once( 'utilities.inc.php' );
+require_once('settings.inc.php');
+require_once('connect.inc.php');
+require_once('dbutils.inc.php');
+require_once('utilities.inc.php');
 
 $textid = getreq('text');
 $sql = 'select TxLgID, TxTitle, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $textid;
@@ -46,15 +46,16 @@ $res = do_mysqli_query($sql);
 $record = mysqli_fetch_assoc($res);
 
 $audio = $record['TxAudioURI'];
-if(!isset($audio)) $audio='';
-$audio=trim($audio);
+if (!isset($audio))
+	$audio = '';
+$audio = trim($audio);
 
 $title = $record['TxTitle'];
 $sourceURI = $record['TxSourceURI'];
 $langid = $record['TxLgID'];
-mysqli_free_result($res); 
+mysqli_free_result($res);
 
-saveSetting('currenttext',$textid);
+saveSetting('currenttext', $textid);
 
 pagestart_nobody(tohtml($title));
 echo '<h2 class="center" style="margin:5px;margin-top:-10px;">';
@@ -62,28 +63,28 @@ echo '<h2 class="center" style="margin:5px;margin-top:-10px;">';
 ?>
 
 <script type="text/javascript">
-//<![CDATA[
+	//<![CDATA[
 	function do_hide_t() {
-		$('#showt').show(); 
+		$('#showt').show();
 		$('#hidet').hide();
-		$('.anntermruby', window.parent.frames['text'].document).css('color','#E5E4E2').css('background-color', '#E5E4E2');
+		$('.anntermruby', window.parent.frames['text'].document).css('color', '#E5E4E2').css('background-color', '#E5E4E2');
 	}
 	function do_show_t() {
-		$('#showt').hide(); 
-		$('#hidet').show(); 
-		$('.anntermruby', window.parent.frames['text'].document).css('color','black').css('background-color', 'white');
+		$('#showt').hide();
+		$('#hidet').show();
+		$('.anntermruby', window.parent.frames['text'].document).css('color', 'black').css('background-color', 'white');
 	}
 	function do_hide_a() {
-		$('#show').show(); 
-		$('#hide').hide(); 
-		$('.anntransruby2', window.parent.frames['text'].document).css('color','#C8DCF0').css('background-color', '#C8DCF0');
+		$('#show').show();
+		$('#hide').hide();
+		$('.anntransruby2', window.parent.frames['text'].document).css('color', '#C8DCF0').css('background-color', '#C8DCF0');
 	}
 	function do_show_a() {
-		$('#show').hide(); 
-		$('#hide').show(); 
-		$('.anntransruby2', window.parent.frames['text'].document).css('color','#006699').css('background-color', 'white');
+		$('#show').hide();
+		$('#hide').show();
+		$('.anntransruby2', window.parent.frames['text'].document).css('color', '#006699').css('background-color', 'white');
 	}
-//]]>
+	//]]>
 </script>
 
 <?php

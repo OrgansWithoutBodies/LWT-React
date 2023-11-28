@@ -1,13 +1,18 @@
-import { RequiredLineButton } from '../Icon';
 import { useData } from '../data/useAkita';
+import { SettingsValidator } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { RequiredLineButton } from '../ui-kit/Icon';
+import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
+import { buildFormInput } from './buildFormInput';
 
 // TODO abstract this out into a nested settings component
 export function SettingsComponent(): JSX.Element {
   const [{ settings }, { setViewerSettings }] = useData(['settings']);
   const navigate = useInternalNavigate();
-
+  const validator = SettingsValidator;
+  const refMap = RefMap(validator);
+  const StInput = buildFormInput(refMap);
   return (
     <>
       <Header title="Settings/Preferences" />
@@ -35,10 +40,10 @@ export function SettingsComponent(): JSX.Element {
                 <b>without</b> audioplayer
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right setfocus"
                   type="text"
-                  name="set-text-h-frameheight-no-audio"
+                  entryKey="set-text-h-frameheight-no-audio"
                   // data_info="Height of left top frame without audioplayer"
                   value={140}
                   maxLength={3}
@@ -59,10 +64,10 @@ export function SettingsComponent(): JSX.Element {
                 <b>with</b> audioplayer
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-text-h-frameheight-with-audio"
+                  entryKey="set-text-h-frameheight-with-audio"
                   // data_info="Height of left top frame with audioplayer"
                   value="200"
                   maxLength={3}
@@ -79,10 +84,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Width of left frames</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-text-l-framewidth-percent"
+                  entryKey="set-text-l-framewidth-percent"
                   // data_info="Width of left frames"
                   value="50"
                   maxLength={2}
@@ -99,10 +104,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Height of right top frame</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-text-r-frameheight-percent"
+                  entryKey="set-text-r-frameheight-percent"
                   // data_info="Height of right top frame"
                   value="50"
                   maxLength={2}
@@ -124,10 +129,10 @@ export function SettingsComponent(): JSX.Element {
               </th>
               <td className="td1 center">Height of left top frame</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-test-h-frameheight"
+                  entryKey="set-test-h-frameheight"
                   // data_info="Height of left top frame"
                   value="140"
                   maxLength={3}
@@ -144,10 +149,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Width of left frames</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-test-l-framewidth-percent"
+                  entryKey="set-test-l-framewidth-percent"
                   // data_info="Width of left frames"
                   value="50"
                   maxLength={2}
@@ -164,10 +169,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Height of right top frame</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-test-r-frameheight-percent"
+                  entryKey="set-test-r-frameheight-percent"
                   // data_info="Height of right top frame"
                   value="50"
                   maxLength={2}
@@ -189,10 +194,10 @@ export function SettingsComponent(): JSX.Element {
                 <br />
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty zeroposintnumber right"
                   type="text"
-                  name="set-test-main-frame-waiting-time"
+                  entryKey="set-test-main-frame-waiting-time"
                   // data_info="Waiting time after assessment to display next test"
                   value="0"
                   maxLength={4}
@@ -212,10 +217,10 @@ export function SettingsComponent(): JSX.Element {
                 to clear the message/edit frame
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty zeroposintnumber right"
                   type="text"
-                  name="set-test-edit-frame-waiting-time"
+                  entryKey="set-test-edit-frame-waiting-time"
                   // data_info="Waiting Time to clear the message/edit frame"
                   value="500"
                   maxLength={8}
@@ -350,10 +355,10 @@ export function SettingsComponent(): JSX.Element {
                 while adding/editing a term
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty zeroposintnumber right"
                   type="text"
-                  name="set-similar-terms-count"
+                  entryKey="set-similar-terms-count"
                   // data_info="Similar terms to be displayed while adding/editing a term"
                   value="0"
                   maxLength={1}
@@ -379,10 +384,10 @@ export function SettingsComponent(): JSX.Element {
                 (used in annotation selection)
               </td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty center"
                   type="text"
-                  name="set-term-translation-delimiters"
+                  entryKey="set-term-translation-delimiters"
                   value="/;|"
                   maxLength={8}
                   size={8}
@@ -401,10 +406,10 @@ export function SettingsComponent(): JSX.Element {
               </th>
               <td className="td1 center">Texts per Page</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-texts-per-page"
+                  entryKey="set-texts-per-page"
                   // data_info="Texts per Page"
                   value="10"
                   maxLength={4}
@@ -437,10 +442,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Archived Texts per Page</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-archivedtexts-per-page"
+                  entryKey="set-archivedtexts-per-page"
                   // data_info="Archived Texts per Page"
                   value="100"
                   maxLength={4}
@@ -455,10 +460,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Terms per Page</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-terms-per-page"
+                  entryKey="set-terms-per-page"
                   // data_info="Terms per Page"
                   value="100"
                   maxLength={4}
@@ -473,10 +478,10 @@ export function SettingsComponent(): JSX.Element {
             <tr>
               <td className="td1 center">Tags per Page</td>
               <td className="td1 center">
-                <input
+                <StInput
                   className="notempty posintnumber right"
                   type="text"
-                  name="set-tags-per-page"
+                  entryKey="set-tags-per-page"
                   // data_info="Tags per Page"
                   value="100"
                   maxLength={4}
@@ -512,7 +517,16 @@ export function SettingsComponent(): JSX.Element {
                   }}
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;
-                <input type="submit" name="op" value="Save" />
+                <input
+                  type="button"
+                  value="Save"
+                  onClick={() => {
+                    // TODO this works different
+                    CheckAndSubmit(refMap, {}, validator, (val) => {
+                      console.log(val);
+                    });
+                  }}
+                />
               </td>
             </tr>
           </tbody>

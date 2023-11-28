@@ -11,6 +11,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
+import { Settings } from './settings';
 import { LanguagesId, TextsId } from './validators';
 const MINS_IN_SECONDS = 60;
 const HOURS_IN_MINS = 60;
@@ -55,7 +56,6 @@ export class DataQuery extends Query<DataState> {
   public archtexttags = this.select('archtexttags');
   public languages = this.select('languages');
   public sentences = this.select('sentences');
-  public settings = this.select('settings');
   public tags = this.select('tags');
   public tags2 = this.select('tags2');
   public textitems = this.select('textitems');
@@ -63,6 +63,23 @@ export class DataQuery extends Query<DataState> {
   public texttags = this.select('texttags');
   public words = this.select('words');
   public wordtags = this.select('wordtags');
+
+  public settings: Observable<Settings> = this.select('settings').pipe(
+    map(
+      (settings) =>
+        Object.fromEntries(
+          settings.map(
+            ({ StKey, StValue }) =>
+              [
+                StKey,
+                Number.isNaN(Number.parseInt(StValue))
+                  ? StValue
+                  : Number.parseInt(StValue),
+              ] as [keyof Settings, Settings[keyof Settings]]
+          )
+        ) as Settings
+    )
+  );
 
   public parsedTexts = this.select('parsedTexts');
   public notificationMessage = this.select('notificationMessage');

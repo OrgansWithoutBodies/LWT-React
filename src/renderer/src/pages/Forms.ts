@@ -57,9 +57,10 @@ function CheckErrors<TForm extends {}>(
 }
 // HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
-export type TRefMap<TForm> = Record<keyof TForm, React.MutableRefObject<any>>;
-//  & { clearAll: () => void };
-// TODO 'clearAll' handle
+export type TRefMap<TForm> = Record<
+  keyof TForm,
+  React.MutableRefObject<any>
+> & { clearAll: () => void };
 export function RefMap<TForm>(
   validator: ss.Struct<{ [key in keyof TForm]: any }>
 ): TRefMap<TForm> {
@@ -96,7 +97,7 @@ export function CheckAndSubmit<TForm>(
 ) {
   const values = Object.fromEntries(
     (Object.keys(refMap) as (keyof typeof refMap)[])
-      .filter((val) => omit === null || val !== omit)
+      .filter((val) => (omit === null || val !== omit) && val !== 'clearAll')
       .map((refKey) => {
         console.log(refKey);
         return [

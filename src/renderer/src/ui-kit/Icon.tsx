@@ -1,5 +1,5 @@
 import { ImgHTMLAttributes } from 'react';
-import { IconNameMap } from './icons';
+import { IconNameMap } from '../icons';
 
 export function Icon({
   src: iconName,

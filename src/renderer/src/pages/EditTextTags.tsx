@@ -1,28 +1,40 @@
-import { Icon, RequiredLineButton } from '../Icon';
 import { dataService } from '../data/data.service';
 import { Tags2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Tags2Validator } from '../data/validators';
+import { usePager } from '../hooks/usePager';
+import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
+import { Icon, RequiredLineButton } from '../ui-kit/Icon';
+import { Pager } from '../ui-kit/Pager';
 import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
-import { FormInput, resetDirty } from './Terms.component';
-import { useSelection } from './useSelection';
-import { confirmDelete } from './utils';
+import { resetDirty } from './Terms.component';
+import { FormInput, buildFormInput } from './buildFormInput';
+import { confirmDelete, multiActionGo } from './utils';
 
-export function DisplayTextTags({ query }: { query: string }) {
-  const [{ tags2, archtexttags, texttags }] = useData([
+export function DisplayTextTags({
+  query,
+  page = 1,
+}: {
+  query: string;
+  page?: number;
+}) {
+  const [{ tags2, archtexttags, texttags, settings }] = useData([
     'tags2',
     'archtexttags',
     'texttags',
+    'settings',
   ]);
   const navigate = useInternalNavigate();
-  const { onSelectAll, onSelectNone, checkboxPropsForEntry } = useSelection(
-    tags2,
-    'T2ID'
-  );
+  const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
+    useSelection(tags2, 'T2ID');
+  const pageSize = settings['set-tags-per-page'] || 1;
 
+  const recno = tags2.length;
+  const { dataOnPage, numPages } = usePager(tags2, page, pageSize);
+  console.log(page, numPages, pageSize);
   return (
     <>
       <Header title={'Edit Text Tags'} />
@@ -54,7 +66,7 @@ export function DisplayTextTags({ query }: { query: string }) {
               <input
                 type="text"
                 name="query"
-                value={query}
+                defaultValue={query}
                 maxLength={50}
                 size={15}
               />
@@ -91,164 +103,144 @@ Sort Order:
 <?php } ?> */}
         </table>
       </form>
-      {/* 
-<?php
-if ($recno==0) {
-?>
-<p>No tags found.</p>
-<?php
-} else {
-?> */}
-      <form
-        name="form2"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>"
-        method="post"
-      >
-        <input type="hidden" name="data" value="" />
-        <table className="tab1" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <th className="th1 center" colSpan={2}>
-              Multi Actions <Icon src="lightning" title="Multi Actions" />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={2}>
-              <b>ALL</b>
-              {/* <?php echo ($recno == 1 ? '1 Tag' : $recno . ' Tags'); ?>:&nbsp;  */}
-              <select
-                name="allaction"
-                onChange="allActionGo(document.form2, document.form2.allaction,<?php echo $recno; ?>);"
-              >
-                {/* <?php echo get_alltagsactions_selectoptions(); ?> */}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 center">
-              <input
-                type="button"
-                value="Mark All"
-                // TODO
-                onClick={onSelectAll}
-              />
-              <input
-                type="button"
-                value="Mark None"
-                // TODO
-                onClick={onSelectNone}
-              />
-            </td>
-            <td className="td1 center">
-              Marked Tags:&nbsp;
-              <select
-                name="markaction"
-                id="markaction"
-                disabled
-                // TODO
-                onChange="multiActionGo(document.form2, document.form2.markaction);"
-              >
-                {/* TODO */}
-                {/* <?php echo get_multipletagsactions_selectoptions(); ?> */}
-              </select>
-            </td>
-          </tr>
-        </table>
+      {recno === 0 ? (
+        <p>No tags found.</p>
+      ) : (
+        <form
+          name="form2"
+          action="<?php echo $_SERVER['PHP_SELF']; ?>"
+          method="post"
+        >
+          <input type="hidden" name="data" value="" />
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1 center" colSpan={2}>
+                Multi Actions <Icon src="lightning" title="Multi Actions" />
+              </th>
+            </tr>
+            <tr>
+              <td className="td1 center" colSpan={2}>
+                <b>ALL</b> {dataOnPage.length}{' '}
+                {dataOnPage.length === 1 ? 'Tag' : 'Tags'}
+                <select
+                  name="allaction"
+                  onChange="allActionGo(document.form2, document.form2.allaction,<?php echo $recno; ?>);"
+                >
+                  <GetAllTagsActionsSelectOptions />
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 center">
+                <input type="button" value="Mark All" onClick={onSelectAll} />
+                <input type="button" value="Mark None" onClick={onSelectNone} />
+              </td>
+              <td className="td1 center">
+                Marked Tags:&nbsp;
+                <select
+                  name="markaction"
+                  id="markaction"
+                  disabled={selectedValues.size === 0}
+                  onChange={(val) => {
+                    multiActionGo(
+                      // TODO
+                      () => {},
+                      // TODO ref
+                      val
+                    );
+                  }}
+                >
+                  <GetMultipleTagsActionsSelectOptions />
+                </select>
+              </td>
+            </tr>
+          </table>
 
-        <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <th className="th1 sorttable_nosort">Mark</th>
-            <th className="th1 sorttable_nosort">Actions</th>
-            <th className="th1 clickable">Tag Text</th>
-            <th className="th1 clickable">Tag Comment</th>
-            <th className="th1 clickable">
-              Texts
-              <br />
-              With Tag
-            </th>
-            <th className="th1 clickable">
-              Arch.Texts
-              <br />
-              With Tag
-            </th>
-          </tr>
+          <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1 sorttable_nosort">Mark</th>
+              <th className="th1 sorttable_nosort">Actions</th>
+              <th className="th1 clickable">Tag Text</th>
+              <th className="th1 clickable">Tag Comment</th>
+              <th className="th1 clickable">
+                Texts
+                <br />
+                With Tag
+              </th>
+              <th className="th1 clickable">
+                Arch.Texts
+                <br />
+                With Tag
+              </th>
+            </tr>
 
-          {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
-          {tags2.map((tag) => {
-            const c = texttags.filter(({ TtT2ID }) => {
-              return tag.T2ID === TtT2ID;
-            }).length;
-            const ca = archtexttags.filter(({ AgT2ID }) => {
-              return tag.T2ID === AgT2ID;
-            }).length;
-            return (
-              <tr>
-                {/* TODO */}
-                {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
-                <td className="td1 center">
-                  <A name="rec' . $record['T2ID'] . '">
-                    <input
-                      name="marked[]"
-                      type="checkbox"
-                      className="markcheck"
-                      {...checkboxPropsForEntry(tag)}
-                      value="' . $record['T2ID'] . '"
-                    />
-                  </A>
-                </td>
-                <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-                  &nbsp;
-                  <A href={`/edit_texttags?chg=${tag.T2ID}`}>
-                    <Icon src={'document--pencil'} title="Edit" />
-                  </A>
-                  &nbsp;
-                  <A
-                  // href={`/edit_texttags?del=${tag.T2ID}`}
-                  >
-                    <Icon
-                      onClick={() => {
-                        if (confirmDelete()) {
-                          dataService.deleteTagFromText(tag.T2ID);
-                        }
-                      }}
-                      src="minus-button"
-                      title="Delete"
-                    />
-                  </A>
-                  &nbsp;
-                </td>
-                {/* TODO */}
-                <td className="td1 center">{tag.T2Text}</td>
-                <td className="td1 center">{tag.T2Comment}</td>
-                <td className="td1 center">
-                  {c > 0 ? (
-                    <A
-                    // TODO
-                    // ref={`edit_texts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
-                    >
-                      {c}
+            {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
+            {tags2.map((tag) => {
+              const c = texttags.filter(({ TtT2ID }) => {
+                return tag.T2ID === TtT2ID;
+              }).length;
+              const ca = archtexttags.filter(({ AgT2ID }) => {
+                return tag.T2ID === AgT2ID;
+              }).length;
+              return (
+                <tr>
+                  {/* TODO */}
+                  {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
+                  <td className="td1 center">
+                    <A name="rec' . $record['T2ID'] . '">
+                      <input
+                        name="marked[]"
+                        type="checkbox"
+                        className="markcheck"
+                        {...checkboxPropsForEntry(tag)}
+                        value="' . $record['T2ID'] . '"
+                      />
                     </A>
-                  ) : (
-                    '0'
-                  )}
-                </td>
-                <td className="td1 center">
-                  {ca > 0 ? (
-                    <A
-                    // TODO
-                    // ref={`edit_archivedtexts?page=1&query=&tag12=0&tag2=&tag1= . ${tag['T2ID']} . `}
-                    >
-                      {ca}
+                  </td>
+                  <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                    &nbsp;
+                    <A href={`/edit_texttags?chg=${tag.T2ID}`}>
+                      <Icon src={'document--pencil'} title="Edit" />
                     </A>
-                  ) : (
-                    '0'
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </table>
-      </form>
-      {/* TODO */}
+                    &nbsp;
+                    <A
+                    // href={`/edit_texttags?del=${tag.T2ID}`}
+                    >
+                      <Icon
+                        onClick={() => {
+                          if (confirmDelete()) {
+                            dataService.deleteTextTag(tag.T2ID);
+                          }
+                        }}
+                        src="minus-button"
+                        title="Delete"
+                      />
+                    </A>
+                    &nbsp;
+                  </td>
+                  <td className="td1 center">{tag.T2Text}</td>
+                  <td className="td1 center">{tag.T2Comment}</td>
+                  <td className="td1 center">
+                    {c > 0 ? (
+                      <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>{c}</A>
+                    ) : (
+                      '0'
+                    )}
+                  </td>
+                  <td className="td1 center">
+                    {ca > 0 ? (
+                      <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>{ca}</A>
+                    ) : (
+                      '0'
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </table>
+        </form>
+      )}
+      <Pager currentPage={page} numPages={numPages} />
       {/*       
 // <?php if( $pages > 1) { ?>
 // <form name="form3" action="#">
@@ -324,7 +316,6 @@ export function NewTextTag() {
                 name="op"
                 value="Save"
                 onClick={() => {
-                  console.log('SAVING');
                   CheckAndSubmit(
                     refMap,
                     {},
@@ -349,10 +340,13 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   const changingTag = tags2.find(({ T2ID }) => {
     return chgID === T2ID;
   });
-
+  if (!changingTag) {
+    throw new Error('invalid change ID');
+  }
   const validator = Tags2Validator;
   const refMap = RefMap<Tags2>(validator);
   const navigator = useInternalNavigate();
+  const TgInput = buildFormInput(refMap, changingTag);
   return (
     <>
       <Header title={'My Text Tags'} />
@@ -363,18 +357,17 @@ export function EditTextTag({ chgID }: { chgID: number }) {
         action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
         method="post"
       >
-        <input type="hidden" name="T2ID" value={changingTag?.T2ID} />
+        <TgInput type="hidden" entryKey="T2ID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <input
+              <TgInput
                 // data_info="Tag"
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
-                name="T2Text"
-                ref={refMap.T2Text}
-                value={changingTag?.T2Text}
+                entryKey="T2Text"
+                default
                 maxLength={20}
                 size={20}
               />
@@ -390,12 +383,10 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 // data_info="Comment"
                 name="T2Comment"
                 ref={refMap.T2Comment}
-                value={changingTag?.T2Comment}
                 cols={40}
                 rows={3}
-              >
-                {changingTag?.T2Comment}
-              </textarea>
+                defaultValue={changingTag.T2Comment}
+              />
             </td>
           </tr>
           <tr>
@@ -429,6 +420,39 @@ export function EditTextTag({ chgID }: { chgID: number }) {
           </tr>
         </table>
       </form>
+    </>
+  );
+}
+
+export function GetMultipleTagsActionsSelectOptions() {
+  return (
+    <>
+      <option value={''}>[Choose...]</option>
+      <option value={'del'}>Delete Marked Tags</option>
+    </>
+  );
+}
+export function GetAllTagsActionsSelectOptions() {
+  return (
+    <>
+      <option value={''}>[Choose...]</option>
+      <option value={'delall'}>Delete ALL Tags</option>
+    </>
+  );
+}
+
+export function GetMultipleArchivedTextActionsSelectOptions() {
+  return (
+    <>
+      <option value={''}>[Choose...]</option>
+      <option disabled>------------</option>
+      <option value="addtag">Add Tag</option>
+      <option value="deltag">Remove Tag</option>
+      <option disabled>------------</option>
+      <option value="unarch">Unarchive Marked Texts</option>
+      <option disabled>------------</option>
+      <option value="del">Delete Marked Texts</option>
+      <option value={'delall'}>Delete ALL Tags</option>
     </>
   );
 }

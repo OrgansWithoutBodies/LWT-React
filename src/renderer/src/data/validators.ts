@@ -1,5 +1,5 @@
 import * as ss from 'superstruct';
-import { brandedNumber, BrandedString } from './branding';
+import { brandedNumber, brandedString, BrandedString } from './branding';
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
 
@@ -33,7 +33,33 @@ const archivedtextsId = brandedNumber('archivedtextsId' as const);
 const archtexttagsId = brandedNumber('archtexttagsId' as const);
 export const languagesId = brandedNumber('languagesId' as const);
 const sentencesId = brandedNumber('sentencesId' as const);
-const settingsId = brandedNumber('settingsId' as const);
+const settingsId = brandedString('settingsId' as const);
+export const settingsKeys = [
+  'dbversion',
+  'showallwords',
+  'currentlanguage',
+  'lastscorecalc',
+  'set-text-h-frameheight-no-audio',
+  'set-text-h-frameheight-with-audio',
+  'set-text-l-framewidth-percent',
+  'set-text-r-frameheight-percent',
+  'set-test-h-frameheight',
+  'set-test-l-framewidth-percent',
+  'set-test-r-frameheight-percent',
+  'set-test-main-frame-waiting-time',
+  'set-test-edit-frame-waiting-time',
+  'set-test-sentence-count',
+  'set-term-sentence-count',
+  'set-archivedtexts-per-page',
+  'set-texts-per-page',
+  'set-terms-per-page',
+  'set-tags-per-page',
+  'set-show-text-word-counts',
+  'set-term-translation-delimiters',
+  'set-mobile-display-mode',
+  'set-similar-terms-count',
+  'currenttext',
+] as const;
 const tagsId = brandedNumber('tagsId' as const);
 const tags2Id = brandedNumber('tags2Id' as const);
 const textitemsId = brandedNumber('textitemsId' as const);
