@@ -7757,19 +7757,19 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
     if (listener) {
       listener({
         action: action2,
-        location: history.location,
+        location: history2.location,
         delta
       });
     }
   }
   function push(to, state) {
     action2 = Action$1.Push;
-    let location = createLocation(history.location, to, state);
+    let location = createLocation(history2.location, to, state);
     if (validateLocation)
       validateLocation(location, to);
     index2 = getIndex() + 1;
     let historyState = getHistoryState(location, index2);
-    let url = history.createHref(location);
+    let url = history2.createHref(location);
     try {
       globalHistory.pushState(historyState, "", url);
     } catch (error) {
@@ -7781,24 +7781,24 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
     if (v5Compat && listener) {
       listener({
         action: action2,
-        location: history.location,
+        location: history2.location,
         delta: 1
       });
     }
   }
   function replace(to, state) {
     action2 = Action$1.Replace;
-    let location = createLocation(history.location, to, state);
+    let location = createLocation(history2.location, to, state);
     if (validateLocation)
       validateLocation(location, to);
     index2 = getIndex();
     let historyState = getHistoryState(location, index2);
-    let url = history.createHref(location);
+    let url = history2.createHref(location);
     globalHistory.replaceState(historyState, "", url);
     if (v5Compat && listener) {
       listener({
         action: action2,
-        location: history.location,
+        location: history2.location,
         delta: 0
       });
     }
@@ -7809,7 +7809,7 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
     invariant(base, "No window.location.(origin|href) available to create URL for href: " + href);
     return new URL(href, base);
   }
-  let history = {
+  let history2 = {
     get action() {
       return action2;
     },
@@ -7845,7 +7845,7 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
       return globalHistory.go(n2);
     }
   };
-  return history;
+  return history2;
 }
 var ResultType;
 (function(ResultType2) {
@@ -8714,10 +8714,10 @@ function BrowserRouter(_ref4) {
       v5Compat: true
     });
   }
-  let history = historyRef.current;
+  let history2 = historyRef.current;
   let [state, setStateImpl] = reactExports.useState({
-    action: history.action,
-    location: history.location
+    action: history2.action,
+    location: history2.location
   });
   let {
     v7_startTransition
@@ -8725,13 +8725,13 @@ function BrowserRouter(_ref4) {
   let setState = reactExports.useCallback((newState) => {
     v7_startTransition && startTransitionImpl ? startTransitionImpl(() => setStateImpl(newState)) : setStateImpl(newState);
   }, [setStateImpl, v7_startTransition]);
-  reactExports.useLayoutEffect(() => history.listen(setState), [history, setState]);
+  reactExports.useLayoutEffect(() => history2.listen(setState), [history2, setState]);
   return /* @__PURE__ */ reactExports.createElement(Router, {
     basename,
     children,
     location: state.location,
     navigationType: state.action,
-    navigator: history
+    navigator: history2
   });
 }
 var DataRouterHook;
@@ -9525,7 +9525,7 @@ function b(e2) {
 function _(e2) {
   return e2 && "string" == typeof e2.styledComponentId;
 }
-var N = "undefined" != typeof process && void 0 !== process.env && ({}.REACT_APP_SC_ATTR || {}.SC_ATTR) || "data-styled", C = "undefined" != typeof window && "HTMLElement" in window, I = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== process.env && (void 0 !== {}.REACT_APP_SC_DISABLE_SPEEDY && "" !== {}.REACT_APP_SC_DISABLE_SPEEDY ? "false" !== {}.REACT_APP_SC_DISABLE_SPEEDY && {}.REACT_APP_SC_DISABLE_SPEEDY : void 0 !== {}.SC_DISABLE_SPEEDY && "" !== {}.SC_DISABLE_SPEEDY ? "false" !== {}.SC_DISABLE_SPEEDY && {}.SC_DISABLE_SPEEDY : false)), P = {};
+var N = "undefined" != typeof process && void 0 !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" } && ({ "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.REACT_APP_SC_ATTR || { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.SC_ATTR) || "data-styled", C = "undefined" != typeof window && "HTMLElement" in window, I = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" } && (void 0 !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.REACT_APP_SC_DISABLE_SPEEDY && "" !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.REACT_APP_SC_DISABLE_SPEEDY ? "false" !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.REACT_APP_SC_DISABLE_SPEEDY && { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.REACT_APP_SC_DISABLE_SPEEDY : void 0 !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.SC_DISABLE_SPEEDY && "" !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.SC_DISABLE_SPEEDY ? "false" !== { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.SC_DISABLE_SPEEDY && { "LESSOPEN": "| /usr/bin/lesspipe %s", "npm_package_devDependencies_ts_node": "^10.4.0", "npm_package_dependencies_papaparse": "^5.4.1", "npm_package_devDependencies__types_webpack_dev_server": "^4.3.1", "USER": "v", "npm_package_devDependencies_webpack_cli": "^4.9.1", "npm_package_dependencies_node_gzip": "^1.1.2", "npm_config_version_commit_hooks": "true", "npm_config_user_agent": "yarn/1.22.19 npm/? node/v19.2.0 linux x64", "npm_package_scripts_build_electron_rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build", "npm_config_bin_links": "true", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "npm_package_scripts_dev_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE electron-vite dev -w", "npm_config_init_version": "1.0.0", "SHLVL": "1", "npm_package_dependencies_rxjs": "^7.4.0", "npm_package_dependencies_process": "^0.11.10", "HOME": "/home/v", "OLDPWD": "/home/v/Projects/LabelMaker", "npm_package_devDependencies__typescript_eslint_parser": "^6.0.0", "npm_package_dependencies_superstruct": "^1.0.3", "npm_package_scripts_dev_electron_sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w", "DESKTOP_SESSION": "ubuntu-xorg", "NVM_BIN": "/home/v/.nvm/versions/node/v19.2.0/bin", "npm_package_dependencies_stream": "^0.0.2", "NVM_INC": "/home/v/.nvm/versions/node/v19.2.0/include/node", "npm_package_dependencies_browserify_zlib": "^0.2.0", "npm_config_init_license": "MIT", "GNOME_SHELL_SESSION_MODE": "ubuntu", "GTK_MODULES": "gail:atk-bridge", "YARN_WRAP_OUTPUT": "false", "npm_package_devDependencies__types_electron": "^1.6.10", "npm_package_dependencies__types_react_modal": "^3.16.3", "npm_package_scripts_dev_rest": "VITE_LWT_PERSIST=REST vite", "npm_config_version_tag_prefix": "v", "SYSTEMD_EXEC_PID": "29480", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus", "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.6.0", "npm_package_dependencies__datorama_akita": "^6.2.4", "COLORTERM": "truecolor", "npm_package_devDependencies_babel_loader": "^8.2.3", "npm_package_dependencies_react_router_dom": "^6.18.0", "npm_package_dependencies_rambdax": "^9.0.0", "npm_package_description": "LWT React Port", "NVM_DIR": "/home/v/.nvm", "npm_package_readmeFilename": "README.md", "npm_package_devDependencies__types_react_dom": "^18.2.7", "npm_package_devDependencies__babel_preset_env": "^7.16.0", "npm_package_dependencies_sqlite": "^5.1.1", "npm_package_dependencies_assert": "^2.0.0", "npm_package_homepage": "http://.", "MANDATORY_PATH": "/usr/share/gconf/ubuntu-xorg.mandatory.path", "npm_package_devDependencies_prettier": "^2.4.1", "npm_package_devDependencies__types_sqlite3": "^3.1.11", "npm_package_devDependencies__babel_runtime": "^7.16.3", "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.16.0", "npm_package_scripts_mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js", "GTK_IM_MODULE": "ibus", "LOGNAME": "v", "npm_package_devDependencies__vitejs_plugin_react": "^4.1.1", "npm_package_devDependencies__babel_preset_typescript": "^7.16.0", "_": "/home/v/.nvm/versions/node/v19.2.0/bin/yarn", "npm_package_devDependencies__babel_preset_react": "^7.16.0", "npm_package_scripts_preview_electron": "electron-vite preview", "XDG_SESSION_CLASS": "user", "DEFAULTS_PATH": "/usr/share/gconf/ubuntu-xorg.default.path", "npm_package_devDependencies__typescript_eslint_eslint_plugin": "^6.0.0", "npm_package_devDependencies__babel_plugin_proposal_decorators": "^7.16.0", "npm_package_scripts_lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0", "npm_config_registry": "https://registry.yarnpkg.com", "USERNAME": "v", "TERM": "xterm-256color", "npm_package_devDependencies__babel_core": "^7.16.0", "npm_package_scripts_build_electron_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "npm_package_devDependencies_html_webpack_plugin": "^5.5.0", "npm_package_devDependencies_eslint_plugin_react_refresh": "^0.4.3", "npm_package_scripts_start": "webpack-dev-server --mode development", "npm_config_ignore_scripts": "", "WINDOWPATH": "2", "npm_package_scripts_build_electron_sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build", "PATH": "/tmp/yarn--1701220054620-0.5729684987327439:/home/v/Projects/LWT-React/node_modules/.bin:/home/v/.config/yarn/link/node_modules/.bin:/home/v/.yarn/bin:/home/v/.nvm/versions/node/v19.2.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin/node_modules/npm/bin/node-gyp-bin:/home/v/.nvm/versions/node/v19.2.0/bin:/home/v/.cargo/bin:/home/v/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin", "NODE": "/home/v/.nvm/versions/node/v19.2.0/bin/node", "SESSION_MANAGER": "local/v-NUC8i3BEH:@/tmp/.ICE-unix/7924,unix/v-NUC8i3BEH:/tmp/.ICE-unix/7924", "npm_package_name": "lwt-react", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/1f565d45_dae5_452c_82b9_317fea2cb63e", "XDG_RUNTIME_DIR": "/run/user/1000", "npm_package_dependencies_zlib": "^1.0.5", "DISPLAY": ":0", "npm_package_devDependencies_electron_vite": "^1.0.29", "npm_package_devDependencies_electron_packager": "^17.1.2", "npm_package_scripts_build_rest": "VITE_LWT_PERSIST=REST tsc && vite build", "LANG": "en_US.UTF-8", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME", "npm_package_devDependencies_webpack": "^5.64.0", "npm_package_devDependencies_eslint": "^8.45.0", "npm_package_devDependencies__types_styled_components": "^5.1.26", "npm_package_dependencies_react_dom": "^18.2.0", "npm_package_scripts_dev_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE vite", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "ubuntu-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.160", "npm_package_dependencies_sqlite3": "^5.1.6", "npm_package_main": "./out/main/index.js", "SSH_AGENT_LAUNCHER": "gnome-keyring", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "npm_package_devDependencies_webpack_dev_server": "^4.4.0", "npm_package_scripts_test": 'echo "Error: no test specified" && exit 1', "npm_config_version_git_message": "v%s", "SHELL": "/bin/bash", "npm_lifecycle_event": "electron-vite", "npm_package_devDependencies__types_react": "^18.2.15", "npm_package_version": "1.0.0", "QT_ACCESSIBILITY": "1", "GDMSESSION": "ubuntu-xorg", "npm_config_argv": '{"remain":[],"cooked":["run","electron-vite"],"original":["run","electron-vite","build"]}', "npm_package_devDependencies__types_papaparse": "^5.3.13", "npm_package_dependencies_buffer": "^6.0.3", "npm_package_scripts_dev_electron_rest": "VITE_LWT_PERSIST=REST electron-vite dev -w", "LESSCLOSE": "/usr/bin/lesspipe %s %s", "npm_package_dependencies_vite": "^4.5.0", "npm_package_devDependencies__types_node_gzip": "^1.1.0", "npm_config_version_git_tag": "true", "npm_config_version_git_sign": "", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "npm_package_dependencies_yarn": "^1.22.19", "npm_package_license": "ISC", "npm_config_strict_ssl": "true", "QT_IM_MODULE": "ibus", "npm_package_dependencies_sqlite_electron": "^2.2.8", "npm_package_dependencies__floating_ui_react": "^0.19.2", "PWD": "/home/v/Projects/LWT-React", "npm_execpath": "/home/v/.nvm/versions/node/v19.2.0/lib/node_modules/yarn/bin/yarn.js", "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu-xorg:/etc/xdg", "NVM_CD_FLAGS": "", "XDG_DATA_DIRS": "/usr/share/ubuntu-xorg:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop", "npm_package_devDependencies_electron": "^27.1.2", "npm_package_dependencies_react_split_pane": "^0.1.92", "npm_package_dependencies_react_modal": "^3.16.1", "npm_package_author_name": "v", "npm_package_dependencies_util": "^0.12.5", "npm_package_dependencies_styled_components": "^5.3.6", "npm_config_save_prefix": "^", "npm_config_ignore_optional": "", "npm_package_scripts_preview": "vite preview", "VTE_VERSION": "6800", "npm_package_browser_assert": "false", "npm_package_dependencies_typescript": "^5.0.2", "INIT_CWD": "/home/v/Projects/LWT-React", "npm_package_devDependencies__types_webpack": "^5.28.0", "npm_package_dependencies_react": "^18.2.0", "npm_package_scripts_build_localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build", "NODE_ENV_ELECTRON_VITE": "production", "NODE_ENV": "production", "ELECTRON_MAJOR_VER": "27" }.SC_DISABLE_SPEEDY : false)), P = {};
 function D(e2) {
   for (var t2 = arguments.length, n2 = new Array(t2 > 1 ? t2 - 1 : 0), r2 = 1; r2 < t2; r2++)
     n2[r2 - 1] = arguments[r2];
@@ -10031,12 +10031,107 @@ function $e(e2) {
   }
   return React.memo(d2);
 }
+const BackendPlugin = {
+  get: async (key) => {
+    console.log("SENDING", window.api);
+    if (key === "languages") {
+      await window.api.sql.get(key);
+    }
+  }
+  // set: () => {},
+  // insert: (key, val) => {
+  //   switch (key) {
+  //     case 'languages':
+  //       return insertLanguage(val);
+  //     case 'texts':
+  //       return insertLanguage(val);
+  //     case 'words':
+  //       return insertLanguage(val);
+  //     case 'wordtags':
+  //       return insertLanguage(val);
+  //     case 'archivedtexts':
+  //       return insertLanguage(val);
+  //     case 'archtexttags':
+  //       return insertLanguage(val);
+  //     case 'tags':
+  //       return insertLanguage(val);
+  //     case 'tags2':
+  //       return insertLanguage(val);
+  //     case 'textitems':
+  //       return insertLanguage(val);
+  //     case 'texttags':
+  //       return insertLanguage(val);
+  //     default:
+  //       throw new Error(`Unimplemented! ${key}`);
+  //   }
+  // },
+};
+const getPersistedValueLocalStorage = (key, nullFallback = null) => {
+  const localVal = localStorage.getItem(key);
+  return localVal === null ? nullFallback : JSON.parse(localVal);
+};
+const setPersistedValueLocalStorage = (key, val) => {
+  localStorage.setItem(key, JSON.stringify(val));
+  return true;
+};
+const getPersistedValueRESTAPI = (key) => {
+  return key;
+};
+const setPersistedValueRESTAPI = (key) => {
+  return key;
+};
+var PersistanceStrategy = /* @__PURE__ */ ((PersistanceStrategy2) => {
+  PersistanceStrategy2[PersistanceStrategy2["LocalStorage"] = 0] = "LocalStorage";
+  PersistanceStrategy2[PersistanceStrategy2["RestAPI"] = 1] = "RestAPI";
+  PersistanceStrategy2[PersistanceStrategy2["ElectronSqlite"] = 2] = "ElectronSqlite";
+  return PersistanceStrategy2;
+})(PersistanceStrategy || {});
+const PersistenceStrategies = {
+  [
+    0
+    /* LocalStorage */
+  ]: {
+    get: getPersistedValueLocalStorage,
+    set: setPersistedValueLocalStorage
+  },
+  [
+    1
+    /* RestAPI */
+  ]: {
+    get: getPersistedValueRESTAPI,
+    set: setPersistedValueRESTAPI
+  },
+  [
+    2
+    /* ElectronSqlite */
+  ]: BackendPlugin
+};
+function GetPersistFromEnv() {
+  console.log({ "BASE_URL": "./", "MODE": "production", "DEV": false, "PROD": true, "SSR": false });
+  switch ({ "BASE_URL": "./", "MODE": "production", "DEV": false, "PROD": true, "SSR": false }[
+    "VITE_LWT_PERSIST"
+    /* persistMethod */
+  ]) {
+    case "REST":
+      return PersistanceStrategy.RestAPI;
+    case "LOCALSTORAGE":
+      return PersistanceStrategy.LocalStorage;
+    case "SQLITE":
+      return PersistanceStrategy.ElectronSqlite;
+    default:
+      return PersistanceStrategy.ElectronSqlite;
+  }
+}
 const AppVariables = {
   versionNumber: "LEGACY-0.0.0",
-  releaseDate: "January 99 2023",
+  releaseDate: "November 31 2023",
+  // Prob dont need to be an env var
   styleVariant: "dark",
+  isMobile: false,
+  persistMethod: GetPersistFromEnv(),
   dbBackend: "SQLite",
   dbVersion: "1.0.0",
+  restURL: "TODO",
   server: "NOSERVER",
   serverVersion: "1.0.0",
   frontend: "React",
@@ -10044,6 +10139,7 @@ const AppVariables = {
   frontendSource: "http://github.com",
   wizardDataUri: ""
 };
+console.log("appvar", AppVariables);
 const TermStrengths = [1, 2, 3, 4, 5, "WKn", "Ign"];
 function createPath(path, delimiter = ".") {
   return typeof path === "string" ? path.split(delimiter) : path;
@@ -18609,41 +18705,6 @@ const demoDB = {
   texttags,
   words
 };
-const getPersistedValueLocalStorage = (key, nullFallback = null) => {
-  const localVal = localStorage.getItem(key);
-  return localVal === null ? nullFallback : JSON.parse(localVal);
-};
-const setPersistedValueLocalStorage = (key, val) => {
-  localStorage.setItem(key, JSON.stringify(val));
-  return true;
-};
-const getPersistedValueRESTAPI = (key) => {
-  return key;
-};
-const setPersistedValueRESTAPI = (key) => {
-  return key;
-};
-var PersistanceStrategy = /* @__PURE__ */ ((PersistanceStrategy2) => {
-  PersistanceStrategy2[PersistanceStrategy2["LocalStorage"] = 0] = "LocalStorage";
-  PersistanceStrategy2[PersistanceStrategy2["RestAPI"] = 1] = "RestAPI";
-  return PersistanceStrategy2;
-})(PersistanceStrategy || {});
-const PersistenceStrategies = {
-  [
-    0
-    /* LocalStorage */
-  ]: {
-    get: getPersistedValueLocalStorage,
-    set: setPersistedValueLocalStorage
-  },
-  [
-    1
-    /* RestAPI */
-  ]: {
-    get: getPersistedValueRESTAPI,
-    set: setPersistedValueRESTAPI
-  }
-};
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -18656,11 +18717,13 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = "activeLanguageId";
-const MyPersistanceStrategy = PersistanceStrategy.LocalStorage;
+const MyPersistanceStrategy = AppVariables.persistMethod;
 const MyPersistanceHandles = PersistenceStrategies[MyPersistanceStrategy];
+console.log("persist", MyPersistanceHandles, MyPersistanceStrategy);
 function createDemoDBInitialState() {
   return {
     ...demoDB,
+    activeLanguageId: null,
     parsedTexts: [],
     wordtags: [],
     notificationMessage: null
@@ -18727,7 +18790,6 @@ class DataQuery extends Query {
   archtexttags = this.select("archtexttags");
   languages = this.select("languages");
   sentences = this.select("sentences");
-  settings = this.select("settings");
   tags = this.select("tags");
   tags2 = this.select("tags2");
   textitems = this.select("textitems");
@@ -18735,6 +18797,18 @@ class DataQuery extends Query {
   texttags = this.select("texttags");
   words = this.select("words");
   wordtags = this.select("wordtags");
+  settings = this.select("settings").pipe(
+    map(
+      (settings2) => Object.fromEntries(
+        settings2.map(
+          ({ StKey, StValue }) => [
+            StKey,
+            Number.isNaN(Number.parseInt(StValue)) ? StValue : Number.parseInt(StValue)
+          ]
+        )
+      )
+    )
+  );
   parsedTexts = this.select("parsedTexts");
   notificationMessage = this.select("notificationMessage");
   notificationMessageDisplay = of(100).pipe(
@@ -18864,7 +18938,7 @@ class DataQuery extends Query {
     this.tags2
   ]).pipe(
     map(([textsForActiveLanguage, texttags2, tags3]) => {
-      console.log({ textsForActiveLanguage });
+      console.log("textDetails", { textsForActiveLanguage });
       return textsForActiveLanguage.map((text) => {
         return {
           TxID: text.TxID,
@@ -18935,7 +19009,9 @@ function RequiredLineButton() {
 }
 const headerValuesTemp = {
   index: { params: [] },
-  edit_texts: { params: ["page", "new"] },
+  edit_texts: {
+    params: ["chg", "arch", "page", "query", "tag1", "tag2", "new"]
+  },
   edit_archivedtexts: { params: ["page"] },
   edit_texttags: { params: ["page"] },
   edit_languages: { params: ["page"] },
@@ -18946,19 +19022,27 @@ const headerValuesTemp = {
       "query",
       "tag12",
       "tag1",
+      "chg",
+      "new",
       "tag2",
       "sort",
-      "text"
+      "text",
+      "filterlang",
+      "lang"
     ]
   },
-  edit_tags: { params: ["page"] },
+  edit_tags: { params: ["query", "new", "page", "chg"] },
   statistics: { params: [] },
   check_text: { params: [] },
+  new_word: { params: [] },
+  do_text: { params: [] },
+  do_test: { params: [] },
   long_text_import: { params: [] },
   upload_words: { params: [] },
   backup_restore: { params: [] },
   settings: { params: [] },
-  info: { params: [] }
+  info: { params: [] },
+  print_text: { params: ["text"] }
 };
 const headerValues = {
   Home: "index",
@@ -19078,14 +19162,14 @@ const useUpdateParams = () => {
   const currentParams = Object.fromEntries(
     headerValuesTemp[`${location.pathname.slice(1)}`].params.map((param) => {
       return [param, searchParams.get(param)];
-    }).filter(([_2, val]) => {
+    }).filter(([, val]) => {
       return val !== null;
     })
   );
   return (params) => {
     const filteredParams = Object.fromEntries(
       Object.entries({ ...currentParams, ...params }).filter(
-        ([_2, val]) => val !== null
+        ([, val]) => val !== null
       )
     );
     setSearchParams(filteredParams);
@@ -19359,8 +19443,57 @@ function AddNewTermTooltip({
     }
   );
 }
+function byteSizeOfString(str) {
+  return new Blob([str]).size;
+}
 function confirmDelete() {
   return window.confirm("CONFIRM\n\nAre you sure you want to delete?");
+}
+function multiActionGo(form, sel) {
+  if (typeof form != "undefined" && typeof sel != "undefined") {
+    const v2 = sel.value;
+    const t2 = sel.options[sel.selectedIndex].text;
+    if (typeof v2 == "string") {
+      if (v2 == "addtag" || v2 == "deltag") {
+        const answer = verifyAddTagWindow(t2);
+        if (answer != "") {
+          return { tagChange: answer };
+        }
+      } else if (v2 == "del" || v2 == "smi1" || v2 == "spl1" || v2 == "s1" || v2 == "s5" || v2 == "s98" || v2 == "s99" || v2 == "today" || v2 == "delsent" || v2 == "lower" || v2 == "cap") {
+        const answer = confirm(
+          "*** " + t2 + " ***\n\n*** " + // TODO
+          "input.markcheck:checked".length + " Record(s) will be affected ***\n\nAre you sure?"
+        );
+        if (answer) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+    sel.value = "";
+  }
+}
+function verifyAddTagWindow(t2) {
+  let notok = 1;
+  let answer = "";
+  while (notok) {
+    answer = prompt(
+      "*** " + t2 + " ***\n\n*** " + // TODO
+      "input.markcheck:checked".length + " Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:",
+      answer
+    );
+    if (typeof answer == "object")
+      answer = "";
+    if (answer.indexOf(" ") > 0 || answer.indexOf(",") > 0) {
+      alert("Please no spaces or commas!");
+    } else if (answer.length > 20) {
+      alert("Please no tags longer than 20 char.!");
+    } else {
+      notok = 0;
+    }
+  }
+  return answer;
 }
 function splitCheckText(text, language, id2) {
   const {
@@ -19372,6 +19505,7 @@ function splitCheckText(text, language, id2) {
     LgRightToLeft: rtlScript,
     LgCharacterSubstitutions
   } = language;
+  console.log("TEST123-split", LgCharacterSubstitutions, language);
   const replace = LgCharacterSubstitutions.split("|");
   let s = text.replace("\r\n", "\n").replace("\n", " ¶ ").replace("	", " ").trim();
   if (splitEachChar) {
@@ -19455,6 +19589,17 @@ class DataService {
     });
     this.persistChange("languages");
   }
+  deleteArchivedText(textId) {
+    this.dataStore.update((state) => {
+      return {
+        ...state,
+        archivedtexts: state.archivedtexts.filter(
+          (language) => language.AtID !== textId
+        )
+      };
+    });
+    this.persistChange("archivedtexts");
+  }
   addText(text) {
     let maxId = null;
     this.dataStore.update((state) => {
@@ -19512,6 +19657,9 @@ class DataService {
       };
     });
     this.persistChange("tags");
+  }
+  editLanguage(chgId, newData) {
+    window.alert("TODO-editLanguage" + chgId);
   }
   addTextTag(tag) {
     this.dataStore.update((state) => {
@@ -19599,8 +19747,20 @@ class DataService {
     }));
     this.persistChange("wordtags");
   }
-  deleteTagFromTerm() {
-    window.alert("TODO DELETETAGFROMTERM");
+  deleteTermTag(tagId) {
+    this.dataStore.update(({ wordtags, tags: tags3, ...rest }) => {
+      return {
+        ...rest,
+        wordtags: wordtags.filter(({ WtTgID }) => {
+          return WtTgID !== tagId;
+        }),
+        tags: tags3.filter(({ TgID }) => {
+          return TgID !== tagId;
+        })
+      };
+    });
+    this.persistChange("wordtags");
+    this.persistChange("tags");
   }
   addTagToText(tagId, textId) {
     this.dataStore.update((state) => ({
@@ -19609,8 +19769,24 @@ class DataService {
     }));
     this.persistChange("texttags");
   }
-  deleteTagFromText() {
-    window.alert("TODO DELETETAGFROMTEXT");
+  deleteTextTag(tagId) {
+    this.dataStore.update(({ texttags: texttags2, archtexttags: archtexttags2, tags2: tags22, ...rest }) => {
+      return {
+        ...rest,
+        texttags: texttags2.filter(({ TtT2ID }) => {
+          return TtT2ID !== tagId;
+        }),
+        archtexttags: archtexttags2.filter(({ AgT2ID }) => {
+          return AgT2ID !== tagId;
+        }),
+        tags2: tags22.filter(({ T2ID }) => {
+          return T2ID !== tagId;
+        })
+      };
+    });
+    this.persistChange("tags2");
+    this.persistChange("texttags");
+    this.persistChange("archtexttags");
   }
   addLongText(longTextForm) {
     window.alert("TODO ADDLONGTEXT");
@@ -19642,8 +19818,14 @@ class DataService {
     });
     this.persistChange("words");
   }
-  restoreFromBackup() {
-    window.alert("TODO RESTORING FROM BACKUP");
+  restoreFromBackup(file) {
+    window.alert("TODO RESTORING FROM BACKUP " + file.name);
+    const reader = new FileReader();
+    reader.onload = async (e2) => {
+      e2.target.result;
+    };
+    const text = reader.readAsText(file);
+    console.log("TEST123", text);
   }
   downloadBackup() {
     const {
@@ -19756,6 +19938,7 @@ class DataService {
       };
     });
     this.persistChange("archivedtexts");
+    this.persistChange("texts");
   }
   unarchiveText() {
     window.alert("TODO UNARCHIVETEXT");
@@ -20025,6 +20208,13 @@ ${serializedData.wordtags.map((entry) => {
   console.log(sqlFileString);
   window.alert("TODO download file");
 }
+function setupAppContext(context) {
+  return reactExports.createContext(context);
+}
+const AppContext = setupAppContext(AppVariables);
+function useAppContext() {
+  return reactExports.useContext(AppContext);
+}
 function LanguageDropdown({
   header = "Choose...",
   name = "LgID",
@@ -20039,7 +20229,8 @@ function LanguageDropdown({
       name,
       value: defaultValue,
       className: "notempty setfocus",
-      onChange: (val) => onChange(Number.parseInt(val.target.value)),
+      onChange: (val) => onChange ? onChange(Number.parseInt(val.target.value)) : () => {
+      },
       ref: dropdownRef,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: "-1", children: [
@@ -20053,13 +20244,6 @@ function LanguageDropdown({
       ]
     }
   );
-}
-function setupAppContext(context) {
-  return reactExports.createContext(context);
-}
-const AppContext = setupAppContext(AppVariables);
-function useAppContext() {
-  return reactExports.useContext(AppContext);
 }
 function LandingPage() {
   const {
@@ -20080,10 +20264,10 @@ function LandingPage() {
   ]);
   const navigate = useInternalNavigate();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    languages2.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: "0", cellPadding: "5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+    languages2.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
       "Hint: The database seems to be empty.",
       /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "install_demo.php", children: "You may install the LWT demo database," }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: "/install_demo", children: "You may install the LWT demo database," }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
       "or",
       /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
@@ -20100,7 +20284,7 @@ function LandingPage() {
                 console.log(val);
                 dataService.setActiveLanguage(val);
               },
-              defaultValue: activeLanguageId
+              defaultValue: activeLanguageId !== null ? activeLanguageId : void 0
             }
           )
         ] }),
@@ -20667,6 +20851,13 @@ function refine(struct, name, refiner) {
     }
   });
 }
+function brandedString(brandName, refiner) {
+  const refinedType = refiner ? refine(string(), `branded-string-${brandName}-refinement`, refiner) : string();
+  return define(
+    `branded-string-${brandName}`,
+    (v2) => refinedType.is(v2)
+  );
+}
 function brandedNumber(brandName, refiner) {
   const refinedType = refiner ? refine(number(), `branded-number-${brandName}-refinement`, refiner) : number();
   return define(
@@ -20678,12 +20869,18 @@ const isValidURL = (validationString) => validationString.startsWith("http://") 
 const isValidURLTemplate = (validationString) => validationString.startsWith("*http://") || validationString.startsWith("*https://");
 const URLValidator = () => string() && define("url", isValidURL);
 const URLTemplateValidator = () => string() && define("urlTemplate", isValidURLTemplate);
+const NumberInListValidator = (numbers) => refine(
+  number(),
+  "Zero or One",
+  (val) => numbers.includes(val)
+);
+const BooleanNumberValidator = NumberInListValidator([0, 1]);
 const TimestampValidator = () => number();
 const archivedtextsId = brandedNumber("archivedtextsId");
 const archtexttagsId = brandedNumber("archtexttagsId");
 const languagesId = brandedNumber("languagesId");
 const sentencesId = brandedNumber("sentencesId");
-const settingsId = brandedNumber("settingsId");
+const settingsId = brandedString("settingsId");
 const tagsId = brandedNumber("tagsId");
 const tags2Id = brandedNumber("tags2Id");
 const textitemsId = brandedNumber("textitemsId");
@@ -20718,6 +20915,7 @@ object({
   AgT2ID: tags2Id
   // KEY (`AgAtID`,`AgT2ID`),
 });
+const textSizes = [100, 150, 200, 250];
 const LanguagesValidator = object({
   // LgID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // KEY (`LgID`),
@@ -20735,7 +20933,7 @@ const LanguagesValidator = object({
   // LgExportTemplate: varchar(1000) DEFAULT NULL,
   LgExportTemplate: optional(string()),
   // LgTextSize: int(5) unsigned NOT NULL DEFAULT '100',
-  LgTextSize: number(),
+  LgTextSize: NumberInListValidator(textSizes),
   // LgCharacterSubstitutions: varchar(500) NOT NULL,
   LgCharacterSubstitutions: nonempty(string()),
   // LgRegexpSplitSentences: varchar(500) NOT NULL,
@@ -20745,11 +20943,11 @@ const LanguagesValidator = object({
   // LgRegexpWordCharacters: varchar(500) NOT NULL,
   LgRegexpWordCharacters: nonempty(string()),
   // LgRemoveSpaces: int(1) unsigned NOT NULL DEFAULT '0',
-  LgRemoveSpaces: number(),
+  LgRemoveSpaces: BooleanNumberValidator,
   // LgSplitEachChar: int(1) unsigned NOT NULL DEFAULT '0',
-  LgSplitEachChar: number(),
+  LgSplitEachChar: BooleanNumberValidator,
   // LgRightToLeft: int(1) unsigned NOT NULL DEFAULT '0',
-  LgRightToLeft: number()
+  LgRightToLeft: BooleanNumberValidator
 });
 const LanguagesValidatorNoId = omit(LanguagesValidator, ["LgID"]);
 object({
@@ -20768,7 +20966,7 @@ object({
   // SeText: text,
   SeText: nonempty(string())
 });
-object({
+const SettingsValidator = object({
   // StKey: varchar(40) NOT NULL,
   // PRIMARY KEY (`StKey`)
   StKey: settingsId,
@@ -20918,12 +21116,16 @@ const parseNumMap = (value) => Number.parseInt(value, 10);
 const emptyToNullMap = (value) => value === "" ? void 0 : value;
 function RefMap(validator) {
   const values = Object.keys(validator.schema);
-  return Object.fromEntries(
+  const individualRefs = Object.fromEntries(
     values.map((key) => [
       key,
       reactExports.useRef()
     ])
   );
+  individualRefs["clearAll"] = () => {
+    values.forEach((val) => individualRefs[val].current.value = "");
+  };
+  return individualRefs;
 }
 function ResetForm(refMap) {
   Object.keys(refMap).forEach(
@@ -20932,7 +21134,7 @@ function ResetForm(refMap) {
 }
 function CheckAndSubmit(refMap, preValidateMap, validator, takeValidatedObject, omit$1 = null) {
   const values = Object.fromEntries(
-    Object.keys(refMap).filter((val) => omit$1 === null || val !== omit$1).map((refKey) => {
+    Object.keys(refMap).filter((val) => (omit$1 === null || val !== omit$1) && val !== "clearAll").map((refKey) => {
       console.log(refKey);
       return [
         refKey,
@@ -20950,6 +21152,63 @@ function CheckAndSubmit(refMap, preValidateMap, validator, takeValidatedObject, 
     ResetForm(refMap);
   }
 }
+function WordTagsSelectDropdown({ wordID }) {
+  const [{ wordtags, tags: tags3 }] = useData(["wordtags", "tags"]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { id: "termtags", children: wordtags.filter(({ WtWoID }) => {
+    return WtWoID === wordID;
+  }).map((tag) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("li", {
+      // TODO better lookup very inefficient
+      children: tags3.find(({ TgID }) => {
+        return tag.WtTgID === TgID;
+      }).TgText
+    });
+  }) });
+}
+function buildFormInput(refMap, entry) {
+  const ReturnedComponent = reactExports.useMemo(
+    () => (args) => {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        FormInput,
+        {
+          ...args,
+          refMap,
+          fixedEntry: entry && args.fixed && entry[args.entryKey] ? entry : void 0,
+          defaultEntry: entry && args.default && entry[args.entryKey] ? entry : void 0
+        }
+      );
+    },
+    Object.values(entry || {})
+  );
+  return ReturnedComponent;
+}
+function FormInput({
+  // TODO nonoptional add dot
+  // TODO errorlines
+  // TODO onChange
+  // TODO probably best to just pass validator in here & build refmap here
+  // TODO data_info for more informative text in error fields
+  // TODO partial input & make sure key matches partial
+  entryKey,
+  refMap,
+  defaultEntry,
+  fixedEntry,
+  ...nativeProps
+}) {
+  if (fixedEntry && defaultEntry) {
+    throw new Error("Can't have fixed and default set!");
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "input",
+    {
+      defaultValue: defaultEntry === void 0 ? void 0 : defaultEntry[entryKey],
+      value: fixedEntry === void 0 ? void 0 : fixedEntry[entryKey],
+      name: entryKey,
+      ref: refMap[entryKey],
+      ...nativeProps
+    }
+  );
+}
 function owin(url) {
   window.open(
     url,
@@ -20957,7 +21216,7 @@ function owin(url) {
     "width=800, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no"
   );
 }
-function createTheDictUrl(u2, w2) {
+function createTheDictUrl$1(u2, w2) {
   const r2 = "trans.php?x=2&i=" + escape(u2) + "&t=" + w2;
   return r2;
 }
@@ -20965,19 +21224,11 @@ function translateSentence2(url, sentctl) {
   if (typeof sentctl != "undefined" && url != "") {
     const text = sentctl.value;
     if (typeof text == "string") {
-      owin(createTheDictUrl(url, text.replace(/[{}]/g, "")));
+      owin(createTheDictUrl$1(url, text.replace(/[{}]/g, "")));
     }
   }
 }
-function CheckErrors(keyChanged, refMap, setFieldError) {
-  const error = pick(WordsValidatorNoId, [keyChanged]).validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
-  console.log("TEST123-Val", keyChanged, refMap[keyChanged], error);
-  if (!error) {
-    return setFieldError(false);
-  }
-  return setFieldError(true);
-}
-function AddNewWord({
+function AddNewWordPane({
   word,
   langId,
   existingTerm = void 0
@@ -20987,366 +21238,254 @@ function AddNewWord({
   const [{ languages: languages2 }] = useData(["languages"]);
   const navigator2 = useInternalNavigate();
   const lang = languages2.find((lang2) => lang2.LgID === langId);
-  const langString = lang?.LgName;
-  const [FormState, setFormState] = reactExports.useState({});
   const [FormErrors, setFormErrors] = reactExports.useState({ WoText: false });
   const setFormErrorLine = (key) => (value) => setFormErrors({ ...FormErrors, [key]: value });
   console.log("TEST123-form", { existingTerm, lang, langId });
+  const WoInput = buildFormInput(refMap, { WoText: word || "" });
   const isEdit = existingTerm !== void 0;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : "1";
+  if (!lang) {
+    throw new Error("Incorrect Language Set!");
+  }
+  const langString = lang.LgName;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "form",
-      {
-        name: "newword",
-        className: "validate",
-        action: "/edit_word",
-        method: "post",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "fromAnn", value: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { name: "newword", className: "validate", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "fromAnn", value: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "hidden",
+          name: "WoLgID",
+          ref: refMap.WoLgID,
+          id: "langfield",
+          value: langId
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "hidden",
+          name: "WoCreated",
+          ref: refMap.WoCreated,
+          id: "langfield",
+          value: langId
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "hidden",
+          name: "WoTextLC",
+          ref: refMap.WoTextLC
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "tid", value: "11" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "ord", value: "7" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab2", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: langString })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
+            isEdit ? "Edit" : "New",
+            " Term:"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              WoInput,
+              {
+                className: "notempty checkoutsidebmp",
+                type: "text",
+                entryKey: "WoText",
+                default: true,
+                onChange: () => (
+                  // TODO bring into buildFormInput
+                  CheckErrors("WoText", refMap, setFormErrorLine("WoText"))
+                ),
+                size: 35
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        FormErrors.WoText && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Translation:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
             {
-              type: "hidden",
-              name: "WoLgID",
-              ref: refMap.WoLgID,
-              id: "langfield",
-              value: langId
+              name: "WoTranslation",
+              ref: refMap.WoTranslation,
+              onChange: () => CheckErrors(
+                "WoTranslation",
+                refMap,
+                setFormErrorLine("WoTranslation")
+              ),
+              className: "setfocus textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 500,
+              cols: 35,
+              rows: 3
             }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+          ) })
+        ] }),
+        FormErrors.WoTranslation && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tags:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "ul",
             {
-              type: "hidden",
-              name: "WoCreated",
-              ref: refMap.WoCreated,
-              id: "langfield",
-              value: langId
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              type: "hidden",
-              name: "WoTextLC",
-              ref: refMap.WoTextLC,
-              value: word?.toLowerCase()
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "tid", value: "11" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "ord", value: "7" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab2", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: langString })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
-                isEdit ? "Edit" : "New",
-                " Term:"
-              ] }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+              id: "termtags",
+              className: "tagit ui-widget ui-widget-content ui-corner-all",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "tagit-new", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "span",
+                  {
+                    role: "status",
+                    "aria-live": "polite",
+                    className: "ui-helper-hidden-accessible"
+                  }
+                ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "input",
                   {
-                    className: "notempty checkoutsidebmp",
-                    data_info: "New Term",
                     type: "text",
-                    name: "WoText",
-                    id: "wordfield",
-                    ref: refMap.WoText,
-                    value: word,
-                    defaultValue: FormState.WoText,
-                    onChange: () => CheckErrors("WoText", refMap, setFormErrorLine("WoText")),
-                    size: 35
+                    maxLength: 20,
+                    onChange: (event) => handleFormChange("WoTranslation", event.target.value),
+                    size: 20,
+                    className: "ui-widget-content ui-autocomplete-input",
+                    autoComplete: "off"
                   }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+                )
               ] })
-            ] }),
-            FormErrors.WoText && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Translation:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  name: "WoTranslation",
-                  value: FormState.WoTranslation,
-                  ref: refMap.WoTranslation,
-                  onChange: () => CheckErrors(
-                    "WoTranslation",
-                    refMap,
-                    setFormErrorLine("WoTranslation")
-                  ),
-                  className: "setfocus textarea-noreturn checklength checkoutsidebmp",
-                  data_maxlength: "500",
-                  data_info: "Translation",
-                  cols: 35,
-                  rows: 3
-                }
-              ) })
-            ] }),
-            FormErrors.WoTranslation && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tags:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "ul",
-                {
-                  id: "termtags",
-                  className: "tagit ui-widget ui-widget-content ui-corner-all",
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "tagit-new", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "span",
-                      {
-                        role: "status",
-                        "aria-live": "polite",
-                        className: "ui-helper-hidden-accessible"
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "input",
-                      {
-                        type: "text",
-                        maxLength: 20,
-                        onChange: (event) => handleFormChange("WoTranslation", event.target.value),
-                        size: 20,
-                        className: "ui-widget-content ui-autocomplete-input",
-                        autoComplete: "off"
-                      }
-                    )
-                  ] })
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Romaniz.:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkoutsidebmp",
-                  data_info: "Romanization",
-                  onChange: (event) => handleFormChange("WoRomanization", event.target.value),
-                  name: "WoRomanization",
-                  ref: refMap.WoRomanization,
-                  value: FormState.WoRomanization,
-                  maxLength: 100,
-                  size: 35
-                }
-              ) })
-            ] }),
-            FormErrors.WoRomanization && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
-                "Sentence",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                "Term in :"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  name: "WoSentence",
-                  className: "textarea-noreturn checklength checkoutsidebmp",
-                  data_maxlength: "1000",
-                  data_info: "Sentence",
-                  cols: 35,
-                  rows: 3,
-                  ref: refMap.WoSentence
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Status:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status1", title: "Learning", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      value: "1",
-                      checked: termStatus === "1",
-                      ref: refMap.WoStatus
-                    }
-                  ),
-                  "1 "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status2", title: "Learning", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      checked: termStatus === "2",
-                      value: "2"
-                    }
-                  ),
-                  "2 "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status3", title: "Learning", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      checked: termStatus === "3",
-                      value: "3"
-                    }
-                  ),
-                  "3 "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status4", title: "Learning", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      checked: termStatus === "4",
-                      value: "4"
-                    }
-                  ),
-                  "4 "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status5", title: "Learned", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      checked: termStatus === "5",
-                      value: "5"
-                    }
-                  ),
-                  "5 "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status99", title: "Well Known", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      checked: termStatus === "99",
-                      value: "99"
-                    }
-                  ),
-                  "WKn "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status98", title: "Ignored", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "radio",
-                      name: "WoStatus",
-                      value: "98",
-                      checked: termStatus === "98"
-                    }
-                  ),
-                  "Ign "
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("script", { type: "text/javascript" }),
-              "Lookup Term:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "a",
-                {
-                  href: "https://dict.naver.com/linedict/zhendict/dict.html#/cnen/search?query=%E5%AE%AA",
-                  target: "ru",
-                  children: "Dict1"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "a",
-                {
-                  href: "http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=%E5%AE%AA",
-                  target: "ru",
-                  children: "Dict2"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "span",
-                {
-                  className: "click",
-                  onClick: () => {
-                    owin(
-                      // TODO url
-                      `http://translate.google.com/?ie=UTF-8&sl=${lang?.LgGoogleTranslateURI}&tl=en&text=${"TEST"}`
-                    );
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Romaniz.:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FormInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              entryKey: "WoRomanization",
+              refMap,
+              maxLength: 100,
+              size: 35
+            }
+          ) })
+        ] }),
+        FormErrors.WoRomanization && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Only change uppercase/lowercase!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { color: "red" }, children: "ERROR" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", {})
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
+            "Sentence",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+            "Term in :"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              name: "WoSentence",
+              className: "textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 1e3,
+              cols: 35,
+              rows: 3,
+              ref: refMap.WoSentence
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Status:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusRadioButtons, { termStatus, refMap }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("script", { type: "text/javascript" }),
+          "Lookup Term:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "a",
+            {
+              href: replaceTemplate(lang.LgDict1URI, word),
+              target: "ru",
+              children: "Dict1"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: replaceTemplate(lang.LgDict2URI, word), target: "ru", children: "Dict2" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: "click",
+              onClick: () => {
+                owin(replaceTemplate(lang.LgGoogleTranslateURI, word));
+              },
+              children: "GTr"
+            }
+          ),
+          "| Sent.:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: "click",
+              onClick: () => {
+                translateSentence2(
+                  // TODO url
+                  `http://translate.google.com/?ie=UTF-8&sl=${lang.LgGoogleTranslateURI}&tl=en&text=###`,
+                  refMap.WoSentence.current
+                );
+              },
+              children: "GTr"
+            }
+          ),
+          "     ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Save",
+              onClick: () => {
+                console.log("SAVING");
+                CheckAndSubmit(
+                  refMap,
+                  {
+                    WoStatus: parseNumMap,
+                    WoLgID: parseNumMap,
+                    WoCreated: () => {
+                      return Date.now();
+                    },
+                    WoTextLC: (_2, refMap2) => refMap2["WoText"].current.value.toLowerCase()
                   },
-                  children: "GTr"
-                }
-              ),
-              "| Sent.:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "span",
-                {
-                  className: "click",
-                  onClick: () => {
-                    translateSentence2(
-                      // TODO url
-                      `http://translate.google.com/?ie=UTF-8&sl=${lang?.LgGoogleTranslateURI}&tl=en&text=###`,
-                      refMap.WoSentence.current
-                    );
-                  },
-                  children: "GTr"
-                }
-              ),
-              "     ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  name: "op",
-                  value: "Save",
-                  onClick: () => {
-                    console.log("SAVING");
-                    CheckAndSubmit(
-                      refMap,
-                      {
-                        WoStatus: parseNumMap,
-                        WoLgID: parseNumMap,
-                        WoCreated: () => {
-                          return Date.now();
-                        },
-                        WoTextLC: (_2, refMap2) => refMap2["WoText"].current.value.toLowerCase()
-                      },
-                      validator,
-                      (value) => {
-                        dataService.addTerm(value);
-                        navigator2("/edit_words");
-                      }
-                    );
+                  validator,
+                  (value) => {
+                    dataService.addTerm(value);
+                    navigator2("/edit_words");
                   }
-                }
-              )
-            ] }) })
-          ] }) })
-        ]
-      }
-    ),
+                );
+              }
+            }
+          )
+        ] }) })
+      ] }) })
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: "exsent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "span",
       {
         className: "click",
-        onClick: "do_ajax_show_sentences(2, '宪', 'document.forms[\\'newword\\'].WoSentence');",
+        onClick: () => {
+          do_ajax_show_sentences(
+            // TODO values
+            2,
+            "宪",
+            "document.forms['newword'].WoSentence"
+          );
+        },
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-notes-stack", title: "Show Sentences" }),
           "Show Sentences"
@@ -21363,19 +21502,120 @@ function AddNewWord({
     )
   ] });
 }
-function RestoreFromBackup(backupFile) {
-  const reader = new FileReader();
-  const { files } = backupFile.current;
-  if (files) {
-    reader.onload = async (e2) => {
-      e2.target.result;
-    };
-    const text = reader.readAsText(files[0]);
-    console.log("TEST123", text);
+function replaceTemplate(templateStr, word) {
+  return templateStr.replace("###", word);
+}
+function CheckErrors(keyChanged, refMap, setFieldError) {
+  const error = pick(WordsValidatorNoId, [keyChanged]).validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
+  console.log("TEST123-Val", keyChanged, refMap[keyChanged], error);
+  if (!error) {
+    return setFieldError(false);
   }
+  return setFieldError(true);
+}
+function StatusRadioButtons({
+  termStatus,
+  refMap
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status1", title: "Learning", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          value: "1",
+          defaultChecked: termStatus === "1",
+          ref: refMap.WoStatus
+        }
+      ),
+      "1 "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status2", title: "Learning", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          defaultChecked: termStatus === "2",
+          value: "2"
+        }
+      ),
+      "2 "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status3", title: "Learning", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          defaultChecked: termStatus === "3",
+          value: "3"
+        }
+      ),
+      "3 "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status4", title: "Learning", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          defaultChecked: termStatus === "4",
+          value: "4"
+        }
+      ),
+      "4 "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status5", title: "Learned", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          defaultChecked: termStatus === "5",
+          value: "5"
+        }
+      ),
+      "5 "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status99", title: "Well Known", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          defaultChecked: termStatus === "99",
+          value: "99"
+        }
+      ),
+      "WKn "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "status98", title: "Ignored", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "WoStatus",
+          value: "98",
+          defaultChecked: termStatus === "98"
+        }
+      ),
+      "Ign "
+    ] })
+  ] });
+}
+function do_ajax_show_sentences(lang, word, ctl) {
+  console.log(lang, word, ctl);
 }
 function BackupScreen() {
-  useData([]);
   const navigate = useInternalNavigate();
   const restoreBackup = reactExports.useRef();
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -21453,7 +21693,13 @@ function BackupScreen() {
                     type: "button",
                     name: "restore",
                     value: "Restore from LWT Backup",
-                    onClick: () => RestoreFromBackup(restoreBackup)
+                    onClick: () => {
+                      if (restoreBackup.current && restoreBackup.current.files) {
+                        dataService.restoreFromBackup(
+                          restoreBackup.current.files[0]
+                        );
+                      }
+                    }
                   }
                 )
               ] })
@@ -21542,8 +21788,225 @@ function BackupScreen() {
     )
   ] }) });
 }
-function CheckText() {
+function StatisticsComponent() {
+  const [{ languages: languages2, languageStatusStatistics }] = useData([
+    "languages",
+    "languageStatusStatistics"
+  ]);
+  const periods = [
+    "Today",
+    "Yesterday",
+    "Last 7 d",
+    "Last 30 d",
+    "Last 365 d",
+    "All Time"
+  ];
+  console.log("TEST123", languageStatusStatistics);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Statistics" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
+      "Breakdown by Language and Term Status",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "(Click on numbers to see the list of terms)"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "Language" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Total",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {})
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Active",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(1..5)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Learning",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(1..4)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Unknown",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(1)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Learning",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(2)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Learning",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(3)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Learning",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(4)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Learned",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(5)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Well",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "Known",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(99)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Known",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(5+99)"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
+          "Ign.",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "(98)"
+        ] })
+      ] }),
+      languageStatusStatistics && languages2.map((language) => {
+        const statuses = [
+          //               15
+          // ,14
+          1,
+          2,
+          3,
+          4,
+          5,
+          99,
+          599,
+          98
+        ];
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: language.LgName }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?filterlang=${language.LgID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: languageStatusStatistics[language.LgID]["total"] }) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            A,
+            {
+              href: `/edit_words?filterlang=${language.LgID}&status=${15}`,
+              children: /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
+                " ",
+                languageStatusStatistics[language.LgID][15]
+              ] })
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            A,
+            {
+              href: `/edit_words?filterlang=${language.LgID}&status=${14}`,
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: languageStatusStatistics[language.LgID][14] })
+            }
+          ) }),
+          languageStatusStatistics && statuses.map((statusVal) => {
+            return /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `status${statusVal}`, children: [
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                A,
+                {
+                  href: `/edit_words?filterlang=${language.LgID}&status=${statusVal}`,
+                  children: languageStatusStatistics[language.LgID][statusVal]
+                }
+              ),
+              " "
+            ] }) });
+          })
+        ] }) });
+      })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
+      "Breakdown by Language and Time Range",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      '(Terms created (C), Terms changed status = Activity (A), Terms set to "Known" (K))'
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", rowSpan: 2, children: "Language" }),
+        periods.map((period) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 3, children: period });
+        })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: periods.map(() => {
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "C" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "A" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "K" })
+        ] });
+      }) }),
+      languages2.map((language) => {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: language.LgName }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) })
+        ] }) });
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TOTAL" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " 47 " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(NavigateButton, {
+      value: "<< Back",
+      navigateTo: "/"
+      /* HOME */
+    }) })
+  ] });
+}
+function NavigateButton({
+  value,
+  navigateTo
+}) {
   const navigate = useInternalNavigate();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "input",
+    {
+      type: "button",
+      value,
+      onClick: () => {
+        navigate(navigateTo);
+      }
+    }
+  );
+}
+function CheckText() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Check Text" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
@@ -21552,7 +22015,7 @@ function CheckText() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(LanguageDropdown, {}),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -21572,30 +22035,63 @@ function CheckText() {
             {
               name: "TxText",
               className: "notempty checkbytes checkoutsidebmp",
-              data_maxlength: "65000",
-              data_info: "Text",
+              maxLength: 65e3,
               cols: 60,
               rows: 20
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(NavigateButton, { value: "<< Back", navigateTo: "/" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
             type: "button",
-            value: "<< Back",
+            name: "op",
+            value: "Check",
             onClick: () => {
-              navigate("/");
+              window.alert("TODO");
             }
           }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Check" })
+        )
       ] }) })
     ] }) }) })
   ] });
+}
+function usePager(data, page, pageSize) {
+  const dataOnPage = data.slice(pageSize * (page - 1), pageSize * page);
+  const numPages = Math.ceil(data.length / pageSize);
+  console.log("PAGER", { data, page, pageSize, dataOnPage });
+  return { dataOnPage, numPages };
+}
+function useSelection(data, key) {
+  const [selectedValues, setSelectedValues] = reactExports.useState(
+    /* @__PURE__ */ new Set()
+  );
+  const onSelect = (val, selecting) => {
+    if (selecting) {
+      return setSelectedValues(/* @__PURE__ */ new Set([...selectedValues, val[key]]));
+    }
+    const newSet = /* @__PURE__ */ new Set([...selectedValues]);
+    newSet.delete(val[key]);
+    setSelectedValues(newSet);
+    return;
+  };
+  return {
+    selectedValues,
+    checkboxPropsForEntry: (val) => {
+      const isChecked = selectedValues.has(val[key]);
+      return { onChange: () => onSelect(val, !isChecked), checked: isChecked };
+    },
+    // onSelectId:(id:[TKey])=>{
+    //   const isSelected = selectedValues.has(id);
+    // },
+    onSelectAll: () => setSelectedValues(new Set(data.map((val) => val[key]))),
+    onSelectNone: () => setSelectedValues(/* @__PURE__ */ new Set()),
+    onSelect
+  };
 }
 function Pager({
   currentPage,
@@ -21669,591 +22165,193 @@ function Pager({
     ] })
   ] });
 }
-function usePager(data, page, pageSize) {
-  const dataOnPage = data.slice(pageSize * (page - 1), pageSize * page);
-  const numPages = Math.ceil(data.length / pageSize);
-  console.log("PAGER", { data, page, pageSize, dataOnPage });
-  return { dataOnPage, numPages };
-}
-function useSelection(data, key) {
-  const [selectedValues, setSelectedValues] = reactExports.useState(
-    /* @__PURE__ */ new Set()
-  );
-  const onSelect = (val, selecting) => {
-    if (selecting) {
-      return setSelectedValues(/* @__PURE__ */ new Set([...selectedValues, val[key]]));
-    }
-    const newSet = /* @__PURE__ */ new Set([...selectedValues]);
-    newSet.delete(val[key]);
-    setSelectedValues(newSet);
-    return;
-  };
-  return {
-    selectedValues,
-    checkboxPropsForEntry: (val) => {
-      const isChecked = selectedValues.has(val[key]);
-      return { onChange: () => onSelect(val, !isChecked), checked: isChecked };
-    },
-    // onSelectId:(id:[TKey])=>{
-    //   const isSelected = selectedValues.has(id);
-    // },
-    onSelectAll: () => setSelectedValues(new Set(data.map((val) => val[key]))),
-    onSelectNone: () => setSelectedValues(/* @__PURE__ */ new Set()),
-    onSelect
-  };
-}
-function EditArchivedTexts({
-  query,
-  currentPage
+const isTags = (tags3) => "TgID" in tags3[0];
+function TagDropDown({
+  tags: tags3,
+  tagKey
 }) {
-  const [{ languages: languages2, activeLanguage, numArchivedTexts, archivedtexts: archivedtexts2 }] = useData([
-    "languages",
-    "activeLanguage",
-    "numArchivedTexts",
-    "archivedtexts"
-  ]);
-  const pageSize = 15;
-  const [filterLanguageID, setFilterLanguage] = reactExports.useState(
-    activeLanguage ? activeLanguage.LgID : null
+  const updateParams = useUpdateParams();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "select",
+    {
+      name: "tag1",
+      onChange: ({ target: { value } }) => {
+        updateParams({ [tagKey]: value });
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Filter off]" }),
+        isTags(tags3) ? tags3.map((tag) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: tag.TgID, children: tag.TgText });
+        }) : tags3.map((tag) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: tag.T2ID, children: tag.T2Text });
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "-1", children: "UNTAGGED" })
+      ]
+    }
   );
-  languages2.map((lang) => {
-    return lang.LgID === filterLanguageID;
-  });
-  const filteredTexts = filterLanguageID !== null ? archivedtexts2.filter(({ AtLgID }) => {
-    return AtLgID === filterLanguageID;
-  }) : archivedtexts2;
-  console.log({
-    activeLanguage,
-    filterLanguage: filterLanguageID,
-    archivedtexts: archivedtexts2,
-    filteredTexts
-  });
-  const { dataOnPage, numPages } = usePager(
-    filteredTexts,
-    currentPage,
-    pageSize
-  );
+}
+function TermsHeader() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Act." }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
+      "Term /",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "Romanization"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
+      "Translation [Tags]",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { id: "waitinfo", className: "hide", children: [
+        "Please ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "icn/waiting2.gif" }),
+        " wait ..."
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_nosort", children: [
+      "Se.",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "?"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_numeric clickable", children: [
+      "Stat./",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "Days"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_numeric clickable", children: [
+      "Score",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "%"
+    ] })
+  ] });
+}
+function TermsFilterBox({
+  numTerms,
+  currentPage,
+  activeLanguageId,
+  numPages,
+  tag12
+}) {
+  const [{ tags: tags3, texts: texts2 }] = useData(["tags", "texts"]);
   const navigate = useInternalNavigate();
-  const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } = useSelection(archivedtexts2, "AtID");
-  const queryRef = reactExports.useRef();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: `My ${activeLanguage?.LgName} Text Archive` }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "form1",
-        action: "#",
-        onSubmit: "document.form1.querybutton.click(); return false;",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
-            "Filter ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Reset All",
-                onClick: "resetAll('edit_archivedtexts');"
+  const updateParams = useUpdateParams();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
+      "Filter",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "button",
+          value: "Reset All",
+          onClick: () => resetAll()
+        }
+      )
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+        "Language:",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          LanguageDropdown,
+          {
+            onChange: (val) => {
+              if (val === -1) {
+                dataService.setActiveLanguage(null);
+              } else {
+                dataService.setActiveLanguage(val);
               }
-            )
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-              "Language:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                LanguageDropdown,
-                {
-                  onChange: (val) => {
-                    if (val === -1) {
-                      setFilterLanguage(null);
-                    } else {
-                      setFilterLanguage(val);
-                    }
-                  }
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-              "Text Title (Wildc.=*):",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  name: "query",
-                  ref: queryRef,
-                  value: query,
-                  maxLength: 50,
-                  size: 15
-                }
-              ),
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  name: "querybutton",
-                  value: "Filter",
-                  onClick: () => navigate(
-                    `/edit_archivedtexts?page=1&query=${queryRef.current?.value || ""}`
-                  )
-                }
-              ),
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  value: "Clear",
-                  onClick: () => navigate(`/edit_archivedtexts`)
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            },
+            defaultValue: activeLanguageId !== null ? activeLanguageId : void 0,
+            header: "Filter off"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+        "Text:",
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            name: "text",
+            onChange: ({ target: { value } }) => {
+              updateParams({ text: value === "-1" ? null : value });
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: -1, selected: true, children: "[Filter off]" }),
+              (activeLanguageId !== null ? texts2.filter(({ TxLgID }) => {
+                return TxLgID === activeLanguageId;
+              }) : texts2).map((text) => {
+                return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: text.TxID, children: text.TxTitle });
+              })
+            ]
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "td",
+        {
+          style: { whiteSpace: "nowrap" },
+          className: "td1 center",
+          colSpan: 2,
+          children: [
+            "Status:",
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "td",
+              "select",
               {
-                className: "td1 center",
-                colSpan: 2,
-                style: { whiteSpace: "nowrap" },
+                name: "status",
+                onChange: ({ target: { value: selectedValue } }) => {
+                  updateParams({ status: selectedValue });
+                },
                 children: [
-                  "Tag #1:",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "select",
-                    {
-                      name: "tag1",
-                      onChange: ({ target: { value: val } }) => navigate(`/edit_archivedtexts?page=1&tag1=${val}`)
-                    }
-                  )
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Filter off]" }),
+                  new Array(5).fill(0).map((_2, ii2) => {
+                    const val = ii2 + 1;
+                    return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: val, children: [
+                      val === 5 ? "Learned" : "Learning",
+                      " [",
+                      val,
+                      "]"
+                    ] });
+                  }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "99", children: "Well Known [WKn]" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "98", children: "Ignored [Ign]" }),
+                  new Array(4).fill(0).map((_2, ii2) => {
+                    const val = ii2 + 1;
+                    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
+                      new Array(5 - val).fill(0).map((__, jj2) => {
+                        const jVal = jj2 + 1;
+                        return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: `${val}${jVal}`, children: [
+                          val + jVal === 5 ? "Learning/-ed" : "Learning",
+                          " [",
+                          val,
+                          "..",
+                          val + jVal,
+                          "]"
+                        ] });
+                      })
+                    ] });
+                  }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "599", children: "All known [5+WKn]" })
                 ]
               }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
-              "Tag #1 ..",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  name: "tag12",
-                  onChange: ({ target: { value: val } }) => navigate(`/edit_archivedtexts?page=1&tag12=${val}`)
-                }
-              ),
-              ".. Tag #2"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
-              "Tag #2:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  name: "tag2",
-                  onChange: ({ target: { value: val } }) => navigate(`/edit_archivedtexts?page=1&tag2=${val}`)
-                }
-              )
-            ] })
-          ] })
-        ] })
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "form",
-      {
-        name: "form2",
-        action: "<?php echo $_SERVER['PHP_SELF']; ?>",
-        method: "post",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "data", value: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
-              "Multi Actions ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                "Marked Texts: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "select",
-                  {
-                    name: "markaction",
-                    id: "markaction",
-                    disabled: selectedValues.size === 0,
-                    onChange: "multiActionGo(document.form2, document.form2.markaction);"
-                  }
-                )
-              ] })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Actions" }),
-              filterLanguageID === null && /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Lang." }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
-                "Title [Tags] / Audio: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "speaker-volume", title: "With Audio" }),
-                ", Src.Link: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Source Link available" }),
-                ", Ann.Text: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "tick", title: "Annotated Text available" })
-              ] })
-            ] }),
-            dataOnPage.map((text) => {
-              const languageForLine = languages2.find(
-                (lang) => lang.LgID === text.AtLgID
-              );
-              return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { name: "rec' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    name: "marked[]",
-                    className: "markcheck",
-                    type: "checkbox",
-                    ...checkboxPropsForEntry(text),
-                    value: "' . $record['AtID'] . '"
-                  }
-                ) }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "inbox-upload", title: "Unarchive" }) }),
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "document--pencil", title: "Edit" }) }),
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "span",
-                    {
-                      className: "click",
-                      onClick: () => {
-                        if (confirmDelete()) {
-                          dataService.deleteArchivedText(text.AtID);
-                        }
-                      },
-                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "minus-button", title: "Delete" })
-                    }
-                  ),
-                  " "
-                ] }),
-                filterLanguageID === null && /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: languageForLine?.LgName }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                  text.AtTitle,
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "smallgray2" }),
-                  text.AtAudioURI && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "speaker-volume", title: "With Audio" }),
-                  text.AtSourceURI && /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "' . $record['AtSourceURI'] . '", target: "_blank", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Link to Text Source" }) }),
-                  text.AtAnnotatedText && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "tick", title: "Annotated Text available" })
-                ] })
-              ] }) });
-            })
-          ] })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "input",
-      {
-        type: "button",
-        value: "Active Texts",
-        onClick: () => navigate(`/edit_texts?query=&page=1`)
-      }
-    ) })
-  ] });
-}
-function EditLanguage({ chgID }) {
-  const [{ languages: languages2 }] = useData(["languages"]);
-  const changingLang = languages2.find(({ LgID }) => {
-    return LgID === chgID;
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
-      "Edit Language",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("a", { target: "_blank", href: "info.htm#howtolang", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "question-frame", title: "Help" }) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "form",
-      {
-        className: "validate",
-        method: "post",
-        onSubmit: "return check_dupl_lang(\n      <?php echo $_REQUEST['chg']; ?>\n      );",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "LgID", value: chgID }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: 'Study Language "L2":' }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "text",
-                    className: "notempty setfocus checkoutsidebmp",
-                    data_info: "Study Language",
-                    name: "LgName",
-                    id: "LgName",
-                    value: changingLang?.LgName,
-                    maxlength: 40,
-                    size: 40
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Dictionary 1 URI:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "text",
-                    className: "notempty checkdicturl checkoutsidebmp",
-                    name: "LgDict1URI",
-                    value: changingLang?.LgDict1URI,
-                    maxLength: 200,
-                    size: 60,
-                    data_info: "Dictionary 1 URI"
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Dictionary 2 URI:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkdicturl checkoutsidebmp",
-                  name: "LgDict2URI",
-                  value: changingLang?.LgDict2URI,
-                  maxLength: 200,
-                  size: 60,
-                  data_info: "Dictionary 2 URI"
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "GoogleTranslate URI:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkdicturl checkoutsidebmp",
-                  name: "LgGoogleTranslateURI",
-                  value: changingLang?.LgGoogleTranslateURI,
-                  maxLength: 200,
-                  size: 60,
-                  data_info: "GoogleTranslate URI"
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Text Size:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("select", { name: "LgTextSize" }) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Character Substitutions:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkoutsidebmp",
-                  data_info: "Character Substitutions",
-                  name: "LgCharacterSubstitutions",
-                  value: changingLang?.LgCharacterSubstitutions,
-                  maxlength: 500,
-                  size: 60
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "RegExp Split Sentences:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "text",
-                    className: "notempty checkoutsidebmp",
-                    name: "LgRegexpSplitSentences",
-                    value: changingLang?.LgRegexpSplitSentences,
-                    maxLength: 500,
-                    size: 60,
-                    data_info: "RegExp Split Sentences"
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Exceptions Split Sentences:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkoutsidebmp",
-                  data_info: "Exceptions Split Sentences",
-                  name: "LgExceptionsSplitSentences",
-                  value: changingLang?.LgExceptionsSplitSentences,
-                  maxlength: 500,
-                  size: 60
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "RegExp Word Characters:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "text",
-                    className: "notempty checkoutsidebmp",
-                    data_info: "RegExp Word Characters",
-                    name: "LgRegexpWordCharacters",
-                    value: changingLang?.LgRegexpWordCharacters,
-                    maxlength: 500,
-                    size: 60
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Make each character a word:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("select", { name: "LgSplitEachChar" }),
-                "(e.g. for Chinese, Japanese, etc.)"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Remove spaces:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("select", { name: "LgRemoveSpaces" }),
-                "(e.g. for Chinese, Japanese, etc.)"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Right-To-Left Script:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("select", { name: "LgRightToLeft" }),
-                "(e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
-                "Export Template",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Icon,
-                  {
-                    src: "question-frame",
-                    title: "Help",
-                    className: "click",
-                    onClick: "oewin('info_export_template.htm');"
-                  }
-                ),
-                ":"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkoutsidebmp",
-                  data_info: "Export Template",
-                  name: "LgExportTemplate",
-                  value: changingLang?.LgExportTemplate,
-                  maxlength: 1e3,
-                  size: 60
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  value: "Cancel",
-                  onClick: "{resetDirty(); location.href='edit_languages.php';}"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Change" })
-            ] }) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "smallgray", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Warning:" }),
-            " Changing certain language settings (e.g. RegExp Word Characters, etc.)",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            "may cause partial or complete loss of improved annotated texts!"
-          ] })
-        ]
-      }
-    )
-  ] });
-}
-function DisplayTags({
-  query,
-  currentPage
-}) {
-  const pageSize = 15;
-  const [{ tags: tags3 }] = useData(["tags"]);
-  reactExports.useRef();
-  const navigate = useInternalNavigate();
-  const tagCount = tags3.length;
-  const recno = tags3.length;
-  const { dataOnPage, numPages } = usePager(tags3, currentPage, pageSize);
-  const { checkboxPropsForEntry, onSelectAll, onSelectNone } = useSelection(
-    tags3,
-    "TgID"
-  );
-  const queryRef = reactExports.useRef(null);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Word Tags" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(A, { href: "/edit_tags?new=1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
-      " New Term Tag ..."
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "form1",
-        action: "#",
-        onSubmit: "document.form1.querybutton.click(); return false;",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
-            "Filter ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Reset All",
-                onClick: () => {
-                  navigate(`/edit_tags?page=${1}`);
-                }
-              }
             )
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 4, children: [
-            "Tag Text or Comment:",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "text",
-                name: "query",
-                ref: queryRef,
-                value: query,
-                maxLength: 50,
-                size: 15
-              }
-            ),
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "td",
+        {
+          style: { whiteSpace: "nowrap" },
+          className: "td1 center",
+          colSpan: 2,
+          children: [
+            "Term, Rom., Transl. (Wildc.=*):",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", name: "query", value: "", maxLength: 50, size: 15 }),
             " ",
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "input",
@@ -22261,10 +22359,8 @@ function DisplayTags({
                 type: "button",
                 name: "querybutton",
                 value: "Filter",
-                onClick: () => {
-                  navigate(
-                    `/edit_tags?page=1&query=${queryRef.current?.value || ""}`
-                  );
+                onChange: ({ target: { value: selectedValue } }) => {
+                  updateParams({ query: selectedValue });
                 }
               }
             ),
@@ -22274,384 +22370,726 @@ function DisplayTags({
               {
                 type: "button",
                 value: "Clear",
-                onClick: () => {
-                  navigate(`/edit_tags?page=${1}&query=`);
+                onChange: () => {
+                  navigate(`/edit_words?page=${currentPage}&query=`);
                 }
               }
             )
-          ] }) })
-        ] })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "td",
+        {
+          style: { whiteSpace: "nowrap" },
+          className: "td1 center",
+          colSpan: 2,
+          children: [
+            "Tag #1:",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3, tagKey: "tag1" })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TagAndOr,
+        {
+          defaultValue: tag12,
+          onChange: ({ target: { value } }) => {
+            navigate(`/edit_words?page=${1}&tag12=${value}`);
+          }
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
+        "Tag #2:",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3, tagKey: "tag2" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
+        numTerms,
+        " Terms"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", style: { whiteSpace: "nowrap" }, colSpan: 2, children: [
+        "   ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
+        "Sort Order:",
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            name: "sort",
+            defaultValue: "3",
+            onChange: ({ target: { value } }) => {
+              navigate(`/edit_words?page=1&sort=${value}`);
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "Term A-Z" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "2", children: "Translation A-Z" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "3", children: "Newest first" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "7", children: "Oldest first" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "4", children: "Status" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "5", children: "Score Value (%)" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "6", children: "Word Count Active Texts" })
+            ]
+          }
+        )
+      ] })
+    ] })
+  ] }) });
+}
+function TagAndOr({
+  onChange,
+  defaultValue
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
+    "Tag #1 ..",
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { defaultValue, name: "tag12", onChange, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 0, children: "... OR ..." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 1, children: "... AND ..." })
+    ] }),
+    ".. Tag #2"
+  ] });
+}
+function TermsFooter({
+  numTerms,
+  currentPage,
+  numPages
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
+      numTerms,
+      " Term",
+      numTerms === 1 ? "" : "s"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
+      "   ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
+    ] })
+  ] }) }) });
+}
+function TermLine({
+  word,
+  onSelect,
+  isSelected
+}) {
+  const termID = word.WoID;
+  const sentence = word.WoSentence;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { name: "rec${termID}", className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        name: "marked[]",
+        type: "checkbox",
+        className: "markcheck",
+        checked: isSelected,
+        value: termID,
+        onChange: ({ target: { checked } }) => {
+          onSelect(word.WoID, checked);
+        }
+      }
+    ) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?chg=${termID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-note--pencil", title: "Edit" }) }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Icon,
+        {
+          onClick: () => {
+            if (confirmDelete()) {
+              dataService.deleteTerm(word.WoID);
+            }
+          },
+          src: "minus-button",
+          title: "Delete"
+        }
+      ),
+      " "
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: word.WoText }),
+      " /",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "span",
+        {
+          id: `roman${termID}`,
+          className: "edit_area clickedit",
+          title: "Click to edit...",
+          children: word.WoRomanization
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "span",
+        {
+          id: `trans${termID}`,
+          className: "edit_area clickedit",
+          title: "Click to edit...",
+          children: word.WoTranslation
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "smallgray2" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: sentence !== null ? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status", title: `${sentence}`, alt: "Yes" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "(No valid sentence)", alt: "No" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", title: "Learning", children: "1/1" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "scorered", children: [
+      "0",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Test today!" })
+    ] }) })
+  ] });
+}
+const sortingMethod = (sort) => {
+  switch (sort) {
+    case 7:
+      return (a, b2) => {
+        return a.WoCreated > b2.WoCreated ? 1 : a.WoCreated < b2.WoCreated ? -1 : 0;
+      };
+    case 3:
+      return (a, b2) => {
+        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
+      };
+    case 5:
+      return (a, b2) => {
+        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
+      };
+    case 4:
+      return (a, b2) => {
+        return a.WoStatus > b2.WoStatus ? -1 : a.WoStatus < b2.WoStatus ? 1 : 0;
+      };
+    case 1:
+      return (a, b2) => {
+        return a.WoText > b2.WoText ? -1 : a.WoText < b2.WoText ? 1 : 0;
+      };
+    case 2:
+      return (a, b2) => {
+        return a.WoTranslation > b2.WoTranslation ? 1 : a.WoTranslation < b2.WoTranslation ? -1 : 0;
+      };
+    case 6:
+      return (a, b2) => {
+        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
+      };
+  }
+};
+function Terms({
+  pageNum = null,
+  // filterlang = null,
+  sort = null,
+  status = null,
+  textFilter,
+  tag1,
+  tag12 = 0,
+  tag2
+}) {
+  const [{ words: words2, activeLanguage, settings: settings2, wordtags }] = useData([
+    "words",
+    "activeLanguage",
+    "settings",
+    "wordtags"
+    // 'texttags',
+  ]);
+  const pageSize = settings2["set-terms-per-page"] || -1;
+  const filteredWords = words2.filter((val) => {
+    const allTagsForThisWord = wordtags.filter(({ WtWoID }) => {
+      return WtWoID === val.WoID;
+    });
+    const isRightText = textFilter === null ? true : (
+      // TODO - find if in target text
+      // : Number.parseInt(val.WoText) === textFilter;
+      true
+    );
+    const isRightStatus = status === null ? true : val.WoStatus === status;
+    const isRightLang = activeLanguage === null ? true : val.WoLgID === activeLanguage?.LgID;
+    const isRightTag1 = tag1 === null ? true : allTagsForThisWord.find((val2) => {
+      return val2.WtTgID === tag1;
+    });
+    const isRightTag2 = tag2 === null ? true : allTagsForThisWord.find((val2) => {
+      return val2.WtTgID === tag2;
+    });
+    const compoundTagStatement = tag12 === 0 ? (
+      // need an extra check to avoid sticking when only one tag is specified? I think
+      isRightTag1 || (tag2 === null ? false : isRightTag2)
+    ) : isRightTag1 && isRightTag2;
+    return isRightStatus && isRightText && isRightLang && compoundTagStatement;
+  });
+  const sortedWords = sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
+  const currentPage = pageNum !== null ? pageNum : 1;
+  const { onSelectAll, onSelectNone, selectedValues, onSelect } = useSelection(
+    filteredWords,
+    "WoID"
+  );
+  const { dataOnPage: displayedWords, numPages } = usePager(
+    sortedWords,
+    currentPage,
+    pageSize
+  );
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Header,
+      {
+        title: `My ${activeLanguage?.LgName || ""} Terms (Words and Expressions)`
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "form",
+    activeLanguage !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(A, { href: `/edit_words?new=1&lang=${activeLanguage.LgID}`, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
+      "New ",
+      activeLanguage.LgName,
+      " Term ..."
+    ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
+      " New Term? - Set Language Filter first ..."
+    ] }),
+    sortedWords && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TermsFilterBox,
+        {
+          tag12,
+          activeLanguageId: activeLanguage !== void 0 ? activeLanguage.LgID : null,
+          numTerms: sortedWords.length,
+          currentPage,
+          numPages
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TermMultiActions,
+        {
+          selectedTerms: selectedValues,
+          onSelectAll,
+          onSelectNone
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TermsHeader, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: displayedWords.map((word) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TermLine,
+            {
+              word,
+              onSelect,
+              isSelected: selectedValues.has(word.WoID)
+            }
+          );
+        }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TermsFooter,
+        {
+          numPages,
+          numTerms: sortedWords.length,
+          currentPage
+        }
+      )
+    ] })
+  ] });
+}
+function ChangeTerm({ chgID }) {
+  const [{ words: words2, activeLanguage }] = useData(["words", "activeLanguage"]);
+  const term = words2.find((val) => {
+    return val.WoID === chgID;
+  });
+  const validator = WordsValidator;
+  const refMap = RefMap(validator);
+  const navigator2 = useInternalNavigate();
+  const WoInput = reactExports.useMemo(() => {
+    return buildFormInput(refMap, term);
+  }, [term]);
+  if (!term) {
+    throw new Error("Invalid Change ID!");
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Header,
       {
-        name: "form2",
-        action: "<?php echo _SERVER['PHP_SELF']; ?>",
-        method: "post",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "data", value: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 center", colSpan: 2, children: [
-              "Multi Actions ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "ALL" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  name: "allaction",
-                  onChange: "allActionGo(document.form2, document.form2.allaction,<?php echo recno; ?>);"
-                }
-              )
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                "Marked Tags: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "select",
-                  {
-                    name: "markaction",
-                    id: "markaction",
-                    disabled: true,
-                    onChange: "multiActionGo(document.form2, document.form2.markaction);"
-                  }
-                )
-              ] })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Actions" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Tag Text" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Tag Comment" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Terms With Tag" })
-            ] }),
-            dataOnPage.map((tag) => {
-              return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { name: "rec' . record['TgID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    name: "marked[]",
-                    type: "checkbox",
-                    ...checkboxPropsForEntry(tag),
-                    className: "markcheck",
-                    value: "' . record['TgID'] . '"
-                  }
-                ) }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_tags?chg=${tag.TgID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "document--pencil", title: "Edit" }) }),
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Icon,
-                    {
-                      onClick: () => {
-                        if (confirmDelete()) {
-                          dataService.deleteTagFromTerm(tag.WtTgID);
-                        }
-                      },
-                      src: "minus-button",
-                      title: "Delete"
-                    }
-                  ),
-                  " "
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.TgText }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.TgComment }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tagCount > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?tag1=${tag.TgID}`, children: tagCount }) : "0" })
-              ] });
-            })
+        title: `My ${activeLanguage?.LgName} Terms (Words and Expressions)`
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Edit Term" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { name: "editword", className: "validate", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(WoInput, { type: "hidden", entryKey: "WoID", fixed: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(WoInput, { type: "hidden", entryKey: "WoLgID", fixed: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "WoOldStatus", value: term.WoStatus }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: activeLanguage?.LgName })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Normally only change uppercase/lowercase here!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Term:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              WoInput,
+              {
+                className: "notempty setfocus checkoutsidebmp",
+                type: "text",
+                entryKey: "WoText",
+                maxLength: 250,
+                size: 40,
+                default: true
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
           ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Translation:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 500,
+              name: "WoTranslation",
+              cols: 40,
+              rows: 3,
+              defaultValue: term.WoTranslation
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tags:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(WordTagsSelectDropdown, { wordID: term.WoID }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Romaniz.:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            WoInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              maxLength: 100,
+              size: 40,
+              entryKey: "WoRomanization",
+              default: true
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
+            "Sentence",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+            "Term in ",
+            "{...}",
+            ":"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 1e3,
+              name: "WoSentence",
+              cols: 40,
+              rows: 3,
+              defaultValue: term.WoSentence
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Status:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: term.WoStatus })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+          " ",
+          "   ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Cancel",
+              onClick: () => {
+                navigator2(`/edit_words#rec${chgID}`);
+              }
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Change" })
+        ] }) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: "exsent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "span",
+      {
+        className: "click",
+        onClick: () => {
+          do_ajax_show_sentences(term.WoLgID, term.WoTextLC, term.WoSentence);
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-notes-stack", title: "Show Sentences" }),
+          " Show Sentences"
         ]
       }
-    ),
-    numPages > 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form3", action: "#", children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", style: { whiteSpace: "nowrap" }, children: [
-        "Tag",
-        recno == 1 ? "" : "s"
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", style: { whiteSpace: "nowrap" } })
-    ] }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
+    ) })
   ] });
 }
-function NewTag() {
-  const preValidateMap = {
-    TgText: identityMap,
-    TgComment: emptyToNullMap
-  };
-  const validator = TagsValidator;
-  const refMap = RefMap(validator);
-  const navigator2 = useInternalNavigate();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Term Tags" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "New Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "newtag",
-        className: "validate",
-        action: "<?php echo $_SERVER['PHP_SELF']; ?>",
-        method: "post",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  className: "notempty setfocus noblanksnocomma checkoutsidebmp",
-                  type: "text",
-                  name: "TgText",
-                  ref: refMap.TgText,
-                  maxlength: 20,
-                  size: 20
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Comment:" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "textarea",
-              {
-                className: "textarea-noreturn checklength checkoutsidebmp",
-                data_maxlength: 200,
-                ref: refMap.TgComment,
-                name: "TgComment",
-                cols: 40,
-                rows: 3
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Cancel",
-                onClick: "{resetDirty(); location.href='edit_tags.php';}"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                name: "op",
-                value: "Save",
-                onClick: () => {
-                  CheckAndSubmit(
-                    refMap,
-                    preValidateMap,
-                    validator,
-                    (value) => {
-                      dataService.addTag(value);
-                      navigator2("/edit_tags");
-                    },
-                    "TgID"
-                  );
-                }
-              }
-            )
-          ] }) })
-        ] })
-      }
-    )
-  ] });
-}
-function EditTag({ chgId }) {
-  const [{ tags: tags3 }] = useData(["tags"]);
-  const changingTag = tags3.find(({ TgID }) => {
-    return TgID === chgId;
+function AddTerm({ langId }) {
+  const [{ languages: languages2 }] = useData(["languages"]);
+  const language = languages2.find((val) => {
+    return val.LgID === langId;
   });
-  const preValidateMap = {
-    TgText: identityMap,
-    TgComment: emptyToNullMap
-  };
-  const validator = TagsValidator;
+  if (!language) {
+    throw new Error("Invalid Language ID!");
+  }
+  const validator = WordsValidatorNoId;
   const refMap = RefMap(validator);
   const navigator2 = useInternalNavigate();
+  const WoInput = buildFormInput(refMap, { WoLgID: langId });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Term Tags" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Edit Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "newtag",
-        className: "validate",
-        method: "post",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  className: "notempty setfocus noblanksnocomma checkoutsidebmp",
-                  type: "text",
-                  name: "TgText",
-                  defaultValue: changingTag?.TgText,
-                  ref: refMap.TgText,
-                  maxlength: 20,
-                  size: 20
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Comment:" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "textarea",
-              {
-                className: "textarea-noreturn checklength checkoutsidebmp",
-                data_maxlength: 200,
-                ref: refMap.TgComment,
-                name: "TgComment",
-                cols: 40,
-                defaultValue: changingTag?.TgComment,
-                rows: 3
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: `TODO` }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "New Term" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { name: "newword", className: "validate", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(WoInput, { type: "hidden", entryKey: "WoLgID", fixed: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: language.LgName })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Normally only change uppercase/lowercase here!", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Term:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              WoInput,
               {
-                type: "button",
-                value: "Cancel",
-                onClick: "{resetDirty(); location.href='edit_tags.php';}"
+                className: "notempty setfocus checkoutsidebmp",
+                type: "text",
+                entryKey: "WoText",
+                maxLength: 250,
+                size: 40
               }
             ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                name: "op",
-                value: "Save",
-                onClick: () => {
-                  CheckAndSubmit(
-                    refMap,
-                    preValidateMap,
-                    validator,
-                    (value) => {
-                      dataService.editTag(changingTag?.TgID, value);
-                      navigator2("/edit_tags");
-                    },
-                    "TgID"
-                  );
-                }
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Translation:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 500,
+              name: "WoTranslation",
+              cols: 40,
+              rows: 3,
+              ref: refMap.WoTranslation
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tags:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Romaniz.:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            WoInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              maxLength: 100,
+              size: 40,
+              entryKey: "WoRomanization"
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
+            "Sentence",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+            "Term in ",
+            "{...}",
+            ":"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "textarea-noreturn checklength checkoutsidebmp",
+              maxLength: 1e3,
+              name: "WoSentence",
+              cols: 40,
+              rows: 3,
+              ref: refMap.WoSentence
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Status:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(StatusRadioButtons, { termStatus: "1", refMap })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+          " ",
+          "   ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Cancel",
+              onClick: () => {
+                navigator2(`/edit_words`);
               }
-            )
-          ] }) })
-        ] })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Change" })
+        ] }) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: "exsent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "span",
+      {
+        className: "click",
+        onClick: () => {
+          do_ajax_show_sentences(
+            refMap.WoLgID.current.value,
+            refMap.WoTextLC.current.value,
+            refMap.WoSentence.current.value
+          );
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-notes-stack", title: "Show Sentences" }),
+          " Show Sentences"
+        ]
       }
-    )
+    ) })
   ] });
 }
-function DisplayTextTags({ query }) {
-  const [{ tags2: tags22, archtexttags: archtexttags2, texttags: texttags2 }] = useData([
+function TermMultiActions({
+  selectedTerms,
+  onSelectAll,
+  onSelectNone
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
+      "Multi Actions",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+        "Marked Texts",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "select",
+          {
+            name: "markaction",
+            id: "markaction",
+            onChange: () => {
+            },
+            disabled: selectedTerms.size === 0,
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetAllWordsActionsSelectOptions, {})
+          }
+        )
+      ] })
+    ] })
+  ] }) }) }) });
+}
+function GetAllWordsActionsSelectOptions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Choose...]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    "// TODO actions",
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "testall", children: "Test ALL Terms" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "spl1all", children: "Increase Status by 1 [+1]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "smi1all", children: "Reduce Status by 1 [-1]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "todayall", children: "Set Status Date to Today" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "lowerall", children: "Set ALL Terms to Lowercase" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "capall", children: "Capitalize ALL Terms" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delsentall", children: "Delete Sentences of ALL Terms" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "addtagall", children: "Add Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "deltagall", children: "Remove Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall", children: "Export ALL Terms (Anki)" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall2", children: "Export ALL Terms (TSV)" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall3", children: "Export ALL Terms (Flexible)" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delall", children: "Delete ALL Terms" })
+  ] });
+}
+function DisplayTextTags({
+  query,
+  page = 1
+}) {
+  const [{ tags2: tags22, archtexttags: archtexttags2, texttags: texttags2, settings: settings2 }] = useData([
     "tags2",
     "archtexttags",
-    "texttags"
+    "texttags",
+    "settings"
   ]);
   const navigate = useInternalNavigate();
-  const { onSelectAll, onSelectNone, checkboxPropsForEntry } = useSelection(
-    tags22,
-    "T2ID"
-  );
+  const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } = useSelection(tags22, "T2ID");
+  const pageSize = settings2["set-tags-per-page"] || 1;
+  const recno = tags22.length;
+  const { dataOnPage, numPages } = usePager(tags22, page, pageSize);
+  console.log(page, numPages, pageSize);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Edit Text Tags" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(A, { href: "/edit_texttags?new=1", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New", alt: "New" }),
       " New Text Tag ..."
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "form1",
-        action: "#",
-        onSubmit: "document.form1.querybutton.click(); return false;",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
-            "Filter ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Reset All",
-                onClick: () => {
-                  navigate(`/edit_texttags?page=${1}&query=`);
-                }
-              }
-            )
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 4, children: [
-            "Tag Text or Comment:",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "text",
-                name: "query",
-                value: query,
-                maxLength: 50,
-                size: 15
-              }
-            ),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                name: "querybutton",
-                value: "Filter",
-                onClick: () => {
-                  navigate(`/edit_texttags?page=${1}&query=${query}`);
-                }
-              }
-            ),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Clear",
-                onClick: () => {
-                  navigate(`/edit_texttags?page=${1}&query=`);
-                }
-              }
-            )
-          ] }) })
-        ] })
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
+        "Filter ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Reset All",
+            onClick: () => {
+            }
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 4, children: [
+        "Tag Text or Comment:",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            name: "query",
+            defaultValue: query,
+            maxLength: 50,
+            size: 15
+          }
+        ),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            name: "querybutton",
+            value: "Filter",
+            onClick: () => {
+              navigate(`/edit_texttags?page=${1}&query=${query}`);
+            }
+          }
+        ),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Clear",
+            onClick: () => {
+              navigate(`/edit_texttags?page=${1}&query=`);
+            }
+          }
+        )
+      ] }) })
+    ] }) }),
+    recno === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "No tags found." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "form",
       {
         name: "form2",
@@ -22666,32 +23104,23 @@ function DisplayTextTags({ query }) {
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "ALL" }),
+              " ",
+              dataOnPage.length,
+              " ",
+              dataOnPage.length === 1 ? "Tag" : "Tags",
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "select",
                 {
                   name: "allaction",
-                  onChange: "allActionGo(document.form2, document.form2.allaction,<?php echo $recno; ?>);"
+                  onChange: "allActionGo(document.form2, document.form2.allaction,<?php echo $recno; ?>);",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetAllTagsActionsSelectOptions, {})
                 }
               )
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "button",
-                    value: "Mark All",
-                    onClick: onSelectAll
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "button",
-                    value: "Mark None",
-                    onClick: onSelectNone
-                  }
-                )
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
                 "Marked Tags: ",
@@ -22700,8 +23129,17 @@ function DisplayTextTags({ query }) {
                   {
                     name: "markaction",
                     id: "markaction",
-                    disabled: true,
-                    onChange: "multiActionGo(document.form2, document.form2.markaction);"
+                    disabled: selectedValues.size === 0,
+                    onChange: (val) => {
+                      multiActionGo(
+                        // TODO
+                        () => {
+                        },
+                        // TODO ref
+                        val
+                      );
+                    },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetMultipleTagsActionsSelectOptions, {})
                   }
                 )
               ] })
@@ -22754,7 +23192,7 @@ function DisplayTextTags({ query }) {
                         {
                           onClick: () => {
                             if (confirmDelete()) {
-                              dataService.deleteTagFromText(tag.T2ID);
+                              dataService.deleteTextTag(tag.T2ID);
                             }
                           },
                           src: "minus-button",
@@ -22767,24 +23205,15 @@ function DisplayTextTags({ query }) {
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.T2Text }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.T2Comment }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: c2 > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  A,
-                  {
-                    children: c2
-                  }
-                ) : "0" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: ca2 > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  A,
-                  {
-                    children: ca2
-                  }
-                ) : "0" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: c2 > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_archivedtexts?tag1=${tag.T2ID}`, children: c2 }) : "0" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: ca2 > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_archivedtexts?tag1=${tag.T2ID}`, children: ca2 }) : "0" })
               ] });
             })
           ] })
         ]
       }
-    )
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage: page, numPages })
   ] });
 }
 function NewTextTag() {
@@ -22794,14 +23223,6 @@ function NewTextTag() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Text Tags" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "New Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "form",
       {
@@ -22814,18 +23235,17 @@ function NewTextTag() {
             /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
+                FormInput,
                 {
                   className: "notempty setfocus noblanksnocomma checkoutsidebmp",
                   type: "text",
-                  name: "T2Text",
-                  ref: refMap.T2Text,
-                  data_info: "Tag",
-                  maxlength: 20,
+                  entryKey: "T2Text",
+                  refMap,
+                  maxLength: 20,
                   size: 20
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -22834,8 +23254,7 @@ function NewTextTag() {
               "textarea",
               {
                 className: "textarea-noreturn checklength checkoutsidebmp",
-                data_maxlength: 200,
-                data_info: "Comment",
+                maxLength: 200,
                 name: "T2Comment",
                 ref: refMap.T2Comment,
                 cols: 40,
@@ -22849,7 +23268,9 @@ function NewTextTag() {
               {
                 type: "button",
                 value: "Cancel",
-                onClick: "{resetDirty(); location.href='edit_texttags.php';}"
+                onClick: () => {
+                  navigator2("/edit_texttags");
+                }
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -22859,7 +23280,6 @@ function NewTextTag() {
                 name: "op",
                 value: "Save",
                 onClick: () => {
-                  console.log("SAVING");
                   CheckAndSubmit(
                     refMap,
                     {},
@@ -22884,20 +23304,16 @@ function EditTextTag({ chgID }) {
   const changingTag = tags22.find(({ T2ID }) => {
     return chgID === T2ID;
   });
+  if (!changingTag) {
+    throw new Error("invalid change ID");
+  }
   const validator = Tags2Validator;
   const refMap = RefMap(validator);
   const navigator2 = useInternalNavigate();
+  const TgInput = buildFormInput(refMap, changingTag);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Text Tags" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Edit Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "form",
       {
@@ -22906,25 +23322,23 @@ function EditTextTag({ chgID }) {
         action: "<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>",
         method: "post",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "T2ID", value: changingTag?.T2ID }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TgInput, { type: "hidden", entryKey: "T2ID", fixed: true }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
+                  TgInput,
                   {
-                    data_info: "Tag",
-                    class: "notempty setfocus noblanksnocomma checkoutsidebmp",
+                    className: "notempty setfocus noblanksnocomma checkoutsidebmp",
                     type: "text",
-                    name: "T2Text",
-                    ref: refMap.T2Text,
-                    value: changingTag?.T2Text,
-                    maxlength: 20,
+                    entryKey: "T2Text",
+                    default: true,
+                    maxLength: 20,
                     size: 20
                   }
                 ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -22933,14 +23347,12 @@ function EditTextTag({ chgID }) {
                 "textarea",
                 {
                   className: "textarea-noreturn checklength checkoutsidebmp",
-                  data_maxlength: 200,
-                  data_info: "Comment",
+                  maxLength: 200,
                   name: "T2Comment",
                   ref: refMap.T2Comment,
-                  value: changingTag?.T2Comment,
                   cols: 40,
                   rows: 3,
-                  children: changingTag?.T2Comment
+                  defaultValue: changingTag.T2Comment
                 }
               ) })
             ] }),
@@ -22950,7 +23362,9 @@ function EditTextTag({ chgID }) {
                 {
                   type: "button",
                   value: "Cancel",
-                  onClick: "{resetDirty(); location.href='edit_texttags.php#rec<?php echo $_REQUEST['chg']; ?>'};"
+                  onClick: () => {
+                    navigator2(`/edit_texttags.php#rec${chgID}`);
+                  }
                 }
               ),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -22960,7 +23374,6 @@ function EditTextTag({ chgID }) {
                   name: "op",
                   value: "Change",
                   onClick: () => {
-                    console.log("SAVING");
                     CheckAndSubmit(
                       refMap,
                       {},
@@ -22977,6 +23390,2839 @@ function EditTextTag({ chgID }) {
             ] }) })
           ] })
         ]
+      }
+    )
+  ] });
+}
+function GetMultipleTagsActionsSelectOptions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Choose...]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "del", children: "Delete Marked Tags" })
+  ] });
+}
+function GetAllTagsActionsSelectOptions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Choose...]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delall", children: "Delete ALL Tags" })
+  ] });
+}
+function GetMultipleArchivedTextActionsSelectOptions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Choose...]" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "addtag", children: "Add Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "deltag", children: "Remove Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "unarch", children: "Unarchive Marked Texts" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "del", children: "Delete Marked Texts" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delall", children: "Delete ALL Tags" })
+  ] });
+}
+function resetAll(refMap) {
+  window.alert("TODO Function not implemented.");
+}
+function EditArchivedTexts({
+  query,
+  currentPage
+}) {
+  const [{ tags: tags3, languages: languages2, activeLanguage, numArchivedTexts, archivedtexts: archivedtexts2 }] = useData([
+    "languages",
+    "activeLanguage",
+    "numArchivedTexts",
+    "archivedtexts",
+    "tags"
+  ]);
+  const pageSize = 15;
+  const [filterLanguageID, setFilterLanguage] = reactExports.useState(
+    activeLanguage ? activeLanguage.LgID : null
+  );
+  const filteredTexts = filterLanguageID !== null ? archivedtexts2.filter(({ AtLgID }) => {
+    return AtLgID === filterLanguageID;
+  }) : archivedtexts2;
+  const { dataOnPage, numPages } = usePager(
+    filteredTexts,
+    currentPage,
+    pageSize
+  );
+  const recno = numArchivedTexts;
+  const navigate = useInternalNavigate();
+  const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } = useSelection(archivedtexts2, "AtID");
+  const queryRef = reactExports.useRef();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: `My ${activeLanguage?.LgName || ""} Text Archive` }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
+        "Filter ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Reset All",
+            onClick: () => resetAll()
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+          "Language:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LanguageDropdown,
+            {
+              header: "[Filter off]",
+              onChange: (val) => {
+                if (val === -1) {
+                  dataService.setActiveLanguage(null);
+                } else {
+                  dataService.setActiveLanguage(val);
+                }
+              }
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+          "Text Title (Wildc.=*):",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "text",
+              name: "query",
+              ref: queryRef,
+              value: query,
+              maxLength: 50,
+              size: 15
+            }
+          ),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              name: "querybutton",
+              value: "Filter",
+              onClick: () => navigate(
+                `/edit_archivedtexts?page=1&query=${queryRef.current?.value || ""}`
+              )
+            }
+          ),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Clear",
+              onClick: () => navigate(`/edit_archivedtexts`)
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "td",
+          {
+            className: "td1 center",
+            colSpan: 2,
+            style: { whiteSpace: "nowrap" },
+            children: [
+              "Tag #1:",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3, tagKey: "tag1" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          TagAndOr,
+          {
+            onChange: ({ target: { value: val } }) => navigate(`/edit_archivedtexts?tag12=${val}`)
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
+          "Tag #2:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3, tagKey: "tag2" })
+        ] })
+      ] })
+    ] }) }),
+    recno === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "No archived texts found." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { name: "form2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "data", value: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
+          "Multi Actions ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+            "Marked Texts: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "select",
+              {
+                name: "markaction",
+                id: "markaction",
+                disabled: selectedValues.size === 0,
+                onChange: (val) => {
+                  multiActionGo(
+                    () => {
+                    },
+                    // TODO ref
+                    val
+                  );
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetMultipleArchivedTextActionsSelectOptions, {})
+              }
+            )
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", cellSpacing: 0, cellPadding: 5, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Actions" }),
+          filterLanguageID === null && /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Lang." }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
+            "Title [Tags] / Audio: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "speaker-volume", title: "With Audio" }),
+            ", Src.Link: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Source Link available" }),
+            ", Ann.Text: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "tick", title: "Annotated Text available" })
+          ] })
+        ] }),
+        dataOnPage.map((text) => {
+          const languageForLine = languages2.find(
+            (lang) => lang.LgID === text.AtLgID
+          );
+          return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { name: "rec' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                name: "marked[]",
+                className: "markcheck",
+                type: "checkbox",
+                ...checkboxPropsForEntry(text),
+                value: "' . $record['AtID'] . '"
+              }
+            ) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "inbox-upload", title: "Unarchive" }) }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "document--pencil", title: "Edit" }) }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: "click",
+                  onClick: () => {
+                    if (confirmDelete()) {
+                      dataService.deleteArchivedText(text.AtID);
+                    }
+                  },
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "minus-button", title: "Delete" })
+                }
+              ),
+              " "
+            ] }),
+            filterLanguageID === null && /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: languageForLine?.LgName }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+              text.AtTitle,
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "smallgray2" }),
+              text.AtAudioURI && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "speaker-volume", title: "With Audio" }),
+              text.AtSourceURI && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "a",
+                {
+                  href: "' . $record['AtSourceURI'] . '",
+                  target: "_blank",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Link to Text Source" })
+                }
+              ),
+              text.AtAnnotatedText && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "tick", title: "Annotated Text available" })
+            ] })
+          ] }) });
+        })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "button",
+        value: "Active Texts",
+        onClick: () => navigate(`/edit_texts?query=&page=1`)
+      }
+    ) })
+  ] });
+}
+var lib = { exports: {} };
+var Modal$2 = {};
+var propTypes = { exports: {} };
+var ReactPropTypesSecret$1 = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+var ReactPropTypesSecret_1 = ReactPropTypesSecret$1;
+var ReactPropTypesSecret = ReactPropTypesSecret_1;
+function emptyFunction() {
+}
+function emptyFunctionWithReset() {
+}
+emptyFunctionWithReset.resetWarningCache = emptyFunction;
+var factoryWithThrowingShims = function() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      return;
+    }
+    var err = new Error(
+      "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
+    );
+    err.name = "Invariant Violation";
+    throw err;
+  }
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  }
+  var ReactPropTypes = {
+    array: shim,
+    bigint: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    elementType: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim,
+    exact: getShim,
+    checkPropTypes: emptyFunctionWithReset,
+    resetWarningCache: emptyFunction
+  };
+  ReactPropTypes.PropTypes = ReactPropTypes;
+  return ReactPropTypes;
+};
+{
+  propTypes.exports = factoryWithThrowingShims();
+}
+var propTypesExports = propTypes.exports;
+const PropTypes = /* @__PURE__ */ getDefaultExportFromCjs(propTypesExports);
+var ModalPortal = { exports: {} };
+var focusManager = {};
+var tabbable$1 = { exports: {} };
+(function(module, exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = findTabbableDescendants;
+  /*!
+   * Adapted from jQuery UI core
+   *
+   * http://jqueryui.com
+   *
+   * Copyright 2014 jQuery Foundation and other contributors
+   * Released under the MIT license.
+   * http://jquery.org/license
+   *
+   * http://api.jqueryui.com/category/ui-core/
+   */
+  var DISPLAY_NONE = "none";
+  var DISPLAY_CONTENTS = "contents";
+  var tabbableNode = /input|select|textarea|button|object|iframe/;
+  function isNotOverflowing(element, style) {
+    return style.getPropertyValue("overflow") !== "visible" || // if 'overflow: visible' set, check if there is actually any overflow
+    element.scrollWidth <= 0 && element.scrollHeight <= 0;
+  }
+  function hidesContents(element) {
+    var zeroSize = element.offsetWidth <= 0 && element.offsetHeight <= 0;
+    if (zeroSize && !element.innerHTML)
+      return true;
+    try {
+      var style = window.getComputedStyle(element);
+      var displayValue = style.getPropertyValue("display");
+      return zeroSize ? displayValue !== DISPLAY_CONTENTS && isNotOverflowing(element, style) : displayValue === DISPLAY_NONE;
+    } catch (exception) {
+      console.warn("Failed to inspect element style");
+      return false;
+    }
+  }
+  function visible(element) {
+    var parentElement = element;
+    var rootNode = element.getRootNode && element.getRootNode();
+    while (parentElement) {
+      if (parentElement === document.body)
+        break;
+      if (rootNode && parentElement === rootNode)
+        parentElement = rootNode.host.parentNode;
+      if (hidesContents(parentElement))
+        return false;
+      parentElement = parentElement.parentNode;
+    }
+    return true;
+  }
+  function focusable(element, isTabIndexNotNaN) {
+    var nodeName = element.nodeName.toLowerCase();
+    var res = tabbableNode.test(nodeName) && !element.disabled || (nodeName === "a" ? element.href || isTabIndexNotNaN : isTabIndexNotNaN);
+    return res && visible(element);
+  }
+  function tabbable3(element) {
+    var tabIndex = element.getAttribute("tabindex");
+    if (tabIndex === null)
+      tabIndex = void 0;
+    var isTabIndexNaN = isNaN(tabIndex);
+    return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
+  }
+  function findTabbableDescendants(element) {
+    var descendants = [].slice.call(element.querySelectorAll("*"), 0).reduce(function(finished, el2) {
+      return finished.concat(!el2.shadowRoot ? [el2] : findTabbableDescendants(el2.shadowRoot));
+    }, []);
+    return descendants.filter(tabbable3);
+  }
+  module.exports = exports["default"];
+})(tabbable$1, tabbable$1.exports);
+var tabbableExports = tabbable$1.exports;
+Object.defineProperty(focusManager, "__esModule", {
+  value: true
+});
+focusManager.resetState = resetState$4;
+focusManager.log = log$4;
+focusManager.handleBlur = handleBlur;
+focusManager.handleFocus = handleFocus;
+focusManager.markForFocusLater = markForFocusLater;
+focusManager.returnFocus = returnFocus;
+focusManager.popWithoutFocus = popWithoutFocus;
+focusManager.setupScopedFocus = setupScopedFocus;
+focusManager.teardownScopedFocus = teardownScopedFocus;
+var _tabbable = tabbableExports;
+var _tabbable2 = _interopRequireDefault$4(_tabbable);
+function _interopRequireDefault$4(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var focusLaterElements = [];
+var modalElement = null;
+var needToFocus = false;
+function resetState$4() {
+  focusLaterElements = [];
+}
+function log$4() {
+}
+function handleBlur() {
+  needToFocus = true;
+}
+function handleFocus() {
+  if (needToFocus) {
+    needToFocus = false;
+    if (!modalElement) {
+      return;
+    }
+    setTimeout(function() {
+      if (modalElement.contains(document.activeElement)) {
+        return;
+      }
+      var el2 = (0, _tabbable2.default)(modalElement)[0] || modalElement;
+      el2.focus();
+    }, 0);
+  }
+}
+function markForFocusLater() {
+  focusLaterElements.push(document.activeElement);
+}
+function returnFocus() {
+  var preventScroll = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : false;
+  var toFocus = null;
+  try {
+    if (focusLaterElements.length !== 0) {
+      toFocus = focusLaterElements.pop();
+      toFocus.focus({ preventScroll });
+    }
+    return;
+  } catch (e2) {
+    console.warn(["You tried to return focus to", toFocus, "but it is not in the DOM anymore"].join(" "));
+  }
+}
+function popWithoutFocus() {
+  focusLaterElements.length > 0 && focusLaterElements.pop();
+}
+function setupScopedFocus(element) {
+  modalElement = element;
+  if (window.addEventListener) {
+    window.addEventListener("blur", handleBlur, false);
+    document.addEventListener("focus", handleFocus, true);
+  } else {
+    window.attachEvent("onBlur", handleBlur);
+    document.attachEvent("onFocus", handleFocus);
+  }
+}
+function teardownScopedFocus() {
+  modalElement = null;
+  if (window.addEventListener) {
+    window.removeEventListener("blur", handleBlur);
+    document.removeEventListener("focus", handleFocus);
+  } else {
+    window.detachEvent("onBlur", handleBlur);
+    document.detachEvent("onFocus", handleFocus);
+  }
+}
+var scopeTab = { exports: {} };
+(function(module, exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = scopeTab2;
+  var _tabbable3 = tabbableExports;
+  var _tabbable22 = _interopRequireDefault2(_tabbable3);
+  function _interopRequireDefault2(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+  }
+  function getActiveElement() {
+    var el2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : document;
+    return el2.activeElement.shadowRoot ? getActiveElement(el2.activeElement.shadowRoot) : el2.activeElement;
+  }
+  function scopeTab2(node, event) {
+    var tabbable3 = (0, _tabbable22.default)(node);
+    if (!tabbable3.length) {
+      event.preventDefault();
+      return;
+    }
+    var target = void 0;
+    var shiftKey = event.shiftKey;
+    var head = tabbable3[0];
+    var tail = tabbable3[tabbable3.length - 1];
+    var activeElement2 = getActiveElement();
+    if (node === activeElement2) {
+      if (!shiftKey)
+        return;
+      target = tail;
+    }
+    if (tail === activeElement2 && !shiftKey) {
+      target = head;
+    }
+    if (head === activeElement2 && shiftKey) {
+      target = tail;
+    }
+    if (target) {
+      event.preventDefault();
+      target.focus();
+      return;
+    }
+    var checkSafari = /(\bChrome\b|\bSafari\b)\//.exec(navigator.userAgent);
+    var isSafariDesktop = checkSafari != null && checkSafari[1] != "Chrome" && /\biPod\b|\biPad\b/g.exec(navigator.userAgent) == null;
+    if (!isSafariDesktop)
+      return;
+    var x2 = tabbable3.indexOf(activeElement2);
+    if (x2 > -1) {
+      x2 += shiftKey ? -1 : 1;
+    }
+    target = tabbable3[x2];
+    if (typeof target === "undefined") {
+      event.preventDefault();
+      target = shiftKey ? tail : head;
+      target.focus();
+      return;
+    }
+    event.preventDefault();
+    target.focus();
+  }
+  module.exports = exports["default"];
+})(scopeTab, scopeTab.exports);
+var scopeTabExports = scopeTab.exports;
+var ariaAppHider$1 = {};
+var warning = function() {
+};
+var warning_1 = warning;
+var safeHTMLElement = {};
+var exenv = { exports: {} };
+/*!
+  Copyright (c) 2015 Jed Watson.
+  Based on code that is Copyright 2013-2015, Facebook, Inc.
+  All rights reserved.
+*/
+(function(module) {
+  (function() {
+    var canUseDOM = !!(typeof window !== "undefined" && window.document && window.document.createElement);
+    var ExecutionEnvironment = {
+      canUseDOM,
+      canUseWorkers: typeof Worker !== "undefined",
+      canUseEventListeners: canUseDOM && !!(window.addEventListener || window.attachEvent),
+      canUseViewport: canUseDOM && !!window.screen
+    };
+    if (module.exports) {
+      module.exports = ExecutionEnvironment;
+    } else {
+      window.ExecutionEnvironment = ExecutionEnvironment;
+    }
+  })();
+})(exenv);
+var exenvExports = exenv.exports;
+Object.defineProperty(safeHTMLElement, "__esModule", {
+  value: true
+});
+safeHTMLElement.canUseDOM = safeHTMLElement.SafeNodeList = safeHTMLElement.SafeHTMLCollection = void 0;
+var _exenv = exenvExports;
+var _exenv2 = _interopRequireDefault$3(_exenv);
+function _interopRequireDefault$3(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var EE = _exenv2.default;
+var SafeHTMLElement = EE.canUseDOM ? window.HTMLElement : {};
+safeHTMLElement.SafeHTMLCollection = EE.canUseDOM ? window.HTMLCollection : {};
+safeHTMLElement.SafeNodeList = EE.canUseDOM ? window.NodeList : {};
+safeHTMLElement.canUseDOM = EE.canUseDOM;
+safeHTMLElement.default = SafeHTMLElement;
+Object.defineProperty(ariaAppHider$1, "__esModule", {
+  value: true
+});
+ariaAppHider$1.resetState = resetState$3;
+ariaAppHider$1.log = log$3;
+ariaAppHider$1.assertNodeList = assertNodeList;
+ariaAppHider$1.setElement = setElement;
+ariaAppHider$1.validateElement = validateElement;
+ariaAppHider$1.hide = hide;
+ariaAppHider$1.show = show;
+ariaAppHider$1.documentNotReadyOrSSRTesting = documentNotReadyOrSSRTesting;
+var _warning = warning_1;
+var _warning2 = _interopRequireDefault$2(_warning);
+var _safeHTMLElement$1 = safeHTMLElement;
+function _interopRequireDefault$2(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var globalElement = null;
+function resetState$3() {
+  if (globalElement) {
+    if (globalElement.removeAttribute) {
+      globalElement.removeAttribute("aria-hidden");
+    } else if (globalElement.length != null) {
+      globalElement.forEach(function(element) {
+        return element.removeAttribute("aria-hidden");
+      });
+    } else {
+      document.querySelectorAll(globalElement).forEach(function(element) {
+        return element.removeAttribute("aria-hidden");
+      });
+    }
+  }
+  globalElement = null;
+}
+function log$3() {
+}
+function assertNodeList(nodeList, selector) {
+  if (!nodeList || !nodeList.length) {
+    throw new Error("react-modal: No elements were found for selector " + selector + ".");
+  }
+}
+function setElement(element) {
+  var useElement = element;
+  if (typeof useElement === "string" && _safeHTMLElement$1.canUseDOM) {
+    var el2 = document.querySelectorAll(useElement);
+    assertNodeList(el2, useElement);
+    useElement = el2;
+  }
+  globalElement = useElement || globalElement;
+  return globalElement;
+}
+function validateElement(appElement) {
+  var el2 = appElement || globalElement;
+  if (el2) {
+    return Array.isArray(el2) || el2 instanceof HTMLCollection || el2 instanceof NodeList ? el2 : [el2];
+  } else {
+    (0, _warning2.default)(false, ["react-modal: App element is not defined.", "Please use `Modal.setAppElement(el)` or set `appElement={el}`.", "This is needed so screen readers don't see main content", "when modal is opened. It is not recommended, but you can opt-out", "by setting `ariaHideApp={false}`."].join(" "));
+    return [];
+  }
+}
+function hide(appElement) {
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = void 0;
+  try {
+    for (var _iterator = validateElement(appElement)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var el2 = _step.value;
+      el2.setAttribute("aria-hidden", "true");
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+}
+function show(appElement) {
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = void 0;
+  try {
+    for (var _iterator2 = validateElement(appElement)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var el2 = _step2.value;
+      el2.removeAttribute("aria-hidden");
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+}
+function documentNotReadyOrSSRTesting() {
+  globalElement = null;
+}
+var classList = {};
+Object.defineProperty(classList, "__esModule", {
+  value: true
+});
+classList.resetState = resetState$2;
+classList.log = log$2;
+var htmlClassList = {};
+var docBodyClassList = {};
+function removeClass(at, cls) {
+  at.classList.remove(cls);
+}
+function resetState$2() {
+  var htmlElement = document.getElementsByTagName("html")[0];
+  for (var cls in htmlClassList) {
+    removeClass(htmlElement, htmlClassList[cls]);
+  }
+  var body = document.body;
+  for (var _cls in docBodyClassList) {
+    removeClass(body, docBodyClassList[_cls]);
+  }
+  htmlClassList = {};
+  docBodyClassList = {};
+}
+function log$2() {
+}
+var incrementReference = function incrementReference2(poll, className) {
+  if (!poll[className]) {
+    poll[className] = 0;
+  }
+  poll[className] += 1;
+  return className;
+};
+var decrementReference = function decrementReference2(poll, className) {
+  if (poll[className]) {
+    poll[className] -= 1;
+  }
+  return className;
+};
+var trackClass = function trackClass2(classListRef, poll, classes) {
+  classes.forEach(function(className) {
+    incrementReference(poll, className);
+    classListRef.add(className);
+  });
+};
+var untrackClass = function untrackClass2(classListRef, poll, classes) {
+  classes.forEach(function(className) {
+    decrementReference(poll, className);
+    poll[className] === 0 && classListRef.remove(className);
+  });
+};
+classList.add = function add(element, classString) {
+  return trackClass(element.classList, element.nodeName.toLowerCase() == "html" ? htmlClassList : docBodyClassList, classString.split(" "));
+};
+classList.remove = function remove(element, classString) {
+  return untrackClass(element.classList, element.nodeName.toLowerCase() == "html" ? htmlClassList : docBodyClassList, classString.split(" "));
+};
+var portalOpenInstances$1 = {};
+Object.defineProperty(portalOpenInstances$1, "__esModule", {
+  value: true
+});
+portalOpenInstances$1.log = log$1;
+portalOpenInstances$1.resetState = resetState$1;
+function _classCallCheck$2(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+var PortalOpenInstances = function PortalOpenInstances2() {
+  var _this = this;
+  _classCallCheck$2(this, PortalOpenInstances2);
+  this.register = function(openInstance) {
+    if (_this.openInstances.indexOf(openInstance) !== -1) {
+      return;
+    }
+    _this.openInstances.push(openInstance);
+    _this.emit("register");
+  };
+  this.deregister = function(openInstance) {
+    var index2 = _this.openInstances.indexOf(openInstance);
+    if (index2 === -1) {
+      return;
+    }
+    _this.openInstances.splice(index2, 1);
+    _this.emit("deregister");
+  };
+  this.subscribe = function(callback) {
+    _this.subscribers.push(callback);
+  };
+  this.emit = function(eventType) {
+    _this.subscribers.forEach(function(subscriber) {
+      return subscriber(
+        eventType,
+        // shallow copy to avoid accidental mutation
+        _this.openInstances.slice()
+      );
+    });
+  };
+  this.openInstances = [];
+  this.subscribers = [];
+};
+var portalOpenInstances = new PortalOpenInstances();
+function log$1() {
+  console.log("portalOpenInstances ----------");
+  console.log(portalOpenInstances.openInstances.length);
+  portalOpenInstances.openInstances.forEach(function(p2) {
+    return console.log(p2);
+  });
+  console.log("end portalOpenInstances ----------");
+}
+function resetState$1() {
+  portalOpenInstances = new PortalOpenInstances();
+}
+portalOpenInstances$1.default = portalOpenInstances;
+var bodyTrap$1 = {};
+Object.defineProperty(bodyTrap$1, "__esModule", {
+  value: true
+});
+bodyTrap$1.resetState = resetState;
+bodyTrap$1.log = log;
+var _portalOpenInstances = portalOpenInstances$1;
+var _portalOpenInstances2 = _interopRequireDefault$1(_portalOpenInstances);
+function _interopRequireDefault$1(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var before = void 0, after = void 0, instances = [];
+function resetState() {
+  var _arr = [before, after];
+  for (var _i = 0; _i < _arr.length; _i++) {
+    var item = _arr[_i];
+    if (!item)
+      continue;
+    item.parentNode && item.parentNode.removeChild(item);
+  }
+  before = after = null;
+  instances = [];
+}
+function log() {
+  console.log("bodyTrap ----------");
+  console.log(instances.length);
+  var _arr2 = [before, after];
+  for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+    var item = _arr2[_i2];
+    var check = item || {};
+    console.log(check.nodeName, check.className, check.id);
+  }
+  console.log("edn bodyTrap ----------");
+}
+function focusContent() {
+  if (instances.length === 0) {
+    return;
+  }
+  instances[instances.length - 1].focusContent();
+}
+function bodyTrap(eventType, openInstances) {
+  if (!before && !after) {
+    before = document.createElement("div");
+    before.setAttribute("data-react-modal-body-trap", "");
+    before.style.position = "absolute";
+    before.style.opacity = "0";
+    before.setAttribute("tabindex", "0");
+    before.addEventListener("focus", focusContent);
+    after = before.cloneNode();
+    after.addEventListener("focus", focusContent);
+  }
+  instances = openInstances;
+  if (instances.length > 0) {
+    if (document.body.firstChild !== before) {
+      document.body.insertBefore(before, document.body.firstChild);
+    }
+    if (document.body.lastChild !== after) {
+      document.body.appendChild(after);
+    }
+  } else {
+    if (before.parentElement) {
+      before.parentElement.removeChild(before);
+    }
+    if (after.parentElement) {
+      after.parentElement.removeChild(after);
+    }
+  }
+}
+_portalOpenInstances2.default.subscribe(bodyTrap);
+(function(module, exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var _extends2 = Object.assign || function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
+    return typeof obj;
+  } : function(obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
+  var _createClass2 = function() {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor)
+          descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function(Constructor, protoProps, staticProps) {
+      if (protoProps)
+        defineProperties(Constructor.prototype, protoProps);
+      if (staticProps)
+        defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+  var _react3 = reactExports;
+  var _propTypes3 = propTypesExports;
+  var _propTypes22 = _interopRequireDefault2(_propTypes3);
+  var _focusManager = focusManager;
+  var focusManager$1 = _interopRequireWildcard2(_focusManager);
+  var _scopeTab = scopeTabExports;
+  var _scopeTab2 = _interopRequireDefault2(_scopeTab);
+  var _ariaAppHider2 = ariaAppHider$1;
+  var ariaAppHider2 = _interopRequireWildcard2(_ariaAppHider2);
+  var _classList = classList;
+  var classList$1 = _interopRequireWildcard2(_classList);
+  var _safeHTMLElement3 = safeHTMLElement;
+  var _safeHTMLElement22 = _interopRequireDefault2(_safeHTMLElement3);
+  var _portalOpenInstances3 = portalOpenInstances$1;
+  var _portalOpenInstances22 = _interopRequireDefault2(_portalOpenInstances3);
+  function _interopRequireWildcard2(obj) {
+    if (obj && obj.__esModule) {
+      return obj;
+    } else {
+      var newObj = {};
+      if (obj != null) {
+        for (var key in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, key))
+            newObj[key] = obj[key];
+        }
+      }
+      newObj.default = obj;
+      return newObj;
+    }
+  }
+  function _interopRequireDefault2(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+  }
+  function _classCallCheck2(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _possibleConstructorReturn2(self2, call) {
+    if (!self2) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return call && (typeof call === "object" || typeof call === "function") ? call : self2;
+  }
+  function _inherits2(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });
+    if (superClass)
+      Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+  var CLASS_NAMES = {
+    overlay: "ReactModal__Overlay",
+    content: "ReactModal__Content"
+  };
+  var isTabKey = function isTabKey2(event) {
+    return event.code === "Tab" || event.keyCode === 9;
+  };
+  var isEscKey = function isEscKey2(event) {
+    return event.code === "Escape" || event.keyCode === 27;
+  };
+  var ariaHiddenInstances = 0;
+  var ModalPortal2 = function(_Component) {
+    _inherits2(ModalPortal3, _Component);
+    function ModalPortal3(props) {
+      _classCallCheck2(this, ModalPortal3);
+      var _this = _possibleConstructorReturn2(this, (ModalPortal3.__proto__ || Object.getPrototypeOf(ModalPortal3)).call(this, props));
+      _this.setOverlayRef = function(overlay) {
+        _this.overlay = overlay;
+        _this.props.overlayRef && _this.props.overlayRef(overlay);
+      };
+      _this.setContentRef = function(content) {
+        _this.content = content;
+        _this.props.contentRef && _this.props.contentRef(content);
+      };
+      _this.afterClose = function() {
+        var _this$props = _this.props, appElement = _this$props.appElement, ariaHideApp = _this$props.ariaHideApp, htmlOpenClassName = _this$props.htmlOpenClassName, bodyOpenClassName2 = _this$props.bodyOpenClassName, parentSelector2 = _this$props.parentSelector;
+        var parentDocument = parentSelector2 && parentSelector2().ownerDocument || document;
+        bodyOpenClassName2 && classList$1.remove(parentDocument.body, bodyOpenClassName2);
+        htmlOpenClassName && classList$1.remove(parentDocument.getElementsByTagName("html")[0], htmlOpenClassName);
+        if (ariaHideApp && ariaHiddenInstances > 0) {
+          ariaHiddenInstances -= 1;
+          if (ariaHiddenInstances === 0) {
+            ariaAppHider2.show(appElement);
+          }
+        }
+        if (_this.props.shouldFocusAfterRender) {
+          if (_this.props.shouldReturnFocusAfterClose) {
+            focusManager$1.returnFocus(_this.props.preventScroll);
+            focusManager$1.teardownScopedFocus();
+          } else {
+            focusManager$1.popWithoutFocus();
+          }
+        }
+        if (_this.props.onAfterClose) {
+          _this.props.onAfterClose();
+        }
+        _portalOpenInstances22.default.deregister(_this);
+      };
+      _this.open = function() {
+        _this.beforeOpen();
+        if (_this.state.afterOpen && _this.state.beforeClose) {
+          clearTimeout(_this.closeTimer);
+          _this.setState({ beforeClose: false });
+        } else {
+          if (_this.props.shouldFocusAfterRender) {
+            focusManager$1.setupScopedFocus(_this.node);
+            focusManager$1.markForFocusLater();
+          }
+          _this.setState({ isOpen: true }, function() {
+            _this.openAnimationFrame = requestAnimationFrame(function() {
+              _this.setState({ afterOpen: true });
+              if (_this.props.isOpen && _this.props.onAfterOpen) {
+                _this.props.onAfterOpen({
+                  overlayEl: _this.overlay,
+                  contentEl: _this.content
+                });
+              }
+            });
+          });
+        }
+      };
+      _this.close = function() {
+        if (_this.props.closeTimeoutMS > 0) {
+          _this.closeWithTimeout();
+        } else {
+          _this.closeWithoutTimeout();
+        }
+      };
+      _this.focusContent = function() {
+        return _this.content && !_this.contentHasFocus() && _this.content.focus({ preventScroll: true });
+      };
+      _this.closeWithTimeout = function() {
+        var closesAt = Date.now() + _this.props.closeTimeoutMS;
+        _this.setState({ beforeClose: true, closesAt }, function() {
+          _this.closeTimer = setTimeout(_this.closeWithoutTimeout, _this.state.closesAt - Date.now());
+        });
+      };
+      _this.closeWithoutTimeout = function() {
+        _this.setState({
+          beforeClose: false,
+          isOpen: false,
+          afterOpen: false,
+          closesAt: null
+        }, _this.afterClose);
+      };
+      _this.handleKeyDown = function(event) {
+        if (isTabKey(event)) {
+          (0, _scopeTab2.default)(_this.content, event);
+        }
+        if (_this.props.shouldCloseOnEsc && isEscKey(event)) {
+          event.stopPropagation();
+          _this.requestClose(event);
+        }
+      };
+      _this.handleOverlayOnClick = function(event) {
+        if (_this.shouldClose === null) {
+          _this.shouldClose = true;
+        }
+        if (_this.shouldClose && _this.props.shouldCloseOnOverlayClick) {
+          if (_this.ownerHandlesClose()) {
+            _this.requestClose(event);
+          } else {
+            _this.focusContent();
+          }
+        }
+        _this.shouldClose = null;
+      };
+      _this.handleContentOnMouseUp = function() {
+        _this.shouldClose = false;
+      };
+      _this.handleOverlayOnMouseDown = function(event) {
+        if (!_this.props.shouldCloseOnOverlayClick && event.target == _this.overlay) {
+          event.preventDefault();
+        }
+      };
+      _this.handleContentOnClick = function() {
+        _this.shouldClose = false;
+      };
+      _this.handleContentOnMouseDown = function() {
+        _this.shouldClose = false;
+      };
+      _this.requestClose = function(event) {
+        return _this.ownerHandlesClose() && _this.props.onRequestClose(event);
+      };
+      _this.ownerHandlesClose = function() {
+        return _this.props.onRequestClose;
+      };
+      _this.shouldBeClosed = function() {
+        return !_this.state.isOpen && !_this.state.beforeClose;
+      };
+      _this.contentHasFocus = function() {
+        return document.activeElement === _this.content || _this.content.contains(document.activeElement);
+      };
+      _this.buildClassName = function(which, additional) {
+        var classNames = (typeof additional === "undefined" ? "undefined" : _typeof(additional)) === "object" ? additional : {
+          base: CLASS_NAMES[which],
+          afterOpen: CLASS_NAMES[which] + "--after-open",
+          beforeClose: CLASS_NAMES[which] + "--before-close"
+        };
+        var className = classNames.base;
+        if (_this.state.afterOpen) {
+          className = className + " " + classNames.afterOpen;
+        }
+        if (_this.state.beforeClose) {
+          className = className + " " + classNames.beforeClose;
+        }
+        return typeof additional === "string" && additional ? className + " " + additional : className;
+      };
+      _this.attributesFromObject = function(prefix, items) {
+        return Object.keys(items).reduce(function(acc, name) {
+          acc[prefix + "-" + name] = items[name];
+          return acc;
+        }, {});
+      };
+      _this.state = {
+        afterOpen: false,
+        beforeClose: false
+      };
+      _this.shouldClose = null;
+      _this.moveFromContentToOverlay = null;
+      return _this;
+    }
+    _createClass2(ModalPortal3, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        if (this.props.isOpen) {
+          this.open();
+        }
+      }
+    }, {
+      key: "componentDidUpdate",
+      value: function componentDidUpdate(prevProps, prevState) {
+        if (this.props.isOpen && !prevProps.isOpen) {
+          this.open();
+        } else if (!this.props.isOpen && prevProps.isOpen) {
+          this.close();
+        }
+        if (this.props.shouldFocusAfterRender && this.state.isOpen && !prevState.isOpen) {
+          this.focusContent();
+        }
+      }
+    }, {
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        if (this.state.isOpen) {
+          this.afterClose();
+        }
+        clearTimeout(this.closeTimer);
+        cancelAnimationFrame(this.openAnimationFrame);
+      }
+    }, {
+      key: "beforeOpen",
+      value: function beforeOpen() {
+        var _props = this.props, appElement = _props.appElement, ariaHideApp = _props.ariaHideApp, htmlOpenClassName = _props.htmlOpenClassName, bodyOpenClassName2 = _props.bodyOpenClassName, parentSelector2 = _props.parentSelector;
+        var parentDocument = parentSelector2 && parentSelector2().ownerDocument || document;
+        bodyOpenClassName2 && classList$1.add(parentDocument.body, bodyOpenClassName2);
+        htmlOpenClassName && classList$1.add(parentDocument.getElementsByTagName("html")[0], htmlOpenClassName);
+        if (ariaHideApp) {
+          ariaHiddenInstances += 1;
+          ariaAppHider2.hide(appElement);
+        }
+        _portalOpenInstances22.default.register(this);
+      }
+      // Don't steal focus from inner elements
+    }, {
+      key: "render",
+      value: function render() {
+        var _props2 = this.props, id2 = _props2.id, className = _props2.className, overlayClassName = _props2.overlayClassName, defaultStyles = _props2.defaultStyles, children = _props2.children;
+        var contentStyles = className ? {} : defaultStyles.content;
+        var overlayStyles = overlayClassName ? {} : defaultStyles.overlay;
+        if (this.shouldBeClosed()) {
+          return null;
+        }
+        var overlayProps = {
+          ref: this.setOverlayRef,
+          className: this.buildClassName("overlay", overlayClassName),
+          style: _extends2({}, overlayStyles, this.props.style.overlay),
+          onClick: this.handleOverlayOnClick,
+          onMouseDown: this.handleOverlayOnMouseDown
+        };
+        var contentProps = _extends2({
+          id: id2,
+          ref: this.setContentRef,
+          style: _extends2({}, contentStyles, this.props.style.content),
+          className: this.buildClassName("content", className),
+          tabIndex: "-1",
+          onKeyDown: this.handleKeyDown,
+          onMouseDown: this.handleContentOnMouseDown,
+          onMouseUp: this.handleContentOnMouseUp,
+          onClick: this.handleContentOnClick,
+          role: this.props.role,
+          "aria-label": this.props.contentLabel
+        }, this.attributesFromObject("aria", _extends2({ modal: true }, this.props.aria)), this.attributesFromObject("data", this.props.data || {}), {
+          "data-testid": this.props.testId
+        });
+        var contentElement2 = this.props.contentElement(contentProps, children);
+        return this.props.overlayElement(overlayProps, contentElement2);
+      }
+    }]);
+    return ModalPortal3;
+  }(_react3.Component);
+  ModalPortal2.defaultProps = {
+    style: {
+      overlay: {},
+      content: {}
+    },
+    defaultStyles: {}
+  };
+  ModalPortal2.propTypes = {
+    isOpen: _propTypes22.default.bool.isRequired,
+    defaultStyles: _propTypes22.default.shape({
+      content: _propTypes22.default.object,
+      overlay: _propTypes22.default.object
+    }),
+    style: _propTypes22.default.shape({
+      content: _propTypes22.default.object,
+      overlay: _propTypes22.default.object
+    }),
+    className: _propTypes22.default.oneOfType([_propTypes22.default.string, _propTypes22.default.object]),
+    overlayClassName: _propTypes22.default.oneOfType([_propTypes22.default.string, _propTypes22.default.object]),
+    parentSelector: _propTypes22.default.func,
+    bodyOpenClassName: _propTypes22.default.string,
+    htmlOpenClassName: _propTypes22.default.string,
+    ariaHideApp: _propTypes22.default.bool,
+    appElement: _propTypes22.default.oneOfType([_propTypes22.default.instanceOf(_safeHTMLElement22.default), _propTypes22.default.instanceOf(_safeHTMLElement3.SafeHTMLCollection), _propTypes22.default.instanceOf(_safeHTMLElement3.SafeNodeList), _propTypes22.default.arrayOf(_propTypes22.default.instanceOf(_safeHTMLElement22.default))]),
+    onAfterOpen: _propTypes22.default.func,
+    onAfterClose: _propTypes22.default.func,
+    onRequestClose: _propTypes22.default.func,
+    closeTimeoutMS: _propTypes22.default.number,
+    shouldFocusAfterRender: _propTypes22.default.bool,
+    shouldCloseOnOverlayClick: _propTypes22.default.bool,
+    shouldReturnFocusAfterClose: _propTypes22.default.bool,
+    preventScroll: _propTypes22.default.bool,
+    role: _propTypes22.default.string,
+    contentLabel: _propTypes22.default.string,
+    aria: _propTypes22.default.object,
+    data: _propTypes22.default.object,
+    children: _propTypes22.default.node,
+    shouldCloseOnEsc: _propTypes22.default.bool,
+    overlayRef: _propTypes22.default.func,
+    contentRef: _propTypes22.default.func,
+    id: _propTypes22.default.string,
+    overlayElement: _propTypes22.default.func,
+    contentElement: _propTypes22.default.func,
+    testId: _propTypes22.default.string
+  };
+  exports.default = ModalPortal2;
+  module.exports = exports["default"];
+})(ModalPortal, ModalPortal.exports);
+var ModalPortalExports = ModalPortal.exports;
+function componentWillMount() {
+  var state = this.constructor.getDerivedStateFromProps(this.props, this.state);
+  if (state !== null && state !== void 0) {
+    this.setState(state);
+  }
+}
+function componentWillReceiveProps(nextProps) {
+  function updater(prevState) {
+    var state = this.constructor.getDerivedStateFromProps(nextProps, prevState);
+    return state !== null && state !== void 0 ? state : null;
+  }
+  this.setState(updater.bind(this));
+}
+function componentWillUpdate(nextProps, nextState) {
+  try {
+    var prevProps = this.props;
+    var prevState = this.state;
+    this.props = nextProps;
+    this.state = nextState;
+    this.__reactInternalSnapshotFlag = true;
+    this.__reactInternalSnapshot = this.getSnapshotBeforeUpdate(
+      prevProps,
+      prevState
+    );
+  } finally {
+    this.props = prevProps;
+    this.state = prevState;
+  }
+}
+componentWillMount.__suppressDeprecationWarning = true;
+componentWillReceiveProps.__suppressDeprecationWarning = true;
+componentWillUpdate.__suppressDeprecationWarning = true;
+function polyfill(Component) {
+  var prototype = Component.prototype;
+  if (!prototype || !prototype.isReactComponent) {
+    throw new Error("Can only polyfill class components");
+  }
+  if (typeof Component.getDerivedStateFromProps !== "function" && typeof prototype.getSnapshotBeforeUpdate !== "function") {
+    return Component;
+  }
+  var foundWillMountName = null;
+  var foundWillReceivePropsName = null;
+  var foundWillUpdateName = null;
+  if (typeof prototype.componentWillMount === "function") {
+    foundWillMountName = "componentWillMount";
+  } else if (typeof prototype.UNSAFE_componentWillMount === "function") {
+    foundWillMountName = "UNSAFE_componentWillMount";
+  }
+  if (typeof prototype.componentWillReceiveProps === "function") {
+    foundWillReceivePropsName = "componentWillReceiveProps";
+  } else if (typeof prototype.UNSAFE_componentWillReceiveProps === "function") {
+    foundWillReceivePropsName = "UNSAFE_componentWillReceiveProps";
+  }
+  if (typeof prototype.componentWillUpdate === "function") {
+    foundWillUpdateName = "componentWillUpdate";
+  } else if (typeof prototype.UNSAFE_componentWillUpdate === "function") {
+    foundWillUpdateName = "UNSAFE_componentWillUpdate";
+  }
+  if (foundWillMountName !== null || foundWillReceivePropsName !== null || foundWillUpdateName !== null) {
+    var componentName = Component.displayName || Component.name;
+    var newApiName = typeof Component.getDerivedStateFromProps === "function" ? "getDerivedStateFromProps()" : "getSnapshotBeforeUpdate()";
+    throw Error(
+      "Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n" + componentName + " uses " + newApiName + " but also contains the following legacy lifecycles:" + (foundWillMountName !== null ? "\n  " + foundWillMountName : "") + (foundWillReceivePropsName !== null ? "\n  " + foundWillReceivePropsName : "") + (foundWillUpdateName !== null ? "\n  " + foundWillUpdateName : "") + "\n\nThe above lifecycles should be removed. Learn more about this warning here:\nhttps://fb.me/react-async-component-lifecycle-hooks"
+    );
+  }
+  if (typeof Component.getDerivedStateFromProps === "function") {
+    prototype.componentWillMount = componentWillMount;
+    prototype.componentWillReceiveProps = componentWillReceiveProps;
+  }
+  if (typeof prototype.getSnapshotBeforeUpdate === "function") {
+    if (typeof prototype.componentDidUpdate !== "function") {
+      throw new Error(
+        "Cannot polyfill getSnapshotBeforeUpdate() for components that do not define componentDidUpdate() on the prototype"
+      );
+    }
+    prototype.componentWillUpdate = componentWillUpdate;
+    var componentDidUpdate = prototype.componentDidUpdate;
+    prototype.componentDidUpdate = function componentDidUpdatePolyfill(prevProps, prevState, maybeSnapshot) {
+      var snapshot = this.__reactInternalSnapshotFlag ? this.__reactInternalSnapshot : maybeSnapshot;
+      componentDidUpdate.call(this, prevProps, prevState, snapshot);
+    };
+  }
+  return Component;
+}
+const reactLifecyclesCompat_es = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  polyfill
+}, Symbol.toStringTag, { value: "Module" }));
+const require$$6 = /* @__PURE__ */ getAugmentedNamespace(reactLifecyclesCompat_es);
+Object.defineProperty(Modal$2, "__esModule", {
+  value: true
+});
+Modal$2.bodyOpenClassName = Modal$2.portalClassName = void 0;
+var _extends$1 = Object.assign || function(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
+var _createClass$1 = function() {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  return function(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      defineProperties(Constructor.prototype, protoProps);
+    if (staticProps)
+      defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+var _react = reactExports;
+var _react2 = _interopRequireDefault(_react);
+var _reactDom = reactDomExports;
+var _reactDom2 = _interopRequireDefault(_reactDom);
+var _propTypes = propTypesExports;
+var _propTypes2 = _interopRequireDefault(_propTypes);
+var _ModalPortal = ModalPortalExports;
+var _ModalPortal2 = _interopRequireDefault(_ModalPortal);
+var _ariaAppHider = ariaAppHider$1;
+var ariaAppHider = _interopRequireWildcard(_ariaAppHider);
+var _safeHTMLElement = safeHTMLElement;
+var _safeHTMLElement2 = _interopRequireDefault(_safeHTMLElement);
+var _reactLifecyclesCompat = require$$6;
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};
+    if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key))
+          newObj[key] = obj[key];
+      }
+    }
+    newObj.default = obj;
+    return newObj;
+  }
+}
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+function _classCallCheck$1(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function _possibleConstructorReturn$1(self2, call) {
+  if (!self2) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return call && (typeof call === "object" || typeof call === "function") ? call : self2;
+}
+function _inherits$1(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });
+  if (superClass)
+    Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+var portalClassName = Modal$2.portalClassName = "ReactModalPortal";
+var bodyOpenClassName = Modal$2.bodyOpenClassName = "ReactModal__Body--open";
+var isReact16 = _safeHTMLElement.canUseDOM && _reactDom2.default.createPortal !== void 0;
+var createHTMLElement = function createHTMLElement2(name) {
+  return document.createElement(name);
+};
+var getCreatePortal = function getCreatePortal2() {
+  return isReact16 ? _reactDom2.default.createPortal : _reactDom2.default.unstable_renderSubtreeIntoContainer;
+};
+function getParentElement(parentSelector2) {
+  return parentSelector2();
+}
+var Modal$1 = function(_Component) {
+  _inherits$1(Modal2, _Component);
+  function Modal2() {
+    var _ref;
+    var _temp, _this, _ret;
+    _classCallCheck$1(this, Modal2);
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, (_ref = Modal2.__proto__ || Object.getPrototypeOf(Modal2)).call.apply(_ref, [this].concat(args))), _this), _this.removePortal = function() {
+      !isReact16 && _reactDom2.default.unmountComponentAtNode(_this.node);
+      var parent = getParentElement(_this.props.parentSelector);
+      if (parent && parent.contains(_this.node)) {
+        parent.removeChild(_this.node);
+      } else {
+        console.warn('React-Modal: "parentSelector" prop did not returned any DOM element. Make sure that the parent element is unmounted to avoid any memory leaks.');
+      }
+    }, _this.portalRef = function(ref) {
+      _this.portal = ref;
+    }, _this.renderPortal = function(props) {
+      var createPortal = getCreatePortal();
+      var portal = createPortal(_this, _react2.default.createElement(_ModalPortal2.default, _extends$1({ defaultStyles: Modal2.defaultStyles }, props)), _this.node);
+      _this.portalRef(portal);
+    }, _temp), _possibleConstructorReturn$1(_this, _ret);
+  }
+  _createClass$1(Modal2, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      if (!_safeHTMLElement.canUseDOM)
+        return;
+      if (!isReact16) {
+        this.node = createHTMLElement("div");
+      }
+      this.node.className = this.props.portalClassName;
+      var parent = getParentElement(this.props.parentSelector);
+      parent.appendChild(this.node);
+      !isReact16 && this.renderPortal(this.props);
+    }
+  }, {
+    key: "getSnapshotBeforeUpdate",
+    value: function getSnapshotBeforeUpdate(prevProps) {
+      var prevParent = getParentElement(prevProps.parentSelector);
+      var nextParent = getParentElement(this.props.parentSelector);
+      return { prevParent, nextParent };
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, _2, snapshot) {
+      if (!_safeHTMLElement.canUseDOM)
+        return;
+      var _props = this.props, isOpen = _props.isOpen, portalClassName2 = _props.portalClassName;
+      if (prevProps.portalClassName !== portalClassName2) {
+        this.node.className = portalClassName2;
+      }
+      var prevParent = snapshot.prevParent, nextParent = snapshot.nextParent;
+      if (nextParent !== prevParent) {
+        prevParent.removeChild(this.node);
+        nextParent.appendChild(this.node);
+      }
+      if (!prevProps.isOpen && !isOpen)
+        return;
+      !isReact16 && this.renderPortal(this.props);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      if (!_safeHTMLElement.canUseDOM || !this.node || !this.portal)
+        return;
+      var state = this.portal.state;
+      var now = Date.now();
+      var closesAt = state.isOpen && this.props.closeTimeoutMS && (state.closesAt || now + this.props.closeTimeoutMS);
+      if (closesAt) {
+        if (!state.beforeClose) {
+          this.portal.closeWithTimeout();
+        }
+        setTimeout(this.removePortal, closesAt - now);
+      } else {
+        this.removePortal();
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!_safeHTMLElement.canUseDOM || !isReact16) {
+        return null;
+      }
+      if (!this.node && isReact16) {
+        this.node = createHTMLElement("div");
+      }
+      var createPortal = getCreatePortal();
+      return createPortal(_react2.default.createElement(_ModalPortal2.default, _extends$1({
+        ref: this.portalRef,
+        defaultStyles: Modal2.defaultStyles
+      }, this.props)), this.node);
+    }
+  }], [{
+    key: "setAppElement",
+    value: function setAppElement(element) {
+      ariaAppHider.setElement(element);
+    }
+    /* eslint-disable react/no-unused-prop-types */
+    /* eslint-enable react/no-unused-prop-types */
+  }]);
+  return Modal2;
+}(_react.Component);
+Modal$1.propTypes = {
+  isOpen: _propTypes2.default.bool.isRequired,
+  style: _propTypes2.default.shape({
+    content: _propTypes2.default.object,
+    overlay: _propTypes2.default.object
+  }),
+  portalClassName: _propTypes2.default.string,
+  bodyOpenClassName: _propTypes2.default.string,
+  htmlOpenClassName: _propTypes2.default.string,
+  className: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
+    base: _propTypes2.default.string.isRequired,
+    afterOpen: _propTypes2.default.string.isRequired,
+    beforeClose: _propTypes2.default.string.isRequired
+  })]),
+  overlayClassName: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
+    base: _propTypes2.default.string.isRequired,
+    afterOpen: _propTypes2.default.string.isRequired,
+    beforeClose: _propTypes2.default.string.isRequired
+  })]),
+  appElement: _propTypes2.default.oneOfType([_propTypes2.default.instanceOf(_safeHTMLElement2.default), _propTypes2.default.instanceOf(_safeHTMLElement.SafeHTMLCollection), _propTypes2.default.instanceOf(_safeHTMLElement.SafeNodeList), _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_safeHTMLElement2.default))]),
+  onAfterOpen: _propTypes2.default.func,
+  onRequestClose: _propTypes2.default.func,
+  closeTimeoutMS: _propTypes2.default.number,
+  ariaHideApp: _propTypes2.default.bool,
+  shouldFocusAfterRender: _propTypes2.default.bool,
+  shouldCloseOnOverlayClick: _propTypes2.default.bool,
+  shouldReturnFocusAfterClose: _propTypes2.default.bool,
+  preventScroll: _propTypes2.default.bool,
+  parentSelector: _propTypes2.default.func,
+  aria: _propTypes2.default.object,
+  data: _propTypes2.default.object,
+  role: _propTypes2.default.string,
+  contentLabel: _propTypes2.default.string,
+  shouldCloseOnEsc: _propTypes2.default.bool,
+  overlayRef: _propTypes2.default.func,
+  contentRef: _propTypes2.default.func,
+  id: _propTypes2.default.string,
+  overlayElement: _propTypes2.default.func,
+  contentElement: _propTypes2.default.func
+};
+Modal$1.defaultProps = {
+  isOpen: false,
+  portalClassName,
+  bodyOpenClassName,
+  role: "dialog",
+  ariaHideApp: true,
+  closeTimeoutMS: 0,
+  shouldFocusAfterRender: true,
+  shouldCloseOnEsc: true,
+  shouldCloseOnOverlayClick: true,
+  shouldReturnFocusAfterClose: true,
+  preventScroll: false,
+  parentSelector: function parentSelector() {
+    return document.body;
+  },
+  overlayElement: function overlayElement(props, contentEl) {
+    return _react2.default.createElement(
+      "div",
+      props,
+      contentEl
+    );
+  },
+  contentElement: function contentElement(props, children) {
+    return _react2.default.createElement(
+      "div",
+      props,
+      children
+    );
+  }
+};
+Modal$1.defaultStyles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.75)"
+  },
+  content: {
+    position: "absolute",
+    top: "40px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    border: "1px solid #ccc",
+    background: "#fff",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "4px",
+    outline: "none",
+    padding: "20px"
+  }
+};
+(0, _reactLifecyclesCompat.polyfill)(Modal$1);
+Modal$2.default = Modal$1;
+(function(module, exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var _Modal = Modal$2;
+  var _Modal2 = _interopRequireDefault2(_Modal);
+  function _interopRequireDefault2(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+  }
+  exports.default = _Modal2.default;
+  module.exports = exports["default"];
+})(lib, lib.exports);
+var libExports = lib.exports;
+const Modal = /* @__PURE__ */ getDefaultExportFromCjs(libExports);
+const LANGS = [
+  "Afrikaans",
+  "Arabic",
+  "Belarusian",
+  "Bulgarian",
+  "Catalan",
+  "Chinese (Simplified)",
+  "Chinese (Traditional)",
+  "Croatian",
+  "Czech",
+  "Danish",
+  "Dutch",
+  "English",
+  "Esperanto",
+  "Estonian",
+  "Finnish",
+  "French",
+  "German",
+  "Greek (Modern)",
+  "Hebrew",
+  "Hungarian",
+  "Italian",
+  "Japanese",
+  "Korean",
+  "Latin",
+  "Latvian",
+  "Lithuanian",
+  "Macedonian",
+  "Norwegian Bokmål",
+  "Polish",
+  "Portuguese",
+  "Romanian",
+  "Russian",
+  "Serbian",
+  "Slovak",
+  "Spanish",
+  "Swedish",
+  "Thai",
+  "Turkish",
+  "Ukrainian"
+];
+const LANGDEFS = {
+  Afrikaans: {
+    LgGlosbeKey: "af",
+    LgGTransKey: "af",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Arabic: {
+    LgGlosbeKey: "ar",
+    LgGTransKey: "ar",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{0600}-\\x{061A}\\x{0620}-\\x{06FF}\\x{0750}-\\x{077F}\\x{FB50}-\\x{FDFF}\\x{FE70}-\\x{FEFF}",
+    LgRegexpWordCharacters: ".!?:;\\x{061B}\\x{061F}",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: true
+  },
+  Belarusian: {
+    LgGlosbeKey: "be",
+    LgGTransKey: "be",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Bulgarian: {
+    LgGlosbeKey: "bg",
+    LgGTransKey: "bg",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Catalan: {
+    LgGlosbeKey: "ca",
+    LgGTransKey: "ca",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  "Chinese (Simplified)": {
+    LgGlosbeKey: "zh",
+    LgGTransKey: "zh-CN",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}",
+    LgRegexpWordCharacters: ".!?:;。！？：；",
+    LgSplitEachChar: true,
+    LgRemoveSpaces: true,
+    LgRightToLeft: false
+  },
+  "Chinese (Traditional)": {
+    LgGlosbeKey: "zh",
+    LgGTransKey: "zh-TW",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3100}-\\x{312F}",
+    LgRegexpWordCharacters: ".!?:;。！？：；",
+    LgSplitEachChar: true,
+    LgRemoveSpaces: true,
+    LgRightToLeft: false
+  },
+  Croatian: {
+    LgGlosbeKey: "hr",
+    LgGTransKey: "hr",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Czech: {
+    LgGlosbeKey: "cs",
+    LgGTransKey: "cs",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Danish: {
+    LgGlosbeKey: "da",
+    LgGTransKey: "da",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Dutch: {
+    LgGlosbeKey: "nl",
+    LgGTransKey: "nl",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  English: {
+    LgGlosbeKey: "en",
+    LgGTransKey: "en",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Esperanto: {
+    LgGlosbeKey: "eo",
+    LgGTransKey: "eo",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Estonian: {
+    LgGlosbeKey: "et",
+    LgGTransKey: "et",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Finnish: {
+    LgGlosbeKey: "fi",
+    LgGTransKey: "fi",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  French: {
+    LgGlosbeKey: "fr",
+    LgGTransKey: "fr",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  German: {
+    LgGlosbeKey: "de",
+    LgGTransKey: "de",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  "Greek (Modern)": {
+    LgGlosbeKey: "el",
+    LgGTransKey: "el",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\x{0370}-\\x{03FF}\\x{1F00}-\\x{1FFF}",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Hebrew: {
+    LgGlosbeKey: "he",
+    LgGTransKey: "iw",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{0590}-\\x{05FF}",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: true
+  },
+  Hungarian: {
+    LgGlosbeKey: "hu",
+    LgGTransKey: "hu",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Italian: {
+    LgGlosbeKey: "it",
+    LgGTransKey: "it",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Japanese: {
+    LgGlosbeKey: "ja",
+    LgGTransKey: "ja",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3040}-\\x{30FF}\\x{31F0}-\\x{31FF}",
+    LgRegexpWordCharacters: ".!?:;。！？：；",
+    LgSplitEachChar: true,
+    LgRemoveSpaces: true,
+    LgRightToLeft: false
+  },
+  Korean: {
+    LgGlosbeKey: "ko",
+    LgGTransKey: "ko",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{1100}-\\x{11FF}\\x{3130}-\\x{318F}\\x{AC00}-\\x{D7A0}",
+    LgRegexpWordCharacters: ".!?:;。！？：；",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Latin: {
+    LgGlosbeKey: "la",
+    LgGTransKey: "la",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Latvian: {
+    LgGlosbeKey: "lv",
+    LgGTransKey: "lv",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Lithuanian: {
+    LgGlosbeKey: "lt",
+    LgGTransKey: "lt",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Macedonian: {
+    LgGlosbeKey: "mk",
+    LgGTransKey: "mk",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  "Norwegian Bokmål": {
+    LgGlosbeKey: "nb",
+    LgGTransKey: "no",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Polish: {
+    LgGlosbeKey: "pl",
+    LgGTransKey: "pl",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Portuguese: {
+    LgGlosbeKey: "pt",
+    LgGTransKey: "pt",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Romanian: {
+    LgGlosbeKey: "ro",
+    LgGTransKey: "ro",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Russian: {
+    LgGlosbeKey: "ru",
+    LgGTransKey: "ru",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Serbian: {
+    LgGlosbeKey: "sr",
+    LgGTransKey: "sr",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Slovak: {
+    LgGlosbeKey: "sk",
+    LgGTransKey: "sk",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Spanish: {
+    LgGlosbeKey: "es",
+    LgGTransKey: "es",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Swedish: {
+    LgGlosbeKey: "sv",
+    LgGTransKey: "sv",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Thai: {
+    LgGlosbeKey: "th",
+    LgGTransKey: "th",
+    LgTextSize: 200,
+    LgRegexpSplitSentences: "\\x{0E00}-\\x{0E7F}",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Turkish: {
+    LgGlosbeKey: "tr",
+    LgGTransKey: "tr",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  },
+  Ukrainian: {
+    LgGlosbeKey: "uk",
+    LgGTransKey: "uk",
+    LgTextSize: 150,
+    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
+    LgRegexpWordCharacters: ".!?:;",
+    LgSplitEachChar: false,
+    LgRemoveSpaces: false,
+    LgRightToLeft: false
+  }
+};
+function wizard_go(refL1, refL2, onSuccess) {
+  const l1 = refL1.current?.value;
+  const l2 = refL2.current?.value;
+  if (l1 === void 0 || l2 === void 0) {
+    throw new Error("Undefined refs");
+  }
+  if (l1 == "") {
+    alert("Please choose your native language (L1)!");
+    return;
+  }
+  if (l2 == "") {
+    alert("Please choose your language you want to read/study (L2)!");
+    return;
+  }
+  if (l2 == l1) {
+    alert("L1 L2 Languages must not be equal!");
+    return;
+  }
+  onSuccess(l1, l2);
+}
+function NewLanguageWizard({
+  onSuccess,
+  onExit
+}) {
+  const refL1 = reactExports.useRef();
+  const refL2 = reactExports.useRef();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "wizard", title: "Language Settings Wizard" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "wizard", children: "Language Settings Wizard" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "wizard", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "My Native language is:" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "L1:",
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refL1, name: "l1", id: "l1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Choose...]" }),
+        LANGS.map((lang) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: lang, children: lang });
+        })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "wizard", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "I want to study:" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+      "L2:",
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "l2", id: "l2", ref: refL2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Choose...]" }),
+        LANGS.map((lang) => {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: lang, children: lang });
+        })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "button",
+        style: { fontSize: "1.1em" },
+        value: "Set Language Settings",
+        onClick: () => wizard_go(refL1, refL2, onSuccess)
+      }
+    ) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Cancel", onClick: () => onExit() }) })
+  ] }) });
+}
+const languagePreValidateMap = {
+  LgTextSize: parseNumMap,
+  LgRemoveSpaces: parseNumMap,
+  LgSplitEachChar: parseNumMap,
+  LgRightToLeft: parseNumMap,
+  LgDict2URI: emptyToNullMap
+};
+function TextSizeSelect({
+  refMap,
+  entryKey,
+  defaultValue = 100
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "select",
+    {
+      name: entryKey,
+      className: "notempty",
+      ref: refMap[entryKey],
+      defaultValue,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "100", children: "100 %" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "150", children: "150 %" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "200", children: "200 %" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "250", children: "250 %" })
+      ]
+    }
+  );
+}
+function oewin(url) {
+  window.open(
+    url,
+    "editwin",
+    "width=800, height=600, scrollbars=yes, menubar=no, resizable=yes, status=no"
+  );
+}
+function EditLanguage({ chgID }) {
+  const [{ languages: languages2 }] = useData(["languages"]);
+  const changingLang = languages2.find(({ LgID }) => {
+    return LgID === chgID;
+  });
+  if (!changingLang) {
+    throw new Error("Invalid Change ID!");
+  }
+  const validator = LanguagesValidator;
+  const navigator2 = useInternalNavigate();
+  const refMap = RefMap(validator);
+  const LgInput = buildFormInput(refMap, changingLang);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "TODO" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
+      "Edit Language",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("a", { target: "_blank", href: "info.htm#howtolang", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "question-frame", title: "Help" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "validate", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(LgInput, { type: "hidden", entryKey: "LgID", fixed: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: 'Study Language "L2":' }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              LgInput,
+              {
+                type: "text",
+                className: "notempty setfocus checkoutsidebmp",
+                entryKey: "LgName",
+                maxLength: 40,
+                size: 40,
+                default: true
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Dictionary 1 URI:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              LgInput,
+              {
+                type: "text",
+                className: "notempty checkdicturl checkoutsidebmp",
+                entryKey: "LgDict1URI",
+                default: true,
+                maxLength: 200,
+                size: 60
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Dictionary 2 URI:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LgInput,
+            {
+              type: "text",
+              className: "checkdicturl checkoutsidebmp",
+              entryKey: "LgDict2URI",
+              default: true,
+              maxLength: 200,
+              size: 60
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "GoogleTranslate URI:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LgInput,
+            {
+              default: true,
+              type: "text",
+              className: "checkdicturl checkoutsidebmp",
+              entryKey: "LgGoogleTranslateURI",
+              maxLength: 200,
+              size: 60
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Text Size:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TextSizeSelect, { entryKey: "LgTextSize", refMap }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Character Substitutions:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LgInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              entryKey: "LgCharacterSubstitutions",
+              default: true,
+              maxLength: 500,
+              size: 60
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "RegExp Split Sentences:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              LgInput,
+              {
+                type: "text",
+                className: "notempty checkoutsidebmp",
+                entryKey: "LgRegexpSplitSentences",
+                default: true,
+                maxLength: 500,
+                size: 60
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Exceptions Split Sentences:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LgInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              entryKey: "LgExceptionsSplitSentences",
+              default: true,
+              maxLength: 500,
+              size: 60
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "RegExp Word Characters:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              LgInput,
+              {
+                type: "text",
+                className: "notempty checkoutsidebmp",
+                entryKey: "LgRegexpWordCharacters",
+                default: true,
+                maxLength: 500,
+                size: 60
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Make each character a word:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              SelectBoolean,
+              {
+                selKey: "LgSplitEachChar",
+                entry: changingLang,
+                refMap
+              }
+            ),
+            "(e.g. for Chinese, Japanese, etc.)"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Remove spaces:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              SelectBoolean,
+              {
+                selKey: "LgRemoveSpaces",
+                entry: changingLang,
+                refMap
+              }
+            ),
+            "(e.g. for Chinese, Japanese, etc.)"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Right-To-Left Script:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              SelectBoolean,
+              {
+                selKey: "LgRightToLeft",
+                entry: changingLang,
+                refMap
+              }
+            ),
+            "(e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
+            "Export Template",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Icon,
+              {
+                src: "question-frame",
+                title: "Help",
+                className: "click",
+                onClick: () => {
+                  oewin("info_export_template.htm");
+                }
+              }
+            ),
+            ":"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LgInput,
+            {
+              type: "text",
+              className: "checkoutsidebmp",
+              entryKey: "LgExportTemplate",
+              default: true,
+              maxLength: 1e3,
+              size: 60
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Cancel",
+              onClick: () => {
+                navigator2("/edit_languages");
+              }
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Change",
+              onClick: () => {
+                CheckAndSubmit(
+                  refMap,
+                  languagePreValidateMap,
+                  validator,
+                  (value) => {
+                    dataService.editLanguage(chgID, value);
+                    navigator2("/edit_words");
+                  }
+                );
+              }
+            }
+          )
+        ] }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "smallgray", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Warning:" }),
+        " Changing certain language settings (e.g. RegExp Word Characters, etc.)",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+        "may cause partial or complete loss of improved annotated texts!"
+      ] })
+    ] })
+  ] });
+}
+function SelectBoolean({
+  entry,
+  selKey,
+  refMap
+}) {
+  const entryVal = entry[selKey];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap[selKey], name: selKey, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 0, selected: entryVal === 0, children: "No" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 1, selected: entryVal === 1, children: "Yes" })
+  ] });
+}
+function DisplayTags({
+  query,
+  currentPage
+}) {
+  const [{ tags: tags3, settings: settings2 }] = useData(["tags", "settings"]);
+  const navigate = useInternalNavigate();
+  const tagCount = tags3.length;
+  const recno = tags3.length;
+  const pageSize = settings2["set-tags-per-page"] || 1;
+  const { dataOnPage, numPages } = usePager(tags3, currentPage, pageSize);
+  const { checkboxPropsForEntry, selectedValues, onSelectAll, onSelectNone } = useSelection(tags3, "TgID");
+  const queryRef = reactExports.useRef(null);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Word Tags" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(A, { href: "/edit_tags?new=1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
+      " New Term Tag ..."
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
+        "Filter ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          NavigateButton,
+          {
+            value: "Reset All",
+            navigateTo: `/edit_tags?page=${1}`
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 4, children: [
+        "Tag Text or Comment:",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            name: "query",
+            ref: queryRef,
+            value: query,
+            maxLength: 50,
+            size: 15
+          }
+        ),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            name: "querybutton",
+            value: "Filter",
+            onClick: () => {
+              navigate(
+                `/edit_tags?page=1&query=${queryRef.current?.value || ""}`
+              );
+            }
+          }
+        ),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Clear",
+            onClick: () => {
+              navigate(`/edit_tags?page=${1}&query=`);
+            }
+          }
+        )
+      ] }) })
+    ] }) }),
+    recno === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "No tags found." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "form",
+      {
+        name: "form2",
+        action: "<?php echo _SERVER['PHP_SELF']; ?>",
+        method: "post",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "data", value: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 center", colSpan: 2, children: [
+              "Multi Actions ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "ALL" }),
+              " ",
+              dataOnPage.length,
+              " ",
+              dataOnPage.length === 1 ? "Tag" : "Tags",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "select",
+                {
+                  name: "allaction",
+                  disabled: false,
+                  onChange: "allActionGo(document.form2, document.form2.allaction,<?php echo recno; ?>);",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetAllTagsActionsSelectOptions, {})
+                }
+              )
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+                "Marked Tags: ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "select",
+                  {
+                    name: "markaction",
+                    id: "markaction",
+                    disabled: selectedValues.size === 0,
+                    onChange: (val) => {
+                      multiActionGo(
+                        () => {
+                        },
+                        // TODO ref
+                        val
+                      );
+                    },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetMultipleTagsActionsSelectOptions, {})
+                  }
+                )
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", cellSpacing: 0, cellPadding: 5, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Actions" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Tag Text" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Tag Comment" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 clickable", children: "Terms With Tag" })
+            ] }),
+            dataOnPage.map((tag) => {
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { name: "rec' . record['TgID'] . '", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    name: "marked[]",
+                    type: "checkbox",
+                    ...checkboxPropsForEntry(tag),
+                    className: "markcheck",
+                    value: "' . record['TgID'] . '"
+                  }
+                ) }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_tags?chg=${tag.TgID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "document--pencil", title: "Edit" }) }),
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Icon,
+                    {
+                      onClick: () => {
+                        if (confirmDelete()) {
+                          dataService.deleteTermTag(tag.TgID);
+                        }
+                      },
+                      src: "minus-button",
+                      title: "Delete"
+                    }
+                  ),
+                  " "
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.TgText }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tag.TgComment }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: tagCount > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?tag1=${tag.TgID}`, children: tagCount }) : "0" })
+              ] });
+            })
+          ] })
+        ]
+      }
+    ),
+    numPages > 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form3", action: "#", children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", style: { whiteSpace: "nowrap" }, children: [
+        "Tag",
+        recno == 1 ? "" : "s"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", style: { whiteSpace: "nowrap" } })
+    ] }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
+  ] });
+}
+function NewTag() {
+  const preValidateMap = {
+    TgText: identityMap,
+    TgComment: emptyToNullMap
+  };
+  const validator = TagsValidator;
+  const refMap = RefMap(validator);
+  const navigator2 = useInternalNavigate();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Term Tags" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "New Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "form",
+      {
+        name: "newtag",
+        className: "validate",
+        action: "<?php echo $_SERVER['PHP_SELF']; ?>",
+        method: "post",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                FormInput,
+                {
+                  className: "notempty setfocus noblanksnocomma checkoutsidebmp",
+                  type: "text",
+                  entryKey: "TgText",
+                  refMap,
+                  maxLength: 20,
+                  size: 20
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Comment:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                className: "textarea-noreturn checklength checkoutsidebmp",
+                maxLength: 200,
+                ref: refMap.TgComment,
+                name: "TgComment",
+                cols: 40,
+                rows: 3
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "button",
+                value: "Cancel",
+                onClick: () => {
+                  navigator2("/edit_tags");
+                }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "button",
+                name: "op",
+                value: "Save",
+                onClick: () => {
+                  CheckAndSubmit(
+                    refMap,
+                    preValidateMap,
+                    validator,
+                    (value) => {
+                      dataService.addTag(value);
+                      navigator2("/edit_tags");
+                    },
+                    "TgID"
+                  );
+                }
+              }
+            )
+          ] }) })
+        ] })
+      }
+    )
+  ] });
+}
+function EditTag({ chgId }) {
+  const [{ tags: tags3 }] = useData(["tags"]);
+  const changingTag = tags3.find(({ TgID }) => {
+    return TgID === chgId;
+  });
+  if (!changingTag) {
+    throw new Error("Invalid Tag ID");
+  }
+  const preValidateMap = {
+    TgText: identityMap,
+    TgComment: emptyToNullMap
+  };
+  const validator = TagsValidator;
+  const refMap = RefMap(validator);
+  const navigator2 = useInternalNavigate();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Term Tags" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Edit Tag" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "form",
+      {
+        name: "newtag",
+        className: "validate",
+        method: "post",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tag:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                FormInput,
+                {
+                  className: "notempty setfocus noblanksnocomma checkoutsidebmp",
+                  type: "text",
+                  entryKey: "TgText",
+                  defaultEntry: changingTag,
+                  refMap,
+                  maxLength: 20,
+                  size: 20
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Comment:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                className: "textarea-noreturn checklength checkoutsidebmp",
+                maxLength: 200,
+                ref: refMap.TgComment,
+                name: "TgComment",
+                cols: 40,
+                defaultValue: changingTag.TgComment,
+                rows: 3
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "button",
+                value: "Cancel",
+                onClick: () => {
+                  navigator2("/edit_tags");
+                }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "button",
+                name: "op",
+                value: "Save",
+                onClick: () => {
+                  CheckAndSubmit(
+                    refMap,
+                    preValidateMap,
+                    validator,
+                    (value) => {
+                      dataService.editTag(changingTag.TgID, value);
+                      navigator2("/edit_tags");
+                    },
+                    "TgID"
+                  );
+                }
+              }
+            )
+          ] }) })
+        ] })
       }
     )
   ] });
@@ -23068,7 +26314,7 @@ function InfoPage() {
             id: "topicjump",
             onChange: "{var qm = document.getElementById('topicjump'); var val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { location.href = '#' + val;}}",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: "selected", children: "[Select...]" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Select...]" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "preface", children: "Preface" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "current", children: "Current Version" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "links", children: "Links" }),
@@ -25376,29 +28622,58 @@ function LanguagesPage() {
     ] })
   ] });
 }
+const TextMultiAction = {
+  test: (selectedValues) => {
+    console.log("test");
+  },
+  addtag: (selectedValues) => {
+    console.log("addtag");
+  },
+  deltag: (selectedValues) => {
+    console.log("deltag");
+  },
+  rebuild: (selectedValues) => {
+    console.log("rebuild");
+  },
+  setsent: (selectedValues) => {
+    console.log("setsent");
+  },
+  arch: (selectedValues) => {
+    console.log("arch");
+  },
+  del: (selectedValues) => {
+    console.log("del");
+  }
+};
 function TextMultiActions({
   onSelectAll,
-  onSelectNone
+  onSelectNone,
+  selectedValues
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "form",
-    {
-      name: "form1",
-      action: "#",
-      onSubmit: "document.form1.querybutton.click(); return false;",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
-          "Multi Actions",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-            "Marked Texts",
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "markaction", id: "markaction", disabled: true, children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", action: "#", children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
+      "Multi Actions",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+        "Marked Texts",
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            name: "markaction",
+            id: "markaction",
+            disabled: selectedValues.size === 0,
+            onChange: ({ target: { value } }) => {
+              TextMultiAction[value](
+                selectedValues
+              );
+            },
+            children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "test", children: "Test Marked Texts" }),
@@ -25412,12 +28687,12 @@ function TextMultiActions({
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "arch", children: "Archive Marked Texts" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "del", children: "Delete Marked Texts" })
-            ] })
-          ] })
-        ] })
-      ] }) })
-    }
-  ) });
+            ]
+          }
+        )
+      ] })
+    ] })
+  ] }) }) }) });
 }
 function LibraryHeader() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -25513,10 +28788,9 @@ function ResizePage({
 }
 function LibraryRow({
   text,
-  isSelected,
-  toggleSelect
+  checked,
+  onChange
 }) {
-  console.log("LIBRARYROW", text);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "input",
@@ -25524,8 +28798,8 @@ function LibraryRow({
         name: "marked[]",
         className: "markcheck",
         type: "checkbox",
-        checked: isSelected,
-        onChange: () => toggleSelect(),
+        checked,
+        onChange: () => onChange(),
         value: "2"
       }
     ) }) }),
@@ -25575,13 +28849,14 @@ function Library({
   filterTag1 = null,
   filterTag2 = null
 }) {
-  const [{ textDetails, activeLanguage, texttags: texttags2, tags2: tags22 }] = useData([
+  const [{ textDetails, activeLanguage, texttags: texttags2, tags2: tags22, settings: settings2 }] = useData([
     "textDetails",
     "activeLanguage",
     "texttags",
-    "tags2"
+    "tags2",
+    "settings"
   ]);
-  const pageSize = 15;
+  const pageSize = settings2["set-texts-per-page"] || -1;
   const { numPages, dataOnPage } = usePager(
     textDetails || [],
     currentPage,
@@ -25590,7 +28865,14 @@ function Library({
   const paramUpdater = useUpdateParams();
   const navigator2 = useInternalNavigate();
   const queryRef = reactExports.useRef();
-  const [selectedTexts, setSelectedTexts] = reactExports.useState(/* @__PURE__ */ new Set());
+  const {
+    selectedValues,
+    onSelectAll,
+    onSelectNone,
+    onSelect,
+    checkboxPropsForEntry
+  } = useSelection(textDetails || [], "TxID");
+  const recno = (textDetails || []).length;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Header,
@@ -25609,224 +28891,137 @@ function Library({
         " Long Text Import ..."
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        name: "form1",
-        action: "#",
-        onSubmit: "document.form1.querybutton.click(); return false;",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
-            "Filter ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Reset All",
-                onClick: () => {
-                  navigator2("/edit_texts");
+    /* @__PURE__ */ jsxRuntimeExports.jsx("form", { name: "form1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
+        "Filter ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Reset All",
+            onClick: () => {
+              resetAll();
+              navigator2("/edit_texts");
+            }
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+          "Language:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            LanguageDropdown,
+            {
+              name: "filterlang",
+              header: "Filter off",
+              onChange: (val) => {
+                if (val === -1) {
+                  dataService.setActiveLanguage(null);
+                } else {
+                  dataService.setActiveLanguage(val);
+                }
+              },
+              defaultValue: activeLanguage?.LgID
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+          "Text Title (Wildc.=*):",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "text",
+              name: "query",
+              ref: queryRef,
+              defaultValue: query || "",
+              maxLength: 50,
+              size: 15
+            }
+          ),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              name: "querybutton",
+              value: "Filter",
+              onClick: () => navigator2(
+                `/edit_texts?page=1&query=${queryRef.current?.value || ""}`
+              )
+            }
+          ),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "Clear",
+              onClick: () => {
+                navigator2("/edit_texts?page=1&query=");
+                if (queryRef.current) {
+                  queryRef.current.value = "";
                 }
               }
-            )
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-              "Language:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                LanguageDropdown,
-                {
-                  header: "Filter off",
-                  onChange: (val) => {
-                    if (val === -1) {
-                      dataService.setActiveLanguage(null);
-                    } else {
-                      dataService.setActiveLanguage(val);
-                    }
-                  },
-                  defaultValue: activeLanguage?.LgID
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-              "Text Title (Wildc.=*):",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  name: "query",
-                  ref: queryRef,
-                  defaultValue: query || "",
-                  maxLength: 50,
-                  size: 15
-                }
-              ),
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  name: "querybutton",
-                  value: "Filter",
-                  onClick: () => navigator2(
-                    `/edit_texts?page=1&query=${queryRef.current?.value || ""}`
-                  )
-                }
-              ),
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  value: "Clear",
-                  onClick: () => {
-                    navigator2("/edit_texts?page=1&query=");
-                    if (queryRef.current) {
-                      queryRef.current.value = "";
-                    }
-                  }
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "td",
-              {
-                className: "td1 center",
-                colSpan: 2,
-                style: { whiteSpace: "nowrap" },
-                children: [
-                  "Tag #1:",
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                    "select",
-                    {
-                      defaultValue: filterTag1 !== null ? filterTag1 : void 0,
-                      name: "tag1",
-                      onChange: ({ target: { value } }) => {
-                        paramUpdater({ tag1: value });
-                      },
-                      children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Filter off]" }),
-                        texttags2.filter((tag) => {
-                          console.log(tag);
-                          return true;
-                        }).map((tag) => {
-                          return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: tag.TtTxID, children: [
-                            " ",
-                            tags22.find(({ T2ID }) => {
-                              return tag.TtT2ID === T2ID;
-                            })?.T2Text
-                          ] });
-                        }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "option",
-                          {
-                            value: "-1",
-                            children: "UNTAGGED"
-                          }
-                        )
-                      ]
-                    }
-                  )
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
-              "Tag #1 ..",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  name: "tag12",
-                  onChange: ({ target: { value } }) => {
-                    paramUpdater({ tag12: value });
-                  }
-                }
-              ),
-              ".. Tag #2"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
-              "Tag #2:",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "select",
-                {
-                  defaultValue: filterTag2 !== null ? filterTag2 : void 0,
-                  name: "tag2",
-                  onChange: ({ target: { value } }) => {
-                    paramUpdater({ tag2: value });
-                  },
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "-1", children: "[Filter off]" }),
-                    texttags2.filter((tag) => {
-                      console.log(tag);
-                      return true;
-                    }).map((tag) => {
-                      return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: tag.T2ID, children: [
-                        " ",
-                        tag.T2Text
-                      ] });
-                    }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "option",
-                      {
-                        value: "-1",
-                        children: "UNTAGGED"
-                      }
-                    )
-                  ]
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 1, style: { whiteSpace: "nowrap" } }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 2, style: { whiteSpace: "nowrap" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 1, style: { whiteSpace: "nowrap" }, children: [
-              "Sort Order:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  name: "sort",
-                  onChange: "{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&sort=' + val;}"
-                }
-              )
-            ] })
-          ] })
+            }
+          )
         ] })
-      }
-    ),
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "td",
+          {
+            className: "td1 center",
+            colSpan: 2,
+            style: { whiteSpace: "nowrap" },
+            children: [
+              "Tag #1:",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags22, tagKey: "tag1" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          TagAndOr,
+          {
+            onChange: ({ target: { value } }) => {
+              paramUpdater({ tag12: value });
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", style: { whiteSpace: "nowrap" }, children: [
+          "Tag #2:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags22, tagKey: "tag2" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 1, style: { whiteSpace: "nowrap" }, children: `${recno} Text${recno === 1 ? "" : "s"}` }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 2, style: { whiteSpace: "nowrap" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 1, style: { whiteSpace: "nowrap" }, children: [
+          "Sort Order:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "select",
+            {
+              name: "sort",
+              onChange: "{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&sort=' + val;}"
+            }
+          )
+        ] })
+      ] })
+    ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       TextMultiActions,
       {
-        onSelectAll: () => setSelectedTexts(new Set(textDetails.map((text) => text.TxID))),
-        onSelectNone: () => setSelectedTexts(/* @__PURE__ */ new Set())
+        onSelectAll,
+        onSelectNone,
+        selectedValues
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(LibraryHeader, {}),
         /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: dataOnPage && dataOnPage.map((text) => {
-          const isSelected = selectedTexts.has(text.TxID);
-          return /* @__PURE__ */ jsxRuntimeExports.jsx(
-            LibraryRow,
-            {
-              isSelected,
-              text,
-              toggleSelect: () => {
-                if (!isSelected) {
-                  return setSelectedTexts(
-                    /* @__PURE__ */ new Set([...selectedTexts, text.TxID])
-                  );
-                }
-                const setToRemove = /* @__PURE__ */ new Set([...selectedTexts]);
-                setToRemove.delete(text.TxID);
-                setSelectedTexts(setToRemove);
-              }
-            }
-          );
+          return /* @__PURE__ */ jsxRuntimeExports.jsx(LibraryRow, { text, ...checkboxPropsForEntry(text) });
         }) })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -25845,6 +29040,13 @@ function EditText({ chgID }) {
   const editingText = texts2.find(({ TxID }) => {
     return TxID === chgID;
   });
+  if (!editingText) {
+    throw new Error("Invalid change ID");
+  }
+  const validator = TextsValidator;
+  const navigator2 = useInternalNavigate();
+  const refMap = RefMap(validator);
+  const TxInput = buildFormInput(refMap, editingText);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Texts" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
@@ -25852,14 +29054,6 @@ function EditText({ chgID }) {
       " ",
       /* @__PURE__ */ jsxRuntimeExports.jsx("a", { target: "_blank", href: "info.htm#howtotext", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "question-frame", title: "Help" }) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "form",
       {
@@ -25867,32 +29061,31 @@ function EditText({ chgID }) {
         action: "<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>",
         method: "post",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "TxID", value: chgID }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TxInput, { type: "hidden", entryKey: "TxID", fixed: true }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(LanguageDropdown, { defaultValue: editingText?.TxLgID }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(LanguageDropdown, { defaultValue: editingText.TxLgID }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Title:" }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
+                  TxInput,
                   {
                     type: "text",
                     className: "notempty checkoutsidebmp",
-                    data_info: "Title",
-                    name: "TxTitle",
-                    value: editingText?.TxTitle,
-                    maxlength: 200,
+                    entryKey: "TxTitle",
+                    default: true,
+                    maxLength: 200,
                     size: 60
                   }
                 ),
                 " ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -25912,15 +29105,13 @@ function EditText({ chgID }) {
                   {
                     name: "TxText",
                     className: "notempty checkbytes checkoutsidebmp",
-                    data_maxlength: 65e3,
-                    data_info: "Text",
+                    maxLength: 65e3,
                     cols: 60,
                     rows: 20,
-                    children: editingText?.TxText
+                    defaultValue: editingText.TxText
                   }
                 ),
-                " ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -25930,14 +29121,13 @@ function EditText({ chgID }) {
             /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Source URI:" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
+                TxInput,
                 {
                   type: "text",
                   className: "checkurl checkoutsidebmp",
-                  data_info: "Source URI",
-                  name: "TxSourceURI",
-                  value: editingText?.TxSourceURI,
-                  maxlength: 1e3,
+                  entryKey: "TxSourceURI",
+                  default: true,
+                  maxLength: 1e3,
                   size: 60
                 }
               ) })
@@ -25950,14 +29140,13 @@ function EditText({ chgID }) {
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Audio-URI:" }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
+                  TxInput,
                   {
                     type: "text",
                     className: "checkoutsidebmp",
-                    data_info: "Audio-URI",
-                    name: "TxAudioURI",
-                    value: editingText?.TxAudioURI,
-                    maxlength: 200,
+                    entryKey: "TxAudioURI",
+                    default: true,
+                    maxLength: 200,
                     size: 60
                   }
                 ),
@@ -25970,12 +29159,41 @@ function EditText({ chgID }) {
                 {
                   type: "button",
                   value: "Cancel",
-                  onClick: "{resetDirty(); location.href='edit_texts.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+                  onClick: () => {
+                    navigator2(`/edit_texts.php#rec${chgID}`);
+                  }
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Check" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Change" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Change and Open" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  onClick: () => {
+                    window.alert("TODO");
+                  },
+                  value: "Check"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  onClick: () => {
+                    window.alert("TODO");
+                  },
+                  value: "Change"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  onClick: () => {
+                    window.alert("TODO");
+                  },
+                  value: "Change and Open"
+                }
+              )
             ] }) })
           ] })
         ]
@@ -25983,7 +29201,102 @@ function EditText({ chgID }) {
     )
   ] });
 }
-function ImportLongText() {
+function LongTextVerify({
+  verifying
+}) {
+  const navigate = useInternalNavigate();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Long Text Import" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "form",
+      {
+        encType: "multipart/form-data",
+        action: "/long_text_import",
+        method: "post",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "LgID", value: "2" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "TxTitle", value: "TODO" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "TxSourceURI", value: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "TextTags", value: "null" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "TextCount", value: "12" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", colSpan: 2, children: verifying.length > 1 ? `This long text will be split into ${verifying.length} shorter
+                texts - as follows:` : "This text can fit as a single text" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  value: "Cancel",
+                  onClick: () => {
+                    navigate("/");
+                  }
+                }
+              ),
+              "  |  ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  value: "Go Back",
+                  onClick: () => {
+                    history.back();
+                  }
+                }
+              ),
+              "  |  ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "button",
+                  value: `Create ${verifying.length} texts`,
+                  onClick: () => {
+                    verifying.forEach((text) => {
+                      dataService.addText(text);
+                    });
+                  }
+                }
+              )
+            ] }) }),
+            verifying.map(({ TxText }, ii2) => {
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
+                    "Text ",
+                    ii2 + 1,
+                    ":"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  "Length:",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  byteSizeOfString(TxText),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  "Bytes"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "textarea",
+                  {
+                    readOnly: true,
+                    name: `text[${ii2}]`,
+                    cols: 60,
+                    rows: 10,
+                    defaultValue: TxText
+                  }
+                ) })
+              ] });
+            })
+          ] }) })
+        ]
+      }
+    )
+  ] });
+}
+function ImportLongText({
+  onSetVerify
+}) {
   const [{ languages: languages2, tags: tags3, texts: texts2, activeLanguageId }] = useData([
     "languages",
     "tags",
@@ -25991,9 +29304,13 @@ function ImportLongText() {
     "activeLanguageId"
   ]);
   const navigate = useInternalNavigate();
-  const [formLanguage, setFormLanguage] = reactExports.useState(
-    activeLanguageId
-  );
+  const validator = object({
+    TxText: string(),
+    TxLgID: number(),
+    TxTitle: string()
+  });
+  const refMap = RefMap(validator);
+  const TxInput = buildFormInput(refMap);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Import Long Text" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
@@ -26003,8 +29320,9 @@ function ImportLongText() {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             LanguageDropdown,
             {
-              defaultValue: formLanguage ? formLanguage : void 0,
-              onChange: (val) => setFormLanguage(val)
+              defaultValue: activeLanguageId ? activeLanguageId : void 0,
+              onChange: (val) => dataService.setActiveLanguage(val),
+              dropdownRef: refMap.TxLgID
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
@@ -26014,13 +29332,11 @@ function ImportLongText() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Title:" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            TxInput,
             {
               type: "text",
               className: "notempty checkoutsidebmp",
-              data_info: "Title",
-              name: "TxTitle",
-              value: "",
+              entryKey: "TxTitle",
               maxLength: 200,
               size: 60
             }
@@ -26047,7 +29363,7 @@ function ImportLongText() {
             "textarea",
             {
               className: "checkoutsidebmp",
-              data_info: "Upload",
+              ref: refMap.TxText,
               name: "Upload",
               cols: 60,
               rows: 15
@@ -26075,10 +29391,19 @@ function ImportLongText() {
           "Paragraphs:"
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "paragraph_handling", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "ONE NEWLINE: Paragraph ends" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "2", children: "TWO NEWLINEs: Paragraph ends. Single NEWLINE converted to SPACE" })
-          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "select",
+            {
+              name: "paragraph_handling",
+              defaultValue: "1",
+              onChange: () => {
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "ONE NEWLINE: Paragraph ends" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "2", children: "TWO NEWLINEs: Paragraph ends. Single NEWLINE converted to SPACE" })
+              ]
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
         ] })
       ] }),
@@ -26096,7 +29421,6 @@ function ImportLongText() {
             {
               type: "text",
               className: "notempty posintnumber",
-              data_info: "Maximum Sentences per Text",
               name: "maxsent",
               value: "50",
               maxLength: 3,
@@ -26119,13 +29443,11 @@ function ImportLongText() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Source URI:" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          TxInput,
           {
             type: "text",
             className: "checkurl checkoutsidebmp",
-            data_info: "Source URI",
-            name: "TxSourceURI",
-            value: "",
+            entryKey: "TxSourceURI",
             maxLength: 1e3,
             size: 60
           }
@@ -26176,1923 +29498,60 @@ function ImportLongText() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
-            type: "submit",
-            name: "op",
-            value: "NEXT STEP: Check the Texts"
+            type: "button",
+            value: "NEXT STEP: Check the Texts",
+            onClick: () => {
+              console.log("LONGIMPORT", refMap.TxText.current);
+              CheckAndSubmit(
+                refMap,
+                { TxLgID: parseNumMap },
+                validator,
+                ({ TxText, TxLgID, TxTitle }) => {
+                  const splitTexts = splitCheckText(
+                    TxText,
+                    languages2.find((lang) => {
+                      return lang.LgID === TxLgID;
+                    }),
+                    -2
+                  );
+                  console.log(splitTexts);
+                  onSetVerify(
+                    splitTexts.map((text, ii2) => {
+                      return {
+                        TxText: text,
+                        TxLgID,
+                        TxTitle: `${TxTitle} [${ii2 + 1}/${splitTexts.length}]`
+                      };
+                    })
+                  );
+                }
+              );
+            }
           }
         )
       ] }) })
     ] }) })
   ] });
 }
-var lib = { exports: {} };
-var Modal$2 = {};
-var propTypes = { exports: {} };
-var ReactPropTypesSecret$1 = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
-var ReactPropTypesSecret_1 = ReactPropTypesSecret$1;
-var ReactPropTypesSecret = ReactPropTypesSecret_1;
-function emptyFunction() {
-}
-function emptyFunctionWithReset() {
-}
-emptyFunctionWithReset.resetWarningCache = emptyFunction;
-var factoryWithThrowingShims = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret) {
-      return;
-    }
-    var err = new Error(
-      "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
-    );
-    err.name = "Invariant Violation";
-    throw err;
-  }
-  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  }
-  var ReactPropTypes = {
-    array: shim,
-    bigint: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    elementType: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim,
-    checkPropTypes: emptyFunctionWithReset,
-    resetWarningCache: emptyFunction
-  };
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
-};
-{
-  propTypes.exports = factoryWithThrowingShims();
-}
-var propTypesExports = propTypes.exports;
-const PropTypes = /* @__PURE__ */ getDefaultExportFromCjs(propTypesExports);
-var ModalPortal = { exports: {} };
-var focusManager = {};
-var tabbable$1 = { exports: {} };
-(function(module, exports) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = findTabbableDescendants;
-  /*!
-   * Adapted from jQuery UI core
-   *
-   * http://jqueryui.com
-   *
-   * Copyright 2014 jQuery Foundation and other contributors
-   * Released under the MIT license.
-   * http://jquery.org/license
-   *
-   * http://api.jqueryui.com/category/ui-core/
-   */
-  var DISPLAY_NONE = "none";
-  var DISPLAY_CONTENTS = "contents";
-  var tabbableNode = /input|select|textarea|button|object|iframe/;
-  function isNotOverflowing(element, style) {
-    return style.getPropertyValue("overflow") !== "visible" || // if 'overflow: visible' set, check if there is actually any overflow
-    element.scrollWidth <= 0 && element.scrollHeight <= 0;
-  }
-  function hidesContents(element) {
-    var zeroSize = element.offsetWidth <= 0 && element.offsetHeight <= 0;
-    if (zeroSize && !element.innerHTML)
-      return true;
-    try {
-      var style = window.getComputedStyle(element);
-      var displayValue = style.getPropertyValue("display");
-      return zeroSize ? displayValue !== DISPLAY_CONTENTS && isNotOverflowing(element, style) : displayValue === DISPLAY_NONE;
-    } catch (exception) {
-      console.warn("Failed to inspect element style");
-      return false;
-    }
-  }
-  function visible(element) {
-    var parentElement = element;
-    var rootNode = element.getRootNode && element.getRootNode();
-    while (parentElement) {
-      if (parentElement === document.body)
-        break;
-      if (rootNode && parentElement === rootNode)
-        parentElement = rootNode.host.parentNode;
-      if (hidesContents(parentElement))
-        return false;
-      parentElement = parentElement.parentNode;
-    }
-    return true;
-  }
-  function focusable(element, isTabIndexNotNaN) {
-    var nodeName = element.nodeName.toLowerCase();
-    var res = tabbableNode.test(nodeName) && !element.disabled || (nodeName === "a" ? element.href || isTabIndexNotNaN : isTabIndexNotNaN);
-    return res && visible(element);
-  }
-  function tabbable3(element) {
-    var tabIndex = element.getAttribute("tabindex");
-    if (tabIndex === null)
-      tabIndex = void 0;
-    var isTabIndexNaN = isNaN(tabIndex);
-    return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
-  }
-  function findTabbableDescendants(element) {
-    var descendants = [].slice.call(element.querySelectorAll("*"), 0).reduce(function(finished, el2) {
-      return finished.concat(!el2.shadowRoot ? [el2] : findTabbableDescendants(el2.shadowRoot));
-    }, []);
-    return descendants.filter(tabbable3);
-  }
-  module.exports = exports["default"];
-})(tabbable$1, tabbable$1.exports);
-var tabbableExports = tabbable$1.exports;
-Object.defineProperty(focusManager, "__esModule", {
-  value: true
-});
-focusManager.resetState = resetState$4;
-focusManager.log = log$4;
-focusManager.handleBlur = handleBlur;
-focusManager.handleFocus = handleFocus;
-focusManager.markForFocusLater = markForFocusLater;
-focusManager.returnFocus = returnFocus;
-focusManager.popWithoutFocus = popWithoutFocus;
-focusManager.setupScopedFocus = setupScopedFocus;
-focusManager.teardownScopedFocus = teardownScopedFocus;
-var _tabbable = tabbableExports;
-var _tabbable2 = _interopRequireDefault$4(_tabbable);
-function _interopRequireDefault$4(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-var focusLaterElements = [];
-var modalElement = null;
-var needToFocus = false;
-function resetState$4() {
-  focusLaterElements = [];
-}
-function log$4() {
-}
-function handleBlur() {
-  needToFocus = true;
-}
-function handleFocus() {
-  if (needToFocus) {
-    needToFocus = false;
-    if (!modalElement) {
-      return;
-    }
-    setTimeout(function() {
-      if (modalElement.contains(document.activeElement)) {
-        return;
-      }
-      var el2 = (0, _tabbable2.default)(modalElement)[0] || modalElement;
-      el2.focus();
-    }, 0);
-  }
-}
-function markForFocusLater() {
-  focusLaterElements.push(document.activeElement);
-}
-function returnFocus() {
-  var preventScroll = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : false;
-  var toFocus = null;
-  try {
-    if (focusLaterElements.length !== 0) {
-      toFocus = focusLaterElements.pop();
-      toFocus.focus({ preventScroll });
-    }
-    return;
-  } catch (e2) {
-    console.warn(["You tried to return focus to", toFocus, "but it is not in the DOM anymore"].join(" "));
-  }
-}
-function popWithoutFocus() {
-  focusLaterElements.length > 0 && focusLaterElements.pop();
-}
-function setupScopedFocus(element) {
-  modalElement = element;
-  if (window.addEventListener) {
-    window.addEventListener("blur", handleBlur, false);
-    document.addEventListener("focus", handleFocus, true);
-  } else {
-    window.attachEvent("onBlur", handleBlur);
-    document.attachEvent("onFocus", handleFocus);
-  }
-}
-function teardownScopedFocus() {
-  modalElement = null;
-  if (window.addEventListener) {
-    window.removeEventListener("blur", handleBlur);
-    document.removeEventListener("focus", handleFocus);
-  } else {
-    window.detachEvent("onBlur", handleBlur);
-    document.detachEvent("onFocus", handleFocus);
-  }
-}
-var scopeTab = { exports: {} };
-(function(module, exports) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = scopeTab2;
-  var _tabbable3 = tabbableExports;
-  var _tabbable22 = _interopRequireDefault2(_tabbable3);
-  function _interopRequireDefault2(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-  }
-  function getActiveElement() {
-    var el2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : document;
-    return el2.activeElement.shadowRoot ? getActiveElement(el2.activeElement.shadowRoot) : el2.activeElement;
-  }
-  function scopeTab2(node, event) {
-    var tabbable3 = (0, _tabbable22.default)(node);
-    if (!tabbable3.length) {
-      event.preventDefault();
-      return;
-    }
-    var target = void 0;
-    var shiftKey = event.shiftKey;
-    var head = tabbable3[0];
-    var tail = tabbable3[tabbable3.length - 1];
-    var activeElement2 = getActiveElement();
-    if (node === activeElement2) {
-      if (!shiftKey)
-        return;
-      target = tail;
-    }
-    if (tail === activeElement2 && !shiftKey) {
-      target = head;
-    }
-    if (head === activeElement2 && shiftKey) {
-      target = tail;
-    }
-    if (target) {
-      event.preventDefault();
-      target.focus();
-      return;
-    }
-    var checkSafari = /(\bChrome\b|\bSafari\b)\//.exec(navigator.userAgent);
-    var isSafariDesktop = checkSafari != null && checkSafari[1] != "Chrome" && /\biPod\b|\biPad\b/g.exec(navigator.userAgent) == null;
-    if (!isSafariDesktop)
-      return;
-    var x2 = tabbable3.indexOf(activeElement2);
-    if (x2 > -1) {
-      x2 += shiftKey ? -1 : 1;
-    }
-    target = tabbable3[x2];
-    if (typeof target === "undefined") {
-      event.preventDefault();
-      target = shiftKey ? tail : head;
-      target.focus();
-      return;
-    }
-    event.preventDefault();
-    target.focus();
-  }
-  module.exports = exports["default"];
-})(scopeTab, scopeTab.exports);
-var scopeTabExports = scopeTab.exports;
-var ariaAppHider$1 = {};
-var warning = function() {
-};
-var warning_1 = warning;
-var safeHTMLElement = {};
-var exenv = { exports: {} };
-/*!
-  Copyright (c) 2015 Jed Watson.
-  Based on code that is Copyright 2013-2015, Facebook, Inc.
-  All rights reserved.
-*/
-(function(module) {
-  (function() {
-    var canUseDOM = !!(typeof window !== "undefined" && window.document && window.document.createElement);
-    var ExecutionEnvironment = {
-      canUseDOM,
-      canUseWorkers: typeof Worker !== "undefined",
-      canUseEventListeners: canUseDOM && !!(window.addEventListener || window.attachEvent),
-      canUseViewport: canUseDOM && !!window.screen
-    };
-    if (module.exports) {
-      module.exports = ExecutionEnvironment;
-    } else {
-      window.ExecutionEnvironment = ExecutionEnvironment;
-    }
-  })();
-})(exenv);
-var exenvExports = exenv.exports;
-Object.defineProperty(safeHTMLElement, "__esModule", {
-  value: true
-});
-safeHTMLElement.canUseDOM = safeHTMLElement.SafeNodeList = safeHTMLElement.SafeHTMLCollection = void 0;
-var _exenv = exenvExports;
-var _exenv2 = _interopRequireDefault$3(_exenv);
-function _interopRequireDefault$3(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-var EE = _exenv2.default;
-var SafeHTMLElement = EE.canUseDOM ? window.HTMLElement : {};
-safeHTMLElement.SafeHTMLCollection = EE.canUseDOM ? window.HTMLCollection : {};
-safeHTMLElement.SafeNodeList = EE.canUseDOM ? window.NodeList : {};
-safeHTMLElement.canUseDOM = EE.canUseDOM;
-safeHTMLElement.default = SafeHTMLElement;
-Object.defineProperty(ariaAppHider$1, "__esModule", {
-  value: true
-});
-ariaAppHider$1.resetState = resetState$3;
-ariaAppHider$1.log = log$3;
-ariaAppHider$1.assertNodeList = assertNodeList;
-ariaAppHider$1.setElement = setElement;
-ariaAppHider$1.validateElement = validateElement;
-ariaAppHider$1.hide = hide;
-ariaAppHider$1.show = show;
-ariaAppHider$1.documentNotReadyOrSSRTesting = documentNotReadyOrSSRTesting;
-var _warning = warning_1;
-var _warning2 = _interopRequireDefault$2(_warning);
-var _safeHTMLElement$1 = safeHTMLElement;
-function _interopRequireDefault$2(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-var globalElement = null;
-function resetState$3() {
-  if (globalElement) {
-    if (globalElement.removeAttribute) {
-      globalElement.removeAttribute("aria-hidden");
-    } else if (globalElement.length != null) {
-      globalElement.forEach(function(element) {
-        return element.removeAttribute("aria-hidden");
-      });
-    } else {
-      document.querySelectorAll(globalElement).forEach(function(element) {
-        return element.removeAttribute("aria-hidden");
-      });
-    }
-  }
-  globalElement = null;
-}
-function log$3() {
-}
-function assertNodeList(nodeList, selector) {
-  if (!nodeList || !nodeList.length) {
-    throw new Error("react-modal: No elements were found for selector " + selector + ".");
-  }
-}
-function setElement(element) {
-  var useElement = element;
-  if (typeof useElement === "string" && _safeHTMLElement$1.canUseDOM) {
-    var el2 = document.querySelectorAll(useElement);
-    assertNodeList(el2, useElement);
-    useElement = el2;
-  }
-  globalElement = useElement || globalElement;
-  return globalElement;
-}
-function validateElement(appElement) {
-  var el2 = appElement || globalElement;
-  if (el2) {
-    return Array.isArray(el2) || el2 instanceof HTMLCollection || el2 instanceof NodeList ? el2 : [el2];
-  } else {
-    (0, _warning2.default)(false, ["react-modal: App element is not defined.", "Please use `Modal.setAppElement(el)` or set `appElement={el}`.", "This is needed so screen readers don't see main content", "when modal is opened. It is not recommended, but you can opt-out", "by setting `ariaHideApp={false}`."].join(" "));
-    return [];
-  }
-}
-function hide(appElement) {
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = void 0;
-  try {
-    for (var _iterator = validateElement(appElement)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var el2 = _step.value;
-      el2.setAttribute("aria-hidden", "true");
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
-}
-function show(appElement) {
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = void 0;
-  try {
-    for (var _iterator2 = validateElement(appElement)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var el2 = _step2.value;
-      el2.removeAttribute("aria-hidden");
-    }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2.return) {
-        _iterator2.return();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
-  }
-}
-function documentNotReadyOrSSRTesting() {
-  globalElement = null;
-}
-var classList = {};
-Object.defineProperty(classList, "__esModule", {
-  value: true
-});
-classList.resetState = resetState$2;
-classList.log = log$2;
-var htmlClassList = {};
-var docBodyClassList = {};
-function removeClass(at, cls) {
-  at.classList.remove(cls);
-}
-function resetState$2() {
-  var htmlElement = document.getElementsByTagName("html")[0];
-  for (var cls in htmlClassList) {
-    removeClass(htmlElement, htmlClassList[cls]);
-  }
-  var body = document.body;
-  for (var _cls in docBodyClassList) {
-    removeClass(body, docBodyClassList[_cls]);
-  }
-  htmlClassList = {};
-  docBodyClassList = {};
-}
-function log$2() {
-}
-var incrementReference = function incrementReference2(poll, className) {
-  if (!poll[className]) {
-    poll[className] = 0;
-  }
-  poll[className] += 1;
-  return className;
-};
-var decrementReference = function decrementReference2(poll, className) {
-  if (poll[className]) {
-    poll[className] -= 1;
-  }
-  return className;
-};
-var trackClass = function trackClass2(classListRef, poll, classes) {
-  classes.forEach(function(className) {
-    incrementReference(poll, className);
-    classListRef.add(className);
-  });
-};
-var untrackClass = function untrackClass2(classListRef, poll, classes) {
-  classes.forEach(function(className) {
-    decrementReference(poll, className);
-    poll[className] === 0 && classListRef.remove(className);
-  });
-};
-classList.add = function add(element, classString) {
-  return trackClass(element.classList, element.nodeName.toLowerCase() == "html" ? htmlClassList : docBodyClassList, classString.split(" "));
-};
-classList.remove = function remove(element, classString) {
-  return untrackClass(element.classList, element.nodeName.toLowerCase() == "html" ? htmlClassList : docBodyClassList, classString.split(" "));
-};
-var portalOpenInstances$1 = {};
-Object.defineProperty(portalOpenInstances$1, "__esModule", {
-  value: true
-});
-portalOpenInstances$1.log = log$1;
-portalOpenInstances$1.resetState = resetState$1;
-function _classCallCheck$2(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-var PortalOpenInstances = function PortalOpenInstances2() {
-  var _this = this;
-  _classCallCheck$2(this, PortalOpenInstances2);
-  this.register = function(openInstance) {
-    if (_this.openInstances.indexOf(openInstance) !== -1) {
-      return;
-    }
-    _this.openInstances.push(openInstance);
-    _this.emit("register");
-  };
-  this.deregister = function(openInstance) {
-    var index2 = _this.openInstances.indexOf(openInstance);
-    if (index2 === -1) {
-      return;
-    }
-    _this.openInstances.splice(index2, 1);
-    _this.emit("deregister");
-  };
-  this.subscribe = function(callback) {
-    _this.subscribers.push(callback);
-  };
-  this.emit = function(eventType) {
-    _this.subscribers.forEach(function(subscriber) {
-      return subscriber(
-        eventType,
-        // shallow copy to avoid accidental mutation
-        _this.openInstances.slice()
-      );
-    });
-  };
-  this.openInstances = [];
-  this.subscribers = [];
-};
-var portalOpenInstances = new PortalOpenInstances();
-function log$1() {
-  console.log("portalOpenInstances ----------");
-  console.log(portalOpenInstances.openInstances.length);
-  portalOpenInstances.openInstances.forEach(function(p2) {
-    return console.log(p2);
-  });
-  console.log("end portalOpenInstances ----------");
-}
-function resetState$1() {
-  portalOpenInstances = new PortalOpenInstances();
-}
-portalOpenInstances$1.default = portalOpenInstances;
-var bodyTrap$1 = {};
-Object.defineProperty(bodyTrap$1, "__esModule", {
-  value: true
-});
-bodyTrap$1.resetState = resetState;
-bodyTrap$1.log = log;
-var _portalOpenInstances = portalOpenInstances$1;
-var _portalOpenInstances2 = _interopRequireDefault$1(_portalOpenInstances);
-function _interopRequireDefault$1(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-var before = void 0, after = void 0, instances = [];
-function resetState() {
-  var _arr = [before, after];
-  for (var _i = 0; _i < _arr.length; _i++) {
-    var item = _arr[_i];
-    if (!item)
-      continue;
-    item.parentNode && item.parentNode.removeChild(item);
-  }
-  before = after = null;
-  instances = [];
-}
-function log() {
-  console.log("bodyTrap ----------");
-  console.log(instances.length);
-  var _arr2 = [before, after];
-  for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-    var item = _arr2[_i2];
-    var check = item || {};
-    console.log(check.nodeName, check.className, check.id);
-  }
-  console.log("edn bodyTrap ----------");
-}
-function focusContent() {
-  if (instances.length === 0) {
-    return;
-  }
-  instances[instances.length - 1].focusContent();
-}
-function bodyTrap(eventType, openInstances) {
-  if (!before && !after) {
-    before = document.createElement("div");
-    before.setAttribute("data-react-modal-body-trap", "");
-    before.style.position = "absolute";
-    before.style.opacity = "0";
-    before.setAttribute("tabindex", "0");
-    before.addEventListener("focus", focusContent);
-    after = before.cloneNode();
-    after.addEventListener("focus", focusContent);
-  }
-  instances = openInstances;
-  if (instances.length > 0) {
-    if (document.body.firstChild !== before) {
-      document.body.insertBefore(before, document.body.firstChild);
-    }
-    if (document.body.lastChild !== after) {
-      document.body.appendChild(after);
-    }
-  } else {
-    if (before.parentElement) {
-      before.parentElement.removeChild(before);
-    }
-    if (after.parentElement) {
-      after.parentElement.removeChild(after);
-    }
-  }
-}
-_portalOpenInstances2.default.subscribe(bodyTrap);
-(function(module, exports) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  var _extends2 = Object.assign || function(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-    return target;
-  };
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
-    return typeof obj;
-  } : function(obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  };
-  var _createClass2 = function() {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor)
-          descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    return function(Constructor, protoProps, staticProps) {
-      if (protoProps)
-        defineProperties(Constructor.prototype, protoProps);
-      if (staticProps)
-        defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-  var _react3 = reactExports;
-  var _propTypes3 = propTypesExports;
-  var _propTypes22 = _interopRequireDefault2(_propTypes3);
-  var _focusManager = focusManager;
-  var focusManager$1 = _interopRequireWildcard2(_focusManager);
-  var _scopeTab = scopeTabExports;
-  var _scopeTab2 = _interopRequireDefault2(_scopeTab);
-  var _ariaAppHider2 = ariaAppHider$1;
-  var ariaAppHider2 = _interopRequireWildcard2(_ariaAppHider2);
-  var _classList = classList;
-  var classList$1 = _interopRequireWildcard2(_classList);
-  var _safeHTMLElement3 = safeHTMLElement;
-  var _safeHTMLElement22 = _interopRequireDefault2(_safeHTMLElement3);
-  var _portalOpenInstances3 = portalOpenInstances$1;
-  var _portalOpenInstances22 = _interopRequireDefault2(_portalOpenInstances3);
-  function _interopRequireWildcard2(obj) {
-    if (obj && obj.__esModule) {
-      return obj;
-    } else {
-      var newObj = {};
-      if (obj != null) {
-        for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key))
-            newObj[key] = obj[key];
-        }
-      }
-      newObj.default = obj;
-      return newObj;
-    }
-  }
-  function _interopRequireDefault2(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-  }
-  function _classCallCheck2(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _possibleConstructorReturn2(self2, call) {
-    if (!self2) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return call && (typeof call === "object" || typeof call === "function") ? call : self2;
-  }
-  function _inherits2(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });
-    if (superClass)
-      Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  }
-  var CLASS_NAMES = {
-    overlay: "ReactModal__Overlay",
-    content: "ReactModal__Content"
-  };
-  var isTabKey = function isTabKey2(event) {
-    return event.code === "Tab" || event.keyCode === 9;
-  };
-  var isEscKey = function isEscKey2(event) {
-    return event.code === "Escape" || event.keyCode === 27;
-  };
-  var ariaHiddenInstances = 0;
-  var ModalPortal2 = function(_Component) {
-    _inherits2(ModalPortal3, _Component);
-    function ModalPortal3(props) {
-      _classCallCheck2(this, ModalPortal3);
-      var _this = _possibleConstructorReturn2(this, (ModalPortal3.__proto__ || Object.getPrototypeOf(ModalPortal3)).call(this, props));
-      _this.setOverlayRef = function(overlay) {
-        _this.overlay = overlay;
-        _this.props.overlayRef && _this.props.overlayRef(overlay);
-      };
-      _this.setContentRef = function(content) {
-        _this.content = content;
-        _this.props.contentRef && _this.props.contentRef(content);
-      };
-      _this.afterClose = function() {
-        var _this$props = _this.props, appElement = _this$props.appElement, ariaHideApp = _this$props.ariaHideApp, htmlOpenClassName = _this$props.htmlOpenClassName, bodyOpenClassName2 = _this$props.bodyOpenClassName, parentSelector2 = _this$props.parentSelector;
-        var parentDocument = parentSelector2 && parentSelector2().ownerDocument || document;
-        bodyOpenClassName2 && classList$1.remove(parentDocument.body, bodyOpenClassName2);
-        htmlOpenClassName && classList$1.remove(parentDocument.getElementsByTagName("html")[0], htmlOpenClassName);
-        if (ariaHideApp && ariaHiddenInstances > 0) {
-          ariaHiddenInstances -= 1;
-          if (ariaHiddenInstances === 0) {
-            ariaAppHider2.show(appElement);
-          }
-        }
-        if (_this.props.shouldFocusAfterRender) {
-          if (_this.props.shouldReturnFocusAfterClose) {
-            focusManager$1.returnFocus(_this.props.preventScroll);
-            focusManager$1.teardownScopedFocus();
-          } else {
-            focusManager$1.popWithoutFocus();
-          }
-        }
-        if (_this.props.onAfterClose) {
-          _this.props.onAfterClose();
-        }
-        _portalOpenInstances22.default.deregister(_this);
-      };
-      _this.open = function() {
-        _this.beforeOpen();
-        if (_this.state.afterOpen && _this.state.beforeClose) {
-          clearTimeout(_this.closeTimer);
-          _this.setState({ beforeClose: false });
-        } else {
-          if (_this.props.shouldFocusAfterRender) {
-            focusManager$1.setupScopedFocus(_this.node);
-            focusManager$1.markForFocusLater();
-          }
-          _this.setState({ isOpen: true }, function() {
-            _this.openAnimationFrame = requestAnimationFrame(function() {
-              _this.setState({ afterOpen: true });
-              if (_this.props.isOpen && _this.props.onAfterOpen) {
-                _this.props.onAfterOpen({
-                  overlayEl: _this.overlay,
-                  contentEl: _this.content
-                });
-              }
-            });
-          });
-        }
-      };
-      _this.close = function() {
-        if (_this.props.closeTimeoutMS > 0) {
-          _this.closeWithTimeout();
-        } else {
-          _this.closeWithoutTimeout();
-        }
-      };
-      _this.focusContent = function() {
-        return _this.content && !_this.contentHasFocus() && _this.content.focus({ preventScroll: true });
-      };
-      _this.closeWithTimeout = function() {
-        var closesAt = Date.now() + _this.props.closeTimeoutMS;
-        _this.setState({ beforeClose: true, closesAt }, function() {
-          _this.closeTimer = setTimeout(_this.closeWithoutTimeout, _this.state.closesAt - Date.now());
-        });
-      };
-      _this.closeWithoutTimeout = function() {
-        _this.setState({
-          beforeClose: false,
-          isOpen: false,
-          afterOpen: false,
-          closesAt: null
-        }, _this.afterClose);
-      };
-      _this.handleKeyDown = function(event) {
-        if (isTabKey(event)) {
-          (0, _scopeTab2.default)(_this.content, event);
-        }
-        if (_this.props.shouldCloseOnEsc && isEscKey(event)) {
-          event.stopPropagation();
-          _this.requestClose(event);
-        }
-      };
-      _this.handleOverlayOnClick = function(event) {
-        if (_this.shouldClose === null) {
-          _this.shouldClose = true;
-        }
-        if (_this.shouldClose && _this.props.shouldCloseOnOverlayClick) {
-          if (_this.ownerHandlesClose()) {
-            _this.requestClose(event);
-          } else {
-            _this.focusContent();
-          }
-        }
-        _this.shouldClose = null;
-      };
-      _this.handleContentOnMouseUp = function() {
-        _this.shouldClose = false;
-      };
-      _this.handleOverlayOnMouseDown = function(event) {
-        if (!_this.props.shouldCloseOnOverlayClick && event.target == _this.overlay) {
-          event.preventDefault();
-        }
-      };
-      _this.handleContentOnClick = function() {
-        _this.shouldClose = false;
-      };
-      _this.handleContentOnMouseDown = function() {
-        _this.shouldClose = false;
-      };
-      _this.requestClose = function(event) {
-        return _this.ownerHandlesClose() && _this.props.onRequestClose(event);
-      };
-      _this.ownerHandlesClose = function() {
-        return _this.props.onRequestClose;
-      };
-      _this.shouldBeClosed = function() {
-        return !_this.state.isOpen && !_this.state.beforeClose;
-      };
-      _this.contentHasFocus = function() {
-        return document.activeElement === _this.content || _this.content.contains(document.activeElement);
-      };
-      _this.buildClassName = function(which, additional) {
-        var classNames = (typeof additional === "undefined" ? "undefined" : _typeof(additional)) === "object" ? additional : {
-          base: CLASS_NAMES[which],
-          afterOpen: CLASS_NAMES[which] + "--after-open",
-          beforeClose: CLASS_NAMES[which] + "--before-close"
-        };
-        var className = classNames.base;
-        if (_this.state.afterOpen) {
-          className = className + " " + classNames.afterOpen;
-        }
-        if (_this.state.beforeClose) {
-          className = className + " " + classNames.beforeClose;
-        }
-        return typeof additional === "string" && additional ? className + " " + additional : className;
-      };
-      _this.attributesFromObject = function(prefix, items) {
-        return Object.keys(items).reduce(function(acc, name) {
-          acc[prefix + "-" + name] = items[name];
-          return acc;
-        }, {});
-      };
-      _this.state = {
-        afterOpen: false,
-        beforeClose: false
-      };
-      _this.shouldClose = null;
-      _this.moveFromContentToOverlay = null;
-      return _this;
-    }
-    _createClass2(ModalPortal3, [{
-      key: "componentDidMount",
-      value: function componentDidMount() {
-        if (this.props.isOpen) {
-          this.open();
-        }
-      }
-    }, {
-      key: "componentDidUpdate",
-      value: function componentDidUpdate(prevProps, prevState) {
-        if (this.props.isOpen && !prevProps.isOpen) {
-          this.open();
-        } else if (!this.props.isOpen && prevProps.isOpen) {
-          this.close();
-        }
-        if (this.props.shouldFocusAfterRender && this.state.isOpen && !prevState.isOpen) {
-          this.focusContent();
-        }
-      }
-    }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        if (this.state.isOpen) {
-          this.afterClose();
-        }
-        clearTimeout(this.closeTimer);
-        cancelAnimationFrame(this.openAnimationFrame);
-      }
-    }, {
-      key: "beforeOpen",
-      value: function beforeOpen() {
-        var _props = this.props, appElement = _props.appElement, ariaHideApp = _props.ariaHideApp, htmlOpenClassName = _props.htmlOpenClassName, bodyOpenClassName2 = _props.bodyOpenClassName, parentSelector2 = _props.parentSelector;
-        var parentDocument = parentSelector2 && parentSelector2().ownerDocument || document;
-        bodyOpenClassName2 && classList$1.add(parentDocument.body, bodyOpenClassName2);
-        htmlOpenClassName && classList$1.add(parentDocument.getElementsByTagName("html")[0], htmlOpenClassName);
-        if (ariaHideApp) {
-          ariaHiddenInstances += 1;
-          ariaAppHider2.hide(appElement);
-        }
-        _portalOpenInstances22.default.register(this);
-      }
-      // Don't steal focus from inner elements
-    }, {
-      key: "render",
-      value: function render() {
-        var _props2 = this.props, id2 = _props2.id, className = _props2.className, overlayClassName = _props2.overlayClassName, defaultStyles = _props2.defaultStyles, children = _props2.children;
-        var contentStyles = className ? {} : defaultStyles.content;
-        var overlayStyles = overlayClassName ? {} : defaultStyles.overlay;
-        if (this.shouldBeClosed()) {
-          return null;
-        }
-        var overlayProps = {
-          ref: this.setOverlayRef,
-          className: this.buildClassName("overlay", overlayClassName),
-          style: _extends2({}, overlayStyles, this.props.style.overlay),
-          onClick: this.handleOverlayOnClick,
-          onMouseDown: this.handleOverlayOnMouseDown
-        };
-        var contentProps = _extends2({
-          id: id2,
-          ref: this.setContentRef,
-          style: _extends2({}, contentStyles, this.props.style.content),
-          className: this.buildClassName("content", className),
-          tabIndex: "-1",
-          onKeyDown: this.handleKeyDown,
-          onMouseDown: this.handleContentOnMouseDown,
-          onMouseUp: this.handleContentOnMouseUp,
-          onClick: this.handleContentOnClick,
-          role: this.props.role,
-          "aria-label": this.props.contentLabel
-        }, this.attributesFromObject("aria", _extends2({ modal: true }, this.props.aria)), this.attributesFromObject("data", this.props.data || {}), {
-          "data-testid": this.props.testId
-        });
-        var contentElement2 = this.props.contentElement(contentProps, children);
-        return this.props.overlayElement(overlayProps, contentElement2);
-      }
-    }]);
-    return ModalPortal3;
-  }(_react3.Component);
-  ModalPortal2.defaultProps = {
-    style: {
-      overlay: {},
-      content: {}
-    },
-    defaultStyles: {}
-  };
-  ModalPortal2.propTypes = {
-    isOpen: _propTypes22.default.bool.isRequired,
-    defaultStyles: _propTypes22.default.shape({
-      content: _propTypes22.default.object,
-      overlay: _propTypes22.default.object
-    }),
-    style: _propTypes22.default.shape({
-      content: _propTypes22.default.object,
-      overlay: _propTypes22.default.object
-    }),
-    className: _propTypes22.default.oneOfType([_propTypes22.default.string, _propTypes22.default.object]),
-    overlayClassName: _propTypes22.default.oneOfType([_propTypes22.default.string, _propTypes22.default.object]),
-    parentSelector: _propTypes22.default.func,
-    bodyOpenClassName: _propTypes22.default.string,
-    htmlOpenClassName: _propTypes22.default.string,
-    ariaHideApp: _propTypes22.default.bool,
-    appElement: _propTypes22.default.oneOfType([_propTypes22.default.instanceOf(_safeHTMLElement22.default), _propTypes22.default.instanceOf(_safeHTMLElement3.SafeHTMLCollection), _propTypes22.default.instanceOf(_safeHTMLElement3.SafeNodeList), _propTypes22.default.arrayOf(_propTypes22.default.instanceOf(_safeHTMLElement22.default))]),
-    onAfterOpen: _propTypes22.default.func,
-    onAfterClose: _propTypes22.default.func,
-    onRequestClose: _propTypes22.default.func,
-    closeTimeoutMS: _propTypes22.default.number,
-    shouldFocusAfterRender: _propTypes22.default.bool,
-    shouldCloseOnOverlayClick: _propTypes22.default.bool,
-    shouldReturnFocusAfterClose: _propTypes22.default.bool,
-    preventScroll: _propTypes22.default.bool,
-    role: _propTypes22.default.string,
-    contentLabel: _propTypes22.default.string,
-    aria: _propTypes22.default.object,
-    data: _propTypes22.default.object,
-    children: _propTypes22.default.node,
-    shouldCloseOnEsc: _propTypes22.default.bool,
-    overlayRef: _propTypes22.default.func,
-    contentRef: _propTypes22.default.func,
-    id: _propTypes22.default.string,
-    overlayElement: _propTypes22.default.func,
-    contentElement: _propTypes22.default.func,
-    testId: _propTypes22.default.string
-  };
-  exports.default = ModalPortal2;
-  module.exports = exports["default"];
-})(ModalPortal, ModalPortal.exports);
-var ModalPortalExports = ModalPortal.exports;
-function componentWillMount() {
-  var state = this.constructor.getDerivedStateFromProps(this.props, this.state);
-  if (state !== null && state !== void 0) {
-    this.setState(state);
-  }
-}
-function componentWillReceiveProps(nextProps) {
-  function updater(prevState) {
-    var state = this.constructor.getDerivedStateFromProps(nextProps, prevState);
-    return state !== null && state !== void 0 ? state : null;
-  }
-  this.setState(updater.bind(this));
-}
-function componentWillUpdate(nextProps, nextState) {
-  try {
-    var prevProps = this.props;
-    var prevState = this.state;
-    this.props = nextProps;
-    this.state = nextState;
-    this.__reactInternalSnapshotFlag = true;
-    this.__reactInternalSnapshot = this.getSnapshotBeforeUpdate(
-      prevProps,
-      prevState
-    );
-  } finally {
-    this.props = prevProps;
-    this.state = prevState;
-  }
-}
-componentWillMount.__suppressDeprecationWarning = true;
-componentWillReceiveProps.__suppressDeprecationWarning = true;
-componentWillUpdate.__suppressDeprecationWarning = true;
-function polyfill(Component) {
-  var prototype = Component.prototype;
-  if (!prototype || !prototype.isReactComponent) {
-    throw new Error("Can only polyfill class components");
-  }
-  if (typeof Component.getDerivedStateFromProps !== "function" && typeof prototype.getSnapshotBeforeUpdate !== "function") {
-    return Component;
-  }
-  var foundWillMountName = null;
-  var foundWillReceivePropsName = null;
-  var foundWillUpdateName = null;
-  if (typeof prototype.componentWillMount === "function") {
-    foundWillMountName = "componentWillMount";
-  } else if (typeof prototype.UNSAFE_componentWillMount === "function") {
-    foundWillMountName = "UNSAFE_componentWillMount";
-  }
-  if (typeof prototype.componentWillReceiveProps === "function") {
-    foundWillReceivePropsName = "componentWillReceiveProps";
-  } else if (typeof prototype.UNSAFE_componentWillReceiveProps === "function") {
-    foundWillReceivePropsName = "UNSAFE_componentWillReceiveProps";
-  }
-  if (typeof prototype.componentWillUpdate === "function") {
-    foundWillUpdateName = "componentWillUpdate";
-  } else if (typeof prototype.UNSAFE_componentWillUpdate === "function") {
-    foundWillUpdateName = "UNSAFE_componentWillUpdate";
-  }
-  if (foundWillMountName !== null || foundWillReceivePropsName !== null || foundWillUpdateName !== null) {
-    var componentName = Component.displayName || Component.name;
-    var newApiName = typeof Component.getDerivedStateFromProps === "function" ? "getDerivedStateFromProps()" : "getSnapshotBeforeUpdate()";
-    throw Error(
-      "Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n" + componentName + " uses " + newApiName + " but also contains the following legacy lifecycles:" + (foundWillMountName !== null ? "\n  " + foundWillMountName : "") + (foundWillReceivePropsName !== null ? "\n  " + foundWillReceivePropsName : "") + (foundWillUpdateName !== null ? "\n  " + foundWillUpdateName : "") + "\n\nThe above lifecycles should be removed. Learn more about this warning here:\nhttps://fb.me/react-async-component-lifecycle-hooks"
-    );
-  }
-  if (typeof Component.getDerivedStateFromProps === "function") {
-    prototype.componentWillMount = componentWillMount;
-    prototype.componentWillReceiveProps = componentWillReceiveProps;
-  }
-  if (typeof prototype.getSnapshotBeforeUpdate === "function") {
-    if (typeof prototype.componentDidUpdate !== "function") {
-      throw new Error(
-        "Cannot polyfill getSnapshotBeforeUpdate() for components that do not define componentDidUpdate() on the prototype"
-      );
-    }
-    prototype.componentWillUpdate = componentWillUpdate;
-    var componentDidUpdate = prototype.componentDidUpdate;
-    prototype.componentDidUpdate = function componentDidUpdatePolyfill(prevProps, prevState, maybeSnapshot) {
-      var snapshot = this.__reactInternalSnapshotFlag ? this.__reactInternalSnapshot : maybeSnapshot;
-      componentDidUpdate.call(this, prevProps, prevState, snapshot);
-    };
-  }
-  return Component;
-}
-const reactLifecyclesCompat_es = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  polyfill
-}, Symbol.toStringTag, { value: "Module" }));
-const require$$6 = /* @__PURE__ */ getAugmentedNamespace(reactLifecyclesCompat_es);
-Object.defineProperty(Modal$2, "__esModule", {
-  value: true
-});
-Modal$2.bodyOpenClassName = Modal$2.portalClassName = void 0;
-var _extends$1 = Object.assign || function(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-  return target;
-};
-var _createClass$1 = function() {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  return function(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      defineProperties(Constructor.prototype, protoProps);
-    if (staticProps)
-      defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-var _react = reactExports;
-var _react2 = _interopRequireDefault(_react);
-var _reactDom = reactDomExports;
-var _reactDom2 = _interopRequireDefault(_reactDom);
-var _propTypes = propTypesExports;
-var _propTypes2 = _interopRequireDefault(_propTypes);
-var _ModalPortal = ModalPortalExports;
-var _ModalPortal2 = _interopRequireDefault(_ModalPortal);
-var _ariaAppHider = ariaAppHider$1;
-var ariaAppHider = _interopRequireWildcard(_ariaAppHider);
-var _safeHTMLElement = safeHTMLElement;
-var _safeHTMLElement2 = _interopRequireDefault(_safeHTMLElement);
-var _reactLifecyclesCompat = require$$6;
-function _interopRequireWildcard(obj) {
-  if (obj && obj.__esModule) {
-    return obj;
-  } else {
-    var newObj = {};
-    if (obj != null) {
-      for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key))
-          newObj[key] = obj[key];
-      }
-    }
-    newObj.default = obj;
-    return newObj;
-  }
-}
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-function _classCallCheck$1(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-function _possibleConstructorReturn$1(self2, call) {
-  if (!self2) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-  return call && (typeof call === "object" || typeof call === "function") ? call : self2;
-}
-function _inherits$1(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });
-  if (superClass)
-    Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-var portalClassName = Modal$2.portalClassName = "ReactModalPortal";
-var bodyOpenClassName = Modal$2.bodyOpenClassName = "ReactModal__Body--open";
-var isReact16 = _safeHTMLElement.canUseDOM && _reactDom2.default.createPortal !== void 0;
-var createHTMLElement = function createHTMLElement2(name) {
-  return document.createElement(name);
-};
-var getCreatePortal = function getCreatePortal2() {
-  return isReact16 ? _reactDom2.default.createPortal : _reactDom2.default.unstable_renderSubtreeIntoContainer;
-};
-function getParentElement(parentSelector2) {
-  return parentSelector2();
-}
-var Modal$1 = function(_Component) {
-  _inherits$1(Modal2, _Component);
-  function Modal2() {
-    var _ref;
-    var _temp, _this, _ret;
-    _classCallCheck$1(this, Modal2);
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, (_ref = Modal2.__proto__ || Object.getPrototypeOf(Modal2)).call.apply(_ref, [this].concat(args))), _this), _this.removePortal = function() {
-      !isReact16 && _reactDom2.default.unmountComponentAtNode(_this.node);
-      var parent = getParentElement(_this.props.parentSelector);
-      if (parent && parent.contains(_this.node)) {
-        parent.removeChild(_this.node);
-      } else {
-        console.warn('React-Modal: "parentSelector" prop did not returned any DOM element. Make sure that the parent element is unmounted to avoid any memory leaks.');
-      }
-    }, _this.portalRef = function(ref) {
-      _this.portal = ref;
-    }, _this.renderPortal = function(props) {
-      var createPortal = getCreatePortal();
-      var portal = createPortal(_this, _react2.default.createElement(_ModalPortal2.default, _extends$1({ defaultStyles: Modal2.defaultStyles }, props)), _this.node);
-      _this.portalRef(portal);
-    }, _temp), _possibleConstructorReturn$1(_this, _ret);
-  }
-  _createClass$1(Modal2, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (!_safeHTMLElement.canUseDOM)
-        return;
-      if (!isReact16) {
-        this.node = createHTMLElement("div");
-      }
-      this.node.className = this.props.portalClassName;
-      var parent = getParentElement(this.props.parentSelector);
-      parent.appendChild(this.node);
-      !isReact16 && this.renderPortal(this.props);
-    }
-  }, {
-    key: "getSnapshotBeforeUpdate",
-    value: function getSnapshotBeforeUpdate(prevProps) {
-      var prevParent = getParentElement(prevProps.parentSelector);
-      var nextParent = getParentElement(this.props.parentSelector);
-      return { prevParent, nextParent };
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, _2, snapshot) {
-      if (!_safeHTMLElement.canUseDOM)
-        return;
-      var _props = this.props, isOpen = _props.isOpen, portalClassName2 = _props.portalClassName;
-      if (prevProps.portalClassName !== portalClassName2) {
-        this.node.className = portalClassName2;
-      }
-      var prevParent = snapshot.prevParent, nextParent = snapshot.nextParent;
-      if (nextParent !== prevParent) {
-        prevParent.removeChild(this.node);
-        nextParent.appendChild(this.node);
-      }
-      if (!prevProps.isOpen && !isOpen)
-        return;
-      !isReact16 && this.renderPortal(this.props);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      if (!_safeHTMLElement.canUseDOM || !this.node || !this.portal)
-        return;
-      var state = this.portal.state;
-      var now = Date.now();
-      var closesAt = state.isOpen && this.props.closeTimeoutMS && (state.closesAt || now + this.props.closeTimeoutMS);
-      if (closesAt) {
-        if (!state.beforeClose) {
-          this.portal.closeWithTimeout();
-        }
-        setTimeout(this.removePortal, closesAt - now);
-      } else {
-        this.removePortal();
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (!_safeHTMLElement.canUseDOM || !isReact16) {
-        return null;
-      }
-      if (!this.node && isReact16) {
-        this.node = createHTMLElement("div");
-      }
-      var createPortal = getCreatePortal();
-      return createPortal(_react2.default.createElement(_ModalPortal2.default, _extends$1({
-        ref: this.portalRef,
-        defaultStyles: Modal2.defaultStyles
-      }, this.props)), this.node);
-    }
-  }], [{
-    key: "setAppElement",
-    value: function setAppElement(element) {
-      ariaAppHider.setElement(element);
-    }
-    /* eslint-disable react/no-unused-prop-types */
-    /* eslint-enable react/no-unused-prop-types */
-  }]);
-  return Modal2;
-}(_react.Component);
-Modal$1.propTypes = {
-  isOpen: _propTypes2.default.bool.isRequired,
-  style: _propTypes2.default.shape({
-    content: _propTypes2.default.object,
-    overlay: _propTypes2.default.object
-  }),
-  portalClassName: _propTypes2.default.string,
-  bodyOpenClassName: _propTypes2.default.string,
-  htmlOpenClassName: _propTypes2.default.string,
-  className: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
-    base: _propTypes2.default.string.isRequired,
-    afterOpen: _propTypes2.default.string.isRequired,
-    beforeClose: _propTypes2.default.string.isRequired
-  })]),
-  overlayClassName: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
-    base: _propTypes2.default.string.isRequired,
-    afterOpen: _propTypes2.default.string.isRequired,
-    beforeClose: _propTypes2.default.string.isRequired
-  })]),
-  appElement: _propTypes2.default.oneOfType([_propTypes2.default.instanceOf(_safeHTMLElement2.default), _propTypes2.default.instanceOf(_safeHTMLElement.SafeHTMLCollection), _propTypes2.default.instanceOf(_safeHTMLElement.SafeNodeList), _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_safeHTMLElement2.default))]),
-  onAfterOpen: _propTypes2.default.func,
-  onRequestClose: _propTypes2.default.func,
-  closeTimeoutMS: _propTypes2.default.number,
-  ariaHideApp: _propTypes2.default.bool,
-  shouldFocusAfterRender: _propTypes2.default.bool,
-  shouldCloseOnOverlayClick: _propTypes2.default.bool,
-  shouldReturnFocusAfterClose: _propTypes2.default.bool,
-  preventScroll: _propTypes2.default.bool,
-  parentSelector: _propTypes2.default.func,
-  aria: _propTypes2.default.object,
-  data: _propTypes2.default.object,
-  role: _propTypes2.default.string,
-  contentLabel: _propTypes2.default.string,
-  shouldCloseOnEsc: _propTypes2.default.bool,
-  overlayRef: _propTypes2.default.func,
-  contentRef: _propTypes2.default.func,
-  id: _propTypes2.default.string,
-  overlayElement: _propTypes2.default.func,
-  contentElement: _propTypes2.default.func
-};
-Modal$1.defaultProps = {
-  isOpen: false,
-  portalClassName,
-  bodyOpenClassName,
-  role: "dialog",
-  ariaHideApp: true,
-  closeTimeoutMS: 0,
-  shouldFocusAfterRender: true,
-  shouldCloseOnEsc: true,
-  shouldCloseOnOverlayClick: true,
-  shouldReturnFocusAfterClose: true,
-  preventScroll: false,
-  parentSelector: function parentSelector() {
-    return document.body;
-  },
-  overlayElement: function overlayElement(props, contentEl) {
-    return _react2.default.createElement(
-      "div",
-      props,
-      contentEl
-    );
-  },
-  contentElement: function contentElement(props, children) {
-    return _react2.default.createElement(
-      "div",
-      props,
-      children
-    );
-  }
-};
-Modal$1.defaultStyles = {
-  overlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.75)"
-  },
-  content: {
-    position: "absolute",
-    top: "40px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    border: "1px solid #ccc",
-    background: "#fff",
-    overflow: "auto",
-    WebkitOverflowScrolling: "touch",
-    borderRadius: "4px",
-    outline: "none",
-    padding: "20px"
-  }
-};
-(0, _reactLifecyclesCompat.polyfill)(Modal$1);
-Modal$2.default = Modal$1;
-(function(module, exports) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  var _Modal = Modal$2;
-  var _Modal2 = _interopRequireDefault2(_Modal);
-  function _interopRequireDefault2(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-  }
-  exports.default = _Modal2.default;
-  module.exports = exports["default"];
-})(lib, lib.exports);
-var libExports = lib.exports;
-const Modal = /* @__PURE__ */ getDefaultExportFromCjs(libExports);
-const LANGS = [
-  "Afrikaans",
-  "Arabic",
-  "Belarusian",
-  "Bulgarian",
-  "Catalan",
-  "Chinese (Simplified)",
-  "Chinese (Traditional)",
-  "Croatian",
-  "Czech",
-  "Danish",
-  "Dutch",
-  "English",
-  "Esperanto",
-  "Estonian",
-  "Finnish",
-  "French",
-  "German",
-  "Greek (Modern)",
-  "Hebrew",
-  "Hungarian",
-  "Italian",
-  "Japanese",
-  "Korean",
-  "Latin",
-  "Latvian",
-  "Lithuanian",
-  "Macedonian",
-  "Norwegian Bokmål",
-  "Polish",
-  "Portuguese",
-  "Romanian",
-  "Russian",
-  "Serbian",
-  "Slovak",
-  "Spanish",
-  "Swedish",
-  "Thai",
-  "Turkish",
-  "Ukrainian"
-];
-const LANGDEFS = {
-  Afrikaans: {
-    LgGlosbeKey: "af",
-    LgGTransKey: "af",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Arabic: {
-    LgGlosbeKey: "ar",
-    LgGTransKey: "ar",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{0600}-\\x{061A}\\x{0620}-\\x{06FF}\\x{0750}-\\x{077F}\\x{FB50}-\\x{FDFF}\\x{FE70}-\\x{FEFF}",
-    LgRegexpWordCharacters: ".!?:;\\x{061B}\\x{061F}",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: true
-  },
-  Belarusian: {
-    LgGlosbeKey: "be",
-    LgGTransKey: "be",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Bulgarian: {
-    LgGlosbeKey: "bg",
-    LgGTransKey: "bg",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Catalan: {
-    LgGlosbeKey: "ca",
-    LgGTransKey: "ca",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  "Chinese (Simplified)": {
-    LgGlosbeKey: "zh",
-    LgGTransKey: "zh-CN",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}",
-    LgRegexpWordCharacters: ".!?:;。！？：；",
-    LgSplitEachChar: true,
-    LgRemoveSpaces: true,
-    LgRightToLeft: false
-  },
-  "Chinese (Traditional)": {
-    LgGlosbeKey: "zh",
-    LgGTransKey: "zh-TW",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3100}-\\x{312F}",
-    LgRegexpWordCharacters: ".!?:;。！？：；",
-    LgSplitEachChar: true,
-    LgRemoveSpaces: true,
-    LgRightToLeft: false
-  },
-  Croatian: {
-    LgGlosbeKey: "hr",
-    LgGTransKey: "hr",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Czech: {
-    LgGlosbeKey: "cs",
-    LgGTransKey: "cs",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Danish: {
-    LgGlosbeKey: "da",
-    LgGTransKey: "da",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Dutch: {
-    LgGlosbeKey: "nl",
-    LgGTransKey: "nl",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  English: {
-    LgGlosbeKey: "en",
-    LgGTransKey: "en",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Esperanto: {
-    LgGlosbeKey: "eo",
-    LgGTransKey: "eo",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Estonian: {
-    LgGlosbeKey: "et",
-    LgGTransKey: "et",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Finnish: {
-    LgGlosbeKey: "fi",
-    LgGTransKey: "fi",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  French: {
-    LgGlosbeKey: "fr",
-    LgGTransKey: "fr",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  German: {
-    LgGlosbeKey: "de",
-    LgGTransKey: "de",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  "Greek (Modern)": {
-    LgGlosbeKey: "el",
-    LgGTransKey: "el",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\x{0370}-\\x{03FF}\\x{1F00}-\\x{1FFF}",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Hebrew: {
-    LgGlosbeKey: "he",
-    LgGTransKey: "iw",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{0590}-\\x{05FF}",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: true
-  },
-  Hungarian: {
-    LgGlosbeKey: "hu",
-    LgGTransKey: "hu",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Italian: {
-    LgGlosbeKey: "it",
-    LgGTransKey: "it",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Japanese: {
-    LgGlosbeKey: "ja",
-    LgGTransKey: "ja",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3040}-\\x{30FF}\\x{31F0}-\\x{31FF}",
-    LgRegexpWordCharacters: ".!?:;。！？：；",
-    LgSplitEachChar: true,
-    LgRemoveSpaces: true,
-    LgRightToLeft: false
-  },
-  Korean: {
-    LgGlosbeKey: "ko",
-    LgGTransKey: "ko",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{1100}-\\x{11FF}\\x{3130}-\\x{318F}\\x{AC00}-\\x{D7A0}",
-    LgRegexpWordCharacters: ".!?:;。！？：；",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Latin: {
-    LgGlosbeKey: "la",
-    LgGTransKey: "la",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Latvian: {
-    LgGlosbeKey: "lv",
-    LgGTransKey: "lv",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Lithuanian: {
-    LgGlosbeKey: "lt",
-    LgGTransKey: "lt",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Macedonian: {
-    LgGlosbeKey: "mk",
-    LgGTransKey: "mk",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  "Norwegian Bokmål": {
-    LgGlosbeKey: "nb",
-    LgGTransKey: "no",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Polish: {
-    LgGlosbeKey: "pl",
-    LgGTransKey: "pl",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Portuguese: {
-    LgGlosbeKey: "pt",
-    LgGTransKey: "pt",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Romanian: {
-    LgGlosbeKey: "ro",
-    LgGTransKey: "ro",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Russian: {
-    LgGlosbeKey: "ru",
-    LgGTransKey: "ru",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Serbian: {
-    LgGlosbeKey: "sr",
-    LgGTransKey: "sr",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Slovak: {
-    LgGlosbeKey: "sk",
-    LgGTransKey: "sk",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Spanish: {
-    LgGlosbeKey: "es",
-    LgGTransKey: "es",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Swedish: {
-    LgGlosbeKey: "sv",
-    LgGTransKey: "sv",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Thai: {
-    LgGlosbeKey: "th",
-    LgGTransKey: "th",
-    LgTextSize: 200,
-    LgRegexpSplitSentences: "\\x{0E00}-\\x{0E7F}",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Turkish: {
-    LgGlosbeKey: "tr",
-    LgGTransKey: "tr",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  },
-  Ukrainian: {
-    LgGlosbeKey: "uk",
-    LgGTransKey: "uk",
-    LgTextSize: 150,
-    LgRegexpSplitSentences: "\\-\\'a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ",
-    LgRegexpWordCharacters: ".!?:;",
-    LgSplitEachChar: false,
-    LgRemoveSpaces: false,
-    LgRightToLeft: false
-  }
-};
-function wizard_go(refL1, refL2, onSuccess) {
-  const l1 = refL1.current?.value;
-  const l2 = refL2.current?.value;
-  if (l1 == "") {
-    alert("Please choose your native language (L1)!");
-    return;
-  }
-  if (l2 == "") {
-    alert("Please choose your language you want to read/study (L2)!");
-    return;
-  }
-  if (l2 == l1) {
-    alert("L1 L2 Languages must not be equal!");
-    return;
-  }
-  onSuccess(l1, l2);
-}
-function NewLanguageWizard({
-  onSuccess,
-  onExit
-}) {
-  const refL1 = reactExports.useRef();
-  const refL2 = reactExports.useRef();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "wizard", title: "Language Settings Wizard" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "wizard", children: "Language Settings Wizard" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "wizard", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "My Native language is:" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "L1:",
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refL1, name: "l1", id: "l1", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "[Choose...]" }),
-        LANGS.map((lang) => {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: lang, children: lang });
-        })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "wizard", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "I want to study:" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "L2:",
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "l2", id: "l2", ref: refL2, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Choose...]" }),
-        LANGS.map((lang) => {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: lang, children: lang });
-        })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "input",
-      {
-        type: "button",
-        style: { fontSize: "1.1em" },
-        value: "Set Language Settings",
-        onClick: () => wizard_go(refL1, refL2, onSuccess)
-      }
-    ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "wizard", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Cancel", onClick: () => onExit() }) })
-  ] }) });
+function LongText() {
+  const [verifying, setVerifying] = reactExports.useState(null);
+  const isVerify = verifying !== null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: isVerify ? /* @__PURE__ */ jsxRuntimeExports.jsx(LongTextVerify, { verifying }) : /* @__PURE__ */ jsxRuntimeExports.jsx(ImportLongText, { onSetVerify: setVerifying }) });
 }
 function NewLanguage() {
-  const preValidateMap = {
-    LgTextSize: parseNumMap,
-    LgRemoveSpaces: parseNumMap,
-    LgSplitEachChar: parseNumMap,
-    LgRightToLeft: parseNumMap,
-    LgDict2URI: emptyToNullMap
-  };
   const [wizardOpen, setWizardOpen] = reactExports.useState(false);
   const navigator2 = useInternalNavigate();
   const validator = LanguagesValidatorNoId;
   const refMap = RefMap(validator);
+  const defaultLgForm = {
+    LgRegexpWordCharacters: "a-zA-ZÀ-ÖØ-öø-ȳ",
+    LgExportTemplate: "$y	$t\n",
+    LgExceptionsSplitSentences: "Mr.|Dr.|[A-Z].|Vd.|Vds.",
+    LgRegexpSplitSentences: '.!?:;"',
+    LgGoogleTranslateURI: "*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###",
+    LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥"
+  };
+  const LgInput = buildFormInput(refMap, defaultLgForm);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "New Language" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
@@ -28139,16 +29598,14 @@ function NewLanguage() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: 'Study Language "L2":' }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              LgInput,
               {
-                ref: refMap.LgName,
                 type: "text",
                 className: "notempty setfocus checkoutsidebmp",
-                name: "LgName",
-                id: "LgName",
-                defaultValue: "",
+                entryKey: "LgName",
                 maxLength: 40,
-                size: 40
+                size: 40,
+                default: true
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
@@ -28158,13 +29615,11 @@ function NewLanguage() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: "Dictionary 1 URI:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              LgInput,
               {
-                ref: refMap.LgDict1URI,
                 type: "text",
                 className: "checkdicturl notempty checkoutsidebmp",
-                name: "LgDict1URI",
-                defaultValue: "",
+                entryKey: "LgDict1URI",
                 maxLength: 200,
                 size: 60
               }
@@ -28175,13 +29630,11 @@ function NewLanguage() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Dictionary 2 URI:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            LgInput,
             {
               type: "text",
               className: "checkdicturl checkoutsidebmp",
-              name: "LgDict2URI",
-              ref: refMap.LgDict2URI,
-              defaultValue: "",
+              entryKey: "LgDict2URI",
               maxLength: 200,
               size: 60
             }
@@ -28190,47 +29643,32 @@ function NewLanguage() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: "GoogleTranslate URI:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            LgInput,
             {
-              ref: refMap.LgGoogleTranslateURI,
               type: "text",
               className: "checkdicturl checkoutsidebmp",
-              name: "LgGoogleTranslateURI",
-              defaultValue: "*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###",
+              entryKey: "LgGoogleTranslateURI",
               maxLength: 200,
-              size: 60
+              size: 60,
+              default: true
             }
           ) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: "Text Size:" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "select",
-            {
-              name: "LgTextSize",
-              className: "notempty",
-              ref: refMap.LgTextSize,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "100", children: "100 %" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "150", children: "150 %" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "200", children: "200 %" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "250", children: "250 %" })
-              ]
-            }
-          ) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TextSizeSelect, { refMap, entryKey: "LgTextSize" }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Character Substitutions:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            LgInput,
             {
               type: "text",
-              ref: refMap.LgCharacterSubstitutions,
               className: "checkoutsidebmp",
-              name: "LgCharacterSubstitutions",
-              defaultValue: "´='|`='|’='|‘='|...=…|..=‥",
+              entryKey: "LgCharacterSubstitutions",
               maxLength: 500,
-              size: 60
+              size: 60,
+              default: true
             }
           ) })
         ] }),
@@ -28238,13 +29676,12 @@ function NewLanguage() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: "RegExp Split Sentences:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              LgInput,
               {
                 type: "text",
-                ref: refMap.LgRegexpSplitSentences,
                 className: "notempty checkoutsidebmp",
-                name: "LgRegexpSplitSentences",
-                defaultValue: ".!?:;",
+                entryKey: "LgRegexpSplitSentences",
+                default: true,
                 maxLength: 500,
                 size: 60
               }
@@ -28255,13 +29692,12 @@ function NewLanguage() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Exceptions Split Sentences:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            LgInput,
             {
               type: "text",
-              ref: refMap.LgExceptionsSplitSentences,
               className: "checkoutsidebmp",
-              name: "LgExceptionsSplitSentences",
-              defaultValue: "Mr.|Dr.|[A-Z].|Vd.|Vds.",
+              entryKey: "LgExceptionsSplitSentences",
+              default: true,
               maxLength: 500,
               size: 60
             }
@@ -28271,13 +29707,12 @@ function NewLanguage() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right backlightyellow", children: "RegExp Word Characters:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              LgInput,
               {
                 type: "text",
                 className: "notempty checkoutsidebmp",
-                name: "LgRegexpWordCharacters",
-                ref: refMap.LgRegexpWordCharacters,
-                defaultValue: "a-zA-ZÀ-ÖØ-öø-ȳ",
+                entryKey: "LgRegexpWordCharacters",
+                default: true,
                 maxLength: 500,
                 size: 60
               }
@@ -28324,19 +29759,20 @@ function NewLanguage() {
                 className: "click",
                 src: "question-frame",
                 title: "Help",
-                onClick: "oewin('info_export_template.htm');"
+                onClick: () => {
+                  oewin("info_export_template");
+                }
               }
             ),
             ":"
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            LgInput,
             {
               type: "text",
               className: "checkoutsidebmp",
-              name: "LgExportTemplate",
-              ref: refMap.LgExportTemplate,
-              defaultValue: "$y\\t$t\\n",
+              entryKey: "LgExportTemplate",
+              default: true,
               maxLength: 1e3,
               size: 60
             }
@@ -28348,7 +29784,9 @@ function NewLanguage() {
             {
               type: "button",
               value: "Cancel",
-              onClick: () => ResetForm(refMap)
+              onClick: () => {
+                navigator2("/edit_languages");
+              }
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -28358,9 +29796,10 @@ function NewLanguage() {
               name: "op",
               value: "Save",
               onClick: () => {
+                check_dupl_lang();
                 CheckAndSubmit(
                   refMap,
-                  preValidateMap,
+                  languagePreValidateMap,
                   validator,
                   (value) => {
                     dataService.addLanguage(value);
@@ -28410,6 +29849,7 @@ function NewLanguage() {
               const originSpec = LANGDEFS[l1];
               const targetSpec = LANGDEFS[l2];
               refMap["LgName"].current.value = l2;
+              console.log(refMap.LgName.current.value, l1, l2);
               refMap["LgDict1URI"].current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
               refMap["LgGoogleTranslateURI"].current.value = `*http://translate.google.com/?ie=UTF-8&sl=${targetSpec.LgGTransKey}&tl=${originSpec.LgGTransKey}&text=###`;
               refMap["LgTextSize"].current.value = targetSpec.LgTextSize;
@@ -28430,16 +29870,25 @@ function NewLanguage() {
   ] });
 }
 function PrintText({ textID }) {
-  const [{ texts: texts2 }] = useData(["texts"]);
+  const [{ texts: texts2, languages: languages2 }] = useData(["texts", "languages"]);
   const showingText = texts2.find(({ TxID }) => {
     return TxID === textID;
   });
+  if (!showingText) {
+    throw new Error("invalid Text ID!");
+  }
+  const language = languages2.find(({ LgID }) => {
+    return LgID === showingText.TxLgID;
+  });
+  if (!language) {
+    throw new Error("invalid Text Language ID!");
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noprint", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         Header,
         {
-          title: `PRINT&nbsp▶${showingText?.TxTitle} ${showingText?.TxSourceURI ? jsxRuntimeExports.jsx("a", { href: showingText.TxSourceURI, target: "_blank", children: jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Text Source" }) }) : jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {})}) . '}`
+          title: `PRINT&nbsp▶${showingText.TxTitle} ${showingText.TxSourceURI ? jsxRuntimeExports.jsx("a", { href: showingText.TxSourceURI, target: "_blank", children: jsxRuntimeExports.jsx(Icon, { src: "chain", title: "Text Source" }) }) : jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {})}) . '}`
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { id: "printoptions", children: [
@@ -28560,11 +30009,12 @@ function PrintText({ textID }) {
         children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "p",
           {
+            style: { fontSize: language.LgTextSize },
             children: [
-              showingText?.TxTitle,
+              showingText.TxTitle,
               /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
               /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              showingText?.TxText
+              showingText.TxText
             ]
           }
         )
@@ -32343,7 +33793,7 @@ const computePosition = (reference, floating, options) => {
     platform: platformWithCache
   });
 };
-var index$2 = typeof document !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+var index$1 = typeof document !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
 function deepEqual(a, b2) {
   if (a === b2) {
     return true;
@@ -32392,7 +33842,7 @@ function deepEqual(a, b2) {
 }
 function useLatestRef$1(value) {
   const ref = reactExports.useRef(value);
-  index$2(() => {
+  index$1(() => {
     ref.current = value;
   });
   return ref;
@@ -32465,7 +33915,7 @@ function useFloating$1(options) {
       }
     });
   }, [latestMiddleware, placement, strategy, platformRef]);
-  index$2(() => {
+  index$1(() => {
     if (open === false && dataRef.current.isPositioned) {
       dataRef.current.isPositioned = false;
       setData((data2) => ({
@@ -32475,13 +33925,13 @@ function useFloating$1(options) {
     }
   }, [open]);
   const isMountedRef = reactExports.useRef(false);
-  index$2(() => {
+  index$1(() => {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
     };
   }, []);
-  index$2(() => {
+  index$1(() => {
     if (reference && floating) {
       if (whileElementsMountedRef.current) {
         return whileElementsMountedRef.current(reference, floating, update);
@@ -32509,13 +33959,13 @@ function useFloating$1(options) {
     floating: setFloating
   }), [data, update, refs, elements, setReference, setFloating]);
 }
-var index$1 = typeof document !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+var index = typeof document !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
 let serverHandoffComplete = false;
 let count = 0;
 const genId = () => "floating-ui-" + count++;
 function useFloatingId() {
   const [id2, setId] = reactExports.useState(() => serverHandoffComplete ? genId() : void 0);
-  index$1(() => {
+  index(() => {
     if (id2 == null) {
       setId(genId());
     }
@@ -32619,7 +34069,7 @@ function isMouseLikePointerType(pointerType, strict) {
 }
 function useLatestRef(value) {
   const ref = reactExports.useRef(value);
-  index$1(() => {
+  index(() => {
     ref.current = value;
   });
   return ref;
@@ -32822,7 +34272,7 @@ function isTabFocus(event) {
 const FocusGuard = /* @__PURE__ */ reactExports.forwardRef(function FocusGuard2(props, ref) {
   const onFocus = useEvent(props.onFocus);
   const [role, setRole] = reactExports.useState();
-  index$1(() => {
+  index(() => {
     if (isSafari()) {
       setRole("button");
     }
@@ -32859,7 +34309,7 @@ const useFloatingPortalNode = function(_temp) {
   const [portalEl, setPortalEl] = reactExports.useState(null);
   const uniqueId = useId();
   const portalContext = usePortalContext();
-  index$1(() => {
+  index(() => {
     if (!enabled) {
       return;
     }
@@ -33129,7 +34579,7 @@ function FloatingFocusManager(_ref) {
       };
     }
   }, [floating, modal, guards, getTabbableElements]);
-  index$1(() => {
+  index(() => {
     if (!floating)
       return;
     const doc = getDocument(floating);
@@ -33187,7 +34637,7 @@ function FloatingFocusManager(_ref) {
       }
     };
   }, [floating, getTabbableElements, initialFocus, returnFocus2, dataRef, refs, events, ignoreInitialFocus]);
-  index$1(() => {
+  index(() => {
     if (!portalContext)
       return;
     portalContext.setFocusManagerState({
@@ -33200,7 +34650,7 @@ function FloatingFocusManager(_ref) {
       portalContext.setFocusManagerState(null);
     };
   }, [portalContext, modal, closeOnFocusOut, context]);
-  index$1(() => {
+  index(() => {
     if (ignoreInitialFocus || !floating)
       return;
     function setState() {
@@ -33711,7 +35161,7 @@ function useFloating(options) {
     open,
     onOpenChange
   }), [position, nodeId, events, open, onOpenChange, refs, elements]);
-  index$1(() => {
+  index(() => {
     const node = tree == null ? void 0 : tree.nodesRef.current.find((node2) => node2.id === nodeId);
     if (node) {
       node.context = context;
@@ -33954,6 +35404,7 @@ function Reader({
     {
       onClick: () => setTooltipOpen(null),
       style: {
+        // TODO
         // wordBreak: 'break-all',
         // whiteSpace: 'nowrap',
         fontSize: "200%",
@@ -33977,28 +35428,52 @@ function Reader({
             );
             const termStatus = foundWord ? ` status${foundWord.WoStatus}` : " status0";
             const { isTerm } = term;
-            return (
-              // TODO make sure works w mobile
-              /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: isTerm ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                PopoverTrigger,
-                {
-                  onClickWord: () => {
-                    setActiveWord(
-                      foundWord !== void 0 ? foundWord : { newWord: term.text }
-                    );
-                    setTooltipOpen(ii2);
-                  },
-                  termStatus,
-                  children: term.text
-                }
-              ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: term.text }) })
-            );
+            return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: isTerm ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              PopoverTrigger,
+              {
+                onClickWord: () => {
+                  setActiveWord(
+                    foundWord !== void 0 ? foundWord : { newWord: term.text }
+                  );
+                  setTooltipOpen(ii2);
+                },
+                termStatus,
+                children: term.text
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: term.text }) });
           })
         ] }),
         " "
       ]
     }
   ) });
+}
+function getStatusName(status) {
+  return STATUSES[status] ? STATUSES[status]["name"] : "Unknown";
+}
+function getStatusAbbr(status) {
+  return STATUSES[status] ? STATUSES[status]["abbr"] : "?";
+}
+function escape_html_chars(s) {
+  return s.replace(/&/g, "%AMP%").replace(/</g, "&#060;").replace(/>/g, "&#062;").replace(/"/g, "&#034;").replace(/'/g, "&#039;").replace(/%AMP%/g, "&#038;").replace(/\x0d/g, "<br />");
+}
+function make_tooltip(word, trans2, roman2, status) {
+  const nl2 = "\r";
+  let title = word;
+  if (roman2 != "") {
+    if (title != "")
+      title += nl2;
+    title += "▶ " + roman2;
+  }
+  if (trans2 != "" && trans2 != "*") {
+    if (title != "")
+      title += nl2;
+    title += "▶ " + trans2;
+  }
+  if (title != "")
+    title += nl2;
+  title += "▶ " + getStatusName(status) + " [" + getStatusAbbr(status) + "]";
+  return title;
 }
 function Pane3() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { backgroundColor: "yellow", width: "100%", height: "100%" }, children: "TEST1" });
@@ -34046,7 +35521,7 @@ function ReaderPage({ textId }) {
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(SplitPane, { split: "horizontal", minSize: 50, defaultSize: "60%", children: [
       activeWord && "newWord" in activeWord ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        AddNewWord,
+        AddNewWordPane,
         {
           word: activeText,
           langId: text.TxLgID,
@@ -34140,7 +35615,7 @@ function TesterPage({
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(SplitPane, { split: "horizontal", minSize: 50, defaultSize: "60%", children: [
       activeWord ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        AddNewWord,
+        AddNewWordPane,
         {
           word: activeWord,
           langId: text.TxLgID,
@@ -34152,12 +35627,11 @@ function TesterPage({
   ] }) });
 }
 function Tester({ modality }) {
+  const [testingWord, setTestingWord] = reactExports.useState(null);
   const [numCorrect, setNumCorrect] = reactExports.useState(0);
   const [numWrong, setNumWrong] = reactExports.useState(0);
   const [numNotTested, setNumNotTested] = reactExports.useState(10);
-  reactExports.useState(0);
-  reactExports.useEffect(() => {
-  });
+  const timer2 = useTimer(1e3);
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
   const b_notyet = l_notyet == 0 ? "" : "borderl";
@@ -34165,53 +35639,125 @@ function Tester({ modality }) {
   const b_wrong = l_wrong == 0 ? "" : "borderl";
   const l_correct = Math.round(numCorrect * 100);
   const b_correct = l_correct == 0 ? "borderr" : "borderl borderr";
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { id: "footer", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "clock", title: "Elapsed Time" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { id: "timer", title: "Elapsed Time" }),
-    "     ",
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Icon,
-      {
-        className: b_notyet,
-        src: "test_notyet",
-        title: "Not yet tested",
-        height: 10,
-        width: l_notyet
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Icon,
-      {
-        className: b_wrong,
-        src: "test_wrong",
-        title: "Wrong",
-        height: 10,
-        width: l_wrong
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Icon,
-      {
-        className: b_correct,
-        src: "test_correct",
-        title: "Correct",
-        height: 10,
-        width: l_correct
-      }
-    ),
-    "     ",
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { title: "Total number of tests", children: totalTests }),
-    "=",
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "todosty", title: "Not yet tested", children: numNotTested }),
-    "+",
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "donewrongsty", title: "Wrong", children: numWrong }),
-    "+",
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "doneoksty", title: "Correct", children: numCorrect })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    testingWord && /* @__PURE__ */ jsxRuntimeExports.jsx(RunTestForWord, { word: testingWord }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { id: "footer", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "clock", title: "Elapsed Time" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { id: "timer", title: "Elapsed Time", children: timer2 }),
+      "     ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Icon,
+        {
+          className: b_notyet,
+          src: "test_notyet",
+          title: "Not yet tested",
+          height: 10,
+          width: l_notyet
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Icon,
+        {
+          className: b_wrong,
+          src: "test_wrong",
+          title: "Wrong",
+          height: 10,
+          width: l_wrong
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Icon,
+        {
+          className: b_correct,
+          src: "test_correct",
+          title: "Correct",
+          height: 10,
+          width: l_correct
+        }
+      ),
+      "     ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { title: "Total number of tests", children: totalTests }),
+      "=",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "todosty", title: "Not yet tested", children: numNotTested }),
+      "+",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "donewrongsty", title: "Wrong", children: numWrong }),
+      "+",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "doneoksty", title: "Correct", children: numCorrect })
+    ] })
+  ] });
+}
+function useTimer(intervalInMs) {
+  const [time, setTime] = reactExports.useState(0);
+  reactExports.useEffect(() => {
+    const interval2 = setInterval(
+      () => setTime((/* @__PURE__ */ new Date()).getTime() - time),
+      intervalInMs
+    );
+    return () => {
+      clearInterval(interval2);
+    };
+  }, []);
+  return time;
+}
+function RunTestForWord({ word: { WoStatus: status } }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("center", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { size: 1 }),
+      status >= 1 && status <= 5 && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "thumb-up", title: "Got it!" }),
+        " Got it! [",
+        `${status} ▶ ${status + 1}`,
+        "]",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { size: 1 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "thumb", title: "Oops!" }),
+        " Oops! [",
+        `${status} ▶ ${status - 1}`,
+        "]",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { size: 1 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("b", {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("br", {})
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { size: 1 }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: escape_html_chars(make_tooltip(txt, trans, roman, stat)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "edit_tword.php?wid=", target: "ro", children: "Edit term" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+    createTheDictLink(wblink1, txt, "Dict1", "Lookup Term: "),
+    createTheDictLink(wblink2, txt, "Dict2", ""),
+    createTheDictLink(wblink3, txt, "GTr", "")
+  ] });
+}
+function createTheDictLink(u2, w2, t2, b2) {
+  const url = u2.trim();
+  const trm = w2.trim();
+  const txt2 = t2.trim();
+  const txtbefore = b2.trim();
+  let r2 = "";
+  if (url != "" && txt2 != "") {
+    if (url.substr(0, 1) == "*") {
+      r2 = " " + txtbefore + ` <span class="click" onclick="owin('` + createTheDictUrl(url.substring(1), escape_apostrophes(trm)) + `');">` + txt2 + "</span> ";
+    } else {
+      r2 = " " + txtbefore + ' <a href="' + createTheDictUrl(url, trm) + '" target="ru">' + txt2 + "</a> ";
+    }
+  }
+  return r2;
+}
+function createTheDictUrl(u2, w2) {
+  u2.trim();
+  w2.trim();
+  const r2 = "trans.php?x=2&i=" + escape(u2) + "&t=" + w2;
+  return r2;
+}
+function escape_apostrophes(s) {
+  return s.replace(/'/g, "\\'");
 }
 function SettingsComponent() {
   useData(["settings"]);
   const navigate = useInternalNavigate();
+  const validator = SettingsValidator;
+  const refMap = RefMap(validator);
+  const StInput = buildFormInput(refMap);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "Settings/Preferences" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
@@ -34235,12 +35781,11 @@ function SettingsComponent() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right setfocus",
               type: "text",
-              name: "set-text-h-frameheight-no-audio",
-              data_info: "Height of left top frame without audioplayer",
+              entryKey: "set-text-h-frameheight-no-audio",
               value: 140,
               maxLength: 3,
               size: 3
@@ -34260,12 +35805,11 @@ function SettingsComponent() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-text-h-frameheight-with-audio",
-              data_info: "Height of left top frame with audioplayer",
+              entryKey: "set-text-h-frameheight-with-audio",
               value: "200",
               maxLength: 3,
               size: 3
@@ -34280,12 +35824,11 @@ function SettingsComponent() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Width of left frames" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-text-l-framewidth-percent",
-              data_info: "Width of left frames",
+              entryKey: "set-text-l-framewidth-percent",
               value: "50",
               maxLength: 2,
               size: 2
@@ -34300,12 +35843,11 @@ function SettingsComponent() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Height of right top frame" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-text-r-frameheight-percent",
-              data_info: "Height of right top frame",
+              entryKey: "set-text-r-frameheight-percent",
               value: "50",
               maxLength: 2,
               size: 2
@@ -34325,12 +35867,11 @@ function SettingsComponent() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Height of left top frame" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-test-h-frameheight",
-              data_info: "Height of left top frame",
+              entryKey: "set-test-h-frameheight",
               value: "140",
               maxLength: 3,
               size: 3
@@ -34345,12 +35886,11 @@ function SettingsComponent() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Width of left frames" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-test-l-framewidth-percent",
-              data_info: "Width of left frames",
+              entryKey: "set-test-l-framewidth-percent",
               value: "50",
               maxLength: 2,
               size: 2
@@ -34365,12 +35905,11 @@ function SettingsComponent() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Height of right top frame" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty posintnumber right",
               type: "text",
-              name: "set-test-r-frameheight-percent",
-              data_info: "Height of right top frame",
+              entryKey: "set-test-r-frameheight-percent",
               value: "50",
               maxLength: 2,
               size: 2
@@ -34390,12 +35929,11 @@ function SettingsComponent() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty zeroposintnumber right",
               type: "text",
-              name: "set-test-main-frame-waiting-time",
-              data_info: "Waiting time after assessment to display next test",
+              entryKey: "set-test-main-frame-waiting-time",
               value: "0",
               maxLength: 4,
               size: 4
@@ -34414,12 +35952,11 @@ function SettingsComponent() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
+            StInput,
             {
               className: "notempty zeroposintnumber right",
               type: "text",
-              name: "set-test-edit-frame-waiting-time",
-              data_info: "Waiting Time to clear the message/edit frame",
+              entryKey: "set-test-edit-frame-waiting-time",
               value: "500",
               maxLength: 8,
               size: 8
@@ -34525,12 +36062,11 @@ function SettingsComponent() {
           "while adding/editing a term"
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty zeroposintnumber right",
             type: "text",
-            name: "set-similar-terms-count",
-            data_info: "Similar terms to be displayed while adding/editing a term",
+            entryKey: "set-similar-terms-count",
             value: "0",
             maxLength: 1,
             size: 1
@@ -34552,11 +36088,11 @@ function SettingsComponent() {
           "(used in annotation selection)"
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty center",
             type: "text",
-            name: "set-term-translation-delimiters",
+            entryKey: "set-term-translation-delimiters",
             value: "/;|",
             maxLength: 8,
             size: 8
@@ -34572,12 +36108,11 @@ function SettingsComponent() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Texts per Page" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty posintnumber right",
             type: "text",
-            name: "set-texts-per-page",
-            data_info: "Texts per Page",
+            entryKey: "set-texts-per-page",
             value: "10",
             maxLength: 4,
             size: 4
@@ -34602,12 +36137,11 @@ function SettingsComponent() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Archived Texts per Page" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty posintnumber right",
             type: "text",
-            name: "set-archivedtexts-per-page",
-            data_info: "Archived Texts per Page",
+            entryKey: "set-archivedtexts-per-page",
             value: "100",
             maxLength: 4,
             size: 4
@@ -34618,12 +36152,11 @@ function SettingsComponent() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Terms per Page" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty posintnumber right",
             type: "text",
-            name: "set-terms-per-page",
-            data_info: "Terms per Page",
+            entryKey: "set-terms-per-page",
             value: "100",
             maxLength: 4,
             size: 4
@@ -34634,12 +36167,11 @@ function SettingsComponent() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: "Tags per Page" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+          StInput,
           {
             className: "notempty posintnumber right",
             type: "text",
-            name: "set-tags-per-page",
-            data_info: "Tags per Page",
+            entryKey: "set-tags-per-page",
             value: "100",
             maxLength: 4,
             size: 4
@@ -34670,954 +36202,20 @@ function SettingsComponent() {
           }
         ),
         "    |    ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Save" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "Save",
+            onClick: () => {
+              CheckAndSubmit(refMap, {}, validator, (val) => {
+                console.log(val);
+              });
+            }
+          }
+        )
       ] }) })
     ] }) }) })
-  ] });
-}
-function StatisticsComponent() {
-  const [{ languages: languages2, languageStatusStatistics }] = useData([
-    "languages",
-    "languageStatusStatistics"
-  ]);
-  const periods = [
-    "Today",
-    "Yesterday",
-    "Last 7 d",
-    "Last 30 d",
-    "Last 365 d",
-    "All Time"
-  ];
-  console.log("TEST123", languageStatusStatistics);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "My Statistics" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: " " }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
-      "Breakdown by Language and Term Status",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "(Click on numbers to see the list of terms)"
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "Language" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Total",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {})
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Active",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(1..5)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Learning",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(1..4)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Unknown",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(1)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Learning",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(2)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Learning",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(3)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Learning",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(4)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Learned",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(5)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Well",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "Known",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(99)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Known",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(5+99)"
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", children: [
-          "Ign.",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          "(98)"
-        ] })
-      ] }),
-      languages2.map((language) => {
-        const statuses = [
-          //               15
-          // ,14
-          1,
-          2,
-          3,
-          4,
-          5,
-          99,
-          599,
-          98
-        ];
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: language.LgName }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?filterlang=${language.LgID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: languageStatusStatistics[language.LgID]["total"] }) }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            A,
-            {
-              href: `/edit_words?filterlang=${language.LgID}&status=${15}`,
-              children: /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
-                " ",
-                languageStatusStatistics[language.LgID][15]
-              ] })
-            }
-          ) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            A,
-            {
-              href: `/edit_words?filterlang=${language.LgID}&status=${14}`,
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: languageStatusStatistics[language.LgID][14] })
-            }
-          ) }),
-          languageStatusStatistics && statuses.map((statusVal) => {
-            return /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `status${statusVal}`, children: [
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                A,
-                {
-                  href: `/edit_words?filterlang=${language.LgID}&status=${statusVal}`,
-                  children: languageStatusStatistics[language.LgID][statusVal]
-                }
-              ),
-              " "
-            ] }) });
-          })
-        ] }) });
-      })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { children: [
-      "Breakdown by Language and Time Range",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      '(Terms created (C), Terms changed status = Activity (A), Terms set to "Known" (K))'
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", rowSpan: 2, children: "Language" }),
-        periods.map((period) => {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", colSpan: 3, children: period });
-        })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: periods.map(() => {
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "C" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "A" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: "K" })
-        ] });
-      }) }),
-      languages2.map((language) => {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: language.LgName }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) })
-        ] }) });
-      }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TOTAL" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " 47 " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status1", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status3", children: " TODO " }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "status5stat", children: " TODO " }) })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(NavigateButton, {
-      buttonText: "<< Back",
-      navigateTo: "/"
-      /* HOME */
-    }) })
-  ] });
-}
-function NavigateButton({
-  buttonText,
-  navigateTo
-}) {
-  const navigate = useInternalNavigate();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "input",
-    {
-      type: "button",
-      value: buttonText,
-      onClick: () => {
-        navigate(navigateTo);
-      }
-    }
-  );
-}
-function TagDropDown({ tags: tags3 }) {
-  const updateParams = useUpdateParams();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "select",
-    {
-      name: "tag1",
-      onChange: ({ target: { value } }) => {
-        updateParams({ tag1: value });
-      },
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Filter off]" }),
-        tags3.map((tag) => {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: tag.TgID, children: tag.TgText });
-        }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "-1", children: "UNTAGGED" })
-      ]
-    }
-  );
-}
-function TermsHeader() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Mark" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "th1 sorttable_nosort", children: "Act." }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
-      "Term /",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "Romanization"
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 clickable", children: [
-      "Translation [Tags]",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { id: "waitinfo", className: "hide", children: [
-        "Please ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "icn/waiting2.gif" }),
-        " wait ..."
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_nosort", children: [
-      "Se.",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "?"
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_numeric clickable", children: [
-      "Stat./",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "Days"
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1 sorttable_numeric clickable", children: [
-      "Score",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-      "%"
-    ] })
-  ] });
-}
-function TermsFilterBox({
-  numTerms,
-  currentPage,
-  activeLanguageId,
-  numPages
-}) {
-  const [{ tags: tags3, texts: texts2 }] = useData(["tags", "texts"]);
-  const navigate = useInternalNavigate();
-  const updateParams = useUpdateParams();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 4, children: [
-      "Filter",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "funnel", title: "Filter" }),
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          type: "button",
-          value: "Reset All",
-          onClick: "resetAll('edit_words');"
-        }
-      )
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-        "Language:",
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          LanguageDropdown,
-          {
-            onChange: (val) => {
-              if (val === -1) {
-                dataService.setActiveLanguage(null);
-              } else {
-                dataService.setActiveLanguage(val);
-              }
-            },
-            defaultValue: activeLanguageId !== null ? activeLanguageId : void 0,
-            header: "Filter off"
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-        "Text:",
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "select",
-          {
-            name: "text",
-            onChange: ({ target: { value } }) => {
-              updateParams({ text: value === "-1" ? null : value });
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: -1, selected: true, children: "[Filter off]" }),
-              (activeLanguageId !== null ? texts2.filter(({ TxLgID }) => {
-                return TxLgID === activeLanguageId;
-              }) : texts2).map((text) => {
-                return /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: text.TxID, children: text.TxTitle });
-              })
-            ]
-          }
-        )
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "td",
-        {
-          style: { whiteSpace: "nowrap" },
-          className: "td1 center",
-          colSpan: 2,
-          children: [
-            "Status:",
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "select",
-              {
-                name: "status",
-                onChange: ({ target: { value: selectedValue } }) => {
-                  updateParams({ status: selectedValue });
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Filter off]" }),
-                  new Array(5).fill(0).map((_2, ii2) => {
-                    const val = ii2 + 1;
-                    return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: val, children: [
-                      val === 5 ? "Learned" : "Learning",
-                      " [",
-                      val,
-                      "]"
-                    ] });
-                  }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "99", children: "Well Known [WKn]" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "98", children: "Ignored [Ign]" }),
-                  new Array(4).fill(0).map((_2, ii2) => {
-                    const val = ii2 + 1;
-                    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
-                      new Array(5 - val).fill(0).map((__, jj2) => {
-                        const jVal = jj2 + 1;
-                        return /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: `${val}${jVal}`, children: [
-                          val + jVal === 5 ? "Learning/-ed" : "Learning",
-                          " [",
-                          val,
-                          "..",
-                          val + jVal,
-                          "]"
-                        ] });
-                      })
-                    ] });
-                  }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "--------" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "599", children: "All known [5+WKn]" })
-                ]
-              }
-            )
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "td",
-        {
-          style: { whiteSpace: "nowrap" },
-          className: "td1 center",
-          colSpan: 2,
-          children: [
-            "Term, Rom., Transl. (Wildc.=*):",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", name: "query", value: "", maxLength: 50, size: 15 }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                name: "querybutton",
-                value: "Filter",
-                onChange: ({ target: { value: selectedValue } }) => {
-                  updateParams({ query: selectedValue });
-                }
-              }
-            ),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "Clear",
-                onChange: () => {
-                  navigate(`/edit_words?page=${currentPage}&query=`);
-                }
-              }
-            )
-          ]
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "td",
-        {
-          style: { whiteSpace: "nowrap" },
-          className: "td1 center",
-          colSpan: 2,
-          children: [
-            "Tag #1:",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3 })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
-        "Tag #1 ..",
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "select",
-          {
-            name: "tag12",
-            onChange: ({ target: { value } }) => {
-              navigate(`/edit_words?page=${1}&tag12=${value}`);
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "0", children: "... OR ..." }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "... AND ..." })
-            ]
-          }
-        ),
-        ".. Tag #2"
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
-        "Tag #2:",
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TagDropDown, { tags: tags3 })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
-        numTerms,
-        " Terms"
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", style: { whiteSpace: "nowrap" }, colSpan: 2, children: [
-        "   ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
-        " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
-        "Sort Order:",
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "select",
-          {
-            name: "sort",
-            onChange: ({ target: { value } }) => {
-              navigate(`/edit_words?page=1&sort=${value}`);
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "Term A-Z" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "2", children: "Translation A-Z" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "3", selected: true, children: "Newest first" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "7", children: "Oldest first" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "4", children: "Status" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "5", children: "Score Value (%)" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "6", children: "Word Count Active Texts" })
-            ]
-          }
-        )
-      ] })
-    ] })
-  ] }) });
-}
-function TermsFooter({
-  numTerms,
-  currentPage,
-  numPages
-}) {
-  useInternalNavigate();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
-      numTerms,
-      " Term",
-      numTerms === 1 ? "" : "s"
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { whiteSpace: "nowrap" }, className: "th1", children: [
-      "   ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "placeholder", alt: "-" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Pager, { currentPage, numPages })
-    ] })
-  ] }) }) });
-}
-function TermLine({
-  word,
-  onSelect,
-  isSelected
-}) {
-  const termID = word.WoID;
-  const sentence = word.WoSentence;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { name: "rec${termID}", className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(A, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "input",
-      {
-        name: "marked[]",
-        type: "checkbox",
-        className: "markcheck",
-        checked: isSelected,
-        value: termID,
-        onChange: ({ target: { checked } }) => {
-          onSelect(word.WoID, checked);
-        }
-      }
-    ) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: [
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(A, { href: `/edit_words?chg=${termID}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-note--pencil", title: "Edit" }) }),
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Icon,
-        {
-          onClick: () => {
-            if (confirmDelete()) {
-              dataService.deleteTerm(word.WoID);
-            }
-          },
-          src: "minus-button",
-          title: "Delete"
-        }
-      ),
-      " "
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: word.WoText }),
-      " /",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "span",
-        {
-          id: `roman${termID}`,
-          className: "edit_area clickedit",
-          title: "Click to edit...",
-          children: word.WoRomanization
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "span",
-        {
-          id: `trans${termID}`,
-          className: "edit_area clickedit",
-          title: "Click to edit...",
-          children: word.WoTranslation
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "smallgray2" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: sentence !== null ? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status", title: `${sentence}`, alt: "Yes" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "(No valid sentence)", alt: "No" }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", title: "Learning", children: "1/1" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { style: { whiteSpace: "nowrap" }, className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "scorered", children: [
-      "0",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Test today!" })
-    ] }) })
-  ] });
-}
-const sortingMethod = (sort) => {
-  switch (sort) {
-    case 7:
-      return (a, b2) => {
-        return a.WoCreated > b2.WoCreated ? 1 : a.WoCreated < b2.WoCreated ? -1 : 0;
-      };
-    case 3:
-      return (a, b2) => {
-        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
-      };
-    case 5:
-      return (a, b2) => {
-        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
-      };
-    case 4:
-      return (a, b2) => {
-        return a.WoStatus > b2.WoStatus ? -1 : a.WoStatus < b2.WoStatus ? 1 : 0;
-      };
-    case 1:
-      return (a, b2) => {
-        return a.WoText > b2.WoText ? -1 : a.WoText < b2.WoText ? 1 : 0;
-      };
-    case 2:
-      return (a, b2) => {
-        return a.WoTranslation > b2.WoTranslation ? 1 : a.WoTranslation < b2.WoTranslation ? -1 : 0;
-      };
-    case 6:
-      return (a, b2) => {
-        return a.WoCreated > b2.WoCreated ? -1 : a.WoCreated < b2.WoCreated ? 1 : 0;
-      };
-  }
-};
-function Terms({
-  pageNum = null,
-  // filterlang = null,
-  sort = null,
-  status = null,
-  textFilter,
-  tag1,
-  tag12,
-  tag2
-}) {
-  const pageSize = 15;
-  const [selectedTerms, setSelectedTerms] = reactExports.useState([]);
-  const [{ words: words2, activeLanguage }] = useData([
-    "words",
-    "activeLanguage"
-    // 'texttags',
-  ]);
-  useInternalNavigate();
-  const filteredWords = words2.filter((val) => {
-    const isRightText = textFilter === null ? true : (
-      // TODO - find if in target text
-      // : Number.parseInt(val.WoText) === textFilter;
-      true
-    );
-    const isRightStatus = status === null ? true : val.WoStatus === status;
-    const isRightLang = activeLanguage === null ? true : val.WoLgID === activeLanguage?.LgID;
-    const isRightTag1 = true;
-    const isRightTag2 = true;
-    const compoundTagStatement = tag12 === 0 ? isRightTag1 || isRightTag2 : isRightTag1 && isRightTag2;
-    return isRightStatus && isRightText && isRightLang && compoundTagStatement;
-  });
-  const sortedWords = sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
-  const currentPage = pageNum !== null ? pageNum : 1;
-  const { dataOnPage: displayedWords, numPages } = usePager(
-    sortedWords,
-    currentPage,
-    pageSize
-  );
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Header,
-      {
-        title: `My ${activeLanguage?.LgName || ""} Terms (Words and Expressions)`
-      }
-    ),
-    activeLanguage !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(A, { href: `/edit_words?new=1&lang=${activeLanguage.LgID}`, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
-      "New ",
-      activeLanguage.LgName,
-      " Term ..."
-    ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "plus-button", title: "New" }),
-      " New Term? - Set Language Filter first ..."
-    ] }),
-    sortedWords && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        TermsFilterBox,
-        {
-          activeLanguageId: activeLanguage?.LgID,
-          numTerms: sortedWords.length,
-          currentPage,
-          numPages
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        TermMultiActions,
-        {
-          selectedTerms,
-          onSelectAll: () => setSelectedTerms(sortedWords.map((term) => term.WoID)),
-          onSelectNone: () => setSelectedTerms([])
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "sortable tab1", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TermsHeader, {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: displayedWords.map((word) => {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx(
-            TermLine,
-            {
-              word,
-              onSelect: (val, checked) => {
-                console.log(val);
-                if (checked) {
-                  setSelectedTerms([...selectedTerms, val]);
-                } else {
-                  setSelectedTerms(
-                    selectedTerms.slice(
-                      selectedTerms.indexOf(val),
-                      selectedTerms.indexOf(val) + 1
-                    )
-                  );
-                }
-              },
-              isSelected: selectedTerms.includes(word.WoID)
-            }
-          );
-        }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        TermsFooter,
-        {
-          numPages,
-          numTerms: sortedWords.length,
-          currentPage
-        }
-      )
-    ] })
-  ] });
-}
-function ChangeTerm({ chgID }) {
-  const [{ words: words2, activeLanguage }] = useData(["words", "activeLanguage"]);
-  const term = words2.find((val) => {
-    return val.WoID === chgID;
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Header,
-      {
-        title: `My ${activeLanguage?.LgName} Terms (Words and Expressions)`
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Edit Term" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "script",
-      {
-        type: "text/javascript",
-        src: "js/unloadformcheck.js",
-        charSet: "utf-8"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "form",
-      {
-        name: "editword",
-        className: "validate",
-        action: "<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>",
-        method: "post",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "WoID", value: term?.WoID }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              type: "hidden",
-              name: "WoLgID",
-              id: "langfield",
-              value: term?.WoLgID
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "hidden", name: "WoOldStatus", value: term?.WoStatus }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Language:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: term?.WoLgID })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { title: "Normally only change uppercase/lowercase here!", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Term:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    className: "notempty setfocus checkoutsidebmp",
-                    data_info: "Term",
-                    type: "text",
-                    name: "WoText",
-                    id: "wordfield",
-                    value: term?.WoText,
-                    maxlength: 250,
-                    size: 40
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Translation:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  className: "textarea-noreturn checklength checkoutsidebmp",
-                  data_maxlength: 500,
-                  data_info: "Translation",
-                  name: "WoTranslation",
-                  cols: 40,
-                  rows: 3,
-                  children: term?.WoTranslation
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Tags:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Romaniz.:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "text",
-                  className: "checkoutsidebmp",
-                  data_info: "Romanization",
-                  name: "WoRomanization",
-                  maxlength: 100,
-                  size: 40,
-                  value: term?.WoRomanization
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", children: [
-                "Sentence",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                "Term in ",
-                "{...}",
-                ":"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  className: "textarea-noreturn checklength checkoutsidebmp",
-                  data_maxlength: 1e3,
-                  data_info: "Sentence",
-                  name: "WoSentence",
-                  cols: 40,
-                  rows: 3,
-                  children: term?.WoSentence
-                }
-              ) })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 right", children: "Status:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1", children: term?.WoStatus })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 right", colSpan: 2, children: [
-              " ",
-              "   ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  value: "Cancel",
-                  onClick: "{resetDirty(); location.href='edit_words.php#rec<?php echo $_REQUEST['chg']; ?>';}"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "submit", name: "op", value: "Change" })
-            ] }) })
-          ] })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: "exsent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "span",
-      {
-        className: "click",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "sticky-notes-stack", title: "Show Sentences" }),
-          " Show Sentences"
-        ]
-      }
-    ) })
-  ] });
-}
-function TermMultiActions({
-  selectedTerms,
-  onSelectAll,
-  onSelectNone
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "form",
-    {
-      name: "form1",
-      action: "#",
-      onSubmit: "document.form1.querybutton.click(); return false;",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx("table", { className: "tab1", cellSpacing: 0, cellPadding: 5, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { className: "th1", colSpan: 2, children: [
-          "Multi Actions",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "lightning", title: "Multi Actions" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark All", onClick: onSelectAll }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "button", value: "Mark None", onClick: onSelectNone })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-            "Marked Texts",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "select",
-              {
-                name: "markaction",
-                id: "markaction",
-                disabled: selectedTerms.length === 0,
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(GetAllWordsActionsSelectOptions, {})
-              }
-            )
-          ] })
-        ] })
-      ] }) })
-    }
-  ) });
-}
-function GetAllWordsActionsSelectOptions() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", selected: true, children: "[Choose...]" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "testall", children: "Test ALL Terms" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "spl1all", children: "Increase Status by 1 [+1]" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "smi1all", children: "Reduce Status by 1 [-1]" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "todayall", children: "Set Status Date to Today" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "lowerall", children: "Set ALL Terms to Lowercase" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "capall", children: "Capitalize ALL Terms" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delsentall", children: "Delete Sentences of ALL Terms" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "addtagall", children: "Add Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "deltagall", children: "Remove Tag" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall", children: "Export ALL Terms (Anki)" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall2", children: "Export ALL Terms (TSV)" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "expall3", children: "Export ALL Terms (Flexible)" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "------------" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "delall", children: "Delete ALL Terms" })
   ] });
 }
 function ImportShortText() {
@@ -35645,7 +36243,8 @@ function ImportShortText() {
             LanguageDropdown,
             {
               dropdownRef: refMap.TxLgID,
-              defaultValue: activeLanguage ? activeLanguage.LgID : void 0
+              defaultValue: activeLanguage ? activeLanguage.LgID : void 0,
+              onChange: (val) => dataService.setActiveLanguage(val)
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
@@ -35659,7 +36258,6 @@ function ImportShortText() {
             {
               type: "text",
               className: "notempty checkoutsidebmp",
-              data_info: "Title",
               name: "TxTitle",
               ref: refMap.TxTitle,
               defaultValue: "",
@@ -35688,8 +36286,7 @@ function ImportShortText() {
               name: "TxText",
               ref: refMap.TxText,
               className: "notempty checkbytes checkoutsidebmp",
-              data_maxlength: "65000",
-              data_info: "Text",
+              maxLength: 65e3,
               cols: 60,
               rows: 20
             }
@@ -35704,7 +36301,6 @@ function ImportShortText() {
           {
             type: "text",
             className: "checkurl checkoutsidebmp",
-            data_info: "Source URI",
             name: "TxSourceURI",
             ref: refMap.TxSourceURI,
             defaultValue: "",
@@ -35751,7 +36347,6 @@ function ImportShortText() {
             {
               type: "text",
               className: "checkoutsidebmp",
-              data_info: "Audio-URI",
               name: "TxAudioURI",
               ref: refMap.TxAudioURI,
               defaultValue: "",
@@ -36465,260 +37060,247 @@ function UploadWords() {
     TxLgId: languagesId
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "form",
-      {
-        encType: "multipart/form-data",
-        className: "validate",
-        action: "<?php echo $_SERVER['PHP_SELF']; ?>",
-        method: "post",
-        onSubmit: "{return confirm ('Did you double-check everything?\\nAre you sure?');}",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Language:" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(LanguageDropdown, { dropdownRef: refMap.lang }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Import Data:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "Format per line:",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "C1 D C2 D C3 D C4 D C5",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: 'Field Delimiter "D":' }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "Tab", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "c", selected: "selected", children: 'Comma "," [CSV File, LingQ]' }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "TAB (ASCII 9) [TSV File]" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "h", children: 'Hash "#" [Direct Input]' })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Column Assignment:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              '"C1":',
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c1, name: "Col1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", selected: "selected", children: "Term" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", children: "Don't import" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              '"C2":',
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c2, name: "Col2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", selected: "selected", children: "Translation" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", children: "Don't import" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              '"C3":',
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c3, name: "Col3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: "selected", children: "Don't import" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              '"C4":',
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c4, name: "Col4", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: "selected", children: "Don't import" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              '"C5":',
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c5, name: "Col5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: "selected", children: "Don't import" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
-                "Overwrite existent",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                "terms"
-              ] }),
-              ":",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "Over", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "0", selected: "selected", children: "No" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "Yes" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Important:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "You must specify the term.",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "Translation, romanization, ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "sentence and tag list",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "are optional. The tag list ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "must be separated either",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "by spaces or commas."
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-              "Either specify a ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "File to upload" }),
-              ":",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { ref: refMap.file, name: "thefile", type: "file" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Or" }),
-              " type in or paste from clipboard (do ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "NOT" }),
-              " specify file):",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  className: "checkoutsidebmp",
-                  data_info: "Upload",
-                  name: "Upload",
-                  cols: 60,
-                  rows: 25
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Status" }),
-              " for all uploaded terms:"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("select", { ref: refMap.status, className: "notempty", name: "WoStatus", children: Object.keys(StrengthMap).filter((val) => val !== "0").map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: StrengthMap[key].classKey, children: [
-                StrengthMap[key].status,
-                " [",
-                key,
-                "]"
-              ] })) }),
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { src: "status-busy", title: "Field must not be empty" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "red2", children: [
-              "A DATABASE",
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "button",
-                  value: "BACKUP",
-                  onClickCapture: () => navigator2("/backup_restore")
-                }
-              ),
-              " ",
-              "MAY BE ADVISABLE!",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-              "PLEASE DOUBLE-CHECK EVERYTHING!"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                value: "<< Back",
-                onClickCapture: () => navigator2("/")
-              }
-            ),
-            " ",
-            "      |      ",
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "button",
-                name: "op",
-                value: "Import",
-                onClick: async () => {
-                  CheckAndSubmit(
-                    refMap,
-                    {
-                      file: (val) => {
-                        console.log("submit file", val);
-                        return val;
-                      }
-                    },
-                    validator,
-                    async (value) => {
-                      const fileBlob = value.file.files[0];
-                      const stringdata = await fileBlob?.text();
-                      const data = papaparse_minExports.parse(stringdata);
-                      const colVals = [
-                        refMap.c1.current.value,
-                        refMap.c2.current.value,
-                        refMap.c3.current.value,
-                        refMap.c4.current.value,
-                        refMap.c5.current.value
-                      ];
-                      const colIndsToCareAbout = colVals.reduce(
-                        (prev, curr, currInd) => {
-                          return curr !== "x" ? [
-                            ...prev,
-                            [currInd, curr]
-                          ] : prev;
-                        },
-                        []
-                      );
-                      Object.fromEntries(
-                        colIndsToCareAbout.map(([ind, colType]) => [
-                          ind,
-                          { colType, data: [] }
-                        ])
-                      );
-                      const parsedTerms = data.data.map((row) => {
-                        const term = Object.fromEntries(
-                          colIndsToCareAbout.map(([ind, colKey]) => {
-                            return [
-                              ColumnImportMode[colKey].termParam,
-                              row[ind]
-                            ];
-                          })
-                        );
-                        return term;
-                      });
-                      console.log("data", parsedTerms);
-                      dataService.addMultipleTerms(parsedTerms);
-                    }
-                  );
-                }
-              }
-            )
-          ] }) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { title: "" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("form", { encType: "multipart/form-data", className: "validate", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "tab3", cellSpacing: 0, cellPadding: 5, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "td1 center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Language:" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LanguageDropdown, { dropdownRef: refMap.lang }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
         ] })
-      }
-    ),
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Import Data:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "Format per line:",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "C1 D C2 D C3 D C4 D C5",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: 'Field Delimiter "D":' }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "Tab", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "c", selected: true, children: 'Comma "," [CSV File, LingQ]' }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "TAB (ASCII 9) [TSV File]" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "h", children: 'Hash "#" [Direct Input]' })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Column Assignment:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          '"C1":',
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c1, name: "Col1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", selected: true, children: "Term" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", children: "Don't import" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          '"C2":',
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c2, name: "Col2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", selected: true, children: "Translation" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", children: "Don't import" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          '"C3":',
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c3, name: "Col3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: true, children: "Don't import" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          '"C4":',
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c4, name: "Col4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: true, children: "Don't import" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          '"C5":',
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { ref: refMap.c5, name: "Col5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "w", children: "Term" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "t", children: "Translation" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "r", children: "Romanization" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "s", children: "Sentence" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "g", children: "Tag List" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "x", selected: true, children: "Don't import" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("b", { children: [
+            "Overwrite existent",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+            "terms"
+          ] }),
+          ":",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { name: "Over", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "0", selected: true, children: "No" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "Yes" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Important:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "You must specify the term.",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "Translation, romanization, ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "sentence and tag list",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "are optional. The tag list ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "must be separated either",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "by spaces or commas."
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+          "Either specify a ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "File to upload" }),
+          ":",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { ref: refMap.file, name: "thefile", type: "file" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Or" }),
+          " type in or paste from clipboard (do ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "NOT" }),
+          " specify file):",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "checkoutsidebmp",
+              name: "Upload",
+              cols: 60,
+              rows: 25
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "Status" }),
+          " for all uploaded terms:"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("select", { ref: refMap.status, className: "notempty", name: "WoStatus", children: Object.keys(StrengthMap).filter((val) => val !== "0").map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: StrengthMap[key].classKey, children: [
+            StrengthMap[key].status,
+            " [",
+            key,
+            "]"
+          ] })) }),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RequiredLineButton, {})
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "td1 center", colSpan: 2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "red2", children: [
+          "A DATABASE",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "button",
+              value: "BACKUP",
+              onClickCapture: () => navigator2("/backup_restore")
+            }
+          ),
+          " ",
+          "MAY BE ADVISABLE!",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          "PLEASE DOUBLE-CHECK EVERYTHING!"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            value: "<< Back",
+            onClickCapture: () => navigator2("/")
+          }
+        ),
+        " ",
+        "      |      ",
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "button",
+            name: "op",
+            value: "Import",
+            onClick: async () => {
+              if (!window.confirm(
+                "Did you double-check everything?\nAre you sure?"
+              )) {
+                return;
+              }
+              CheckAndSubmit(
+                refMap,
+                {
+                  file: (val) => {
+                    console.log("submit file", val);
+                    return val;
+                  }
+                },
+                validator,
+                async (value) => {
+                  const fileBlob = value.file.files[0];
+                  const stringdata = await fileBlob?.text();
+                  const data = papaparse_minExports.parse(stringdata);
+                  const colVals = [
+                    refMap.c1.current.value,
+                    refMap.c2.current.value,
+                    refMap.c3.current.value,
+                    refMap.c4.current.value,
+                    refMap.c5.current.value
+                  ];
+                  const colIndsToCareAbout = colVals.reduce(
+                    (prev, curr, currInd) => {
+                      return curr !== "x" ? [
+                        ...prev,
+                        [currInd, curr]
+                      ] : prev;
+                    },
+                    []
+                  );
+                  const parsedTerms = data.data.map((row) => {
+                    const term = Object.fromEntries(
+                      colIndsToCareAbout.map(([ind, colKey]) => {
+                        return [
+                          ColumnImportMode[colKey].termParam,
+                          row[ind]
+                        ];
+                      })
+                    );
+                    return term;
+                  });
+                  dataService.addMultipleTerms(parsedTerms);
+                }
+              );
+            }
+          }
+        )
+      ] }) })
+    ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
       "Sentences should contain the term in curly brackets ",
       '"... {term} ..."',
@@ -36816,6 +37398,9 @@ const VariantMap = {
 const createColors = (variant) => {
   const Colors = VariantMap[variant];
   return {
+    hr: {
+      border: "1px solid rgb(128, 128, 128)"
+    },
     input: {
       backgroundColor: `${Colors.lum6}`,
       color: `${Colors.lum0}`
@@ -37366,7 +37951,7 @@ function App() {
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/edit_tags", element: /* @__PURE__ */ jsxRuntimeExports.jsx(EditTagsWrapper, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/edit_texttags", element: /* @__PURE__ */ jsxRuntimeExports.jsx(EditTextTagsWrapper, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/edit_languages", element: /* @__PURE__ */ jsxRuntimeExports.jsx(LanguagesWrapper, {}) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/long_text_import", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ImportLongText, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/long_text_import", element: /* @__PURE__ */ jsxRuntimeExports.jsx(LongText, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/statistics", element: /* @__PURE__ */ jsxRuntimeExports.jsx(StatisticsComponent, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/new_word", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AddNewWordWrapper, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/settings", element: /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsComponent, {}) }),
@@ -37385,50 +37970,64 @@ function Switch({
   const [firstChild, secondChild] = React.Children.toArray(children);
   return on ? secondChild : firstChild;
 }
-function TermsWrapper() {
-  const [{ activeLanguageId }] = useData(["activeLanguageId"]);
+function useInternalParams(pageKey) {
   const [searchParams] = useSearchParams();
-  const chgID = searchParams.get("chg");
-  const sort = searchParams.get("sort");
-  const status = searchParams.get("status");
-  const page = searchParams.get("page");
-  const filterlang = searchParams.get("filterlang");
-  const isNew = searchParams.get("new") === "1";
-  const lang = searchParams.get("lang");
+  return Object.fromEntries(
+    headerValuesTemp[pageKey].params.map((val) => {
+      return [val, searchParams.get(val)];
+    })
+  );
+}
+function TermsWrapper() {
+  const {
+    filterlang,
+    new: newVal,
+    page,
+    sort,
+    chg,
+    tag1,
+    status,
+    tag12,
+    tag2,
+    text,
+    lang
+  } = useInternalParams("edit_words");
+  const [{ activeLanguageId }] = useData(["activeLanguageId"]);
+  const isNew = newVal === "1";
   if (filterlang === "") {
     if (activeLanguageId !== null) {
-      console.log("FILTER", filterlang, activeLanguageId);
       dataService.setActiveLanguage(null);
     }
   } else if (filterlang !== null && Number.parseInt(filterlang) !== activeLanguageId) {
     dataService.setActiveLanguage(Number.parseInt(filterlang));
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: isNew, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: chgID !== null, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: chg !== null, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         Terms,
         {
-          filterlang: activeLanguageId,
           pageNum: page !== null ? Number.parseInt(page) : 1,
           sort: sort ? Number.parseInt(sort) : null,
           status: status ? Number.parseInt(status) : null,
-          textFilter: 0,
-          tag1: null,
-          tag12: 0,
-          tag2: null
+          textFilter: text === null ? null : Number.parseInt(text),
+          tag1: tag1 === null ? null : Number.parseInt(tag1),
+          tag12: tag12 === null || !["0", "1"].includes(tag12) ? null : Number.parseInt(tag12),
+          tag2: tag2 === null ? null : Number.parseInt(tag2)
         }
       ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ChangeTerm, { chgID: Number.parseInt(chgID) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ChangeTerm, { chgID: Number.parseInt(chg) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AddNewWord, { langId: Number.parseInt(lang) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AddTerm, { langId: Number.parseInt(lang) })
   ] });
 }
 function UploadWordsWrapper() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(UploadWords, {}) });
 }
 function PrintTextWrapper() {
-  const [searchParams] = useSearchParams();
-  const text = searchParams.get("text");
+  const { text } = useInternalParams("print_text");
+  if (text === null) {
+    throw new Error("Need To Specify Text ID");
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrintText, { textID: Number.parseInt(text) }) });
 }
 function LanguagesWrapper() {
@@ -37449,35 +38048,39 @@ function LanguagesWrapper() {
 }
 function AddNewWordWrapper() {
   const [searchParams] = useSearchParams();
-  searchParams.get("text");
   const langID = searchParams.get("lang");
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(AddNewWord, { langId: Number.parseInt(langID) });
+  if (langID === null) {
+    throw new Error("Need To Specify Language ID");
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AddNewWordPane, { langId: Number.parseInt(langID) });
 }
 function LibraryWrapper() {
-  const [searchParams] = useSearchParams();
-  const chgID = searchParams.get("chg");
-  const archID = searchParams.get("arch");
-  const page = searchParams.get("page");
-  const query = searchParams.get("query");
-  const filterTag1 = searchParams.get("tag1");
-  const filterTag2 = searchParams.get("tag2");
-  const isNew = searchParams.get("new") === "1";
-  if (archID !== null) {
-    dataService.archiveText(Number.parseInt(archID));
+  const {
+    chg,
+    arch,
+    page,
+    query,
+    tag1,
+    tag2,
+    new: newVal
+  } = useInternalParams("edit_texts");
+  const isNew = newVal === "1";
+  if (arch !== null) {
+    dataService.archiveText(Number.parseInt(arch));
   }
   console.log("new", isNew);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: isNew, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: chgID !== null, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: chg !== null, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         Library,
         {
           currentPage: page !== null ? Number.parseInt(page) : 1,
           query,
-          filterTag1: filterTag1 !== null ? Number.parseInt(filterTag1) : null,
-          filterTag2: filterTag2 !== null ? Number.parseInt(filterTag2) : null
+          filterTag1: tag1 !== null ? Number.parseInt(tag1) : null,
+          filterTag2: tag2 !== null ? Number.parseInt(tag2) : null
         }
       ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(EditText, { chgID: Number.parseInt(chgID) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(EditText, { chgID: Number.parseInt(chg) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ImportShortText, {})
   ] });
@@ -37499,9 +38102,16 @@ function EditTextTagsWrapper() {
   const query = searchParams.get("query");
   const isNew = searchParams.get("new") === "1";
   const chgID = searchParams.get("chg");
+  const page = searchParams.get("page");
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: isNew, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(Switch, { on: chgID !== null, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(DisplayTextTags, { query: query || "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        DisplayTextTags,
+        {
+          page: page !== null ? Number.parseInt(page) : void 0,
+          query: query || ""
+        }
+      ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(EditTextTag, { chgID: Number.parseInt(chgID) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(NewTextTag, {})
@@ -37530,23 +38140,18 @@ function EditTagsWrapper() {
 function ReaderWrapper() {
   const [searchParams] = useSearchParams();
   const start = searchParams.get("start");
-  const sanitizedParam = Number.parseInt(start);
-  console.log("TEST123-start", sanitizedParam);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(ReaderPage, { textId: sanitizedParam });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(ReaderPage, { textId: Number.parseInt(start) });
 }
 function TestWrapper() {
   const [searchParams] = useSearchParams();
   const textID = searchParams.get("text");
   const lang = searchParams.get("lang");
-  const sanitizedText = textID !== null ? Number.parseInt(textID) : null;
-  console.log("TEST123-start", sanitizedText);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     TesterPage,
     {
       langId: lang !== null ? Number.parseInt(lang) : null,
-      textId: sanitizedText
+      textId: textID !== null ? Number.parseInt(textID) : null
     }
   );
 }
-const index = "";
 client.createRoot(document.getElementById("root")).render(/* @__PURE__ */ jsxRuntimeExports.jsx(App, {}));

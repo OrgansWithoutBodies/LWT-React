@@ -1,3 +1,4 @@
+import { BackendPlugin } from '../electron-sqlite.backend-plugin.renderer';
 import type { DataState } from './data.storage';
 
 export type PersistedValueGetter<
@@ -6,6 +7,12 @@ export type PersistedValueGetter<
 export type PersistedValueSetter<
   TKey extends keyof DataState = keyof DataState
 > = (key: TKey, val: DataState[TKey]) => void;
+export type PersistedValueInserter<
+  TKey extends keyof DataState = keyof DataState,
+  TVal extends DataState[TKey][keyof DataState[TKey]] = DataState[TKey][keyof DataState[TKey]]
+  // TODO restrict to only entries where val is an array
+  //   TODO could use a returned id
+> = (key: TKey, val: any) => void;
 
 // ================== //
 
@@ -41,14 +48,21 @@ export const setPersistedValueRESTAPI: PersistedValueGetter = (key) => {
 export enum PersistanceStrategy {
   LocalStorage,
   RestAPI,
+  ElectronSqlite,
   // TODO Authorized RestAPI
   // TODO local sql server (if electron app) https://www.npmjs.com/package/electron-store
 }
 
-export const PersistenceStrategies: Record<
+type StrategyLookup = Record<
   PersistanceStrategy,
-  { get: PersistedValueGetter; set: PersistedValueSetter }
-> = {
+  {
+    get: PersistedValueGetter;
+    set: PersistedValueSetter;
+    insert?: PersistedValueInserter;
+  }
+>;
+
+export const PersistenceStrategies: StrategyLookup = {
   [PersistanceStrategy.LocalStorage]: {
     get: getPersistedValueLocalStorage,
     set: setPersistedValueLocalStorage,
@@ -57,4 +71,5 @@ export const PersistenceStrategies: Record<
     get: getPersistedValueRESTAPI,
     set: setPersistedValueRESTAPI,
   },
+  [PersistanceStrategy.ElectronSqlite]: BackendPlugin,
 };

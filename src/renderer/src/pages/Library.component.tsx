@@ -302,6 +302,12 @@ export function Library({
     'tags2',
     'settings',
   ]);
+  console.log('TEST123-library', {
+    activeLanguage,
+    tags2,
+    texttags,
+    textDetails,
+  });
   const pageSize = settings['set-texts-per-page'] || -1;
 
   const { numPages, dataOnPage } = usePager(
@@ -319,9 +325,9 @@ export function Library({
     onSelectNone,
     onSelect,
     checkboxPropsForEntry,
-  } = useSelection(textDetails, 'TxID');
+  } = useSelection(textDetails || [], 'TxID');
 
-  const recno = textDetails.length;
+  const recno = (textDetails || []).length;
   return (
     <>
       <Header

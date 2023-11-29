@@ -5,4 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   root: './src/renderer',
+  define: {
+    'process.env': process.env,
+  },
 });

@@ -8,6 +8,7 @@ import {
   DataStore,
   MyPersistanceHandles,
 } from './data.storage';
+import { Persistable } from './Persistable';
 
 import {
   AddNewTextType,
@@ -36,11 +37,18 @@ function IDIsUnique<TBrand extends number>(
   return !existingIds.includes(id as any);
 }
 export class DataService {
-  private persistChange(key: keyof DataState) {
-    const { set: setter } = MyPersistanceHandles;
+  private persistChange(key: keyof DataState, insertVal: any) {
+    // assume insert instead of wholly recreate when given the option
+    if (MyPersistanceHandles['insert']) {
+      const { insert: inserter } = MyPersistanceHandles;
+      // TODO return val - rn these can get out of sync
+      inserter(key, insertVal);
+    } else {
+      const { set: setter } = MyPersistanceHandles;
 
-    const { [key]: value } = this.dataStore.getValue();
-    setter(key, value);
+      const { [key]: value } = this.dataStore.getValue();
+      setter(key, value);
+    }
   }
   // These are saved in DB
   public addLanguage(language: LanguageNoId) {
@@ -59,7 +67,7 @@ export class DataService {
         ],
       };
     });
-    this.persistChange('languages');
+    this.persistChange('languages', language);
   }
   public deleteLanguage(langId: LanguagesId) {
     this.dataStore.update((state) => {
@@ -420,6 +428,7 @@ export class DataService {
   }
 
   public installDemoDatabase() {
+    // TODO persist this better
     this.dataStore.update(() => createDemoDBInitialState());
 
     this.persistChange('settings');
@@ -525,7 +534,25 @@ export class DataService {
     });
   }
 
-  constructor(private dataStore: DataStore) {}
+  constructor(private dataStore: DataStore) {
+    this.getInitialAsync();
+  }
+
+  private async getInitialAsync() {
+    const { getAsync: persistGetter } = MyPersistanceHandles;
+    Promise.all(
+      Object.keys(Persistable).map(async (key) => {
+        const val = await persistGetter(key);
+        return [key, val];
+      })
+    ).then((val) => {
+      const valObj = Object.fromEntries(val);
+      this.dataStore.update((state) => {
+        console.log('GOTObjs', { ...state, ...valObj });
+        return { ...state, ...valObj };
+      });
+    });
+  }
 }
 
 export const dataService = new DataService(dataStore);

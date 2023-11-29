@@ -43,7 +43,8 @@ export const enum Sorting {
   'Score Value (%)' = 5,
   'Word Count Active Texts' = 6,
 }
-const isTags = (tags: Tags[] | Tags2[]): tags is Tags[] => 'TgID' in tags[0];
+const isTags = (tags: Tags[] | Tags2[]): tags is Tags[] =>
+  tags[0] && 'TgID' in tags[0];
 // TODO tagKey type restricted to path param
 export function TagDropDown({
   tags,
@@ -53,6 +54,7 @@ export function TagDropDown({
   tagKey: PathParams;
 }): JSX.Element {
   const updateParams = useUpdateParams();
+  console.log('TEST123-tag', tags);
   return (
     <select
       name="tag1"

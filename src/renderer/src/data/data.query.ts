@@ -8,6 +8,7 @@ import {
   of,
   switchMap,
   take,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
@@ -103,7 +104,9 @@ export class DataQuery extends Query<DataState> {
   // public wordsLen = this.words.pipe(count());
   // public wordtagsLen = this.wordtags.pipe(count());
 
-  public activeLanguageId = this.select('activeLanguageId');
+  public activeLanguageId = this.select('activeLanguageId').pipe(
+    tap((val) => console.log('TEST123-activelang', val))
+  );
 
   // derived observables
   public activeLanguage = combineLatest([
@@ -224,7 +227,7 @@ export class DataQuery extends Query<DataState> {
     this.tags2,
   ]).pipe(
     map(([textsForActiveLanguage, texttags, tags]) => {
-      console.log({ textsForActiveLanguage });
+      console.log('textDetails', { textsForActiveLanguage });
       return textsForActiveLanguage.map((text) => {
         return {
           TxID: text.TxID,

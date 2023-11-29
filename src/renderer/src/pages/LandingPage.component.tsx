@@ -22,6 +22,7 @@ export function LandingPage() {
     'activeLanguageId',
     'activeLanguage',
   ]);
+  console.log('LANGS', languages);
   const navigate = useInternalNavigate();
   return (
     <>

@@ -16,6 +16,7 @@ import {
 import { resetDirty } from './Terms.component';
 import NewLanguageWizard from './Wizard.component';
 import { buildFormInput } from './buildFormInput';
+import { check_dupl_lang } from './utils';
 
 export function NewLanguage() {
   // languages type map

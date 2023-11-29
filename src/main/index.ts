@@ -1,18 +1,25 @@
-import { app, BrowserWindow, Menu, nativeImage } from 'electron';
+import { BrowserWindow, Menu, app, ipcMain, nativeImage } from 'electron';
+import path from 'path';
 import icon from '../renderer/public/img/lwt_icon.png';
 import { AppVariables } from '../renderer/src/meta';
 import { createColors } from '../renderer/src/styles';
+import { BackendPlugin } from './electron-sqlite.backend-plugin.main';
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({
+    width: 1000,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, '..', 'preload', 'preload.js'),
+    },
+  });
   mainWindow.setIcon(nativeImage.createFromDataURL(icon));
   const style = createColors(AppVariables.styleVariant);
   // TODO bgcolor
   console.log(style['body'].backgroundColor!);
-  mainWindow.blur();
-  window;
   // Vite dev server URL
+
   // TODO option
   mainWindow.loadURL('http://localhost:5173');
   mainWindow.on('closed', () => (mainWindow = null));
@@ -131,6 +138,14 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  ipcMain.handle('backend-plugin-get', (_, { key }) => {
+    return BackendPlugin.get(key);
+  });
+  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) => {
+    return BackendPlugin!.insert(key, dataEntry);
+  });
+
+  BackendPlugin.init();
   createWindow();
 });
 

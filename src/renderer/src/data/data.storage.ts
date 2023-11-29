@@ -1,6 +1,7 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import demoDB from '../demo_db.json';
 import { AppVariables } from '../meta';
+import { Persistable } from './Persistable';
 import {
   PersistedValueGetter,
   PersistenceStrategies,
@@ -20,7 +21,6 @@ import {
   Words,
 } from './parseMySqlDump';
 import { LanguagesId, TextsId } from './validators';
-
 export interface DataState {
   archivedtexts: ArchivedTexts[];
   archtexttags: ArchTextTags[];
@@ -74,17 +74,17 @@ function getPersistedData(
   return {
     settings: persistGetter('settings', []),
     activeLanguageId: persistGetter('activeLanguageId', null),
-    archivedtexts: persistGetter('archivedtexts', []),
-    archtexttags: persistGetter('archtexttags', []),
-    languages: persistGetter('languages', []),
     parsedTexts: persistGetter('parsedTexts', []),
     sentences: persistGetter('sentences', []),
-    tags2: persistGetter('tags2', []),
-    tags: persistGetter('tags', []),
-    textitems: persistGetter('textitems', []),
-    texts: persistGetter('texts', []),
-    texttags: persistGetter('texttags', []),
-    words: persistGetter('words', []),
-    wordtags: persistGetter('wordtags', []),
+    archivedtexts: persistGetter(Persistable.archivedtexts, []),
+    archtexttags: persistGetter(Persistable.archtexttags, []),
+    languages: persistGetter(Persistable.languages, []),
+    tags2: persistGetter(Persistable.tags2, []),
+    tags: persistGetter(Persistable.tags, []),
+    textitems: persistGetter(Persistable.textitems, []),
+    texts: persistGetter(Persistable.texts, []),
+    texttags: persistGetter(Persistable.texttags, []),
+    words: persistGetter(Persistable.words, []),
+    wordtags: persistGetter(Persistable.wordtags, []),
   };
 }
