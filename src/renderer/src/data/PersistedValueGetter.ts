@@ -4,6 +4,9 @@ import type { DataState } from './data.storage';
 export type PersistedValueGetter<
   TKey extends keyof DataState = keyof DataState
 > = (key: TKey, nullFallback?: DataState[TKey]) => DataState[TKey];
+export type PersistedValueGetterAsync<
+  TKey extends keyof DataState = keyof DataState
+> = (key: TKey, nullFallback?: DataState[TKey]) => Promise<DataState[TKey]>;
 export type PersistedValueSetter<
   TKey extends keyof DataState = keyof DataState
 > = (key: TKey, val: DataState[TKey]) => void;
@@ -12,7 +15,16 @@ export type PersistedValueInserter<
   TVal extends DataState[TKey][keyof DataState[TKey]] = DataState[TKey][keyof DataState[TKey]]
   // TODO restrict to only entries where val is an array
   //   TODO could use a returned id
-> = (key: TKey, val: any) => void;
+> = (key: TKey, val: any) => TVal;
+// TODO 'AsyncReturnValue'
+export type PersistedValueInserterAsync<
+  TKey extends keyof DataState = keyof DataState,
+  TVal extends DataState[TKey][keyof DataState[TKey]] = DataState[TKey][keyof DataState[TKey]]
+> = (key: TKey, val: any) => Promise<TVal>;
+export type PersistedValueDeleter<
+  TKey extends keyof DataState = keyof DataState
+> = (key: TKey, deleteID: TKey extends object ? keyof TKey : never) => void;
+export type PersistedValueEmptyer = () => void;
 
 // ================== //
 
@@ -48,19 +60,27 @@ export const setPersistedValueRESTAPI: PersistedValueGetter = (key) => {
 export enum PersistanceStrategy {
   LocalStorage,
   RestAPI,
+  // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
   ElectronSqlite,
   // TODO Authorized RestAPI
   // TODO local sql server (if electron app) https://www.npmjs.com/package/electron-store
+  // TODO MySql compatibility
+  // TODO shared details for sqlite implementation for IPC & REST-express
 }
 
-type StrategyLookup = Record<
-  PersistanceStrategy,
-  {
-    get: PersistedValueGetter;
-    set: PersistedValueSetter;
-    insert?: PersistedValueInserter;
-  }
->;
+export interface PersistenceHandles {
+  get: PersistedValueGetter;
+  set: PersistedValueSetter;
+
+  getAsync?: PersistedValueGetterAsync;
+
+  insert?: PersistedValueInserterAsync;
+  update?: PersistedValueInserterAsync;
+  delete?: PersistedValueDeleter;
+  empty?: PersistedValueEmptyer;
+}
+
+type StrategyLookup = Record<PersistanceStrategy, PersistenceHandles>;
 
 export const PersistenceStrategies: StrategyLookup = {
   [PersistanceStrategy.LocalStorage]: {

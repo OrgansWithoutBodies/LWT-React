@@ -24,12 +24,14 @@ function createWindow() {
   mainWindow.loadURL('http://localhost:5173');
   mainWindow.on('closed', () => (mainWindow = null));
   const template: Electron.MenuItemConstructorOptions[] = [
+    // TODO reload page shortcut
     {
       label: 'New',
       submenu: [
         {
           label: 'Language',
           click: (_, window) => {
+            // TODO API typesafety
             window?.loadURL('http://localhost:5173/edit_languages?new=1');
           },
         },
@@ -143,6 +145,15 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) => {
     return BackendPlugin!.insert(key, dataEntry);
+  });
+  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) => {
+    return BackendPlugin!.update(key, dataEntry);
+  });
+  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) => {
+    return BackendPlugin!.delete(key, deleteId);
+  });
+  ipcMain.handle('backend-plugin-empty', () => {
+    return BackendPlugin!.empty();
   });
 
   BackendPlugin.init();

@@ -1,7 +1,7 @@
 import { Store, StoreConfig } from '@datorama/akita';
+import { Persistable } from '../../../shared/Persistable';
 import demoDB from '../demo_db.json';
 import { AppVariables } from '../meta';
-import { Persistable } from './Persistable';
 import {
   PersistedValueGetter,
   PersistenceStrategies,
@@ -20,7 +20,7 @@ import {
   WordTags,
   Words,
 } from './parseMySqlDump';
-import { LanguagesId, TextsId } from './validators';
+import { TextsId } from './validators';
 export interface DataState {
   archivedtexts: ArchivedTexts[];
   archtexttags: ArchTextTags[];
@@ -36,12 +36,9 @@ export interface DataState {
   words: Words[];
   wordtags: WordTags[];
 
-  activeLanguageId: LanguagesId | null;
   parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
-
   notificationMessage: null | { txt: string; time };
 }
-export const ACTIVE_LANGUAGE_LOCAL_STORAGE_KEY = 'activeLanguageId' as const;
 
 // TODO decide this on compile w DI token
 const MyPersistanceStrategy = AppVariables.persistMethod;
@@ -51,7 +48,6 @@ export const MyPersistanceHandles =
 export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,
-    activeLanguageId: null,
     parsedTexts: [],
     wordtags: [],
     notificationMessage: null,
@@ -73,7 +69,6 @@ function getPersistedData(
 ): Partial<DataState> {
   return {
     settings: persistGetter('settings', []),
-    activeLanguageId: persistGetter('activeLanguageId', null),
     parsedTexts: persistGetter('parsedTexts', []),
     sentences: persistGetter('sentences', []),
     archivedtexts: persistGetter(Persistable.archivedtexts, []),

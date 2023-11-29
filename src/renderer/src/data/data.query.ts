@@ -8,7 +8,6 @@ import {
   of,
   switchMap,
   take,
-  tap,
   withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
@@ -66,20 +65,20 @@ export class DataQuery extends Query<DataState> {
   public wordtags = this.select('wordtags');
 
   public settings: Observable<Settings> = this.select('settings').pipe(
-    map(
-      (settings) =>
-        Object.fromEntries(
-          settings.map(
-            ({ StKey, StValue }) =>
-              [
-                StKey,
-                Number.isNaN(Number.parseInt(StValue))
-                  ? StValue
-                  : Number.parseInt(StValue),
-              ] as [keyof Settings, Settings[keyof Settings]]
-          )
-        ) as Settings
-    )
+    map((settings) => {
+      console.log('active', settings);
+      return Object.fromEntries(
+        settings.map(
+          ({ StKey, StValue }) =>
+            [
+              StKey,
+              Number.isNaN(Number.parseInt(StValue))
+                ? StValue
+                : Number.parseInt(StValue),
+            ] as [keyof Settings, Settings[keyof Settings]]
+        )
+      ) as Settings;
+    })
   );
 
   public parsedTexts = this.select('parsedTexts');
@@ -95,7 +94,6 @@ export class DataQuery extends Query<DataState> {
   // public archtexttagsLen = this.archtexttags.pipe(count());
   // public languagesLen = this.languages.pipe(count());
   // public sentencesLen = this.sentences.pipe(count());
-  // public settingsLen = this.settings.pipe(count());
   // public tagsLen = this.tags.pipe(count());
   // public tags2Len = this.tags2.pipe(count());
   // public textitemsLen = this.textitems.pipe(count());
@@ -104,8 +102,10 @@ export class DataQuery extends Query<DataState> {
   // public wordsLen = this.words.pipe(count());
   // public wordtagsLen = this.wordtags.pipe(count());
 
-  public activeLanguageId = this.select('activeLanguageId').pipe(
-    tap((val) => console.log('TEST123-activelang', val))
+  public activeLanguageId = this.settings.pipe(
+    map((val) => {
+      return val['currentlanguage'];
+    })
   );
 
   // derived observables

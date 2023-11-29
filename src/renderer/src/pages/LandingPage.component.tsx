@@ -1,6 +1,8 @@
+import { PersistanceStrategy } from '../data/PersistedValueGetter';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { useAppContext } from '../hooks/useContext';
+import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
@@ -142,7 +144,7 @@ export function LandingPage() {
                   target="_blank"
                 >
                   "Learning with Texts" (LWT)
-                </a>
+                </a>{' '}
                 is free and unencumbered software released
                 <br />
                 into the
@@ -152,12 +154,15 @@ export function LandingPage() {
                 >
                   PUBLIC DOMAIN
                 </a>
-                . LWT React Port is as well. Feel free
+                . LWT React Port is as well. Clone, modify, go wild. Learn more
+                languages, help more learn more languages.
+                <br />
                 <a href="http://unlicense.org/" target="_blank">
                   More information and detailed Unlicense ...
                 </a>
                 <br />
-                This is LWT-React Version {versionNumber} ({releaseDate})
+                This is LWT-React Version {versionNumber} (Released:{' '}
+                {releaseDate})
                 <br />
                 <a
                   href="https://en.wikipedia.org/wiki/Database"
@@ -193,7 +198,11 @@ export function LandingPage() {
 if (! isset($mb)) $mb = '0.0';
  */}
                 </span>
+                {/* TODO */}
                 / Size: 94.5 MB
+                <br />
+                <b>Persistence strategy: </b>
+                {PersistanceStrategy[AppVariables.persistMethod]}
                 <br />
                 <a href="https://en.wikipedia.org/wiki/Front-end_web_development">
                   Frontend:

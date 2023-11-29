@@ -1,14 +1,15 @@
 import path from 'path';
 import * as sql from 'sqlite';
 import {
+  PersistedValueEmptyer,
   PersistedValueGetter,
   PersistedValueInserter,
   PersistedValueSetter,
 } from '../renderer/src/data/PersistedValueGetter';
 import { Languages } from '../renderer/src/data/parseMySqlDump';
 import { LanguagesId } from '../renderer/src/data/validators';
+import { Persistable } from '../shared/Persistable';
 const { Database, OPEN_CREATE } = require('sqlite3');
-// TODO what a name lol
 
 // https://github.com/nylas/electron-RxDB
 // https://chamaradodandeniya.wordpress.com/2020/02/02/how-to-create-cross-platform-desktop-app-using-electron-react-and-sqllite/
@@ -20,38 +21,23 @@ type PersistenceStrategyPlugin = {
   set: PersistedValueSetter;
   // TODO be able to just insert?
   insert?: PersistedValueInserter;
+  update?: PersistedValueInserter;
+  delete?: PersistedValueInserter;
+  empty?: PersistedValueEmptyer;
 };
 const tbpref = '';
-const fileName = './db.sql';
-export function insertLanguage(
-  language: Pick<
-    Languages,
-    | 'LgName'
-    | 'LgDict1URI'
-    | 'LgDict2URI'
-    | 'LgGoogleTranslateURI'
-    | 'LgExportTemplate'
-    | 'LgTextSize'
-    | 'LgCharacterSubstitutions'
-    | 'LgRegexpSplitSentences'
-    | 'LgExceptionsSplitSentences'
-    | 'LgRegexpWordCharacters'
-    | 'LgRemoveSpaces'
-    | 'LgSplitEachChar'
-    | 'LgRightToLeft'
-  >
-) {
-  insertEntry(language, 'languages');
-}
+
 function insertEntry(entry: object, tableKey: string) {
+  const entryKeys = Object.keys(entry).filter(
+    (val) => entry[val] !== undefined
+  );
+  console.log('TEST123-insertentry', entry, tableKey);
   const insertQuery = `INSERT INTO 
   ${tbpref}${tableKey}(
-    ${Object.keys(entry).join(', ')}
+    ${entryKeys.join(', ')}
     ) 
     values(
-    ${Object.keys(entry)
-      .map((val) => `$${val}`)
-      .join(', ')}
+    ${entryKeys.map((val) => `$${val}`).join(', ')}
     		);`;
   sql
     .open({
@@ -63,22 +49,17 @@ function insertEntry(entry: object, tableKey: string) {
         .run(
           insertQuery,
           Object.fromEntries(
-            Object.keys(entry).map((key) => [`$${key}`, entry[key]])
+            entryKeys.map((key) => {
+              console.log('TEST123-entrykey', key, entry[key]);
+              return [`$${key}`, entry[key]];
+            })
           ),
           (val) => console.log('TEST123-SUCCESS-INSERT', val)
         )
-        .catch((err) => console.log(err))
+        // TODO
+        .catch((err) => console.log('ERR', err))
         .then((val) => console.log('TEST123-SUCCESS-INSERT', val));
     });
-  console.log(
-    insertQuery,
-    Object.fromEntries(
-      Object.keys(entry).map((key) => [
-        `$${key}`,
-        entry[key] === undefined ? null : entry[key],
-      ])
-    )
-  );
 }
 
 function countTextsForLanguage(lgID: LanguagesId) {
@@ -90,7 +71,38 @@ function countArchivedTextsForLanguage(lgID: LanguagesId) {
 function countWordsForLanguage(lgID: LanguagesId) {
   `select count(WoID) as value from ${tbpref}words where WoLgID=${lgID}`;
 }
-export async function getLanguages() {
+export async function getEntries(tableName: string, columnKeys: string[]) {
+  return await sql
+    .open({
+      filename: dbLoc,
+      driver: Database,
+    })
+    .then(async (db) => {
+      const res = await db.all<
+        Pick<Languages, 'LgID' | 'LgName' | 'LgExportTemplate'>[]
+      >(
+        `SELECT ${columnKeys.join(',')} FROM ${tbpref}${tableName};`
+        // TODO ORDER BY LgName
+      );
+      return res;
+    });
+}
+export async function deleteEntry(tableName: string, deleteID: number) {
+  console.log('TEST123-delete', tableName, deleteID);
+  return await sql
+    .open({
+      filename: dbLoc,
+      driver: Database,
+    })
+    .then(async (db) => {
+      if (tableIDLookup[tableName] === null) {
+        return;
+      }
+      await db.exec(`DELETE FROM ${tbpref}${tableName};`);
+      // return res;
+    });
+}
+export async function emptyDB() {
   return await sql
     .open({
       filename: dbLoc,
@@ -98,65 +110,90 @@ export async function getLanguages() {
     })
     .then(async (db) => {
       await db.exec(
-        `CREATE TABLE IF NOT EXISTS ${tbpref}languages (
-          LgID INTEGER PRIMARY KEY AUTOINCREMENT,
-          LgName varchar(40) UNIQUE NOT NULL,
-          LgDict1URI varchar(200) NOT NULL,
-          LgDict2URI varchar(200),
-          LgGoogleTranslateURI varchar(200),
-          LgExportTemplate varchar(1000),
-          LgTextSize int(5)  NOT NULL DEFAULT 100,
-          LgCharacterSubstitutions varchar(500) NOT NULL,
-          LgRegexpSplitSentences varchar(500) NOT NULL,
-          LgExceptionsSplitSentences varchar(500) NOT NULL,
-          LgRegexpWordCharacters varchar(500) NOT NULL,
-          LgRemoveSpaces int(1)  NOT NULL DEFAULT 0,
-          LgSplitEachChar int(1)  NOT NULL DEFAULT 0,
-          LgRightToLeft int(1)  NOT NULL DEFAULT 0 );`
+        Object.keys(Persistable)
+          .filter((val) => val !== 'settings')
+          .map((val) => `DELETE FROM ${tbpref}${val};`)
+          .join('\n')
       );
-      const res = await db.all<
-        Pick<Languages, 'LgID' | 'LgName' | 'LgExportTemplate'>[]
-      >(
-        `SELECT LgID, LgName, LgExportTemplate FROM ${tbpref}languages ORDER BY LgName;`
-      );
-      return res;
+    });
+}
+export async function updateEntry(
+  tableName: string,
+  updateVal: Record<string, string>
+) {
+  console.log('TEST123-update', tableName, updateVal);
+  const tableID = tableIDLookup[tableName];
+  return await sql
+    .open({
+      filename: dbLoc,
+      driver: Database,
+    })
+    .then(async (db) => {
+      if (tableIDLookup[tableName] === null) {
+        return;
+      }
+      const sqlStr = `UPDATE ${tbpref}${tableName} SET ${Object.keys(updateVal)
+        .filter((val) => val !== tableID)
+        .map((key) => `${key} = ${updateVal[key]}`)} WHERE ${tableID} == '${
+        updateVal[tableID]
+      }';`;
+      console.log(sqlStr);
+      await db.exec(sqlStr);
+      // return res;
     });
 }
 export const BackendPlugin: PersistenceStrategyPlugin = {
   get: (key) => {
-    switch (key) {
-      case 'languages':
-        return getLanguages();
-      default:
-        return [];
-      // throw new Error(`Unimplemented! ${key}`);
+    if (isValidKey(key)) {
+      return getEntries(key, ['*']);
     }
+
+    throw new Error(`Unimplemented! ${key}`);
   },
   init: async () => {
     await initDB();
   },
+  update: (key, newEntry) => {
+    console.log('TEST123-backendupdate');
+    if (isValidKey(key)) {
+      return updateEntry(key, newEntry);
+    }
+  },
+  delete: (key, delID) => {
+    if (isValidKey(key)) {
+      return deleteEntry(key, delID);
+    }
+  },
   set: () => {},
+  empty: () => {
+    return emptyDB();
+  },
   insert: (key, val) => {
-    if (
-      [
-        'languages',
-        'texts',
-        'words',
-        'wordtags',
-        'archivedtexts',
-        'archtexttags',
-        'tags',
-        'tags2',
-        'textitems',
-        'texttags',
-      ].includes(key)
-    ) {
+    if (isValidKey(key)) {
       return insertEntry(val, key);
     }
 
     throw new Error(`Unimplemented! ${key}`);
   },
 };
+
+const tableIDLookup = {
+  languages: 'LgID',
+  texts: 'TxID',
+  words: 'WoID',
+  // TODO non primary key
+  wordtags: null,
+  archivedtexts: 'AtID',
+  archtexttags: 'AgAtID',
+  tags: 'TgID',
+  tags2: 'T2ID',
+  settings: 'StKey',
+  textitems: 'TiID',
+  texttags: null,
+} as const;
+function isValidKey(key: string) {
+  return Object.keys(tableIDLookup).includes(key);
+}
 
 export async function initDB() {
   const creationStrings = [

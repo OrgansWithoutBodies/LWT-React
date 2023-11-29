@@ -8,7 +8,7 @@ import { buildFormInput } from './buildFormInput';
 
 // TODO abstract this out into a nested settings component
 export function SettingsComponent(): JSX.Element {
-  const [{ settings }, { setViewerSettings }] = useData(['settings']);
+  const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();
   const validator = SettingsValidator;
   const refMap = RefMap(validator);

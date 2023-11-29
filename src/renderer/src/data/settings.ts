@@ -1,4 +1,11 @@
+import { LanguagesId, TextsId } from './validators';
+
 export type Settings = {
+  dbversion: string;
+  showallwords: number;
+  currentlanguage: LanguagesId | null;
+  lastscorecalc: number;
+  currenttext: TextsId;
   'set-text-h-frameheight-no-audio': number;
   'set-text-h-frameheight-with-audio': number;
   'set-text-l-framewidth-percent': number;

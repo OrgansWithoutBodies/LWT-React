@@ -9,4 +9,5 @@ export enum Persistable {
   tags2 = 'tags2',
   textitems = 'textitems',
   texttags = 'texttags',
+  settings = 'settings',
 }
