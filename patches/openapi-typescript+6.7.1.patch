@@ -1,0 +1,34 @@
+diff --git a/node_modules/openapi-typescript/bin/cli.js b/node_modules/openapi-typescript/bin/cli.js
+index 0e568e4..bf35247 100755
+--- a/node_modules/openapi-typescript/bin/cli.js
++++ b/node_modules/openapi-typescript/bin/cli.js
+@@ -117,14 +117,15 @@ async function generateSchema(pathToSpec) {
+       if (typeof flags.output === "string" && !flags.output.endsWith("/")) {
+         outputFilePath = new URL(`${flags.output}/`, CWD);
+       }
+-      const filename = pathToSpec.replace(EXT_RE, ".ts");
++      const splitPath = pathToSpec.split('/');
++      const filename = splitPath[splitPath.length-1].replace(EXT_RE, ".ts");
+       const originalOutputFilePath = outputFilePath;
+       outputFilePath = new URL(filename, originalOutputFilePath);
+       if (outputFilePath.protocol !== "file:") {
+         outputFilePath = new URL(outputFilePath.host.replace(EXT_RE, ".ts"), originalOutputFilePath);
+       }
+     }
+-
++console.log("TEST123",outputFilePath, )
+     fs.writeFileSync(outputFilePath, result, "utf8");
+ 
+     const timeEnd = process.hrtime(timeStart);
+@@ -193,11 +194,7 @@ async function main() {
+   await Promise.all(
+     inputSpecPaths.map(async (specPath) => {
+       if (flags.output !== "." && output === OUTPUT_FILE) {
+-        if (isGlob || isDirUrl) {
+-          fs.mkdirSync(new URL(path.dirname(specPath), outputDir), { recursive: true }); // recursively make parent dirs
+-        } else {
+           fs.mkdirSync(outputDir, { recursive: true }); // recursively make parent dirs
+-        }
+       }
+       await generateSchema(specPath);
+     }),

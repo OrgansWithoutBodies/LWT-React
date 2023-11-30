@@ -5,15 +5,11 @@ import { Header } from './Header';
 
 export function PrintText({ textID }: { textID: TextsId }) {
   const [{ texts, languages }] = useData(['texts', 'languages']);
-  const showingText = texts.find(({ TxID }) => {
-    return TxID === textID;
-  });
+  const showingText = texts.find(({ TxID }) => TxID === textID);
   if (!showingText) {
     throw new Error('invalid Text ID!');
   }
-  const language = languages.find(({ LgID }) => {
-    return LgID === showingText.TxLgID;
-  });
+  const language = languages.find(({ LgID }) => LgID === showingText.TxLgID);
   if (!language) {
     throw new Error('invalid Text Language ID!');
   }

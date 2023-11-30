@@ -186,9 +186,7 @@ export function useInternalParams<
 >(pageKey: TPageKey): Record<TPageParams, string | null> {
   const [searchParams] = useSearchParams();
   return Object.fromEntries(
-    headerValuesTemp[pageKey].params.map((val) => {
-      return [val, searchParams.get(val)] as [TPageParams, string | null];
-    })
+    headerValuesTemp[pageKey].params.map((val) => [val, searchParams.get(val)] as [TPageParams, string | null])
   );
 }
 function TermsWrapper() {

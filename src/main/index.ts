@@ -140,21 +140,11 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('backend-plugin-get', (_, { key }) => {
-    return BackendPlugin.get(key);
-  });
-  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) => {
-    return BackendPlugin!.insert(key, dataEntry);
-  });
-  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) => {
-    return BackendPlugin!.update(key, dataEntry);
-  });
-  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) => {
-    return BackendPlugin!.delete(key, deleteId);
-  });
-  ipcMain.handle('backend-plugin-empty', () => {
-    return BackendPlugin!.empty();
-  });
+  ipcMain.handle('backend-plugin-get', (_, { key }) => BackendPlugin.get(key));
+  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) => BackendPlugin!.insert(key, dataEntry));
+  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) => BackendPlugin!.update(key, dataEntry));
+  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) => BackendPlugin!.delete(key, deleteId));
+  ipcMain.handle('backend-plugin-empty', () => BackendPlugin!.empty());
 
   BackendPlugin.init();
   createWindow();

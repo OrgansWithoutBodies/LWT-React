@@ -1,3 +1,5 @@
+import { Gzip } from 'browserify-zlib';
+
 import { Persistable } from '../../../shared/Persistable';
 import { StrengthMap } from '../pages/AddNewTermTooltip';
 import { splitCheckText } from '../pages/utils';
@@ -8,7 +10,9 @@ import {
   DataStore,
   MyPersistanceHandles,
 } from './data.storage';
+import { downloadTextFile } from './downloadTxtFile';
 
+import { TatoebaOpenAPIWrapper, ThreeLetterString } from '../pages/TatoebaAPI';
 import {
   AddNewTextType,
   AddNewWordType,
@@ -19,7 +23,7 @@ import {
   Words,
 } from './parseMySqlDump';
 import { serializeJsonToSQL } from './serializeJsonToSQL';
-import { Settings } from './settings';
+import Settings from './settings';
 import { TermStrengthOrUnknown } from './type';
 import {
   ArchivedTextsId,
@@ -37,6 +41,8 @@ export enum CRUD {
   Update,
   Delete,
 }
+// TODO most of these are actually just identical C.UD operations - formalize that
+// TODO sometimes with a callback to add more object keys (maybe best handled in form submission?)
 function IDIsUnique<TBrand extends number>(
   id: number,
   existingIds: TBrand[]
@@ -44,6 +50,7 @@ function IDIsUnique<TBrand extends number>(
   return !existingIds.includes(id as any);
 }
 export class DataService {
+  private TatoebaAPI: TatoebaOpenAPIWrapper;
   // TODO maybe just a drop handler? test if any faster
   private persistEmpty() {
     // assume insert instead of wholly recreate when given the option
@@ -84,7 +91,8 @@ export class DataService {
       await deleter(key, deleteID);
     }
   }
-  // These are saved in DB
+  // =================
+
   public addLanguage(language: LanguageNoId) {
     this.dataStore.update((state) => {
       const ids = state.languages.map((lang) => lang.LgID);
@@ -106,27 +114,23 @@ export class DataService {
     this.persistInsert('languages', language);
   }
   public deleteLanguage(langId: LanguagesId) {
-    this.dataStore.update((state) => {
-      return {
+    this.dataStore.update((state) => ({
         ...state,
         languages: state.languages.filter(
           (language) => language.LgID !== langId
         ),
-      };
-    });
+      }));
 
     this.persistSet('languages');
     this.persistDelete('languages', langId);
   }
   public deleteArchivedText(textId: ArchivedTextsId) {
-    this.dataStore.update((state) => {
-      return {
+    this.dataStore.update((state) => ({
         ...state,
         archivedtexts: state.archivedtexts.filter(
           (language) => language.AtID !== textId
         ),
-      };
-    });
+      }));
     this.persistSet('archivedtexts');
     this.persistDelete('archivedtexts', textId);
   }
@@ -232,13 +236,11 @@ export class DataService {
     this.persistInsert('tags2', tag);
   }
   public deleteText(textId: TextsId) {
-    this.dataStore.update((state) => {
-      return {
+    this.dataStore.update((state) => ({
         ...state,
         notificationMessage: { txt: `Removed Text Tag id=${textId}` },
         texts: state.texts.filter((text) => text.TxID !== textId),
-      };
-    });
+      }));
     this.persistSet('texts');
     this.persistDelete('texts', textId);
   }
@@ -271,12 +273,10 @@ export class DataService {
     this.persistInsert('words', word);
   }
   public deleteTerm(termId: WordsId) {
-    this.dataStore.update((state) => {
-      return {
+    this.dataStore.update((state) => ({
         ...state,
         words: state.words.filter((word) => word.WoID !== termId),
-      };
-    });
+      }));
     this.persistSet('words');
     this.persistDelete('words', termId);
   }
@@ -310,17 +310,11 @@ export class DataService {
     // TODO
   }
   public deleteTermTag(tagId: TagsId) {
-    this.dataStore.update(({ wordtags, tags, ...rest }) => {
-      return {
+    this.dataStore.update(({ wordtags, tags, ...rest }) => ({
         ...rest,
-        wordtags: wordtags.filter(({ WtTgID }) => {
-          return WtTgID !== tagId;
-        }),
-        tags: tags.filter(({ TgID }) => {
-          return TgID !== tagId;
-        }),
-      };
-    });
+        wordtags: wordtags.filter(({ WtTgID }) => WtTgID !== tagId),
+        tags: tags.filter(({ TgID }) => TgID !== tagId),
+      }));
     // TODO persist deletes
     this.persistSet('wordtags');
     this.persistSet('tags');
@@ -334,20 +328,12 @@ export class DataService {
     this.persistSet('texttags');
   }
   public deleteTextTag(tagId: Tags2Id) {
-    this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => {
-      return {
+    this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => ({
         ...rest,
-        texttags: texttags.filter(({ TtT2ID }) => {
-          return TtT2ID !== tagId;
-        }),
-        archtexttags: archtexttags.filter(({ AgT2ID }) => {
-          return AgT2ID !== tagId;
-        }),
-        tags2: tags2.filter(({ T2ID }) => {
-          return T2ID !== tagId;
-        }),
-      };
-    });
+        texttags: texttags.filter(({ TtT2ID }) => TtT2ID !== tagId),
+        archtexttags: archtexttags.filter(({ AgT2ID }) => AgT2ID !== tagId),
+        tags2: tags2.filter(({ T2ID }) => T2ID !== tagId),
+      }));
     // TODO persist multiple at a time
     this.persistSet('tags2');
     this.persistSet('texttags');
@@ -366,8 +352,7 @@ export class DataService {
           ...state,
           words: [
             ...state.words,
-            ...terms.map((word, ii) => {
-              return {
+            ...terms.map((word, ii) => ({
                 ...word,
                 WoID: maxId + ii,
                 // TODO
@@ -376,8 +361,7 @@ export class DataService {
                 WoTomorrowScore: 0,
                 // TODO ? whats this
                 WoRandom: 0,
-              };
-            }),
+              })),
           ],
         };
       }
@@ -388,31 +372,58 @@ export class DataService {
   }
 
   public restoreFromBackup(file: File) {
-    window.alert('TODO RESTORING FROM BACKUP ' + file.name);
-    // import { Gunzip } from 'browserify-zlib';
+    // window.alert('TODO RESTORING FROM BACKUP ' + file.name);
+    // const reader = new FileReader();
+    // const buffer: string[] = [];
+    // reader.onload = async (e) => {
+    //   const text = e.target.result;
+    //   Gunzip.ungzip(text, function (err, dezipped) {
+    //     console.log('gunzip',dezipped.toString());
+    //   });
+    // };
+    // const text = reader.readAsText(file);
+    // console.log('TEST123', text);
     const reader = new FileReader();
-    const buffer: string[] = [];
-    reader.onload = async (e) => {
-      const text = e.target.result;
-      // Gunzip.ungzip(text, function (err, dezipped) {
-      //   console.log(dezipped.toString());
-      // });
-      //     // decompression chunk ready, add it to the buffer
-      //     buffer.push(data.toString());
-      //   })
-      //   .on('end', function () {
-      //     // response and decompression complete, join the buffer and return
-      //     console.log(buffer.join(''));
-      //   }).
+    const fileExt = file.name.split('.')[file.name.split('.').length - 1];
+    reader.onload = (ev) => {
+      const readData = ev.target?.result as string;
+      if (!readData) {
+        return;
+      }
+      if (fileExt === 'json') {
+        const jsonData = JSON.parse(readData);
 
-      // console.log(text);
-      // alert(text);
+        console.log(jsonData);
+        return;
+      }
+      if (fileExt === 'sql') {
+        const parsedData = {};
+        // TODO count how many columns in this table?
+        const splitTablesRegex = new RegExp(' *CREATE TABLE `', 'g');
+        const tableStrings = readData.split(splitTablesRegex).slice(1);
+        tableStrings.forEach((tableVal) => {
+          const tableKey = tableVal.slice(0, tableVal.indexOf('` '));
+          // valid tableKey
+          if (Object.keys(Persistable).includes(tableKey)) {
+            const entryVals = tableVal.split('INSERT INTO').slice(1);
+            if (entryVals.length > 0) {
+              const entryValRegex = new RegExp(
+                ` ${tableKey} VALUES\\((.*)\\);\n`
+              );
+              const entryVal = entryVals[0].match(entryValRegex);
+              if (entryVal && entryVal?.length > 1) {
+                const entryColRegex = new RegExp(`(.*),`);
+                entryVal[1].split();
+              }
+            }
+          }
+        });
+        // const tableName=
+      }
     };
-    const text = reader.readAsText(file);
-    console.log('TEST123', text);
+    reader.readAsText(file);
   }
-
-  public downloadBackup() {
+  private serialize(backupType: 'JSON' | 'SQL') {
     const {
       archivedtexts,
       archtexttags,
@@ -427,7 +438,24 @@ export class DataService {
       words,
       wordtags,
     } = this.dataStore.getValue();
-    serializeJsonToSQL({
+    if (backupType === 'JSON') {
+      return JSON.stringify({
+        archivedtexts,
+        archtexttags,
+        languages,
+        sentences,
+        settings,
+        tags,
+        tags2,
+        textitems,
+        texts,
+        texttags,
+        words,
+        wordtags,
+      });
+    }
+
+    const serializedSql = serializeJsonToSQL({
       archivedtexts,
       archtexttags,
       languages,
@@ -441,11 +469,18 @@ export class DataService {
       words,
       wordtags,
     });
-    window.alert('TODO DOWNLOADING BACKUP');
+    return serializedSql;
+  }
+  public downloadBackup(backupType: 'JSON' | 'SQL') {
+    const serializedData = this.serialize(backupType);
+    console.log(backupType);
+
+    Gzip();
+    // deflate((serializedData as string))
+    downloadTextFile(serializedData, backupType);
   }
   public emptyDatabase() {
-    this.dataStore.update((state) => {
-      return {
+    this.dataStore.update((state) => ({
         settings: state.settings,
         archivedtexts: [],
         archtexttags: [],
@@ -459,8 +494,7 @@ export class DataService {
         texttags: [],
         words: [],
         wordtags: [],
-      };
-    });
+      }));
 
     this.persistSet('settings');
     this.persistSet('archivedtexts');
@@ -518,9 +552,7 @@ export class DataService {
 	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
      */
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
-      const archIndex = texts.findIndex((text) => {
-        return text.TxID === archID;
-      });
+      const archIndex = texts.findIndex((text) => text.TxID === archID);
       const toArchive = texts[archIndex];
       console.log('TEST123', toArchive, archIndex, texts, archID);
       const poppedTexts = [
@@ -552,31 +584,15 @@ export class DataService {
   }
 
   public setSettings(settings: Partial<Settings>) {
-    this.dataStore.update(({ settings: oldSettings, ...state }) => {
-      console.log(
-        'settings',
-        settings,
-        Object.entries({
-          ...Object.fromEntries(
-            oldSettings.map(({ StValue, StKey }) => {
-              return [StKey, StValue];
-            })
-          ),
-          ...settings,
-        })
-      );
-      return {
+    this.dataStore.update(({ settings: oldSettings, ...state }) => ({
         ...state,
         settings: Object.entries({
           ...Object.fromEntries(
-            oldSettings.map(({ StValue, StKey }) => {
-              return [StKey, StValue];
-            })
+            oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
           ),
           ...settings,
         }).map(([key, val]) => ({ StKey: key, StValue: val })),
-      };
-    });
+      }));
     Object.entries(settings).forEach(async ([key, val]) => {
       await this.persistDelete('settings', key);
       await this.persistInsert('settings', { StKey: key, StValue: val });
@@ -585,23 +601,15 @@ export class DataService {
 
   public reparseText(textId: TextsId) {
     const { texts, languages } = this.dataStore.getValue();
-    const parsingText = texts.find(({ TxID }) => {
-      return TxID === textId;
-    });
-    const parsingLanguage = languages.find(({ LgID }) => {
-      return LgID === parsingText?.TxLgID;
-    });
+    const parsingText = texts.find(({ TxID }) => TxID === textId);
+    const parsingLanguage = languages.find(({ LgID }) => LgID === parsingText?.TxLgID);
     const parsedText = splitCheckText(parsingText?.TxText, parsingLanguage, -1);
-    this.dataStore.update(({ parsedTexts, ...rest }) => {
-      return { ...rest, parsedTexts: { ...parsedTexts, [textId]: parsedText } };
-    });
+    this.dataStore.update(({ parsedTexts, ...rest }) => ({ ...rest, parsedTexts: { ...parsedTexts, [textId]: parsedText } }));
   }
   public reparseAllTextsForLanguage(langId: LanguagesId) {
     const { texts } = this.dataStore.getValue();
     texts
-      .filter((text) => {
-        return text.TxLgID === langId;
-      })
+      .filter((text) => text.TxLgID === langId)
       .forEach((text) => {
         this.reparseText(text.TxID);
       });
@@ -630,8 +638,17 @@ export class DataService {
     // });
   }
 
+  public async getTatoebaSentence(langKey: ThreeLetterString, word: string) {
+    const tatoebaData = await this.TatoebaAPI.getPath('/unstable/sentences', {
+      lang: langKey,
+      q: word,
+    });
+    console.log('TATOEBA', tatoebaData.data);
+  }
+
   constructor(private dataStore: DataStore) {
     this.getInitialAsync();
+    this.TatoebaAPI = new TatoebaOpenAPIWrapper();
   }
 
   private async getInitialAsync() {
@@ -652,3 +669,10 @@ export class DataService {
 }
 
 export const dataService = new DataService(dataStore);
+
+async function do_gzip(input, output) {
+  const gzip = createGzip();
+  const source = createReadStream(input);
+  const destination = createWriteStream(output);
+  await pipe(source, gzip, destination);
+}

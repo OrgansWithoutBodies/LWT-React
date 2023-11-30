@@ -10,20 +10,8 @@ import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { StrengthMap } from './AddNewTermTooltip';
 import { CheckAndSubmit } from './Forms';
 import { Header } from './Header';
+import { ColumnImportMode, TermName } from './TermName';
 
-type TermName = 'w' | 't' | 'r' | 's' | 'g' | 'x';
-
-export const ColumnImportMode: Record<
-  TermName,
-  { txt: string; termParam: keyof Words }
-> = {
-  w: { termParam: 'WoText', txt: 'Term' },
-  t: { termParam: 'WoTranslation', txt: 'Translation' },
-  r: { termParam: 'WoRomanization', txt: 'Romanization' },
-  s: { termParam: 'WoSentence', txt: 'Sentence' },
-  g: { termParam: 'TODO', txt: 'Tag List' },
-  x: { termParam: 'TODO', txt: "Don't Import" },
-};
 export function UploadWords() {
   const navigator = useInternalNavigate();
   const refMap = {
@@ -261,8 +249,8 @@ export function UploadWords() {
                         refMap.c5.current!.value,
                       ];
                       const colIndsToCareAbout = colVals.reduce(
-                        (prev, curr, currInd) => {
-                          return curr !== 'x'
+                        (prev, curr, currInd) =>
+                          curr !== 'x'
                             ? [
                                 ...prev,
                                 [currInd, curr] as [
@@ -270,21 +258,21 @@ export function UploadWords() {
                                   Exclude<TermName, 'x'>
                                 ],
                               ]
-                            : prev;
-                        },
+                            : prev,
                         [] as [number, Exclude<TermName, 'x'>][]
                       );
                       const parsedTerms = data.data.map((row) => {
                         const term = Object.fromEntries(
-                          colIndsToCareAbout.map(([ind, colKey]) => {
-                            return [
-                              ColumnImportMode[colKey].termParam,
-                              row[ind],
-                            ] as [
-                              (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
-                              Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
-                            ];
-                          })
+                          colIndsToCareAbout.map(
+                            ([ind, colKey]) =>
+                              [
+                                ColumnImportMode[colKey].termParam,
+                                row[ind],
+                              ] as [
+                                (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
+                                Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
+                              ]
+                          )
                         );
                         return term as Words;
                       });

@@ -109,16 +109,14 @@ export function Header({
           }}
         >
           <option disabled>[Menu]</option>
-          {Object.keys(headerValues).map((key) => {
-            return (
+          {Object.keys(headerValues).map((key) => (
               <option
                 value={headerValues[key]}
                 selected={location.pathname === `/${headerValues[key]}`}
               >
                 {key}
               </option>
-            );
-          })}
+            ))}
         </select>
         {readerProps && (
           <>

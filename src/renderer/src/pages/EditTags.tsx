@@ -15,8 +15,8 @@ import {
 } from './EditTextTags';
 import { CheckAndSubmit, RefMap, emptyToNullMap, identityMap } from './Forms';
 import { Header } from './Header';
+import { resetDirty } from './Sorting';
 import { NavigateButton } from './Statistics.component';
-import { resetDirty } from './Terms.component';
 import { FormInput } from './buildFormInput';
 import { confirmDelete, multiActionGo } from './utils';
 
@@ -168,53 +168,51 @@ Sort Order:
               <th className="th1 clickable">Tag Comment</th>
               <th className="th1 clickable">Terms With Tag</th>
             </tr>
-            {dataOnPage.map((tag) => {
-              return (
-                <tr>
-                  {/* ' . checkTest(record['TgID'], 'marked') . ' */}
-                  <td className="td1 center">
-                    {/* TODO */}
-                    <A name="rec' . record['TgID'] . '">
-                      <input
-                        name="marked[]"
-                        type="checkbox"
-                        {...checkboxPropsForEntry(tag)}
-                        className="markcheck"
-                        value="' . record['TgID'] . '"
-                      />
-                    </A>
-                  </td>
-                  <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-                    &nbsp;
-                    <A href={`/edit_tags?chg=${tag.TgID}`}>
-                      <Icon src="document--pencil" title="Edit" />
-                    </A>
-                    &nbsp;
-                    <Icon
-                      onClick={() => {
-                        // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
-                        if (confirmDelete()) {
-                          dataService.deleteTermTag(tag.TgID);
-                        }
-                      }}
-                      src="minus-button"
-                      title="Delete"
+            {dataOnPage.map((tag) => (
+              <tr>
+                {/* ' . checkTest(record['TgID'], 'marked') . ' */}
+                <td className="td1 center">
+                  {/* TODO */}
+                  <A name="rec' . record['TgID'] . '">
+                    <input
+                      name="marked[]"
+                      type="checkbox"
+                      {...checkboxPropsForEntry(tag)}
+                      className="markcheck"
+                      value="' . record['TgID'] . '"
                     />
-                    &nbsp;
-                  </td>
-                  <td className="td1 center">{tag.TgText}</td>
-                  <td className="td1 center">{tag.TgComment}</td>
-                  <td className="td1 center">
-                    {/* TODO should be counting with this tag */}
-                    {tagCount > 0 ? (
-                      <A href={`/edit_words?tag1=${tag.TgID}`}>{tagCount}</A>
-                    ) : (
-                      '0'
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+                  </A>
+                </td>
+                <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                  &nbsp;
+                  <A href={`/edit_tags?chg=${tag.TgID}`}>
+                    <Icon src="document--pencil" title="Edit" />
+                  </A>
+                  &nbsp;
+                  <Icon
+                    onClick={() => {
+                      // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
+                      if (confirmDelete()) {
+                        dataService.deleteTermTag(tag.TgID);
+                      }
+                    }}
+                    src="minus-button"
+                    title="Delete"
+                  />
+                  &nbsp;
+                </td>
+                <td className="td1 center">{tag.TgText}</td>
+                <td className="td1 center">{tag.TgComment}</td>
+                <td className="td1 center">
+                  {/* TODO should be counting with this tag */}
+                  {tagCount > 0 ? (
+                    <A href={`/edit_words?tag1=${tag.TgID}`}>{tagCount}</A>
+                  ) : (
+                    '0'
+                  )}
+                </td>
+              </tr>
+            ))}
           </table>
         </form>
       )}
@@ -329,9 +327,7 @@ export function NewTag() {
 }
 export function EditTag({ chgId }: { chgId: TagsId }) {
   const [{ tags }] = useData(['tags']);
-  const changingTag = tags.find(({ TgID }) => {
-    return TgID === chgId;
-  });
+  const changingTag = tags.find(({ TgID }) => TgID === chgId);
   if (!changingTag) {
     throw new Error('Invalid Tag ID');
   }

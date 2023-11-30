@@ -25,24 +25,11 @@ import { StatusRadioButtons, do_ajax_show_sentences } from './AddNewWordPane';
 import { resetAll } from './EditArchived.component';
 import { RefMap } from './Forms';
 import { Header } from './Header';
-import { WordTagsSelectDropdown, buildFormInput } from './buildFormInput';
+import { Sorting, resetDirty } from './Sorting';
+import { WordTagsSelectDropdown } from './buildFormInput';
+import { useFormInput } from './useFormInput';
 import { confirmDelete } from './utils';
 
-// TODO
-export const resetDirty = () => {
-  // ** You have unsaved changes! **
-};
-export const setDirty = () => {};
-
-export const enum Sorting {
-  'Term A-Z' = 1,
-  'Translation A-Z' = 2,
-  'Newest first' = 3,
-  'Oldest first' = 7,
-  'Status' = 4,
-  'Score Value (%)' = 5,
-  'Word Count Active Texts' = 6,
-}
 const isTags = (tags: Tags[] | Tags2[]): tags is Tags[] =>
   tags[0] && 'TgID' in tags[0];
 // TODO tagKey type restricted to path param
@@ -66,12 +53,8 @@ export function TagDropDown({
         [Filter off]
       </option>
       {isTags(tags)
-        ? tags.map((tag) => {
-            return <option value={tag.TgID}>{tag.TgText}</option>;
-          })
-        : tags.map((tag) => {
-            return <option value={tag.T2ID}>{tag.T2Text}</option>;
-          })}
+        ? tags.map((tag) => <option value={tag.TgID}>{tag.TgText}</option>)
+        : tags.map((tag) => <option value={tag.T2ID}>{tag.T2Text}</option>)}
 
       <option disabled>--------</option>
       <option value="-1">UNTAGGED</option>
@@ -174,13 +157,11 @@ export function TermsFilterBox({
                 [Filter off]
               </option>
               {(activeLanguageId !== null
-                ? texts.filter(({ TxLgID }) => {
-                    return TxLgID === activeLanguageId;
-                  })
+                ? texts.filter(({ TxLgID }) => TxLgID === activeLanguageId)
                 : texts
-              ).map((text) => {
-                return <option value={text.TxID}>{text.TxTitle}</option>;
-              })}
+              ).map((text) => (
+                <option value={text.TxID}>{text.TxTitle}</option>
+              ))}
             </select>
           </td>
         </tr>
@@ -455,57 +436,33 @@ const sortingMethod = (
 ): ((termA: Words, termB: Words) => 1 | -1 | 0) => {
   switch (sort) {
     case Sorting['Oldest first']:
-      return (a, b) => {
-        return a.WoCreated > b.WoCreated
-          ? 1
-          : a.WoCreated < b.WoCreated
-          ? -1
-          : 0;
-      };
+      return (a, b) =>
+        a.WoCreated > b.WoCreated ? 1 : a.WoCreated < b.WoCreated ? -1 : 0;
     case Sorting['Newest first']:
-      return (a, b) => {
-        return a.WoCreated > b.WoCreated
-          ? -1
-          : a.WoCreated < b.WoCreated
-          ? 1
-          : 0;
-      };
+      return (a, b) =>
+        a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
     // TODO
     case Sorting['Score Value (%)']:
-      return (a, b) => {
-        return a.WoCreated > b.WoCreated
-          ? -1
-          : a.WoCreated < b.WoCreated
-          ? 1
-          : 0;
-      };
+      return (a, b) =>
+        a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
     case Sorting['Status']:
-      return (a, b) => {
-        return a.WoStatus > b.WoStatus ? -1 : a.WoStatus < b.WoStatus ? 1 : 0;
-      };
+      return (a, b) =>
+        a.WoStatus > b.WoStatus ? -1 : a.WoStatus < b.WoStatus ? 1 : 0;
     // TODO
     case Sorting['Term A-Z']:
-      return (a, b) => {
-        return a.WoText > b.WoText ? -1 : a.WoText < b.WoText ? 1 : 0;
-      };
+      return (a, b) => (a.WoText > b.WoText ? -1 : a.WoText < b.WoText ? 1 : 0);
     // TODO
     case Sorting['Translation A-Z']:
-      return (a, b) => {
-        return a.WoTranslation > b.WoTranslation
+      return (a, b) =>
+        a.WoTranslation > b.WoTranslation
           ? 1
           : a.WoTranslation < b.WoTranslation
           ? -1
           : 0;
-      };
     // TODO
     case Sorting['Word Count Active Texts']:
-      return (a, b) => {
-        return a.WoCreated > b.WoCreated
-          ? -1
-          : a.WoCreated < b.WoCreated
-          ? 1
-          : 0;
-      };
+      return (a, b) =>
+        a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
   }
 };
 export function Terms({
@@ -543,9 +500,9 @@ export function Terms({
   // const textTagsMatchingTag1=texttags.filter((tag)=>tag.TtTxID===)
   // const navigator = useInternalNavigate();
   const filteredWords = words.filter((val) => {
-    const allTagsForThisWord = wordtags.filter(({ WtWoID }) => {
-      return WtWoID === val.WoID;
-    });
+    const allTagsForThisWord = wordtags.filter(
+      ({ WtWoID }) => WtWoID === val.WoID
+    );
     const isRightText =
       textFilter === null
         ? true
@@ -558,15 +515,11 @@ export function Terms({
     const isRightTag1 =
       tag1 === null
         ? true
-        : allTagsForThisWord.find((val) => {
-            return val.WtTgID === tag1;
-          });
+        : allTagsForThisWord.find((val) => val.WtTgID === tag1);
     const isRightTag2 =
       tag2 === null
         ? true
-        : allTagsForThisWord.find((val) => {
-            return val.WtTgID === tag2;
-          });
+        : allTagsForThisWord.find((val) => val.WtTgID === tag2);
 
     // TODO account for both tags empty
     const compoundTagStatement =
@@ -631,15 +584,13 @@ export function Terms({
           <table className="sortable tab1">
             <TermsHeader />
             <tbody>
-              {displayedWords.map((word) => {
-                return (
-                  <TermLine
-                    word={word}
-                    onSelect={onSelect}
-                    isSelected={selectedValues.has(word.WoID)}
-                  />
-                );
-              })}
+              {displayedWords.map((word) => (
+                <TermLine
+                  word={word}
+                  onSelect={onSelect}
+                  isSelected={selectedValues.has(word.WoID)}
+                />
+              ))}
             </tbody>
           </table>
           <TermsFooter
@@ -655,15 +606,11 @@ export function Terms({
 
 export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
-  const term = words.find((val) => {
-    return val.WoID === chgID;
-  });
+  const term = words.find((val) => val.WoID === chgID);
   const validator = WordsValidator;
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
-  const WoInput = useMemo(() => {
-    return buildFormInput(refMap, term);
-  }, [term]);
+  const WoInput = useMemo(() => useFormInput(refMap, term), [term]);
   if (!term) {
     throw new Error('Invalid Change ID!');
   }
@@ -799,16 +746,14 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
 }
 export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const [{ languages }] = useData(['languages']);
-  const language = languages.find((val) => {
-    return val.LgID === langId;
-  });
+  const language = languages.find((val) => val.LgID === langId);
   if (!language) {
     throw new Error('Invalid Language ID!');
   }
   const validator = WordsValidatorNoId;
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
-  const WoInput = buildFormInput(refMap, { WoLgID: langId });
+  const WoInput = useFormInput(refMap, { WoLgID: langId });
   return (
     <>
       <Header title={`TODO`} />

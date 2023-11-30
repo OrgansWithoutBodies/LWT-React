@@ -1,3 +1,1 @@
-import('./App').then(async ({ startApplication }) => {
-  return startApplication();
-});
+import('./App').then(async ({ startApplication }) => startApplication());

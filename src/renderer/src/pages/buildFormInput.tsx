@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, useMemo } from 'react';
+import { InputHTMLAttributes } from 'react';
 import { useData } from '../data/useAkita';
 import { WordsId } from '../data/validators';
 import { TRefMap } from './Forms';
@@ -8,56 +8,19 @@ export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
   return (
     <ul id="termtags">
       {wordtags
-        .filter(({ WtWoID }) => {
-          return WtWoID === wordID;
-        })
-        .map((tag) => {
-          return (
-            <li>
-              {
-                // TODO better lookup very inefficient
-                tags.find(({ TgID }) => {
-                  return tag.WtTgID === TgID;
-                })!.TgText
-              }
-            </li>
-          );
-        })}
+        .filter(({ WtWoID }) => WtWoID === wordID)
+        .map((tag) => (
+          <li>
+            {
+              // TODO better lookup very inefficient
+              tags.find(({ TgID }) => tag.WtTgID === TgID)!.TgText
+            }
+          </li>
+        ))}
     </ul>
   );
 }
 
-export function buildFormInput<
-  TKey extends string,
-  TData extends Record<TKey, any>
->(refMap: TRefMap<TData>, entry?: Partial<TData>) {
-  // TODO useFormContext? for shared without build
-  // memo to avoid retriggering
-  const ReturnedComponent = useMemo(
-    () =>
-      (
-        args: Omit<
-          Parameters<typeof FormInput>[0],
-          'refMap' | 'defaultEntry' | 'fixedEntry'
-        > & { fixed?: boolean; default?: boolean }
-      ) => {
-        return (
-          <FormInput
-            {...args}
-            refMap={refMap}
-            fixedEntry={
-              entry && args.fixed && entry[args.entryKey] ? entry : undefined
-            }
-            defaultEntry={
-              entry && args.default && entry[args.entryKey] ? entry : undefined
-            }
-          />
-        );
-      },
-    Object.values(entry || {})
-  );
-  return ReturnedComponent;
-}
 export function FormInput<
   TKey extends string,
   TData extends Record<TKey, any>

@@ -243,6 +243,13 @@ if (! isset($mb)) $mb = '0.0';
           </tr>
         </tbody>
       </table>
+      <button
+        onClick={() => {
+          dataService.getTatoebaSentence('eng', 'test');
+        }}
+      >
+        TEST
+      </button>
     </>
   );
 }

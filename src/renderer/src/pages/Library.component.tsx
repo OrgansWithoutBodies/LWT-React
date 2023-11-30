@@ -13,8 +13,9 @@ import { Pager } from '../ui-kit/Pager';
 import { resetAll } from './EditArchived.component';
 import { RefMap } from './Forms';
 import { Header } from './Header';
-import { TagAndOr, TagDropDown, resetDirty } from './Terms.component';
-import { buildFormInput } from './buildFormInput';
+import { resetDirty } from './Sorting';
+import { TagAndOr, TagDropDown } from './Terms.component';
+import { useFormInput } from './useFormInput';
 const TextMultiAction = {
   test: (selectedValues: Set<TextsId>) => {
     console.log('test');
@@ -197,9 +198,9 @@ function ResizePage({
         value={pageSize}
         onChange={(val) => onPageResize(Number.parseInt(val))}
       >
-        {options.map((val) => {
-          return <option value={val}>{val}</option>;
-        })}
+        {options.map((val) => (
+          <option value={val}>{val}</option>
+        ))}
       </select>
     </>
   );
@@ -266,11 +267,7 @@ function LibraryRow({
         {text.title}
         <span className="smallgray2">
           {text.tags &&
-            '[' +
-              text.tags.map((tag, ii) => {
-                return ii > 0 ? ' ' + tag : tag;
-              }) +
-              ']'}
+            '[' + text.tags.map((tag, ii) => (ii > 0 ? ' ' + tag : tag)) + ']'}
         </span>
         {text.audioAvailable && <Icon src="speaker-volume" />}
         {text.link && <Icon src="chain" />}
@@ -483,11 +480,9 @@ export function Library({
             <LibraryHeader />
             <tbody>
               {dataOnPage &&
-                dataOnPage.map((text) => {
-                  return (
-                    <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
-                  );
-                })}
+                dataOnPage.map((text) => (
+                  <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
+                ))}
             </tbody>
           </table>
           <LibraryFooter
@@ -502,16 +497,14 @@ export function Library({
 }
 export function EditText({ chgID }: { chgID: TextsId }) {
   const [{ texts }] = useData(['texts']);
-  const editingText = texts.find(({ TxID }) => {
-    return TxID === chgID;
-  });
+  const editingText = texts.find(({ TxID }) => TxID === chgID);
   if (!editingText) {
     throw new Error('Invalid change ID');
   }
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
   const refMap = RefMap(validator);
-  const TxInput = buildFormInput(refMap, editingText);
+  const TxInput = useFormInput(refMap, editingText);
   return (
     <>
       <Header title={'My Texts'} />

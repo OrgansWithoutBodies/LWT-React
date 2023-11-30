@@ -40,9 +40,7 @@ export function EditArchivedTexts({
   // });
   const filteredTexts =
     filterLanguageID !== null
-      ? archivedtexts.filter(({ AtLgID }) => {
-          return AtLgID === filterLanguageID;
-        })
+      ? archivedtexts.filter(({ AtLgID }) => AtLgID === filterLanguageID)
       : archivedtexts;
   const { dataOnPage, numPages } = usePager(
     filteredTexts,

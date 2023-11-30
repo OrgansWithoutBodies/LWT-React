@@ -1,18 +1,160 @@
+import * as ss from 'superstruct';
+import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { SettingsValidator } from '../data/validators';
+import { SettingsObjValidator } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { RequiredLineButton } from '../ui-kit/Icon';
-import { CheckAndSubmit, RefMap } from './Forms';
+import { CheckAndSubmit, RefMap, parseNumMap } from './Forms';
 import { Header } from './Header';
-import { buildFormInput } from './buildFormInput';
-
+import { useFormInput } from './useFormInput';
 // TODO abstract this out into a nested settings component
+
+const validator = ss.omit(SettingsObjValidator, [
+  'currentlanguage',
+  'currenttext',
+  'dbversion',
+  'lastscorecalc',
+  'showallwords',
+]);
+const CategoryJSXLookup = {
+  Counts: () => (
+    <>
+      Text, Term &
+      <br />
+      Tag Tables
+    </>
+  ),
+  ReadTexts: () => (
+    <>
+      Read Text
+      <br />
+      Screen
+    </>
+  ),
+};
+const SettingsLayout: Record<
+  keyof typeof validator.TYPE,
+  {
+    category: keyof typeof CategoryJSXLookup;
+    description: () => JSX.Element;
+    suffix?: string;
+    inputType: 'dropdown' | 'text' | 'number';
+    dropdownOptions: { key: string; val: string }[];
+  }
+> = {
+  'set-archivedtexts-per-page': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-mobile-display-mode': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-show-text-word-counts': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-similar-terms-count': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-tags-per-page': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-term-sentence-count': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-term-translation-delimiters': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-terms-per-page': { category: '', suffix: '', inputType: 'dropdown' },
+  'set-test-edit-frame-waiting-time': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-test-h-frameheight': { category: '', suffix: '', inputType: 'dropdown' },
+  'set-test-l-framewidth-percent': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-test-main-frame-waiting-time': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-test-r-frameheight-percent': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-test-sentence-count': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-text-h-frameheight-no-audio': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-text-h-frameheight-with-audio': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-text-l-framewidth-percent': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-text-r-frameheight-percent': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-text-visit-statuses-via-key': {
+    category: '',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  'set-texts-per-page': { category: '', suffix: '', inputType: 'dropdown' },
+  '': {},
+};
+const DEFAULT_SETTINGS = {
+  'set-text-h-frameheight-no-audio': 140,
+  'set-text-h-frameheight-with-audio': 200,
+  'set-text-l-framewidth-percent': 50,
+  'set-text-r-frameheight-percent': 50,
+  'set-test-h-frameheight': 140,
+  'set-test-l-framewidth-percent': 50,
+  'set-test-r-frameheight-percent': 50,
+  'set-test-main-frame-waiting-time': 0,
+  'set-test-edit-frame-waiting-time': 500,
+  'set-similar-terms-count': 0,
+  'set-term-translation-delimiters': '/;|',
+  'set-texts-per-page': 10,
+  'set-archivedtexts-per-page': 100,
+  'set-terms-per-page': 100,
+  'set-tags-per-page': 100,
+};
 export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();
-  const validator = SettingsValidator;
-  const refMap = RefMap(validator);
-  const StInput = buildFormInput(refMap);
+  // const validator = ss.array(SettingsValidator);
+  const refMap = RefMap<typeof validator.TYPE>(validator);
+  const StInput = useFormInput(refMap, { ...DEFAULT_SETTINGS, ...settings });
   return (
     <>
       <Header title="Settings/Preferences" />
@@ -45,9 +187,9 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-text-h-frameheight-no-audio"
                   // data_info="Height of left top frame without audioplayer"
-                  value={140}
                   maxLength={3}
                   size={3}
+                  default
                 />
                 <br />
                 Pixel
@@ -69,7 +211,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-text-h-frameheight-with-audio"
                   // data_info="Height of left top frame with audioplayer"
-                  value="200"
+                  default
                   maxLength={3}
                   size={3}
                 />
@@ -89,7 +231,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-text-l-framewidth-percent"
                   // data_info="Width of left frames"
-                  value="50"
+                  default
                   maxLength={2}
                   size={2}
                 />
@@ -109,7 +251,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-text-r-frameheight-percent"
                   // data_info="Height of right top frame"
-                  value="50"
+                  default
                   maxLength={2}
                   size={2}
                 />
@@ -134,7 +276,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-test-h-frameheight"
                   // data_info="Height of left top frame"
-                  value="140"
+                  default
                   maxLength={3}
                   size={3}
                 />
@@ -154,7 +296,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-test-l-framewidth-percent"
                   // data_info="Width of left frames"
-                  value="50"
+                  default
                   maxLength={2}
                   size={2}
                 />
@@ -174,7 +316,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-test-r-frameheight-percent"
                   // data_info="Height of right top frame"
-                  value="50"
+                  default
                   maxLength={2}
                   size={2}
                 />
@@ -222,7 +364,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-test-edit-frame-waiting-time"
                   // data_info="Waiting Time to clear the message/edit frame"
-                  value="500"
+                  default
                   maxLength={8}
                   size={8}
                 />
@@ -246,7 +388,11 @@ export function SettingsComponent(): JSX.Element {
                 displayed on different devices
               </td>
               <td className="td1 center">
-                <select name="set-mobile-display-mode">
+                <select
+                  name="set-mobile-display-mode"
+                  ref={refMap['set-mobile-display-mode']}
+                >
+                  {/* TODO deprecate? */}
                   <option value="0" selected>
                     Auto
                   </option>
@@ -267,7 +413,10 @@ export function SettingsComponent(): JSX.Element {
                 (via keystrokes RIGHT, SPACE, LEFT, etc.)
               </td>
               <td className="td1 center">
-                <select name="set-text-visit-statuses-via-key">
+                <select
+                  ref={refMap['set-text-visit-statuses-via-key']}
+                  name="set-text-visit-statuses-via-key"
+                >
                   <option value="" selected>
                     [Filter off]
                   </option>
@@ -306,7 +455,11 @@ export function SettingsComponent(): JSX.Element {
                 displayed from text, if available
               </td>
               <td className="td1 center">
-                <select name="set-test-sentence-count" className="notempty">
+                <select
+                  name="set-test-sentence-count"
+                  ref={refMap['set-test-sentence-count']}
+                  className="notempty"
+                >
                   <option value="1" selected>
                     Just ONE
                   </option>
@@ -330,7 +483,11 @@ export function SettingsComponent(): JSX.Element {
                 generated from text, if available
               </td>
               <td className="td1 center">
-                <select name="set-term-sentence-count" className="notempty">
+                <select
+                  name="set-term-sentence-count"
+                  ref={refMap['set-term-sentence-count']}
+                  className="notempty"
+                >
                   <option value="1" selected>
                     Just ONE
                   </option>
@@ -360,7 +517,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-similar-terms-count"
                   // data_info="Similar terms to be displayed while adding/editing a term"
-                  value="0"
+                  default
                   maxLength={1}
                   size={1}
                 />
@@ -388,7 +545,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty center"
                   type="text"
                   entryKey="set-term-translation-delimiters"
-                  value="/;|"
+                  default
                   maxLength={8}
                   size={8}
                 />
@@ -411,7 +568,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-texts-per-page"
                   // data_info="Texts per Page"
-                  value="10"
+                  default
                   maxLength={4}
                   size={4}
                 />
@@ -427,7 +584,11 @@ export function SettingsComponent(): JSX.Element {
                 <br />(<b>"No"</b> loads a long text table faster)
               </td>
               <td className="td1 center">
-                <select name="set-show-text-word-counts" className="notempty">
+                <select
+                  name="set-show-text-word-counts"
+                  ref={refMap['set-show-text-word-counts']}
+                  className="notempty"
+                >
                   <option value="0">No</option>
                   <option value="1" selected>
                     Yes
@@ -447,7 +608,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-archivedtexts-per-page"
                   // data_info="Archived Texts per Page"
-                  value="100"
+                  default
                   maxLength={4}
                   size={4}
                 />
@@ -465,7 +626,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-terms-per-page"
                   // data_info="Terms per Page"
-                  value="100"
+                  default
                   maxLength={4}
                   size={4}
                 />
@@ -483,7 +644,7 @@ export function SettingsComponent(): JSX.Element {
                   type="text"
                   entryKey="set-tags-per-page"
                   // data_info="Tags per Page"
-                  value="100"
+                  default
                   maxLength={4}
                   size={4}
                 />
@@ -521,10 +682,37 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="Save"
                   onClick={() => {
-                    // TODO this works different
-                    CheckAndSubmit(refMap, {}, validator, (val) => {
-                      console.log(val);
-                    });
+                    CheckAndSubmit(
+                      refMap,
+                      {
+                        'set-text-h-frameheight-no-audio': parseNumMap,
+                        'set-text-h-frameheight-with-audio': parseNumMap,
+                        'set-text-l-framewidth-percent': parseNumMap,
+                        'set-text-r-frameheight-percent': parseNumMap,
+                        'set-test-h-frameheight': parseNumMap,
+                        'set-test-l-framewidth-percent': parseNumMap,
+                        'set-test-r-frameheight-percent': parseNumMap,
+                        'set-test-main-frame-waiting-time': parseNumMap,
+                        'set-test-edit-frame-waiting-time': parseNumMap,
+                        'set-test-sentence-count': parseNumMap,
+                        'set-term-sentence-count': parseNumMap,
+                        'set-archivedtexts-per-page': parseNumMap,
+                        'set-texts-per-page': parseNumMap,
+                        'set-terms-per-page': parseNumMap,
+                        'set-tags-per-page': parseNumMap,
+                        'set-show-text-word-counts': parseNumMap,
+                        'set-similar-terms-count': parseNumMap,
+                        'set-mobile-display-mode': parseNumMap,
+                        'set-text-visit-statuses-via-key': parseNumMap,
+                      },
+                      validator,
+                      (val) => {
+                        console.log(val);
+                        // if (false) {
+                        dataService.setSettings(val);
+                        // }
+                      }
+                    );
                   }}
                 />
               </td>

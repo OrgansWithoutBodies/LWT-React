@@ -39,12 +39,8 @@ export const useUpdateParams = () => {
     headerValuesTemp[
       `${location.pathname.slice(1) as InternalPathsFromHeader}`
     ].params
-      .map((param) => {
-        return [param, searchParams.get(param)];
-      })
-      .filter(([, val]) => {
-        return val !== null;
-      })
+      .map((param) => [param, searchParams.get(param)])
+      .filter(([, val]) => val !== null)
   );
   return (params: { [path in PathParams]?: string | null }) => {
     const filteredParams: { [path in PathParams]?: string } =

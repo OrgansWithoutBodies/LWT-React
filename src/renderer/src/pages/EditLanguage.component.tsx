@@ -10,22 +10,20 @@ import {
   languagePreValidateMap,
   oewin,
 } from './NewLanguage.component';
-import { resetDirty } from './Terms.component';
-import { buildFormInput } from './buildFormInput';
+import { resetDirty } from './Sorting';
+import { useFormInput } from './useFormInput';
 import { check_dupl_lang } from './utils';
 
 export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   const [{ languages }] = useData(['languages']);
-  const changingLang = languages.find(({ LgID }) => {
-    return LgID === chgID;
-  });
+  const changingLang = languages.find(({ LgID }) => LgID === chgID);
   if (!changingLang) {
     throw new Error('Invalid Change ID!');
   }
   const validator = LanguagesValidator;
   const navigator = useInternalNavigate();
   const refMap = RefMap(validator);
-  const LgInput = buildFormInput(refMap, changingLang);
+  const LgInput = useFormInput(refMap, changingLang);
 
   return (
     <>

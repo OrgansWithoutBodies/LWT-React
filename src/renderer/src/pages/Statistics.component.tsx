@@ -144,8 +144,7 @@ export function StatisticsComponent(): JSX.Element {
                       </A>
                     </td>
                     {languageStatusStatistics &&
-                      statuses.map((statusVal) => {
-                        return (
+                      statuses.map((statusVal) => (
                           <td className="td1 center">
                             <span className={`status${statusVal}`}>
                               &nbsp;
@@ -161,8 +160,7 @@ export function StatisticsComponent(): JSX.Element {
                               &nbsp;
                             </span>
                           </td>
-                        );
-                      })}
+                        ))}
                   </tr>
                 </>
               );
@@ -182,27 +180,22 @@ export function StatisticsComponent(): JSX.Element {
             <th className="th1" rowSpan={2}>
               Language
             </th>
-            {periods.map((period) => {
-              return (
+            {periods.map((period) => (
                 <th className="th1" colSpan={3}>
                   {period}
                 </th>
-              );
-            })}
+              ))}
           </tr>
           <tr>
-            {periods.map(() => {
-              return (
+            {periods.map(() => (
                 <>
                   <th className="th1">C</th>
                   <th className="th1">A</th>
                   <th className="th1">K</th>
                 </>
-              );
-            })}
+              ))}
           </tr>
-          {languages.map((language) => {
-            return (
+          {languages.map((language) => (
               <>
                 <tr>
                   <td className="td1">{language.LgName}</td>
@@ -262,8 +255,7 @@ export function StatisticsComponent(): JSX.Element {
                   </td>
                 </tr>
               </>
-            );
-          })}
+            ))}
           <tr>
             <th className="th1">
               <b>TOTAL</b>

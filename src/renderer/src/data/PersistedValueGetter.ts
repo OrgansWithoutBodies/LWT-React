@@ -48,12 +48,8 @@ export const setPersistedValueLocalStorage: PersistedValueSetter = (
 
 // ================== //
 
-export const getPersistedValueRESTAPI: PersistedValueGetter = (key) => {
-  return key as any;
-};
-export const setPersistedValueRESTAPI: PersistedValueGetter = (key) => {
-  return key as any;
-};
+export const getPersistedValueRESTAPI: PersistedValueGetter = (key) => key as any;
+export const setPersistedValueRESTAPI: PersistedValueGetter = (key) => key as any;
 
 // ================== //
 
@@ -63,7 +59,6 @@ export enum PersistanceStrategy {
   // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
   ElectronSqlite,
   // TODO Authorized RestAPI
-  // TODO local sql server (if electron app) https://www.npmjs.com/package/electron-store
   // TODO MySql compatibility
   // TODO shared details for sqlite implementation for IPC & REST-express
 }
@@ -78,6 +73,9 @@ export interface PersistenceHandles {
   update?: PersistedValueInserterAsync;
   delete?: PersistedValueDeleter;
   empty?: PersistedValueEmptyer;
+  // TODO ?
+  // restoreBackup
+  // drop
 }
 
 type StrategyLookup = Record<PersistanceStrategy, PersistenceHandles>;

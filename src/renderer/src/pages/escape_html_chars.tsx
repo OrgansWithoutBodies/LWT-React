@@ -59,7 +59,7 @@ function keydown_event_do_test_test(e: KeyboardEvent) {
       $('.word').attr('data_status');
     return false;
   }
-  for (var i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 5; i++) {
     if (e.which == 48 + i || e.which == 96 + i) {
       // 1,.. : status=i
       window.parent.frames['ro'].location.href =

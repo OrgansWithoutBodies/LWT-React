@@ -165,9 +165,7 @@ export const BackendPlugin: PersistenceStrategyPlugin = {
     }
   },
   set: () => {},
-  empty: () => {
-    return emptyDB();
-  },
+  empty: () => emptyDB(),
   insert: (key, val) => {
     if (isValidKey(key)) {
       return insertEntry(val, key);

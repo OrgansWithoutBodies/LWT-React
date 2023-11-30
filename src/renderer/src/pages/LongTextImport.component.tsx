@@ -9,8 +9,8 @@ import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { CheckAndSubmit, RefMap, parseNumMap } from './Forms';
 import { Header } from './Header';
 import { LongTextVerify } from './LongTextImportVerify.component';
-import { resetDirty } from './Terms.component';
-import { buildFormInput } from './buildFormInput';
+import { resetDirty } from './Sorting';
+import { useFormInput } from './useFormInput';
 import { splitCheckText } from './utils';
 
 export default function ImportLongText({
@@ -31,7 +31,7 @@ export default function ImportLongText({
     TxTitle: ss.string(),
   });
   const refMap = RefMap(validator);
-  const TxInput = buildFormInput(refMap);
+  const TxInput = useFormInput(refMap);
 
   return (
     <>
@@ -212,22 +212,18 @@ export default function ImportLongText({
                       // console.log(TxLgID);
                       const splitTexts = splitCheckText(
                         TxText,
-                        languages.find((lang) => {
-                          return lang.LgID === TxLgID;
-                        })!,
+                        languages.find((lang) => lang.LgID === TxLgID)!,
                         -2
                       ) as string[];
                       console.log(splitTexts);
                       onSetVerify(
-                        splitTexts.map((text, ii) => {
-                          return {
-                            TxText: text,
-                            TxLgID,
-                            TxTitle: `${TxTitle} [${ii + 1}/${
-                              splitTexts.length
-                            }]`,
-                          };
-                        })
+                        splitTexts.map((text, ii) => ({
+                          TxText: text,
+                          TxLgID,
+                          TxTitle: `${TxTitle} [${ii + 1}/${
+                            splitTexts.length
+                          }]`,
+                        }))
                       );
                     }
                   );

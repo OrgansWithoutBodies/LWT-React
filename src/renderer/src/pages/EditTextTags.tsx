@@ -10,8 +10,9 @@ import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { Pager } from '../ui-kit/Pager';
 import { CheckAndSubmit, RefMap } from './Forms';
 import { Header } from './Header';
-import { resetDirty } from './Terms.component';
-import { FormInput, buildFormInput } from './buildFormInput';
+import { resetDirty } from './Sorting';
+import { FormInput } from './buildFormInput';
+import { useFormInput } from './useFormInput';
 import { confirmDelete, multiActionGo } from './utils';
 
 export function DisplayTextTags({
@@ -176,12 +177,12 @@ Sort Order:
 
             {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
             {tags2.map((tag) => {
-              const c = texttags.filter(({ TtT2ID }) => {
-                return tag.T2ID === TtT2ID;
-              }).length;
-              const ca = archtexttags.filter(({ AgT2ID }) => {
-                return tag.T2ID === AgT2ID;
-              }).length;
+              const c = texttags.filter(
+                ({ TtT2ID }) => tag.T2ID === TtT2ID
+              ).length;
+              const ca = archtexttags.filter(
+                ({ AgT2ID }) => tag.T2ID === AgT2ID
+              ).length;
               return (
                 <tr>
                   {/* TODO */}
@@ -337,16 +338,14 @@ export function NewTextTag() {
 }
 export function EditTextTag({ chgID }: { chgID: number }) {
   const [{ tags2 }] = useData(['tags2']);
-  const changingTag = tags2.find(({ T2ID }) => {
-    return chgID === T2ID;
-  });
+  const changingTag = tags2.find(({ T2ID }) => chgID === T2ID);
   if (!changingTag) {
     throw new Error('invalid change ID');
   }
   const validator = Tags2Validator;
   const refMap = RefMap<Tags2>(validator);
   const navigator = useInternalNavigate();
-  const TgInput = buildFormInput(refMap, changingTag);
+  const TgInput = useFormInput(refMap, changingTag);
   return (
     <>
       <Header title={'My Text Tags'} />

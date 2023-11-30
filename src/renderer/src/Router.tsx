@@ -80,9 +80,7 @@ export function RouterBar({
           // float: 'right',
         }}
       >
-        {leftPages.map((page) => {
-          return <RouterTab name={page.name} float="left" />;
-        })}
+        {leftPages.map((page) => <RouterTab name={page.name} float="left" />)}
       </ul>
       <ul
         style={{
@@ -93,9 +91,7 @@ export function RouterBar({
           top: 0,
         }}
       >
-        {rightPages.map((page) => {
-          return <RouterTab name={page.name} float="right" />;
-        })}
+        {rightPages.map((page) => <RouterTab name={page.name} float="right" />)}
       </ul>
     </div>
   );

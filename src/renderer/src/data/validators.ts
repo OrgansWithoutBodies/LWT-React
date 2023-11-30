@@ -1,8 +1,24 @@
 import * as ss from 'superstruct';
+import { Persistable } from '../../../shared/Persistable';
+import { PLUGINS } from '../plugins';
 import { brandedNumber, brandedString, BrandedString } from './branding';
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
 
+// todo why cant use straight string for persistable here
+const getValidatorPluginsFor = <
+  TKey extends Persistable,
+  TTableKeys extends string = string
+>(
+  key: TKey
+): { [k in TTableKeys]: ss.Struct<any, unknown> } =>
+  Object.fromEntries(
+    PLUGINS.filter(({ validators }) => validators[key] !== undefined).map(({ validators }) => {
+      const safeKeyValidator = validators[key]!;
+
+      return Object.entries(safeKeyValidator);
+    })
+  );
 const isValidURL = (validationString: string): validationString is URL =>
   validationString.startsWith('http://') ||
   validationString.startsWith('https://');
@@ -60,6 +76,7 @@ export const settingsKeys = [
   'set-similar-terms-count',
   'currenttext',
 ] as const;
+
 const tagsId = brandedNumber('tagsId' as const);
 const tags2Id = brandedNumber('tags2Id' as const);
 const textitemsId = brandedNumber('textitemsId' as const);
@@ -97,6 +114,7 @@ export const ArchivedTextsValidator = ss.object({
   AtAudioURI: ss.optional(URLValidator()),
   // AtSourceURI: varchar(1000) DEFAULT NULL,
   AtSourceURI: ss.optional(URLValidator()),
+  ...getValidatorPluginsFor(Persistable.archivedtexts),
 });
 
 export const ArchTextTagsValidator = ss.object({
@@ -107,6 +125,7 @@ export const ArchTextTagsValidator = ss.object({
   // KEY `AgT2ID` (`AgT2ID`)
   AgT2ID: tags2Id,
   // KEY (`AgAtID`,`AgT2ID`),
+  ...getValidatorPluginsFor(Persistable.archivedtexts),
 });
 
 export const textSizes = [100, 150, 200, 250] as const;
@@ -142,6 +161,9 @@ export const LanguagesValidator = ss.object({
   LgSplitEachChar: BooleanNumberValidator,
   // LgRightToLeft: int(1) unsigned NOT NULL DEFAULT '0',
   LgRightToLeft: BooleanNumberValidator,
+  ...getValidatorPluginsFor<Persistable.languages, 'LgTatoebaKey'>(
+    Persistable.languages
+  ),
 });
 export const LanguagesValidatorNoId = ss.omit(LanguagesValidator, ['LgID']);
 export const SentencesValidator = ss.object({
@@ -159,35 +181,8 @@ export const SentencesValidator = ss.object({
   SeOrder: ss.number(),
   // SeText: text,
   SeText: ss.nonempty(ss.string()),
+  // ...getValidatorPluginsFor(Persistable.sentences),
 });
-
-// export const SettingsValidator = {
-//   dbversion: string;
-//   showallwords: number;
-//   currentlanguage: LanguagesId;
-//   lastscorecalc: number;
-//   currenttext: number;
-//   'set-text-h-frameheight-no-audio': number;
-//   'set-text-h-frameheight-with-audio': number;
-//   'set-text-l-framewidth-percent': number;
-//   'set-text-r-frameheight-percent': number;
-//   'set-test-h-frameheight': number;
-//   'set-test-l-framewidth-percent': number;
-//   'set-test-r-frameheight-percent': number;
-//   'set-test-main-frame-waiting-time': number;
-//   'set-test-edit-frame-waiting-time': number;
-//   'set-test-sentence-count': number;
-//   'set-term-sentence-count': number;
-//   'set-archivedtexts-per-page': number;
-//   'set-texts-per-page': number;
-//   'set-terms-per-page': number;
-//   'set-tags-per-page': number;
-//   'set-show-text-word-counts': string;
-//   'set-text-visit-statuses-via-key': string;
-//   'set-term-translation-delimiters': string;
-//   'set-mobile-display-mode': string;
-//   'set-similar-terms-count': string;
-// };
 
 // TODO import Settings type
 export const SettingsValidator = ss.object({
@@ -196,6 +191,9 @@ export const SettingsValidator = ss.object({
   StKey: settingsId,
   // StValue: varchar(40) DEFAULT NULL,
   StValue: ss.nonempty(ss.string()),
+
+  // this  adds a column to ****EVERY**** settings entry
+  ...getValidatorPluginsFor(Persistable.settings),
 });
 
 export const TagsValidator = ss.object({
@@ -207,6 +205,7 @@ export const TagsValidator = ss.object({
   TgText: ss.nonempty(ss.string()),
   // TgComment: varchar(200) NOT NULL DEFAULT '',
   TgComment: ss.optional(ss.string()),
+  ...getValidatorPluginsFor(Persistable.tags),
 });
 
 export const Tags2Validator = ss.object({
@@ -218,6 +217,7 @@ export const Tags2Validator = ss.object({
   T2Text: ss.nonempty(ss.string()),
   // T2Comment: varchar(200) NOT NULL DEFAULT '',
   T2Comment: ss.optional(ss.string()),
+  ...getValidatorPluginsFor(Persistable.tags2),
 });
 
 export const TextItemsValidator = ss.object({
@@ -247,6 +247,7 @@ export const TextItemsValidator = ss.object({
   // TiIsNotWord: tinyint(1) NOT NULL,
   // KEY `TiIsNotWord` (`TiIsNotWord`)
   TiIsNotWord: ss.number(),
+  ...getValidatorPluginsFor(Persistable.textitems),
 });
 
 export const TextsValidator = ss.object({
@@ -267,6 +268,7 @@ export const TextsValidator = ss.object({
   TxAudioURI: ss.optional(URLValidator()),
   // TxSourceURI: varchar(1000) DEFAULT NULL,
   TxSourceURI: ss.optional(URLValidator()),
+  ...getValidatorPluginsFor(Persistable.texts),
 });
 export const TextsValidatorNoId = ss.omit(TextsValidator, ['TxID']);
 
@@ -278,6 +280,7 @@ export const TextTagsValidator = ss.object({
   // KEY `TtT2ID` (`TtT2ID`)
   TtT2ID: tags2Id,
   // KEY (`TtTxID`,`TtT2ID`),
+  ...getValidatorPluginsFor(Persistable.texttags),
 });
 
 export const WordsValidator = ss.object({
@@ -320,6 +323,7 @@ export const WordsValidator = ss.object({
   // KEY `WoRandom` (`WoRandom`)
   WoRandom: ss.number(),
   // UNIQUE KEY `WoLgIDTextLC` (`WoLgID`,`WoTextLC`),
+  ...getValidatorPluginsFor(Persistable.words),
 });
 export const WordsValidatorNoId = ss.omit(WordsValidator, ['WoID']);
 
@@ -331,4 +335,36 @@ export const WordTagsValidator = ss.object({
   // KEY `WtTgID` (`WtTgID`),
   WtTgID: tagsId,
   // KEY (`WtWoID`,`WtTgID`),
+  ...getValidatorPluginsFor(Persistable.wordtags),
+});
+export const SettingsObjValidator = ss.object({
+  dbversion: ss.string(),
+  showallwords: NumberInListValidator([0, 1]),
+  currenttext: textsId,
+  currentlanguage: languagesId,
+  lastscorecalc: ss.number(),
+  'set-text-h-frameheight-no-audio': ss.number(),
+  'set-text-h-frameheight-with-audio': ss.number(),
+  'set-text-l-framewidth-percent': ss.number(),
+  'set-text-r-frameheight-percent': ss.number(),
+  'set-test-h-frameheight': ss.number(),
+  'set-test-l-framewidth-percent': ss.number(),
+  'set-test-r-frameheight-percent': ss.number(),
+  'set-test-main-frame-waiting-time': ss.number(),
+  'set-test-edit-frame-waiting-time': ss.number(),
+  'set-test-sentence-count': ss.number(),
+  'set-term-sentence-count': ss.number(),
+  'set-archivedtexts-per-page': ss.number(),
+  'set-texts-per-page': ss.number(),
+  'set-terms-per-page': ss.number(),
+  'set-tags-per-page': ss.number(),
+  'set-show-text-word-counts': ss.number(),
+  'set-mobile-display-mode': NumberInListValidator([0, 1, 2]),
+  'set-similar-terms-count': ss.number(),
+  'set-text-visit-statuses-via-key': NumberInListValidator([
+    1, 2, 3, 4, 5, 12, 13, 14, 15, 23, 24, 25, 34, 35, 45, 599,
+  ]),
+  'set-term-translation-delimiters': ss.string(),
+  // TODO differentiate
+  // ...getValidatorPluginsFor(Persistable.settings),
 });

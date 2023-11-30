@@ -2,7 +2,7 @@ import { dataService } from '../data/data.service';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Header } from './Header';
 import { LongTextType } from './LongTextImport.component';
-import { resetDirty } from './Terms.component';
+import { resetDirty } from './Sorting';
 import { byteSizeOfString } from './utils';
 
 export function LongTextVerify({
@@ -69,32 +69,30 @@ export function LongTextVerify({
               </td>
             </tr>
 
-            {verifying.map(({ TxText }, ii) => {
-              return (
-                <tr>
-                  <td className="td1 right">
-                    <b>Text {ii + 1}:</b>
-                    <br />
-                    <br />
-                    <br />
-                    Length:
-                    <br />
-                    {byteSizeOfString(TxText)}
-                    <br />
-                    Bytes
-                  </td>
-                  <td className="td1">
-                    <textarea
-                      readOnly
-                      name={`text[${ii}]`}
-                      cols={60}
-                      rows={10}
-                      defaultValue={TxText}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
+            {verifying.map(({ TxText }, ii) => (
+              <tr>
+                <td className="td1 right">
+                  <b>Text {ii + 1}:</b>
+                  <br />
+                  <br />
+                  <br />
+                  Length:
+                  <br />
+                  {byteSizeOfString(TxText)}
+                  <br />
+                  Bytes
+                </td>
+                <td className="td1">
+                  <textarea
+                    readOnly
+                    name={`text[${ii}]`}
+                    cols={60}
+                    rows={10}
+                    defaultValue={TxText}
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </form>

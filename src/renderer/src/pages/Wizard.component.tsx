@@ -81,9 +81,7 @@ export default function NewLanguageWizard({
           L1:
           <select ref={refL1} name="l1" id="l1">
             <option value="">[Choose...]</option>
-            {LANGS.map((lang) => {
-              return <option value={lang}>{lang}</option>;
-            })}
+            {LANGS.map((lang) => <option value={lang}>{lang}</option>)}
           </select>
         </p>
 
@@ -95,9 +93,7 @@ export default function NewLanguageWizard({
             <option value="" selected>
               [Choose...]
             </option>
-            {LANGS.map((lang) => {
-              return <option value={lang}>{lang}</option>;
-            })}
+            {LANGS.map((lang) => <option value={lang}>{lang}</option>)}
           </select>
         </p>
 

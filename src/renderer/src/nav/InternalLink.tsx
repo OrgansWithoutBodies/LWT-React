@@ -13,9 +13,7 @@ export function A({
   const onClick =
     href === undefined
       ? undefined
-      : () => {
-          return nav(href);
-        };
+      : () => nav(href);
   return (
     <a {...rest} className="a" onClick={onClick}>
       {children}

@@ -35,9 +35,7 @@ contextBridge.exposeInMainWorld('api', {
         return await ipcRenderer.invoke(`backend-plugin-get`, { key, data });
       }
     },
-    empty: async () => {
-      return await ipcRenderer.invoke(`backend-plugin-empty`);
-    },
+    empty: async () => await ipcRenderer.invoke(`backend-plugin-empty`),
   },
 });
 function isValidKey(key: string) {

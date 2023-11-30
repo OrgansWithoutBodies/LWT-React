@@ -37,8 +37,7 @@ function ExpressionsLines({
   return (
     <>
       Expr:
-      {expressions.map((expression, ii) => {
-        return (
+      {expressions.map((expression, ii) => (
           // TODO numbers here
           <A
             href={`/edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
@@ -46,8 +45,7 @@ function ExpressionsLines({
           >
             {ii + 2}..{expression}
           </A>
-        );
-      })}
+        ))}
     </>
   );
 }

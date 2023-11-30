@@ -185,8 +185,7 @@ export function LanguagesPage(): JSX.Element {
             </th>
           </tr>
         </thead>
-        {languages.map((lang) => {
-          return (
+        {languages.map((lang) => (
             <LanguageLine
               texts={texts}
               archivedtexts={archivedtexts}
@@ -194,8 +193,7 @@ export function LanguagesPage(): JSX.Element {
               language={lang}
               activeLanguageId={activeLanguageId}
             />
-          );
-        })}
+          ))}
       </table>
     </>
   );

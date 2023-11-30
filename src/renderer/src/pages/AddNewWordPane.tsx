@@ -11,8 +11,9 @@ import { LanguagesId, WordsValidatorNoId } from '../data/validators';
 import { useInternalNavigate } from '../nav/useInternalNav';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
-import { FormInput, buildFormInput } from './buildFormInput';
+import { FormInput } from './buildFormInput';
 import { owin, translateSentence2 } from './translateSentence2';
+import { useFormInput } from './useFormInput';
 
 /**
  * This is only called from inside the reader, rly more of a pane than a component
@@ -42,7 +43,7 @@ export function AddNewWordPane({
     (value) =>
       setFormErrors({ ...FormErrors, [key]: value });
   console.log('TEST123-form', { existingTerm, lang, langId });
-  const WoInput = buildFormInput(refMap, { WoText: word || '' });
+  const WoInput = useFormInput(refMap, { WoText: word || '' });
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
 
@@ -271,9 +272,7 @@ export function AddNewWordPane({
                       {
                         WoStatus: parseNumMap,
                         WoLgID: parseNumMap,
-                        WoCreated: () => {
-                          return Date.now();
-                        },
+                        WoCreated: () => Date.now(),
                         WoTextLC: (_, refMap) =>
                           refMap['WoText'].current.value.toLowerCase(),
                       },

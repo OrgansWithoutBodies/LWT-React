@@ -3922,14 +3922,10 @@ export function splitCheckText(text: string, language: Languages, id: number) {
 
     const reTermMatch = new RegExp(`([^${termchar}]{1,})`, 'g');
     const wordList = sArray
-      .map((val) => {
-        return val
+      .map((val) => val
           .split(reTermMatch)
           .filter((term) => term !== '')
-          .map((term) => {
-            return { isTerm: !reTermMatch.test(term), text: term.trim() };
-          });
-      })
+          .map((term) => ({ isTerm: !reTermMatch.test(term), text: term.trim() })))
       .flat();
 
     // wordList.forEach();

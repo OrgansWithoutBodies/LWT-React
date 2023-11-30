@@ -1,5 +1,11 @@
 import { Languages } from './parseMySqlDump';
 
+// TODO get more details from wikidata?
+// https://www.wikidata.org/wiki/Property:P4132
+// https://www.wikidata.org/wiki/Property:P219
+// https://www.wikidata.org/wiki/Property:P220
+// https://www.wikidata.org/wiki/Property:P9753
+// TODO make more pluginnable
 // TODO get langs from csv/google sheet?
 export type LangDef = Pick<
   Languages,

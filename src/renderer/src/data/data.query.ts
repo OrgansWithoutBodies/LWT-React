@@ -11,7 +11,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
-import { Settings } from './settings';
+import Settings from './settings';
 import { LanguagesId, TextsId } from './validators';
 const MINS_IN_SECONDS = 60;
 const HOURS_IN_MINS = 60;
@@ -103,9 +103,7 @@ export class DataQuery extends Query<DataState> {
   // public wordtagsLen = this.wordtags.pipe(count());
 
   public activeLanguageId = this.settings.pipe(
-    map((val) => {
-      return val['currentlanguage'];
-    })
+    map((val) => val['currentlanguage'])
   );
 
   // derived observables
@@ -113,19 +111,16 @@ export class DataQuery extends Query<DataState> {
     this.activeLanguageId,
     this.languages,
   ]).pipe(
-    map(([activeLanguageId, languages]) => {
-      return languages.find((language) => {
+    map(([activeLanguageId, languages]) => languages.find((language) => {
+        console.log('TATOEBAKEY', language.LgTatoebaKey);
         return language.LgID === activeLanguageId;
-      });
-    })
+      }))
   );
   public activeWords = combineLatest([this.activeLanguageId, this.words]).pipe(
-    map(([activeLanguageId, words]) => {
-      return words.filter((word) => {
+    map(([activeLanguageId, words]) => words.filter((word) => {
         console.log(word.WoLgID, activeLanguageId);
         return word.WoLgID === activeLanguageId;
-      });
-    })
+      }))
   );
   public textsForActiveLanguage = combineLatest([
     this.texts,
@@ -228,8 +223,7 @@ export class DataQuery extends Query<DataState> {
   ]).pipe(
     map(([textsForActiveLanguage, texttags, tags]) => {
       console.log('textDetails', { textsForActiveLanguage });
-      return textsForActiveLanguage.map((text) => {
-        return {
+      return textsForActiveLanguage.map((text) => ({
           TxID: text.TxID,
           title: text.TxTitle,
           // TODO split
@@ -241,15 +235,12 @@ export class DataQuery extends Query<DataState> {
           // TODO
           unkPerc: 100,
           tags: texttags
-            .filter((textTag) => {
-              return textTag.TtTxID === text.TxID;
-            })
+            .filter((textTag) => textTag.TtTxID === text.TxID)
             .map((textTag) => {
               const tag = tags.find((tag) => tag.T2ID === textTag.TtT2ID);
               return tag ? tag.T2Text : 'ERROR';
             }),
-        };
-      });
+        }));
     })
   );
 }

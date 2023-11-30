@@ -41,11 +41,18 @@ export function BackupScreen(): JSX.Element {
                   <p className="right">
                     &nbsp;
                     <br />
+                    Download LWT Backup:
                     <input
                       type="button"
                       name="backup"
-                      onClick={() => dataService.downloadBackup()}
-                      value="Download LWT Backup"
+                      onClick={() => dataService.downloadBackup('SQL')}
+                      value=".sql.gz"
+                    />
+                    <input
+                      type="button"
+                      name="backup"
+                      onClick={() => dataService.downloadBackup('JSON')}
+                      value=".json.gz"
                     />
                   </p>
                 </td>

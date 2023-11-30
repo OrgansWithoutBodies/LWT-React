@@ -35,9 +35,7 @@ export const BackendPlugin: PersistenceHandles = {
     // TODO uncomment when more stable
     // throw new Error(`Unimplemented! ${key}`);
   },
-  empty: () => {
-    return window.api.sql.empty();
-  },
+  empty: () => window.api.sql.empty(),
   //   }
   // },
 };

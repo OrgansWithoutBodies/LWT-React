@@ -15,9 +15,9 @@ import {
   parseNumMap,
 } from './Forms';
 import { Header } from './Header';
-import { resetDirty } from './Terms.component';
+import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
-import { buildFormInput } from './buildFormInput';
+import { useFormInput } from './useFormInput';
 import { check_dupl_lang } from './utils';
 
 // TODO table component?
@@ -51,7 +51,7 @@ export function NewLanguage() {
       '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
     LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
   };
-  const LgInput = buildFormInput(refMap, defaultLgForm);
+  const LgInput = useFormInput(refMap, defaultLgForm);
   return (
     <>
       <Header title="New Language" />

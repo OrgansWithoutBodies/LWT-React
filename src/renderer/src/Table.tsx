@@ -15,15 +15,11 @@ export default function Table<TType extends {}, TElement extends {}>({
       <tr>
         <th></th>
       </tr>
-      {data.map((row) => {
-        return (
+      {data.map((row) => (
           <tr>
-            {Object.keys(row).map((cell) => {
-              return <td></td>;
-            })}
+            {Object.keys(row).map((cell) => <td></td>)}
           </tr>
-        );
-      })}
+        ))}
     </table>
   );
 }

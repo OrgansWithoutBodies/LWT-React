@@ -7,8 +7,11 @@ PORT:
 - export backup
 - import terms
 - annotate
+- error handling/boundaries
+- message dropdown (timed observable?)
 - "Show All" for multiword terms
 - Long Text Import
+- licensing for sentences (tatoeba)
 
 ---
 
@@ -17,6 +20,29 @@ TODO BEFORE RELEASE:
 - better pattern for parser, sentences, and terms
 - export backup & restore (sql.gz)
 - import terms
+- figure out licensing (unlicense not great?)
+
+---
+
+DEV NICETIES:
+
+- CI(/CD?)
+- storybook
+- visual regressions (BackstopJS? Differencify?)
+- puppeteer tests
+- cucumber test?
+
+---
+
+CODE TODOs
+
+- remove anys, fix type problems
+- add more comments & clean up
+- add more lint constraints/prettier rules
+- add custom vscode snippets
+- shared interfaces between main/preload/renderer
+- submit diff for openapi-typescript
+- enum literals for openapi-typescript
 
 ---
 
@@ -25,6 +51,8 @@ IDEAS
 - "Offline Mode"?
 - json backup/restore
 - "Local + Sync" backend?
+- other dictionaries than glosbe
+- "merge backup"
 - consider RxDB for electron-sqlite wrapper? https://github.com/nylas/electron-RxDB
 - - would also need to consider making sure friendly w other plugins
 - Tatoeba/Lute
@@ -36,6 +64,7 @@ IDEAS
 - parse text from web page url
 - implementation as component prop?
 - download audio from youtube
+- wiktionary api - https://en.wiktionary.org/w/api.php
 - term conjugation/declension/etc
 - - term/baseTerm?
 - routerbar?

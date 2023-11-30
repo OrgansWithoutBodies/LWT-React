@@ -13,9 +13,9 @@ import {
   languagePreValidateMap,
   oewin,
 } from './NewLanguage.component';
-import { resetDirty } from './Terms.component';
+import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
-import { buildFormInput } from './buildFormInput';
+import { useFormInput } from './useFormInput';
 import { check_dupl_lang } from './utils';
 
 export function NewLanguage() {
@@ -36,7 +36,7 @@ export function NewLanguage() {
       '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
     LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
   };
-  const LgInput = buildFormInput(refMap, defaultLgForm);
+  const LgInput = useFormInput(refMap, defaultLgForm);
   return (
     <>
       <Header title="New Language" />
