@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { dataService } from '../data/data.service';
 import { Tags, Tags2, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -10,29 +9,30 @@ import {
   WordsValidator,
   WordsValidatorNoId,
 } from '../data/validators';
-import { usePager } from '../hooks/usePager';
-import { useSelection } from '../hooks/useSelection';
-import { A } from '../nav/InternalLink';
+import { RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
 import {
   PathParams,
   useInternalNavigate,
   useUpdateParams,
-} from '../nav/useInternalNav';
+} from '../hooks/useInternalNav';
+import { usePager } from '../hooks/usePager';
+import { useSelection } from '../hooks/useSelection';
+import { A } from '../nav/InternalLink';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { StatusRadioButtons, do_ajax_show_sentences } from './AddNewWordPane';
 import { resetAll } from './EditArchived.component';
-import { RefMap } from './Forms';
-import { Header } from './Header';
 import { Sorting, resetDirty } from './Sorting';
 import { WordTagsSelectDropdown } from './buildFormInput';
-import { useFormInput } from './useFormInput';
 import { confirmDelete } from './utils';
 
 const isTags = (tags: Tags[] | Tags2[]): tags is Tags[] =>
   tags[0] && 'TgID' in tags[0];
 // TODO tagKey type restricted to path param
+
 export function TagDropDown({
   tags,
   tagKey,
@@ -61,13 +61,15 @@ export function TagDropDown({
     </select>
   );
 }
+
 function TermsHeader(): JSX.Element {
   return (
     <tr>
       <th className="th1 sorttable_nosort">Mark</th>
       <th className="th1 sorttable_nosort">Act.</th>
       <th className="th1 clickable">
-        Term /<br />
+        Term /
+        <br />
         Romanization
       </th>
       <th className="th1 clickable">
@@ -95,6 +97,7 @@ function TermsHeader(): JSX.Element {
 }
 
 // TODO abstract out filterbox
+
 export function TermsFilterBox({
   numTerms,
   currentPage,
@@ -204,7 +207,8 @@ export function TermsFilterBox({
                         <option value={`${val}${jVal}`}>
                           {val + jVal === 5 ? 'Learning/-ed' : 'Learning'} [
                           {val}
-                          ..{val + jVal}]
+                          ..
+                          {val + jVal}]
                         </option>
                       );
                     })}
@@ -248,7 +252,7 @@ export function TermsFilterBox({
             colSpan={2}
           >
             Tag #1:
-            <TagDropDown tags={tags} tagKey={'tag1'} />
+            <TagDropDown tags={tags} tagKey="tag1" />
           </td>
           <TagAndOr
             defaultValue={tag12}
@@ -258,7 +262,7 @@ export function TermsFilterBox({
           />
           <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
             Tag #2:
-            <TagDropDown tags={tags} tagKey={'tag2'} />
+            <TagDropDown tags={tags} tagKey="tag2" />
           </td>
         </tr>
         <tr>
@@ -276,7 +280,7 @@ export function TermsFilterBox({
             Sort Order:
             <select
               name="sort"
-              defaultValue={'3'}
+              defaultValue="3"
               onChange={({ target: { value } }) => {
                 // TODO udpate params
                 navigate(`/edit_words?page=1&sort=${value}`);
@@ -330,7 +334,8 @@ export function TermsFooter({
       <tbody>
         <tr>
           <th style={{ whiteSpace: 'nowrap' }} className="th1">
-            {numTerms} Term{numTerms === 1 ? '' : 's'}
+            {numTerms} Term
+            {numTerms === 1 ? '' : 's'}
           </th>
           <th style={{ whiteSpace: 'nowrap' }} className="th1">
             &nbsp; &nbsp;
@@ -344,6 +349,7 @@ export function TermsFooter({
     </table>
   );
 }
+
 function TermLine({
   word,
   onSelect,
@@ -351,7 +357,7 @@ function TermLine({
 }: {
   word: Words;
   isSelected: boolean;
-  onSelect: (term: WordsId, checked: boolean) => void;
+  onSelect: (term: Words, checked: boolean) => void;
 }): JSX.Element {
   const termID = word.WoID;
   const sentence = word.WoSentence;
@@ -368,7 +374,7 @@ function TermLine({
             checked={isSelected}
             value={termID}
             onChange={({ target: { checked } }) => {
-              onSelect(word.WoID, checked);
+              onSelect(word, checked);
             }}
           />
         </A>
@@ -408,7 +414,7 @@ function TermLine({
         >
           {word.WoTranslation}
         </span>
-        <span className="smallgray2"></span>
+        <span className="smallgray2" />
       </td>
       <td className="td1 center">
         <b>
@@ -445,7 +451,7 @@ const sortingMethod = (
     case Sorting['Score Value (%)']:
       return (a, b) =>
         a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
-    case Sorting['Status']:
+    case Sorting.Status:
       return (a, b) =>
         a.WoStatus > b.WoStatus ? -1 : a.WoStatus < b.WoStatus ? 1 : 0;
     // TODO
@@ -465,6 +471,7 @@ const sortingMethod = (
         a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
   }
 };
+
 export function Terms({
   pageNum = null,
   // filterlang = null,
@@ -482,7 +489,7 @@ export function Terms({
   status: number | null;
   // TODO tagID
   tag1: TagsId | null;
-  tag12?: 0 | 1;
+  tag12: 0 | 1;
   tag2: TagsId | null;
   sort: Sorting | null;
 }): JSX.Element {
@@ -493,7 +500,7 @@ export function Terms({
     'wordtags',
     // 'texttags',
   ]);
-  const pageSize = settings['set-terms-per-page'] || -1;
+  const pageSize = settings['set-terms-per-page'] || 10;
   // if (!activeLanguage) {
   //   return <></>;
   // }
@@ -610,9 +617,14 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const validator = WordsValidator;
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
-  const WoInput = useMemo(() => useFormInput(refMap, term), [term]);
+  const WoInput = useFormInput(refMap, term);
+  console.log('TEST123-term', term, words, chgID);
+  // TODO don't know why this is necessary but seems to happen that initially words starts as [] for a few ms
+  if (words.length === 0) {
+    return <></>;
+  }
   if (!term) {
-    throw new Error('Invalid Change ID!');
+    throw new Error(`Invalid Change ID! ${chgID}`);
   }
   return (
     <>
@@ -622,8 +634,8 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
 
       <h4>Edit Term</h4>
       <form name="editword" className="validate">
-        <WoInput type="hidden" entryKey={'WoID'} fixed />
-        <WoInput type="hidden" entryKey={'WoLgID'} fixed />
+        <WoInput type="hidden" entryKey="WoID" fixed />
+        <WoInput type="hidden" entryKey="WoLgID" fixed />
         <input type="hidden" name="WoOldStatus" value={term.WoStatus} />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
@@ -641,7 +653,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                 type="text"
                 // id="wordfield"
                 // data_info="Term"
-                entryKey={'WoText'}
+                entryKey="WoText"
                 maxLength={250}
                 size={40}
                 default
@@ -744,6 +756,7 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
     </>
   );
 }
+
 export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const [{ languages }] = useData(['languages']);
   const language = languages.find((val) => val.LgID === langId);
@@ -756,11 +769,11 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const WoInput = useFormInput(refMap, { WoLgID: langId });
   return (
     <>
-      <Header title={`TODO`} />
+      <Header title="TODO" />
 
       <h4>New Term</h4>
       <form name="newword" className="validate">
-        <WoInput type="hidden" entryKey={'WoLgID'} fixed />
+        <WoInput type="hidden" entryKey="WoLgID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Language:</td>
@@ -777,7 +790,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                 type="text"
                 // id="wordfield"
                 // data_info="Term"
-                entryKey={'WoText'}
+                entryKey="WoText"
                 maxLength={250}
                 size={40}
               />
@@ -841,7 +854,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
           </tr>
           <tr>
             <td className="td1 right">Status:</td>
-            <StatusRadioButtons termStatus={'1'} refMap={refMap} />
+            <StatusRadioButtons termStatus="1" refMap={refMap} />
           </tr>
           <tr>
             <td className="td1 right" colSpan={2}>
@@ -854,7 +867,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                 value="Cancel"
                 onClick={() => {
                   resetDirty();
-                  navigator(`/edit_words`);
+                  navigator('/edit_words');
                 }}
               />
               <input type="button" value="Change" />
@@ -893,40 +906,39 @@ export function TermMultiActions({
   onSelectNone: () => void;
 }) {
   return (
-    <>
-      <form name="form1">
-        <table className="tab1" cellSpacing={0} cellPadding={5}>
-          <tbody>
-            <tr>
-              <th className="th1" colSpan={2}>
-                Multi Actions
-                <Icon src="lightning" title="Multi Actions" />
-              </th>
-            </tr>
-            <tr>
-              <td className="td1 center">
-                <input type="button" value="Mark All" onClick={onSelectAll} />
-                <input type="button" value="Mark None" onClick={onSelectNone} />
-              </td>
-              <td className="td1 center">
-                Marked Texts
-                <select
-                  name="markaction"
-                  id="markaction"
-                  // TODO
-                  onChange={() => {}}
-                  disabled={selectedTerms.size === 0}
-                >
-                  <GetAllWordsActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    </>
+    <form name="form1">
+      <table className="tab1" cellSpacing={0} cellPadding={5}>
+        <tbody>
+          <tr>
+            <th className="th1" colSpan={2}>
+              Multi Actions
+              <Icon src="lightning" title="Multi Actions" />
+            </th>
+          </tr>
+          <tr>
+            <td className="td1 center">
+              <input type="button" value="Mark All" onClick={onSelectAll} />
+              <input type="button" value="Mark None" onClick={onSelectNone} />
+            </td>
+            <td className="td1 center">
+              Marked Texts
+              <select
+                name="markaction"
+                id="markaction"
+                // TODO
+                onChange={() => {}}
+                disabled={selectedTerms.size === 0}
+              >
+                <GetAllWordsActionsSelectOptions />
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   );
 }
+
 function GetAllWordsActionsSelectOptions() {
   return (
     <>

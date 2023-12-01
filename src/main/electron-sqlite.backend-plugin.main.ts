@@ -9,6 +9,7 @@ import {
 import { Languages } from '../renderer/src/data/parseMySqlDump';
 import { LanguagesId } from '../renderer/src/data/validators';
 import { Persistable } from '../shared/Persistable';
+
 const { Database, OPEN_CREATE } = require('sqlite3');
 
 // https://github.com/nylas/electron-RxDB
@@ -27,6 +28,11 @@ type PersistenceStrategyPlugin = {
 };
 const tbpref = '';
 
+/**
+ *
+ * @param entry
+ * @param tableKey
+ */
 function insertEntry(entry: object, tableKey: string) {
   const entryKeys = Object.keys(entry).filter(
     (val) => entry[val] !== undefined
@@ -62,15 +68,32 @@ function insertEntry(entry: object, tableKey: string) {
     });
 }
 
+/**
+ *
+ * @param lgID
+ */
 function countTextsForLanguage(lgID: LanguagesId) {
   `select count(TxID) as value from ${tbpref}texts where TxLgID=${lgID}`;
 }
+/**
+ *
+ * @param lgID
+ */
 function countArchivedTextsForLanguage(lgID: LanguagesId) {
   `select count(AtID) as value from ${tbpref}archivedtexts where AtLgID=${lgID}`;
 }
+/**
+ *
+ * @param lgID
+ */
 function countWordsForLanguage(lgID: LanguagesId) {
   `select count(WoID) as value from ${tbpref}words where WoLgID=${lgID}`;
 }
+/**
+ *
+ * @param tableName
+ * @param columnKeys
+ */
 export async function getEntries(tableName: string, columnKeys: string[]) {
   return await sql
     .open({
@@ -87,6 +110,11 @@ export async function getEntries(tableName: string, columnKeys: string[]) {
       return res;
     });
 }
+/**
+ *
+ * @param tableName
+ * @param deleteID
+ */
 export async function deleteEntry(tableName: string, deleteID: number) {
   console.log('TEST123-delete', tableName, deleteID);
   return await sql
@@ -102,6 +130,7 @@ export async function deleteEntry(tableName: string, deleteID: number) {
       // return res;
     });
 }
+
 export async function emptyDB() {
   return await sql
     .open({
@@ -117,6 +146,11 @@ export async function emptyDB() {
       );
     });
 }
+/**
+ *
+ * @param tableName
+ * @param updateVal
+ */
 export async function updateEntry(
   tableName: string,
   updateVal: Record<string, string>
@@ -189,6 +223,10 @@ const tableIDLookup = {
   textitems: 'TiID',
   texttags: null,
 } as const;
+/**
+ *
+ * @param key
+ */
 function isValidKey(key: string) {
   return Object.keys(tableIDLookup).includes(key);
 }

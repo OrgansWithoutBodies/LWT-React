@@ -1,51 +1,67 @@
 import { parse } from 'papaparse';
-import { useRef } from 'react';
 import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import { Words } from '../data/parseMySqlDump';
-import { languagesId } from '../data/validators';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import {
+  NumberInListValidator,
+  StringInListValidator,
+  languagesId,
+} from '../data/validators';
+import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from '../forms/Forms';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { StrengthMap } from './AddNewTermTooltip';
-import { CheckAndSubmit } from './Forms';
-import { Header } from './Header';
+import { StrengthMap } from './StrengthMap';
 import { ColumnImportMode, TermName } from './TermName';
 
 export function UploadWords() {
   const navigator = useInternalNavigate();
-  const refMap = {
-    status: useRef<HTMLSelectElement>(null),
-    file: useRef<HTMLInputElement>(null),
-    lang: useRef<HTMLSelectElement>(null),
-    c1: useRef<HTMLSelectElement>(null),
-    c2: useRef<HTMLSelectElement>(null),
-    c3: useRef<HTMLSelectElement>(null),
-    c4: useRef<HTMLSelectElement>(null),
-    c5: useRef<HTMLSelectElement>(null),
-  };
-  // TODO check extension
-  const fileValidator = ss.object({ files: ss.array(ss.any()) });
+  // TODO check magics
+  const fileValidator = ss.object({
+    file: ss.any(),
+    fileName: ss.refine(ss.string(), 'ends-with-csv', (val) =>
+      val.endsWith('.csv')
+    ),
+    fileType: ss.refine(
+      ss.string(),
+      'is-text-csv',
+      (val) => val === 'text/csv'
+    ),
+  });
   const validator = ss.object({
     // TODO at least has term, no dupes
     columns: ss.nonempty(ss.array()),
-    file: fileValidator,
-    TxLgId: languagesId,
-  });
+    c1: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
+    c2: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
+    c3: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
+    c4: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
+    c5: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
+    delimiter: StringInListValidator(['c', 't', 'h']),
 
+    file: fileValidator,
+    // TODO add hook callback to check if ID given exists
+    WoLgID: languagesId,
+    WoStatus: NumberInListValidator(
+      Object.keys(StrengthMap).map(
+        (strengthKey) => StrengthMap[strengthKey].classKey
+      )
+    ),
+  } as const);
+  const refMap = RefMap(validator);
   return (
     <>
       {/* TODO */}
-      <Header title={''} />
+      <Header title="" />
       <form encType="multipart/form-data" className="validate">
+        <input ref={refMap.columns} name="columns" type="hidden" />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 center">
               <b>Language:</b>
             </td>
             <td className="td1">
-              {/* <select name="LgID" className="notempty setfocus"> */}
-              <LanguageDropdown dropdownRef={refMap.lang} />
+              <LanguageDropdown dropdownRef={refMap.WoLgID} />
               <RequiredLineButton />
             </td>
           </tr>
@@ -61,7 +77,7 @@ export function UploadWords() {
               <br />
               <b>Field Delimiter "D":</b>
               <br />
-              <select name="Tab">
+              <select name="Tab" ref={refMap.delimiter}>
                 <option value="c" selected>
                   Comma "," [CSV File, LingQ]
                 </option>
@@ -161,12 +177,14 @@ export function UploadWords() {
               by spaces or commas.
             </td>
             <td className="td1">
-              Either specify a <b>File to upload</b>:<br />
+              Either specify a <b>File to upload</b>
+              :
+              <br />
               <input ref={refMap.file} name="thefile" type="file" />
               <br />
               <br />
-              <b>Or</b> type in or paste from clipboard (do <b>NOT</b> specify
-              file):
+              <b>Or</b> type in or paste from clipboard (do
+              <b>NOT</b> specify file):
               <br />
               <textarea
                 // TODO
@@ -183,7 +201,11 @@ export function UploadWords() {
               <b>Status</b> for all uploaded terms:
             </td>
             <td className="td1">
-              <select ref={refMap.status} className="notempty" name="WoStatus">
+              <select
+                ref={refMap.WoStatus}
+                className="notempty"
+                name="WoStatus"
+              >
                 {Object.keys(StrengthMap)
                   .filter((val) => val !== '0')
                   .map((key) => (
@@ -231,51 +253,30 @@ export function UploadWords() {
                   CheckAndSubmit(
                     refMap,
                     {
-                      file: (val) => {
-                        console.log('submit file', val);
-                        return val;
+                      columns: (_, refMap) => [
+                        refMap.c1.current.value,
+                        refMap.c2.current.value,
+                        refMap.c3.current.value,
+                        refMap.c4.current.value,
+                        refMap.c5.current.value,
+                      ],
+                      WoLgID: parseNumMap,
+                      WoStatus: parseNumMap,
+                      file: (_, { file }) => {
+                        console.log('test123-file', file.current.files[0]);
+                        return {
+                          file: file.current.files[0],
+                          fileName: file.current.files[0].name,
+                          fileType: file.current.files[0].type,
+                        };
                       },
                     },
                     validator,
                     async (value) => {
-                      const fileBlob = value.file.files[0];
-                      const stringdata = await fileBlob?.text();
-                      const data = parse<string[]>(stringdata!);
-                      const colVals = [
-                        refMap.c1.current!.value,
-                        refMap.c2.current!.value,
-                        refMap.c3.current!.value,
-                        refMap.c4.current!.value,
-                        refMap.c5.current!.value,
-                      ];
-                      const colIndsToCareAbout = colVals.reduce(
-                        (prev, curr, currInd) =>
-                          curr !== 'x'
-                            ? [
-                                ...prev,
-                                [currInd, curr] as [
-                                  number,
-                                  Exclude<TermName, 'x'>
-                                ],
-                              ]
-                            : prev,
-                        [] as [number, Exclude<TermName, 'x'>][]
+                      const parsedTerms = await parseTermsFromCSV(
+                        value,
+                        refMap
                       );
-                      const parsedTerms = data.data.map((row) => {
-                        const term = Object.fromEntries(
-                          colIndsToCareAbout.map(
-                            ([ind, colKey]) =>
-                              [
-                                ColumnImportMode[colKey].termParam,
-                                row[ind],
-                              ] as [
-                                (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
-                                Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
-                              ]
-                          )
-                        );
-                        return term as Words;
-                      });
                       dataService.addMultipleTerms(parsedTerms);
                     }
                   );
@@ -303,7 +304,58 @@ export function UploadWords() {
     </>
   );
 }
-
+const delimiterMap = { c: ',', t: '\t', h: '#' };
+async function parseTermsFromCSV(
+  value: { [x: string]: any },
+  refMap: TRefMap<{ [x: string]: any }>
+) {
+  const fileBlob = value.file.file;
+  console.log('blob', fileBlob);
+  const stringdata = await fileBlob?.text();
+  const delimiterVal = delimiterMap[value.delimiter];
+  const data = parse<string[]>(stringdata!, { delimiter: delimiterVal });
+  const colVals = value.columns;
+  console.log('TEST123-COL', colVals);
+  const colIndsToCareAbout = colVals.reduce(
+    (prev, curr, currInd) =>
+      curr !== 'x'
+        ? [...prev, [currInd, curr] as [number, Exclude<TermName, 'x'>]]
+        : prev,
+    [] as [number, Exclude<TermName, 'x'>][]
+  );
+  const parsedTerms = data.data
+    .filter(
+      (row) =>
+        !(
+          (row[0] === undefined || row[0] === '') &&
+          (row[1] === undefined || row[1] === '') &&
+          (row[2] === undefined || row[2] === '') &&
+          (row[3] === undefined || row[3] === '') &&
+          (row[4] === undefined || row[4] === '')
+        )
+    )
+    .map((row, ii) => {
+      const term = Object.fromEntries(
+        colIndsToCareAbout.map(([ind, colKey]) => {
+          console.log('TEST123-ind', {
+            row: [ColumnImportMode[colKey]['termParam'], row[ind]],
+            rowNum: ii,
+          });
+          return [ColumnImportMode[colKey]['termParam'], row[ind]] as [
+            (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
+            Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
+          ];
+        })
+      );
+      return {
+        ...term,
+        WoLgID: value.WoLgID,
+        WoStatus: value.WoStatus,
+      } as Words;
+    });
+  // console.log('TEST123-parsedterms');
+  return parsedTerms;
+}
 // function get_wordstatus_selectoptions($v, $all, $not9899, $off = true)
 // {
 // 	if (!isset($v)) {

@@ -1,13 +1,14 @@
-import { useUpdateParams } from '../nav/useInternalNav';
+import { useUpdateParams } from '../hooks/useInternalNav';
 import { Icon } from './Icon';
 
 export function Pager({
-  currentPage: currentPage,
+  currentPage,
   numPages,
 }: {
   currentPage: number;
   numPages: number;
 }) {
+  console.log('TEST123-page', currentPage, numPages);
   const updateParams = useUpdateParams();
   return (
     <>

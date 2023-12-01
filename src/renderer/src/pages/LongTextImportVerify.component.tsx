@@ -1,6 +1,6 @@
 import { dataService } from '../data/data.service';
-import { useInternalNavigate } from '../nav/useInternalNav';
-import { Header } from './Header';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { LongTextType } from './LongTextImport.component';
 import { resetDirty } from './Sorting';
 import { byteSizeOfString } from './utils';
@@ -72,7 +72,10 @@ export function LongTextVerify({
             {verifying.map(({ TxText }, ii) => (
               <tr>
                 <td className="td1 right">
-                  <b>Text {ii + 1}:</b>
+                  <b>
+                    Text
+                    {ii + 1}:
+                  </b>
                   <br />
                   <br />
                   <br />

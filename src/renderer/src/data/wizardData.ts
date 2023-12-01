@@ -7,6 +7,7 @@ import { Languages } from './parseMySqlDump';
 // https://www.wikidata.org/wiki/Property:P9753
 // TODO make more pluginnable
 // TODO get langs from csv/google sheet?
+
 export type LangDef = Pick<
   Languages,
   'LgTextSize' | 'LgRegexpSplitSentences' | 'LgRegexpWordCharacters'

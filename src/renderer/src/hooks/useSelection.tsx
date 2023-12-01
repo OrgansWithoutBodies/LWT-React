@@ -1,11 +1,16 @@
 import { useState } from 'react';
 
+/**
+ *
+ * @param data
+ * @param key
+ */
 export function useSelection<TData extends object, TKey extends keyof TData>(
   data: TData[],
-  key: TKey
+  key: TKey,
 ) {
   const [selectedValues, setSelectedValues] = useState<Set<TData[TKey]>>(
-    new Set()
+    new Set(),
   );
   const onSelect = (val: TData, selecting: boolean) => {
     if (selecting) {
@@ -14,7 +19,6 @@ export function useSelection<TData extends object, TKey extends keyof TData>(
     const newSet = new Set([...selectedValues]);
     newSet.delete(val[key]);
     setSelectedValues(newSet);
-    return;
   };
   return {
     selectedValues,

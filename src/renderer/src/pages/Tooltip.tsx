@@ -17,7 +17,9 @@ import {
   useRole,
 } from '@floating-ui/react';
 import React, { useRef } from 'react';
+
 export type Dimension2D<T = number> = { x: T; y: T };
+
 export function Tooltip({ visible }: { visible: boolean }): JSX.Element {
   const { x, y, refs, strategy, context, elements } = useFloating({
     open: visible,
@@ -102,7 +104,7 @@ export function usePopover({
     ],
   });
 
-  const context = data.context;
+  const { context } = data;
 
   const click = useClick(context, {
     enabled: controlledOpen == null,
@@ -175,56 +177,58 @@ export const PopoverTrigger = React.forwardRef<
   HTMLElement,
   React.HTMLProps<HTMLElement> &
     PopoverTriggerProps & { termStatus: string; onClickWord: () => void }
->(function PopoverTrigger(
-  { children, onClickWord, termStatus, asChild = false, ...props },
-  propRef
-) {
-  const context = usePopoverContext();
-  console.log(context.refs);
-  const childrenRef = (children as any).ref;
+>(
+  (
+    { children, onClickWord, termStatus, asChild = false, ...props },
+    propRef
+  ) => {
+    const context = usePopoverContext();
+    console.log(context.refs);
+    const childrenRef = (children as any).ref;
 
-  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
-  const divRef = useRef<HTMLSpanElement>();
-  // `asChild` allows the user to pass any element as the anchor
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(
-      children,
-      context.getReferenceProps({
-        ref,
-        ...props,
-        ...children.props,
-        'data-state': context.open ? 'open' : 'closed',
-      })
+    const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+    const divRef = useRef<HTMLSpanElement>();
+    // `asChild` allows the user to pass any element as the anchor
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(
+        children,
+        context.getReferenceProps({
+          ref,
+          ...props,
+          ...children.props,
+          'data-state': context.open ? 'open' : 'closed',
+        })
+      );
+    }
+    const { ...refProps } = context.getReferenceProps(props);
+    if (context.open) {
+      console.log('TRIGGER', context.open, refProps);
+    }
+
+    return (
+      <span
+        // https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx
+        className={`click word wsty${termStatus}`}
+        ref={divRef}
+        // The user can style the trigger based on the state
+        data-state={context.open ? 'open' : 'closed'}
+        {...refProps}
+        onClick={(event) => {
+          context.refs.setPositionReference(divRef.current!);
+          onClickWord();
+          event.stopPropagation();
+        }}
+      >
+        {children}
+      </span>
     );
   }
-  const { ...refProps } = context.getReferenceProps(props);
-  if (context.open) {
-    console.log('TRIGGER', context.open, refProps);
-  }
-
-  return (
-    <span
-      // https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx
-      className={`click word wsty${termStatus}`}
-      ref={divRef}
-      // The user can style the trigger based on the state
-      data-state={context.open ? 'open' : 'closed'}
-      {...refProps}
-      onClick={(event) => {
-        context.refs.setPositionReference(divRef.current!);
-        onClickWord();
-        event.stopPropagation();
-      }}
-    >
-      {children}
-    </span>
-  );
-});
+);
 
 export const PopoverContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement>
->(function PopoverContent(props, propRef) {
+>((props, propRef) => {
   const { context: floatingContext, ...context } = usePopoverContext();
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
   console.log('POPOVER', context.open);
@@ -234,7 +238,7 @@ export const PopoverContent = React.forwardRef<
         <FloatingFocusManager context={floatingContext} modal={context.modal}>
           <div
             ref={ref}
-            id={'TEST123-TOOLTIP'}
+            id="TEST123-TOOLTIP"
             style={{
               position: context.strategy,
               top: context.y ?? 0,
@@ -257,7 +261,7 @@ export const PopoverContent = React.forwardRef<
 export const PopoverHeading = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLProps<HTMLHeadingElement>
->(function PopoverHeading({ children, ...props }, ref) {
+>(({ children, ...props }, ref) => {
   const { setLabelId } = usePopoverContext();
   const id = useId();
 
@@ -278,7 +282,7 @@ export const PopoverHeading = React.forwardRef<
 export const PopoverBody = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLProps<HTMLParagraphElement>
->(function PopoverBody({ children, ...props }, ref) {
+>(({ children, ...props }, ref) => {
   const { setDescriptionId: setBodyId } = usePopoverContext();
   const id = useId();
 
@@ -299,7 +303,7 @@ export const PopoverBody = React.forwardRef<
 export const PopoverClose = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
->(function PopoverClose({ children, ...props }, ref) {
+>(({ children, ...props }, ref) => {
   const { setOpen } = usePopoverContext();
   return (
     <button type="button" {...props} ref={ref} onClick={() => setOpen(false)}>

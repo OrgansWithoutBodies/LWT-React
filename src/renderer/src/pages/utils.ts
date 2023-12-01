@@ -1,8 +1,13 @@
 import { Languages } from '../data/parseMySqlDump';
 
+/**
+ *
+ * @param str
+ */
 export function byteSizeOfString(str: string): number {
   return new Blob([str]).size;
 }
+
 export function confirmDelete(): boolean {
   return window.confirm('CONFIRM\n\nAre you sure you want to delete?');
 }
@@ -294,6 +299,11 @@ export function confirmDelete(): boolean {
 // // -------------------------------------------------------------
 
 // TODO
+/**
+ *
+ * @param $v
+ * @param $l
+ */
 export function get_archivedtexttag_selectoptions($v: string, $l: string) {
   console.log($v, $l);
   return '';
@@ -3716,14 +3726,19 @@ export function get_archivedtexttag_selectoptions($v: string, $l: string) {
 
 // ?>
 
+/**
+ *
+ * @param form
+ * @param sel
+ */
 export function multiActionGo(
   form: undefined | HTMLFormElement,
   sel: undefined | HTMLSelectElement
 ) {
-  if (typeof form != 'undefined' && typeof sel != 'undefined') {
+  if (typeof form !== 'undefined' && typeof sel !== 'undefined') {
     const v = sel.value;
     const t = sel.options[sel.selectedIndex].text;
-    if (typeof v == 'string') {
+    if (typeof v === 'string') {
       if (v == 'addtag' || v == 'deltag') {
         const answer: string | null = verifyAddTagWindow(t);
         if (answer != '') {
@@ -3743,12 +3758,10 @@ export function multiActionGo(
         v == 'cap'
       ) {
         const answer = confirm(
-          '*** ' +
-            t +
-            ' ***\n\n*** ' +
+          `*** ${t} ***\n\n*** ${
             // TODO
-            'input.markcheck:checked'.length +
-            ' Record(s) will be affected ***\n\nAre you sure?'
+            'input.markcheck:checked'.length
+          } Record(s) will be affected ***\n\nAre you sure?`
         );
         if (answer) {
           return true;
@@ -3834,20 +3847,22 @@ export function multiActionGo(
 // 	}
 // }
 
+/**
+ *
+ * @param t
+ */
 function verifyAddTagWindow(t: string) {
   let notok = 1;
   let answer: string | null = '';
   while (notok) {
     answer = prompt(
-      '*** ' +
-        t +
-        ' ***\n\n*** ' +
+      `*** ${t} ***\n\n*** ${
         // TODO
-        'input.markcheck:checked'.length +
-        ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:',
+        'input.markcheck:checked'.length
+      } Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`,
       answer
     );
-    if (typeof answer == 'object') answer = '';
+    if (typeof answer === 'object') answer = '';
     if (answer.indexOf(' ') > 0 || answer.indexOf(',') > 0) {
       alert('Please no spaces or commas!');
     } else if (answer.length > 20) {
@@ -3859,6 +3874,12 @@ function verifyAddTagWindow(t: string) {
   return answer;
 }
 
+/**
+ *
+ * @param text
+ * @param language
+ * @param id
+ */
 export function splitCheckText(text: string, language: Languages, id: number) {
   const {
     LgRemoveSpaces: removeSpaces,
@@ -3870,7 +3891,7 @@ export function splitCheckText(text: string, language: Languages, id: number) {
     LgCharacterSubstitutions,
   } = language;
   // list of 'A=B' equations
-  console.log('TEST123-split', LgCharacterSubstitutions, language);
+  console.log('TEST123-split', { LgCharacterSubstitutions, language, text });
   const replace = LgCharacterSubstitutions.split('|');
   let s = text
     .replace('\r\n', '\n')
@@ -3919,13 +3940,30 @@ export function splitCheckText(text: string, language: Languages, id: number) {
   if (id === -1) {
     // const wordSeps = [];
     const parsedList: { text: string; isTerm: boolean }[] = [];
-
-    const reTermMatch = new RegExp(`([^${termchar}]{1,})`, 'g');
+    console.log(
+      'RANGE',
+      termchar,
+      termchar.replace(new RegExp('\\x{([A-F0-9]*)}', 'g'), '\\m$1')
+    );
+    // u here for potential unicode
+    const reTermMatch = new RegExp(
+      `([^${termchar.replace(
+        new RegExp('\\x{([A-F0-9]*)}', 'g'),
+        '\\m$1'
+      )}]{1,})`,
+      'g'
+    );
+    console.log('MATCH', reTermMatch);
     const wordList = sArray
-      .map((val) => val
+      .map((val) =>
+        val
           .split(reTermMatch)
           .filter((term) => term !== '')
-          .map((term) => ({ isTerm: !reTermMatch.test(term), text: term.trim() })))
+          .map((term) => ({
+            isTerm: !reTermMatch.test(term),
+            text: term.trim(),
+          }))
+      )
       .flat();
 
     // wordList.forEach();
@@ -3935,4 +3973,5 @@ export function splitCheckText(text: string, language: Languages, id: number) {
   return s;
 }
 // TODO
+
 export function check_dupl_lang() {}

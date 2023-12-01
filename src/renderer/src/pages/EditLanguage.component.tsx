@@ -1,17 +1,14 @@
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { LanguagesId, LanguagesValidator } from '../data/validators';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import { CheckAndSubmit, RefMap, TRefMap } from './Forms';
-import { Header } from './Header';
-import {
-  TextSizeSelect,
-  languagePreValidateMap,
-  oewin,
-} from './NewLanguage.component';
+import { TextSizeSelect, oewin } from './NewLanguage';
 import { resetDirty } from './Sorting';
-import { useFormInput } from './useFormInput';
+import { languagePreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
 export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
@@ -27,7 +24,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
 
   return (
     <>
-      <Header title={'TODO'} />
+      <Header title="TODO" />
       <h4>
         Edit Language
         <a target="_blank" href="info.htm#howtolang">
@@ -98,7 +95,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
           <tr>
             <td className="td1 right">Text Size:</td>
             <td className="td1">
-              <TextSizeSelect entryKey={'LgTextSize'} refMap={refMap} />
+              <TextSizeSelect entryKey="LgTextSize" refMap={refMap} />
             </td>
           </tr>
           <tr>
@@ -163,7 +160,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Make each character a word:</td>
             <td className="td1">
               <SelectBoolean
-                selKey={'LgSplitEachChar'}
+                selKey="LgSplitEachChar"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -174,7 +171,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Remove spaces:</td>
             <td className="td1">
               <SelectBoolean
-                selKey={'LgRemoveSpaces'}
+                selKey="LgRemoveSpaces"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -185,7 +182,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Right-To-Left Script:</td>
             <td className="td1">
               <SelectBoolean
-                selKey={'LgRightToLeft'}
+                selKey="LgRightToLeft"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -256,6 +253,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
     </>
   );
 }
+
 function SelectBoolean<
   TSelKey extends string,
   TEntry extends Record<TSelKey, 0 | 1>

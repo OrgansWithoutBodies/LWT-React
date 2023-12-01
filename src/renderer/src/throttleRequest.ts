@@ -1,12 +1,26 @@
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 // import { Milliseconds } from './Units';
 type Milliseconds = number;
+/**
+ *
+ * @param a
+ * @param b
+ */
 export function pls<TNum extends number>(a: TNum, b: TNum): TNum {
   return (a + b) as TNum;
 }
+/**
+ *
+ * @param a
+ * @param b
+ */
 export function min<TNum extends number>(a: TNum, b: TNum): TNum {
   return (a + b) as TNum;
 }
+/**
+ *
+ * @param lenMS
+ */
 export async function sleep(lenMS: number) {
   await new Promise((r) => setTimeout(r, lenMS));
   // console.log(`Waited ${lenMS}ms to be friendly`);
@@ -22,19 +36,21 @@ declare global {
 }
 export class ThrottleableRequest {
   private msSinceLastRequest: Milliseconds;
+
   private lastRequestTimestamp: Milliseconds;
+
   private requestsLeft: number;
+
   constructor(
     private readonly minimumMSBetweenRequests: Milliseconds,
     readonly maxNumberOfRequests: number = -1,
-    private readonly onExceedLimit: () => void
+    private readonly onExceedLimit: () => void,
   ) {
     this.lastRequestTimestamp = min(Date.now(), minimumMSBetweenRequests);
     this.msSinceLastRequest = (minimumMSBetweenRequests + 1) as Milliseconds;
-    this.requestsLeft =
-      maxNumberOfRequests === -1
-        ? Number.POSITIVE_INFINITY
-        : maxNumberOfRequests;
+    this.requestsLeft = maxNumberOfRequests === -1
+      ? Number.POSITIVE_INFINITY
+      : maxNumberOfRequests;
   }
 
   private updateClock(): void {
@@ -44,7 +60,7 @@ export class ThrottleableRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig<D>
+    config?: AxiosRequestConfig<D>,
   ): Promise<R> {
     this.updateClock();
     console.log('TEST123-reqleft', this.requestsLeft);
@@ -63,7 +79,7 @@ export class ThrottleableRequest {
       console.log(diff, pastMinimum);
     }
     this.lastRequestTimestamp = Date.now();
-    this.requestsLeft = this.requestsLeft - 1;
+    this.requestsLeft -= 1;
     return Axios.get(url, config);
   }
 }

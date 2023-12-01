@@ -4,75 +4,49 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "react-refresh", "eslint-plugin-tsdoc"],
   "extends": [
-    "airbnb",
+    // "airbnb",
+    // "plugin:react/recommended",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:react/recommended",
     "plugin:jsdoc/recommended-typescript"
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "react-refresh/only-export-components": "error",
     "jsdoc/require-throws": "error",
-
     "jsdoc/check-indentation": "warn",
-
     "jsdoc/no-blank-blocks": "warn",
-
     "jsdoc/require-asterisk-prefix": "warn",
-
     "jsdoc/require-description": "warn",
-
     "jsdoc/sort-tags": "warn",
-
     "jsdoc/check-syntax": "warn",
-
     "jsdoc/tag-lines": ["warn", "never", { "startLines": 1 }],
-
     "jsdoc/require-param": ["warn", { "checkDestructuredRoots": false }],
-
-    "jsdoc/require-jsdoc": [
-      "warn",
-
-      {
-        "publicOnly": true,
-
-        "require": {
-          "FunctionDeclaration": true,
-
-          "FunctionExpression": true,
-
-          "ArrowFunctionExpression": true,
-
-          "ClassDeclaration": true,
-
-          "ClassExpression": true,
-
-          "MethodDefinition": true
-        },
-
-        "contexts": [
-          "VariableDeclaration",
-
-          "TSTypeAliasDeclaration",
-
-          // Encourage documenting React prop types
-
-          "TSPropertySignature"
-        ],
-
-        "enableFixer": true
-      }
-    ],
-
+    // "jsdoc/require-jsdoc": [
+    //   "warn",
+    //   {
+    //     "publicOnly": true,
+    //     "require": {
+    //       "FunctionDeclaration": true,
+    //       "FunctionExpression": true,
+    //       "ArrowFunctionExpression": true,
+    //       "ClassDeclaration": true,
+    //       "ClassExpression": true,
+    //       "MethodDefinition": true
+    //     },
+    //     "contexts": [
+    //       "TSTypeAliasDeclaration",
+    //       // Encourage documenting React prop types
+    //       "TSPropertySignature"
+    //     ],
+    //     "enableFixer": true
+    //   }
+    // ],
     // tsdoc checks this syntax instead
-
     "jsdoc/require-hyphen-before-param-description": "off",
-
     "jsdoc/require-returns": "off",
-
     "tsdoc/syntax": "warn"
     // "react/self-closing-comp": ["error", { "component": true, "html": true }]
   }

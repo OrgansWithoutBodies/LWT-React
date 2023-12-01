@@ -2,10 +2,11 @@ import { PersistanceStrategy } from '../data/PersistedValueGetter';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { useAppContext } from '../hooks/useContext';
+import { useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate } from '../nav/useInternalNav';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { GlosbeAPI } from './GlosbeAPI.component';
 
 export function LandingPage() {
   const {
@@ -63,7 +64,7 @@ export function LandingPage() {
             <div>
               {/* TODO */}
               My last Text (in
-              {' ' + activeLanguage.LgName})
+              {` ${activeLanguage.LgName}`})
             </div>
           )}
         </div>
@@ -129,7 +130,7 @@ export function LandingPage() {
         <tbody>
           <tr>
             <td className="width50px">
-              <a target="_blank" href="http://unlicense.org/">
+              <a target="_blank" href="http://unlicense.org/" rel="noreferrer">
                 <img
                   alt="Public Domain"
                   title="Public Domain"
@@ -142,6 +143,7 @@ export function LandingPage() {
                 <a
                   href="https://sourceforge.net/projects/learning-with-texts/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   "Learning with Texts" (LWT)
                 </a>{' '}
@@ -151,26 +153,33 @@ export function LandingPage() {
                 <a
                   href="https://en.wikipedia.org/wiki/Public_domain_software"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   PUBLIC DOMAIN
                 </a>
                 . LWT React Port is as well. Clone, modify, go wild. Learn more
                 languages, help more learn more languages.
                 <br />
-                <a href="http://unlicense.org/" target="_blank">
+                <a
+                  href="http://unlicense.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   More information and detailed Unlicense ...
                 </a>
                 <br />
                 This is LWT-React Version {versionNumber} (Released:{' '}
-                {releaseDate})
+                {releaseDate}
+                )
                 <br />
                 <a
                   href="https://en.wikipedia.org/wiki/Database"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Database
                 </a>
-                {/* TODO server url & type? */}: <i>lwt</i> on
+                {/* TODO server url & type? */}:<i>lwt</i> on
                 <i>{dbBackend}</i> /
                 <span
                   title="Manage Table Sets"
@@ -212,6 +221,7 @@ if (! isset($mb)) $mb = '0.0';
                 <a
                   href="https://en.wikipedia.org/wiki/React_(JavaScript_library)"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {frontend}/{frontendVersion}
                 </a>
@@ -219,20 +229,25 @@ if (! isset($mb)) $mb = '0.0';
                 <a
                   href="https://en.wikipedia.org/wiki/Web_server"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Web Server
                 </a>
-                {/* TODO server url & type? */}: <i>{'test'}</i> / Server
-                Software:
+                {/* TODO server url & type? */}:<i>test</i> / Server Software:
                 <a
                   href="https://en.wikipedia.org/wiki/Apache_HTTP_Server"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {server}/{serverVersion}
                 </a>
                 &nbsp;&nbsp;
                 {/* TODO get db backend & version programmatically */}
-                <a href="https://en.wikipedia.org/wiki/MySQL" target="_blank">
+                <a
+                  href="https://en.wikipedia.org/wiki/MySQL"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {dbBackend}/{dbVersion}
                 </a>
                 &nbsp;&nbsp;
@@ -243,12 +258,20 @@ if (! isset($mb)) $mb = '0.0';
           </tr>
         </tbody>
       </table>
+      <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
       <button
         onClick={() => {
           dataService.getTatoebaSentence('eng', 'test');
         }}
       >
-        TEST
+        TEST TATOEBA
+      </button>
+      <button
+        onClick={() => {
+          dataService.getTatoebaSentence('eng', 'test');
+        }}
+      >
+        TEST TATOEBA
       </button>
     </>
   );

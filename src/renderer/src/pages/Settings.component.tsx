@@ -2,11 +2,12 @@ import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { SettingsObjValidator } from '../data/validators';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
-import { CheckAndSubmit, RefMap, parseNumMap } from './Forms';
-import { Header } from './Header';
-import { useFormInput } from './useFormInput';
+import { settingsPrevalidateMap } from './preValidateMaps';
 // TODO abstract this out into a nested settings component
 
 const validator = ss.omit(SettingsObjValidator, [
@@ -149,6 +150,7 @@ const DEFAULT_SETTINGS = {
   'set-terms-per-page': 100,
   'set-tags-per-page': 100,
 };
+
 export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();
@@ -684,27 +686,7 @@ export function SettingsComponent(): JSX.Element {
                   onClick={() => {
                     CheckAndSubmit(
                       refMap,
-                      {
-                        'set-text-h-frameheight-no-audio': parseNumMap,
-                        'set-text-h-frameheight-with-audio': parseNumMap,
-                        'set-text-l-framewidth-percent': parseNumMap,
-                        'set-text-r-frameheight-percent': parseNumMap,
-                        'set-test-h-frameheight': parseNumMap,
-                        'set-test-l-framewidth-percent': parseNumMap,
-                        'set-test-r-frameheight-percent': parseNumMap,
-                        'set-test-main-frame-waiting-time': parseNumMap,
-                        'set-test-edit-frame-waiting-time': parseNumMap,
-                        'set-test-sentence-count': parseNumMap,
-                        'set-term-sentence-count': parseNumMap,
-                        'set-archivedtexts-per-page': parseNumMap,
-                        'set-texts-per-page': parseNumMap,
-                        'set-terms-per-page': parseNumMap,
-                        'set-tags-per-page': parseNumMap,
-                        'set-show-text-word-counts': parseNumMap,
-                        'set-similar-terms-count': parseNumMap,
-                        'set-mobile-display-mode': parseNumMap,
-                        'set-text-visit-statuses-via-key': parseNumMap,
-                      },
+                      settingsPrevalidateMap,
                       validator,
                       (val) => {
                         console.log(val);

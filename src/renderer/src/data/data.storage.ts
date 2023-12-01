@@ -21,6 +21,7 @@ import {
   Words,
 } from './parseMySqlDump';
 import { TextsId } from './validators';
+
 export interface DataState {
   archivedtexts: ArchivedTexts[];
   archtexttags: ArchTextTags[];
@@ -64,6 +65,10 @@ export class DataStore extends Store<DataState> {
 }
 
 export const dataStore = new DataStore();
+/**
+ *
+ * @param persistGetter
+ */
 function getPersistedData(
   persistGetter: PersistedValueGetter
 ): Partial<DataState> {

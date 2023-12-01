@@ -38,15 +38,22 @@ CODE TODOs
 
 - remove anys, fix type problems
 - add more comments & clean up
+- more error throws, more error boundaries
 - add more lint constraints/prettier rules
 - add custom vscode snippets
 - shared interfaces between main/preload/renderer
 - submit diff for openapi-typescript
 - enum literals for openapi-typescript
+- typescript-axios? openapi-client-axios-typegen?
+- @nll/api-codegen-ts?
+- fern-api?
+- tsoa to generate from express
+- https://github.com/vercel/swr?
+- https://github.com/nfroidure/openapi-ts-sdk-builder?
 
 ---
 
-IDEAS
+FEATURE IDEAS
 
 - "Offline Mode"?
 - json backup/restore

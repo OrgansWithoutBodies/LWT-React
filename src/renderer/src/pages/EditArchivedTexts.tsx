@@ -2,15 +2,15 @@ import { useRef, useState } from 'react';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
+import { useInternalNavigate } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { resetAll } from './EditArchived.component';
 import { GetMultipleArchivedTextActionsSelectOptions } from './EditTextTags';
-import { Header } from './Header';
 import { TagAndOr, TagDropDown } from './Terms.component';
 import { confirmDelete, multiActionGo } from './utils';
 
@@ -73,7 +73,7 @@ export function EditArchivedTexts({
             <td className="td1 center" colSpan={2}>
               Language:
               <LanguageDropdown
-                header={'[Filter off]'}
+                header="[Filter off]"
                 onChange={(val) => {
                   if (val === -1) {
                     dataService.setActiveLanguage(null);
@@ -113,7 +113,7 @@ export function EditArchivedTexts({
               <input
                 type="button"
                 value="Clear"
-                onClick={() => navigate(`/edit_archivedtexts`)}
+                onClick={() => navigate('/edit_archivedtexts')}
               />
             </td>
           </tr>
@@ -124,7 +124,7 @@ export function EditArchivedTexts({
               style={{ whiteSpace: 'nowrap' }}
             >
               Tag #1:
-              <TagDropDown tags={tags} tagKey={'tag1'} />
+              <TagDropDown tags={tags} tagKey="tag1" />
             </td>
             <TagAndOr
               onChange={({ target: { value: val } }) =>
@@ -133,7 +133,7 @@ export function EditArchivedTexts({
             />
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
-              <TagDropDown tags={tags} tagKey={'tag2'} />
+              <TagDropDown tags={tags} tagKey="tag2" />
             </td>
           </tr>
           {/* TODO */}
@@ -195,9 +195,7 @@ export function EditArchivedTexts({
               <th className="th1 sorttable_nosort">Mark</th>
               <th className="th1 sorttable_nosort">Actions</th>
               {filterLanguageID === null && (
-                <>
-                  <th className="th1 clickable">Lang.</th>
-                </>
+                <th className="th1 clickable">Lang.</th>
               )}
               <th className="th1 clickable">
                 Title [Tags] / Audio:&nbsp;
@@ -213,73 +211,64 @@ export function EditArchivedTexts({
                 (lang) => lang.LgID === text.AtLgID
               );
               return (
-                <>
-                  <tr>
-                    <td className="td1 center">
-                      <a name="rec' . $record['AtID'] . '">
-                        <input
-                          name="marked[]"
-                          className="markcheck"
-                          type="checkbox"
-                          {...checkboxPropsForEntry(text)}
-                          value="' . $record['AtID'] . '"
-                        />
-                      </a>
-                    </td>
-                    {/* ' . checkTest($record['AtID'], 'marked') . '  */}
-                    <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
-                      &nbsp;
-                      <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '">
-                        <Icon src="inbox-upload" title="Unarchive" />
-                      </a>
-                      &nbsp;
-                      <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '">
-                        <Icon src="document--pencil" title="Edit" />
-                      </a>
-                      &nbsp;
-                      <span
-                        className="click"
-                        onClick={() => {
-                          if (confirmDelete()) {
-                            // TODO del url pattern uniformly?
-                            dataService.deleteArchivedText(text.AtID);
-                          }
-                        }}
-                      >
-                        <Icon src="minus-button" title="Delete" />
-                      </span>
-                      &nbsp;
-                    </td>
-                    {filterLanguageID === null && (
-                      <>
-                        <td className="td1 center">
-                          {languageForLine?.LgName}
-                        </td>
-                      </>
+                <tr>
+                  <td className="td1 center">
+                    <a name="rec' . $record['AtID'] . '">
+                      <input
+                        name="marked[]"
+                        className="markcheck"
+                        type="checkbox"
+                        {...checkboxPropsForEntry(text)}
+                        value="' . $record['AtID'] . '"
+                      />
+                    </a>
+                  </td>
+                  {/* ' . checkTest($record['AtID'], 'marked') . '  */}
+                  <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
+                    &nbsp;
+                    <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '">
+                      <Icon src="inbox-upload" title="Unarchive" />
+                    </a>
+                    &nbsp;
+                    <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '">
+                      <Icon src="document--pencil" title="Edit" />
+                    </a>
+                    &nbsp;
+                    <span
+                      className="click"
+                      onClick={() => {
+                        if (confirmDelete()) {
+                          // TODO del url pattern uniformly?
+                          dataService.deleteArchivedText(text.AtID);
+                        }
+                      }}
+                    >
+                      <Icon src="minus-button" title="Delete" />
+                    </span>
+                    &nbsp;
+                  </td>
+                  {filterLanguageID === null && (
+                    <td className="td1 center">{languageForLine?.LgName}</td>
+                  )}
+                  <td className="td1 center">
+                    {text.AtTitle}
+                    <span className="smallgray2">
+                      {/* TODO */}
+                      {/* . tohtml($record['taglist']) . */}
+                    </span>
+                    {text.AtAudioURI && (
+                      <Icon src="speaker-volume" title="With Audio" />
                     )}
-                    <td className="td1 center">
-                      {text.AtTitle}
-                      <span className="smallgray2">
-                        {/* TODO */}
-                        {/* . tohtml($record['taglist']) . */}
-                      </span>
-                      {text.AtAudioURI && (
-                        <Icon src="speaker-volume" title="With Audio" />
-                      )}
-                      {text.AtSourceURI && (
-                        <a
-                          href="' . $record['AtSourceURI'] . '"
-                          target="_blank"
-                        >
-                          <Icon src="chain" title="Link to Text Source" />
-                        </a>
-                      )}
-                      {text.AtAnnotatedText && (
-                        <Icon src="tick" title="Annotated Text available" />
-                      )}
-                    </td>
-                  </tr>
-                </>
+                    {text.AtSourceURI && (
+                      <a href="' . $record['AtSourceURI'] . '" target="_blank">
+                        <Icon src="chain" title="Link to Text Source" />
+                      </a>
+                    )}
+                    {text.AtAnnotatedText && (
+                      <Icon src="tick" title="Annotated Text available" />
+                    )}
+                  </td>
+                </tr>
               );
             })}
           </table>
@@ -300,16 +289,16 @@ export function EditArchivedTexts({
       <?php } ?>
       `
       <?php
-      
+
       }
-      
+
       ?> */}
       <Pager currentPage={currentPage} numPages={numPages} />
       <p>
         <input
           type="button"
           value="Active Texts"
-          onClick={() => navigate(`/edit_texts?query=&page=1`)}
+          onClick={() => navigate('/edit_texts?query=&page=1')}
         />
       </p>
     </>

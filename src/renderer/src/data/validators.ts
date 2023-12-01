@@ -2,6 +2,7 @@ import * as ss from 'superstruct';
 import { Persistable } from '../../../shared/Persistable';
 import { PLUGINS } from '../plugins';
 import { brandedNumber, brandedString, BrandedString } from './branding';
+
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
 
@@ -13,11 +14,13 @@ const getValidatorPluginsFor = <
   key: TKey
 ): { [k in TTableKeys]: ss.Struct<any, unknown> } =>
   Object.fromEntries(
-    PLUGINS.filter(({ validators }) => validators[key] !== undefined).map(({ validators }) => {
-      const safeKeyValidator = validators[key]!;
+    PLUGINS.filter(({ validators }) => validators[key] !== undefined).map(
+      ({ validators }) => {
+        const safeKeyValidator = validators[key]!;
 
-      return Object.entries(safeKeyValidator);
-    })
+        return Object.entries(safeKeyValidator);
+      }
+    )
   );
 const isValidURL = (validationString: string): validationString is URL =>
   validationString.startsWith('http://') ||
@@ -33,13 +36,21 @@ const URLValidator = () =>
 const URLTemplateValidator = (): ss.Struct<any, any> =>
   ss.string() && ss.define('urlTemplate', isValidURLTemplate);
 
-const NumberInListValidator = <TNum extends Readonly<number[]>>(
+export const NumberInListValidator = <TNum extends Readonly<number[]>>(
   numbers: TNum
 ) =>
   ss.refine<TNum[number], null>(
     ss.number() as ss.Struct<TNum[number], null>,
-    'Zero or One',
+    'number-in-list',
     (val) => numbers.includes(val)
+  );
+export const StringInListValidator = <TString extends Readonly<string[]>>(
+  strings: TString
+) =>
+  ss.refine<TString[number], null>(
+    ss.string() as ss.Struct<TString[number], null>,
+    'string-in-list',
+    (val) => strings.includes(val)
   );
 const BooleanNumberValidator = NumberInListValidator([0, 1] as const);
 

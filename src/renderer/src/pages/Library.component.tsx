@@ -3,19 +3,20 @@ import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { TextsId, TextsValidator } from '../data/validators';
+import { RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate, useUpdateParams } from '../nav/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
 import { resetAll } from './EditArchived.component';
-import { RefMap } from './Forms';
-import { Header } from './Header';
 import { resetDirty } from './Sorting';
 import { TagAndOr, TagDropDown } from './Terms.component';
-import { useFormInput } from './useFormInput';
+
 const TextMultiAction = {
   test: (selectedValues: Set<TextsId>) => {
     console.log('test');
@@ -39,6 +40,7 @@ const TextMultiAction = {
     console.log('del');
   },
 };
+
 export function TextMultiActions({
   onSelectAll,
   onSelectNone,
@@ -49,54 +51,52 @@ export function TextMultiActions({
   onSelectNone: () => void;
 }) {
   return (
-    <>
-      <form name="form1" action="#">
-        <table className="tab1" cellSpacing={0} cellPadding={5}>
-          <tbody>
-            <tr>
-              <th className="th1" colSpan={2}>
-                Multi Actions
-                <Icon src="lightning" title="Multi Actions" />
-              </th>
-            </tr>
-            <tr>
-              <td className="td1 center">
-                <input type="button" value="Mark All" onClick={onSelectAll} />
-                <input type="button" value="Mark None" onClick={onSelectNone} />
-              </td>
-              <td className="td1 center">
-                Marked Texts
-                <select
-                  name="markaction"
-                  id="markaction"
-                  disabled={selectedValues.size === 0}
-                  onChange={({ target: { value } }) => {
-                    /* TODO */
-                    TextMultiAction[value as keyof typeof TextMultiAction](
-                      selectedValues
-                    );
-                  }}
-                >
-                  <option value=""></option>
-                  <option disabled={true}>------------</option>
-                  <option value={'test'}>Test Marked Texts</option>
-                  <option disabled={true}>------------</option>
-                  <option value={'addtag'}>Add Tag</option>
-                  <option value={'deltag'}>Remove Tag</option>
-                  <option disabled={true}>------------</option>
-                  <option value={'rebuild'}>Reparse Texts</option>
-                  <option value={'setsent'}>Set Term Sentences</option>
-                  <option disabled={true}>------------</option>
-                  <option value={'arch'}>Archive Marked Texts</option>
-                  <option disabled={true}>------------</option>
-                  <option value={'del'}>Delete Marked Texts</option>
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    </>
+    <form name="form1" action="#">
+      <table className="tab1" cellSpacing={0} cellPadding={5}>
+        <tbody>
+          <tr>
+            <th className="th1" colSpan={2}>
+              Multi Actions
+              <Icon src="lightning" title="Multi Actions" />
+            </th>
+          </tr>
+          <tr>
+            <td className="td1 center">
+              <input type="button" value="Mark All" onClick={onSelectAll} />
+              <input type="button" value="Mark None" onClick={onSelectNone} />
+            </td>
+            <td className="td1 center">
+              Marked Texts
+              <select
+                name="markaction"
+                id="markaction"
+                disabled={selectedValues.size === 0}
+                onChange={({ target: { value } }) => {
+                  /* TODO */
+                  TextMultiAction[value as keyof typeof TextMultiAction](
+                    selectedValues
+                  );
+                }}
+              >
+                <option value="" />
+                <option disabled>------------</option>
+                <option value="test">Test Marked Texts</option>
+                <option disabled>------------</option>
+                <option value="addtag">Add Tag</option>
+                <option value="deltag">Remove Tag</option>
+                <option disabled>------------</option>
+                <option value="rebuild">Reparse Texts</option>
+                <option value="setsent">Set Term Sentences</option>
+                <option disabled>------------</option>
+                <option value="arch">Archive Marked Texts</option>
+                <option disabled>------------</option>
+                <option value="del">Delete Marked Texts</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   );
 }
 
@@ -142,6 +142,7 @@ function LibraryHeader(): JSX.Element {
     </thead>
   );
 }
+
 function LibraryFooter({
   numTexts,
   currentPage,
@@ -152,36 +153,35 @@ function LibraryFooter({
   numPages: number;
 }): JSX.Element {
   return (
-    <>
-      <table className="tab1" cellSpacing={0} cellPadding={5}>
-        <tbody>
-          <tr>
-            <th style={{ whiteSpace: 'nowrap' }} className="th1">
-              {numTexts} Texts
-            </th>
-            <th style={{ whiteSpace: 'nowrap' }} className="th1">
-              &nbsp; &nbsp;
-              <Icon src="placeholder" alt="-" />
-              <Icon src="placeholder" alt="-" />
-              <Pager currentPage={currentPage} numPages={numPages} />
-            </th>
-            <th style={{ whiteSpace: 'nowrap' }} className="th1">
-              &nbsp; &nbsp;
-              <Icon src="placeholder" alt="-" />
-              <Icon src="placeholder" alt="-" />
-              <ResizePage
-                pageSize={15}
-                onPageResize={function (newSize: number): void {
-                  throw new Error('Function not implemented.');
-                }}
-              />
-            </th>
-          </tr>
-        </tbody>
-      </table>
-    </>
+    <table className="tab1" cellSpacing={0} cellPadding={5}>
+      <tbody>
+        <tr>
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
+            {numTexts} Texts
+          </th>
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
+            &nbsp; &nbsp;
+            <Icon src="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
+            <Pager currentPage={currentPage} numPages={numPages} />
+          </th>
+          <th style={{ whiteSpace: 'nowrap' }} className="th1">
+            &nbsp; &nbsp;
+            <Icon src="placeholder" alt="-" />
+            <Icon src="placeholder" alt="-" />
+            <ResizePage
+              pageSize={15}
+              onPageResize={function (newSize: number): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
+          </th>
+        </tr>
+      </tbody>
+    </table>
   );
 }
+
 function ResizePage({
   pageSize,
   onPageResize,
@@ -267,7 +267,7 @@ function LibraryRow({
         {text.title}
         <span className="smallgray2">
           {text.tags &&
-            '[' + text.tags.map((tag, ii) => (ii > 0 ? ' ' + tag : tag)) + ']'}
+            `[${text.tags.map((tag, ii) => (ii > 0 ? ` ${tag}` : tag))}]`}
         </span>
         {text.audioAvailable && <Icon src="speaker-volume" />}
         {text.link && <Icon src="chain" />}
@@ -414,7 +414,7 @@ export function Library({
               style={{ whiteSpace: 'nowrap' }}
             >
               Tag #1:
-              <TagDropDown tags={tags2} tagKey={'tag1'} />
+              <TagDropDown tags={tags2} tagKey="tag1" />
               {/* {texttags
                   .filter((tag) => {
                     console.log(tag);
@@ -440,7 +440,7 @@ export function Library({
             />
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
-              <TagDropDown tags={tags2} tagKey={'tag2'} />
+              <TagDropDown tags={tags2} tagKey="tag2" />
             </td>
           </tr>
 
@@ -474,27 +474,26 @@ export function Library({
         onSelectNone={onSelectNone}
         selectedValues={selectedValues}
       />
-      {
-        <>
-          <table className="sortable tab1">
-            <LibraryHeader />
-            <tbody>
-              {dataOnPage &&
-                dataOnPage.map((text) => (
-                  <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
-                ))}
-            </tbody>
-          </table>
-          <LibraryFooter
-            numTexts={textDetails ? textDetails.length : 0}
-            currentPage={currentPage}
-            numPages={numPages}
-          />
-        </>
-      }
+      <>
+        <table className="sortable tab1">
+          <LibraryHeader />
+          <tbody>
+            {dataOnPage &&
+              dataOnPage.map((text) => (
+                <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
+              ))}
+          </tbody>
+        </table>
+        <LibraryFooter
+          numTexts={textDetails ? textDetails.length : 0}
+          currentPage={currentPage}
+          numPages={numPages}
+        />
+      </>
     </>
   );
 }
+
 export function EditText({ chgID }: { chgID: TextsId }) {
   const [{ texts }] = useData(['texts']);
   const editingText = texts.find(({ TxID }) => TxID === chgID);
@@ -507,7 +506,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
   const TxInput = useFormInput(refMap, editingText);
   return (
     <>
-      <Header title={'My Texts'} />
+      <Header title="My Texts" />
       <h4>
         Edit Text{' '}
         <a target="_blank" href="info.htm#howtotext">

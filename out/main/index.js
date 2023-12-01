@@ -551,9 +551,11 @@ const createColors = (variant) => {
     ".wizard": {
       margin: "20px 0 5px 0"
     },
-    /**************************************************************
-    Additional styles for printing
-    ***************************************************************/
+    /**
+     ************************************************************
+     * Additional styles for printing
+     **************************************************************
+     */
     "@media print": {
       ".noprint": {
         display: "none"
@@ -562,9 +564,11 @@ const createColors = (variant) => {
         fontSize: "75%"
       }
     },
-    /*************************************************************
-    Split View
-    ***************************************************************/
+    /**
+     ***********************************************************
+     * Split View
+     **************************************************************
+     */
     ".Resizer": {
       position: "relative",
       background: "darkGray",
@@ -580,7 +584,7 @@ const createColors = (variant) => {
      .Resizer:active {
     -webkit-transition: all 2s ease,
     transition: all 2s ease,
-     }*/
+     } */
     ".Resizer.horizontal": {
       height: "20px",
       margin: "-5px 0",
@@ -589,7 +593,7 @@ const createColors = (variant) => {
       cursor: "row-resize",
       width: "100%"
     },
-    /*   
+    /*
      .Resizer.horizontal:hover,
      .Resizer.Resizer.horizontal:active {
     border-top: 5px solid rgba(0, 0, 0, 0.5),
@@ -1301,9 +1305,7 @@ const BackendPlugin = {
   },
   set: () => {
   },
-  empty: () => {
-    return emptyDB();
-  },
+  empty: () => emptyDB(),
   insert: (key, val) => {
     if (isValidKey(key)) {
       return insertEntry(val, key);
@@ -1476,7 +1478,7 @@ function createWindow() {
   });
   mainWindow.setIcon(electron.nativeImage.createFromDataURL(icon));
   const style = createColors(AppVariables.styleVariant);
-  console.log(style["body"].backgroundColor);
+  console.log(style.body.backgroundColor);
   mainWindow.loadURL("http://localhost:5173");
   mainWindow.on("closed", () => mainWindow = null);
   const template = [
@@ -1591,21 +1593,20 @@ function createWindow() {
   electron.Menu.setApplicationMenu(menu);
 }
 electron.app.whenReady().then(() => {
-  electron.ipcMain.handle("backend-plugin-get", (_, { key }) => {
-    return BackendPlugin.get(key);
-  });
-  electron.ipcMain.handle("backend-plugin-insert", (_, { key, dataEntry }) => {
-    return BackendPlugin.insert(key, dataEntry);
-  });
-  electron.ipcMain.handle("backend-plugin-update", (_, { key, dataEntry }) => {
-    return BackendPlugin.update(key, dataEntry);
-  });
-  electron.ipcMain.handle("backend-plugin-delete", (_, { key, deleteId }) => {
-    return BackendPlugin.delete(key, deleteId);
-  });
-  electron.ipcMain.handle("backend-plugin-empty", () => {
-    return BackendPlugin.empty();
-  });
+  electron.ipcMain.handle("backend-plugin-get", (_, { key }) => BackendPlugin.get(key));
+  electron.ipcMain.handle(
+    "backend-plugin-insert",
+    (_, { key, dataEntry }) => BackendPlugin.insert(key, dataEntry)
+  );
+  electron.ipcMain.handle(
+    "backend-plugin-update",
+    (_, { key, dataEntry }) => BackendPlugin.update(key, dataEntry)
+  );
+  electron.ipcMain.handle(
+    "backend-plugin-delete",
+    (_, { key, deleteId }) => BackendPlugin.delete(key, deleteId)
+  );
+  electron.ipcMain.handle("backend-plugin-empty", () => BackendPlugin.empty());
   BackendPlugin.init();
   createWindow();
 });

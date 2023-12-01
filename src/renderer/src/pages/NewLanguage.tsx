@@ -3,19 +3,14 @@ import Modal from 'react-modal';
 import { dataService } from '../data/data.service';
 import { LanguagesValidatorNoId } from '../data/validators';
 import { LANGDEFS } from '../data/wizardData';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import { CheckAndSubmit, RefMap } from './Forms';
-import { Header } from './Header';
-import {
-  LanguageNoId,
-  TextSizeSelect,
-  languagePreValidateMap,
-  oewin,
-} from './NewLanguage.component';
 import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
-import { useFormInput } from './useFormInput';
+import { languagePreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
 export function NewLanguage() {
@@ -148,7 +143,7 @@ export function NewLanguage() {
             <tr>
               <td className="td1 right backlightyellow">Text Size:</td>
               <td className="td1">
-                <TextSizeSelect refMap={refMap} entryKey={'LgTextSize'} />
+                <TextSizeSelect refMap={refMap} entryKey="LgTextSize" />
               </td>
             </tr>
             <tr>
@@ -342,27 +337,23 @@ export function NewLanguage() {
           onSuccess={(l1, l2) => {
             const originSpec = LANGDEFS[l1 as keyof typeof LANGDEFS];
             const targetSpec = LANGDEFS[l2 as keyof typeof LANGDEFS];
-            refMap['LgName'].current.value = l2;
+            refMap.LgName.current.value = l2;
             console.log(refMap.LgName.current.value, l1, l2);
-            refMap[
-              'LgDict1URI'
-            ].current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
-            refMap[
-              'LgGoogleTranslateURI'
-            ].current.value = `*http://translate.google.com/?ie=UTF-8&sl=${targetSpec.LgGTransKey}&tl=${originSpec.LgGTransKey}&text=###`;
-            refMap['LgTextSize'].current.value = targetSpec.LgTextSize;
-            refMap['LgRegexpWordCharacters'].current.value =
+            refMap.LgDict1URI.current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
+            refMap.LgGoogleTranslateURI.current.value = `*http://translate.google.com/?ie=UTF-8&sl=${targetSpec.LgGTransKey}&tl=${originSpec.LgGTransKey}&text=###`;
+            refMap.LgTextSize.current.value = targetSpec.LgTextSize;
+            refMap.LgRegexpWordCharacters.current.value =
               targetSpec.LgRegexpWordCharacters;
-            refMap['LgRegexpSplitSentences'].current.value =
+            refMap.LgRegexpSplitSentences.current.value =
               targetSpec.LgRegexpSplitSentences;
 
-            refMap['LgSplitEachChar'].current.value = targetSpec.LgSplitEachChar
+            refMap.LgSplitEachChar.current.value = targetSpec.LgSplitEachChar
               ? 1
               : 0;
-            refMap['LgRemoveSpaces'].current.value = targetSpec.LgRemoveSpaces
+            refMap.LgRemoveSpaces.current.value = targetSpec.LgRemoveSpaces
               ? 1
               : 0;
-            refMap['LgRightToLeft'].current.value = targetSpec.LgRightToLeft
+            refMap.LgRightToLeft.current.value = targetSpec.LgRightToLeft
               ? 1
               : 0;
             setWizardOpen(false);
@@ -373,5 +364,45 @@ export function NewLanguage() {
         />
       </Modal>
     </>
+  );
+}
+
+export function TextSizeSelect<
+  TData extends Record<string, unknown>,
+  TKey extends keyof TData
+>({
+  refMap,
+  entryKey,
+  defaultValue = 100,
+}: {
+  refMap: TRefMap<TData>;
+  entryKey: TKey;
+  defaultValue?: TextSize;
+}) {
+  return (
+    <select
+      name={entryKey as string}
+      className="notempty"
+      ref={refMap[entryKey]}
+      defaultValue={defaultValue}
+    >
+      <option value="100">100 %</option>
+      <option value="150">150 %</option>
+      <option value="200">200 %</option>
+      <option value="250">250 %</option>
+    </select>
+  );
+}
+
+/**
+ *
+ * @param url
+ */
+export function oewin(url: string | URL | undefined) {
+  // TODO
+  window.open(
+    url,
+    'editwin',
+    'width=800, height=600, scrollbars=yes, menubar=no, resizable=yes, status=no'
   );
 }

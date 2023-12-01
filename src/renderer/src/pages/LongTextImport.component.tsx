@@ -3,14 +3,14 @@ import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import { Texts } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap, parseNumMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { CheckAndSubmit, RefMap, parseNumMap } from './Forms';
-import { Header } from './Header';
 import { LongTextVerify } from './LongTextImportVerify.component';
 import { resetDirty } from './Sorting';
-import { useFormInput } from './useFormInput';
 import { splitCheckText } from './utils';
 
 export default function ImportLongText({
@@ -35,14 +35,14 @@ export default function ImportLongText({
 
   return (
     <>
-      <Header title={'Import Long Text'} />
+      <Header title="Import Long Text" />
       <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tbody>
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
               <LanguageDropdown
-                defaultValue={activeLanguageId ? activeLanguageId : undefined}
+                defaultValue={activeLanguageId || undefined}
                 onChange={(val) => dataService.setActiveLanguage(val)}
                 dropdownRef={refMap.TxLgID}
               />
@@ -67,11 +67,14 @@ export default function ImportLongText({
             <td className="td1 right">Text:</td>
             <td className="td1">
               {/* TODO validate one not both specified (XOR) */}
-              Either specify a <b>File to upload</b>:<br />
+              Either specify a <b>File to upload</b>
+              :
+              <br />
               <input name="thefile" type="file" />
               <br />
               <br />
-              <b>Or</b> paste a text from the clipboard (and do <b>NOT</b>
+              <b>Or</b> paste a text from the clipboard (and do
+              <b>NOT</b>
               specify file):
               <br />
               <textarea
@@ -104,7 +107,7 @@ export default function ImportLongText({
             <td className="td1">
               <select
                 name="paragraph_handling"
-                defaultValue={'1'}
+                defaultValue="1"
                 onChange={() => {
                   // TODO
                 }}
@@ -174,7 +177,7 @@ export default function ImportLongText({
                     role="status"
                     aria-live="polite"
                     className="ui-helper-hidden-accessible"
-                  ></span>
+                  />
                   <input
                     type="text"
                     maxLength={20}
@@ -239,6 +242,7 @@ export default function ImportLongText({
 }
 // TODO flesh out
 export type LongTextType = Pick<Texts, 'TxText' | 'TxLgID' | 'TxTitle'>[];
+
 export function LongText() {
   const [verifying, setVerifying] = useState<LongTextType | null>(null);
   const isVerify = verifying !== null;
@@ -254,7 +258,6 @@ export function LongText() {
 }
 {
   /* <p class="smallgray">Import of a <b>single text</b>, max. 65,000 bytes long, with optional audio:</p><p><input type="button" value="Standard Text Import" onClick="location.href='edit_texts?new=1';"> </p>
-
 
 <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabIndex={0} style="display: none;"></ul> </>
 } */

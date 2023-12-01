@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { headerValues, headerValuesTemp } from '../pages/Header';
+import { headerValues, headerValuesTemp } from '../ui-kit/Header';
+
 type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
 type NonHeaderLinks =
@@ -19,12 +20,19 @@ export type InternalPaths = `/${BasePath}${`?${string}` | ''}`;
 // const urlIsInternalPathGuard = (url: string): url is InternalPaths => {
 //   return Object.values(headerValues).includes(url as any);
 // };
-export const useInternalNavigate: () => (url: InternalPaths) => void = () => {
+export const useInternalNavigate: () => (
+  url: InternalPaths,
+  addToCurrentURL?: boolean
+) => void = () => {
   const nav = useNavigate();
-  return (url) => {
+  const location = useLocation();
+  return (url, addToCurrentURL = false) => {
     // if (urlIsInternalPathGuard(url)) {
-    nav(url);
-    return;
+    if (addToCurrentURL) {
+      return nav(location.pathname + url);
+    }
+    return nav(url);
+
     // }
     // return;
   };

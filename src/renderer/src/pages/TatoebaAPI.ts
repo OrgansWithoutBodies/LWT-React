@@ -1,42 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { paths as TatoebaPaths } from '../../../shared/apis/out/tatoeba.openapi';
+import { AxiosOpenAPIWrapper, BaseOpenAPIWrapper } from './BaseOpenAPIWrapper';
 
 type TatoebaOpenAPI = TatoebaPaths;
 type TatoebaGetSentencePath =
   TatoebaOpenAPI['/unstable/sentences']['parameters']['query'];
 //   type TatoebaAPIReqParamKeys=keyofTatoebaAPIQueryParamObjects['query']
 
+export type PathStartingWithSlash = `/${string}`;
 export const TATOEBA_API_BASE_URL_NO_SLASH =
   'https://api.dev.tatoeba.org' as const;
 
-export interface AxiosOpenAPIWrapper<
-  TKey extends string,
-  TPathInterface extends Record<
-    TKey,
-    {
-      parameters:
-        | { query: Record<string, unknown> }
-        | { path: Record<string, unknown> };
-    }
-  >
-> {
-  getPath: <TKey extends keyof TPathInterface>(
-    path: TKey,
-    queryParams: TPathInterface[TKey]['parameters'] extends { query: any }
-      ? {
-          [key in keyof TPathInterface[TKey]['parameters']['query']]: TPathInterface[TKey]['parameters']['query'][key];
-        }
-      : never
-  ) => Promise<AxiosResponse<any>>;
-}
-
-class BaseOpenAPIWrapper {
-  public wrapperAPIUrl: string | null = null;
-
-  constructor(wrapperAPIUrl: string) {
-    this.wrapperAPIUrl = wrapperAPIUrl;
-  }
-}
 export class TatoebaOpenAPIWrapper
   extends BaseOpenAPIWrapper
   implements AxiosOpenAPIWrapper<keyof TatoebaPaths, TatoebaPaths>
@@ -44,6 +18,7 @@ export class TatoebaOpenAPIWrapper
   constructor() {
     super(TATOEBA_API_BASE_URL_NO_SLASH);
   }
+
   getPath: <TKey extends keyof TatoebaPaths>(
     path: TKey,
     queryParams: TatoebaPaths[TKey]['parameters'] extends { query: any }

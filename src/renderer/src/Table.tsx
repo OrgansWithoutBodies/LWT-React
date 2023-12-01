@@ -1,6 +1,5 @@
-import React from 'react';
-
 // TODO "compilation row" ie add a row which compiles data in a column (ie by adding)
+
 export default function Table<TType extends {}, TElement extends {}>({
   rowElement,
   header,
@@ -13,13 +12,15 @@ export default function Table<TType extends {}, TElement extends {}>({
   return (
     <table>
       <tr>
-        <th></th>
+        <th />
       </tr>
       {data.map((row) => (
-          <tr>
-            {Object.keys(row).map((cell) => <td></td>)}
-          </tr>
-        ))}
+        <tr>
+          {Object.keys(row).map((cell) => (
+            <td />
+          ))}
+        </tr>
+      ))}
     </table>
   );
 }

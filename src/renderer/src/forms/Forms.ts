@@ -38,8 +38,15 @@ export const identityMap = (val: string) => val;
 export const parseNumMap = (value: string) => Number.parseInt(value, 10);
 export const emptyToNullMap = (value: string) =>
   value === '' ? undefined : value;
-export const binaryMap = (val: '0' | '1') => (val === '0' ? true : false);
+export const binaryMap = (val: '0' | '1') => val === '0';
 
+/**
+ *
+ * @param keyChanged
+ * @param refMap
+ * @param setFieldError
+ * @param validator
+ */
 function CheckErrors<TForm extends {}>(
   keyChanged: keyof TForm,
   refMap: TRefMap<TForm>,
@@ -61,6 +68,10 @@ export type TRefMap<TForm> = Record<
   keyof TForm,
   React.MutableRefObject<any>
 > & { clearAll: () => void };
+/**
+ *
+ * @param validator
+ */
 export function RefMap<TForm>(
   validator: ss.Struct<{ [key in keyof TForm]: any }>
 ): TRefMap<TForm> {
@@ -71,18 +82,30 @@ export function RefMap<TForm>(
       useRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(),
     ])
   ) as TRefMap<TForm>;
-  individualRefs['clearAll'] = () => {
+  individualRefs.clearAll = () => {
     values.forEach((val) => (individualRefs[val].current.value = ''));
   };
   return individualRefs;
 }
 // TODO can pass in default values to reset to
+/**
+ *
+ * @param refMap
+ */
 export function ResetForm<TForm>(refMap: TRefMap<TForm>) {
   Object.keys(refMap).forEach(
     (key) => (refMap[key as keyof TForm].current.value = '')
   );
 }
 
+/**
+ *
+ * @param refMap
+ * @param preValidateMap
+ * @param validator
+ * @param takeValidatedObject
+ * @param omit
+ */
 export function CheckAndSubmit<TForm>(
   refMap: TRefMap<TForm>,
   preValidateMap: {

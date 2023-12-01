@@ -1,23 +1,37 @@
+/**
+ *
+ * @param url
+ */
 export function owin(url: string | URL | undefined): void {
   window.open(
     url,
     'dictwin',
-    'width=800, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no'
+    'width=800, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no',
   );
 }
+/**
+ *
+ * @param u
+ * @param w
+ */
 function createTheDictUrl(u: string, w: string) {
   // const url = u.trim();
   // const trm = w.trim();
-  const r = 'trans.php?x=2&i=' + escape(u) + '&t=' + w;
+  const r = `trans.php?x=2&i=${escape(u)}&t=${w}`;
   return r;
 }
+/**
+ *
+ * @param url
+ * @param sentctl
+ */
 export function translateSentence2(
   url: string,
-  sentctl: { value: any } | undefined
+  sentctl: { value: any } | undefined,
 ) {
-  if (typeof sentctl != 'undefined' && url != '') {
+  if (typeof sentctl !== 'undefined' && url != '') {
     const text = sentctl.value;
-    if (typeof text == 'string') {
+    if (typeof text === 'string') {
       owin(createTheDictUrl(url, text.replace(/[{}]/g, '')));
     }
   }

@@ -31,10 +31,10 @@ export function LanguageDropdown({
         [{header}]
       </option>
       {languages.map((language) => (
-          <option key={language.LgID} value={language.LgID}>
-            {language.LgName}
-          </option>
-        ))}
+        <option key={language.LgID} value={language.LgID}>
+          {language.LgName}
+        </option>
+      ))}
     </select>
   );
 }

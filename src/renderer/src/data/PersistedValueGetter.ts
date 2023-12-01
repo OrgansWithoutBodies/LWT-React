@@ -30,7 +30,7 @@ export type PersistedValueEmptyer = () => void;
 
 export const getPersistedValueLocalStorage = <TKey extends keyof DataState>(
   key: TKey,
-  nullFallback = null
+  nullFallback = null,
 ): DataState[TKey] => {
   const localVal = localStorage.getItem(key);
   // TODO val parser/validator
@@ -40,7 +40,7 @@ export const getPersistedValueLocalStorage = <TKey extends keyof DataState>(
 };
 export const setPersistedValueLocalStorage: PersistedValueSetter = (
   key,
-  val
+  val,
 ) => {
   localStorage.setItem(key, JSON.stringify(val));
   return true;

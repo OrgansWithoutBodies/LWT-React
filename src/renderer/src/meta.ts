@@ -24,20 +24,21 @@ type AppVersion =
     }
   | {
       versionNumber: 'NEXT';
-      releaseDate: `א_0`;
+      releaseDate: 'א_0';
     };
 
 export type TAppContext = AppVersion & {
-  styleVariant: StyleVariant;
-
-  persistMethod: PersistanceStrategy;
-  isMobile: boolean;
-
   dbBackend: 'SQLite' | 'MySQL' | 'Postgres';
   dbVersion: string;
 
-  restURL: string;
+  isMobile: boolean;
+  styleVariant: StyleVariant;
 
+  pluginsEnabled: boolean;
+
+  persistMethod: PersistanceStrategy;
+
+  restURL: string;
   server: string;
   serverVersion: string;
 
@@ -49,14 +50,16 @@ export type TAppContext = AppVersion & {
   wizardDataUri: string;
 };
 enum LWT_ENV_VARS {
+  devMode = 'VITE_LWT_DEV_MODE',
+  disablePlugins = 'VITE_LWT_DISABLE_PLUGINS',
   persistMethod = 'VITE_LWT_PERSIST',
   isMobile = 'VITE_LWT_MOBILE',
   // These should probably be dynamic variables?
   restURL = 'VITE_LWT_REST_URL',
   wizardURL = 'VITE_LWT_WIZARD_URL',
 }
+
 function GetPersistFromEnv() {
-  console.log(import.meta.env);
   switch (import.meta.env[LWT_ENV_VARS.persistMethod]) {
     case 'REST':
       return PersistanceStrategy.RestAPI;
@@ -69,11 +72,20 @@ function GetPersistFromEnv() {
     // throw new Error('INVALID PERSISTANCE STRATEGY');
   }
 }
+function GetPluginsEnabledFromEnv() {
+  console.log('TEST123-disabled', import.meta.env);
+  if (import.meta.env[LWT_ENV_VARS.disablePlugins] === 'true') {
+    return false;
+  }
+  return true;
+}
 export const AppVariables: TAppContext = {
   versionNumber: 'LEGACY-0.0.0',
   releaseDate: 'November 31 2023',
   // Prob dont need to be an env var
   styleVariant: 'dark',
+
+  pluginsEnabled: GetPluginsEnabledFromEnv(),
 
   isMobile: false,
   persistMethod: GetPersistFromEnv(),

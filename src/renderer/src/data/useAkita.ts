@@ -5,6 +5,7 @@ import { pick } from 'rambdax';
 import { useEffect, useState } from 'react';
 import { dataQuery } from './data.query';
 import { dataService } from './data.service';
+
 type StateShapeDefault = {};
 type SubscribedQueryKeys<TQuery extends Query<StateShapeDefault>> =
   (keyof TQuery)[];
@@ -13,6 +14,12 @@ type LiteralQueryState<
   Keys extends SubscribedQueryKeys<TQuery>
 > = { readonly [key in Keys[number]]: ObservedValueOf<TQuery[key]> };
 
+/**
+ *
+ * @param query
+ * @param service
+ * @param queryTerms
+ */
 export function useAkita<
   TState extends {},
   TQuery extends Query<TState>,
@@ -20,16 +27,15 @@ export function useAkita<
 >(
   query: TQuery,
   service: TService,
-  queryTerms: SubscribedQueryKeys<TQuery>
+  queryTerms: SubscribedQueryKeys<TQuery>,
 ): [LiteralQueryState<TQuery, typeof queryTerms>, TService] {
   const [retrievedQueryTerms, setRetrievedQueryTerms] = useState<
     LiteralQueryState<TQuery, typeof queryTerms>
   >(
-    () =>
-      pick(queryTerms, query.getValue()) as unknown as LiteralQueryState<
+    () => pick(queryTerms, query.getValue()) as unknown as LiteralQueryState<
         TQuery,
         typeof queryTerms
-      >
+      >,
   );
   useEffect(() => {
     const subscriptions = queryTerms.map((term) => {
@@ -42,12 +48,10 @@ export function useAkita<
         },
       });
     });
-    return () =>
-      subscriptions.forEach((subscription) => subscription.unsubscribe());
+    return () => subscriptions.forEach((subscription) => subscription.unsubscribe());
   }, []);
 
   return [retrievedQueryTerms, service];
 }
 // TODO token registration
-export const useData = (queryTerms: SubscribedQueryKeys<typeof dataQuery>) =>
-  useAkita(dataQuery, dataService, queryTerms);
+export const useData = (queryTerms: SubscribedQueryKeys<typeof dataQuery>) => useAkita(dataQuery, dataService, queryTerms);

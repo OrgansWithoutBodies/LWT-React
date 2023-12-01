@@ -4,6 +4,7 @@ import icon from '../renderer/public/img/lwt_icon.png';
 import { AppVariables } from '../renderer/src/meta';
 import { createColors } from '../renderer/src/styles';
 import { BackendPlugin } from './electron-sqlite.backend-plugin.main';
+
 let mainWindow;
 
 function createWindow() {
@@ -17,7 +18,7 @@ function createWindow() {
   mainWindow.setIcon(nativeImage.createFromDataURL(icon));
   const style = createColors(AppVariables.styleVariant);
   // TODO bgcolor
-  console.log(style['body'].backgroundColor!);
+  console.log(style.body.backgroundColor!);
   // Vite dev server URL
 
   // TODO option
@@ -141,9 +142,15 @@ function createWindow() {
 
 app.whenReady().then(() => {
   ipcMain.handle('backend-plugin-get', (_, { key }) => BackendPlugin.get(key));
-  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) => BackendPlugin!.insert(key, dataEntry));
-  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) => BackendPlugin!.update(key, dataEntry));
-  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) => BackendPlugin!.delete(key, deleteId));
+  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) =>
+    BackendPlugin!.insert(key, dataEntry)
+  );
+  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) =>
+    BackendPlugin!.update(key, dataEntry)
+  );
+  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) =>
+    BackendPlugin!.delete(key, deleteId)
+  );
   ipcMain.handle('backend-plugin-empty', () => BackendPlugin!.empty());
 
   BackendPlugin.init();

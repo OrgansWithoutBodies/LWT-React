@@ -1,6 +1,6 @@
+import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { Header } from './Header';
 import { NavigateButton } from './Statistics.component';
 
 export function CheckText(): JSX.Element {

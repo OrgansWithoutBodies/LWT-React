@@ -1,7 +1,7 @@
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
+import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Header } from './Header';
 
 export function PrintText({ textID }: { textID: TextsId }) {
   const [{ texts, languages }] = useData(['texts', 'languages']);
@@ -19,7 +19,11 @@ export function PrintText({ textID }: { textID: TextsId }) {
         <Header
           title={`PRINT&nbsp▶${showingText.TxTitle} ${
             showingText.TxSourceURI ? (
-              <a href={showingText.TxSourceURI} target="_blank">
+              <a
+                href={showingText.TxSourceURI}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Icon src="chain" title="Text Source" />
               </a>
             ) : (
@@ -39,46 +43,13 @@ export function PrintText({ textID }: { textID: TextsId }) {
           ...
           <br />
           will be <b>annotated</b> with "
-          <select
-            id="ann"
-            // onchange="{val=document.getElementById('ann').options[document.getElementById('ann').selectedIndex].valuelocation.href='print_text.php?text=" . $textid . "&ampann=' + val}"
-          >
-            <option
-              value="0"
-              // " . get_selected(0,$ann) . "
-            >
-              Nothing
-            </option>
-            <option
-              value="1"
-              // " . get_selected(1,$ann) . "
-            >
-              Translation
-            </option>
-            <option
-              value="5"
-              // " . get_selected(5,$ann) . "
-            >
-              Translation &amp Tags
-            </option>
-            <option
-              value="2"
-              // " . get_selected(2,$ann) . "
-            >
-              Romanization
-            </option>
-            <option
-              value="3"
-              // " . get_selected(3,$ann) . "
-            >
-              Romanization &amp Translation
-            </option>
-            <option
-              value="7"
-              // " . get_selected(7,$ann) . "
-            >
-              Romanization, Translation &amp Tags
-            </option>
+          <select id="ann">
+            <option value="0">Nothing</option>
+            <option value="1">Translation</option>
+            <option value="5">Translation &amp Tags</option>
+            <option value="2">Romanization</option>
+            <option value="3">Romanization &amp Translation</option>
+            <option value="7">Romanization, Translation &amp Tags</option>
           </select>
           <select
             id="annplcmnt"

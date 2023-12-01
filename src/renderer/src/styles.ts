@@ -1,38 +1,42 @@
-/**************************************************************
-"Learning with Texts" (LWT) is free and unencumbered software 
-released into the PUBLIC DOMAIN.
-
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a
-compiled binary, for any purpose, commercial or non-commercial,
-and by any means.
-
-In jurisdictions that recognize copyright laws, the author or
-authors of this software dedicate any and all copyright
-interest in the software to the public domain. We make this
-dedication for the benefit of the public at large and to the 
-detriment of our heirs and successors. We intend this 
-dedication to be an overt act of relinquishment in perpetuity
-of all present and future rights to this software under
-copyright law.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
-AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
-THE SOFTWARE.
-
-For more information, please refer to [http://unlicense.org/].
-***************************************************************/
+/**
+ ************************************************************
+ * "Learning with Texts" (LWT) is free and unencumbered software
+ * released into the PUBLIC DOMAIN.
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a
+ * compiled binary, for any purpose, commercial or non-commercial,
+ * and by any means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or
+ * authors of this software dedicate any and all copyright
+ * interest in the software to the public domain. We make this
+ * dedication for the benefit of the public at large and to the
+ * detriment of our heirs and successors. We intend this
+ * dedication to be an overt act of relinquishment in perpetuity
+ * of all present and future rights to this software under
+ * copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * For more information, please refer to [http://unlicense.org/].
+**************************************************************
+*/
 
 import { CSSObject } from 'styled-components';
 
-/**************************************************************
-Stylesheet
-***************************************************************/
+/**
+ ************************************************************
+ * Stylesheet
+ **************************************************************
+ */
 export type StyleVariant = 'light' | 'dark';
 type HexString = `#${Uppercase<string>}`;
 type ColorSchema = { [key in ColorKeys]: HexString };
@@ -121,7 +125,7 @@ const VariantMap: Record<StyleVariant, ColorSchema> = {
   light: DefaultColors,
 };
 export const createColors = (
-  variant: StyleVariant
+  variant: StyleVariant,
 ): Record<'body' | string, CSSObject> => {
   const Colors = VariantMap[variant];
   return {
@@ -547,9 +551,11 @@ export const createColors = (
       margin: '20px 0 5px 0',
     },
 
-    /**************************************************************
-Additional styles for printing
-***************************************************************/
+    /**
+     ************************************************************
+     * Additional styles for printing
+     **************************************************************
+     */
 
     '@media print': {
       '.noprint': {
@@ -559,9 +565,11 @@ Additional styles for printing
         fontSize: '75%',
       },
     },
-    /*************************************************************
-Split View
-***************************************************************/
+    /**
+     ***********************************************************
+     * Split View
+     **************************************************************
+     */
     '.Resizer': {
       position: 'relative',
       background: 'darkGray',
@@ -578,7 +586,7 @@ Split View
   .Resizer:active {
 	-webkit-transition: all 2s ease,
 	transition: all 2s ease,
-  }*/
+  } */
 
     '.Resizer.horizontal': {
       height: '20px',
@@ -588,7 +596,7 @@ Split View
       cursor: 'row-resize',
       width: '100%',
     },
-    /*   
+    /*
   .Resizer.horizontal:hover,
   .Resizer.Resizer.horizontal:active {
 	border-top: 5px solid rgba(0, 0, 0, 0.5),

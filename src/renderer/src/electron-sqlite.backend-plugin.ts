@@ -13,7 +13,9 @@ type PersistenceStrategyPlugin = {
 };
 const tbpref = '';
 const fileName = './db.sql';
+
 function updateLanguage() {}
+
 function getLanguages() {
   sql
     .open({
@@ -28,7 +30,6 @@ function getLanguages() {
       );
       console.log(res);
     });
-  return;
 }
 export const BackendPlugin: PersistenceStrategyPlugin = {
   get: (val) => {

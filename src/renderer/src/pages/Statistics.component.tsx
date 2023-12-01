@@ -1,8 +1,9 @@
 import { Languages } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
+import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
-import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
-import { Header } from './Header';
+import { Header } from '../ui-kit/Header';
+
 const CAKSlices = [
   'Today',
   'Yesterday',
@@ -12,14 +13,17 @@ const CAKSlices = [
   'All Time',
 ] as const;
 type CAKMap = Record<(typeof CAKSlices)[number], () => number>;
+
 function CAKRow({ language }: { language: Languages }): JSX.Element {
   return <></>;
 }
 // (Terms created (C), Terms changed status = Activity (A), Terms set to "Known" (K))
 // table that takes a
+
 function CAKTable({ rows, map }: { rows: any; map: CAKMap }): JSX.Element {
   return <></>;
 }
+
 export function StatisticsComponent(): JSX.Element {
   const [{ languages, languageStatusStatistics }] = useData([
     'languages',
@@ -115,54 +119,46 @@ export function StatisticsComponent(): JSX.Element {
               ];
 
               return (
-                <>
-                  <tr>
-                    <td className="td1">{language.LgName}</td>
-                    <td className="td1 center">
-                      <A href={`/edit_words?filterlang=${language.LgID}`}>
-                        <b>
-                          {languageStatusStatistics[language.LgID]['total']}
-                        </b>
-                      </A>
-                    </td>
-                    <td className="td1 center">
-                      <A
-                        href={`/edit_words?filterlang=${
-                          language.LgID
-                        }&status=${15}`}
-                      >
-                        <b> {languageStatusStatistics[language.LgID][15]}</b>
-                      </A>
-                    </td>
-                    <td className="td1 center">
-                      <A
-                        href={`/edit_words?filterlang=${
-                          language.LgID
-                        }&status=${14}`}
-                      >
-                        <b>{languageStatusStatistics[language.LgID][14]}</b>
-                      </A>
-                    </td>
-                    {languageStatusStatistics &&
-                      statuses.map((statusVal) => (
-                          <td className="td1 center">
-                            <span className={`status${statusVal}`}>
-                              &nbsp;
-                              <A
-                                href={`/edit_words?filterlang=${language.LgID}&status=${statusVal}`}
-                              >
-                                {
-                                  languageStatusStatistics[language.LgID][
-                                    statusVal
-                                  ]
-                                }
-                              </A>
-                              &nbsp;
-                            </span>
-                          </td>
-                        ))}
-                  </tr>
-                </>
+                <tr>
+                  <td className="td1">{language.LgName}</td>
+                  <td className="td1 center">
+                    <A href={`/edit_words?filterlang=${language.LgID}`}>
+                      <b>{languageStatusStatistics[language.LgID].total}</b>
+                    </A>
+                  </td>
+                  <td className="td1 center">
+                    <A
+                      href={`/edit_words?filterlang=${
+                        language.LgID
+                      }&status=${15}`}
+                    >
+                      <b> {languageStatusStatistics[language.LgID][15]}</b>
+                    </A>
+                  </td>
+                  <td className="td1 center">
+                    <A
+                      href={`/edit_words?filterlang=${
+                        language.LgID
+                      }&status=${14}`}
+                    >
+                      <b>{languageStatusStatistics[language.LgID][14]}</b>
+                    </A>
+                  </td>
+                  {languageStatusStatistics &&
+                    statuses.map((statusVal) => (
+                      <td className="td1 center">
+                        <span className={`status${statusVal}`}>
+                          &nbsp;
+                          <A
+                            href={`/edit_words?filterlang=${language.LgID}&status=${statusVal}`}
+                          >
+                            {languageStatusStatistics[language.LgID][statusVal]}
+                          </A>
+                          &nbsp;
+                        </span>
+                      </td>
+                    ))}
+                </tr>
               );
             })}
         </tbody>
@@ -181,81 +177,79 @@ export function StatisticsComponent(): JSX.Element {
               Language
             </th>
             {periods.map((period) => (
-                <th className="th1" colSpan={3}>
-                  {period}
-                </th>
-              ))}
+              <th className="th1" colSpan={3}>
+                {period}
+              </th>
+            ))}
           </tr>
           <tr>
             {periods.map(() => (
-                <>
-                  <th className="th1">C</th>
-                  <th className="th1">A</th>
-                  <th className="th1">K</th>
-                </>
-              ))}
-          </tr>
-          {languages.map((language) => (
               <>
-                <tr>
-                  <td className="td1">{language.LgName}</td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status1">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status3">&nbsp;TODO&nbsp;</span>
-                  </td>
-                  <td className="td1 center">
-                    <span className="status5stat">&nbsp;TODO&nbsp;</span>
-                  </td>
-                </tr>
+                <th className="th1">C</th>
+                <th className="th1">A</th>
+                <th className="th1">K</th>
               </>
             ))}
+          </tr>
+          {languages.map((language) => (
+            <tr>
+              <td className="td1">{language.LgName}</td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status1">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status3">&nbsp;TODO&nbsp;</span>
+              </td>
+              <td className="td1 center">
+                <span className="status5stat">&nbsp;TODO&nbsp;</span>
+              </td>
+            </tr>
+          ))}
           <tr>
             <th className="th1">
               <b>TOTAL</b>
@@ -318,7 +312,7 @@ export function StatisticsComponent(): JSX.Element {
         </tbody>
       </table>
       <p>
-        <NavigateButton value={'<< Back'} navigateTo={RouterPage.HOME} />
+        <NavigateButton value="<< Back" navigateTo={RouterPage.HOME} />
       </p>
     </>
   );
@@ -326,6 +320,7 @@ export function StatisticsComponent(): JSX.Element {
 enum RouterPage {
   HOME = '/',
 }
+
 export function NavigateButton({
   value,
   navigateTo,

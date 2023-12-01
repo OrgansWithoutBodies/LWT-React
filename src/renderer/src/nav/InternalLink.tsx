@@ -1,7 +1,8 @@
-import { InternalPaths, useInternalNavigate } from './useInternalNav';
+import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 // const urlIsInternalPathGuard = (url: string): url is InternalPaths => {
 //   return Object.values(headerValues).includes(url as any);
 // };
+
 export function A({
   children,
   href,
@@ -10,10 +11,7 @@ export function A({
   Omit<JSX.IntrinsicElements['a'], 'href'> & { href?: InternalPaths }
 >) {
   const nav = useInternalNavigate();
-  const onClick =
-    href === undefined
-      ? undefined
-      : () => nav(href);
+  const onClick = href === undefined ? undefined : () => nav(href);
   return (
     <a {...rest} className="a" onClick={onClick}>
       {children}

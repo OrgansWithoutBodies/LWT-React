@@ -11,6 +11,10 @@ const overwriteTermsStr = 'Overwrite existent terms: ';
 type ColumnAssignment = {
   [columnNumber in typeof ColumnId[number]]: typeof ColumnType[number];
 };
+/**
+ *
+ * @param filePath
+ */
 export function parseCsvTerms(filePath: string) {
   return {};
 }

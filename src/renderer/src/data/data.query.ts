@@ -1,18 +1,20 @@
 import { Query } from '@datorama/akita';
 import {
+  Observable,
   combineLatest,
   count,
   interval,
   map,
-  Observable,
   of,
   switchMap,
   take,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
-import Settings from './settings';
+import { Settings } from './settings';
 import { LanguagesId, TextsId } from './validators';
+
 const MINS_IN_SECONDS = 60;
 const HOURS_IN_MINS = 60;
 const DAYS_IN_HOURS = 24;
@@ -20,6 +22,11 @@ const DAYS_IN_SECONDS = DAYS_IN_HOURS * HOURS_IN_MINS * MINS_IN_SECONDS;
 const TICKER_INTERVAL = 50;
 const TICKER_MAX_STEPS = 20;
 
+/**
+ *
+ * @param startValue
+ * @param endValue
+ */
 function ticker(startValue: number, endValue: number): Observable<number> {
   return interval(TICKER_INTERVAL).pipe(
     take(TICKER_MAX_STEPS),
@@ -33,6 +40,12 @@ function ticker(startValue: number, endValue: number): Observable<number> {
   );
 }
 
+/**
+ *
+ * @param startObservable
+ * @param endObservable
+ * @param ticker_interval
+ */
 function timedSwitchMap<
   TObservableA extends Observable<unknown>,
   TObservableB extends Observable<unknown>
@@ -53,15 +66,27 @@ export class DataQuery extends Query<DataState> {
   }
 
   public archivedtexts = this.select('archivedtexts');
+
   public archtexttags = this.select('archtexttags');
+
   public languages = this.select('languages');
+
   public sentences = this.select('sentences');
+
   public tags = this.select('tags');
+
   public tags2 = this.select('tags2');
+
   public textitems = this.select('textitems');
+
   public texts = this.select('texts');
+
   public texttags = this.select('texttags');
-  public words = this.select('words');
+
+  public words = this.select('words').pipe(
+    tap((val) => console.log('QUERY WORDS', val))
+  );
+
   public wordtags = this.select('wordtags');
 
   public settings: Observable<Settings> = this.select('settings').pipe(
@@ -82,6 +107,7 @@ export class DataQuery extends Query<DataState> {
   );
 
   public parsedTexts = this.select('parsedTexts');
+
   public notificationMessage = this.select('notificationMessage');
 
   public notificationMessageDisplay = of(100).pipe(
@@ -103,7 +129,7 @@ export class DataQuery extends Query<DataState> {
   // public wordtagsLen = this.wordtags.pipe(count());
 
   public activeLanguageId = this.settings.pipe(
-    map((val) => val['currentlanguage'])
+    map((val) => val.currentlanguage)
   );
 
   // derived observables
@@ -111,17 +137,23 @@ export class DataQuery extends Query<DataState> {
     this.activeLanguageId,
     this.languages,
   ]).pipe(
-    map(([activeLanguageId, languages]) => languages.find((language) => {
+    map(([activeLanguageId, languages]) =>
+      languages.find((language) => {
         console.log('TATOEBAKEY', language.LgTatoebaKey);
         return language.LgID === activeLanguageId;
-      }))
+      })
+    )
   );
+
   public activeWords = combineLatest([this.activeLanguageId, this.words]).pipe(
-    map(([activeLanguageId, words]) => words.filter((word) => {
+    map(([activeLanguageId, words]) =>
+      words.filter((word) => {
         console.log(word.WoLgID, activeLanguageId);
         return word.WoLgID === activeLanguageId;
-      }))
+      })
+    )
   );
+
   public textsForActiveLanguage = combineLatest([
     this.texts,
     this.activeLanguageId,
@@ -135,6 +167,7 @@ export class DataQuery extends Query<DataState> {
       return texts.filter((text) => text.TxLgID === activeLanguageId);
     })
   );
+
   //   Total
   // 	Active
   // (1..5)	Learning
@@ -158,7 +191,7 @@ export class DataQuery extends Query<DataState> {
         (prev, curr) => {
           const val = prev;
           // while we're here may as well just count em all up to avoid another pass
-          val[curr.WoLgID]['total'] = val[curr.WoLgID]['total'] + 1;
+          val[curr.WoLgID].total = val[curr.WoLgID].total + 1;
           if (curr.WoStatus === 0) {
             return val;
           }
@@ -215,6 +248,7 @@ export class DataQuery extends Query<DataState> {
       // Today	Yesterday	Last 7 d	Last 30 d	Last 365 d	All Time
     })
   );
+
   // TODO
   public textDetails: Observable<TextDetailRow[]> = combineLatest([
     this.textsForActiveLanguage,
@@ -224,23 +258,23 @@ export class DataQuery extends Query<DataState> {
     map(([textsForActiveLanguage, texttags, tags]) => {
       console.log('textDetails', { textsForActiveLanguage });
       return textsForActiveLanguage.map((text) => ({
-          TxID: text.TxID,
-          title: text.TxTitle,
-          // TODO split
-          totalWords: text.TxText.length,
-          // TODO
-          saved: 'test',
-          // TODO
-          unk: 100,
-          // TODO
-          unkPerc: 100,
-          tags: texttags
-            .filter((textTag) => textTag.TtTxID === text.TxID)
-            .map((textTag) => {
-              const tag = tags.find((tag) => tag.T2ID === textTag.TtT2ID);
-              return tag ? tag.T2Text : 'ERROR';
-            }),
-        }));
+        TxID: text.TxID,
+        title: text.TxTitle,
+        // TODO split
+        totalWords: text.TxText.length,
+        // TODO
+        saved: 'test',
+        // TODO
+        unk: 100,
+        // TODO
+        unkPerc: 100,
+        tags: texttags
+          .filter((textTag) => textTag.TtTxID === text.TxID)
+          .map((textTag) => {
+            const tag = tags.find((tag) => tag.T2ID === textTag.TtT2ID);
+            return tag ? tag.T2Text : 'ERROR';
+          }),
+      }));
     })
   );
 }

@@ -8,12 +8,13 @@ import {
 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import { CheckAndSubmit, RefMap, TRefMap, parseNumMap } from './Forms';
 import { FormInput } from './buildFormInput';
+import { wordPrevalidateMap } from './preValidateMaps';
 import { owin, translateSentence2 } from './translateSentence2';
-import { useFormInput } from './useFormInput';
 
 /**
  * This is only called from inside the reader, rly more of a pane than a component
@@ -113,7 +114,7 @@ export function AddNewWordPane({
             {FormErrors.WoText && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
-                <td></td>
+                <td />
               </tr>
             )}
             <tr>
@@ -141,7 +142,7 @@ export function AddNewWordPane({
             {FormErrors.WoTranslation && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
-                <td></td>
+                <td />
               </tr>
             )}
             <tr>
@@ -156,7 +157,7 @@ export function AddNewWordPane({
                       role="status"
                       aria-live="polite"
                       className="ui-helper-hidden-accessible"
-                    ></span>
+                    />
                     <input
                       type="text"
                       maxLength={20}
@@ -194,7 +195,7 @@ export function AddNewWordPane({
             {FormErrors.WoRomanization && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
-                <td></td>
+                <td />
               </tr>
             )}
             <tr>
@@ -223,7 +224,7 @@ export function AddNewWordPane({
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
-                <script type="text/javascript"></script>
+                <script type="text/javascript" />
                 Lookup Term:
                 {/* external link */}
                 <a
@@ -266,16 +267,9 @@ export function AddNewWordPane({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    console.log('SAVING');
                     CheckAndSubmit(
                       refMap,
-                      {
-                        WoStatus: parseNumMap,
-                        WoLgID: parseNumMap,
-                        WoCreated: () => Date.now(),
-                        WoTextLC: (_, refMap) =>
-                          refMap['WoText'].current.value.toLowerCase(),
-                      },
+                      wordPrevalidateMap,
                       validator,
                       (value) => {
                         dataService.addTerm(value);
@@ -309,26 +303,27 @@ export function AddNewWordPane({
         className="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all"
         id="ui-id-1"
         tabIndex={0}
-      ></ul>
+      />
     </>
   );
 }
 
+/**
+ *
+ * @param templateStr
+ * @param word
+ */
 function replaceTemplate(templateStr: string, word: string): string {
   // TODO could start with *
   return templateStr.replace('###', word);
 }
 
-// TODO
-// const STATUSES = {
-//   1: { abbr: '1', name: 'Learning' },
-//   2: { abbr: '2', name: 'Learning' },
-//   3: { abbr: '3', name: 'Learning' },
-//   4: { abbr: '4', name: 'Learning' },
-//   5: { abbr: '5', name: 'Learned' },
-//   99: { abbr: 'WKn', name: 'Well Known' },
-//   98: { abbr: 'Ign', name: 'Ignored' },
-// };
+/**
+ *
+ * @param keyChanged
+ * @param refMap
+ * @param setFieldError
+ */
 export function CheckErrors(
   keyChanged: keyof AddNewWordType,
   refMap: TRefMap<AddNewWordType>,
@@ -337,7 +332,6 @@ export function CheckErrors(
   const error = ss
     .pick(WordsValidatorNoId, [keyChanged])
     .validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
-  console.log('TEST123-Val', keyChanged, refMap[keyChanged], error);
   if (!error) {
     return setFieldError(false);
   }
@@ -432,7 +426,8 @@ export function StatusRadioButtons({
   );
 }
 
-/* TODO get sentences*/
+/* TODO get sentences */
+
 function SentencesForWord({ word }: { word: Words }) {
   return (
     <>
@@ -461,6 +456,12 @@ function SentencesForWord({ word }: { word: Words }) {
     </>
   );
 }
+/**
+ *
+ * @param lang
+ * @param word
+ * @param ctl
+ */
 export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
   // ('#exsent').html('<img src="icn/waiting2.gif" />');
   console.log(lang, word, ctl);

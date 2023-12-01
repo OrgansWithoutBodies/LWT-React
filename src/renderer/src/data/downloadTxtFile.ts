@@ -1,6 +1,6 @@
 export const downloadTextFile = (
   textData: string,
-  serializedAs: 'SQL' | 'JSON'
+  serializedAs: 'SQL' | 'JSON',
 ) => {
   // text content
   const file = new Blob([textData], { type: 'text/plain' }); // anchor link

@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import { LanguagesId, TextsId } from '../data/validators';
+import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
-import { InternalPaths, useInternalNavigate } from '../nav/useInternalNav';
-import { Icon } from '../ui-kit/Icon';
+import { Icon } from './Icon';
 
 export const headerValuesTemp = {
   index: { params: [] },
@@ -110,13 +110,13 @@ export function Header({
         >
           <option disabled>[Menu]</option>
           {Object.keys(headerValues).map((key) => (
-              <option
-                value={headerValues[key]}
-                selected={location.pathname === `/${headerValues[key]}`}
-              >
-                {key}
-              </option>
-            ))}
+            <option
+              value={headerValues[key]}
+              selected={location.pathname === `/${headerValues[key]}`}
+            >
+              {key}
+            </option>
+          ))}
         </select>
         {readerProps && (
           <>

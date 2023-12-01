@@ -3,17 +3,30 @@ import {
   make_overlib_link_change_status_test,
 } from './ReaderPage.component';
 
-function onWordClick() {
-  const WBLINK1 = '<?php echo $wb1; ?>';
-  const WBLINK2 = '<?php echo $wb2; ?>';
-  const WBLINK3 = '<?php echo $wb3; ?>';
+let STATUSES = {
+  1: { abbr: '1', name: 'Learning' },
+  2: { abbr: '2', name: 'Learning' },
+  3: { abbr: '3', name: 'Learning' },
+  4: { abbr: '4', name: 'Learning' },
+  5: { abbr: '5', name: 'Learned' },
+  99: { abbr: 'WKn', name: 'Well Known' },
+  98: { abbr: 'Ign', name: 'Ignored' },
+};
+
+function onWordClick(
+  wb1,
+  wb2,
+
+  wb3
+) {
+  const WBLINK1 = wb1;
+  const WBLINK2 = wb2;
+  const WBLINK3 = wb3;
   // SOLUTION = <?php echo prepare_textdata_js ( $testtype==1 ? ( $nosent ? ($traWBLINK1ns) : (' [' . $trans . '] ')) : $save ); ?>;
   const OPENED = 0;
   // WID = <?php echo $wid; ?>;
-  $(document).ready(function () {
-    $(document).keydown(keydown_event_do_test_test);
-    $('.word').click(word_click_event_do_test_test);
-  });
+  const onClickWord = () => word_click_event_do_test_test;
+  const onKeyDown = () => keydown_event_do_test_test;
 }
 enum KeyStatus {
   'SPACE' = 32,
@@ -26,66 +39,66 @@ enum KeyStatus {
   // '' = 48,
   // '' = 96,
 }
+/**
+ *
+ * @param e
+ */
 function keydown_event_do_test_test(e: KeyboardEvent) {
   // TODO update 'which' pattern
   if (e.which == 32 && OPENED == 0) {
     // space : show sol.
     $('.word').click();
+
     cClick();
-    window.parent.frames['ro'].location.href =
-      'show_word.php?wid=' + $('.word').attr('data_wid') + '&ann=';
+    window.parent.frames.ro.location.href = `show_word.php?wid=${$(
+      '.word'
+    ).attr('data_wid')}&ann=`;
     OPENED = 1;
     return false;
   }
   if (OPENED == 0) return true;
   if (e.which == 38) {
     // up : status+1
-    window.parent.frames['ro'].location.href =
-      'set_test_status.php?wid=' + WID + '&stchange=1';
+    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&stchange=1`;
     return false;
   }
   if (e.which == 40) {
     // down : status-1
-    window.parent.frames['ro'].location.href =
-      'set_test_status.php?wid=' + WID + '&stchange=-1';
+    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&stchange=-1`;
     return false;
   }
   if (e.which == 27) {
     // esc : dont change status
-    window.parent.frames['ro'].location.href =
-      'set_test_status.php?wid=' +
-      WID +
-      '&status=' +
-      $('.word').attr('data_status');
+    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=${$(
+      '.word'
+    ).attr('data_status')}`;
     return false;
   }
   for (let i = 1; i <= 5; i++) {
     if (e.which == 48 + i || e.which == 96 + i) {
       // 1,.. : status=i
-      window.parent.frames['ro'].location.href =
-        'set_test_status.php?wid=' + WID + '&status=' + i;
+      window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=${i}`;
       return false;
     }
   }
   if (e.which == 73) {
     // I : status=98
-    window.parent.frames['ro'].location.href =
-      'set_test_status.php?wid=' + WID + '&status=98';
+    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=98`;
     return false;
   }
   if (e.which == 87) {
     // W : status=99
-    window.parent.frames['ro'].location.href =
-      'set_test_status.php?wid=' + WID + '&status=99';
+    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=99`;
     return false;
   }
   if (e.which == 69) {
     // E : EDIT
-    window.parent.frames['ro'].location.href = 'edit_tword.php?wid=' + WID;
+    window.parent.frames.ro.location.href = `edit_tword.php?wid=${WID}`;
     return false;
   }
   return true;
 }
+
 function word_click_event_do_test_test(this: any) {
   // $wb1 = isset($record['LgDict1URI']) ? $record['LgDict1URI'] : "";
   // $wb2 = isset($record['LgDict2URI']) ? $record['LgDict2URI'] : "";
@@ -105,6 +118,19 @@ function word_click_event_do_test_test(this: any) {
   $('.todo').text(SOLUTION);
   return false;
 }
+/**
+ *
+ * @param wblink1
+ * @param wblink2
+ * @param wblink3
+ * @param wid
+ * @param txt
+ * @param trans
+ * @param roman
+ * @param stat
+ * @param sent
+ * @param todo
+ */
 function run_overlib_test(
   wblink1: string,
   wblink2: string,
@@ -123,48 +149,51 @@ function run_overlib_test(
   if (c > 5) c = 5;
   let w = s - 1;
   if (w < 1) w = 1;
-  let cc = stat + ' ▶ ' + c;
+  let cc = `${stat} ▶ ${c}`;
   if (c == s) cc = c;
-  let ww = stat + ' ▶ ' + w;
+  let ww = `${stat} ▶ ${w}`;
   if (w == s) ww = w;
   return overlib(
-    (todo == 1
-      ? '<center><hr noshade size=1 /><b>' +
-        (stat >= 1 && stat <= 5
-          ? make_overlib_link_change_status_test(
-              wid,
-              1,
-              '<img src=\x22icn/thumb-up.png\x22 title=\x22Got it!\x22 alt=\x22Got it!\x22 /> Got it! [' +
-                cc +
-                ']'
-            ) +
-            '<hr noshade size=1 />' +
-            make_overlib_link_change_status_test(
-              wid,
-              -1,
-              '<img src=\x22icn/thumb.png\x22 title=\x22Oops!\x22 alt=\x22Oops!\x22 /> Oops! [' +
-                ww +
-                ']'
-            ) +
-            '<hr noshade size=1 />'
-          : '') +
-        make_overlib_link_change_status_alltest(wid, stat) +
-        '</b></center><hr noshade size=1 />'
-      : '') +
-      '<b>' +
-      escape_html_chars(make_tooltip(txt, trans, roman, stat)) +
-      '</b><br />' +
-      ' <a href=\x22edit_tword.php?wid=' +
-      wid +
-      '\x22 target=\x22ro\x22>Edit term</a><br />' +
-      createTheDictLink(wblink1, txt, 'Dict1', 'Lookup Term: ') +
-      createTheDictLink(wblink2, txt, 'Dict2', '') +
-      createTheDictLink(wblink3, txt, 'GTr', '') +
-      createTheDictLink(wblink3, sent, 'GTr', '<br />Lookup Sentence:'),
+    `${
+      todo == 1
+        ? `<center><hr noshade size=1 /><b>${
+            stat >= 1 && stat <= 5
+              ? `${make_overlib_link_change_status_test(
+                  wid,
+                  1,
+                  `<img src=\x22icn/thumb-up.png\x22 title=\x22Got it!\x22 alt=\x22Got it!\x22 /> Got it! [${cc}]`
+                )}<hr noshade size=1 />${make_overlib_link_change_status_test(
+                  wid,
+                  -1,
+                  `<img src=\x22icn/thumb.png\x22 title=\x22Oops!\x22 alt=\x22Oops!\x22 /> Oops! [${ww}]`
+                )}<hr noshade size=1 />`
+              : ''
+          }${make_overlib_link_change_status_alltest(
+            wid,
+            stat
+          )}</b></center><hr noshade size=1 />`
+        : ''
+    }<b>${escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b><br />` +
+      ` <a href=\x22edit_tword.php?wid=${wid}\x22 target=\x22ro\x22>Edit term</a><br />${createTheDictLink(
+        wblink1,
+        txt,
+        'Dict1',
+        'Lookup Term: '
+      )}${createTheDictLink(wblink2, txt, 'Dict2', '')}${createTheDictLink(
+        wblink3,
+        txt,
+        'GTr',
+        ''
+      )}${createTheDictLink(wblink3, sent, 'GTr', '<br />Lookup Sentence:')}`,
     CAPTION,
     'Got it?'
   );
 }
+/**
+ *
+ * @param wid
+ * @param oldstat
+ */
 function make_overlib_link_change_status_alltest(wid: any, oldstat: any) {
   let result = '';
   for (let newstat = 1; newstat <= 5; newstat++)
@@ -173,34 +202,25 @@ function make_overlib_link_change_status_alltest(wid: any, oldstat: any) {
   result += make_overlib_link_change_status_test2(wid, oldstat, 98);
   return result;
 }
+/**
+ *
+ * @param wid
+ * @param oldstat
+ * @param newstat
+ */
 function make_overlib_link_change_status_test2(
   wid: string,
   oldstat: any,
   newstat: string | number
 ) {
   if (oldstat == newstat) {
-    return (
-      ' <a href=\x22set_test_status.php?wid=' +
-      wid +
-      '&amp;status=' +
-      newstat +
-      '\x22 target=\x22ro\x22><span title=\x22' +
-      getStatusName(newstat) +
-      '\x22>[◆]</span></a> '
-    );
-  } else {
-    return (
-      ' <a href=\x22set_test_status.php?wid=' +
-      wid +
-      '&amp;status=' +
-      newstat +
-      '\x22 target=\x22ro\x22><span title=\x22' +
-      getStatusName(newstat) +
-      '\x22>[' +
-      getStatusAbbr(newstat) +
-      ']</span></a> '
-    );
+    return ` <a href=\x22set_test_status.php?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
+      newstat
+    )}\x22>[◆]</span></a> `;
   }
+  return ` <a href=\x22set_test_status.php?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
+    newstat
+  )}\x22>[${getStatusAbbr(newstat)}]</span></a> `;
 }
 // todo STATUSES comes from her e
 // function get_wordstatus_radiooptions($v)
@@ -218,12 +238,24 @@ function make_overlib_link_change_status_test2(
 // 	}
 // 	return $r;
 // }
+/**
+ *
+ * @param status
+ */
 function getStatusName(status: string | number) {
-  return STATUSES[status] ? STATUSES[status]['name'] : 'Unknown';
+  return STATUSES[status] ? STATUSES[status].name : 'Unknown';
 }
+/**
+ *
+ * @param status
+ */
 function getStatusAbbr(status: string | number) {
-  return STATUSES[status] ? STATUSES[status]['abbr'] : '?';
+  return STATUSES[status] ? STATUSES[status].abbr : '?';
 }
+/**
+ *
+ * @param s
+ */
 export function escape_html_chars(s: string) {
   return s
     .replace(/&/g, '%AMP%')
@@ -234,6 +266,13 @@ export function escape_html_chars(s: string) {
     .replace(/%AMP%/g, '&#038;')
     .replace(/\x0d/g, '<br />');
 }
+/**
+ *
+ * @param word
+ * @param trans
+ * @param roman
+ * @param status
+ */
 export function make_tooltip(
   word: any,
   trans: string,
@@ -245,13 +284,13 @@ export function make_tooltip(
   // if (title != '' ) title = '▶ ' + title;
   if (roman != '') {
     if (title != '') title += nl;
-    title += '▶ ' + roman;
+    title += `▶ ${roman}`;
   }
   if (trans != '' && trans != '*') {
     if (title != '') title += nl;
-    title += '▶ ' + trans;
+    title += `▶ ${trans}`;
   }
   if (title != '') title += nl;
-  title += '▶ ' + getStatusName(status) + ' [' + getStatusAbbr(status) + ']';
+  title += `▶ ${getStatusName(status)} [${getStatusAbbr(status)}]`;
   return title;
 }

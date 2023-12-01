@@ -3,21 +3,22 @@ import { dataService } from '../data/data.service';
 import { Tags } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TagsId, TagsValidator } from '../data/validators';
+import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { useInternalNavigate } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { Pager } from '../ui-kit/Pager';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
 } from './EditTextTags';
-import { CheckAndSubmit, RefMap, emptyToNullMap, identityMap } from './Forms';
-import { Header } from './Header';
 import { resetDirty } from './Sorting';
 import { NavigateButton } from './Statistics.component';
 import { FormInput } from './buildFormInput';
+import { tagPreValidateMap } from './preValidateMaps';
 import { confirmDelete, multiActionGo } from './utils';
 
 export function DisplayTags({
@@ -41,7 +42,7 @@ export function DisplayTags({
   const queryRef = useRef<HTMLInputElement>(null);
   return (
     <>
-      <Header title={'Word Tags'} />
+      <Header title="Word Tags" />
       <p>
         <A href="/edit_tags?new=1">
           <Icon src="plus-button" title="New" /> New Term Tag ...
@@ -221,9 +222,10 @@ Sort Order:
           <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tr>
               <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Tag{recno == 1 ? '' : 's'}
+                Tag
+                {recno == 1 ? '' : 's'}
               </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}></th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }} />
             </tr>
           </table>
         </form>
@@ -241,13 +243,8 @@ Sort Order:
     </>
   );
 }
+
 export function NewTag() {
-  const preValidateMap: {
-    [key in keyof Tags]?: (value: string) => any | null;
-  } = {
-    TgText: identityMap,
-    TgComment: emptyToNullMap,
-  };
   const validator = TagsValidator;
   const refMap = RefMap<Tags>(validator);
 
@@ -255,7 +252,7 @@ export function NewTag() {
 
   return (
     <>
-      <Header title={'My Term Tags'} />
+      <Header title="My Term Tags" />
       <h4>New Tag</h4>
       <form
         name="newtag"
@@ -308,7 +305,7 @@ export function NewTag() {
                 onClick={() => {
                   CheckAndSubmit(
                     refMap,
-                    preValidateMap,
+                    tagPreValidateMap,
                     validator,
                     (value) => {
                       dataService.addTag(value);
@@ -325,18 +322,13 @@ export function NewTag() {
     </>
   );
 }
+
 export function EditTag({ chgId }: { chgId: TagsId }) {
   const [{ tags }] = useData(['tags']);
   const changingTag = tags.find(({ TgID }) => TgID === chgId);
   if (!changingTag) {
     throw new Error('Invalid Tag ID');
   }
-  const preValidateMap: {
-    [key in keyof Tags]?: (value: string) => any | null;
-  } = {
-    TgText: identityMap,
-    TgComment: emptyToNullMap,
-  };
   const validator = TagsValidator;
   const refMap = RefMap<Tags>(validator);
 
@@ -344,7 +336,7 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
   Comment;
   return (
     <>
-      <Header title={'My Term Tags'} />
+      <Header title="My Term Tags" />
       <h4>Edit Tag</h4>
       <form
         name="newtag"
@@ -399,7 +391,7 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
                 onClick={() => {
                   CheckAndSubmit(
                     refMap,
-                    preValidateMap,
+                    tagPreValidateMap,
                     validator,
                     (value) => {
                       dataService.editTag(changingTag.TgID, value);

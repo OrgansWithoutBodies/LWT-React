@@ -2,17 +2,17 @@ import { dataService } from '../data/data.service';
 import { Tags2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Tags2Validator } from '../data/validators';
+import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
+import { useInternalNavigate } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { Pager } from '../ui-kit/Pager';
-import { CheckAndSubmit, RefMap } from './Forms';
-import { Header } from './Header';
 import { resetDirty } from './Sorting';
 import { FormInput } from './buildFormInput';
-import { useFormInput } from './useFormInput';
 import { confirmDelete, multiActionGo } from './utils';
 
 export function DisplayTextTags({
@@ -38,7 +38,7 @@ export function DisplayTextTags({
   console.log(page, numPages, pageSize);
   return (
     <>
-      <Header title={'Edit Text Tags'} />
+      <Header title="Edit Text Tags" />
       <p>
         <A href="/edit_texttags?new=1">
           <Icon src="plus-button" title="New" alt="New" /> New Text Tag ...
@@ -201,12 +201,10 @@ Sort Order:
                   <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                     &nbsp;
                     <A href={`/edit_texttags?chg=${tag.T2ID}`}>
-                      <Icon src={'document--pencil'} title="Edit" />
+                      <Icon src="document--pencil" title="Edit" />
                     </A>
                     &nbsp;
-                    <A
-                    // href={`/edit_texttags?del=${tag.T2ID}`}
-                    >
+                    <A>
                       <Icon
                         onClick={() => {
                           if (confirmDelete()) {
@@ -242,7 +240,7 @@ Sort Order:
         </form>
       )}
       <Pager currentPage={page} numPages={numPages} />
-      {/*       
+      {/*
 // <?php if( $pages > 1) { ?>
 // <form name="form3" action="#">
 // <table class="tab1" cellspacing={0} cellpadding={5}>
@@ -264,7 +262,7 @@ export function NewTextTag() {
   const navigator = useInternalNavigate();
   return (
     <>
-      <Header title={'My Text Tags'} />
+      <Header title="My Text Tags" />
       <h4>New Tag</h4>
       <form
         name="newtag"
@@ -336,6 +334,7 @@ export function NewTextTag() {
     </>
   );
 }
+
 export function EditTextTag({ chgID }: { chgID: number }) {
   const [{ tags2 }] = useData(['tags2']);
   const changingTag = tags2.find(({ T2ID }) => chgID === T2ID);
@@ -348,7 +347,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   const TgInput = useFormInput(refMap, changingTag);
   return (
     <>
-      <Header title={'My Text Tags'} />
+      <Header title="My Text Tags" />
       <h4>Edit Tag</h4>
       <form
         name="edittag"
@@ -426,16 +425,17 @@ export function EditTextTag({ chgID }: { chgID: number }) {
 export function GetMultipleTagsActionsSelectOptions() {
   return (
     <>
-      <option value={''}>[Choose...]</option>
-      <option value={'del'}>Delete Marked Tags</option>
+      <option value="">[Choose...]</option>
+      <option value="del">Delete Marked Tags</option>
     </>
   );
 }
+
 export function GetAllTagsActionsSelectOptions() {
   return (
     <>
-      <option value={''}>[Choose...]</option>
-      <option value={'delall'}>Delete ALL Tags</option>
+      <option value="">[Choose...]</option>
+      <option value="delall">Delete ALL Tags</option>
     </>
   );
 }
@@ -443,7 +443,7 @@ export function GetAllTagsActionsSelectOptions() {
 export function GetMultipleArchivedTextActionsSelectOptions() {
   return (
     <>
-      <option value={''}>[Choose...]</option>
+      <option value="">[Choose...]</option>
       <option disabled>------------</option>
       <option value="addtag">Add Tag</option>
       <option value="deltag">Remove Tag</option>
@@ -451,7 +451,7 @@ export function GetMultipleArchivedTextActionsSelectOptions() {
       <option value="unarch">Unarchive Marked Texts</option>
       <option disabled>------------</option>
       <option value="del">Delete Marked Texts</option>
-      <option value={'delall'}>Delete ALL Tags</option>
+      <option value="delall">Delete ALL Tags</option>
     </>
   );
 }

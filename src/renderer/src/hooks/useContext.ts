@@ -1,6 +1,10 @@
 import { createContext, useContext } from 'react';
 import { AppVariables, TAppContext } from '../meta';
 
+/**
+ *
+ * @param context
+ */
 export function setupAppContext(context: TAppContext) {
   return createContext<TAppContext>(context);
 }

@@ -1,7 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import { useData } from '../data/useAkita';
 import { WordsId } from '../data/validators';
-import { TRefMap } from './Forms';
+import { TRefMap } from '../forms/Forms';
 
 export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
   const [{ wordtags, tags }] = useData(['wordtags', 'tags']);

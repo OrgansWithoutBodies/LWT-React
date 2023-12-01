@@ -3,8 +3,8 @@ import { ArchivedTexts, Languages, Texts, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
 import { A } from '../nav/InternalLink';
+import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Header } from './Header';
 import { confirmDelete } from './utils';
 
 function LanguageLine({
@@ -31,12 +31,15 @@ function LanguageLine({
   const numArchivedThisLanguage = archivedtexts.filter(
     (text) => text.AtLgID === id
   ).length;
-  const TdTh = ({ children }: React.PropsWithChildren<object>) => {
+  /**
+   *
+   */
+  function TdTh({ children }: React.PropsWithChildren<object>) {
     if (thisRowActive) {
       return <th className="th1 center">{children}</th>;
     }
     return <td className="td1 center">{children}</td>;
-  };
+  }
   return (
     <tr>
       {thisRowActive ? (
@@ -45,8 +48,8 @@ function LanguageLine({
             onClick={() => {
               dataService.setActiveLanguage(thisRowActive ? null : id);
             }}
-            src={'exclamation-red'}
-            title={'Current Language'}
+            src="exclamation-red"
+            title="Current Language"
           />
         </th>
       ) : (
@@ -55,14 +58,14 @@ function LanguageLine({
             onClick={() => {
               dataService.setActiveLanguage(thisRowActive ? null : id);
             }}
-            src={'tick-button'}
-            title={'Set as Current Language'}
+            src="tick-button"
+            title="Set as Current Language"
           />
         </td>
       )}
       <TdTh>
         <A href={`/do_test?lang=${id}`}>
-          <Icon src={'question-balloon'} title="Test" />
+          <Icon src="question-balloon" title="Test" />
         </A>
       </TdTh>
       <TdTh>
@@ -134,6 +137,7 @@ function LanguageLine({
     </tr>
   );
 }
+
 export function LanguagesPage(): JSX.Element {
   const [{ languages, activeLanguageId, texts, words, archivedtexts }] =
     useData([
@@ -186,14 +190,14 @@ export function LanguagesPage(): JSX.Element {
           </tr>
         </thead>
         {languages.map((lang) => (
-            <LanguageLine
-              texts={texts}
-              archivedtexts={archivedtexts}
-              terms={words}
-              language={lang}
-              activeLanguageId={activeLanguageId}
-            />
-          ))}
+          <LanguageLine
+            texts={texts}
+            archivedtexts={archivedtexts}
+            terms={words}
+            language={lang}
+            activeLanguageId={activeLanguageId}
+          />
+        ))}
       </table>
     </>
   );

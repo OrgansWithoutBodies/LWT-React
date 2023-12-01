@@ -2,9 +2,6 @@ import { Library } from './pages/Library.component';
 
 type RouterType = { children: JSX.Element[] };
 type Page = { url: string; name: string; component: JSX.Element };
-function Blank(): JSX.Element {
-  return <></>;
-}
 
 const PAGES: Page[] = [
   {
@@ -19,13 +16,14 @@ const PAGES: Page[] = [
       />
     ),
   },
-  { url: '/langs', name: 'languages', component: <Blank /> },
-  { url: '/read', name: 'reader', component: <Blank /> },
+  { url: '/langs', name: 'languages', component: <></> },
+  { url: '/read', name: 'reader', component: <></> },
 ];
 const RIGHTPAGES: Page[] = [
-  { url: '/logout', name: 'logout', component: <Blank /> },
-  { url: '/settings', name: 'settings', component: <Blank /> },
+  { url: '/logout', name: 'logout', component: <></> },
+  { url: '/settings', name: 'settings', component: <></> },
 ];
+
 export function RouterTab({
   name,
   float,
@@ -53,6 +51,7 @@ export function RouterTab({
     </li>
   );
 }
+
 export function RouterBar({
   leftPages,
   rightPages,
@@ -80,7 +79,9 @@ export function RouterBar({
           // float: 'right',
         }}
       >
-        {leftPages.map((page) => <RouterTab name={page.name} float="left" />)}
+        {leftPages.map((page) => (
+          <RouterTab name={page.name} float="left" />
+        ))}
       </ul>
       <ul
         style={{
@@ -91,12 +92,15 @@ export function RouterBar({
           top: 0,
         }}
       >
-        {rightPages.map((page) => <RouterTab name={page.name} float="right" />)}
+        {rightPages.map((page) => (
+          <RouterTab name={page.name} float="right" />
+        ))}
       </ul>
     </div>
   );
 }
-export function Router({ children }: RouterType): JSX.Element {
+
+export function RoutedPage({ children }: RouterType): JSX.Element {
   return (
     <>
       <RouterBar leftPages={PAGES} rightPages={RIGHTPAGES} />

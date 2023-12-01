@@ -4,7 +4,9 @@ import { Languages, Words } from '../data/parseMySqlDump';
 import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
+import { StrengthMap } from './StrengthMap';
+
+export type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
 // TODO dedupe with STATUSES
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   0: 0,
@@ -16,19 +18,6 @@ const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   98: 'Ign',
   99: 'WKn',
 };
-export const StrengthMap: Record<
-  TermStrengthOrUnknown,
-  { status: string; classKey: NumericalStrength }
-> = {
-  0: { status: 'Unknown', classKey: 0 },
-  1: { status: 'Learning', classKey: 1 },
-  2: { status: 'Learning', classKey: 2 },
-  3: { status: 'Learning', classKey: 3 },
-  4: { status: 'Learning', classKey: 4 },
-  5: { status: 'Learned', classKey: 5 },
-  Ign: { status: 'Ignored', classKey: 98 },
-  WKn: { status: 'Well Known', classKey: 99 },
-};
 function ExpressionsLines({
   expressions,
 }: {
@@ -38,22 +27,30 @@ function ExpressionsLines({
     <>
       Expr:
       {expressions.map((expression, ii) => (
-          // TODO numbers here
-          <A
-            href={`/edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
-            target="ro"
-          >
-            {ii + 2}..{expression}
-          </A>
-        ))}
+        // TODO numbers here
+        <A
+          href={`/edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
+          target="ro"
+        >
+          {ii + 2}
+          ..
+          {expression}
+        </A>
+      ))}
     </>
   );
 }
 // TODO template vs url branded type
+/**
+ *
+ * @param templateStr
+ * @param valueStr
+ */
 function ApplyTemplate(templateStr: string, valueStr: string): string {
   const replaced = templateStr.replace('###', valueStr);
   return replaced;
 }
+
 function TranslateLines({
   language,
   word,
@@ -63,9 +60,17 @@ function TranslateLines({
   word: string;
   sentence: string;
 }): JSX.Element {
+  /**
+   *
+   * @param translator
+   */
   function TranslateWord(translator: string) {
     ApplyTemplate(translator, word);
   }
+  /**
+   *
+   * @param translator
+   */
   function TranslateSentence(translator: string) {
     ApplyTemplate(translator, sentence);
   }
@@ -104,16 +109,16 @@ function TranslateLines({
     </>
   );
 }
-const TermTooltipClose = React.forwardRef<HTMLDivElement>(function PopoverClose(
-  {
-    // children,
-    onClose,
-    ...props
-  }: React.PropsWithChildren<{ onClose: () => void }>,
-  ref
-) {
-  // const { setOpen } = usePopoverContext();
-  return (
+const TermTooltipClose = React.forwardRef<HTMLDivElement>(
+  (
+    {
+      // children,
+      onClose,
+      ...props
+    }: React.PropsWithChildren<{ onClose: () => void }>,
+    ref
+  ) => (
+    // const { setOpen } = usePopoverContext();
     <div
       className="click"
       {...props}
@@ -128,8 +133,8 @@ const TermTooltipClose = React.forwardRef<HTMLDivElement>(function PopoverClose(
       Close
       {/* </font>  */}
     </div>
-  );
-});
+  )
+);
 
 function TermTooltipHeader({
   headerTitle,
@@ -139,34 +144,33 @@ function TermTooltipHeader({
   headerTitle: string;
 }): JSX.Element {
   return (
-    <>
-      <table width="100%" cellSpacing={0} cellPadding={2}>
-        {/* border={0} */}
-        <tbody>
-          <tr>
-            <td>
-              <b>
-                {/* <!-- <font lucida="" grande",arial,sans-serif,stheiti,"arial="" unicode="" ms",mingliu"="" size={3} face="" color="#FFFFFF"> --> */}
-                <A
-                  style={{ color: 'yellow' }}
-                  href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`}
-                  target="ro"
-                >
-                  {headerTitle} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp;
-                </A>
-                {/* <!-- </font> --> */}
-              </b>
-            </td>
-            <td align="right">
-              <TermTooltipClose onClose={onClose} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </>
+    <table width="100%" cellSpacing={0} cellPadding={2}>
+      {/* border={0} */}
+      <tbody>
+        <tr>
+          <td>
+            <b>
+              {/* <!-- <font lucida="" grande",arial,sans-serif,stheiti,"arial="" unicode="" ms",mingliu"="" size={3} face="" color="#FFFFFF"> --> */}
+              <A
+                style={{ color: 'yellow' }}
+                href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`}
+                target="ro"
+              >
+                {headerTitle} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp;
+              </A>
+              {/* <!-- </font> --> */}
+            </b>
+          </td>
+          <td align="right">
+            <TermTooltipClose onClose={onClose} />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }
+
 export function UnknownTermLines({ word }: { word: string }): JSX.Element {
   return (
     <>
@@ -185,6 +189,7 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
     </>
   );
 }
+
 export function KnownTermLines({
   word,
   tags,
@@ -196,8 +201,9 @@ export function KnownTermLines({
     <>
       <b>
         {word.WoText}
-        <br />▶ {word.WoRomanization}
-        <br />▶ {word.WoTranslation}, [{tags.join(', ')}]
+        <br />▶{word.WoRomanization}
+        <br />▶{word.WoTranslation}, [{tags.join(', ')}
+        ]
         <br />▶{/* TODO why undef */}
         {StrengthMap[ReverseStrengthMap[word.WoStatus]]
           ? StrengthMap[ReverseStrengthMap[word.WoStatus]].status

@@ -23,6 +23,7 @@ export function Icon({
 }
 
 // TODO 'satisfactory' state where it turns green
+
 export function RequiredLineButton(): JSX.Element {
   return (
     <Icon

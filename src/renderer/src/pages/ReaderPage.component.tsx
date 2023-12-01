@@ -3,15 +3,16 @@ import SplitPane from 'react-split-pane';
 import { Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
+import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { AddNewWordPane } from './AddNewWordPane';
-import { Header } from './Header';
 import { Reader } from './Reader.component';
 import { escape_html_chars, make_tooltip } from './escape_html_chars';
 
 // TODO
 //  confirmation screen
 //  details screen
+
 function Pane3() {
   // https://stackoverflow.com/questions/23616226/insert-html-with-react-variable-statements-jsx
   // dictionary pane
@@ -22,6 +23,7 @@ function Pane3() {
   );
 }
 // TODO I Know All
+
 export function ReaderPage({ textId }: { textId: TextsId }) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
@@ -39,50 +41,49 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
     return <></>;
   }
   return (
-    <>
-      <SplitPane split="vertical" minSize={50} defaultSize={'55%'}>
-        <SplitPane
-          style={{ overflowWrap: 'break-word' }}
-          split="horizontal"
-          minSize={50}
-          defaultSize={'20%'}
-        >
-          <Header
-            title={`READ ▶ ${text.TxTitle}`}
-            readerProps={{
-              // TODO getPreviousAndNextTextLinks
-              nextTextID: 'Test1',
-              prevTextString: 'test2',
-              langID: text.TxLgID,
-              textID: text.TxID,
-            }}
-          />
-          {/* TODO Show All */}
-          {/* TODO audio */}
-          <Reader
-            activeId={textId}
-            setActiveWord={setActiveWord}
-            activeWord={activeWord}
-          />
-        </SplitPane>
-        <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
-          {activeWord && 'newWord' in activeWord ? (
-            <AddNewWordPane
-              word={activeText}
-              langId={text.TxLgID}
-              // TODO horribly inefficient
-              existingTerm={words.find(({ WoText }) => activeText === WoText)}
-            />
-          ) : (
-            <></>
-          )}
-          <Pane3 />
-        </SplitPane>
+    <SplitPane split="vertical" minSize={50} defaultSize="55%">
+      <SplitPane
+        style={{ overflowWrap: 'break-word' }}
+        split="horizontal"
+        minSize={50}
+        defaultSize="20%"
+      >
+        <Header
+          title={`READ ▶ ${text.TxTitle}`}
+          readerProps={{
+            // TODO getPreviousAndNextTextLinks
+            nextTextID: 'Test1',
+            prevTextString: 'test2',
+            langID: text.TxLgID,
+            textID: text.TxID,
+          }}
+        />
+        {/* TODO Show All */}
+        {/* TODO audio */}
+        <Reader
+          activeId={textId}
+          setActiveWord={setActiveWord}
+          activeWord={activeWord}
+        />
       </SplitPane>
-    </>
+      <SplitPane split="horizontal" minSize={50} defaultSize="60%">
+        {activeWord && 'newWord' in activeWord ? (
+          <AddNewWordPane
+            word={activeText}
+            langId={text.TxLgID}
+            // TODO horribly inefficient
+            existingTerm={words.find(({ WoText }) => activeText === WoText)}
+          />
+        ) : (
+          <></>
+        )}
+        <Pane3 />
+      </SplitPane>
+    </SplitPane>
   );
 }
 type Modality = 0 | 1 | 2 | 3 | 4 | 5 | 'table' | null;
+
 export function TesterPage({
   langId,
   textId,
@@ -105,86 +106,83 @@ export function TesterPage({
     return <></>;
   }
   return (
-    <>
-      <SplitPane split="vertical" minSize={50} defaultSize={'55%'}>
-        <SplitPane
-          style={{ overflowWrap: 'break-word' }}
-          split="horizontal"
-          minSize={50}
-          defaultSize={'20%'}
-        >
-          <>
-            <Header title={''} />
-            <p style={{ marginBottom: 0 }}>
-              <input
-                type="button"
-                value="..[L2].."
-                onClickCapture={() => setTestModality(1)}
-              />
-              <input
-                type="button"
-                value="..[L1].."
-                onClickCapture={() => setTestModality(2)}
-              />
-              <input
-                type="button"
-                value="..[••].."
-                onClickCapture={() => setTestModality(3)}
-              />{' '}
-              &nbsp; | &nbsp;
-              <input
-                type="button"
-                value="[L2]"
-                onClickCapture={() => setTestModality(4)}
-              />
-              <input
-                type="button"
-                value="[L1]"
-                onClickCapture={() => setTestModality(5)}
-              />{' '}
-              &nbsp; | &nbsp;
-              <input
-                type="button"
-                value="Table"
-                onClickCapture={() => setTestModality('table')}
-              />
-            </p>
-          </>
-          {testModality === null ? <></> : <Tester modality={testModality} />}
-        </SplitPane>
-        <SplitPane split="horizontal" minSize={50} defaultSize={'60%'}>
-          {/* TODO RHS panes */}
-          {activeWord ? (
-            <AddNewWordPane
-              word={activeWord}
-              langId={text.TxLgID}
-              existingTerm={words.find(({ WoText }) => activeWord === WoText)}
+    <SplitPane split="vertical" minSize={50} defaultSize="55%">
+      <SplitPane
+        style={{ overflowWrap: 'break-word' }}
+        split="horizontal"
+        minSize={50}
+        defaultSize="20%"
+      >
+        <>
+          <Header title="" />
+          <p style={{ marginBottom: 0 }}>
+            <input
+              type="button"
+              value="..[L2].."
+              onClickCapture={() => setTestModality(1)}
             />
-          ) : (
-            <></>
-          )}
-          <Pane3 />
-        </SplitPane>
+            <input
+              type="button"
+              value="..[L1].."
+              onClickCapture={() => setTestModality(2)}
+            />
+            <input
+              type="button"
+              value="..[••].."
+              onClickCapture={() => setTestModality(3)}
+            />{' '}
+            &nbsp; | &nbsp;
+            <input
+              type="button"
+              value="[L2]"
+              onClickCapture={() => setTestModality(4)}
+            />
+            <input
+              type="button"
+              value="[L1]"
+              onClickCapture={() => setTestModality(5)}
+            />{' '}
+            &nbsp; | &nbsp;
+            <input
+              type="button"
+              value="Table"
+              onClickCapture={() => setTestModality('table')}
+            />
+          </p>
+        </>
+        {testModality === null ? <></> : <Tester modality={testModality} />}
       </SplitPane>
-    </>
+      <SplitPane split="horizontal" minSize={50} defaultSize="60%">
+        {/* TODO RHS panes */}
+        {activeWord ? (
+          <AddNewWordPane
+            word={activeWord}
+            langId={text.TxLgID}
+            existingTerm={words.find(({ WoText }) => activeWord === WoText)}
+          />
+        ) : (
+          <></>
+        )}
+        <Pane3 />
+      </SplitPane>
+    </SplitPane>
   );
 }
 
+/**
+ *
+ * @param wid
+ * @param plusminus
+ * @param text
+ */
 export function make_overlib_link_change_status_test(
   wid: string,
   plusminus: string,
   text: string
 ) {
-  return (
-    ' <a href=\x22set_test_status.php?wid=' +
-    wid +
-    '&amp;stchange=' +
-    plusminus +
-    '\x22 target=\x22ro\x22>' +
-    text +
-    '</a> '
-  );
+  return ` <a href=\x22set_test_status.php?wid=${wid}&amp;stchange=${plusminus}\x22 target=\x22ro\x22>${text}</a> `;
 }
+
 export function Tester({ modality }: { modality: Modality }) {
   const [testingWord, setTestingWord] = useState<Words | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
@@ -248,6 +246,10 @@ export function Tester({ modality }: { modality: Modality }) {
     </>
   );
 }
+/**
+ *
+ * @param intervalInMs
+ */
 function useTimer(intervalInMs: number) {
   const [time, setTime] = useState(0);
   useEffect(() => {
@@ -271,11 +273,13 @@ function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {
           <>
             {/* make_overlib_link_change_status_test */}
             <Icon src="thumb-up" title="Got it!" /> Got it! [
-            {`${status} ▶ ${status + 1}`}]
+            {`${status} ▶ ${status + 1}`}
+            ]
             <hr size={1} />
             {/* make_overlib_link_change_status_test */}
             <Icon src="thumb" title="Oops!" /> Oops! [
-            {`${status} ▶ ${status - 1}`}]
+            {`${status} ▶ ${status - 1}`}
+            ]
             <hr size={1} />
             <b>{/* make_overlib_link_change_status_alltest(wid,stat) */}</b>
             <br />
@@ -302,6 +306,13 @@ function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {
 }
 
 // TODO
+/**
+ *
+ * @param u
+ * @param w
+ * @param t
+ * @param b
+ */
 export function createTheDictLink(u: string, w: string, t: string, b: string) {
   const url = u.trim();
   const trm = w.trim();
@@ -310,35 +321,36 @@ export function createTheDictLink(u: string, w: string, t: string, b: string) {
   let r = '';
   if (url != '' && txt != '') {
     if (url.substr(0, 1) == '*') {
-      r =
-        ' ' +
-        txtbefore +
-        " <span class=\x22click\x22 onclick=\x22owin('" +
-        createTheDictUrl(url.substring(1), escape_apostrophes(trm)) +
-        "');\x22>" +
-        txt +
-        '</span> ';
+      r = ` ${txtbefore} <span class=\x22click\x22 onclick=\x22owin('${createTheDictUrl(
+        url.substring(1),
+        escape_apostrophes(trm)
+      )}');\x22>${txt}</span> `;
     } else {
-      r =
-        ' ' +
-        txtbefore +
-        ' <a href=\x22' +
-        createTheDictUrl(url, trm) +
-        '\x22 target=\x22ru\x22>' +
-        txt +
-        '</a> ';
+      r = ` ${txtbefore} <a href=\x22${createTheDictUrl(
+        url,
+        trm
+      )}\x22 target=\x22ru\x22>${txt}</a> `;
     }
   }
   return r;
 }
 
+/**
+ *
+ * @param u
+ * @param w
+ */
 function createTheDictUrl(u: string, w: string) {
   const url = u.trim();
   const trm = w.trim();
-  const r = 'trans.php?x=2&i=' + escape(u) + '&t=' + w;
+  const r = `trans.php?x=2&i=${escape(u)}&t=${w}`;
   return r;
 }
 
+/**
+ *
+ * @param s
+ */
 function escape_apostrophes(s: string) {
   return s.replace(/'/g, "\\'");
 }

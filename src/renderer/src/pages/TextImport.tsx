@@ -1,17 +1,12 @@
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { useInternalNavigate } from '../nav/useInternalNav';
+import { CheckAndSubmit, RefMap, ResetForm } from '../forms/Forms';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import {
-  CheckAndSubmit,
-  RefMap,
-  ResetForm,
-  emptyToNullMap,
-  parseNumMap,
-} from './Forms';
-import { Header } from './Header';
+import { textPrevalidateMap } from './preValidateMaps';
 
 export function ImportShortText(): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
@@ -115,7 +110,7 @@ export function ImportShortText(): JSX.Element {
                       role="status"
                       aria-live="polite"
                       className="ui-helper-hidden-accessible"
-                    ></span>
+                    />
                     <input
                       type="text"
                       maxLength={20}
@@ -166,7 +161,7 @@ export function ImportShortText(): JSX.Element {
                   value="Cancel"
                   onClick={() => {
                     ResetForm(refMap);
-                    navigator(`/edit_texts`);
+                    navigator('/edit_texts');
                   }}
                 />
                 <input type="submit" name="op" value="Check" />
@@ -177,17 +172,13 @@ export function ImportShortText(): JSX.Element {
                   onClick={() => {
                     CheckAndSubmit(
                       refMap,
-                      {
-                        TxLgID: parseNumMap,
-                        TxAudioURI: emptyToNullMap,
-                        TxSourceURI: emptyToNullMap,
-                      },
+                      textPrevalidateMap,
                       validator,
                       (value) => {
                         const textId = dataService.addText(value);
                         if (textId !== null) {
                           dataService.reparseText(textId);
-                          navigator(`/edit_texts`);
+                          navigator('/edit_texts');
                         }
                         // todo something if null?
                       }
@@ -201,11 +192,7 @@ export function ImportShortText(): JSX.Element {
                   onClick={() => {
                     CheckAndSubmit(
                       refMap,
-                      {
-                        TxLgID: parseNumMap,
-                        TxAudioURI: emptyToNullMap,
-                        TxSourceURI: emptyToNullMap,
-                      },
+                      textPrevalidateMap,
                       validator,
                       (value) => {
                         const textId = dataService.addText(value);
@@ -241,8 +228,7 @@ export function ImportShortText(): JSX.Element {
       "
         id="ui-id-1"
         tabIndex={0}
-        // style="display: none"
-      ></ul>
+      />
     </>
   );
 }

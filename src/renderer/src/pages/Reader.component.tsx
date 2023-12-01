@@ -57,7 +57,7 @@ export function Reader({
                   word={
                     'WoText' in activeWord ? activeWord : activeWord.newWord
                   }
-                  sentence={'sentence'}
+                  sentence="sentence"
                   onClose={() => setTooltipOpen(null)}
                 />
               </PopoverBody>

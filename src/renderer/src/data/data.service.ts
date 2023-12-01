@@ -1,7 +1,7 @@
 import { Gzip } from 'browserify-zlib';
 
 import { Persistable } from '../../../shared/Persistable';
-import { StrengthMap } from '../pages/AddNewTermTooltip';
+import { StrengthMap } from '../pages/StrengthMap';
 import { splitCheckText } from '../pages/utils';
 import {
   createDemoDBInitialState,
@@ -33,6 +33,7 @@ import {
   TextsId,
   WordsId,
 } from './validators';
+
 type LongTextForm = {};
 
 export enum CRUD {
@@ -43,6 +44,11 @@ export enum CRUD {
 }
 // TODO most of these are actually just identical C.UD operations - formalize that
 // TODO sometimes with a callback to add more object keys (maybe best handled in form submission?)
+/**
+ *
+ * @param id
+ * @param existingIds
+ */
 function IDIsUnique<TBrand extends number>(
   id: number,
   existingIds: TBrand[]
@@ -51,42 +57,46 @@ function IDIsUnique<TBrand extends number>(
 }
 export class DataService {
   private TatoebaAPI: TatoebaOpenAPIWrapper;
+
   // TODO maybe just a drop handler? test if any faster
   private persistEmpty() {
     // assume insert instead of wholly recreate when given the option
-    if (MyPersistanceHandles['empty']) {
+    if (MyPersistanceHandles.empty) {
       const { empty: emptyer } = MyPersistanceHandles;
 
       emptyer();
     }
   }
+
   // TODO maybe not as good of an abstraction? just pass in a callback for getting data into the insert?
   private persistSet(key: keyof DataState) {
     // assume insert instead of wholly recreate when given the option
-    if (MyPersistanceHandles['set']) {
+    if (MyPersistanceHandles.set) {
       const { set: setter } = MyPersistanceHandles;
 
       const { [key]: value } = this.dataStore.getValue();
       setter(key, value);
     }
   }
+
   private async persistInsert(key: keyof DataState, insertVal: any) {
-    if (MyPersistanceHandles['insert']) {
+    if (MyPersistanceHandles.insert) {
       const { insert: inserter } = MyPersistanceHandles;
       const insertedVal = await inserter(key, insertVal);
       return insertedVal;
     }
-    return;
   }
+
   private async persistUpdate(key: keyof DataState, updatedVal: any) {
-    if (MyPersistanceHandles['update']) {
+    if (MyPersistanceHandles.update) {
       console.log('UPDATING', key, updatedVal);
       const { update: updater } = MyPersistanceHandles;
       await updater(key, updatedVal);
     }
   }
+
   private async persistDelete(key: keyof DataState, deleteID: any) {
-    if (MyPersistanceHandles['delete']) {
+    if (MyPersistanceHandles.delete) {
       const { delete: deleter } = MyPersistanceHandles;
       await deleter(key, deleteID);
     }
@@ -113,24 +123,24 @@ export class DataService {
     this.persistSet('languages');
     this.persistInsert('languages', language);
   }
+
   public deleteLanguage(langId: LanguagesId) {
     this.dataStore.update((state) => ({
-        ...state,
-        languages: state.languages.filter(
-          (language) => language.LgID !== langId
-        ),
-      }));
+      ...state,
+      languages: state.languages.filter((language) => language.LgID !== langId),
+    }));
 
     this.persistSet('languages');
     this.persistDelete('languages', langId);
   }
+
   public deleteArchivedText(textId: ArchivedTextsId) {
     this.dataStore.update((state) => ({
-        ...state,
-        archivedtexts: state.archivedtexts.filter(
-          (language) => language.AtID !== textId
-        ),
-      }));
+      ...state,
+      archivedtexts: state.archivedtexts.filter(
+        (language) => language.AtID !== textId
+      ),
+    }));
     this.persistSet('archivedtexts');
     this.persistDelete('archivedtexts', textId);
   }
@@ -158,6 +168,7 @@ export class DataService {
     this.persistInsert('texts', text);
     return maxId;
   }
+
   public addTag(tag: Tags) {
     this.dataStore.update((state) => {
       const ids = state.tags.map((tag) => tag.TgID);
@@ -177,6 +188,7 @@ export class DataService {
     this.persistSet('tags');
     this.persistInsert('tags', tag);
   }
+
   public editTag(chgId: TagsId, tag: Tags) {
     this.dataStore.update((state) => {
       const ids = state.tags.map((tag) => tag.TgID);
@@ -196,8 +208,9 @@ export class DataService {
     this.persistSet('tags');
     this.persistUpdate('tags', tag);
   }
+
   public editLanguage(chgId: LanguagesId, newData: Languages) {
-    window.alert('TODO-editLanguage' + chgId);
+    window.alert(`TODO-editLanguage${chgId}`);
     // this.dataStore.update((state) => {
     //   const ids = state.tags.map((tag) => tag.TgID);
     //   const maxId = (Math.max(...ids) + 1) as TagsId;
@@ -216,6 +229,7 @@ export class DataService {
     // this.persistChange('tags');
     // this.persistUpdate('tags',newData);
   }
+
   public addTextTag(tag: Tags2) {
     this.dataStore.update((state) => {
       const ids = state.tags2.map((tag) => tag.T2ID);
@@ -235,12 +249,13 @@ export class DataService {
     this.persistSet('tags2');
     this.persistInsert('tags2', tag);
   }
+
   public deleteText(textId: TextsId) {
     this.dataStore.update((state) => ({
-        ...state,
-        notificationMessage: { txt: `Removed Text Tag id=${textId}` },
-        texts: state.texts.filter((text) => text.TxID !== textId),
-      }));
+      ...state,
+      notificationMessage: { txt: `Removed Text Tag id=${textId}` },
+      texts: state.texts.filter((text) => text.TxID !== textId),
+    }));
     this.persistSet('texts');
     this.persistDelete('texts', textId);
   }
@@ -272,11 +287,12 @@ export class DataService {
     this.persistSet('words');
     this.persistInsert('words', word);
   }
+
   public deleteTerm(termId: WordsId) {
     this.dataStore.update((state) => ({
-        ...state,
-        words: state.words.filter((word) => word.WoID !== termId),
-      }));
+      ...state,
+      words: state.words.filter((word) => word.WoID !== termId),
+    }));
     this.persistSet('words');
     this.persistDelete('words', termId);
   }
@@ -301,6 +317,7 @@ export class DataService {
     this.persistSet('words');
     this.persistUpdate('words', updatedWord);
   }
+
   public addTagToTerm(tagId: TagsId, termId: WordsId) {
     this.dataStore.update((state) => ({
       ...state,
@@ -309,12 +326,13 @@ export class DataService {
     this.persistSet('wordtags');
     // TODO
   }
+
   public deleteTermTag(tagId: TagsId) {
     this.dataStore.update(({ wordtags, tags, ...rest }) => ({
-        ...rest,
-        wordtags: wordtags.filter(({ WtTgID }) => WtTgID !== tagId),
-        tags: tags.filter(({ TgID }) => TgID !== tagId),
-      }));
+      ...rest,
+      wordtags: wordtags.filter(({ WtTgID }) => WtTgID !== tagId),
+      tags: tags.filter(({ TgID }) => TgID !== tagId),
+    }));
     // TODO persist deletes
     this.persistSet('wordtags');
     this.persistSet('tags');
@@ -327,13 +345,14 @@ export class DataService {
     }));
     this.persistSet('texttags');
   }
+
   public deleteTextTag(tagId: Tags2Id) {
     this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => ({
-        ...rest,
-        texttags: texttags.filter(({ TtT2ID }) => TtT2ID !== tagId),
-        archtexttags: archtexttags.filter(({ AgT2ID }) => AgT2ID !== tagId),
-        tags2: tags2.filter(({ T2ID }) => T2ID !== tagId),
-      }));
+      ...rest,
+      texttags: texttags.filter(({ TtT2ID }) => TtT2ID !== tagId),
+      archtexttags: archtexttags.filter(({ AgT2ID }) => AgT2ID !== tagId),
+      tags2: tags2.filter(({ T2ID }) => T2ID !== tagId),
+    }));
     // TODO persist multiple at a time
     this.persistSet('tags2');
     this.persistSet('texttags');
@@ -343,25 +362,33 @@ export class DataService {
   public addLongText(longTextForm: LongTextForm) {
     window.alert('TODO ADDLONGTEXT');
   }
+
   public addMultipleTerms(terms: Words[]) {
+    const mappedTerms = terms.map((word, ii) => {
+      if (!word.WoText) {
+        console.log('TEST123-problem:', word, ii);
+      }
+      return {
+        ...word,
+        // TODO check if right
+        WoStatusChanged: Date.now(),
+        WoTextLC: word.WoText.toLowerCase(),
+        WoTodayScore: 0,
+        WoTomorrowScore: 0,
+        // TODO ? whats this
+        WoRandom: 0,
+      };
+    });
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
       const maxId = Math.max(...ids) + 1;
       if (IDIsUnique(maxId, ids)) {
         return {
           ...state,
+          // TODO mapping twice not ideal here
           words: [
             ...state.words,
-            ...terms.map((word, ii) => ({
-                ...word,
-                WoID: maxId + ii,
-                // TODO
-                WoStatusChanged: Date.now(),
-                WoTodayScore: 0,
-                WoTomorrowScore: 0,
-                // TODO ? whats this
-                WoRandom: 0,
-              })),
+            ...mappedTerms.map((word, ii) => ({ ...word, WoID: maxId + ii })),
           ],
         };
       }
@@ -369,6 +396,7 @@ export class DataService {
 
     // TODO multiple insert
     this.persistSet('words');
+    mappedTerms.forEach((term) => this.persistInsert('words', term));
   }
 
   public restoreFromBackup(file: File) {
@@ -412,7 +440,7 @@ export class DataService {
               );
               const entryVal = entryVals[0].match(entryValRegex);
               if (entryVal && entryVal?.length > 1) {
-                const entryColRegex = new RegExp(`(.*),`);
+                const entryColRegex = new RegExp('(.*),');
                 entryVal[1].split();
               }
             }
@@ -423,6 +451,7 @@ export class DataService {
     };
     reader.readAsText(file);
   }
+
   private serialize(backupType: 'JSON' | 'SQL') {
     const {
       archivedtexts,
@@ -471,6 +500,7 @@ export class DataService {
     });
     return serializedSql;
   }
+
   public downloadBackup(backupType: 'JSON' | 'SQL') {
     const serializedData = this.serialize(backupType);
     console.log(backupType);
@@ -479,22 +509,23 @@ export class DataService {
     // deflate((serializedData as string))
     downloadTextFile(serializedData, backupType);
   }
+
   public emptyDatabase() {
     this.dataStore.update((state) => ({
-        settings: state.settings,
-        archivedtexts: [],
-        archtexttags: [],
-        languages: [],
-        parsedTexts: [],
-        sentences: [],
-        tags2: [],
-        tags: [],
-        textitems: [],
-        texts: [],
-        texttags: [],
-        words: [],
-        wordtags: [],
-      }));
+      settings: state.settings,
+      archivedtexts: [],
+      archtexttags: [],
+      languages: [],
+      parsedTexts: [],
+      sentences: [],
+      tags2: [],
+      tags: [],
+      textitems: [],
+      texts: [],
+      texttags: [],
+      words: [],
+      wordtags: [],
+    }));
 
     this.persistSet('settings');
     this.persistSet('archivedtexts');
@@ -537,19 +568,19 @@ export class DataService {
   public archiveText(archID: TextsId) {
     // TODO hashmap
     /**
-     * 	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'], 
-		"Text items deleted");
-	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'], 
-		"Sentences deleted");
-	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
-	$id = get_last_key();
-	runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");	
-	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
-	$message = $message4 . " / " . $message1 . " / " . $message2 . " / " . $message3;
-	adjust_autoincr('texts','TxID');
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
-	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
+     * 	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'],
+     * "Text items deleted");
+     * $message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'],
+     * "Sentences deleted");
+     * $message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
+     * $id = get_last_key();
+     * runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");
+     * $message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
+     * $message = $message4 . " / " . $message1 . " / " . $message2 . " / " . $message3;
+     * adjust_autoincr('texts','TxID');
+     * adjust_autoincr('sentences','SeID');
+     * adjust_autoincr('textitems','TiID');
+     * runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
      */
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
@@ -579,20 +610,21 @@ export class DataService {
     this.persistSet('archivedtexts');
     this.persistSet('texts');
   }
+
   public unarchiveText() {
     window.alert('TODO UNARCHIVETEXT');
   }
 
   public setSettings(settings: Partial<Settings>) {
     this.dataStore.update(({ settings: oldSettings, ...state }) => ({
-        ...state,
-        settings: Object.entries({
-          ...Object.fromEntries(
-            oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
-          ),
-          ...settings,
-        }).map(([key, val]) => ({ StKey: key, StValue: val })),
-      }));
+      ...state,
+      settings: Object.entries({
+        ...Object.fromEntries(
+          oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
+        ),
+        ...settings,
+      }).map(([key, val]) => ({ StKey: key, StValue: val })),
+    }));
     Object.entries(settings).forEach(async ([key, val]) => {
       await this.persistDelete('settings', key);
       await this.persistInsert('settings', { StKey: key, StValue: val });
@@ -602,10 +634,16 @@ export class DataService {
   public reparseText(textId: TextsId) {
     const { texts, languages } = this.dataStore.getValue();
     const parsingText = texts.find(({ TxID }) => TxID === textId);
-    const parsingLanguage = languages.find(({ LgID }) => LgID === parsingText?.TxLgID);
+    const parsingLanguage = languages.find(
+      ({ LgID }) => LgID === parsingText?.TxLgID
+    );
     const parsedText = splitCheckText(parsingText?.TxText, parsingLanguage, -1);
-    this.dataStore.update(({ parsedTexts, ...rest }) => ({ ...rest, parsedTexts: { ...parsedTexts, [textId]: parsedText } }));
+    this.dataStore.update(({ parsedTexts, ...rest }) => ({
+      ...rest,
+      parsedTexts: { ...parsedTexts, [textId]: parsedText },
+    }));
   }
+
   public reparseAllTextsForLanguage(langId: LanguagesId) {
     const { texts } = this.dataStore.getValue();
     texts
@@ -648,11 +686,18 @@ export class DataService {
 
   constructor(private dataStore: DataStore) {
     this.getInitialAsync();
+    const { languages } = this.dataStore.getValue();
+    languages.forEach((lang) => {
+      this.reparseAllTextsForLanguage(lang.LgID);
+    });
     this.TatoebaAPI = new TatoebaOpenAPIWrapper();
   }
 
   private async getInitialAsync() {
     const { getAsync: persistGetter } = MyPersistanceHandles;
+    if (!persistGetter) {
+      return;
+    }
     Promise.all(
       Object.keys(Persistable).map(async (key) => {
         const val = await persistGetter(key);
@@ -670,6 +715,11 @@ export class DataService {
 
 export const dataService = new DataService(dataStore);
 
+/**
+ *
+ * @param input
+ * @param output
+ */
 async function do_gzip(input, output) {
   const gzip = createGzip();
   const source = createReadStream(input);
