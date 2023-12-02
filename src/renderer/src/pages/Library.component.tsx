@@ -270,7 +270,11 @@ function LibraryRow({
             `[${text.tags.map((tag, ii) => (ii > 0 ? ` ${tag}` : tag))}]`}
         </span>
         {text.audioAvailable && <Icon src="speaker-volume" />}
-        {text.link && <Icon src="chain" />}
+        {text.link && (
+          <a href={text.link}>
+            <Icon src="chain" />
+          </a>
+        )}
         {text.annotatedAvailable && <Icon src="tick" />}
       </td>
       <td className="td1 center">{text.totalWords}</td>
@@ -299,12 +303,6 @@ export function Library({
     'tags2',
     'settings',
   ]);
-  console.log('TEST123-library', {
-    activeLanguage,
-    tags2,
-    texttags,
-    textDetails,
-  });
   const pageSize = settings['set-texts-per-page'] || -1;
 
   const { numPages, dataOnPage } = usePager(

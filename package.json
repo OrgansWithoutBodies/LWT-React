@@ -1,6 +1,6 @@
 {
   "name": "lwt-react",
-  "homepage": ".",
+  "homepage": "/lwt",
   "version": "1.0.0",
   "description": "LWT React Port",
   "main": "./out/main/index.js",
@@ -13,7 +13,7 @@
     "dev:electron:sqlite": "VITE_LWT_PERSIST=SQLITE electron-vite dev -w",
     "dev:electron:rest": "VITE_LWT_PERSIST=REST electron-vite dev -w",
     "build:rest": "VITE_LWT_PERSIST=REST tsc && vite build",
-    "build:localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build",
+    "build:localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && vite build",
     "build:electron:sqlite": "VITE_LWT_PERSIST=SQLITE tsc && electron-vite build",
     "build:electron:localstorage": "VITE_LWT_PERSIST=LOCALSTORAGE tsc && electron-vite build",
     "build:electron:rest": "VITE_LWT_PERSIST=REST tsc && electron-vite build",

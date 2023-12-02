@@ -8,7 +8,6 @@ export function Pager({
   currentPage: number;
   numPages: number;
 }) {
-  console.log('TEST123-page', currentPage, numPages);
   const updateParams = useUpdateParams();
   return (
     <>

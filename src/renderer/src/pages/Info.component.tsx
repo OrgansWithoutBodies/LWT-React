@@ -1,7 +1,26 @@
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
 
-// TODO info page for lwt-react
+const infoLines: Parameters<typeof InfoLine>[0][] = [
+  { title: 'Preface', href: 'preface' },
+  { title: 'Current Version', href: 'current' },
+  { title: 'Links', href: 'links' },
+  { title: 'Abstract', href: 'abstract' },
+  { title: 'Features', href: 'features' },
+  { title: 'Restrictions', href: 'restrictions' },
+  { title: '(Un-) License', href: 'license' },
+  { title: 'Disclaimer', href: 'disclaimer' },
+  { title: 'Installation', href: 'install' },
+  { title: 'How to learn', href: 'learn' },
+  { title: 'How to use', href: 'howto' },
+  { title: 'Questions and Answers', href: 'faq' },
+  { title: 'Setup for Tablets', href: 'ipad' },
+  { title: 'Language Setup', href: 'langsetup' },
+  { title: 'Term Scores', href: 'termscores' },
+  { title: 'Key Bindings', href: 'keybind' },
+  { title: 'Changelog', href: 'history' },
+];
+
 export function InfoPage() {
   const navigator = useInternalNavigate();
   return (
@@ -64,6 +83,7 @@ export function InfoPage() {
 
       <script type="text/javascript">
         {/* //<![CDATA[
+          // TODO
 $(document).ready( function() {
 $('#floatdiv').addFloating( {
     targetRight: 10,
@@ -3227,5 +3247,18 @@ $('#floatdiv').addFloating( {
         </table>
       </div>
     </body>
+  );
+}
+export function InfoLine({ href, title }: { href: string; title: string }) {
+  return (
+    <dt>
+      ▶
+      <b>
+        <a name={href} id={href}>
+          {title}
+        </a>
+      </b>
+      - <a href={'#'}>[↑]</a>
+    </dt>
   );
 }

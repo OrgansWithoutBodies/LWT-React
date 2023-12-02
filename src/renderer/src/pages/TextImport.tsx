@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { CheckAndSubmit, RefMap, ResetForm } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
@@ -11,7 +13,13 @@ import { textPrevalidateMap } from './preValidateMaps';
 export function ImportShortText(): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;
+
+  const [formErrors, setFormErrors] = useState<{
+    [key in keyof typeof validator.TYPE]?: string;
+  }>({});
   const refMap = RefMap(validator);
+  const TxInput = useFormInput(refMap);
+
   const navigator = useInternalNavigate();
   return (
     <>
@@ -45,13 +53,12 @@ export function ImportShortText(): JSX.Element {
             <tr>
               <td className="td1 right">Title:</td>
               <td className="td1">
-                <input
+                <TxInput
                   type="text"
                   className="notempty checkoutsidebmp"
                   // data_info="Title"
-                  name="TxTitle"
-                  ref={refMap.TxTitle}
-                  defaultValue=""
+                  entryKey="TxTitle"
+                  default
                   maxLength={200}
                   size={60}
                 />
@@ -86,13 +93,12 @@ export function ImportShortText(): JSX.Element {
             <tr>
               <td className="td1 right">Source URI:</td>
               <td className="td1">
-                <input
+                <TxInput
                   type="text"
                   className="checkurl checkoutsidebmp"
                   // data_info="Source URI"
-                  name="TxSourceURI"
-                  ref={refMap.TxSourceURI}
-                  defaultValue=""
+                  entryKey="TxSourceURI"
+                  default
                   maxLength={1000}
                   size={60}
                 />
@@ -125,13 +131,12 @@ export function ImportShortText(): JSX.Element {
             <tr>
               <td className="td1 right">Audio-URI:</td>
               <td className="td1">
-                <input
+                <TxInput
                   type="text"
                   className="checkoutsidebmp"
                   // data_info="Audio-URI"
-                  name="TxAudioURI"
-                  ref={refMap.TxAudioURI}
-                  defaultValue=""
+                  entryKey="TxAudioURI"
+                  default
                   maxLength={200}
                   size={60}
                 />
@@ -181,7 +186,9 @@ export function ImportShortText(): JSX.Element {
                           navigator('/edit_texts');
                         }
                         // todo something if null?
-                      }
+                      },
+                      null,
+                      setFormErrors
                     );
                   }}
                 />

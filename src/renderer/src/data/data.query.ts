@@ -5,11 +5,9 @@ import {
   count,
   interval,
   map,
-  of,
   switchMap,
   take,
   tap,
-  withLatestFrom,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
 import { Settings } from './settings';
@@ -110,10 +108,10 @@ export class DataQuery extends Query<DataState> {
 
   public notificationMessage = this.select('notificationMessage');
 
-  public notificationMessageDisplay = of(100).pipe(
-    withLatestFrom(this.notificationMessage),
-    switchMap(([initial]) => timedSwitchMap(of(initial), ticker(100, 0), 2000))
-  );
+  // public notificationMessageDisplay = of(100).pipe(
+  //   withLatestFrom(this.notificationMessage),
+  //   switchMap(([initial]) => timedSwitchMap(of(initial), ticker(100, 0), 2000))
+  // );
 
   public numArchivedTexts = this.archivedtexts.pipe(count());
   // public archivedtextsLen = this.archivedtexts.pipe(count());
@@ -229,7 +227,6 @@ export class DataQuery extends Query<DataState> {
         LanguagesId,
         Record<1 | 2 | 3 | 4 | 5 | 15 | 14 | 99 | 599 | 98 | 'total', number>
       > = statisticMapEntries;
-      console.log('TEST123-query', statisticMap);
       return statisticMap;
     })
   );

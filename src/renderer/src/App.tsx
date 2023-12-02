@@ -1,18 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { AppVariables } from './meta';
 import { LandingPage } from './pages/LandingPage.component';
 
-import { useData } from './data/useAkita';
-import { AppContext, useAppContext } from './hooks/useContext';
-import { BackupScreen } from './pages/Backups.component';
-import { CheckText } from './pages/CheckText';
-import { InfoPage } from './pages/Info.component';
-import { LongText } from './pages/LongTextImport.component';
-import { SettingsComponent } from './pages/Settings.component';
-import { StatisticsComponent } from './pages/Statistics.component';
-import { createColors } from './styles';
 import {
   AddNewWordWrapper,
   EditArchivedTextsWrapper,
@@ -26,6 +17,20 @@ import {
   TestWrapper,
   UploadWordsWrapper,
 } from './Wrappers';
+import { useData } from './data/useAkita';
+import { AppContext, useAppContext } from './hooks/useContext';
+import { InternalPaths } from './hooks/useInternalNav';
+import { BackupScreen } from './pages/Backups.component';
+import { CheckText } from './pages/CheckText';
+import { InfoPage } from './pages/Info.component';
+import { InfoExportTemplate } from './pages/InfoExportTemplate';
+import { InstallDemo } from './pages/InstallDemo';
+import { LongText } from './pages/LongTextImport.component';
+import { SettingsComponent } from './pages/Settings.component';
+import { StatisticsComponent } from './pages/Statistics.component';
+import { useCountdown } from './pages/useTimer';
+import { PLUGINS } from './plugins';
+import { createColors } from './styles';
 
 declare global {
   interface NumberConstructor {
@@ -56,102 +61,91 @@ function GlobalStyle(): JSX.Element {
 
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
-  const [{ notificationMessageDisplay, notificationMessage }] = useData([
-    'notificationMessageDisplay',
-    'notificationMessage',
-  ]);
-  console.log('msg', { notificationMessage });
+  const [{ notificationMessage }] = useData(['notificationMessage']);
+  const pluginRoutes = PLUGINS.filter(
+    (plugin) => plugin.routes !== undefined
+  ).reduce<Record<Partial<InternalPaths>, () => JSX.Element>>(
+    (prev, curr) => ({ ...prev, ...curr.routes! }),
+    {} as Record<Partial<InternalPaths>, () => JSX.Element>
+  );
   //   const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
   // (12/12 tables dropped/created, 355 records added), 0 failed.`;
+
+  const routes: { [path in InternalPaths]: () => JSX.Element } = {
+    '/': () => <LandingPage />,
+    '/index': () => <LandingPage />,
+    '/check_text': () => <CheckText />,
+    '/backup_restore': () => <BackupScreen />,
+    '/info': () => <InfoPage />,
+    '/edit_words': () => <TermsWrapper />,
+    '/edit_texts': () => <LibraryWrapper />,
+    '/edit_archivedtexts': () => <EditArchivedTextsWrapper />,
+    '/edit_tags': () => <EditTagsWrapper />,
+    '/edit_texttags': () => <EditTextTagsWrapper />,
+    '/edit_languages': () => <LanguagesWrapper />,
+    '/long_text_import': () => <LongText />,
+    '/statistics': () => <StatisticsComponent />,
+    '/new_word': () => <AddNewWordWrapper />,
+    '/settings': () => <SettingsComponent />,
+    '/do_text': () => <ReaderWrapper />,
+    '/do_test': () => <TestWrapper />,
+    '/print_text': () => <PrintTextWrapper />,
+    '/upload_words': () => <UploadWordsWrapper />,
+    '/install_demo': () => <InstallDemo />,
+    '/info_export_template': () => <InfoExportTemplate />,
+    // yells about multiple specs without this cast TODO
+    // all_words_wellknown
+    // delete_mword
+    // delete_word
+    // display_impr_text_header
+    // display_impr_text_text
+    // display_impr_text
+    // edit_archivedtexts
+    // edit_languages
+    // // TODO
+    // edit_mword
+    // edit_tword
+    // edit_word
+    // glosbe_api
+    // inline_edit
+    // insert_word_ignore
+    // insert_word_wellknown
+    // // TODO
+    // install_demo
+    // mobile
+    // print_impr_text
+    // save_setting_redirect
+    // set_test_status
+    // set_text_mode
+    // set_word_status
+    // show_word
+    // simterms.inc
+    // start
+    // table_set_management
+    // trans
+    ...(pluginRoutes as object),
+    /* TODO 404 page */
+  };
+  console.log('TEST123-landing');
   return (
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
-      {notificationMessage && (
-        <p
-          id="hide3"
-          className="msgblue"
-          style={{
-            display: notificationMessageDisplay === 0 ? 'none' : undefined,
-            maxHeight: 100,
-            height: `${notificationMessageDisplay}%`,
-          }}
-        >
-          +++ {notificationMessage?.txt} +++
-        </p>
+      {notificationMessage === null ? (
+        <></>
+      ) : (
+        <NotificationMessage notificationMessage={notificationMessage.txt} />
       )}
-      <Router>
+      <Router basename="/lwt">
         {/*
-all_words_wellknown
-delete_mword
-delete_word
-display_impr_text_header
-display_impr_text_text
-display_impr_text
-do_test_header
-do_test_table
-do_test_test
-do_test
-do_text_header
-do_text_text
-do_text
-edit_archivedtexts
-edit_languages
-// TODO
-edit_mword
-edit_tword
-edit_word
-glosbe_api
-inline_edit
-insert_word_ignore
-insert_word_wellknown
-// TODO
-install_demo
-long_text_import
-mobile
-new_word
-print_impr_text
-print_text
-save_setting_redirect
-select_lang_pair
-set_test_status
-set_text_mode
-set_word_status
-show_word
-simterms.inc
-start
-table_set_management
-trans
-*/}
+         */}
 
         {/* A <Routes> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Routes>
-          {/* TODO 404 page */}
-          <Route path="/" element={<LandingPage />} />
-          {/* <Route path="/select_lang_pair" element={<NewLanguageWizard />} /> */}
-          <Route path="/index" element={<LandingPage />} />
-          <Route path="/check_text" element={<CheckText />} />
-          <Route path="/backup_restore" element={<BackupScreen />} />
-          <Route path="/info" element={<InfoPage />} />
-          <Route path="/edit_words" element={<TermsWrapper />} />
-          <Route path="/edit_texts" element={<LibraryWrapper />} />
-          {/* TODO */}
-          {/* <Route path="/upload_words" element={<LibraryWrapper />} /> */}
-          <Route
-            path="/edit_archivedtexts"
-            element={<EditArchivedTextsWrapper />}
-          />
-          <Route path="/edit_tags" element={<EditTagsWrapper />} />
-          <Route path="/edit_texttags" element={<EditTextTagsWrapper />} />
-          <Route path="/edit_languages" element={<LanguagesWrapper />} />
-          <Route path="/long_text_import" element={<LongText />} />
-          <Route path="/statistics" element={<StatisticsComponent />} />
-          <Route path="/new_word" element={<AddNewWordWrapper />} />
-          <Route path="/settings" element={<SettingsComponent />} />
-          <Route path="/do_text" element={<ReaderWrapper />} />
-          <Route path="/do_test" element={<TestWrapper />} />
-          <Route path="/print_text" element={<PrintTextWrapper />} />
-          <Route path="/upload_words" element={<UploadWordsWrapper />} />
+          {...Object.keys(routes).map((routeKey) => {
+            const PathRouteElement = routes[routeKey];
+            return <Route path={routeKey} element={<PathRouteElement />} />;
+          })}
         </Routes>
       </Router>
       <>
@@ -160,6 +154,41 @@ trans
         */}
       </>
     </AppContext.Provider>
+  );
+}
+
+function NotificationMessage({
+  notificationMessage,
+}: {
+  notificationMessage: string;
+}): React.ReactNode {
+  const [notificationMessageDisplay, setNotificationMessageDisplay] = useState<
+    null | number
+  >(null);
+  const isOpen = useCountdown({
+    countdownInMs: 3000,
+    intervalInMs: 100,
+    trigger: notificationMessage,
+  });
+
+  console.log('TEST123-notif', { notificationMessage, isOpen });
+  // this is needed for initial hook pass
+  if (notificationMessage === undefined) {
+    return <></>;
+  }
+  return (
+    <p
+      id="hide3"
+      className="msgblue"
+      style={{
+        display: isOpen ? undefined : 'none',
+        maxHeight: 100,
+
+        // height: `${notificationMessageDisplay}%`,
+      }}
+    >
+      +++ {notificationMessage} +++
+    </p>
   );
 }
 

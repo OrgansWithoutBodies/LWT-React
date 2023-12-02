@@ -4,7 +4,6 @@ import { PersistenceHandles } from './data/PersistedValueGetter';
 export const BackendPlugin: PersistenceHandles = {
   getAsync: async (key) => {
     const val = await window.api.sql.get(key);
-    console.log('TEST123-getasync', key, val);
     return val;
     // return window.api.sql.
     // return [];

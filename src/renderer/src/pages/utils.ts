@@ -3891,7 +3891,6 @@ export function splitCheckText(text: string, language: Languages, id: number) {
     LgCharacterSubstitutions,
   } = language;
   // list of 'A=B' equations
-  console.log('TEST123-split', { LgCharacterSubstitutions, language, text });
   const replace = LgCharacterSubstitutions.split('|');
   let s = text
     .replace('\r\n', '\n')

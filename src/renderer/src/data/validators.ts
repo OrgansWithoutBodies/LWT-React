@@ -14,13 +14,13 @@ const getValidatorPluginsFor = <
   key: TKey
 ): { [k in TTableKeys]: ss.Struct<any, unknown> } =>
   Object.fromEntries(
-    PLUGINS.filter(({ validators }) => validators[key] !== undefined).map(
-      ({ validators }) => {
-        const safeKeyValidator = validators[key]!;
+    PLUGINS.filter(
+      ({ validators }) => validators && validators[key] !== undefined
+    ).map(({ validators }) => {
+      const safeKeyValidator = validators[key]!;
 
-        return Object.entries(safeKeyValidator);
-      }
-    )
+      return Object.entries(safeKeyValidator);
+    })
   );
 const isValidURL = (validationString: string): validationString is URL =>
   validationString.startsWith('http://') ||

@@ -43,7 +43,6 @@ export function AddNewWordPane({
     (key: keyof AddNewWordType): SetBoolean =>
     (value) =>
       setFormErrors({ ...FormErrors, [key]: value });
-  console.log('TEST123-form', { existingTerm, lang, langId });
   const WoInput = useFormInput(refMap, { WoText: word || '' });
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';

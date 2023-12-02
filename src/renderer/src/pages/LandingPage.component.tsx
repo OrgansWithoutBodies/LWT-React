@@ -2,9 +2,10 @@ import { PersistanceStrategy } from '../data/PersistedValueGetter';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { useAppContext } from '../hooks/useContext';
-import { useInternalNavigate } from '../hooks/useInternalNav';
+import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
+import { PLUGINS } from '../plugins';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { GlosbeAPI } from './GlosbeAPI.component';
 
@@ -26,6 +27,35 @@ export function LandingPage() {
     'activeLanguage',
   ]);
   console.log('LANGS', languages);
+  const pluginLinks = PLUGINS.filter(
+    ({ landingPageLinks }) => landingPageLinks !== undefined
+  )
+    .map((plugin) => plugin.landingPageLinks!)
+    .flat();
+  const linkLayout: ({ link: InternalPaths; label: string } | null)[] = [
+    { link: '/edit_texts', label: 'My Texts' },
+    { link: '/edit_archivedtexts', label: 'My Text Archive' },
+    { link: '/edit_texttags', label: 'My Text Tags' },
+    { link: '/edit_languages', label: 'My Languages' },
+    null,
+    { link: '/edit_words', label: 'My Terms (Words and Expressions)' },
+    { link: '/edit_tags', label: 'My Term Tags' },
+    null,
+    { link: '/statistics', label: 'My Statistics' },
+    null,
+    { link: '/check_text', label: 'Check a Text' },
+    { link: '/long_text_import', label: 'Long Text Import' },
+    { link: '/upload_words', label: 'Import Terms' },
+    { link: '/backup_restore', label: 'Backup/Restore/Empty Database' },
+    null,
+    { link: '/settings', label: 'Settings/Preferences' },
+    null,
+    { link: '/info', label: 'Help/Information' },
+    // TODO
+    // { link: '/mobile', label: 'Mobile LWT (Experimental)' },
+    ...pluginLinks,
+  ];
+
   const navigate = useInternalNavigate();
   return (
     <>
@@ -42,6 +72,35 @@ export function LandingPage() {
               <A href="/edit_languages?new=1">
                 define the first language you want to learn.
               </A>
+              <br />
+              <br />
+              If you've never used LWT before, check out the{' '}
+              <A href="/info">original docs</A> - and check out the{' '}
+              <A href="/lwt_react_info">React Port docs</A>!
+            </th>
+          </tr>
+        </table>
+      )}
+      {AppVariables.frontendVersion === 'LEGACY-0.0.0-PRE-ALPHA-DEMO' && (
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <th className="th1">
+              <span style={{ fontSize: 20 }}>
+                <A>Howdy! 🤠</A> Welcome to a pre-alpha demo release of
+                LWT-React!
+              </span>
+              <br />
+              <br />
+              Watch your step as there are still bugs & unimplemented features,
+              some known - some unknown!
+              <br />
+              <br />
+              Let V know if you run into any problems!
+              <br />
+              <br />
+              <span style={{ fontSize: 10 }}>
+                (If you don't have V's contact....how did you find this 🤨)
+              </span>
             </th>
           </tr>
         </table>
@@ -70,58 +129,18 @@ export function LandingPage() {
         </div>
 
         <ul>
-          <li>
-            <A href="/edit_texts">My Texts</A>
-          </li>
-          <li>
-            <A href="/edit_archivedtexts">My Text Archive</A>
-          </li>
-          <li>
-            <A href="/edit_texttags">My Text Tags</A> <br />
-            <br />
-          </li>
-          <li>
-            <A href="/edit_languages">My Languages</A> <br />
-            <br />
-          </li>
-          <li>
-            <A href="/edit_words">My Terms (Words and Expressions)</A>
-          </li>
-          <li>
-            <A href="/edit_tags">My Term Tags</A> <br />
-            <br />
-          </li>
-          <li>
-            <A href="/statistics">My Statistics</A> <br />
-            <br />
-          </li>
-          <li>
-            <A href="/check_text">Check a Text</A>
-          </li>
-          <li>
-            <A href="/long_text_import">Long Text Import</A>
-          </li>
-          <li>
-            <A href="/upload_words">Import Terms</A>
-          </li>
-          <li>
-            <A href="/backup_restore">Backup/Restore/Empty Database</A>
-            <br />
-            <br />
-          </li>
-          <li>
-            <A href="/settings">Settings/Preferences</A>
-
-            <br />
-            <br />
-          </li>
-          <li>
-            <A href="/info">Help/Information</A>
-          </li>
-          {/* TODO */}
-          {/* <li>
-            <a href="/mobile">Mobile LWT (Experimental)</a>
-          </li> */}
+          {linkLayout.map((layoutLine) =>
+            layoutLine === null ? (
+              <>
+                <br />
+                <br />
+              </>
+            ) : (
+              <li>
+                <A href={layoutLine.link}>{layoutLine.label}</A>
+              </li>
+            )
+          )}
         </ul>
       </div>
 
@@ -130,6 +149,7 @@ export function LandingPage() {
         <tbody>
           <tr>
             <td className="width50px">
+              {/* TODO invalid url */}
               <a target="_blank" href="http://unlicense.org/" rel="noreferrer">
                 <img
                   alt="Public Domain"
@@ -183,9 +203,9 @@ export function LandingPage() {
                 <i>{dbBackend}</i> /
                 <span
                   title="Manage Table Sets"
-                  // TODO
                   onClick={() => {
-                    navigate('/table_set_management');
+                    // TODO
+                    // navigate('/table_set_management');
                   }}
                   className="click"
                 >
@@ -258,21 +278,25 @@ if (! isset($mb)) $mb = '0.0';
           </tr>
         </tbody>
       </table>
-      <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
-      <button
-        onClick={() => {
-          dataService.getTatoebaSentence('eng', 'test');
-        }}
-      >
-        TEST TATOEBA
-      </button>
-      <button
-        onClick={() => {
-          dataService.getTatoebaSentence('eng', 'test');
-        }}
-      >
-        TEST TATOEBA
-      </button>
+      {AppVariables.devMode && false && (
+        <>
+          <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
+          <button
+            onClick={() => {
+              dataService.getTatoebaSentence('eng', 'test');
+            }}
+          >
+            TEST TATOEBA
+          </button>
+          <button
+            onClick={() => {
+              dataService.getTatoebaSentence('eng', 'test');
+            }}
+          >
+            TEST TATOEBA
+          </button>
+        </>
+      )}
     </>
   );
 }

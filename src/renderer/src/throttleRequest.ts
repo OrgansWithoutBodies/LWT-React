@@ -44,13 +44,14 @@ export class ThrottleableRequest {
   constructor(
     private readonly minimumMSBetweenRequests: Milliseconds,
     readonly maxNumberOfRequests: number = -1,
-    private readonly onExceedLimit: () => void,
+    private readonly onExceedLimit: () => void
   ) {
     this.lastRequestTimestamp = min(Date.now(), minimumMSBetweenRequests);
     this.msSinceLastRequest = (minimumMSBetweenRequests + 1) as Milliseconds;
-    this.requestsLeft = maxNumberOfRequests === -1
-      ? Number.POSITIVE_INFINITY
-      : maxNumberOfRequests;
+    this.requestsLeft =
+      maxNumberOfRequests === -1
+        ? Number.POSITIVE_INFINITY
+        : maxNumberOfRequests;
   }
 
   private updateClock(): void {
@@ -60,10 +61,9 @@ export class ThrottleableRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig<D>,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     this.updateClock();
-    console.log('TEST123-reqleft', this.requestsLeft);
     if (!(this.requestsLeft > 0)) {
       this.onExceedLimit();
       throw new Error('Trial Mode Limit Reached!');

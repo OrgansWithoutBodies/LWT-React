@@ -38,7 +38,7 @@ export interface DataState {
   wordtags: WordTags[];
 
   parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
-  notificationMessage: null | { txt: string; time };
+  notificationMessage: null | { txt: string };
 }
 
 // TODO decide this on compile w DI token

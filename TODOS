@@ -19,7 +19,6 @@ TODO BEFORE RELEASE:
 
 - better pattern for parser, sentences, and terms
 - export backup & restore (sql.gz)
-- import terms
 - figure out licensing (unlicense not great?)
 
 ---
@@ -55,6 +54,9 @@ CODE TODOs
 
 FEATURE IDEAS
 
+- User account plugin
+- User default L1/i18n
+- Direct integration w anki sync server
 - "Offline Mode"?
 - json backup/restore
 - "Local + Sync" backend?

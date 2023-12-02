@@ -19,11 +19,11 @@ type FullMonthName =
   | 'December';
 type AppVersion =
   | {
-      versionNumber: VersionNumber;
+      frontendVersion: VersionNumber;
       releaseDate: `${FullMonthName} ${number} ${number}`;
     }
   | {
-      versionNumber: 'NEXT';
+      frontendVersion: 'NEXT';
       releaseDate: 'א_0';
     };
 
@@ -31,6 +31,7 @@ export type TAppContext = AppVersion & {
   dbBackend: 'SQLite' | 'MySQL' | 'Postgres';
   dbVersion: string;
 
+  electronBuildTarget: 'Linux' | 'Windows' | 'OSX' | 'Android' | 'iOS';
   isMobile: boolean;
   styleVariant: StyleVariant;
 
@@ -38,12 +39,13 @@ export type TAppContext = AppVersion & {
 
   persistMethod: PersistanceStrategy;
 
+  devMode: boolean;
+
   restURL: string;
   server: string;
   serverVersion: string;
 
-  frontend: 'React';
-  frontendVersion: string;
+  frontend: 'LWT-React';
   frontendSource: string;
 
   // TODO can get wizard data from google sheet
@@ -73,15 +75,20 @@ function GetPersistFromEnv() {
   }
 }
 function GetPluginsEnabledFromEnv() {
-  console.log('TEST123-disabled', import.meta.env);
   if (import.meta.env[LWT_ENV_VARS.disablePlugins] === 'true') {
     return false;
   }
   return true;
 }
+function GetDevModeFromEnv() {
+  if (import.meta.env[LWT_ENV_VARS.devMode] === 'true') {
+    return true;
+  }
+  return false;
+}
 export const AppVariables: TAppContext = {
-  versionNumber: 'LEGACY-0.0.0',
-  releaseDate: 'November 31 2023',
+  versionNumber: 'LEGACY-0.0.0-PRE-ALPHA-DEMO',
+  releaseDate: 'November 30 2023',
   // Prob dont need to be an env var
   styleVariant: 'dark',
 
@@ -95,14 +102,16 @@ export const AppVariables: TAppContext = {
 
   restURL: 'TODO',
 
+  devMode: GetDevModeFromEnv(),
+
   server: 'NOSERVER',
   serverVersion: '1.0.0',
 
-  frontend: 'React',
-  frontendVersion: '17.0.2',
-  frontendSource: 'http://github.com',
+  frontend: 'LWT-React',
+  frontendVersion: 'LEGACY-0.0.0-PRE-ALPHA-DEMO',
+  frontendSource: 'https://github.com/OrgansWithoutBodies/LWT-React',
 
   wizardDataUri: '',
 } as const;
-
+console.log('STARTING APP WITH VARIABLES: ', AppVariables);
 // Server requirements: persist data, REST-compliant w openapi schema, backup/restore from backup, tableSize endpoint,parse sentences?

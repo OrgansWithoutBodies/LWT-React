@@ -252,7 +252,6 @@ export function AddNewTermTooltip({
   if (!language) {
     return <></>;
   }
-  console.log('TEST123-tooltip', word, sentence, newTerm);
   const wordStr = newTerm ? word : word.WoText;
   // TODO on click on term, change other panes
   return (

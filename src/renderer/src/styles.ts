@@ -27,8 +27,8 @@
  * THE SOFTWARE.
  *
  * For more information, please refer to [http://unlicense.org/].
-**************************************************************
-*/
+ **************************************************************
+ */
 
 import { CSSObject } from 'styled-components';
 
@@ -120,12 +120,12 @@ const DarkColors: ColorSchema = {
   test10: '#CCFFCC',
   test11: '#DDFFDD',
 };
-const VariantMap: Record<StyleVariant, ColorSchema> = {
+export const VariantMap: Record<StyleVariant, ColorSchema> = {
   dark: DarkColors,
   light: DefaultColors,
 };
 export const createColors = (
-  variant: StyleVariant,
+  variant: StyleVariant
 ): Record<'body' | string, CSSObject> => {
   const Colors = VariantMap[variant];
   return {
@@ -189,7 +189,7 @@ export const createColors = (
       color: Colors.lum0,
     },
     'span.status5': {
-      backgroundColor: Colors.test11,
+      backgroundColor: Colors.str5,
       color: Colors.lum0,
     },
     'span.status99': {

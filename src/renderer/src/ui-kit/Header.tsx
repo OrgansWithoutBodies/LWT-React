@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { LanguagesId, TextsId } from '../data/validators';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
+import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
 import { Icon } from './Icon';
 
@@ -61,6 +62,7 @@ export const headerValues = {
 } as const;
 
 export function Header({
+  // TODO deprecate?
   afterDropdown,
   title,
   link = '/',
@@ -158,7 +160,15 @@ export function Header({
       <table>
         <tbody>
           <tr>
-            <h3>{title}</h3>
+            <h3>
+              {title}
+              {AppVariables.devMode && (
+                <>
+                  {' '}
+                  <span className="red">DEBUG</span>
+                </>
+              )}
+            </h3>
           </tr>
         </tbody>
       </table>

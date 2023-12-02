@@ -263,7 +263,6 @@ export function UploadWords() {
                       WoLgID: parseNumMap,
                       WoStatus: parseNumMap,
                       file: (_, { file }) => {
-                        console.log('test123-file', file.current.files[0]);
                         return {
                           file: file.current.files[0],
                           fileName: file.current.files[0].name,
@@ -315,7 +314,6 @@ async function parseTermsFromCSV(
   const delimiterVal = delimiterMap[value.delimiter];
   const data = parse<string[]>(stringdata!, { delimiter: delimiterVal });
   const colVals = value.columns;
-  console.log('TEST123-COL', colVals);
   const colIndsToCareAbout = colVals.reduce(
     (prev, curr, currInd) =>
       curr !== 'x'
@@ -337,10 +335,6 @@ async function parseTermsFromCSV(
     .map((row, ii) => {
       const term = Object.fromEntries(
         colIndsToCareAbout.map(([ind, colKey]) => {
-          console.log('TEST123-ind', {
-            row: [ColumnImportMode[colKey]['termParam'], row[ind]],
-            rowNum: ii,
-          });
           return [ColumnImportMode[colKey]['termParam'], row[ind]] as [
             (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
             Words[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
@@ -353,7 +347,6 @@ async function parseTermsFromCSV(
         WoStatus: value.WoStatus,
       } as Words;
     });
-  // console.log('TEST123-parsedterms');
   return parsedTerms;
 }
 // function get_wordstatus_selectoptions($v, $all, $not9899, $off = true)

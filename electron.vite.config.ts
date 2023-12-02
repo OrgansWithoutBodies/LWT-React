@@ -15,6 +15,8 @@ export default defineConfig({
   },
   preload: {},
   renderer: {
+    base: '/lwt',
+
     plugins: [react()],
 
     define: {

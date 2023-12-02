@@ -92,8 +92,8 @@ export function NewLanguage() {
                   maxLength={40}
                   size={40}
                   default
+                  // data_info="Study Language"
                 />
-                {/* // data_info="Study Language" */}
                 <RequiredLineButton />
               </td>
             </tr>
@@ -219,7 +219,6 @@ export function NewLanguage() {
                 </select>
                 (e.g. for Chinese, Japanese, etc.)
               </td>
-              {/* selected */}
             </tr>
             <tr>
               <td className="td1 right backlightyellow">Remove spaces:</td>
@@ -230,7 +229,6 @@ export function NewLanguage() {
                 </select>
                 (e.g. for Chinese, Japanese, etc.)
               </td>
-              {/* selected */}
             </tr>
             <tr>
               <td className="td1 right backlightyellow">
@@ -243,7 +241,6 @@ export function NewLanguage() {
                 </select>
                 (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
               </td>
-              {/* selected */}
             </tr>
             <tr>
               <td className="td1 right">
@@ -270,6 +267,7 @@ export function NewLanguage() {
               </td>
               {/* // data_info="Export Template" */}
             </tr>
+            {/* {TODO rows for plugins here} */}
             <tr>
               <td className="td1 right" colSpan={2}>
                 <input

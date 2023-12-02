@@ -37,7 +37,6 @@ function insertEntry(entry: object, tableKey: string) {
   const entryKeys = Object.keys(entry).filter(
     (val) => entry[val] !== undefined
   );
-  console.log('TEST123-insertentry', entry, tableKey);
   const insertQuery = `INSERT INTO 
   ${tbpref}${tableKey}(
     ${entryKeys.join(', ')}
@@ -60,7 +59,7 @@ function insertEntry(entry: object, tableKey: string) {
               return [`$${key}`, entry[key]];
             })
           ),
-          (val) => console.log('TEST123-SUCCESS-INSERT', val)
+          () => {}
         )
         // TODO
         .catch((err) => console.log('ERR', err))

@@ -260,7 +260,7 @@ export function EditArchivedTexts({
                       <Icon src="speaker-volume" title="With Audio" />
                     )}
                     {text.AtSourceURI && (
-                      <a href="' . $record['AtSourceURI'] . '" target="_blank">
+                      <a href={text.AtSourceURI} target="_blank">
                         <Icon src="chain" title="Link to Text Source" />
                       </a>
                     )}

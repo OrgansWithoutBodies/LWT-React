@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { dataService } from '../data/data.service';
 import { Tags, Tags2, Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -9,7 +10,7 @@ import {
   WordsValidator,
   WordsValidatorNoId,
 } from '../data/validators';
-import { RefMap } from '../forms/Forms';
+import { CheckAndSubmit, RefMap, parseNumMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import {
   PathParams,
@@ -41,7 +42,6 @@ export function TagDropDown({
   tagKey: PathParams;
 }): JSX.Element {
   const updateParams = useUpdateParams();
-  console.log('TEST123-tag', tags);
   return (
     <select
       name="tag1"
@@ -618,7 +618,6 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
   const WoInput = useFormInput(refMap, term);
-  console.log('TEST123-term', term, words, chgID);
   // TODO don't know why this is necessary but seems to happen that initially words starts as [] for a few ms
   if (words.length === 0) {
     return <></>;
@@ -735,7 +734,16 @@ export function ChangeTerm({ chgID }: { chgID: number }): JSX.Element {
                   navigator(`/edit_words#rec${chgID}`);
                 }}
               />
-              <input type="button" value="Change" />
+              <input
+                type="button"
+                value="Change"
+                onClick={() => {
+                  // TODO
+                  // CheckAndSubmit(refMap, {}, validator, (val) => {
+                  //   dataService.addTerm(val);
+                  // });
+                }}
+              />
             </td>
           </tr>
         </table>
@@ -764,9 +772,12 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
     throw new Error('Invalid Language ID!');
   }
   const validator = WordsValidatorNoId;
+  const [formErrors, setFormErrors] = useState<{
+    [key in keyof typeof validator.TYPE]?: string;
+  }>({});
   const refMap = RefMap(validator);
   const navigator = useInternalNavigate();
-  const WoInput = useFormInput(refMap, { WoLgID: langId });
+  const WoInput = useFormInput(refMap, { WoLgID: langId }, formErrors);
   return (
     <>
       <Header title="TODO" />
@@ -870,7 +881,27 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                   navigator('/edit_words');
                 }}
               />
-              <input type="button" value="Change" />
+              <input
+                type="button"
+                value="Save"
+                onClick={() => {
+                  CheckAndSubmit(
+                    refMap,
+                    { WoLgID: parseNumMap },
+                    validator,
+                    (val) => {
+                      console.log('ADDING TERM');
+                      dataService.addTerm(val);
+                      navigator('/edit_words');
+                    },
+                    null,
+                    (errors) => {
+                      console.log('TEST123-terms', errors);
+                      setFormErrors(errors);
+                    }
+                  );
+                }}
+              />
             </td>
           </tr>
         </table>

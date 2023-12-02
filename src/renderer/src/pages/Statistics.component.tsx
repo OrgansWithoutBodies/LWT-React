@@ -38,7 +38,6 @@ export function StatisticsComponent(): JSX.Element {
     'Last 365 d',
     'All Time',
   ];
-  console.log('TEST123', languageStatusStatistics);
   return (
     <>
       <Header title="My Statistics" />

@@ -291,6 +291,7 @@ export class DataService {
   public deleteTerm(termId: WordsId) {
     this.dataStore.update((state) => ({
       ...state,
+      notificationMessage: { txt: `Removed Term id=${termId}` },
       words: state.words.filter((word) => word.WoID !== termId),
     }));
     this.persistSet('words');
@@ -366,7 +367,6 @@ export class DataService {
   public addMultipleTerms(terms: Words[]) {
     const mappedTerms = terms.map((word, ii) => {
       if (!word.WoText) {
-        console.log('TEST123-problem:', word, ii);
       }
       return {
         ...word,
@@ -410,7 +410,6 @@ export class DataService {
     //   });
     // };
     // const text = reader.readAsText(file);
-    // console.log('TEST123', text);
     const reader = new FileReader();
     const fileExt = file.name.split('.')[file.name.split('.').length - 1];
     reader.onload = (ev) => {
@@ -512,6 +511,7 @@ export class DataService {
 
   public emptyDatabase() {
     this.dataStore.update((state) => ({
+      notificationMessage: { txt: 'Emptied Database!' },
       settings: state.settings,
       archivedtexts: [],
       archtexttags: [],
@@ -546,7 +546,10 @@ export class DataService {
 
   public installDemoDatabase() {
     // TODO persist this better
-    this.dataStore.update(() => createDemoDBInitialState());
+    this.dataStore.update(() => ({
+      ...createDemoDBInitialState(),
+      notificationMessage: { txt: 'Installed Demo DB' },
+    }));
 
     // TODO drop db
     // TODO installDemo handler?
@@ -585,7 +588,6 @@ export class DataService {
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
       const toArchive = texts[archIndex];
-      console.log('TEST123', toArchive, archIndex, texts, archID);
       const poppedTexts = [
         ...texts.slice(0, archIndex),
         ...texts.slice(archIndex + 1),
@@ -618,6 +620,7 @@ export class DataService {
   public setSettings(settings: Partial<Settings>) {
     this.dataStore.update(({ settings: oldSettings, ...state }) => ({
       ...state,
+      notificationMessage: { txt: 'Updated Settings' },
       settings: Object.entries({
         ...Object.fromEntries(
           oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
@@ -640,6 +643,7 @@ export class DataService {
     const parsedText = splitCheckText(parsingText?.TxText, parsingLanguage, -1);
     this.dataStore.update(({ parsedTexts, ...rest }) => ({
       ...rest,
+      notificationMessage: `parsed text:${parsingText?.TxTitle}`,
       parsedTexts: { ...parsedTexts, [textId]: parsedText },
     }));
   }

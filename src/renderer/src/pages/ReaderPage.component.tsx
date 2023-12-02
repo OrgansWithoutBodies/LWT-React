@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { Words } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
@@ -8,6 +8,7 @@ import { Icon } from '../ui-kit/Icon';
 import { AddNewWordPane } from './AddNewWordPane';
 import { Reader } from './Reader.component';
 import { escape_html_chars, make_tooltip } from './escape_html_chars';
+import { useTick } from './useTimer';
 
 // TODO
 //  confirmation screen
@@ -190,7 +191,7 @@ export function Tester({ modality }: { modality: Modality }) {
   const [numNotTested, setNumNotTested] = useState(10);
   //
 
-  const timer = useTimer(1000);
+  const timer = useTick(1000);
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
   const b_notyet = l_notyet == 0 ? '' : 'borderl';
@@ -245,23 +246,6 @@ export function Tester({ modality }: { modality: Modality }) {
       </div>
     </>
   );
-}
-/**
- *
- * @param intervalInMs
- */
-function useTimer(intervalInMs: number) {
-  const [time, setTime] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTime(new Date().getTime() - time),
-      intervalInMs
-    );
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  return time;
 }
 
 function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {

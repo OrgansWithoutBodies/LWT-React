@@ -39,7 +39,6 @@ export function GlosbeAPI({
   );
   useEffect(() => {
     const setDataFromGlosbe = async () => {
-      console.log('TEST123-glosbe', glosbeAPIHandler.getPath);
       const glosbeData = await glosbeAPIHandler.getPath('/gapi/translate', {
         dest,
         from,

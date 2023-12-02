@@ -24,7 +24,6 @@ var PersistanceStrategy = /* @__PURE__ */ ((PersistanceStrategy2) => {
   return PersistanceStrategy2;
 })(PersistanceStrategy || {});
 function GetPersistFromEnv() {
-  console.log({ "BASE_URL": "/", "MODE": "development", "DEV": true, "PROD": false, "SSR": false });
   switch ({ "BASE_URL": "/", "MODE": "development", "DEV": true, "PROD": false, "SSR": false }[
     "VITE_LWT_PERSIST"
     /* persistMethod */
@@ -39,23 +38,44 @@ function GetPersistFromEnv() {
       return PersistanceStrategy.ElectronSqlite;
   }
 }
+function GetPluginsEnabledFromEnv() {
+  if ({ "BASE_URL": "/", "MODE": "development", "DEV": true, "PROD": false, "SSR": false }[
+    "VITE_LWT_DISABLE_PLUGINS"
+    /* disablePlugins */
+  ] === "true") {
+    return false;
+  }
+  return true;
+}
+function GetDevModeFromEnv() {
+  if ({ "BASE_URL": "/", "MODE": "development", "DEV": true, "PROD": false, "SSR": false }[
+    "VITE_LWT_DEV_MODE"
+    /* devMode */
+  ] === "true") {
+    return true;
+  }
+  return false;
+}
 const AppVariables = {
-  versionNumber: "LEGACY-0.0.0",
-  releaseDate: "November 31 2023",
+  versionNumber: "LEGACY-0.0.0-PRE-ALPHA-DEMO",
+  releaseDate: "November 30 2023",
   // Prob dont need to be an env var
   styleVariant: "dark",
+  pluginsEnabled: GetPluginsEnabledFromEnv(),
   isMobile: false,
   persistMethod: GetPersistFromEnv(),
   dbBackend: "SQLite",
   dbVersion: "1.0.0",
   restURL: "TODO",
+  devMode: GetDevModeFromEnv(),
   server: "NOSERVER",
   serverVersion: "1.0.0",
-  frontend: "React",
-  frontendVersion: "17.0.2",
-  frontendSource: "http://github.com",
+  frontend: "LWT-React",
+  frontendVersion: "LEGACY-0.0.0-PRE-ALPHA-DEMO",
+  frontendSource: "https://github.com/OrgansWithoutBodies/LWT-React",
   wizardDataUri: ""
 };
+console.log("STARTING APP WITH VARIABLES: ", AppVariables);
 const DefaultColors = {
   // nonsaturated
   lum0: "#000000",
@@ -1209,7 +1229,6 @@ function insertEntry(entry, tableKey) {
   const entryKeys = Object.keys(entry).filter(
     (val) => entry[val] !== void 0
   );
-  console.log("TEST123-insertentry", entry, tableKey);
   const insertQuery = `INSERT INTO 
   ${tbpref}${tableKey}(
     ${entryKeys.join(", ")}
@@ -1229,7 +1248,8 @@ function insertEntry(entry, tableKey) {
           return [`$${key}`, entry[key]];
         })
       ),
-      (val) => console.log("TEST123-SUCCESS-INSERT", val)
+      () => {
+      }
     ).catch((err) => console.log("ERR", err)).then((val) => console.log("TEST123-SUCCESS-INSERT", val));
   });
 }

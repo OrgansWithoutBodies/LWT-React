@@ -384,7 +384,6 @@ export class DataService {
       // alert(text);
     };
     const text = reader.readAsText(file);
-    console.log('TEST123', text);
   }
 
   private serialize(backupType: 'JSON' | 'SQL') {
@@ -525,7 +524,6 @@ export class DataService {
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
       const toArchive = texts[archIndex];
-      console.log('TEST123', toArchive, archIndex, texts, archID);
       const poppedTexts = [
         ...texts.slice(0, archIndex),
         ...texts.slice(archIndex + 1),

@@ -37,7 +37,6 @@ export class GlosbeOpenAPIWrapper
     if (!this.wrapperAPIUrl) {
       throw new Error('Base URL hasnt been set!');
     }
-    console.log('TEST123-getpath');
     const getURL = `${this.wrapperAPIUrl}${path}?${Object.keys(queryParams)
       .map((queryKey) => `${queryKey}=${queryParams[queryKey]}`)
       .join('&')}`;

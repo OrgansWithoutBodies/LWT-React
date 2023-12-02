@@ -56,7 +56,6 @@ function CheckErrors<TForm extends {}>(
   const error = ss
     .pick(validator, [keyChanged])
     .validate({ [keyChanged]: refMap[keyChanged].current.value })[0];
-  console.log('TEST123-Val', keyChanged, refMap[keyChanged], error);
   if (!error) {
     return setFieldError(false);
   }
@@ -116,13 +115,14 @@ export function CheckAndSubmit<TForm>(
   },
   validator: ss.Struct<{ [key in keyof TForm]: any }>,
   takeValidatedObject: (value: { [key in keyof TForm]: any }) => void,
-  omit: keyof TForm | null = null
+  omit: keyof TForm | null = null,
+  onFormErrors: (errors: { [key in keyof TForm]: string }) => void = () => {}
 ) {
   const values = Object.fromEntries(
     (Object.keys(refMap) as (keyof typeof refMap)[])
       .filter((val) => (omit === null || val !== omit) && val !== 'clearAll')
       .map((refKey) => {
-        console.log(refKey);
+        // console.log(refKey);
         return [
           refKey,
           (preValidateMap[refKey] || identityMap)(
@@ -137,10 +137,12 @@ export function CheckAndSubmit<TForm>(
     .omit(validator, [omit])
     .validate(values);
 
-  console.log('TEST123', validationErrors, postValidationObj);
   if (!validationErrors && postValidationObj) {
     takeValidatedObject(postValidationObj);
-    // TODO reset form on valid/show success msg
+    // TODO reset to default values
     ResetForm(refMap);
+  } else if (validationErrors) {
+    console.log(validationErrors.key);
+    onFormErrors({ [validationErrors.key]: validationErrors.message });
   }
 }
