@@ -1,19 +1,19 @@
-import { useState } from 'react';
 import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import {
   AddNewWordType,
   AddNewWordValidator,
-  Words,
+  Word,
 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsValidatorNoId } from '../data/validators';
-import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
+import { TRefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
-import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import { FormInput } from './buildFormInput';
-import { wordPrevalidateMap } from './preValidateMaps';
+import { Icon } from '../ui-kit/Icon';
+import { FormInput } from './FormInput';
+import { GetTagsList } from './Terms.component';
+import { wordNoIdPrevalidateMap } from './preValidateMaps';
 import { owin, translateSentence2 } from './translateSentence2';
 
 /**
@@ -25,27 +25,31 @@ export function AddNewWordPane({
   existingTerm = undefined,
 }: {
   word?: string;
-  existingTerm?: Words;
+  existingTerm?: Word;
   langId: LanguagesId;
 }): JSX.Element {
   // TODO reset form on new word
   // TODO verify dialog on change
   const validator = AddNewWordValidator;
-  const refMap = RefMap<AddNewWordType>(validator);
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();
   // TODO hashmap here avoid lookup
   const lang = languages.find((lang) => lang.LgID === langId);
-  const [FormErrors, setFormErrors] = useState<{
-    [key in keyof AddNewWordType]?: boolean;
-  }>({ WoText: false });
-  const setFormErrorLine =
-    (key: keyof AddNewWordType): SetBoolean =>
-    (value) =>
-      setFormErrors({ ...FormErrors, [key]: value });
-  const WoInput = useFormInput(refMap, { WoText: word || '' });
+  const {
+    Input: WoInput,
+    refMap,
+    formErrors,
+    onSubmit,
+  } = useFormInput({
+    entry: { WoText: word || '' },
+    validator: validator,
+  });
+  // const setFormErrorLine =
+  //   (key: keyof AddNewWordType): SetBoolean =>
+  //   (value) =>
+  //     setformErrors({ ...formErrors, [key]: value });
   const isEdit = existingTerm !== undefined;
-  const termStatus = isEdit ? `${existingTerm.WoStatus}` : '1';
+  const termStatus = isEdit ? existingTerm.WoStatus : 1;
 
   if (!lang) {
     throw new Error('Incorrect Language Set!');
@@ -93,24 +97,24 @@ export function AddNewWordPane({
               <td className="td1">
                 <WoInput
                   className="notempty checkoutsidebmp"
-                  // data_info="New Term"
+                  errorName="New Term"
                   type="text"
                   entryKey="WoText"
                   // id="wordfield"
                   // value={word}
                   default
                   // defaultEntry={FormState}
-                  onChange={() =>
-                    // TODO bring into buildFormInput
-                    CheckErrors('WoText', refMap, setFormErrorLine('WoText'))
-                  }
+                  // onChange={() =>
+                  //   // TODO bring into buildFormInput
+                  //   CheckErrors('WoText', refMap, setFormErrorLine('WoText'))
+                  // }
                   size={35}
+                  isRequired
                 />
-                <RequiredLineButton />
               </td>
             </tr>
             {/* TODO bring logic into formlines */}
-            {FormErrors.WoText && (
+            {formErrors.WoText && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
                 <td />
@@ -123,22 +127,22 @@ export function AddNewWordPane({
                   name="WoTranslation"
                   // value={FormState.WoTranslation}
                   ref={refMap.WoTranslation}
-                  onChange={() =>
-                    CheckErrors(
-                      'WoTranslation',
-                      refMap,
-                      setFormErrorLine('WoTranslation')
-                    )
-                  }
+                  // onChange={() =>
+                  //   CheckErrors(
+                  //     'WoTranslation',
+                  //     refMap,
+                  //     setFormErrorLine('WoTranslation')
+                  //   )
+                  // }
                   className="setfocus textarea-noreturn checklength checkoutsidebmp"
                   maxLength={500}
-                  // data_info="Translation"
+                  errorName="Translation"
                   cols={35}
                   rows={3}
                 />
               </td>
             </tr>
-            {FormErrors.WoTranslation && (
+            {formErrors.WoTranslation && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
                 <td />
@@ -151,6 +155,7 @@ export function AddNewWordPane({
                   id="termtags"
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
+                  <GetTagsList WoID={existingTerm?.WoID || null} />
                   <li className="tagit-new">
                     <span
                       role="status"
@@ -160,9 +165,9 @@ export function AddNewWordPane({
                     <input
                       type="text"
                       maxLength={20}
-                      onChange={(event) =>
-                        handleFormChange('WoTranslation', event.target.value)
-                      }
+                      // onChange={(event) =>
+                      //   handleFormChange('WoTranslation', event.target.value)
+                      // }
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
                       autoComplete="off"
@@ -171,7 +176,7 @@ export function AddNewWordPane({
                 </ul>
               </td>
             </tr>
-            {/* {FormErrors.wotags && (
+            {/* {formErrors.wotags && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
                 <td></td>
@@ -183,7 +188,7 @@ export function AddNewWordPane({
                 <FormInput
                   type="text"
                   className="checkoutsidebmp"
-                  // data_info="Romanization"
+                  errorName="Romanization"
                   entryKey="WoRomanization"
                   refMap={refMap}
                   maxLength={100}
@@ -191,7 +196,7 @@ export function AddNewWordPane({
                 />
               </td>
             </tr>
-            {FormErrors.WoRomanization && (
+            {formErrors.WoRomanization && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
                 <td />
@@ -208,7 +213,7 @@ export function AddNewWordPane({
                   name="WoSentence"
                   className="textarea-noreturn checklength checkoutsidebmp"
                   maxLength={1000}
-                  // data_info="Sentence"
+                  errorName="Sentence"
                   cols={35}
                   rows={3}
                   ref={refMap.WoSentence}
@@ -218,7 +223,7 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Status:</td>
               <td className="td1">
-                <StatusRadioButtons termStatus={termStatus} refMap={refMap} />
+                <StatusRadioButtons WoStatus={termStatus} refMap={refMap} />
               </td>
             </tr>
             <tr>
@@ -266,15 +271,10 @@ export function AddNewWordPane({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    CheckAndSubmit(
-                      refMap,
-                      wordPrevalidateMap,
-                      validator,
-                      (value) => {
-                        dataService.addTerm(value);
-                        navigator('/edit_words');
-                      }
-                    );
+                    onSubmit(wordNoIdPrevalidateMap, (value) => {
+                      dataService.addTerm(value);
+                      navigator('/edit_words');
+                    });
                   }}
                 />
               </td>
@@ -342,12 +342,13 @@ type SetBoolean = (value: boolean) => void;
  */
 
 export function StatusRadioButtons({
-  termStatus,
+  WoStatus,
   refMap,
-}: {
-  termStatus: string;
+}: Pick<Word, 'WoStatus'> & {
   refMap: TRefMap<AddNewWordType>;
 }) {
+  const setRef = (event: React.ChangeEvent) =>
+    (refMap.WoStatus.current = event.target);
   return (
     <>
       <span className="status1" title="Learning">
@@ -356,7 +357,8 @@ export function StatusRadioButtons({
           type="radio"
           name="WoStatus"
           value="1"
-          defaultChecked={termStatus === '1'}
+          onChange={setRef}
+          defaultChecked={WoStatus === 1}
           ref={refMap.WoStatus}
         />
         1&nbsp;
@@ -366,7 +368,8 @@ export function StatusRadioButtons({
         <input
           type="radio"
           name="WoStatus"
-          defaultChecked={termStatus === '2'}
+          onChange={setRef}
+          defaultChecked={WoStatus === 2}
           value="2"
         />
         2&nbsp;
@@ -376,7 +379,8 @@ export function StatusRadioButtons({
         <input
           type="radio"
           name="WoStatus"
-          defaultChecked={termStatus === '3'}
+          defaultChecked={WoStatus === 3}
+          onChange={setRef}
           value="3"
         />
         3&nbsp;
@@ -384,9 +388,10 @@ export function StatusRadioButtons({
       <span className="status4" title="Learning">
         &nbsp;
         <input
+          onChange={setRef}
           type="radio"
           name="WoStatus"
-          defaultChecked={termStatus === '4'}
+          defaultChecked={WoStatus === 4}
           value="4"
         />
         4&nbsp;
@@ -395,8 +400,9 @@ export function StatusRadioButtons({
         &nbsp;
         <input
           type="radio"
+          onChange={setRef}
           name="WoStatus"
-          defaultChecked={termStatus === '5'}
+          defaultChecked={WoStatus === 5}
           value="5"
         />
         5&nbsp;
@@ -405,8 +411,9 @@ export function StatusRadioButtons({
         &nbsp;
         <input
           type="radio"
+          onChange={setRef}
           name="WoStatus"
-          defaultChecked={termStatus === '99'}
+          defaultChecked={WoStatus === 99}
           value="99"
         />
         WKn&nbsp;
@@ -414,10 +421,11 @@ export function StatusRadioButtons({
       <span className="status98" title="Ignored">
         &nbsp;
         <input
+          onChange={setRef}
           type="radio"
           name="WoStatus"
           value="98"
-          defaultChecked={termStatus === '98'}
+          defaultChecked={WoStatus === 98}
         />
         Ign&nbsp;
       </span>
@@ -427,7 +435,7 @@ export function StatusRadioButtons({
 
 /* TODO get sentences */
 
-function SentencesForWord({ word }: { word: Words }) {
+function SentencesForWord({ word }: { word: Word }) {
   return (
     <>
       <p>
@@ -443,13 +451,13 @@ function SentencesForWord({ word }: { word: Words }) {
         <span
           className="click"
           // TODO
-          onClick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"
+          onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"
         >
           <Icon src="tick-button" title="Choose" />
         </span>{' '}
         &nbsp;
         {/* TODO */}
-        ' . $sent[0] . '
+        ' . sent[0] . '
         <br />
       </p>
     </>
@@ -465,7 +473,7 @@ export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
   // ('#exsent').html('<img src="icn/waiting2.gif" />');
   console.log(lang, word, ctl);
   // post(
-  //   'ajax_show_sentences.php',
+  //   'ajax_show_sentences',
   //   { lang: lang, word: word, ctl: ctl },
   //   function (data: any) {
   //     ('#exsent').html(data);
@@ -473,22 +481,22 @@ export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
   // );
 }
 
-// function get20Sentences($lang, $wordlc, $jsctlname, $mode)
+// function get20Sentences(lang, wordlc, jsctlname, mode)
 // {
-// 	global $tbpref;
-// 	$r = '<p><b>Sentences in active texts with <i>' . tohtml($wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
-// 	$sql = 'SELECT DISTINCT SeID, SeText FROM ' . $tbpref . 'sentences, ' . $tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax($wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . $lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
-// 	$res = do_mysqli_query($sql);
-// 	$r .= '<p>';
-// 	$last = '';
-// 	while ($record = mysqli_fetch_assoc($res)) {
-// 		if ($last != $record['SeText']) {
-// 			$sent = getSentence($record['SeID'], $wordlc, $mode);
-// 			$r .= '<span class="click" onclick="{' . $jsctlname . '.value=' . prepare_textdata_js($sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . $sent[0] . '<br />';
+// 	global tbpref;
+// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
+// 	sql = 'SELECT DISTINCT SeID, SeText FROM ' . tbpref . 'sentences, ' . tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax(wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
+// 	res = do_mysqli_query(sql);
+// 	r .= '<p>';
+// 	last = '';
+// 	while (record = mysqli_fetch_assoc(res)) {
+// 		if (last != record['SeText']) {
+// 			sent = getSentence(record['SeID'], wordlc, mode);
+// 			r .= '<span class="click" onclick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . sent[0] . '<br />';
 // 		}
-// 		$last = $record['SeText'];
+// 		last = record['SeText'];
 // 	}
-// 	mysqli_free_result($res);
-// 	$r .= '</p>';
-// 	return $r;
+// 	mysqli_free_result(res);
+// 	r .= '</p>';
+// 	return r;
 // }

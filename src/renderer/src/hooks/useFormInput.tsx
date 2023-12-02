@@ -1,6 +1,9 @@
-import { useMemo } from 'react';
-import { TRefMap } from '../forms/Forms';
-import { FormInput } from '../pages/buildFormInput';
+import { useMemo, useState } from 'react';
+import * as ss from 'superstruct';
+import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { FormInput, FormLineError } from '../pages/FormInput';
+import { RequiredLineButton } from '../ui-kit/Icon';
+import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
 /**
  *
@@ -10,15 +13,24 @@ import { FormInput } from '../pages/buildFormInput';
 export function useFormInput<
   TKey extends string,
   TData extends Record<TKey, any>
->(
-  refMap: TRefMap<TData>,
-  entry?: Partial<TData>,
-  formErrors?: {
-    [key in TKey]?: string;
-  }
-) {
+>({
+  validator,
+  entry,
+}: // formErrors,
+{
+  validator: ss.Struct<{ [key in keyof TData]: any }>;
+  entry?: Partial<TData>;
+  // formErrors?: {
+  //   [key in TKey]?: string;
+  // };
+}) {
   // TODO useFormContext? for shared without build
   // memo to avoid retriggering
+  const refMap = RefMap(validator);
+
+  const [formErrors, setFormErrors] = useState<{
+    [key in keyof typeof validator.TYPE]?: string;
+  }>({});
 
   const ReturnedComponent = useMemo(
     () =>
@@ -52,18 +64,55 @@ export function useFormInput<
       // ...Object.values(formErrors ? formErrors : {}),
     ]
   );
-  const onSubmit = (preValidateMap, onValidatedData) =>
+  const onSubmit = (
+    preValidateMap,
+    onValidatedData,
+    omit: keyof TData | null = null
+  ) =>
     CheckAndSubmit(
       refMap,
       preValidateMap,
       validator,
       onValidatedData,
-      null,
+      omit,
       (errors) => {
-        console.log('TEST123-terms', errors);
         setFormErrors(errors);
       }
     );
-  return ReturnedComponent;
-  // return { Input: ReturnedComponent, onSubmit };
+  const LanguageSelectInput = useMemo(
+    () =>
+      ({
+        entryKey,
+        errorName,
+        isRequired = false,
+      }: {
+        entryKey: TKey;
+        isRequired?: boolean;
+        errorName?: string;
+      }) =>
+        (
+          <>
+            <LanguageDropdown dropdownRef={refMap[entryKey]} />
+            {isRequired && <RequiredLineButton />}
+            <br />
+            {formErrors && formErrors[entryKey] && (
+              <FormLineError<TKey>
+                errorName={errorName}
+                entryKey={entryKey}
+                formError={formErrors[entryKey]}
+              />
+            )}
+          </>
+        ),
+    [...Object.values(entry || {}), formErrors]
+  );
+  console.log(formErrors);
+  return {
+    Input: ReturnedComponent,
+    onSubmit,
+    refMap,
+    formErrors,
+
+    LanguageSelectInput,
+  };
 }

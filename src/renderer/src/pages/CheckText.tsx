@@ -35,7 +35,7 @@ export function CheckText(): JSX.Element {
                   name="TxText"
                   className="notempty checkbytes checkoutsidebmp"
                   maxLength={65000}
-                  // data_info="Text"
+                  errorName="Text"
                   cols={60}
                   rows={20}
                 />

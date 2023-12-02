@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
-import { Texts } from '../data/parseMySqlDump';
+import { Text } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { CheckAndSubmit, RefMap, parseNumMap } from '../forms/Forms';
+import { CheckAndSubmit, parseNumMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
@@ -11,7 +11,7 @@ import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { LongTextVerify } from './LongTextImportVerify.component';
 import { resetDirty } from './Sorting';
-import { splitCheckText } from './utils';
+import { buildSentences } from './utils';
 
 export default function ImportLongText({
   onSetVerify,
@@ -29,9 +29,9 @@ export default function ImportLongText({
     TxText: ss.string(),
     TxLgID: ss.number(),
     TxTitle: ss.string(),
+    maxSent: ss.number(),
   });
-  const refMap = RefMap(validator);
-  const TxInput = useFormInput(refMap);
+  const { Input: TxInput, refMap } = useFormInput({ validator });
 
   return (
     <>
@@ -55,12 +55,12 @@ export default function ImportLongText({
               <TxInput
                 type="text"
                 className="notempty checkoutsidebmp"
-                // data_info="Title"
+                errorName="Title"
                 entryKey="TxTitle"
                 maxLength={200}
                 size={60}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -70,7 +70,7 @@ export default function ImportLongText({
               Either specify a <b>File to upload</b>
               :
               <br />
-              <input name="thefile" type="file" />
+              <input name="file" type="file" />
               <br />
               <br />
               <b>Or</b> paste a text from the clipboard (and do
@@ -80,7 +80,7 @@ export default function ImportLongText({
               <textarea
                 className="checkoutsidebmp"
                 ref={refMap.TxText}
-                // data_info="Upload"
+                errorName="Upload"
                 name="Upload"
                 cols={60}
                 rows={15}
@@ -130,16 +130,16 @@ export default function ImportLongText({
               per Text:
             </td>
             <td className="td1">
-              <input
+              <TxInput
                 type="text"
                 className="notempty posintnumber"
-                // data_info="Maximum Sentences per Text"
-                name="maxsent"
-                value="50"
+                errorName="Maximum Sentences per Text"
+                entryKey="maxSent"
+                default
                 maxLength={3}
+                isRequired
                 size={3}
               />
-              <RequiredLineButton />
               <br />
               <span className="smallgray">
                 Values higher than 100 may slow down text display.
@@ -158,7 +158,7 @@ export default function ImportLongText({
               <TxInput
                 type="text"
                 className="checkurl checkoutsidebmp"
-                // data_info="Source URI"
+                errorName="Source URI"
                 entryKey="TxSourceURI"
                 maxLength={1000}
                 size={60}
@@ -213,11 +213,10 @@ export default function ImportLongText({
                     ({ TxText, TxLgID, TxTitle }) => {
                       // TODO
                       // console.log(TxLgID);
-                      const splitTexts = splitCheckText(
+                      const splitTexts = buildSentences(
                         TxText,
-                        languages.find((lang) => lang.LgID === TxLgID)!,
-                        -2
-                      ) as string[];
+                        languages.find((lang) => lang.LgID === TxLgID)!
+                      );
                       console.log(splitTexts);
                       onSetVerify(
                         splitTexts.map((text, ii) => ({
@@ -241,7 +240,7 @@ export default function ImportLongText({
   );
 }
 // TODO flesh out
-export type LongTextType = Pick<Texts, 'TxText' | 'TxLgID' | 'TxTitle'>[];
+export type LongTextType = Pick<Text, 'TxText' | 'TxLgID' | 'TxTitle'>[];
 
 export function LongText() {
   const [verifying, setVerifying] = useState<LongTextType | null>(null);

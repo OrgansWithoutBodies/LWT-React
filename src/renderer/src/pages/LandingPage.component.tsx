@@ -211,20 +211,20 @@ export function LandingPage() {
                 >
                   <i>Default</i> Table Set
                   {/* TODO table set size */}
-                  {/* $mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . convert_string_to_sqlsyntax($dbname) . " and table_name in (" .
-	"CONCAT(" . $p . ",'archivedtexts')," .
-	"CONCAT(" . $p . ",'archtexttags')," .
-	"CONCAT(" . $p . ",'languages')," .
-	"CONCAT(" . $p . ",'sentences')," .
-	"CONCAT(" . $p . ",'settings')," .
-	"CONCAT(" . $p . ",'tags')," .
-	"CONCAT(" . $p . ",'tags2')," .
-	"CONCAT(" . $p . ",'textitems')," .
-	"CONCAT(" . $p . ",'texts')," .
-	"CONCAT(" . $p . ",'texttags')," .
-	"CONCAT(" . $p . ",'words')," .
-	"CONCAT(" . $p . ",'wordtags'))");
-if (! isset($mb)) $mb = '0.0';
+                  {/* mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . convert_string_to_sqlsyntax(dbname) . " and table_name in (" .
+	"CONCAT(" . p . ",'archivedtexts')," .
+	"CONCAT(" . p . ",'archtexttags')," .
+	"CONCAT(" . p . ",'languages')," .
+	"CONCAT(" . p . ",'sentences')," .
+	"CONCAT(" . p . ",'settings')," .
+	"CONCAT(" . p . ",'tags')," .
+	"CONCAT(" . p . ",'tags2')," .
+	"CONCAT(" . p . ",'textitems')," .
+	"CONCAT(" . p . ",'texts')," .
+	"CONCAT(" . p . ",'texttags')," .
+	"CONCAT(" . p . ",'words')," .
+	"CONCAT(" . p . ",'wordtags'))");
+if (! isset(mb)) mb = '0.0';
  */}
                 </span>
                 {/* TODO */}

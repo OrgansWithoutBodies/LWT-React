@@ -18,7 +18,9 @@ type NonHeaderLinks =
   | 'do_text';
 
 type BasePath = InternalPathsFromHeader | NonHeaderLinks | '/';
-export type InternalPaths = `/${BasePath}${`?${string}` | ''}`;
+export type InternalPaths = `/${BasePath}${`?${string}` | ''}${
+  | `#${string}`
+  | ''}`;
 // const urlIsInternalPathGuard = (url: string): url is InternalPaths => {
 //   return Object.values(headerValues).includes(url as any);
 // };

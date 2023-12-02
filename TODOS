@@ -35,6 +35,7 @@ DEV NICETIES:
 
 CODE TODOs
 
+- use superstruct coercion instead of prevalidatemaps https://docs.superstructjs.org/guides/03-coercing-data
 - remove anys, fix type problems
 - add more comments & clean up
 - more error throws, more error boundaries
@@ -47,6 +48,7 @@ CODE TODOs
 - @nll/api-codegen-ts?
 - fern-api?
 - tsoa to generate from express
+- graphql persistence strategy
 - https://github.com/vercel/swr?
 - https://github.com/nfroidure/openapi-ts-sdk-builder?
 
@@ -61,7 +63,7 @@ FEATURE IDEAS
 - json backup/restore
 - "Local + Sync" backend?
 - other dictionaries than glosbe
-- "merge backup"
+- "merge backup" for disparate backups
 - consider RxDB for electron-sqlite wrapper? https://github.com/nylas/electron-RxDB
 - - would also need to consider making sure friendly w other plugins
 - Tatoeba/Lute

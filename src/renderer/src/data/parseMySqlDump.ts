@@ -5,9 +5,10 @@ import {
   ArchivedTextsValidator,
   ArchTextTagsValidator,
   LanguagesValidator,
-  LanguagesValidatorNoId,
-  SentencesValidator,
+  LanguageValidatorNoId,
+  SentenceValidator,
   SettingsValidator,
+  Tags2NoIdValidator,
   Tags2Validator,
   TagsValidator,
   TextItemsValidator,
@@ -19,33 +20,36 @@ import {
   WordTagsValidator,
 } from './validators';
 
-export type ArchivedTexts = typeof ArchivedTextsValidator.TYPE;
-export type ArchTextTags = typeof ArchTextTagsValidator.TYPE;
+export type ArchivedText = typeof ArchivedTextsValidator.TYPE;
+export type ArchTextTag = typeof ArchTextTagsValidator.TYPE;
 
-export type Languages = typeof LanguagesValidator.TYPE;
-export type LanguageNoId = typeof LanguagesValidatorNoId.TYPE;
+export type Language = typeof LanguagesValidator.TYPE;
+export type LanguageNoId = typeof LanguageValidatorNoId.TYPE;
 
-export type Sentences = typeof SentencesValidator.TYPE;
+export type Sentence = typeof SentenceValidator.TYPE;
 export type Settings = typeof SettingsValidator.TYPE;
-export type Tags = typeof TagsValidator.TYPE;
-export type Tags2 = typeof Tags2Validator.TYPE;
-export type TextItems = typeof TextItemsValidator.TYPE;
+export type Tag = typeof TagsValidator.TYPE;
+export type Tag2 = typeof Tags2Validator.TYPE;
+export type Tag2NoId = typeof Tags2NoIdValidator.TYPE;
+export type TextItem = typeof TextItemsValidator.TYPE;
 
-export type Texts = typeof TextsValidator.TYPE;
-export type TextsNoId = typeof TextsValidatorNoId.TYPE;
+export type Text = typeof TextsValidator.TYPE;
+export type TextNoId = typeof TextsValidatorNoId.TYPE;
 
-export type TextTags = typeof TextTagsValidator.TYPE;
+export type TextTag = typeof TextTagsValidator.TYPE;
 
-export type Words = typeof WordsValidator.TYPE;
-export type WordsNoId = typeof WordsValidatorNoId.TYPE;
+export type Word = typeof WordsValidator.TYPE;
+export type WordNoId = typeof WordsValidatorNoId.TYPE;
 
-export type WordTags = typeof WordTagsValidator.TYPE;
+export type WordTag = typeof WordTagsValidator.TYPE;
 
 export const AddNewWordValidator = ss.omit(WordsValidatorNoId, [
   'WoStatusChanged',
   'WoTodayScore',
   'WoTomorrowScore',
   'WoRandom',
+  'WoCreated',
+  'WoTextLC',
 ]);
 export type AddNewWordType = typeof AddNewWordValidator.TYPE;
 
@@ -54,7 +58,7 @@ export const AddNewTextValidator = ss.omit(TextsValidatorNoId, [
 ]);
 export type AddNewTextType = typeof AddNewTextValidator.TYPE;
 
-export const AddNewLanguageValidator = ss.omit(LanguagesValidatorNoId, []);
+export const AddNewLanguageValidator = ss.omit(LanguageValidatorNoId, []);
 export type AddNewLanguageType = typeof AddNewLanguageValidator.TYPE;
 
 // TODO tsoa to generate openapi from these schemas?

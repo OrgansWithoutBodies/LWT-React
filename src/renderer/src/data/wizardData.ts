@@ -1,4 +1,4 @@
-import { Languages } from './parseMySqlDump';
+import { Language } from './parseMySqlDump';
 
 // TODO get more details from wikidata?
 // https://www.wikidata.org/wiki/Property:P4132
@@ -9,7 +9,7 @@ import { Languages } from './parseMySqlDump';
 // TODO get langs from csv/google sheet?
 
 export type LangDef = Pick<
-  Languages,
+  Language,
   'LgTextSize' | 'LgRegexpSplitSentences' | 'LgRegexpWordCharacters'
 > & {
   LgGTransKey: string;

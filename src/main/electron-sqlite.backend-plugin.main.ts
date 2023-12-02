@@ -6,7 +6,7 @@ import {
   PersistedValueInserter,
   PersistedValueSetter,
 } from '../renderer/src/data/PersistedValueGetter';
-import { Languages } from '../renderer/src/data/parseMySqlDump';
+import { Language } from '../renderer/src/data/parseMySqlDump';
 import { LanguagesId } from '../renderer/src/data/validators';
 import { Persistable } from '../shared/Persistable';
 
@@ -101,7 +101,7 @@ export async function getEntries(tableName: string, columnKeys: string[]) {
     })
     .then(async (db) => {
       const res = await db.all<
-        Pick<Languages, 'LgID' | 'LgName' | 'LgExportTemplate'>[]
+        Pick<Language, 'LgID' | 'LgName' | 'LgExportTemplate'>[]
       >(
         `SELECT ${columnKeys.join(',')} FROM ${tbpref}${tableName};`
         // TODO ORDER BY LgName

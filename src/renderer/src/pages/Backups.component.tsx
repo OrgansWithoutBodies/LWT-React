@@ -80,7 +80,7 @@ export function BackupScreen(): JSX.Element {
                   </span>
                 </p>
                 <p>
-                  <input name="thefile" type="file" ref={restoreBackup} />
+                  <input name="file" type="file" ref={restoreBackup} />
                 </p>
                 <p className="right">
                   &nbsp;

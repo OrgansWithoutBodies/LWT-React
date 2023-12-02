@@ -246,7 +246,7 @@ export class DataQuery extends Query<DataState> {
     })
   );
 
-  // TODO
+  // TODO not sure this is best pattern
   public textDetails: Observable<TextDetailRow[]> = combineLatest([
     this.textsForActiveLanguage,
     this.texttags,
@@ -259,12 +259,21 @@ export class DataQuery extends Query<DataState> {
         title: text.TxTitle,
         // TODO split
         totalWords: text.TxText.length,
+        link: text.TxSourceURI,
+        audioAvailable: text.TxAudioURI,
         // TODO
         saved: 'test',
         // TODO
         unk: 100,
         // TODO
         unkPerc: 100,
+        // unkPerc: Math.round(100*)
+        // txttodowords = txttotalwords - txtworkedwords;
+        // percentunknown = 0;
+        // if (txttotalwords != 0) {
+        //   percentunknown =
+        //     round(100 * txttodowords / txttotalwords, 0);
+
         tags: texttags
           .filter((textTag) => textTag.TtTxID === text.TxID)
           .map((textTag) => {

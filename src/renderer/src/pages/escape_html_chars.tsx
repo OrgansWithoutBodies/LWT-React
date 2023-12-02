@@ -22,9 +22,9 @@ function onWordClick(
   const WBLINK1 = wb1;
   const WBLINK2 = wb2;
   const WBLINK3 = wb3;
-  // SOLUTION = <?php echo prepare_textdata_js ( $testtype==1 ? ( $nosent ? ($traWBLINK1ns) : (' [' . $trans . '] ')) : $save ); ?>;
+  // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (traWBLINK1ns) : (' [' . trans . '] ')) : save ); ?>;
   const OPENED = 0;
-  // WID = <?php echo $wid; ?>;
+  // WID = <?php echo wid; ?>;
   const onClickWord = () => word_click_event_do_test_test;
   const onKeyDown = () => keydown_event_do_test_test;
 }
@@ -50,26 +50,26 @@ function keydown_event_do_test_test(e: KeyboardEvent) {
     $('.word').click();
 
     cClick();
-    window.parent.frames.ro.location.href = `show_word.php?wid=${$(
-      '.word'
-    ).attr('data_wid')}&ann=`;
+    window.parent.frames.ro.location.href = `show_word?wid=${$('.word').attr(
+      'data_wid'
+    )}&ann=`;
     OPENED = 1;
     return false;
   }
   if (OPENED == 0) return true;
   if (e.which == 38) {
     // up : status+1
-    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&stchange=1`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&stchange=1`;
     return false;
   }
   if (e.which == 40) {
     // down : status-1
-    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&stchange=-1`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&stchange=-1`;
     return false;
   }
   if (e.which == 27) {
     // esc : dont change status
-    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=${$(
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=${$(
       '.word'
     ).attr('data_status')}`;
     return false;
@@ -77,32 +77,32 @@ function keydown_event_do_test_test(e: KeyboardEvent) {
   for (let i = 1; i <= 5; i++) {
     if (e.which == 48 + i || e.which == 96 + i) {
       // 1,.. : status=i
-      window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=${i}`;
+      window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=${i}`;
       return false;
     }
   }
   if (e.which == 73) {
     // I : status=98
-    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=98`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=98`;
     return false;
   }
   if (e.which == 87) {
     // W : status=99
-    window.parent.frames.ro.location.href = `set_test_status.php?wid=${WID}&status=99`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=99`;
     return false;
   }
   if (e.which == 69) {
     // E : EDIT
-    window.parent.frames.ro.location.href = `edit_tword.php?wid=${WID}`;
+    window.parent.frames.ro.location.href = `edit_tword?wid=${WID}`;
     return false;
   }
   return true;
 }
 
 function word_click_event_do_test_test(this: any) {
-  // $wb1 = isset($record['LgDict1URI']) ? $record['LgDict1URI'] : "";
-  // $wb2 = isset($record['LgDict2URI']) ? $record['LgDict2URI'] : "";
-  // $wb3 = isset($record['LgGoogleTranslateURI']) ? $record['LgGoogleTranslateURI'] : "";
+  // wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
+  // wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
+  // wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
   run_overlib_test(
     WBLINK1,
     WBLINK2,
@@ -174,7 +174,7 @@ function run_overlib_test(
           )}</b></center><hr noshade size=1 />`
         : ''
     }<b>${escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b><br />` +
-      ` <a href=\x22edit_tword.php?wid=${wid}\x22 target=\x22ro\x22>Edit term</a><br />${createTheDictLink(
+      ` <a href=\x22edit_tword?wid=${wid}\x22 target=\x22ro\x22>Edit term</a><br />${createTheDictLink(
         wblink1,
         txt,
         'Dict1',
@@ -214,29 +214,29 @@ function make_overlib_link_change_status_test2(
   newstat: string | number
 ) {
   if (oldstat == newstat) {
-    return ` <a href=\x22set_test_status.php?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
+    return ` <a href=\x22set_test_status?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
       newstat
     )}\x22>[◆]</span></a> `;
   }
-  return ` <a href=\x22set_test_status.php?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
+  return ` <a href=\x22set_test_status?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
     newstat
   )}\x22>[${getStatusAbbr(newstat)}]</span></a> `;
 }
 // todo STATUSES comes from her e
-// function get_wordstatus_radiooptions($v)
+// function get_wordstatus_radiooptions(v)
 // {
-// 	if (!isset($v))
-// 		$v = 1;
-// 	$r = "";
-// 	$statuses = get_statuses();
-// 	foreach ($statuses as $n => $status) {
-// 		$r .= '<span class="status' . $n . '" title="' . tohtml($status["name"]) . '">';
-// 		$r .= '&nbsp;<input type="radio" name="WoStatus" value="' . $n . '"';
-// 		if ($v == $n)
-// 			$r .= ' checked="checked"';
-// 		$r .= ' />' . tohtml($status["abbr"]) . "&nbsp;</span> ";
+// 	if (!isset(v))
+// 		v = 1;
+// 	r = "";
+// 	statuses = get_statuses();
+// 	foreach (statuses as n => status) {
+// 		r .= '<span class="status' . n . '" title="' . tohtml(status["name"]) . '">';
+// 		r .= '&nbsp;<input type="radio" name="WoStatus" value="' . n . '"';
+// 		if (v == n)
+// 			r .= ' checked="checked"';
+// 		r .= ' />' . tohtml(status["abbr"]) . "&nbsp;</span> ";
 // 	}
-// 	return $r;
+// 	return r;
 // }
 /**
  *

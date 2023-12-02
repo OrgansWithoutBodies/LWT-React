@@ -116,13 +116,12 @@ export function CheckAndSubmit<TForm>(
   validator: ss.Struct<{ [key in keyof TForm]: any }>,
   takeValidatedObject: (value: { [key in keyof TForm]: any }) => void,
   omit: keyof TForm | null = null,
-  onFormErrors: (errors: { [key in keyof TForm]: string }) => void = () => {}
+  onFormErrors: (errors: { [key in keyof TForm]?: string }) => void = () => {}
 ) {
   const values = Object.fromEntries(
     (Object.keys(refMap) as (keyof typeof refMap)[])
       .filter((val) => (omit === null || val !== omit) && val !== 'clearAll')
       .map((refKey) => {
-        // console.log(refKey);
         return [
           refKey,
           (preValidateMap[refKey] || identityMap)(
@@ -132,17 +131,24 @@ export function CheckAndSubmit<TForm>(
         ];
       })
   );
+  console.log(values);
 
   const [validationErrors, postValidationObj] = ss
     .omit(validator, [omit])
     .validate(values);
 
   if (!validationErrors && postValidationObj) {
+    // TODO ifTakeValidated returns then we take that as a success otherwise a failure & dont reset
     takeValidatedObject(postValidationObj);
     // TODO reset to default values
     ResetForm(refMap);
   } else if (validationErrors) {
-    console.log(validationErrors.key);
-    onFormErrors({ [validationErrors.key]: validationErrors.message });
+    console.log({
+      [validationErrors.path[0] as keyof TForm]: validationErrors.message,
+    });
+
+    onFormErrors({
+      [validationErrors.path[0] as keyof TForm]: validationErrors.message,
+    });
   }
 }

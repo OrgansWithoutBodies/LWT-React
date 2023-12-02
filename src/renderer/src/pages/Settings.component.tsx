@@ -2,7 +2,7 @@ import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { SettingsObjValidator } from '../data/validators';
-import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { CheckAndSubmit } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
@@ -155,8 +155,10 @@ export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();
   // const validator = ss.array(SettingsValidator);
-  const refMap = RefMap<typeof validator.TYPE>(validator);
-  const StInput = useFormInput(refMap, { ...DEFAULT_SETTINGS, ...settings });
+  const { Input: StInput, refMap } = useFormInput({
+    validator,
+    entry: { ...DEFAULT_SETTINGS, ...settings },
+  });
   return (
     <>
       <Header title="Settings/Preferences" />
@@ -188,7 +190,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right setfocus"
                   type="text"
                   entryKey="set-text-h-frameheight-no-audio"
-                  // data_info="Height of left top frame without audioplayer"
+                  errorName="Height of left top frame without audioplayer"
                   maxLength={3}
                   size={3}
                   default
@@ -212,7 +214,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-text-h-frameheight-with-audio"
-                  // data_info="Height of left top frame with audioplayer"
+                  errorName="Height of left top frame with audioplayer"
                   default
                   maxLength={3}
                   size={3}
@@ -232,7 +234,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-text-l-framewidth-percent"
-                  // data_info="Width of left frames"
+                  errorName="Width of left frames"
                   default
                   maxLength={2}
                   size={2}
@@ -252,7 +254,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-text-r-frameheight-percent"
-                  // data_info="Height of right top frame"
+                  errorName="Height of right top frame"
                   default
                   maxLength={2}
                   size={2}
@@ -277,7 +279,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-test-h-frameheight"
-                  // data_info="Height of left top frame"
+                  errorName="Height of left top frame"
                   default
                   maxLength={3}
                   size={3}
@@ -297,7 +299,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-test-l-framewidth-percent"
-                  // data_info="Width of left frames"
+                  errorName="Width of left frames"
                   default
                   maxLength={2}
                   size={2}
@@ -317,7 +319,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-test-r-frameheight-percent"
-                  // data_info="Height of right top frame"
+                  errorName="Height of right top frame"
                   default
                   maxLength={2}
                   size={2}
@@ -342,7 +344,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   entryKey="set-test-main-frame-waiting-time"
-                  // data_info="Waiting time after assessment to display next test"
+                  errorName="Waiting time after assessment to display next test"
                   value="0"
                   maxLength={4}
                   size={4}
@@ -365,7 +367,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   entryKey="set-test-edit-frame-waiting-time"
-                  // data_info="Waiting Time to clear the message/edit frame"
+                  errorName="Waiting Time to clear the message/edit frame"
                   default
                   maxLength={8}
                   size={8}
@@ -518,7 +520,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty zeroposintnumber right"
                   type="text"
                   entryKey="set-similar-terms-count"
-                  // data_info="Similar terms to be displayed while adding/editing a term"
+                  errorName="Similar terms to be displayed while adding/editing a term"
                   default
                   maxLength={1}
                   size={1}
@@ -569,7 +571,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-texts-per-page"
-                  // data_info="Texts per Page"
+                  errorName="Texts per Page"
                   default
                   maxLength={4}
                   size={4}
@@ -609,7 +611,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-archivedtexts-per-page"
-                  // data_info="Archived Texts per Page"
+                  errorName="Archived Texts per Page"
                   default
                   maxLength={4}
                   size={4}
@@ -627,7 +629,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-terms-per-page"
-                  // data_info="Terms per Page"
+                  errorName="Terms per Page"
                   default
                   maxLength={4}
                   size={4}
@@ -645,7 +647,7 @@ export function SettingsComponent(): JSX.Element {
                   className="notempty posintnumber right"
                   type="text"
                   entryKey="set-tags-per-page"
-                  // data_info="Tags per Page"
+                  errorName="Tags per Page"
                   default
                   maxLength={4}
                   size={4}

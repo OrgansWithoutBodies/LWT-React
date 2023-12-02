@@ -36,9 +36,9 @@ export function PrintText({ textID }: { textID: TextsId }) {
           Terms with <b>status(es)</b>{' '}
           <select
             id="status"
-            // onchange="{val=document.getElementById('status').options[document.getElementById('status').selectedIndex].valuelocation.href='print_text.php?text=" . $textid . "&ampstatus=' + val}"
+            // onchange="{val=document.getElementById('status').options[document.getElementById('status').selectedIndex].valuelocation.href='print_text?text=" . textid . "&ampstatus=' + val}"
           >
-            echo get_wordstatus_selectoptions($statusrange, true, true, false)
+            echo get_wordstatus_selectoptions(statusrange, true, true, false)
           </select>{' '}
           ...
           <br />
@@ -53,23 +53,23 @@ export function PrintText({ textID }: { textID: TextsId }) {
           </select>
           <select
             id="annplcmnt"
-            // onchange="{val=document.getElementById('annplcmnt').options[document.getElementById('annplcmnt').selectedIndex].valuelocation.href='print_text.php?text=" . $textid . "&ampannplcmnt=' + val}"
+            // onchange="{val=document.getElementById('annplcmnt').options[document.getElementById('annplcmnt').selectedIndex].valuelocation.href='print_text?text=" . textid . "&ampannplcmnt=' + val}"
           >
             <option
               value="0"
-              // " . get_selected(0,$annplcmnt) . "
+              // " . get_selected(0,annplcmnt) . "
             >
               behind
             </option>
             <option
               value="1"
-              // " . get_selected(1,$annplcmnt) . "
+              // " . get_selected(1,annplcmnt) . "
             >
               in front of
             </option>
             <option
               value="2"
-              // " . get_selected(2,$annplcmnt) . "
+              // " . get_selected(2,annplcmnt) . "
             >
               above (ruby)
             </option>
@@ -83,20 +83,20 @@ export function PrintText({ textID }: { textID: TextsId }) {
             // onClick="window.print()"
           />{' '}
           (only the text below the line)
-          {/* if ((get_first_value("select length(TxAnnotatedText) as value from " . $tbpref . "texts where TxID = " . $textid) + 0) > 0) {
-	 &nbsp | &nbsp Or <input type="button" value="Print/Edit/Delete" onclick="location.href='print_impr_text.php?text=" . $textid . "'" /> your <b>Improved Annotated Text</b>" . get_annotation_link($textid) . ".
+          {/* if ((get_first_value("select length(TxAnnotatedText) as value from " . tbpref . "texts where TxID = " . textid) + 0) > 0) {
+	 &nbsp | &nbsp Or <input type="button" value="Print/Edit/Delete" onclick="location.href='print_impr_text?text=" . textid . "'" /> your <b>Improved Annotated Text</b>" . get_annotation_link(textid) . ".
 } else {
-	 &nbsp | &nbsp <input type="button" value="Create" onclick="location.href='print_impr_text.php?edit=1&amptext=" . $textid . "'" /> an <b>Improved Annotated Text</b> [<img src="icn/tick.png" title="Annotated Text" alt="Annotated Text" />].
+	 &nbsp | &nbsp <input type="button" value="Create" onclick="location.href='print_impr_text?edit=1&amptext=" . textid . "'" /> an <b>Improved Annotated Text</b> [<img src="icn/tick.png" title="Annotated Text" alt="Annotated Text" />].
 } */}
         </p>
       </div>
       <div
         id="print"
-        // " . ($rtlScript ? ' dir="rtl"' : '') . "
+        // " . (rtlScript ? ' dir="rtl"' : '') . "
       >
         <p
           style={{ fontSize: language.LgTextSize }}
-          // style="font-size:' . $textsize . '%line-height: 1.35 margin-bottom: 10px "
+          // style="font-size:' . textsize . '%line-height: 1.35 margin-bottom: 10px "
         >
           {showingText.TxTitle}
           <br />

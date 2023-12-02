@@ -31,7 +31,6 @@ Build & dev targets are specified in the format `yarn [dev|build]:[?electron]:[l
 - Annotated Text
 - Term tester
 - Backup/Restore not working yet
-- Import terms not working yet
 - Vite Env Vars not working in electron
 - Audio not implemented
 - No REST Backend yet

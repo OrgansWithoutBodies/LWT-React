@@ -14,3 +14,16 @@ export const StrengthMap: Record<
   Ign: { status: 'Ignored', classKey: 98 },
   WKn: { status: 'Well Known', classKey: 99 },
 };
+export const StrengthMapNumericalKey: Record<
+  NumericalStrength,
+  { name: string; abbr: TermStrengthOrUnknown }
+> = {
+  0: { name: 'Unknown', abbr: 0 },
+  1: { name: 'Learning', abbr: 1 },
+  2: { name: 'Learning', abbr: 2 },
+  3: { name: 'Learning', abbr: 3 },
+  4: { name: 'Learning', abbr: 4 },
+  5: { name: 'Learned', abbr: 5 },
+  98: { name: 'Ignored', abbr: 'Ign' },
+  99: { name: 'Well Known', abbr: 'WKn' },
+};

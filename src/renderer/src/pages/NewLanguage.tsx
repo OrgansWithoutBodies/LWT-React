@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import Modal from 'react-modal';
 import { dataService } from '../data/data.service';
-import { LanguagesValidatorNoId } from '../data/validators';
+import { TextSize } from '../data/type';
+import { LanguageValidatorNoId } from '../data/validators';
 import { LANGDEFS } from '../data/wizardData';
-import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { TRefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
-import { Icon, RequiredLineButton } from '../ui-kit/Icon';
+import { Icon } from '../ui-kit/Icon';
 import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
-import { languagePreValidateMap } from './preValidateMaps';
+import { openInNewWindow } from './openInNewWindow';
+import { languageNoIdPreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
 export function NewLanguage() {
@@ -19,19 +21,25 @@ export function NewLanguage() {
   //  - map validator to row - but if row styling is different maybe difficult..
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
   const navigator = useInternalNavigate();
-  const validator = LanguagesValidatorNoId;
-  const refMap = RefMap<LanguageNoId>(validator);
+  const validator = LanguageValidatorNoId;
 
   const defaultLgForm = {
     LgRegexpWordCharacters: 'a-zA-ZÀ-ÖØ-öø-ȳ',
-    LgExportTemplate: '$y\t$t\n',
+    LgExportTemplate: 'y\tt\n',
     LgExceptionsSplitSentences: 'Mr.|Dr.|[A-Z].|Vd.|Vds.',
     LgRegexpSplitSentences: '.!?:;"',
     LgGoogleTranslateURI:
       '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
     LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
   };
-  const LgInput = useFormInput(refMap, defaultLgForm);
+  const {
+    refMap,
+    Input: LgInput,
+    onSubmit,
+  } = useFormInput({
+    validator,
+    entry: defaultLgForm,
+  });
   return (
     <>
       <Header title="New Language" />
@@ -92,9 +100,9 @@ export function NewLanguage() {
                   maxLength={40}
                   size={40}
                   default
-                  // data_info="Study Language"
+                  isRequired
+                  errorName="Study Language"
                 />
-                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -104,11 +112,11 @@ export function NewLanguage() {
                   type="text"
                   className="checkdicturl notempty checkoutsidebmp"
                   entryKey="LgDict1URI"
+                  isRequired
                   maxLength={200}
-                  // data_info="Dictionary 1 URI"
+                  errorName="Dictionary 1 URI"
                   size={60}
                 />
-                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -119,7 +127,7 @@ export function NewLanguage() {
                   className="checkdicturl checkoutsidebmp"
                   entryKey="LgDict2URI"
                   maxLength={200}
-                  // data_info="Dictionary 2 URI"
+                  errorName="Dictionary 2 URI"
                   size={60}
                 />
               </td>
@@ -136,8 +144,8 @@ export function NewLanguage() {
                   maxLength={200}
                   size={60}
                   default
+                  errorName="GoogleTranslate URI"
                 />
-                {/* // data_info="GoogleTranslate URI" */}
               </td>
             </tr>
             <tr>
@@ -156,8 +164,8 @@ export function NewLanguage() {
                   maxLength={500}
                   size={60}
                   default
+                  errorName="Character Substitutions"
                 />
-                {/* // data_info="Character Substitutions" */}
               </td>
             </tr>
             <tr>
@@ -172,9 +180,9 @@ export function NewLanguage() {
                   default
                   maxLength={500}
                   size={60}
+                  isRequired
+                  errorName="RegExp Split Sentences"
                 />
-                {/* // data_info="RegExp Split Sentences" */}
-                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -187,9 +195,10 @@ export function NewLanguage() {
                   default
                   maxLength={500}
                   size={60}
+                  isRequired
+                  errorName="Exceptions Split Sentences"
                 />
               </td>
-              {/* // data_info="Exceptions Split Sentences" */}
             </tr>
             <tr>
               <td className="td1 right backlightyellow">
@@ -202,10 +211,10 @@ export function NewLanguage() {
                   entryKey="LgRegexpWordCharacters"
                   default
                   maxLength={500}
+                  isRequired
                   size={60}
+                  errorName="RegExp Word Characters"
                 />
-                {/* // data_info="RegExp Word Characters" */}
-                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -250,7 +259,7 @@ export function NewLanguage() {
                   src="question-frame"
                   title="Help"
                   onClick={() => {
-                    oewin('info_export_template');
+                    openInNewWindow('info_export_template');
                   }}
                 />
                 :
@@ -264,8 +273,8 @@ export function NewLanguage() {
                   maxLength={1000}
                   size={60}
                 />
+                errorName="Export Template"
               </td>
-              {/* // data_info="Export Template" */}
             </tr>
             {/* {TODO rows for plugins here} */}
             <tr>
@@ -284,15 +293,10 @@ export function NewLanguage() {
                   value="Save"
                   onClick={() => {
                     check_dupl_lang();
-                    CheckAndSubmit(
-                      refMap,
-                      languagePreValidateMap,
-                      validator,
-                      (value) => {
-                        dataService.addLanguage(value);
-                        navigator('/edit_languages');
-                      }
-                    );
+                    onSubmit(languageNoIdPreValidateMap, (value) => {
+                      dataService.addLanguage(value);
+                      navigator('/edit_languages');
+                    });
                   }}
                 />
               </td>
@@ -335,6 +339,7 @@ export function NewLanguage() {
           onSuccess={(l1, l2) => {
             const originSpec = LANGDEFS[l1 as keyof typeof LANGDEFS];
             const targetSpec = LANGDEFS[l2 as keyof typeof LANGDEFS];
+            console.log('TEST123', { refMap });
             refMap.LgName.current.value = l2;
             console.log(refMap.LgName.current.value, l1, l2);
             refMap.LgDict1URI.current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
@@ -389,18 +394,5 @@ export function TextSizeSelect<
       <option value="200">200 %</option>
       <option value="250">250 %</option>
     </select>
-  );
-}
-
-/**
- *
- * @param url
- */
-export function oewin(url: string | URL | undefined) {
-  // TODO
-  window.open(
-    url,
-    'editwin',
-    'width=800, height=600, scrollbars=yes, menubar=no, resizable=yes, status=no'
   );
 }

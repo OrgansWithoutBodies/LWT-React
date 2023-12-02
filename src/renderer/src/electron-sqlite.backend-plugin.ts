@@ -4,7 +4,7 @@ import {
   PersistedValueGetter,
   PersistedValueSetter,
 } from './data/PersistedValueGetter';
-import { Languages } from './data/parseMySqlDump';
+import { Language } from './data/parseMySqlDump';
 
 type PersistenceStrategyPlugin = {
   get: PersistedValueGetter;
@@ -24,7 +24,7 @@ function getLanguages() {
     })
     .then(async (db) => {
       const res = await db.get<
-        Pick<Languages, 'LgID' | 'LgName' | 'LgExportTemplate'>
+        Pick<Language, 'LgID' | 'LgName' | 'LgExportTemplate'>
       >(
         `select LgID, LgName, LgExportTemplate from ${tbpref}languages order by LgName`
       );

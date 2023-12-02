@@ -1740,9 +1740,9 @@ $('#floatdiv').addFloating( {
                   Term Exports for the terms of that language. It consists of a
                   string of characters. Some parts of this string are
                   placeholders that are replaced by the actual term data,
-                  <a target="_blank" href="info_export_template.htm">
+                  <A target="_blank" href="/info_export_template">
                     see this table
-                  </a>
+                  </A>
                   . For each term (word or expression), that has been selected
                   for export, the placeholders of the export template will be
                   replaced by the term data and the string will be written to
@@ -2452,11 +2452,11 @@ $('#floatdiv').addFloating( {
               you may define the name in the file "connect.inc":
               <br />
               <br />
-              <b>$tbpref = "";</b> &nbsp; &nbsp; &nbsp; // only the default
-              table set
+              <b>tbpref = "";</b> &nbsp; &nbsp; &nbsp; // only the default table
+              set
               <br />
               <br />
-              <b>$tbpref = "setname";</b> &nbsp; &nbsp; &nbsp; // only the table
+              <b>tbpref = "setname";</b> &nbsp; &nbsp; &nbsp; // only the table
               set "setname"
               <br />
               <br />
@@ -2466,7 +2466,7 @@ $('#floatdiv').addFloating( {
               rules for table set names (see above)!!
               <br />
               <br />
-              If more than one table set exists, and $tbpref was NOT set to a
+              If more than one table set exists, and tbpref was NOT set to a
               fixed value in "connect.inc", you can select the desired table set
               via "start" (use this as start page if several people use their
               own table set), or by clicking on the LWT icon or title in the LWT

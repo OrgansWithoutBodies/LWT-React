@@ -138,28 +138,28 @@ export function InfoExportTemplate() {
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$w</td>
+          <td className="td1 center">w</td>
           <td className="td1">
             Term (Word/Expression) - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$t</td>
+          <td className="td1 center">t</td>
           <td className="td1">
             Translation - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$s</td>
+          <td className="td1 center">s</td>
           <td className="td1">
             Sentence, curly braces removed - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$c</td>
+          <td className="td1 center">c</td>
           <td className="td1">
             The sentence, but the "{`{xxx}`}" parts are replaced by "[...]"
             (cloze test question) - as <b>HTML text</b>.
@@ -167,7 +167,7 @@ export function InfoExportTemplate() {
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$d</td>
+          <td className="td1 center">d</td>
           <td className="td1">
             The sentence, but the "{`{xxx}`}" parts are replaced by "[xxx]"
             (cloze test solution) - as <b>HTML text</b>.
@@ -175,7 +175,7 @@ export function InfoExportTemplate() {
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$x</td>
+          <td className="td1 center">x</td>
           <td className="td1">
             The sentence in Anki2 cloze test notation: the "{`{xxx}`}" parts are
             replaced by "{`{{c1::xxx}}`}" - as <b>HTML text</b>.
@@ -183,7 +183,7 @@ export function InfoExportTemplate() {
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$y</td>
+          <td className="td1 center">y</td>
           <td className="td1">
             The sentence in Anki2 cloze test notation, with translation: the "
             {`{xxx}`}" parts are replaced by "{`{{c1::xxx::translation}}`}" - as{' '}
@@ -192,28 +192,28 @@ export function InfoExportTemplate() {
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$r</td>
+          <td className="td1 center">r</td>
           <td className="td1">
             Romanization - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$k</td>
+          <td className="td1 center">k</td>
           <td className="td1">
             Term in lowercase (key) - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$z</td>
+          <td className="td1 center">z</td>
           <td className="td1">
             Tag List - as <b>HTML text</b>.
           </td>
         </tr>
 
         <tr className="tr1">
-          <td className="td1 center">$l</td>
+          <td className="td1 center">l</td>
           <td className="td1">
             Language - as <b>HTML text</b>.
           </td>

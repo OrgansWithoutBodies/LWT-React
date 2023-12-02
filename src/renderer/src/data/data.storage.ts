@@ -7,35 +7,35 @@ import {
   PersistenceStrategies,
 } from './PersistedValueGetter';
 import {
-  ArchTextTags,
-  ArchivedTexts,
-  Languages,
-  Sentences,
+  ArchTextTag,
+  ArchivedText,
+  Language,
+  Sentence,
   Settings,
-  Tags,
-  Tags2,
-  TextItems,
-  TextTags,
-  Texts,
-  WordTags,
-  Words,
+  Tag,
+  Tag2,
+  Text,
+  TextItem,
+  TextTag,
+  Word,
+  WordTag,
 } from './parseMySqlDump';
 import { TextsId } from './validators';
 
 export interface DataState {
-  archivedtexts: ArchivedTexts[];
-  archtexttags: ArchTextTags[];
-  languages: Languages[];
+  archivedtexts: ArchivedText[];
+  archtexttags: ArchTextTag[];
+  languages: Language[];
 
-  sentences: Sentences[];
+  sentences: Sentence[];
   settings: Settings[];
-  tags: Tags[];
-  tags2: Tags2[];
-  textitems: TextItems[];
-  texts: Texts[];
-  texttags: TextTags[];
-  words: Words[];
-  wordtags: WordTags[];
+  tags: Tag[];
+  tags2: Tag2[];
+  textitems: TextItem[];
+  texts: Text[];
+  texttags: TextTag[];
+  words: Word[];
+  wordtags: WordTag[];
 
   parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
   notificationMessage: null | { txt: string };

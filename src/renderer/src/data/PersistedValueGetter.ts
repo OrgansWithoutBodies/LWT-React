@@ -30,7 +30,7 @@ export type PersistedValueEmptyer = () => void;
 
 export const getPersistedValueLocalStorage = <TKey extends keyof DataState>(
   key: TKey,
-  nullFallback = null,
+  nullFallback = null
 ): DataState[TKey] => {
   const localVal = localStorage.getItem(key);
   // TODO val parser/validator
@@ -40,16 +40,22 @@ export const getPersistedValueLocalStorage = <TKey extends keyof DataState>(
 };
 export const setPersistedValueLocalStorage: PersistedValueSetter = (
   key,
-  val,
+  val
 ) => {
   localStorage.setItem(key, JSON.stringify(val));
+  const { size } = new Blob(Object.values(localStorage));
+  console.log(
+    `LocalStorage Size: ${Math.round((size / (1000 * 1000)) * 100) / 100}Mb`
+  );
   return true;
 };
 
 // ================== //
 
-export const getPersistedValueRESTAPI: PersistedValueGetter = (key) => key as any;
-export const setPersistedValueRESTAPI: PersistedValueGetter = (key) => key as any;
+export const getPersistedValueRESTAPI: PersistedValueGetter = (key) =>
+  key as any;
+export const setPersistedValueRESTAPI: PersistedValueGetter = (key) =>
+  key as any;
 
 // ================== //
 

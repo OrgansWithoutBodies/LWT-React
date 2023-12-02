@@ -9,10 +9,12 @@ import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
-import { resetAll } from './EditArchived.component';
-import { GetMultipleArchivedTextActionsSelectOptions } from './EditTextTags';
+import {
+  GetMultipleArchivedTextActionsSelectOptions,
+  GetTextssortSelectoptions,
+} from './EditTextTags';
 import { TagAndOr, TagDropDown } from './Terms.component';
-import { confirmDelete, multiActionGo } from './utils';
+import { confirmDelete } from './utils';
 
 export function EditArchivedTexts({
   query,
@@ -52,6 +54,10 @@ export function EditArchivedTexts({
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(archivedtexts, 'AtID');
   const queryRef = useRef<HTMLInputElement | undefined>();
+  function pluralize(recno: number): import('react').ReactNode {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <>
       <Header title={`My ${activeLanguage?.LgName || ''} Text Archive`} />
@@ -73,7 +79,7 @@ export function EditArchivedTexts({
             <td className="td1 center" colSpan={2}>
               Language:
               <LanguageDropdown
-                header="[Filter off]"
+                header="Filter off"
                 onChange={(val) => {
                   if (val === -1) {
                     dataService.setActiveLanguage(null);
@@ -137,21 +143,26 @@ export function EditArchivedTexts({
             </td>
           </tr>
           {/* TODO */}
-          {/* <?php if(recno > 0) { ?>
-  <tr>
-  <th class="th1" style={{whiteSpace:"nowrap"}}>
-  <?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
-  </th>
-  <th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
-  <?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form1', 1); ?>
-  </th>
-  <th class="th1" style={{whiteSpace:"nowrap"}}>
-  Sort Order:
-  <select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts?page=1&sort=' + val;}">
-    <?php echo get_textssort_selectoptions($currentsort); ?>
-  </select>
-  </th></tr>
-  <?php } ?> */}
+          {recno > 0 && (
+            <tr>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                Text{pluralize(recno)}
+              </th>
+              <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
+                {/* TODO */}
+                <Pager currentPage={0} numPages={0} />
+              </th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                Sort Order:
+                <select
+                  name="sort"
+                  onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts?page=1&sort=' + val;}"
+                >
+                  <GetTextssortSelectoptions />
+                </select>
+              </th>
+            </tr>
+          )}
         </table>
       </form>
       {recno === 0 ? (
@@ -176,12 +187,17 @@ export function EditArchivedTexts({
                   name="markaction"
                   id="markaction"
                   disabled={selectedValues.size === 0}
-                  onChange={(val) => {
-                    multiActionGo(
-                      () => {},
-                      // TODO ref
-                      val
-                    );
+                  onChange={({ target: { value } }) => {
+                    if (value === 'del') {
+                      dataService.deleteMultipleArchivedTexts([
+                        ...selectedValues,
+                      ]);
+                    }
+                    // multiActionGo(
+                    //   () => {},
+                    //   // TODO ref
+                    //   val
+                    // );
                   }}
                 >
                   <GetMultipleArchivedTextActionsSelectOptions />
@@ -213,24 +229,24 @@ export function EditArchivedTexts({
               return (
                 <tr>
                   <td className="td1 center">
-                    <a name="rec' . $record['AtID'] . '">
+                    <a name="rec' . record['AtID'] . '">
                       <input
                         name="marked[]"
                         className="markcheck"
                         type="checkbox"
                         {...checkboxPropsForEntry(text)}
-                        value="' . $record['AtID'] . '"
+                        value="' . record['AtID'] . '"
                       />
                     </a>
                   </td>
-                  {/* ' . checkTest($record['AtID'], 'marked') . '  */}
+                  {/* ' . checkTest(record['AtID'], 'marked') . '  */}
                   <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
                     &nbsp;
-                    <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . $record['AtID'] . '">
+                    <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . record['AtID'] . '">
                       <Icon src="inbox-upload" title="Unarchive" />
                     </a>
                     &nbsp;
-                    <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['AtID'] . '">
+                    <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . record['AtID'] . '">
                       <Icon src="document--pencil" title="Edit" />
                     </a>
                     &nbsp;
@@ -254,7 +270,7 @@ export function EditArchivedTexts({
                     {text.AtTitle}
                     <span className="smallgray2">
                       {/* TODO */}
-                      {/* . tohtml($record['taglist']) . */}
+                      {/* . tohtml(record['taglist']) . */}
                     </span>
                     {text.AtAudioURI && (
                       <Icon src="speaker-volume" title="With Audio" />
@@ -274,26 +290,21 @@ export function EditArchivedTexts({
           </table>
         </form>
       )}
-      {/* TODO */}
-      {/*
-      <?php if( $pages > 1) { ?>
+      {numPages > 1 && (
         <form name="form3" action="#">
-        <table class="tab1" cellspacing={0} cellpadding={5}>
-      <tr>
-      <th class="th1" style={{whiteSpace:"nowrap"}}>
-      <?php echo recno; ?> Text<?php echo (recno==1?'':'s'); ?>
-      </th><th class="th1" style={{whiteSpace:"nowrap"}}>
-      <?php makePager ($currentpage, $pages, 'edit_archivedtexts', 'form3', 2); ?>
-      </th></tr></table>
-      </form>
-      <?php } ?>
-      `
-      <?php
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                Text{pluralize(recno)}
+              </th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                <Pager currentPage={currentPage} numPages={numPages} />
+              </th>
+            </tr>
+          </table>
+        </form>
+      )}
 
-      }
-
-      ?> */}
-      <Pager currentPage={currentPage} numPages={numPages} />
       <p>
         <input
           type="button"
@@ -303,4 +314,7 @@ export function EditArchivedTexts({
       </p>
     </>
   );
+}
+export function resetAll(refMap: string): void {
+  window.alert('TODO Function not implemented.');
 }

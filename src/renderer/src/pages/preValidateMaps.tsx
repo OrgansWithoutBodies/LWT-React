@@ -1,9 +1,9 @@
 // TODO table component?
 
-import { LanguageNoId, Tags } from '../data/parseMySqlDump';
+import { Language, LanguageNoId, Tag } from '../data/parseMySqlDump';
 import { emptyToNullMap, identityMap, parseNumMap } from '../forms/Forms';
 
-export const languagePreValidateMap: {
+export const languageNoIdPreValidateMap: {
   [key in keyof LanguageNoId]?: (
     value: string
   ) => number | string | undefined | null;
@@ -14,14 +14,33 @@ export const languagePreValidateMap: {
   LgRightToLeft: parseNumMap,
   LgDict2URI: emptyToNullMap,
 };
+export const languagePreValidateMap: {
+  [key in keyof Language]?: (
+    value: string
+  ) => number | string | undefined | null;
+} = {
+  LgID: parseNumMap,
+  LgTextSize: parseNumMap,
+  LgRemoveSpaces: parseNumMap,
+  LgSplitEachChar: parseNumMap,
+  LgRightToLeft: parseNumMap,
+  LgDict2URI: emptyToNullMap,
+};
 
 export const tagPreValidateMap: {
-  [key in keyof Tags]?: (value: string) => any | null;
+  [key in keyof Tag]?: (value: string) => any | null;
 } = {
   TgText: identityMap,
   TgComment: emptyToNullMap,
 };
+export const wordNoIdPrevalidateMap = {
+  WoStatus: parseNumMap,
+  WoLgID: parseNumMap,
+  WoCreated: () => Date.now(),
+  WoTextLC: (_, refMap) => refMap.WoText.current.value.toLowerCase(),
+};
 export const wordPrevalidateMap = {
+  WoID: parseNumMap,
   WoStatus: parseNumMap,
   WoLgID: parseNumMap,
   WoCreated: () => Date.now(),

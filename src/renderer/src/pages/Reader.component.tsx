@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Words } from '../data/parseMySqlDump';
+import { Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
 import { AddNewTermTooltip } from './AddNewTermTooltip';
@@ -25,19 +25,23 @@ export function Reader({
   activeWord,
 }: {
   activeId: TextsId;
-  setActiveWord: (word: Words | { newWord: string } | null) => void;
-  activeWord: Words | { newWord: string } | null;
+  setActiveWord: (word: Word | { newWord: string } | null) => void;
+  activeWord: Word | { newWord: string } | null;
 }): JSX.Element {
-  const [{ texts, words, parsedTexts }] = useData([
+  const [{ languages, texts, words, parsedTexts }] = useData([
     'texts',
     'words',
     'parsedTexts',
+    'languages',
   ]);
   const [tooltipOpen, setTooltipOpen] = useState<null | number>(null);
   const activeText = texts.find((text) => text.TxID === activeId);
+  const isLangRTL = languages.find(
+    (langs) => langs.LgID === activeText.TxLgID
+  )?.LgRightToLeft;
   const activeParsedText = parsedTexts[activeId];
   return (
-    <div id="thetext">
+    <div id="thetext" dir={isLangRTL ? 'rtl' : undefined}>
       <p
         onClick={() => setTooltipOpen(null)}
         style={{

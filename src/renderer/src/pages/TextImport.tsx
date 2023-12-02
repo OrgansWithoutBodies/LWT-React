@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { dataService } from '../data/data.service';
 import { AddNewTextValidator } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { CheckAndSubmit, RefMap, ResetForm } from '../forms/Forms';
+import { CheckAndSubmit, ResetForm } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
@@ -14,11 +13,7 @@ export function ImportShortText(): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;
 
-  const [formErrors, setFormErrors] = useState<{
-    [key in keyof typeof validator.TYPE]?: string;
-  }>({});
-  const refMap = RefMap(validator);
-  const TxInput = useFormInput(refMap);
+  const { Input: TxInput, refMap, onSubmit } = useFormInput({ validator });
 
   const navigator = useInternalNavigate();
   return (
@@ -56,13 +51,13 @@ export function ImportShortText(): JSX.Element {
                 <TxInput
                   type="text"
                   className="notempty checkoutsidebmp"
-                  // data_info="Title"
+                  errorName="Title"
                   entryKey="TxTitle"
                   default
                   maxLength={200}
                   size={60}
+                  isRequired
                 />
-                <RequiredLineButton />
               </td>
             </tr>
             <tr>
@@ -83,7 +78,7 @@ export function ImportShortText(): JSX.Element {
                   className="notempty checkbytes checkoutsidebmp"
                   // TODO move these to validators
                   maxLength={65000}
-                  // data_info="Text"
+                  errorName="Text"
                   cols={60}
                   rows={20}
                 />
@@ -96,7 +91,7 @@ export function ImportShortText(): JSX.Element {
                 <TxInput
                   type="text"
                   className="checkurl checkoutsidebmp"
-                  // data_info="Source URI"
+                  errorName="Source URI"
                   entryKey="TxSourceURI"
                   default
                   maxLength={1000}
@@ -134,7 +129,7 @@ export function ImportShortText(): JSX.Element {
                 <TxInput
                   type="text"
                   className="checkoutsidebmp"
-                  // data_info="Audio-URI"
+                  errorName="Audio-URI"
                   entryKey="TxAudioURI"
                   default
                   maxLength={200}
@@ -175,21 +170,14 @@ export function ImportShortText(): JSX.Element {
                   name="op"
                   value="Save"
                   onClick={() => {
-                    CheckAndSubmit(
-                      refMap,
-                      textPrevalidateMap,
-                      validator,
-                      (value) => {
-                        const textId = dataService.addText(value);
-                        if (textId !== null) {
-                          dataService.reparseText(textId);
-                          navigator('/edit_texts');
-                        }
-                        // todo something if null?
-                      },
-                      null,
-                      setFormErrors
-                    );
+                    onSubmit(textPrevalidateMap, (value) => {
+                      const textId = dataService.addText(value);
+                      if (textId !== null) {
+                        dataService.reparseText(textId);
+                        navigator('/edit_texts');
+                      }
+                      // todo something if null?
+                    });
                   }}
                 />
                 <input

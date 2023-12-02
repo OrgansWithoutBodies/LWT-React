@@ -1,5 +1,5 @@
 import { dataService } from '../data/data.service';
-import { ArchivedTexts, Languages, Texts, Words } from '../data/parseMySqlDump';
+import { ArchivedText, Language, Text, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
 import { A } from '../nav/InternalLink';
@@ -14,11 +14,11 @@ function LanguageLine({
   terms,
   archivedtexts,
 }: {
-  language: Languages;
+  language: Language;
   activeLanguageId: LanguagesId | null;
-  texts: Texts[];
-  terms: Words[];
-  archivedtexts: ArchivedTexts[];
+  texts: Text[];
+  terms: Word[];
+  archivedtexts: ArchivedText[];
 }): JSX.Element {
   const id = language.LgID;
   const thisRowActive = activeLanguageId === id;
@@ -79,8 +79,8 @@ function LanguageLine({
         numTextsThisLanguage === 0 ? (
           <span
             className="click"
-            //         if ($textcount == 0 && $archtextcount == 0 && $wordcount == 0)
-            // 	echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';
+            //         if (textcount == 0 && archtextcount == 0 && wordcount == 0)
+            // 	echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';
             // else
             // 	echo '&nbsp; <img src="icn/placeholder.png" title="Delete not possible" alt="Delete not possible" />';
 

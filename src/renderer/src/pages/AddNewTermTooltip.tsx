@@ -1,6 +1,6 @@
 import React from 'react';
 import { dataService } from '../data/data.service';
-import { Languages, Words } from '../data/parseMySqlDump';
+import { Language, Word } from '../data/parseMySqlDump';
 import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
@@ -56,7 +56,7 @@ function TranslateLines({
   word,
   sentence,
 }: {
-  language: Languages;
+  language: Language;
   word: string;
   sentence: string;
 }): JSX.Element {
@@ -194,7 +194,7 @@ export function KnownTermLines({
   word,
   tags,
 }: {
-  word: Words;
+  word: Word;
   tags: string[];
 }): JSX.Element {
   return (
@@ -241,7 +241,7 @@ export function AddNewTermTooltip({
   sentence,
   onClose,
 }: {
-  word: Words | string;
+  word: Word | string;
   sentence: string;
   onClose: () => void;
 }): JSX.Element {

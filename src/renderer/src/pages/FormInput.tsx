@@ -1,43 +1,22 @@
 import { InputHTMLAttributes } from 'react';
-import { useData } from '../data/useAkita';
-import { WordsId } from '../data/validators';
 import { TRefMap } from '../forms/Forms';
 import { AppVariables } from '../meta';
 import { VariantMap } from '../styles';
-
-export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
-  const [{ wordtags, tags }] = useData(['wordtags', 'tags']);
-  return (
-    <ul id="termtags">
-      {wordtags
-        .filter(({ WtWoID }) => WtWoID === wordID)
-        .map((tag) => (
-          <li>
-            {
-              // TODO better lookup very inefficient
-              tags.find(({ TgID }) => tag.WtTgID === TgID)!.TgText
-            }
-          </li>
-        ))}
-    </ul>
-  );
-}
+import { RequiredLineButton } from '../ui-kit/Icon';
 
 export function FormInput<
   TKey extends string,
   TData extends Record<TKey, any>
 >({
-  // TODO nonoptional add dot
-  // TODO errorlines
   // TODO onChange
-  // TODO probably best to just pass validator in here & build refmap here
-  // TODO data_info for more informative text in error fields
   // TODO partial input & make sure key matches partial
   entryKey,
   refMap,
   defaultEntry,
   fixedEntry,
   formErrors,
+  errorName,
+  isRequired = false,
   ...nativeProps
 }: Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -46,8 +25,10 @@ export function FormInput<
   entryKey: TKey;
   // TODO need refmap if fixed entry?
   refMap: TRefMap<TData>;
+  isRequired?: boolean;
   defaultEntry?: TData;
   fixedEntry?: TData;
+  errorName?: string;
   formErrors?: {
     [key in TKey]?: string;
   };
@@ -57,8 +38,6 @@ export function FormInput<
   if (fixedEntry && defaultEntry) {
     throw new Error("Can't have fixed and default set!");
   }
-  console.log('TEST123-errors', formErrors);
-
   return (
     <>
       <input
@@ -70,8 +49,32 @@ export function FormInput<
         ref={refMap[entryKey]}
         {...nativeProps}
       />
+      {isRequired && <RequiredLineButton />}
       <br />
-      {formErrors && (
+      {formErrors && formErrors[entryKey] && (
+        <FormLineError<TKey>
+          errorName={errorName}
+          entryKey={entryKey}
+          formError={formErrors[entryKey]}
+        />
+      )}
+    </>
+  );
+}
+export function FormLineError<TKey extends string>({
+  errorName,
+  entryKey,
+  formError,
+}: {
+  errorName: string | undefined;
+  entryKey: TKey;
+  formError: string;
+}) {
+  const firstBreak = formError.indexOf('--');
+
+  return (
+    <>
+      {
         <span
           style={{
             color: VariantMap[AppVariables.styleVariant].highlightColor1,
@@ -80,9 +83,9 @@ export function FormInput<
             fontSize: '90%',
           }}
         >
-          {formErrors[entryKey]}
+          Error in {errorName || entryKey}: {formError.slice(firstBreak + 3)}
         </span>
-      )}
+      }
     </>
   );
 }

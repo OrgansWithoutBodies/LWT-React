@@ -5,7 +5,7 @@ import { useData } from './data/useAkita';
 import { LanguagesId, TagsId, TextsId } from './data/validators';
 import { useInternalParams } from './hooks/useInternalParams';
 import { AddNewWordPane } from './pages/AddNewWordPane';
-import { EditArchivedTexts } from './pages/EditArchivedTexts';
+import { EditArchivedTexts } from './pages/EditArchivedTexts.component';
 import { EditLanguage } from './pages/EditLanguage.component';
 import { DisplayTags, EditTag, NewTag } from './pages/EditTags';
 import { DisplayTextTags, EditTextTag, NewTextTag } from './pages/EditTextTags';
@@ -14,7 +14,7 @@ import { EditText, Library } from './pages/Library.component';
 import { NewLanguage } from './pages/NewLanguage';
 import { PrintText } from './pages/PrintText.component';
 import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
-import { AddTerm, ChangeTerm, Terms } from './pages/Terms.component';
+import { AddTerm, EditTerm, Terms } from './pages/Terms.component';
 import { ImportShortText } from './pages/TextImport';
 import { UploadWords } from './pages/UploadWords.component';
 
@@ -62,7 +62,7 @@ export function TermsWrapper() {
           }
           tag2={tag2 === null ? null : Number.parseInt<TagsId>(tag2)}
         />
-        <ChangeTerm chgID={Number.parseInt(chg!)} />
+        <EditTerm chgID={Number.parseInt(chg!)} />
       </Switch>
       <AddTerm langId={Number.parseInt(lang!)} />
     </Switch>
@@ -149,61 +149,61 @@ export function LibraryWrapper() {
   /* <p><input type="button" value="&lt;&lt; Back" onclick="history.back();" /></p> */
 }
 // op === 'check';
-// $wordList = array();
-// $wordSeps = array();
-// $r .= "<h4>Sentences</h4><ol>";
-// $sentNumber = 0;
-// foreach ($textLines as $value) {
-//   $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces($value, $removeSpaces)) . "</li>";
-//   $lineWords[$sentNumber] = preg_split('/([^' . $termchar . ']{1,})/u', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
-//   $l = count($lineWords[$sentNumber]);
-//   for ($i = 0; $i < $l; $i++) {
-//     $term = mb_strtolower($lineWords[$sentNumber][$i], 'UTF-8');
-//     if ($term != '') {
-//       if ($i % 2 == 0) {
-//         if (array_key_exists($term, $wordList)) {
-//           $wordList[$term][0]++;
-//           $wordList[$term][1][] = $sentNumber;
+// wordList = array();
+// wordSeps = array();
+// r .= "<h4>Sentences</h4><ol>";
+// sentNumber = 0;
+// foreach (textLines as value) {
+//   r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces(value, removeSpaces)) . "</li>";
+//   lineWords[sentNumber] = preg_split('/([^' . termchar . ']{1,})/u', value, -1, PREG_SPLIT_DELIM_CAPTURE);
+//   l = count(lineWords[sentNumber]);
+//   for (i = 0; i < l; i++) {
+//     term = mb_strtolower(lineWords[sentNumber][i], 'UTF-8');
+//     if (term != '') {
+//       if (i % 2 == 0) {
+//         if (array_key_exists(term, wordList)) {
+//           wordList[term][0]++;
+//           wordList[term][1][] = sentNumber;
 //         } else {
-//           $wordList[$term] = array(1, array($sentNumber));
+//           wordList[term] = array(1, array(sentNumber));
 //         }
 //       } else {
-//         $ww = remove_spaces($term, $removeSpaces);
-//         if (array_key_exists($ww, $wordSeps))
-//           $wordSeps[$ww]++;
+//         ww = remove_spaces(term, removeSpaces);
+//         if (array_key_exists(ww, wordSeps))
+//           wordSeps[ww]++;
 //         else
-//           $wordSeps[$ww] = 1;
+//           wordSeps[ww] = 1;
 //       }
 //     }
 //   }
-//   $sentNumber += 1;
+//   sentNumber += 1;
 // }
-// $r .= "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
-// ksort($wordList);
-// $anz = 0;
-// foreach ($wordList as $key => $value) {
-//   $trans = get_first_value("select WoTranslation as value from " . $tbpref . "words where WoLgID = " . $lid . " and WoTextLC = " . convert_string_to_sqlsyntax($key));
-//   if (!isset($trans))
-//     $trans = "";
-//   if ($trans == "*")
-//     $trans = "";
-//   if ($trans != "")
-//     $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml($key) . "] — " . $value[0] . " - " . tohtml(repl_tab_nl($trans)) . "</span></li>";
+// r .= "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
+// ksort(wordList);
+// anz = 0;
+// foreach (wordList as key => value) {
+//   trans = get_first_value("select WoTranslation as value from " . tbpref . "words where WoLgID = " . lid . " and WoTextLC = " . convert_string_to_sqlsyntax(key));
+//   if (!isset(trans))
+//     trans = "";
+//   if (trans == "*")
+//     trans = "";
+//   if (trans != "")
+//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
 //   else
-//     $r .= "<li " . ($rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml($key) . "] — " . $value[0] . "</li>";
-//   $anz++;
+//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml(key) . "] — " . value[0] . "</li>";
+//   anz++;
 // }
-// $r .= "</ul><p>TOTAL: " . $anz . "</p><h4>Non-Word List</h4><ul>";
-// if (array_key_exists('', $wordSeps))
-//   unset($wordSeps['']);
-// ksort($wordSeps);
-// $anz = 0;
-// foreach ($wordSeps as $key => $value) {
-//   $r .= "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml($key)) . "] — " . $value . "</li>";
-//   $anz++;
+// r .= "</ul><p>TOTAL: " . anz . "</p><h4>Non-Word List</h4><ul>";
+// if (array_key_exists('', wordSeps))
+//   unset(wordSeps['']);
+// ksort(wordSeps);
+// anz = 0;
+// foreach (wordSeps as key => value) {
+//   r .= "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
+//   anz++;
 // }
-// $r .= "</ul><p>TOTAL: " . $anz . "</p></div>";
-// return $r;
+// r .= "</ul><p>TOTAL: " . anz . "</p></div>";
+// return r;
 export function EditArchivedTextsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');

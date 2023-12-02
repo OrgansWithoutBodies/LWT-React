@@ -1,10 +1,10 @@
-import { Words } from '../data/parseMySqlDump';
+import { Word } from '../data/parseMySqlDump';
 
 export type TermName = 'w' | 't' | 'r' | 's' | 'g' | 'x';
 
 export const ColumnImportMode: Record<
   TermName,
-  { txt: string; termParam: keyof Words }
+  { txt: string; termParam: keyof Word }
 > = {
   w: { termParam: 'WoText', txt: 'Term' },
   t: { termParam: 'WoTranslation', txt: 'Translation' },

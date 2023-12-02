@@ -1,5 +1,5 @@
 import { dataService } from '../data/data.service';
-import { Tags2 } from '../data/parseMySqlDump';
+import { Tag2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Tags2Validator } from '../data/validators';
 import { CheckAndSubmit, RefMap } from '../forms/Forms';
@@ -9,11 +9,12 @@ import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
-import { Icon, RequiredLineButton } from '../ui-kit/Icon';
+import { Icon } from '../ui-kit/Icon';
 import { Pager } from '../ui-kit/Pager';
+import { pluralize } from './EditTags';
+import { FormInput } from './FormInput';
 import { resetDirty } from './Sorting';
-import { FormInput } from './buildFormInput';
-import { confirmDelete, multiActionGo } from './utils';
+import { confirmDelete } from './utils';
 
 export function DisplayTextTags({
   query,
@@ -91,27 +92,31 @@ export function DisplayTextTags({
             </td>
           </tr>
           {/* TODO */}
-          {/* <?php if($recno > 0) { ?>
-<tr>
-<th class="th1" colspan={1} style={{whiteSpace:"nowrap"}}>
-<?php echo $recno; ?> Tag<?php echo ($recno==1?'':'s'); ?>
-</th><th class="th1" colspan={2} style={{whiteSpace:"nowrap"}}>
-<?php makePager ($currentpage, $pages, 'edit_texttags', 'form1', 1); ?>
-</th><th class="th1" style={{whiteSpace:"nowrap"}}>
-Sort Order:
-<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texttags?page=1&sort=' + val;}"><?php echo get_tagsort_selectoptions($currentsort); ?></select>
-</th></tr>
-<?php } ?> */}
+          <tr>
+            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
+              {recno} Tag{pluralize(recno)}
+            </th>
+            <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
+              {/* TODO */}
+              <Pager currentPage={0} numPages={0} />
+            </th>
+            <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+              Sort Order:
+              <select
+                name="sort"
+                // TODO
+                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texttags?page=1&sort=' + val;}"
+              >
+                <GetTagsortSelectoptions />
+              </select>
+            </th>
+          </tr>
         </table>
       </form>
       {recno === 0 ? (
         <p>No tags found.</p>
       ) : (
-        <form
-          name="form2"
-          action="<?php echo $_SERVER['PHP_SELF']; ?>"
-          method="post"
-        >
+        <form name="form2" method="post">
           <input type="hidden" name="data" value="" />
           <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tr>
@@ -121,11 +126,23 @@ Sort Order:
             </tr>
             <tr>
               <td className="td1 center" colSpan={2}>
-                <b>ALL</b> {dataOnPage.length}{' '}
-                {dataOnPage.length === 1 ? 'Tag' : 'Tags'}
+                <b>ALL</b> {recno} {recno === 1 ? 'Tag' : 'Tags'}
                 <select
                   name="allaction"
-                  onChange="allActionGo(document.form2, document.form2.allaction,<?php echo $recno; ?>);"
+                  onChange={({ target: { value } }) => {
+                    // TODO other cases
+                    if (value === 'delall') {
+                      if (
+                        window.confirm(
+                          `THIS IS AN ACTION ON ALL RECORDS\nON ALL PAGES OF THE CURRENT QUERY!\n\n*** ' + t + ' ***\n\n*** ${recno} Record(s) will be affected ***\n\nARE YOU SURE?`
+                        )
+                      ) {
+                        dataService.deleteMultipleTextTags(
+                          tags2.map((val) => val.T2ID)
+                        );
+                      }
+                    }
+                  }}
                 >
                   <GetAllTagsActionsSelectOptions />
                 </select>
@@ -142,13 +159,16 @@ Sort Order:
                   name="markaction"
                   id="markaction"
                   disabled={selectedValues.size === 0}
-                  onChange={(val) => {
-                    multiActionGo(
-                      // TODO
-                      () => {},
-                      // TODO ref
-                      val
-                    );
+                  onChange={({ target: { value } }) => {
+                    if (value === 'del') {
+                      if (
+                        window.confirm(
+                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+                        )
+                      ) {
+                        dataService.deleteMultipleTextTags([...selectedValues]);
+                      }
+                    }
                   }}
                 >
                   <GetMultipleTagsActionsSelectOptions />
@@ -177,10 +197,10 @@ Sort Order:
 
             {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
             {tags2.map((tag) => {
-              const c = texttags.filter(
+              const numTextTags = texttags.filter(
                 ({ TtT2ID }) => tag.T2ID === TtT2ID
               ).length;
-              const ca = archtexttags.filter(
+              const numArchivedTextTags = archtexttags.filter(
                 ({ AgT2ID }) => tag.T2ID === AgT2ID
               ).length;
               return (
@@ -220,15 +240,17 @@ Sort Order:
                   <td className="td1 center">{tag.T2Text}</td>
                   <td className="td1 center">{tag.T2Comment}</td>
                   <td className="td1 center">
-                    {c > 0 ? (
-                      <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>{c}</A>
+                    {numTextTags > 0 ? (
+                      <A href={`/edit_texts?tag1=${tag.T2ID}`}>{numTextTags}</A>
                     ) : (
                       '0'
                     )}
                   </td>
                   <td className="td1 center">
-                    {ca > 0 ? (
-                      <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>{ca}</A>
+                    {numArchivedTextTags > 0 ? (
+                      <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>
+                        {numArchivedTextTags}
+                      </A>
                     ) : (
                       '0'
                     )}
@@ -239,37 +261,33 @@ Sort Order:
           </table>
         </form>
       )}
-      <Pager currentPage={page} numPages={numPages} />
-      {/*
-// <?php if( $pages > 1) { ?>
-// <form name="form3" action="#">
-// <table class="tab1" cellspacing={0} cellpadding={5}>
-// <tr>
-// <th class="th1" style={{whiteSpace:"nowrap"}}>
-// <?php echo $recno; ?> Tag<?php echo ($recno==1?'':'s'); ?>
-// </th><th class="th1" style={{whiteSpace:"nowrap"}}>
-// <?php makePager ($currentpage, $pages, 'edit_texttags', 'form3', 2); ?>
-// </th></tr></table>
-// </form>
-// <?php } ?> */}
+      {numPages > 1 && (
+        <form name="form3" action="#">
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                {recno} Tag{pluralize(recno)}
+              </th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                <Pager currentPage={page} numPages={numPages} />
+              </th>
+            </tr>
+          </table>
+        </form>
+      )}
     </>
   );
 }
 
 export function NewTextTag() {
   const validator = Tags2Validator;
-  const refMap = RefMap<Tags2>(validator);
+  const refMap = RefMap<Tag2>(validator);
   const navigator = useInternalNavigate();
   return (
     <>
       <Header title="My Text Tags" />
       <h4>New Tag</h4>
-      <form
-        name="newtag"
-        className="validate"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>"
-        method="post"
-      >
+      <form name="newtag" className="validate" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
@@ -279,11 +297,11 @@ export function NewTextTag() {
                 type="text"
                 entryKey="T2Text"
                 refMap={refMap}
-                // data_info="Tag"
+                errorName="Tag"
                 maxLength={20}
                 size={20}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -292,7 +310,7 @@ export function NewTextTag() {
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
                 maxLength={200}
-                // data_info="Comment"
+                errorName="Comment"
                 name="T2Comment"
                 ref={refMap.T2Comment}
                 cols={40}
@@ -342,34 +360,32 @@ export function EditTextTag({ chgID }: { chgID: number }) {
     throw new Error('invalid change ID');
   }
   const validator = Tags2Validator;
-  const refMap = RefMap<Tags2>(validator);
   const navigator = useInternalNavigate();
-  const TgInput = useFormInput(refMap, changingTag);
+  const {
+    Input: TgInput,
+    onSubmit,
+    refMap,
+  } = useFormInput({ validator, entry: changingTag });
   return (
     <>
       <Header title="My Text Tags" />
       <h4>Edit Tag</h4>
-      <form
-        name="edittag"
-        className="validate"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
-        method="post"
-      >
+      <form name="edittag" className="validate">
         <TgInput type="hidden" entryKey="T2ID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
               <TgInput
-                // data_info="Tag"
+                errorName="Tag"
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
                 type="text"
                 entryKey="T2Text"
                 default
                 maxLength={20}
                 size={20}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -378,7 +394,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
               <textarea
                 className="textarea-noreturn checklength checkoutsidebmp"
                 maxLength={200}
-                // data_info="Comment"
+                errorName="Comment"
                 name="T2Comment"
                 ref={refMap.T2Comment}
                 cols={40}
@@ -394,7 +410,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 value="Cancel"
                 onClick={() => {
                   resetDirty();
-                  navigator(`/edit_texttags.php#rec${chgID}`);
+                  navigator(`/edit_texttags#rec${chgID}`);
                 }}
               />
               <input
@@ -402,13 +418,12 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 name="op"
                 value="Change"
                 onClick={() => {
-                  CheckAndSubmit(
-                    refMap,
+                  onSubmit(
                     {},
-                    validator,
                     (value) => {
-                      dataService.addTextTag(value);
-                      navigator('/edit_texttags');
+                      if (dataService.addTextTag(value) !== -1) {
+                        navigator('/edit_texttags');
+                      }
                     },
                     'T2ID'
                   );
@@ -452,6 +467,26 @@ export function GetMultipleArchivedTextActionsSelectOptions() {
       <option disabled>------------</option>
       <option value="del">Delete Marked Texts</option>
       <option value="delall">Delete ALL Tags</option>
+    </>
+  );
+}
+
+export function GetTagsortSelectoptions() {
+  return (
+    <>
+      <option value="1">Tag Text A-Z</option>
+      <option value="2">Tag Comment A-Z</option>
+      <option value="3">Newest first</option>
+      <option value="4">Oldest first</option>
+    </>
+  );
+}
+export function GetTextssortSelectoptions() {
+  return (
+    <>
+      <option value="1">Title A-Z</option>
+      <option value="2">Newest first</option>
+      <option value="3">Oldest first</option>
     </>
   );
 }

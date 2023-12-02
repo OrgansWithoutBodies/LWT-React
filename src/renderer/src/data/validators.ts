@@ -88,25 +88,25 @@ export const settingsKeys = [
   'currenttext',
 ] as const;
 
-const tagsId = brandedNumber('tagsId' as const);
-const tags2Id = brandedNumber('tags2Id' as const);
-const textitemsId = brandedNumber('textitemsId' as const);
-const textsId = brandedNumber('textsId' as const);
-const texttagsId = brandedNumber('texttagsId' as const);
-const wordsId = brandedNumber('wordsId' as const);
-const wordtagsId = brandedNumber('wordtagsId' as const);
-export type ArchivedTextsId = typeof archivedtextsId.TYPE;
+const tagId = brandedNumber('tagsId' as const);
+const tag2Id = brandedNumber('tags2Id' as const);
+const textitemId = brandedNumber('textitemsId' as const);
+const textId = brandedNumber('textsId' as const);
+const texttagId = brandedNumber('texttagsId' as const);
+const wordId = brandedNumber('wordsId' as const);
+const wordtagId = brandedNumber('wordtagsId' as const);
+export type ArchivedTextId = typeof archivedtextsId.TYPE;
 export type ArchTextTagsId = typeof archtexttagsId.TYPE;
 export type LanguagesId = typeof languagesId.TYPE;
 export type SentencesId = typeof sentencesId.TYPE;
 export type SettingsId = typeof settingsId.TYPE;
-export type TagsId = typeof tagsId.TYPE;
-export type Tags2Id = typeof tags2Id.TYPE;
-export type TextItemsId = typeof textitemsId.TYPE;
-export type TextsId = typeof textsId.TYPE;
-export type TextTagsId = typeof texttagsId.TYPE;
-export type WordsId = typeof wordsId.TYPE;
-export type WordTagsId = typeof wordtagsId.TYPE;
+export type TagsId = typeof tagId.TYPE;
+export type Tags2Id = typeof tag2Id.TYPE;
+export type TextItemsId = typeof textitemId.TYPE;
+export type TextsId = typeof textId.TYPE;
+export type TextTagsId = typeof texttagId.TYPE;
+export type WordsId = typeof wordId.TYPE;
+export type WordTagsId = typeof wordtagId.TYPE;
 // TODO nullable, max lengths, unsigned vs signed
 export const ArchivedTextsValidator = ss.object({
   // AtID: int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -134,7 +134,7 @@ export const ArchTextTagsValidator = ss.object({
   AgAtID: archtexttagsId,
   // AgT2ID: int(11) unsigned NOT NULL,
   // KEY `AgT2ID` (`AgT2ID`)
-  AgT2ID: tags2Id,
+  AgT2ID: tag2Id,
   // KEY (`AgAtID`,`AgT2ID`),
   ...getValidatorPluginsFor(Persistable.archivedtexts),
 });
@@ -176,8 +176,8 @@ export const LanguagesValidator = ss.object({
     Persistable.languages
   ),
 });
-export const LanguagesValidatorNoId = ss.omit(LanguagesValidator, ['LgID']);
-export const SentencesValidator = ss.object({
+export const LanguageValidatorNoId = ss.omit(LanguagesValidator, ['LgID']);
+export const SentenceValidator = ss.object({
   // SeID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`SeID`),
   SeID: sentencesId,
@@ -186,7 +186,7 @@ export const SentencesValidator = ss.object({
   SeLgID: languagesId,
   // SeTxID: int(11) unsigned NOT NULL,
   // KEY `SeTxID` (`SeTxID`),
-  SeTxID: textsId,
+  SeTxID: textId,
   // SeOrder: int(11) unsigned NOT NULL,
   // KEY `SeOrder` (`SeOrder`)
   SeOrder: ss.number(),
@@ -210,7 +210,7 @@ export const SettingsValidator = ss.object({
 export const TagsValidator = ss.object({
   // TgID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`TgID`),
-  TgID: tagsId,
+  TgID: tagId,
   // TgText: varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   // UNIQUE KEY `TgText` (`TgText`)
   TgText: ss.nonempty(ss.string()),
@@ -222,7 +222,7 @@ export const TagsValidator = ss.object({
 export const Tags2Validator = ss.object({
   // T2ID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`T2ID`),
-  T2ID: tags2Id,
+  T2ID: tag2Id,
   // T2Text: varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   // UNIQUE KEY `T2Text` (`T2Text`)
   T2Text: ss.nonempty(ss.string()),
@@ -234,13 +234,13 @@ export const Tags2Validator = ss.object({
 export const TextItemsValidator = ss.object({
   // TiID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // KEY (`TiID`),
-  TiID: textitemsId,
+  TiID: textitemId,
   // TiLgID: int(11) unsigned NOT NULL,
   // KEY `TiLgID` (`TiLgID`),
   TiLgID: languagesId,
   // TiTxID: int(11) unsigned NOT NULL,
   // KEY `TiTxID` (`TiTxID`),
-  TiTxID: textsId,
+  TiTxID: textId,
   // TiSeID: int(11) unsigned NOT NULL,
   // KEY `TiSeID` (`TiSeID`),
   TiSeID: sentencesId,
@@ -264,7 +264,7 @@ export const TextItemsValidator = ss.object({
 export const TextsValidator = ss.object({
   // TxID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`TxID`),
-  TxID: textsId,
+  TxID: textId,
   // TxLgID: int(11) unsigned NOT NULL,
   // KEY `TxLgID` (`TxLgID`)
   TxLgID: languagesId,
@@ -281,15 +281,16 @@ export const TextsValidator = ss.object({
   TxSourceURI: ss.optional(URLValidator()),
   ...getValidatorPluginsFor(Persistable.texts),
 });
+export const Tags2NoIdValidator = ss.omit(Tags2Validator, ['T2ID']);
 export const TextsValidatorNoId = ss.omit(TextsValidator, ['TxID']);
 
 export const TextTagsValidator = ss.object({
   // TtTxID: int(11) unsigned NOT NULL,
   // KEY `TtTxID` (`TtTxID`),
-  TtTxID: textsId,
+  TtTxID: textId,
   // TtT2ID: int(11) unsigned NOT NULL,
   // KEY `TtT2ID` (`TtT2ID`)
-  TtT2ID: tags2Id,
+  TtT2ID: tag2Id,
   // KEY (`TtTxID`,`TtT2ID`),
   ...getValidatorPluginsFor(Persistable.texttags),
 });
@@ -297,7 +298,7 @@ export const TextTagsValidator = ss.object({
 export const WordsValidator = ss.object({
   // WoID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`WoID`),
-  WoID: wordsId,
+  WoID: wordId,
   // WoLgID: int(11) unsigned NOT NULL,
   // KEY `WoLgID` (`WoLgID`),
   WoLgID: languagesId,
@@ -311,7 +312,7 @@ export const WordsValidator = ss.object({
   WoStatus: ss.enums([0, 1, 2, 3, 4, 5, 98, 99]),
   // WoTranslation: varchar(500) NOT NULL DEFAULT '*',
   // KEY `WoTranslation` (`WoTranslation`(333)),
-  WoTranslation: ss.nonempty(ss.string()),
+  WoTranslation: ss.string(),
   // WoRomanization: varchar(100) DEFAULT NULL,
   WoRomanization: ss.optional(ss.string()),
   // WoSentence: varchar(1000) DEFAULT NULL,
@@ -341,17 +342,17 @@ export const WordsValidatorNoId = ss.omit(WordsValidator, ['WoID']);
 export const WordTagsValidator = ss.object({
   // WtWoID: int(11) unsigned NOT NULL,
   // KEY `WtWoID` (`WtWoID`)
-  WtWoID: wordsId,
+  WtWoID: wordId,
   // WtTgID: int(11) unsigned NOT NULL,
   // KEY `WtTgID` (`WtTgID`),
-  WtTgID: tagsId,
+  WtTgID: tagId,
   // KEY (`WtWoID`,`WtTgID`),
   ...getValidatorPluginsFor(Persistable.wordtags),
 });
 export const SettingsObjValidator = ss.object({
   dbversion: ss.string(),
   showallwords: NumberInListValidator([0, 1]),
-  currenttext: textsId,
+  currenttext: textId,
   currentlanguage: languagesId,
   lastscorecalc: ss.number(),
   'set-text-h-frameheight-no-audio': ss.number(),

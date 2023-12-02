@@ -1,13 +1,15 @@
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { LanguagesId, LanguagesValidator } from '../data/validators';
-import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
+import { TRefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
+import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
-import { Icon, RequiredLineButton } from '../ui-kit/Icon';
-import { TextSizeSelect, oewin } from './NewLanguage';
+import { Icon } from '../ui-kit/Icon';
+import { TextSizeSelect } from './NewLanguage';
 import { resetDirty } from './Sorting';
+import { openInNewWindow } from './openInNewWindow';
 import { languagePreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
@@ -19,17 +21,22 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   }
   const validator = LanguagesValidator;
   const navigator = useInternalNavigate();
-  const refMap = RefMap(validator);
-  const LgInput = useFormInput(refMap, changingLang);
-
+  const {
+    Input: LgInput,
+    refMap,
+    onSubmit,
+  } = useFormInput({
+    entry: changingLang,
+    validator: validator,
+  });
   return (
     <>
       <Header title="TODO" />
       <h4>
         Edit Language
-        <a target="_blank" href="info.htm#howtolang">
+        <A target="_blank" href="/info#howtolang">
           <Icon src="question-frame" title="Help" />
-        </a>
+        </A>
       </h4>
       <form className="validate">
         <LgInput type="hidden" entryKey="LgID" fixed />
@@ -40,13 +47,13 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               <LgInput
                 type="text"
                 className="notempty setfocus checkoutsidebmp"
-                // data_info="Study Language"
+                errorName="Study Language"
                 entryKey="LgName"
                 maxLength={40}
                 size={40}
                 default
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -59,9 +66,9 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 default
                 maxLength={200}
                 size={60}
-                // data_info="Dictionary 1 URI"
+                isRequired
+                errorName="Dictionary 1 URI"
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -74,7 +81,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 default
                 maxLength={200}
                 size={60}
-                // data_info="Dictionary 2 URI"
+                errorName="Dictionary 2 URI"
               />
             </td>
           </tr>
@@ -88,7 +95,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 entryKey="LgGoogleTranslateURI"
                 maxLength={200}
                 size={60}
-                // data_info="GoogleTranslate URI"
+                errorName="GoogleTranslate URI"
               />
             </td>
           </tr>
@@ -104,7 +111,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                // data_info="Character Substitutions"
+                errorName="Character Substitutions"
                 entryKey="LgCharacterSubstitutions"
                 default
                 maxLength={500}
@@ -122,9 +129,9 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 default
                 maxLength={500}
                 size={60}
-                // data_info="RegExp Split Sentences"
+                errorName="RegExp Split Sentences"
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -133,7 +140,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                // data_info="Exceptions Split Sentences"
+                errorName="Exceptions Split Sentences"
                 entryKey="LgExceptionsSplitSentences"
                 default
                 maxLength={500}
@@ -147,13 +154,13 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               <LgInput
                 type="text"
                 className="notempty checkoutsidebmp"
-                // data_info="RegExp Word Characters"
+                errorName="RegExp Word Characters"
                 entryKey="LgRegexpWordCharacters"
                 default
                 maxLength={500}
                 size={60}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -197,7 +204,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 title="Help"
                 className="click"
                 onClick={() => {
-                  oewin('info_export_template.htm');
+                  openInNewWindow('/info_export_template');
                 }}
               />
               :
@@ -206,7 +213,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               <LgInput
                 type="text"
                 className="checkoutsidebmp"
-                // data_info="Export Template"
+                errorName="Export Template"
                 entryKey="LgExportTemplate"
                 default
                 maxLength={1000}
@@ -228,16 +235,12 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 type="button"
                 value="Change"
                 onClick={() => {
+                  // TODO
                   check_dupl_lang();
-                  CheckAndSubmit(
-                    refMap,
-                    languagePreValidateMap,
-                    validator,
-                    (value) => {
-                      dataService.editLanguage(chgID, value);
-                      navigator('/edit_words');
-                    }
-                  );
+                  onSubmit(languagePreValidateMap, (value) => {
+                    dataService.editLanguage(chgID, value);
+                    navigator('/edit_words');
+                  });
                 }}
               />
             </td>
@@ -254,7 +257,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   );
 }
 
-function SelectBoolean<
+export function SelectBoolean<
   TSelKey extends string,
   TEntry extends Record<TSelKey, 0 | 1>
 >({
@@ -269,6 +272,8 @@ function SelectBoolean<
   const entryVal = entry[selKey];
   return (
     <select ref={refMap[selKey]} name={selKey}>
+      {/* TODO can i get away w/o setting selected here */}
+      {/* TODO bring all yes/no dropdowns into using this */}
       <option value={0} selected={entryVal === 0}>
         No
       </option>

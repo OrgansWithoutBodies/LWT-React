@@ -16,17 +16,18 @@ import { TatoebaOpenAPIWrapper, ThreeLetterString } from '../pages/TatoebaAPI';
 import {
   AddNewTextType,
   AddNewWordType,
+  Language,
   LanguageNoId,
-  Languages,
-  Tags,
-  Tags2,
-  Words,
+  Sentence,
+  Tag,
+  Tag2NoId,
+  Word,
 } from './parseMySqlDump';
 import { serializeJsonToSQL } from './serializeJsonToSQL';
 import Settings from './settings';
 import { TermStrengthOrUnknown } from './type';
 import {
-  ArchivedTextsId,
+  ArchivedTextId,
   LanguagesId,
   Tags2Id,
   TagsId,
@@ -87,6 +88,15 @@ export class DataService {
     }
   }
 
+  // TODO
+  // private async persistInsertMany(key: keyof DataState, insertVal: any) {
+  //   if (MyPersistanceHandles.insert) {
+  //     const { insert: inserter } = MyPersistanceHandles;
+  //     const insertedVal = await inserter(key, insertVal);
+  //     return insertedVal;
+  //   }
+  // }
+
   private async persistUpdate(key: keyof DataState, updatedVal: any) {
     if (MyPersistanceHandles.update) {
       console.log('UPDATING', key, updatedVal);
@@ -133,8 +143,18 @@ export class DataService {
     this.persistSet('languages');
     this.persistDelete('languages', langId);
   }
-
-  public deleteArchivedText(textId: ArchivedTextsId) {
+  /**
+   * addSentences
+   */
+  public addSentences(sentences: Sentence[]) {
+    this.dataStore.update((state) => ({
+      ...state,
+      sentences: [...state.sentences, ...sentences],
+    }));
+    this.persistInsert('sentences', sentences);
+    this.persistSet('sentences');
+  }
+  public deleteArchivedText(textId: ArchivedTextId) {
     this.dataStore.update((state) => ({
       ...state,
       archivedtexts: state.archivedtexts.filter(
@@ -169,7 +189,7 @@ export class DataService {
     return maxId;
   }
 
-  public addTag(tag: Tags) {
+  public addTag(tag: Tag) {
     this.dataStore.update((state) => {
       const ids = state.tags.map((tag) => tag.TgID);
       const maxId = (Math.max(...ids) + 1) as TagsId;
@@ -189,7 +209,7 @@ export class DataService {
     this.persistInsert('tags', tag);
   }
 
-  public editTag(chgId: TagsId, tag: Tags) {
+  public editTag(chgId: TagsId, tag: Tag) {
     this.dataStore.update((state) => {
       const ids = state.tags.map((tag) => tag.TgID);
       const maxId = (Math.max(...ids) + 1) as TagsId;
@@ -208,8 +228,26 @@ export class DataService {
     this.persistSet('tags');
     this.persistUpdate('tags', tag);
   }
+  public editTerm(term: Word) {
+    this.dataStore.update((state) => {
+      const ids = state.words.map((word) => word.WoID);
+      const maxId = (Math.max(...ids) + 1) as WordsId;
+      return {
+        ...state,
+        notificationMessage: { txt: `Edited Word ${term.WoText}` },
+        words: [
+          ...state.words,
+          {
+            ...term,
+            TgID: maxId,
+          },
+        ],
+      };
+    });
+    this.persistSet('words');
+  }
 
-  public editLanguage(chgId: LanguagesId, newData: Languages) {
+  public editLanguage(chgId: LanguagesId, newData: Language) {
     window.alert(`TODO-editLanguage${chgId}`);
     // this.dataStore.update((state) => {
     //   const ids = state.tags.map((tag) => tag.TgID);
@@ -230,10 +268,11 @@ export class DataService {
     // this.persistUpdate('tags',newData);
   }
 
-  public addTextTag(tag: Tags2) {
+  public addTextTag(tag: Tag2NoId) {
+    var maxId = -1 as Tags2Id;
     this.dataStore.update((state) => {
       const ids = state.tags2.map((tag) => tag.T2ID);
-      const maxId = (Math.max(...ids) + 1) as Tags2Id;
+      maxId = (Math.max(...ids) + 1) as Tags2Id;
       return {
         ...state,
         notificationMessage: { txt: `Added New Text Tag ${tag.T2Text}` },
@@ -248,16 +287,44 @@ export class DataService {
     });
     this.persistSet('tags2');
     this.persistInsert('tags2', tag);
+    return maxId;
   }
 
   public deleteText(textId: TextsId) {
     this.dataStore.update((state) => ({
       ...state,
-      notificationMessage: { txt: `Removed Text Tag id=${textId}` },
+      notificationMessage: { txt: `Removed Text id=${textId}` },
       texts: state.texts.filter((text) => text.TxID !== textId),
     }));
     this.persistSet('texts');
     this.persistDelete('texts', textId);
+  }
+  // TODO this can really act as the only function
+  public deleteMultipleTexts(textIds: TextsId[]) {
+    this.dataStore.update((state) => ({
+      ...state,
+      notificationMessage: {
+        txt: `Removed ${textIds.length} Text${textIds.length === 1 ? '' : 's'}`,
+      },
+      texts: state.texts.filter((text) => !textIds.includes(text.TxID)),
+    }));
+    this.persistSet('texts');
+    this.persistDelete('texts', textIds);
+  }
+  public deleteMultipleArchivedTexts(textIds: ArchivedTextId[]) {
+    this.dataStore.update((state) => ({
+      ...state,
+      notificationMessage: {
+        txt: `Removed ${textIds.length} Archived Text${
+          textIds.length === 1 ? '' : 's'
+        }`,
+      },
+      archivedtexts: state.archivedtexts.filter(
+        (text) => !textIds.includes(text.AtID)
+      ),
+    }));
+    this.persistSet('texts');
+    this.persistDelete('texts', textIds);
   }
 
   public addTerm(word: AddNewWordType) {
@@ -308,13 +375,17 @@ export class DataService {
       return;
     }
     const word = words[wordIndex];
-    const updatedWord: Words = {
+    const updatedWord: Word = {
       ...word,
       WoStatus: StrengthMap[termStrength].classKey,
     };
     const newWords = [...words];
     newWords[wordIndex] = updatedWord;
-    this.dataStore.update((state) => ({ ...state, words: newWords }));
+    this.dataStore.update((state) => ({
+      ...state,
+      words: newWords,
+      notificationMessage: { txt: 'Updated Term Strength' },
+    }));
     this.persistSet('words');
     this.persistUpdate('words', updatedWord);
   }
@@ -322,6 +393,7 @@ export class DataService {
   public addTagToTerm(tagId: TagsId, termId: WordsId) {
     this.dataStore.update((state) => ({
       ...state,
+      notificationMessage: { txt: 'Added Tag To Term' },
       wordtags: [...state.wordtags, { WtTgID: tagId, WtWoID: termId }],
     }));
     this.persistSet('wordtags');
@@ -331,6 +403,8 @@ export class DataService {
   public deleteTermTag(tagId: TagsId) {
     this.dataStore.update(({ wordtags, tags, ...rest }) => ({
       ...rest,
+      notificationMessage: { txt: 'Deleted Term Tag' },
+
       wordtags: wordtags.filter(({ WtTgID }) => WtTgID !== tagId),
       tags: tags.filter(({ TgID }) => TgID !== tagId),
     }));
@@ -342,8 +416,29 @@ export class DataService {
   public addTagToText(tagId: Tags2Id, textId: TextsId) {
     this.dataStore.update((state) => ({
       ...state,
+      notificationMessage: { txt: 'Added Tag to Text' },
       texttags: [...state.texttags, { TtT2ID: tagId, TtTxID: textId }],
     }));
+    this.persistSet('texttags');
+  }
+  public addTagToMultipleTexts(tagString: string, textIds: TextsId[]) {
+    this.dataStore.update((state) => {
+      const foundTag = state.tags2.find(
+        (tag) => tag.T2Text === tagString.trim()
+      );
+      const tagId =
+        foundTag === undefined
+          ? this.addTextTag({ T2Text: tagString })
+          : foundTag.T2ID;
+      return {
+        ...state,
+        notificationMessage: { txt: 'Added Tag to Text' },
+        texttags: [
+          ...state.texttags,
+          ...textIds.map((TtTxID) => ({ TtT2ID: tagId, TtTxID })),
+        ],
+      };
+    });
     this.persistSet('texttags');
   }
 
@@ -351,6 +446,7 @@ export class DataService {
     this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => ({
       ...rest,
       texttags: texttags.filter(({ TtT2ID }) => TtT2ID !== tagId),
+      notificationMessage: { txt: 'Deleted Text Tag' },
       archtexttags: archtexttags.filter(({ AgT2ID }) => AgT2ID !== tagId),
       tags2: tags2.filter(({ T2ID }) => T2ID !== tagId),
     }));
@@ -360,31 +456,64 @@ export class DataService {
     this.persistSet('archtexttags');
   }
 
+  public deleteMultipleTextTags(tagIds: Tags2Id[]) {
+    this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => ({
+      ...rest,
+      texttags: texttags.filter(({ TtT2ID }) => !tagIds.includes(TtT2ID)),
+      notificationMessage: {
+        txt: `Deleted ${tagIds.length} Text Tag${
+          tagIds.length === 1 ? '' : 's'
+        }`,
+      },
+      archtexttags: archtexttags.filter(
+        ({ AgT2ID }) => !tagIds.includes(AgT2ID)
+      ),
+      tags2: tags2.filter(({ T2ID }) => !tagIds.includes(T2ID)),
+    }));
+    // TODO persist multiple at a time
+    this.persistSet('tags2');
+    this.persistSet('texttags');
+    this.persistSet('archtexttags');
+  }
+
+  public deleteMultipleTermTags(tagIds: TagsId[]) {
+    this.dataStore.update(({ wordtags, tags, ...rest }) => ({
+      ...rest,
+      wordtags: wordtags.filter(({ WtTgID }) => !tagIds.includes(WtTgID)),
+      notificationMessage: {
+        txt: `Deleted ${tagIds.length} Text Tag${
+          tagIds.length === 1 ? '' : 's'
+        }`,
+      },
+      tags: tags.filter(({ TgID }) => !tagIds.includes(TgID)),
+    }));
+    this.persistSet('tags');
+    this.persistSet('wordtags');
+  }
+
   public addLongText(longTextForm: LongTextForm) {
     window.alert('TODO ADDLONGTEXT');
   }
 
-  public addMultipleTerms(terms: Words[]) {
-    const mappedTerms = terms.map((word, ii) => {
-      if (!word.WoText) {
-      }
-      return {
-        ...word,
-        // TODO check if right
-        WoStatusChanged: Date.now(),
-        WoTextLC: word.WoText.toLowerCase(),
-        WoTodayScore: 0,
-        WoTomorrowScore: 0,
-        // TODO ? whats this
-        WoRandom: 0,
-      };
-    });
+  public addMultipleTerms(terms: Word[]) {
+    const mappedTerms = terms.map((word, ii) => ({
+      ...word,
+      // TODO check if right
+      WoStatusChanged: Date.now(),
+      // TODO make sure to do this on edit
+      WoTextLC: word.WoText.toLowerCase(),
+      WoTodayScore: 0,
+      WoTomorrowScore: 0,
+      // TODO ? whats this
+      WoRandom: 0,
+    }));
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
       const maxId = Math.max(...ids) + 1;
       if (IDIsUnique(maxId, ids)) {
         return {
           ...state,
+          notificationMessage: { txt: `Added ${terms.length} Terms` },
           // TODO mapping twice not ideal here
           words: [
             ...state.words,
@@ -571,19 +700,19 @@ export class DataService {
   public archiveText(archID: TextsId) {
     // TODO hashmap
     /**
-     * 	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'],
+     * 	message3 = runsql('delete from ' . tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'],
      * "Text items deleted");
-     * $message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'],
+     * message2 = runsql('delete from ' . tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'],
      * "Sentences deleted");
-     * $message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
-     * $id = get_last_key();
-     * runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");
-     * $message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
-     * $message = $message4 . " / " . $message1 . " / " . $message2 . " / " . $message3;
+     * message4 = runsql('insert into ' . tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
+     * id = get_last_key();
+     * runsql('insert into ' . tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . id . ', TtT2ID from ' . tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");
+     * message1 = runsql('delete from ' . tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
+     * message = message4 . " / " . message1 . " / " . message2 . " / " . message3;
      * adjust_autoincr('texts','TxID');
      * adjust_autoincr('sentences','SeID');
      * adjust_autoincr('textitems','TiID');
-     * runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
+     * runsql("DELETE " . tbpref . "texttags FROM (" . tbpref . "texttags LEFT JOIN " . tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
      */
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
@@ -595,12 +724,13 @@ export class DataService {
       return {
         ...state,
         texts: poppedTexts,
+        notificationMessage: { txt: 'Archived Text' },
         archivedtexts: [
           ...archivedtexts,
           {
             AtAnnotatedText: toArchive.TxAnnotatedText,
             AtAudioURI: toArchive.TxAudioURI,
-            AtID: toArchive.TxID as any as ArchivedTextsId,
+            AtID: toArchive.TxID as any as ArchivedTextId,
             AtLgID: toArchive.TxLgID,
             AtSourceURI: toArchive.TxSourceURI,
             AtText: toArchive.TxText,
@@ -614,6 +744,9 @@ export class DataService {
   }
 
   public unarchiveText() {
+    window.alert('TODO UNARCHIVETEXT');
+  }
+  public unarchiveMultipleTexts(textIds: ArchivedTextId[]) {
     window.alert('TODO UNARCHIVETEXT');
   }
 
@@ -637,13 +770,19 @@ export class DataService {
   public reparseText(textId: TextsId) {
     const { texts, languages } = this.dataStore.getValue();
     const parsingText = texts.find(({ TxID }) => TxID === textId);
+    if (!parsingText) {
+      return;
+    }
     const parsingLanguage = languages.find(
-      ({ LgID }) => LgID === parsingText?.TxLgID
+      ({ LgID }) => LgID === parsingText.TxLgID
     );
-    const parsedText = splitCheckText(parsingText?.TxText, parsingLanguage, -1);
+    if (!parsingLanguage) {
+      return;
+    }
+    const parsedText = splitCheckText(parsingText.TxText, parsingLanguage);
     this.dataStore.update(({ parsedTexts, ...rest }) => ({
       ...rest,
-      notificationMessage: `parsed text:${parsingText?.TxTitle}`,
+      notificationMessage: `parsed text: ${parsingText?.TxTitle}`,
       parsedTexts: { ...parsedTexts, [textId]: parsedText },
     }));
   }
@@ -709,10 +848,7 @@ export class DataService {
       })
     ).then((val) => {
       const valObj = Object.fromEntries(val);
-      this.dataStore.update((state) => {
-        console.log('GOTObjs', { ...state, ...valObj });
-        return { ...state, ...valObj };
-      });
+      this.dataStore.update((state) => ({ ...state, ...valObj }));
     });
   }
 }

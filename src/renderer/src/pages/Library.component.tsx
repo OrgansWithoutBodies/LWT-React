@@ -3,7 +3,6 @@ import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { TextsId, TextsValidator } from '../data/validators';
-import { RefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
@@ -13,7 +12,10 @@ import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
-import { resetAll } from './EditArchived.component';
+import { resetAll } from './EditArchivedTexts.component';
+import { pluralize } from './EditTags';
+import { GetTextssortSelectoptions } from './EditTextTags';
+import { SelectMediaPath } from './SelectMediaPath';
 import { resetDirty } from './Sorting';
 import { TagAndOr, TagDropDown } from './Terms.component';
 
@@ -22,7 +24,14 @@ const TextMultiAction = {
     console.log('test');
   },
   addtag: (selectedValues: Set<TextsId>) => {
-    console.log('addtag');
+    const answer = window.prompt(
+      `*** ${'addTag'} ***\n\n*** ' + $('input.markcheck:checked').length + ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`
+    );
+    if (answer === null) {
+      return;
+    }
+
+    dataService.addTagToMultipleTexts(answer, [...selectedValues]);
   },
   deltag: (selectedValues: Set<TextsId>) => {
     console.log('deltag');
@@ -37,7 +46,7 @@ const TextMultiAction = {
     console.log('arch');
   },
   del: (selectedValues: Set<TextsId>) => {
-    console.log('del');
+    dataService.deleteMultipleTexts([...selectedValues]);
   },
 };
 
@@ -271,7 +280,7 @@ function LibraryRow({
         </span>
         {text.audioAvailable && <Icon src="speaker-volume" />}
         {text.link && (
-          <a href={text.link}>
+          <a href={text.link} target="_blank">
             <Icon src="chain" />
           </a>
         )}
@@ -443,10 +452,10 @@ export function Library({
           </tr>
 
           {/* TODO */}
-          {/* <?php if($recno > 0) { ?> */}
+          {/* <?php if(recno > 0) { ?> */}
           <tr>
             <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-              {`${recno} Text${recno === 1 ? '' : 's'}`}
+              {`${recno} Text${pluralize(recno)}`}
             </th>
             <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
               <Pager currentPage={currentPage} numPages={numPages} />
@@ -456,11 +465,9 @@ export function Library({
               <select
                 name="sort"
                 // TODO
-                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&amp;sort=' + val;}"
+                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts?page=1&amp;sort=' + val;}"
               >
-                {/* TODO */}
-                {/* title-a-z/newest/oldest */}
-                {/* <?php echo get_textssort_selectoptions($currentsort); ?> */}
+                <GetTextssortSelectoptions />
               </select>
             </th>
           </tr>
@@ -493,30 +500,28 @@ export function Library({
 }
 
 export function EditText({ chgID }: { chgID: TextsId }) {
-  const [{ texts }] = useData(['texts']);
+  const [{ texts, tags2 }] = useData(['texts', 'tags2']);
   const editingText = texts.find(({ TxID }) => TxID === chgID);
   if (!editingText) {
     throw new Error('Invalid change ID');
   }
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
-  const refMap = RefMap(validator);
-  const TxInput = useFormInput(refMap, editingText);
+
+  const { Input: TxInput, formErrors } = useFormInput({
+    entry: editingText,
+    validator,
+  });
   return (
     <>
       <Header title="My Texts" />
       <h4>
         Edit Text{' '}
-        <a target="_blank" href="info.htm#howtotext">
+        <A target="_blank" href="/info#howtotext">
           <Icon src="question-frame" title="Help" />
-        </a>
+        </A>
       </h4>
-      <form
-        className="validate"
-        // TODO
-        action="<?php echo $_SERVER['PHP_SELF']; ?>#rec<?php echo $_REQUEST['chg']; ?>"
-        method="post"
-      >
+      <form className="validate">
         <TxInput type="hidden" entryKey="TxID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
@@ -532,13 +537,13 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <TxInput
                 type="text"
                 className="notempty checkoutsidebmp"
-                // data_info="Title"
+                errorName="Title"
                 entryKey="TxTitle"
                 default
                 maxLength={200}
                 size={60}
-              />{' '}
-              <RequiredLineButton />
+                isRequired
+              />
             </td>
           </tr>
           <tr>
@@ -556,27 +561,27 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <textarea
                 // TODO
 
-                // function getScriptDirectionTag($lid)
+                // function getScriptDirectionTag(lid)
                 // {
-                // 	global $tbpref;
-                // 	if (!isset($lid))
+                // 	global tbpref;
+                // 	if (!isset(lid))
                 // 		return '';
-                // 	if (trim($lid) == '')
+                // 	if (trim(lid) == '')
                 // 		return '';
-                // 	if (!is_numeric($lid))
+                // 	if (!is_numeric(lid))
                 // 		return '';
-                // 	$r = get_first_value("select LgRightToLeft as value from " . $tbpref . "languages where LgID='" . $lid . "'");
-                // 	if (isset($r)) {
-                // 		if ($r)
+                // 	r = get_first_value("select LgRightToLeft as value from " . tbpref . "languages where LgID='" . lid . "'");
+                // 	if (isset(r)) {
+                // 		if (r)
                 // 			return ' dir="rtl" ';
                 // 	}
                 // 	return '';
                 // }
-                //  <?php echo getScriptDirectionTag($record['TxLgID']); ?>
+                //  <?php echo getScriptDirectionTag(record['TxLgID']); ?>
                 name="TxText"
                 className="notempty checkbytes checkoutsidebmp"
                 maxLength={65000}
-                // data_info="Text"
+                errorName="Text"
                 cols={60}
                 rows={20}
                 defaultValue={editingText.TxText}
@@ -587,8 +592,20 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Ann.Text:</td>
             <td className="td1">
-              {/* TODO */}
-              {/* <?php echo ($record['annotlen'] ? '<Icon src="tick.png" title="With Improved Annotation" alt="With Improved Annotation" /> Exists - May be partially or fully lost if you change the text!<br /><input type="button" value="Print/Edit..." onclick="location.href=\'print_impr_text.php?text=' . $_REQUEST['chg'] . '\';" />' : '<img src="icn/cross" title="No Improved Annotation" />'); ?> */}
+              {editingText.TxAnnotatedText.length ? (
+                <>
+                  <Icon src="tick" title="With Improved Annotation" /> Exists -
+                  May be partially or fully lost if you change the text!
+                  <br />
+                  <input
+                    type="button"
+                    value="Print/Edit..."
+                    onclick="location.href=\'print_impr_text?text=' . $_REQUEST['chg'] . '\';"
+                  />
+                </>
+              ) : (
+                <Icon src="cross" title="No Improved Annotation" />
+              )}
             </td>
           </tr>
           <tr>
@@ -597,7 +614,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <TxInput
                 type="text"
                 className="checkurl checkoutsidebmp"
-                // data_info="Source URI"
+                errorName="Source URI"
                 entryKey="TxSourceURI"
                 default
                 maxLength={1000}
@@ -609,7 +626,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
             <td className="td1 right">Tags:</td>
             <td className="td1">
               {/* TODO */}
-              {/* <?php echo getTextTags($_REQUEST['chg']); ?> */}
+              <TagDropDown tags={tags2} tagKey={'text'} />
             </td>
           </tr>
           <tr>
@@ -618,7 +635,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <TxInput
                 type="text"
                 className="checkoutsidebmp"
-                // data_info="Audio-URI"
+                errorName="Audio-URI"
                 entryKey="TxAudioURI"
                 default
                 maxLength={200}
@@ -626,7 +643,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               />
               <span id="mediaselect">
                 {/* TODO */}
-                {/* <?php echo selectmediapath('TxAudioURI'); ?> */}
+                <SelectMediaPath f="TxAudioURI" />
               </span>
             </td>
           </tr>
@@ -637,7 +654,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                 value="Cancel"
                 onClick={() => {
                   resetDirty();
-                  navigator(`/edit_texts.php#rec${chgID}`);
+                  navigator(`/edit_texts#rec${chgID}`);
                 }}
               />
               <input

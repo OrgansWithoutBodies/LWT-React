@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SplitPane from 'react-split-pane';
-import { Words } from '../data/parseMySqlDump';
+import { Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
 import { Header } from '../ui-kit/Header';
@@ -29,7 +29,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
   const [activeWord, setActiveWord] = useState<
-    Words | { newWord: string } | null
+    Word | { newWord: string } | null
   >(null);
   const text = texts.find((text) => text.TxID === textId);
   const activeText =
@@ -49,18 +49,51 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
         minSize={50}
         defaultSize="20%"
       >
-        <Header
-          title={`READ ▶ ${text.TxTitle}`}
-          readerProps={{
-            // TODO getPreviousAndNextTextLinks
-            nextTextID: 'Test1',
-            prevTextString: 'test2',
-            langID: text.TxLgID,
-            textID: text.TxID,
-          }}
-        />
+        <>
+          <Header
+            title={`READ ▶ ${text.TxTitle}`}
+            readerProps={{
+              // TODO getPreviousAndNextTextLinks
+              nextTextID: 'Test1',
+              prevTextString: 'test2',
+              langID: text.TxLgID,
+              textID: text.TxID,
+            }}
+          />
+          <table className="width99pc">
+            <tr>
+              <td
+                class="center"
+                colspan="7"
+                style={{ padding: '2px 5px 5px 5px' }}
+                nowrap="nowrap"
+              >
+                TO DO:{' '}
+                <span id="learnstatus">
+                  {/* <?php echo texttodocount2($_REQUEST['text']); ?> */}
+                </span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span
+                  title="[Show All] = ON: ALL terms are shown, and all multi-word terms are shown as superscripts before the first word. The superscript indicates the number of words in the multi-word term. 
+[Show All] = OFF: Multi-word terms now hide single words and shorter or overlapping multi-word terms."
+                >
+                  Show All&nbsp;
+                  <input
+                    type="checkbox"
+                    id="showallwords"
+                    // <?php echo get_checked($showAll); ?>
+                  />
+                </span>
+                <span id="thetextid" className="hide">
+                  {text.TxID}
+                </span>
+              </td>
+            </tr>
+
+            {text.TxAudioURI && <AudioPlayer audioURI={text.TxAudioURI} />}
+          </table>
+        </>
         {/* TODO Show All */}
-        {/* TODO audio */}
         <Reader
           activeId={textId}
           setActiveWord={setActiveWord}
@@ -181,11 +214,11 @@ export function make_overlib_link_change_status_test(
   plusminus: string,
   text: string
 ) {
-  return ` <a href=\x22set_test_status.php?wid=${wid}&amp;stchange=${plusminus}\x22 target=\x22ro\x22>${text}</a> `;
+  return ` <a href=\x22set_test_status?wid=${wid}&amp;stchange=${plusminus}\x22 target=\x22ro\x22>${text}</a> `;
 }
 
 export function Tester({ modality }: { modality: Modality }) {
-  const [testingWord, setTestingWord] = useState<Words | null>(null);
+  const [testingWord, setTestingWord] = useState<Word | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
   const [numWrong, setNumWrong] = useState(0);
   const [numNotTested, setNumNotTested] = useState(10);
@@ -248,7 +281,7 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
-function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {
+function RunTestForWord({ word: { WoStatus: status } }: { word: Word }) {
   return (
     <>
       <center>
@@ -272,15 +305,15 @@ function RunTestForWord({ word: { WoStatus: status } }: { word: Words }) {
         )}
       </center>
       <hr size={1} />
-      <b>{escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b>
+      <b>{escape_html_chars(make_tooltip(Text, trans, roman, stat))}</b>
       <br />
-      <a href="edit_tword.php?wid=" target="ro">
+      <a href="edit_tword?wid=" target="ro">
         Edit term
       </a>
       <br />
-      {createTheDictLink(wblink1, txt, 'Dict1', 'Lookup Term: ')}
-      {createTheDictLink(wblink2, txt, 'Dict2', '')}
-      {createTheDictLink(wblink3, txt, 'GTr', '')}
+      {createTheDictLink(wblink1, Text, 'Dict1', 'Lookup Term: ')}
+      {createTheDictLink(wblink2, Text, 'Dict2', '')}
+      {createTheDictLink(wblink3, Text, 'GTr', '')}
       {/* TODO */}
       {/* createTheDictLink(wblink3,sent,'GTr','
       <br />
@@ -327,7 +360,7 @@ export function createTheDictLink(u: string, w: string, t: string, b: string) {
 function createTheDictUrl(u: string, w: string) {
   const url = u.trim();
   const trm = w.trim();
-  const r = `trans.php?x=2&i=${escape(u)}&t=${w}`;
+  const r = `trans?x=2&i=${escape(u)}&t=${w}`;
   return r;
 }
 
@@ -337,4 +370,7 @@ function createTheDictUrl(u: string, w: string) {
  */
 function escape_apostrophes(s: string) {
   return s.replace(/'/g, "\\'");
+}
+function AudioPlayer({ audioURI }: { audioURI: string }) {
+  return <></>;
 }

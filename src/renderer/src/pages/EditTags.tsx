@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { dataService } from '../data/data.service';
-import { Tags } from '../data/parseMySqlDump';
+import { Tag } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TagsId, TagsValidator } from '../data/validators';
 import { CheckAndSubmit, RefMap } from '../forms/Forms';
@@ -9,17 +9,18 @@ import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
-import { Icon, RequiredLineButton } from '../ui-kit/Icon';
+import { Icon } from '../ui-kit/Icon';
 import { Pager } from '../ui-kit/Pager';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
+  GetTagsortSelectoptions,
 } from './EditTextTags';
+import { FormInput } from './FormInput';
 import { resetDirty } from './Sorting';
 import { NavigateButton } from './Statistics.component';
-import { FormInput } from './buildFormInput';
 import { tagPreValidateMap } from './preValidateMaps';
-import { confirmDelete, multiActionGo } from './utils';
+import { confirmDelete } from './utils';
 
 export function DisplayTags({
   query,
@@ -36,7 +37,7 @@ export function DisplayTags({
 
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(tags, currentPage, pageSize);
-  const { checkboxPropsForEntry, selectedValues, onSelectAll, onSelectNone } =
+  const { checkboxPropsForEntry, onSelectAll, onSelectNone, selectedValues } =
     useSelection(tags, 'TgID');
 
   const queryRef = useRef<HTMLInputElement>(null);
@@ -93,28 +94,32 @@ export function DisplayTags({
               />
             </td>
           </tr>
-          {/* <?php if(recno > 0) { ?>
-<tr>
-<th className="th1" colSpan={1} style={{whiteSpace:"nowrap"}}>
-<?php echo recno; ?> Tag<?php echo (recno==1?'':'s'); ?>
-</th><th className="th1" colSpan={2} style={{whiteSpace:"nowrap"}}>
-<?php makePager (currentpage, pages, 'edit_tags', 'form1', 1); ?>
-</th><th className="th1" style={{whiteSpace:"nowrap"}}>
-Sort Order:
-<select name="sort" onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_tags?page=1&sort=' + val;}"><?php echo get_tagsort_selectoptions(currentsort); ?></select>
-</th></tr>
-<?php } ?> */}
+          {recno > 0 && (
+            <tr>
+              <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
+                Tag{pluralize(recno)}
+              </th>
+              <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
+                <Pager currentPage={0} numPages={0} />
+              </th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                Sort Order:
+                <select
+                  name="sort"
+                  onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_tags?page=1&sort=' + val;}"
+                >
+                  <GetTagsortSelectoptions />
+                </select>
+              </th>
+            </tr>
+          )}
         </table>
       </form>
 
       {recno === 0 ? (
         <p>No tags found.</p>
       ) : (
-        <form
-          name="form2"
-          action="<?php echo _SERVER['PHP_SELF']; ?>"
-          method="post"
-        >
+        <form name="form2">
           <input type="hidden" name="data" value="" />
           <table className="tab1" cellSpacing={0} cellPadding={5}>
             <tr>
@@ -129,8 +134,20 @@ Sort Order:
                 <select
                   name="allaction"
                   disabled={false}
-                  // TODO
-                  onChange="allActionGo(document.form2, document.form2.allaction,<?php echo recno; ?>);"
+                  onChange={({ target: { value } }) => {
+                    // TODO rest
+                    if (value === 'delall') {
+                      if (
+                        window.confirm(
+                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+                        )
+                      ) {
+                        dataService.deleteMultipleTermTags(
+                          tags.map(({ TgID }) => TgID)
+                        );
+                      }
+                    }
+                  }}
                 >
                   <GetAllTagsActionsSelectOptions />
                 </select>
@@ -147,12 +164,16 @@ Sort Order:
                   name="markaction"
                   id="markaction"
                   disabled={selectedValues.size === 0}
-                  onChange={(val) => {
-                    multiActionGo(
-                      () => {},
-                      // TODO ref
-                      val
-                    );
+                  onChange={({ target: { value } }) => {
+                    if (value === 'del') {
+                      if (
+                        window.confirm(
+                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+                        )
+                      ) {
+                        dataService.deleteMultipleTermTags([...selectedValues]);
+                      }
+                    }
                   }}
                 >
                   <GetMultipleTagsActionsSelectOptions />
@@ -223,7 +244,7 @@ Sort Order:
             <tr>
               <th className="th1" style={{ whiteSpace: 'nowrap' }}>
                 Tag
-                {recno == 1 ? '' : 's'}
+                {pluralize(recno)}
               </th>
               <th className="th1" style={{ whiteSpace: 'nowrap' }} />
             </tr>
@@ -231,22 +252,31 @@ Sort Order:
         </form>
       )}
 
-      <Pager currentPage={currentPage} numPages={numPages} />
-      {/* <?php if( pages > 1) { ?>
-<form name="form3" action="#">
-<table className="tab1" cellspacing={0} cellpadding={5}>
-<tr>
-<th className="th1" style={{whiteSpace:"nowrap"}}>
-<?php echo recno; ?> Tag<?php echo (recno==1?'':'s'); ?>
-</th><th className="th1" style={{whiteSpace:"nowrap"}}>
-// <?php makePager (currentpage, pages, 'edit_tags', 'form3', 2); ?> */}
+      {numPages > 1 && (
+        <form name="form3" action="#">
+          <table className="tab1" cellSpacing={0} cellPadding={5}>
+            <tr>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                Tag{pluralize(recno)}
+              </th>
+              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+                <Pager currentPage={currentPage} numPages={numPages} />
+              </th>
+            </tr>
+          </table>
+        </form>
+      )}
     </>
   );
 }
 
+export function pluralize(count: number) {
+  return count == 1 ? '' : 's';
+}
+
 export function NewTag() {
   const validator = TagsValidator;
-  const refMap = RefMap<Tags>(validator);
+  const refMap = RefMap<Tag>(validator);
 
   const navigator = useInternalNavigate();
 
@@ -254,12 +284,7 @@ export function NewTag() {
     <>
       <Header title="My Term Tags" />
       <h4>New Tag</h4>
-      <form
-        name="newtag"
-        className="validate"
-        action="<?php echo $_SERVER['PHP_SELF']; ?>"
-        method="post"
-      >
+      <form name="newtag" className="validate" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
@@ -271,8 +296,8 @@ export function NewTag() {
                 refMap={refMap}
                 maxLength={20}
                 size={20}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
@@ -330,7 +355,7 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
     throw new Error('Invalid Tag ID');
   }
   const validator = TagsValidator;
-  const refMap = RefMap<Tags>(validator);
+  const refMap = RefMap<Tag>(validator);
 
   const navigator = useInternalNavigate();
   Comment;
@@ -341,7 +366,7 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
       <form
         name="newtag"
         className="validate"
-        // action="<?php echo $_SERVER['PHP_SELF']; ?>"
+        //
         method="post"
       >
         <table className="tab3" cellSpacing={0} cellPadding={5}>
@@ -356,8 +381,8 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
                 refMap={refMap}
                 maxLength={20}
                 size={20}
+                isRequired
               />
-              <RequiredLineButton />
             </td>
           </tr>
           <tr>
