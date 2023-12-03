@@ -2,13 +2,12 @@ import { dataService } from '../data/data.service';
 import { AddNewWordValidator, Tag, Tag2, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import {
+  EditWordsValidator,
   LanguagesId,
   TagsId,
   TextsId,
   WordsId,
-  WordsValidator,
 } from '../data/validators';
-import { parseNumMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import {
   PathParams,
@@ -26,20 +25,17 @@ import { NumericalStrength } from './AddNewTermTooltip';
 import { StatusRadioButtons, do_ajax_show_sentences } from './AddNewWordPane';
 import { resetAll } from './EditArchivedTexts.component';
 import { pluralize } from './EditTags';
+import { filterTags } from './Library.component';
 import { Sorting, resetDirty } from './Sorting';
 import { StrengthMapNumericalKey } from './StrengthMap';
 import { WordTagsSelectDropdown } from './WordTagsSelectDropdown';
-import { wordPrevalidateMap } from './preValidateMaps';
+import { wordNoIdPrevalidateMap, wordPrevalidateMap } from './preValidateMaps';
 import { confirmDelete } from './utils';
 
-export const isTags = (tags: Tag[] | Tag2[]): tags is Tag[] =>
+const isTags = (tags: Tag[] | Tag2[]): tags is Tag[] =>
   tags[0] && 'TgID' in tags[0];
-export const isTag = (tag: Tag | Tag2): tag is Tag => 'TgID' in tag;
 // TODO tagKey type restricted to path param
 
-/**
- *
- */
 export function TagDropDown({
   tags,
   tagKey,
@@ -68,10 +64,7 @@ export function TagDropDown({
   );
 }
 
-/**
- *
- */
-function TermsHeader(): JSX.Element {
+function TermsHeader({ sorting }: { sorting: Sorting }): JSX.Element {
   return (
     <tr>
       <th className="th1 sorttable_nosort">Mark</th>
@@ -101,15 +94,22 @@ function TermsHeader(): JSX.Element {
         Score
         <br />%
       </th>
+      {sorting === Sorting['Word Count Active Texts'] && (
+        <th
+          className="th1 sorttable_numeric clickable"
+          title="Word Count in Active Texts"
+        >
+          WCnt
+          <br />
+          Txts
+        </th>
+      )}
     </tr>
   );
 }
 
 // TODO abstract out filterbox
 
-/**
- *
- */
 export function TermsFilterBox({
   numTerms,
   currentPage,
@@ -208,6 +208,7 @@ export function TermsFilterBox({
               })}
               <option value="99">Well Known [WKn]</option>
               <option value="98">Ignored [Ign]</option>
+              {/* TODO reuse GetWordstatusSelectoptions */}
               {new Array(4).fill(0).map((_, ii) => {
                 const val = ii + 1;
                 return (
@@ -313,9 +314,6 @@ export function TermsFilterBox({
   );
 }
 
-/**
- *
- */
 export function TagAndOr({
   onChange,
   defaultValue,
@@ -326,7 +324,11 @@ export function TagAndOr({
   return (
     <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
       Tag #1 ..
-      <select defaultValue={defaultValue} name="tag12" onChange={onChange}>
+      <select
+        defaultValue={defaultValue}
+        name="tag12"
+        onChange={onChange as (arg: { target: { value: any } }) => void}
+      >
         <option value={0}>... OR ...</option>
         <option value={1}>... AND ...</option>
       </select>
@@ -335,9 +337,6 @@ export function TagAndOr({
   );
 }
 
-/**
- *
- */
 export function TermsFooter({
   numTerms,
   currentPage,
@@ -367,25 +366,25 @@ export function TermsFooter({
   );
 }
 
-/**
- *
- */
 function TermLine({
   word,
   onSelect,
   isSelected,
+  tags,
+  sorting,
 }: {
+  sorting: Sorting;
   word: Word;
+  tags: string[];
   isSelected: boolean;
   onSelect: (term: Word, checked: boolean) => void;
 }): JSX.Element {
   const termID = word.WoID;
   const sentence = word.WoSentence;
 
-  // console.log('TERMLINE', word, word.WoRomanization);
   return (
     <tr>
-      <td name="rec${termID}" className="td1 center">
+      <td id={`rec${termID}`} className="td1 center">
         <A>
           <input
             name="marked[]"
@@ -433,12 +432,12 @@ function TermLine({
           title="Click to edit..."
         >
           {word.WoTranslation}
-        </span>
-        <span className="smallgray2" />
+        </span>{' '}
+        <span className="smallgray2">[{tags.join(', ')}]</span>
       </td>
       <td className="td1 center">
         <b>
-          {sentence !== null ? (
+          {sentence !== undefined ? (
             <Icon src="status" title={`${sentence}`} alt="Yes" />
           ) : (
             <Icon src="status-busy" title="(No valid sentence)" alt="No" />
@@ -446,14 +445,22 @@ function TermLine({
         </b>
       </td>
       <td className="td1 center" title="Learning">
+        {/* TODO */}
         1/1
       </td>
       <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
         <span className="scorered">
+          {/* TODO */}
           0
           <Icon src="status-busy" title="Test today!" />
         </span>
       </td>
+      {sorting === Sorting['Word Count Active Texts'] && (
+        <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+          {/* TODO */}
+          {/* ' . $record['textswordcount'] . ' */}
+        </td>
+      )}
     </tr>
   );
 }
@@ -462,11 +469,9 @@ const sortingMethod = (
 ): ((termA: Word, termB: Word) => 1 | -1 | 0) => {
   switch (sort) {
     case Sorting['Oldest first']:
-      return (a, b) =>
-        a.WoCreated > b.WoCreated ? 1 : a.WoCreated < b.WoCreated ? -1 : 0;
+      return oldestFirstSort;
     case Sorting['Newest first']:
-      return (a, b) =>
-        a.WoCreated > b.WoCreated ? -1 : a.WoCreated < b.WoCreated ? 1 : 0;
+      return newestFirstSort;
     // TODO
     case Sorting['Score Value (%)']:
       return (a, b) =>
@@ -492,13 +497,23 @@ const sortingMethod = (
   }
 };
 
-/**
- *
- */
+const newestFirstSort = (a: Word, b: Word): 1 | -1 | 0 =>
+  Date.parse(a.WoCreated) > Date.parse(b.WoCreated)
+    ? -1
+    : Date.parse(a.WoCreated) < Date.parse(b.WoCreated)
+    ? 1
+    : 0;
+const oldestFirstSort = (a: Word, b: Word): 1 | -1 | 0 =>
+  Date.parse(a.WoCreated) > Date.parse(b.WoCreated)
+    ? 1
+    : Date.parse(a.WoCreated) < Date.parse(b.WoCreated)
+    ? -1
+    : 0;
+
 export function Terms({
   pageNum = null,
   // filterlang = null,
-  sort = null,
+  sort = Sorting['Term A-Z'],
   status = null,
   textFilter,
   tag1,
@@ -514,10 +529,11 @@ export function Terms({
   tag1: TagsId | null;
   tag12: 0 | 1;
   tag2: TagsId | null;
-  sort: Sorting | null;
+  sort?: Sorting;
 }): JSX.Element {
-  const [{ words, activeLanguage, settings, wordtags }] = useData([
+  const [{ words, activeLanguage, settings, tags, wordtags }] = useData([
     'words',
+    'tags',
     'activeLanguage',
     'settings',
     'wordtags',
@@ -529,16 +545,15 @@ export function Terms({
   // }
   // const textTagsMatchingTag1=texttags.filter((tag)=>tag.TtTxID===)
   // const navigator = useInternalNavigate();
+  const filteredWordTags = wordtags.filter((tag) =>
+    filterTags(tag.WtTgID, tag1, tag2, tag12)
+  );
   const filteredWords = words.filter((val) => {
     const allTagsForThisWord = wordtags.filter(
       ({ WtWoID }) => WtWoID === val.WoID
     );
-    const isRightText =
-      textFilter === null
-        ? true
-        : // TODO - find if in target text
-          // : Number.parseInt(val.WoText) === textFilter;
-          true;
+    // TODO - find if in target text
+    const isRightText = textFilter === null ? true : true;
     const isRightStatus = status === null ? true : val.WoStatus === status;
     const isRightLang =
       activeLanguage === null ? true : val.WoLgID === activeLanguage?.LgID;
@@ -551,13 +566,7 @@ export function Terms({
         ? true
         : allTagsForThisWord.find((val) => val.WtTgID === tag2);
 
-    // TODO account for both tags empty
-    const compoundTagStatement =
-      tag12 === 0
-        ? // need an extra check to avoid sticking when only one tag is specified? I think
-
-          isRightTag1 || (tag2 === null ? false : isRightTag2)
-        : isRightTag1 && isRightTag2;
+    const compoundTagStatement = filterTags(tag, tag1, tag2, tag12);
 
     return isRightStatus && isRightText && isRightLang && compoundTagStatement;
   });
@@ -613,12 +622,19 @@ export function Terms({
             allTermIDs={filteredWords.map((val) => val.WoID)}
           />
           <table className="sortable tab1">
-            <TermsHeader />
+            <TermsHeader sorting={sort} />
             <tbody>
               {displayedWords.map((word) => (
                 <TermLine
+                  tags={wordtags
+                    .filter((val) => val.WtWoID === word.WoID)
+                    .map(
+                      (val) =>
+                        tags.find((tag) => tag.TgID === val.WtTgID)?.TgText
+                    )}
                   word={word}
                   onSelect={onSelect}
+                  sorting={sort}
                   isSelected={selectedValues.has(word.WoID)}
                 />
               ))}
@@ -635,13 +651,10 @@ export function Terms({
   );
 }
 
-/**
- *
- */
 export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   const [{ words, activeLanguage }] = useData(['words', 'activeLanguage']);
   const term = words.find((val) => val.WoID === chgID);
-  const validator = WordsValidator;
+  const validator = EditWordsValidator;
   const navigator = useInternalNavigate();
   const {
     Input: WoInput,
@@ -665,6 +678,8 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
       <form name="editword" className="validate">
         <WoInput type="hidden" entryKey="WoID" fixed />
         <WoInput type="hidden" entryKey="WoLgID" fixed />
+        <WoInput type="hidden" entryKey="WoCreated" fixed />
+        {/* TODO */}
         <input type="hidden" name="WoOldStatus" value={term.WoStatus} />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
@@ -680,7 +695,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 // <?php echo $scrdir; ?>
                 className="notempty setfocus checkoutsidebmp"
                 type="text"
-                // id="wordfield"
+                id="wordfield"
                 errorName="Term"
                 entryKey="WoText"
                 maxLength={250}
@@ -748,7 +763,10 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right">Status:</td>
             <td className="td1">
-              <StatusRadioButtons WoStatus={term.WoStatus} refMap={refMap} />
+              <StatusRadioButtons
+                defaultStatus={term.WoStatus}
+                refMap={refMap}
+              />
             </td>
           </tr>
           <tr>
@@ -772,6 +790,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 onClick={() => {
                   onSubmit(wordPrevalidateMap, (val) => {
                     dataService.editTerm(val);
+                    navigator('/edit_words');
                   });
                 }}
               />
@@ -796,9 +815,6 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   );
 }
 
-/**
- *
- */
 export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const [{ languages }] = useData(['languages']);
   const language = languages.find((val) => val.LgID === langId);
@@ -811,7 +827,6 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const {
     Input: WoInput,
     refMap,
-    formErrors,
     onSubmit,
   } = useFormInput({
     entry: { WoLgID: langId },
@@ -838,7 +853,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                 // <?php echo $scrdir; ?>
                 className="notempty setfocus checkoutsidebmp"
                 type="text"
-                // id="wordfield"
+                id="wordfield"
                 errorName="Term"
                 entryKey="WoText"
                 maxLength={250}
@@ -903,13 +918,14 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
           </tr>
           <tr>
             <td className="td1 right">Status:</td>
-            <StatusRadioButtons WoStatus="1" refMap={refMap} />
+            <StatusRadioButtons refMap={refMap} />
           </tr>
           <tr>
             <td className="td1 right" colSpan={2}>
               &nbsp;
               {/* TODO */}
               {/* <?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoSentence','document.forms[\'editword\'].WoText'); ?> */}
+              {/* createDictLinksInEditWin2 */}
               &nbsp; &nbsp;
               <input
                 type="button"
@@ -923,18 +939,11 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                 type="button"
                 value="Save"
                 onClick={() => {
-                  onSubmit(
-                    {
-                      WoLgID: parseNumMap,
-                      WoStatus: parseNumMap,
-                      WoTranslation: (val) => (val === undefined ? '' : val),
-                    },
-                    (val) => {
-                      console.log('ADDING TERM');
-                      dataService.addTerm(val);
-                      navigator('/edit_words');
-                    }
-                  );
+                  onSubmit(wordNoIdPrevalidateMap, (val) => {
+                    console.log('ADDING TERM', val);
+                    dataService.addTerm(val);
+                    navigator('/edit_words');
+                  });
                 }}
               />
             </td>
@@ -962,9 +971,6 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   );
 }
 
-/**
- *
- */
 export function TermMultiActions({
   selectedTerms,
   onSelectAll,
@@ -988,7 +994,7 @@ export function TermMultiActions({
             </th>
           </tr>
           <tr>
-            <td className="td1 center" colSpan="2">
+            <td className="td1 center" colSpan={2}>
               <b>ALL</b>
               {recno == 1 ? '1 Term' : `${recno} Terms`}&nbsp;
               <select
@@ -1026,9 +1032,6 @@ export function TermMultiActions({
   );
 }
 
-/**
- *
- */
 function GetAllWordsActionsSelectOptions() {
   return (
     <>
@@ -1065,9 +1068,6 @@ function GetAllWordsActionsSelectOptions() {
   );
 }
 
-/**
- *
- */
 function GetSetStatusOption({
   n,
   suffix,
@@ -1083,9 +1083,7 @@ function GetSetStatusOption({
 }
 
 // TODO
-/**
- *
- */
+
 function do_ajax_show_similar_terms() {
   $('#simwords').html('<img src="icn/waiting2.gif" />');
   $.post(
@@ -1096,9 +1094,7 @@ function do_ajax_show_similar_terms() {
     }
   );
 }
-/**
- *
- */
+
 export function PrintSimilarTermsTabrow() {
   const [{ settings }] = useData(['settings']);
   return (
@@ -1121,9 +1117,6 @@ export function PrintSimilarTermsTabrow() {
   );
 }
 
-/**
- *
- */
 export function WordTag() {
   return (
     <>
@@ -1136,9 +1129,6 @@ export function WordTag() {
   );
 }
 
-/**
- *
- */
 export function GetTagsList({
   EntryID,
   tagKey,

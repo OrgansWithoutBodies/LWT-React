@@ -26,11 +26,41 @@
 // 	}
 // 	return r;
 // }
-{
-  /* TODO */
+
+// TODO
+export function do_ajax_update_media_select() {
+  // $('#mediaselect').html('&nbsp; <img src="icn/waiting2.gif" />');
+  // $.post('ajax_update_media_select.php',
+  // 	function(data) { $('#mediaselect').html(data); }
+  // );
 }
+
 export function SelectMediaPath({ f }: { f: string }) {
-  return <></>;
+  const exists = true;
+  return (
+    <>
+      <br /> or choose a file in ".../'.basename(getcwd()).; '/media" (only mp3,
+      ogg, wav files shown):{' '}
+      {exists ? (
+        <>
+          {is_dir('media') ? (
+            <></>
+          ) : (
+            <>
+              <br />
+              [Error: ".../{basename(getcwd())}/media" exists, but it is not a
+              directory.]
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <br />
+          [Directory ".../{basename(getcwd())}/media" does not yet exist.]
+        </>
+      )}
+    </>
+  );
   // exists = file_exists('media');
   // if (exists) {
   //   if (is_dir('media'))
@@ -48,6 +78,6 @@ export function SelectMediaPath({ f }: { f: string }) {
   //   r += selectmediapathoptions('media');
   //   r += '</select> ';
   // }
-  // r += ' &nbsp; &nbsp; <span class="click" onclick="do_ajax_update_media_select();"><img src="icn/arrow-circle-135.png" title="Refresh Media Selection" alt="Refresh Media Selection" /> Refresh</span>';
+  // r += ' &nbsp; &nbsp; <span class="click" onClick="do_ajax_update_media_select();"><Icon src="arrow-circle-135" title="Refresh Media Selection" /> Refresh</span>';
   // return r;
 }

@@ -20,7 +20,7 @@ export function FormInput<
   ...nativeProps
 }: Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'defaultValue' | 'id' | 'ref' | 'name'
+  'defaultValue' | 'ref' | 'name'
 > & {
   entryKey: TKey;
   // TODO need refmap if fixed entry?

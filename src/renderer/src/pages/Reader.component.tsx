@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Word } from '../data/parseMySqlDump';
+import { Language, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
 import { AddNewTermTooltip } from './AddNewTermTooltip';
@@ -36,12 +36,16 @@ export function Reader({
   ]);
   const [tooltipOpen, setTooltipOpen] = useState<null | number>(null);
   const activeText = texts.find((text) => text.TxID === activeId);
-  const isLangRTL = languages.find(
-    (langs) => langs.LgID === activeText.TxLgID
-  )?.LgRightToLeft;
+  if (!activeText) {
+    return <></>;
+  }
+  const language = languages.find((langs) => langs.LgID === activeText.TxLgID);
+  if (!language) {
+    return <></>;
+  }
   const activeParsedText = parsedTexts[activeId];
   return (
-    <div id="thetext" dir={isLangRTL ? 'rtl' : undefined}>
+    <div id="thetext" {...getDirTag(language)}>
       <p
         onClick={() => setTooltipOpen(null)}
         style={{
@@ -104,3 +108,6 @@ export function Reader({
     </div>
   );
 }
+export const getDirTag = (language: Language) => ({
+  dir: language.LgRightToLeft ? 'rtl' : 'ltr',
+});

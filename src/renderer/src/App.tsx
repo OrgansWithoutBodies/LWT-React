@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { AppVariables } from './meta';
 import { LandingPage } from './pages/LandingPage.component';
@@ -31,6 +36,7 @@ import { StatisticsComponent } from './pages/Statistics.component';
 import { useCountdown } from './pages/useTimer';
 import { PLUGINS } from './plugins';
 import { createColors } from './styles';
+import { Header } from './ui-kit/Header';
 
 declare global {
   interface NumberConstructor {
@@ -39,6 +45,22 @@ declare global {
       radix?: number
     ): TNum;
   }
+}
+
+/**
+ * 404 Page
+ */
+function NoMatch() {
+  const location = useLocation();
+
+  return (
+    <div>
+      <Header title={'404 - Page Not Found'} />
+      <h3 className="red2" style={{ fontSize: 30 }}>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  );
 }
 
 // function InternalRoute({
@@ -90,10 +112,11 @@ function App(): JSX.Element {
     '/do_text': () => <ReaderWrapper />,
     '/do_test': () => <TestWrapper />,
     '/print_text': () => <PrintTextWrapper />,
+    // TODO
+    '/print_impr_text': () => <PrintTextWrapper />,
     '/upload_words': () => <UploadWordsWrapper />,
     '/install_demo': () => <InstallDemo />,
     '/info_export_template': () => <InfoExportTemplate />,
-    // yells about multiple specs without this cast TODO
     // all_words_wellknown
     // delete_mword
     // delete_word
@@ -110,10 +133,7 @@ function App(): JSX.Element {
     // inline_edit
     // insert_word_ignore
     // insert_word_wellknown
-    // // TODO
-    // install_demo
     // mobile
-    // print_impr_text
     // save_setting_redirect
     // set_test_status
     // set_text_mode
@@ -123,8 +143,9 @@ function App(): JSX.Element {
     // start
     // table_set_management
     // trans
+    // yells about multiple specs without this cast TODO
     ...(pluginRoutes as object),
-    /* TODO 404 page */
+    '*': () => <NoMatch />,
   };
   console.log('TEST123-landing');
   return (

@@ -7,6 +7,7 @@ import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
+import { SelectBoolean } from './EditLanguage.component';
 import { settingsPrevalidateMap } from './preValidateMaps';
 // TODO abstract this out into a nested settings component
 
@@ -17,6 +18,7 @@ const validator = ss.omit(SettingsObjValidator, [
   'lastscorecalc',
   'showallwords',
 ]);
+// TODO these should be able to be raw strings w \n instead of jsx elements
 const CategoryJSXLookup = {
   Counts: () => (
     <>
@@ -32,15 +34,23 @@ const CategoryJSXLookup = {
       Screen
     </>
   ),
+  FrameSetDisplayMode: () => {},
+  Reading: () => {},
+  TestScreen: () => {},
+  TermTranslations: () => {},
+  Testing: () => {},
+  TermSentenceGeneration: () => {},
+  SimilarTerms: () => {},
+  // ...PLUGINS.settingsGroups:
 };
 const SettingsLayout: Record<
   keyof typeof validator.TYPE,
   {
     category: keyof typeof CategoryJSXLookup;
-    description: () => JSX.Element;
+    description?: () => JSX.Element;
     suffix?: string;
     inputType: 'dropdown' | 'text' | 'number';
-    dropdownOptions: { key: string; val: string }[];
+    dropdownOptions?: { key: string; val: string }[];
   }
 > = {
   'set-archivedtexts-per-page': {
@@ -49,7 +59,7 @@ const SettingsLayout: Record<
     inputType: 'dropdown',
   },
   'set-mobile-display-mode': {
-    category: '',
+    category: 'FrameSetDisplayMode',
     suffix: '',
     inputType: 'dropdown',
   },
@@ -59,7 +69,7 @@ const SettingsLayout: Record<
     inputType: 'dropdown',
   },
   'set-similar-terms-count': {
-    category: '',
+    category: 'SimilarTerms',
     suffix: '',
     inputType: 'dropdown',
   },
@@ -74,64 +84,76 @@ const SettingsLayout: Record<
     inputType: 'dropdown',
   },
   'set-term-translation-delimiters': {
-    category: '',
+    category: 'TermTranslations',
     suffix: '',
     inputType: 'dropdown',
   },
-  'set-terms-per-page': { category: '', suffix: '', inputType: 'dropdown' },
+  'set-terms-per-page': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
   'set-test-edit-frame-waiting-time': {
-    category: '',
+    category: 'TestScreen',
     suffix: '',
     inputType: 'dropdown',
   },
-  'set-test-h-frameheight': { category: '', suffix: '', inputType: 'dropdown' },
+  'set-test-h-frameheight': {
+    category: 'TestScreen',
+    suffix: '',
+    inputType: 'dropdown',
+  },
   'set-test-l-framewidth-percent': {
-    category: '',
+    category: 'TestScreen',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-test-main-frame-waiting-time': {
-    category: '',
+    category: 'TestScreen',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-test-r-frameheight-percent': {
-    category: '',
+    category: 'TestScreen',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-test-sentence-count': {
-    category: '',
+    category: 'Testing',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-text-h-frameheight-no-audio': {
-    category: '',
+    category: 'ReadTexts',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-text-h-frameheight-with-audio': {
-    category: '',
+    category: 'ReadTexts',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-text-l-framewidth-percent': {
-    category: '',
+    category: 'ReadTexts',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-text-r-frameheight-percent': {
-    category: '',
+    category: 'ReadTexts',
     suffix: '',
     inputType: 'dropdown',
   },
   'set-text-visit-statuses-via-key': {
-    category: '',
+    category: 'Reading',
     suffix: '',
     inputType: 'dropdown',
   },
-  'set-texts-per-page': { category: '', suffix: '', inputType: 'dropdown' },
-  '': {},
+  'set-texts-per-page': {
+    category: 'Counts',
+    suffix: '',
+    inputType: 'dropdown',
+  },
+  // ...PLUGINS.settings:
 };
 const DEFAULT_SETTINGS = {
   'set-text-h-frameheight-no-audio': 140,
@@ -155,6 +177,8 @@ export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();
   // const validator = ss.array(SettingsValidator);
+  // TODO use
+  SettingsLayout;
   const { Input: StInput, refMap } = useFormInput({
     validator,
     entry: { ...DEFAULT_SETTINGS, ...settings },
@@ -588,16 +612,11 @@ export function SettingsComponent(): JSX.Element {
                 <br />(<b>"No"</b> loads a long text table faster)
               </td>
               <td className="td1 center">
-                <select
-                  name="set-show-text-word-counts"
-                  ref={refMap['set-show-text-word-counts']}
-                  className="notempty"
-                >
-                  <option value="0">No</option>
-                  <option value="1" selected>
-                    Yes
-                  </option>
-                </select>
+                <SelectBoolean
+                  refMap={refMap}
+                  entryKey={'set-show-text-word-counts'}
+                  entry={{ 'set-show-text-word-counts': 1 }}
+                />
               </td>
               <td className="td1 center">
                 <RequiredLineButton />

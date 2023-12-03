@@ -105,8 +105,6 @@ export function EditArchivedTexts({
                 type="button"
                 name="querybutton"
                 value="Filter"
-                // TODO
-                // onClick="{val=document.form1.query.value; location.href='edit_archivedtexts?page=1&query=' + val;}"
                 onClick={() =>
                   navigate(
                     `/edit_archivedtexts?page=1&query=${
@@ -189,15 +187,11 @@ export function EditArchivedTexts({
                   disabled={selectedValues.size === 0}
                   onChange={({ target: { value } }) => {
                     if (value === 'del') {
+                      // TODO confirm
                       dataService.deleteMultipleArchivedTexts([
                         ...selectedValues,
                       ]);
                     }
-                    // multiActionGo(
-                    //   () => {},
-                    //   // TODO ref
-                    //   val
-                    // );
                   }}
                 >
                   <GetMultipleArchivedTextActionsSelectOptions />
@@ -229,7 +223,7 @@ export function EditArchivedTexts({
               return (
                 <tr>
                   <td className="td1 center">
-                    <a name="rec' . record['AtID'] . '">
+                    <a id={`rec${text['AtID']}`}>
                       <input
                         name="marked[]"
                         className="markcheck"
@@ -242,10 +236,12 @@ export function EditArchivedTexts({
                   {/* ' . checkTest(record['AtID'], 'marked') . '  */}
                   <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
                     &nbsp;
+                    {/* TODO */}
                     <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . record['AtID'] . '">
                       <Icon src="inbox-upload" title="Unarchive" />
                     </a>
                     &nbsp;
+                    {/* TODO */}
                     <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . record['AtID'] . '">
                       <Icon src="document--pencil" title="Edit" />
                     </a>

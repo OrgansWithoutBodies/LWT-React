@@ -167,7 +167,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Make each character a word:</td>
             <td className="td1">
               <SelectBoolean
-                selKey="LgSplitEachChar"
+                entryKey="LgSplitEachChar"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -178,7 +178,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Remove spaces:</td>
             <td className="td1">
               <SelectBoolean
-                selKey="LgRemoveSpaces"
+                entryKey="LgRemoveSpaces"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -189,7 +189,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Right-To-Left Script:</td>
             <td className="td1">
               <SelectBoolean
-                selKey="LgRightToLeft"
+                entryKey="LgRightToLeft"
                 entry={changingLang}
                 refMap={refMap}
               />
@@ -262,16 +262,16 @@ export function SelectBoolean<
   TEntry extends Record<TSelKey, 0 | 1>
 >({
   entry,
-  selKey,
+  entryKey,
   refMap,
 }: {
   entry: TEntry;
-  selKey: TSelKey;
+  entryKey: TSelKey;
   refMap: TRefMap<TEntry>;
 }) {
-  const entryVal = entry[selKey];
+  const entryVal = entry[entryKey];
   return (
-    <select ref={refMap[selKey]} name={selKey}>
+    <select ref={refMap[entryKey]} name={entryKey}>
       {/* TODO can i get away w/o setting selected here */}
       {/* TODO bring all yes/no dropdowns into using this */}
       <option value={0} selected={entryVal === 0}>

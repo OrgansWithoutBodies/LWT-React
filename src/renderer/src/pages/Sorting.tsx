@@ -1,10 +1,10 @@
-// TODO
-
+// TODO - maybe save in context? handle in form?
 export const resetDirty = () => {
   // ** You have unsaved changes! **
 };
 export const setDirty = () => {};
 
+// TODO these enums are different per select
 export const enum Sorting {
   'Term A-Z' = 1,
   'Translation A-Z' = 2,

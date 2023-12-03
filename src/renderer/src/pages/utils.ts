@@ -164,18 +164,18 @@ export function confirmDelete(): boolean {
 // 		if (list[i] == textid) {
 // 			if (list[i - 1] !== 0) {
 // 				title = tohtml(getTextTitle(list[i - 1]));
-// 				prev = '<a href="' . url . list[i - 1] . '" target="_top"><img src="icn/navigation-180-button.png" title="Previous Text: ' . title . '" alt="Previous Text: ' . title . '" /></a>';
+// 				prev = '<a href="' . url . list[i - 1] . '" target="_top"><Icon src="navigation-180-button" title="Previous Text: ' . title . '" /></a>';
 // 			} else
-// 				prev = '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" />';
+// 				prev = '<Icon src="navigation-180-button-light" title="No Previous Text" />';
 // 			if (list[i + 1] !== 0) {
 // 				title = tohtml(getTextTitle(list[i + 1]));
-// 				next = '<a href="' . url . list[i + 1] . '" target="_top"><img src="icn/navigation-000-button.png" title="Next Text: ' . title . '" alt="Next Text: ' . title . '" /></a>';
+// 				next = '<a href="' . url . list[i + 1] . '" target="_top"><Icon src="navigation-000-button" title="Next Text: ' . title . '" /></a>';
 // 			} else
-// 				next = '<img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
+// 				next = '<Icon src="navigation-000-button-light" title="No Next Text" />';
 // 			return add . prev . ' ' . next;
 // 		}
 // 	}
-// 	return add . '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
+// 	return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
 // }
 
 // // -------------------------------------------------------------
@@ -250,7 +250,7 @@ export function confirmDelete(): boolean {
 // 	global tbpref;
 // 	if (!isset(v))
 // 		v = '';
-// 	r = "<option value=\"\"" . get_selected(v, '');
+// 	r = "<option value=""" . get_selected(v, '');
 // 	r += ">[Filter off]</option>";
 // 	if (l == '')
 // 		sql = "select TgID, TgText from " . tbpref . "words, " . tbpref . "tags, " . tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID group by TgID order by TgText";
@@ -261,12 +261,12 @@ export function confirmDelete(): boolean {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		d = record["TgText"];
 // 		cnt++;
-// 		r += "<option value=\"" . record["TgID"] . "\"" . get_selected(v, record["TgID"]) . ">" . tohtml(d) . "</option>";
+// 		r += "<option value="" . record["TgID"] . """ . get_selected(v, record["TgID"]) . ">" . tohtml(d) . "</option>";
 // 	}
 // 	mysqli_free_result(res);
 // 	if (cnt > 0) {
-// 		r += "<option disabled=\"disabled\">--------</option>";
-// 		r += "<option value=\"-1\"" . get_selected(v, -1) . ">UNTAGGED</option>";
+// 		r += "<option disabled="disabled">--------</option>";
+// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return r;
 // }
@@ -278,7 +278,7 @@ export function confirmDelete(): boolean {
 // 	global tbpref;
 // 	if (!isset(v))
 // 		v = '';
-// 	r = "<option value=\"\"" . get_selected(v, '');
+// 	r = "<option value=""" . get_selected(v, '');
 // 	r += ">[Filter off]</option>";
 // 	if (l == '')
 // 		sql = "select T2ID, T2Text from " . tbpref . "texts, " . tbpref . "tags2, " . tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text";
@@ -289,12 +289,12 @@ export function confirmDelete(): boolean {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		d = record["T2Text"];
 // 		cnt++;
-// 		r += "<option value=\"" . record["T2ID"] . "\"" . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
+// 		r += "<option value="" . record["T2ID"] . """ . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
 // 	}
 // 	mysqli_free_result(res);
 // 	if (cnt > 0) {
-// 		r += "<option disabled=\"disabled\">--------</option>";
-// 		r += "<option value=\"-1\"" . get_selected(v, -1) . ">UNTAGGED</option>";
+// 		r += "<option disabled="disabled">--------</option>";
+// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return r;
 // }
@@ -316,7 +316,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	global tbpref;
 // 	if (!isset(v))
 // 		v = '';
-// 	r = "<option value=\"\"" . get_selected(v, '');
+// 	r = "<option value=""" . get_selected(v, '');
 // 	r += ">[Filter off]</option>";
 // 	if (l == '')
 // 		sql = "select T2ID, T2Text from " . tbpref . "archivedtexts, " . tbpref . "tags2, " . tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID group by T2ID order by T2Text";
@@ -327,12 +327,12 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		d = record["T2Text"];
 // 		cnt++;
-// 		r += "<option value=\"" . record["T2ID"] . "\"" . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
+// 		r += "<option value="" . record["T2ID"] . """ . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
 // 	}
 // 	mysqli_free_result(res);
 // 	if (cnt > 0) {
-// 		r += "<option disabled=\"disabled\">--------</option>";
-// 		r += "<option value=\"-1\"" . get_selected(v, -1) . ">UNTAGGED</option>";
+// 		r += "<option disabled="disabled">--------</option>";
+// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
 // 	}
 // 	return r;
 // }
@@ -696,7 +696,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	pagestart_nobody(titletext);
 // 	echo '<h4>';
 // 	if (close)
-// 		echo '<a href="index.php" target="_top">';
+// 		echo '<a href="index" target="_top">';
 // 	echo_lwt_logo();
 // 	echo "LWT";
 // 	if (close) {
@@ -715,7 +715,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		r += ":" . url["port"];
 // 	if (isset(url["path"])) {
 // 		b = basename(url["path"]);
-// 		if (substr(b, -4) == ".php" || substr(b, -4) == ".htm" || substr(b, -5) == ".html")
+// 		if (substr(b, -4) == "" || substr(b, -4) == ".htm" || substr(b, -5) == ".html")
 // 			r += dirname(url["path"]);
 // 		else
 // 			r += url["path"];
@@ -731,7 +731,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	if (debug)
 // 		showRequest();
 // 	if (dspltime)
-// 		echo "\n<p class=\"smallgray2\">" .
+// 		echo "\n<p class="smallgray2">" .
 // 			round(get_execution_time(), 5) . " secs</p>\n";
 // 	?></body></html><?php
 // }
@@ -773,7 +773,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		v = 5;
 // 	r = '';
 // 	for (i = 1; i <= 10; i++) {
-// 		r += "<option value=\"" . i . "\"" . get_selected(v, i);
+// 		r += "<option value="" . i . """ . get_selected(v, i);
 // 		r += ">" . i . " sec</option>";
 // 	}
 // 	return r;
@@ -788,7 +788,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	r = '';
 // 	for (i = 5; i <= 15; i++) {
 // 		text = (i < 10 ? (' 0.' . i . ' x ') : (' 1.' . (i - 10) . ' x '));
-// 		r += "<option value=\"" . i . "\"" . get_selected(v, i);
+// 		r += "<option value="" . i . """ . get_selected(v, i);
 // 		r += ">&nbsp;" . text . "&nbsp;</option>";
 // 	}
 // 	return r;
@@ -798,7 +798,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function quickMenu()
 // {
-// 	?><select id="quickmenu" onchange="{const qm = document.getElementById('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '.php';}}}">
+// 	?><select id="quickmenu" onchange="{const qm = document.getElementById('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val != '') { if (val == 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '';}}}">
 // 	<option value="" selected="selected">[Menu]</option>
 // 	<option value="index">Home</option>
 // 	<option value="edit_texts">Texts</option>
@@ -827,7 +827,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		return '<p class="red">*** ' . tohtml(msg) . ' ***' .
 // 			(noback ?
 // 				'' :
-// 				'<br /><input type="button" value="&lt;&lt; Go back and correct &lt;&lt;" onclick="history.back();" />') .
+// 				'<br /><input type="button" value="&lt;&lt; Go back and correct &lt;&lt;" onClick="history.back();" />') .
 // 			'</p>';
 // 	else
 // 		return '<p id="hide3" class="msgblue">+++ ' . tohtml(msg) . ' +++</p>';
@@ -838,7 +838,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // function errorbutton(msg)
 // {
 // 	if (substr(msg, 0, 5) == "Error")
-// 		return '<input type="button" value="&lt;&lt; Back" onclick="history.back();" />';
+// 		return '<input type="button" value="&lt;&lt; Back" onClick="history.back();" />';
 // 	else
 // 		return '';
 // }
@@ -1121,11 +1121,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = "0";
-// 	r = "<option value=\"0\"" . get_selected(v, "0");
+// 	r = "<option value="0"" . get_selected(v, "0");
 // 	r += ">Auto</option>";
-// 	r += "<option value=\"1\"" . get_selected(v, "1");
+// 	r += "<option value="1"" . get_selected(v, "1");
 // 	r += ">Force Non-Mobile</option>";
-// 	r += "<option value=\"2\"" . get_selected(v, "2");
+// 	r += "<option value="2"" . get_selected(v, "2");
 // 	r += ">Force Mobile</option>";
 // 	return r;
 // }
@@ -1136,11 +1136,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = 1;
-// 	r = "<option value=\"1\"" . get_selected(v, 1);
+// 	r = "<option value="1"" . get_selected(v, 1);
 // 	r += ">Just ONE</option>";
-// 	r += "<option value=\"2\"" . get_selected(v, 2);
+// 	r += "<option value="2"" . get_selected(v, 2);
 // 	r += ">TWO (+previous)</option>";
-// 	r += "<option value=\"3\"" . get_selected(v, 3);
+// 	r += "<option value="3"" . get_selected(v, 3);
 // 	r += ">THREE (+previous,+next)</option>";
 // 	return r;
 // }
@@ -1347,13 +1347,13 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		scoret = get_status_abbr(status);
 
 // 	if (status <= 5 || status == 98)
-// 		plus = '<img src="icn/plus.png" class="click" title="+" alt="+" onclick="changeTableTestStatus(' . wordid . ',true);" />';
+// 		plus = '<img src="icn/plus.png" class="click" title="+" alt="+" onClick="changeTableTestStatus(' . wordid . ',true);" />';
 // 	else
-// 		plus = '<img src="icn/placeholder.png" title="" alt="" />';
+// 		plus = '<Icon src="placeholder" title="" />';
 // 	if (status >= 1)
-// 		minus = '<img src="icn/minus.png" class="click" title="-" alt="-" onclick="changeTableTestStatus(' . wordid . ',false);" />';
+// 		minus = '<img src="icn/minus.png" class="click" title="-" alt="-" onClick="changeTableTestStatus(' . wordid . ',false);" />';
 // 	else
-// 		minus = '<img src="icn/placeholder.png" title="" alt="" />';
+// 		minus = '<Icon src="placeholder" title="" />';
 // 	return (status == 98 ? '' : minus . ' ') . scoret . (status == 99 ? '' : ' ' . plus);
 // }
 
@@ -1365,15 +1365,15 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	sql = "select LgID, LgName from " . tbpref . "languages order by LgName";
 // 	res = do_mysqli_query(sql);
 // 	if (!isset(v) || trim(v) == '') {
-// 		r = "<option value=\"\" selected=\"selected\">" . dt . "</option>";
+// 		r = "<option value="\" selected=\"selected">" . dt . "</option>";
 // 	} else {
-// 		r = "<option value=\"\">" . dt . "</option>";
+// 		r = "<option value="">" . dt . "</option>";
 // 	}
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		d = record["LgName"];
 // 		if (strlen(d) > 30)
 // 			d = substr(d, 0, 30) . "...";
-// 		r += "<option value=\"" . record["LgID"] . "\" " . get_selected(v, record["LgID"]);
+// 		r += "<option value="" . record["LgID"] . "" " . get_selected(v, record["LgID"]);
 // 		r += ">" . tohtml(d) . "</option>";
 // 	}
 // 	mysqli_free_result(res);
@@ -1386,13 +1386,13 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = 100;
-// 	r = "<option value=\"100\"" . get_selected(v, 100);
+// 	r = "<option value="100"" . get_selected(v, 100);
 // 	r += ">100 %</option>";
-// 	r += "<option value=\"150\"" . get_selected(v, 150);
+// 	r += "<option value="150"" . get_selected(v, 150);
 // 	r += ">150 %</option>";
-// 	r += "<option value=\"200\"" . get_selected(v, 200);
+// 	r += "<option value="200"" . get_selected(v, 200);
 // 	r += ">200 %</option>";
-// 	r += "<option value=\"250\"" . get_selected(v, 250);
+// 	r += "<option value="250"" . get_selected(v, 250);
 // 	r += ">250 %</option>";
 // 	return r;
 // }
@@ -1417,83 +1417,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function get_wordstatus_selectoptions(v, all, not9899, off = true)
-// {
-// 	if (!isset(v)) {
-// 		if (all)
-// 			v = "";
-// 		else
-// 			v = 1;
-// 	}
-// 	r = "";
-// 	if (all && off) {
-// 		r += "<option value=\"\"" . get_selected(v, '');
-// 		r += ">[Filter off]</option>";
-// 	}
-// 	statuses = get_statuses();
-// 	foreach (statuses as n => status) {
-// 		if (not9899 && (n == 98 || n == 99))
-// 			continue;
-// 		r += "<option value =\"" . n . "\"" . get_selected(v, n);
-// 		r += ">" . tohtml(status['name']) . " [" .
-// 			tohtml(status['abbr']) . "]</option>";
-// 	}
-// 	if (all) {
-// 		r += '<option disabled="disabled">--------</option>';
-// 		status_1_name = tohtml(statuses[1]["name"]);
-// 		status_1_abbr = tohtml(statuses[1]["abbr"]);
-// 		r += "<option value=\"12\"" . get_selected(v, 12);
-// 		r += ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[2]["abbr"]) . "]</option>";
-// 		r += "<option value=\"13\"" . get_selected(v, 13);
-// 		r += ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[3]["abbr"]) . "]</option>";
-// 		r += "<option value=\"14\"" . get_selected(v, 14);
-// 		r += ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r += "<option value=\"15\"" . get_selected(v, 15);
-// 		r += ">Learning/-ed [" . status_1_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r += '<option disabled="disabled">--------</option>';
-// 		status_2_name = tohtml(statuses[2]["name"]);
-// 		status_2_abbr = tohtml(statuses[2]["abbr"]);
-// 		r += "<option value=\"23\"" . get_selected(v, 23);
-// 		r += ">" . status_2_name . " [" . status_2_abbr . ".." .
-// 			tohtml(statuses[3]["abbr"]) . "]</option>";
-// 		r += "<option value=\"24\"" . get_selected(v, 24);
-// 		r += ">" . status_2_name . " [" . status_2_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r += "<option value=\"25\"" . get_selected(v, 25);
-// 		r += ">Learning/-ed [" . status_2_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r += '<option disabled="disabled">--------</option>';
-// 		status_3_name = tohtml(statuses[3]["name"]);
-// 		status_3_abbr = tohtml(statuses[3]["abbr"]);
-// 		r += "<option value=\"34\"" . get_selected(v, 34);
-// 		r += ">" . status_3_name . " [" . status_3_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r += "<option value=\"35\"" . get_selected(v, 35);
-// 		r += ">Learning/-ed [" . status_3_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r += '<option disabled="disabled">--------</option>';
-// 		r += "<option value=\"45\"" . get_selected(v, 45);
-// 		r += ">Learning/-ed [" . tohtml(statuses[4]["abbr"]) . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r += '<option disabled="disabled">--------</option>';
-// 		r += "<option value=\"599\"" . get_selected(v, 599);
-// 		r += ">All known [" . tohtml(statuses[5]["abbr"]) . "+" .
-// 			tohtml(statuses[99]["abbr"]) . "]</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function get_paging_selectoptions(currentpage, pages)
 // {
 // 	r = "";
 // 	for (i = 1; i <= pages; i++) {
-// 		r += "<option value=\"" . i . "\"" . get_selected(i, currentpage);
+// 		r += "<option value="" . i . """ . get_selected(i, currentpage);
 // 		r += ">i</option>";
 // 	}
 // 	return r;
@@ -1505,19 +1433,19 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = 1;
-// 	r = "<option value=\"1\"" . get_selected(v, 1);
+// 	r = "<option value="1"" . get_selected(v, 1);
 // 	r += ">Term A-Z</option>";
-// 	r += "<option value=\"2\"" . get_selected(v, 2);
+// 	r += "<option value="2"" . get_selected(v, 2);
 // 	r += ">Translation A-Z</option>";
-// 	r += "<option value=\"3\"" . get_selected(v, 3);
+// 	r += "<option value="3"" . get_selected(v, 3);
 // 	r += ">Newest first</option>";
-// 	r += "<option value=\"7\"" . get_selected(v, 7);
+// 	r += "<option value="7"" . get_selected(v, 7);
 // 	r += ">Oldest first</option>";
-// 	r += "<option value=\"4\"" . get_selected(v, 4);
+// 	r += "<option value="4"" . get_selected(v, 4);
 // 	r += ">Status</option>";
-// 	r += "<option value=\"5\"" . get_selected(v, 5);
+// 	r += "<option value="5"" . get_selected(v, 5);
 // 	r += ">Score Value (%)</option>";
-// 	r += "<option value=\"6\"" . get_selected(v, 6);
+// 	r += "<option value="6"" . get_selected(v, 6);
 // 	r += ">Word Count Active Texts</option>";
 // 	return r;
 // }
@@ -1528,9 +1456,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = 0;
-// 	r = "<option value=\"0\"" . get_selected(v, 0);
+// 	r = "<option value="0"" . get_selected(v, 0);
 // 	r += ">No</option>";
-// 	r += "<option value=\"1\"" . get_selected(v, 1);
+// 	r += "<option value="1"" . get_selected(v, 1);
 // 	r += ">Yes</option>";
 // 	return r;
 // }
@@ -1541,9 +1469,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (!isset(v))
 // 		v = 0;
-// 	r = "<option value=\"0\"" . get_selected(v, 0);
+// 	r = "<option value="0"" . get_selected(v, 0);
 // 	r += ">... OR ...</option>";
-// 	r += "<option value=\"1\"" . get_selected(v, 1);
+// 	r += "<option value="1"" . get_selected(v, 1);
 // 	r += ">... AND ...</option>";
 // 	return r;
 // }
@@ -1552,7 +1480,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function get_set_status_option(n, suffix = "")
 // {
-// 	return "<option value=\"s" . n . suffix . "\">Set Status to " .
+// 	return "<option value="s" . n . suffix . "">Set Status to " .
 // 		tohtml(get_status_name(n)) . " [" . tohtml(get_status_abbr(n)) .
 // 		"]</option>";
 // }
@@ -1584,32 +1512,32 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function get_multiplewordsactions_selectoptions()
 // {
-// 	r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"test\">Test Marked Terms</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"spl1\">Increase Status by 1 [+1]</option>";
-// 	r += "<option value=\"smi1\">Reduce Status by 1 [-1]</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
+// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="test">Test Marked Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="spl1">Increase Status by 1 [+1]</option>";
+// 	r += "<option value="smi1">Reduce Status by 1 [-1]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
 // 	r += get_set_status_option(1);
 // 	r += get_set_status_option(5);
 // 	r += get_set_status_option(99);
 // 	r += get_set_status_option(98);
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"today\">Set Status Date to Today</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"lower\">Set Marked Terms to Lowercase</option>";
-// 	r += "<option value=\"cap\">Capitalize Marked Terms</option>";
-// 	r += "<option value=\"delsent\">Delete Sentences of Marked Terms</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"addtag\">Add Tag</option>";
-// 	r += "<option value=\"deltag\">Remove Tag</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"exp\">Export Marked Terms (Anki)</option>";
-// 	r += "<option value=\"exp2\">Export Marked Terms (TSV)</option>";
-// 	r += "<option value=\"exp3\">Export Marked Terms (Flexible)</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"del\">Delete Marked Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="today">Set Status Date to Today</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="lower">Set Marked Terms to Lowercase</option>";
+// 	r += "<option value="cap">Capitalize Marked Terms</option>";
+// 	r += "<option value="delsent">Delete Sentences of Marked Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="addtag">Add Tag</option>";
+// 	r += "<option value="deltag">Remove Tag</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="exp">Export Marked Terms (Anki)</option>";
+// 	r += "<option value="exp2">Export Marked Terms (TSV)</option>";
+// 	r += "<option value="exp3">Export Marked Terms (Flexible)</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="del">Delete Marked Terms</option>";
 // 	return r;
 // }
 
@@ -1617,32 +1545,32 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function get_allwordsactions_selectoptions()
 // {
-// 	r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"testall\">Test ALL Terms</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"spl1all\">Increase Status by 1 [+1]</option>";
-// 	r += "<option value=\"smi1all\">Reduce Status by 1 [-1]</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
+// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="testall">Test ALL Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="spl1all">Increase Status by 1 [+1]</option>";
+// 	r += "<option value="smi1all">Reduce Status by 1 [-1]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
 // 	r += get_set_status_option(1, "all");
 // 	r += get_set_status_option(5, "all");
 // 	r += get_set_status_option(99, "all");
 // 	r += get_set_status_option(98, "all");
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"todayall\">Set Status Date to Today</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"lowerall\">Set ALL Terms to Lowercase</option>";
-// 	r += "<option value=\"capall\">Capitalize ALL Terms</option>";
-// 	r += "<option value=\"delsentall\">Delete Sentences of ALL Terms</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"addtagall\">Add Tag</option>";
-// 	r += "<option value=\"deltagall\">Remove Tag</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"expall\">Export ALL Terms (Anki)</option>";
-// 	r += "<option value=\"expall2\">Export ALL Terms (TSV)</option>";
-// 	r += "<option value=\"expall3\">Export ALL Terms (Flexible)</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"delall\">Delete ALL Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="todayall">Set Status Date to Today</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="lowerall">Set ALL Terms to Lowercase</option>";
+// 	r += "<option value="capall">Capitalize ALL Terms</option>";
+// 	r += "<option value="delsentall">Delete Sentences of ALL Terms</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="addtagall">Add Tag</option>";
+// 	r += "<option value="deltagall">Remove Tag</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="expall">Export ALL Terms (Anki)</option>";
+// 	r += "<option value="expall2">Export ALL Terms (TSV)</option>";
+// 	r += "<option value="expall3">Export ALL Terms (Flexible)</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="delall">Delete ALL Terms</option>";
 // 	return r;
 // }
 
@@ -1650,19 +1578,19 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function get_multipletextactions_selectoptions()
 // {
-// 	r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"test\">Test Marked Texts</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"addtag\">Add Tag</option>";
-// 	r += "<option value=\"deltag\">Remove Tag</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"rebuild\">Reparse Texts</option>";
-// 	r += "<option value=\"setsent\">Set Term Sentences</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"arch\">Archive Marked Texts</option>";
-// 	r += "<option disabled=\"disabled\">------------</option>";
-// 	r += "<option value=\"del\">Delete Marked Texts</option>";
+// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="test">Test Marked Texts</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="addtag">Add Tag</option>";
+// 	r += "<option value="deltag">Remove Tag</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="rebuild">Reparse Texts</option>";
+// 	r += "<option value="setsent">Set Term Sentences</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="arch">Archive Marked Texts</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="del">Delete Marked Texts</option>";
 // 	return r;
 // }
 
@@ -1679,7 +1607,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		l = "";
 // 	else
 // 		l = "and TxLgID=" . lang;
-// 	r = "<option value=\"\"" . get_selected(v, '');
+// 	r = "<option value=""" . get_selected(v, '');
 // 	r += ">[Filter off]</option>";
 // 	sql = "select TxID, TxTitle, LgName from " . tbpref . "languages, " . tbpref . "texts where LgID = TxLgID " . l . " order by LgName, TxTitle";
 // 	res = do_mysqli_query(sql);
@@ -1687,7 +1615,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		d = record["TxTitle"];
 // 		if (mb_strlen(d, 'UTF-8') > 30)
 // 			d = mb_substr(d, 0, 30, 'UTF-8') . "...";
-// 		r += "<option value=\"" . record["TxID"] . "\"" . get_selected(v, record["TxID"]) . ">" . tohtml((lang != "" ? "" : (record["LgName"] . ": ")) . d) . "</option>";
+// 		r += "<option value="" . record["TxID"] . """ . get_selected(v, record["TxID"]) . ">" . tohtml((lang != "" ? "" : (record["LgName"] . ": ")) . d) . "</option>";
 // 	}
 // 	mysqli_free_result(res);
 // 	return r;
@@ -1699,8 +1627,8 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (currentpage > 1) {
 // 		?>
-// 		&nbsp; &nbsp;<a href="<?php echo script; ?>?page=1"><img src="icn/control-stop-180.png" title="First Page" alt="First Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>"><img  src="icn/control-180.png" title="Previous Page" alt="Previous Page" /></a>&nbsp;
+// 		&nbsp; &nbsp;<a href="<?php echo script; ?>?page=1"><Icon src="control-stop-180" title="First Page" /></a>&nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>"><Icon src="control-180" title="Previous Page" /></a>&nbsp;
 // 	<?php
 // 	} else {
 // 		?>
@@ -1721,8 +1649,8 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	echo ' of ' . pages . '&nbsp; ';
 // 	if (currentpage < pages) {
 // 		?>
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>"><img src="icn/control.png" title="Next Page" alt="Next Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo pages; ?>"><img src="icn/control-stop.png" title="Last Page" alt="Last Page" /></a>&nbsp; &nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>"><Icon src="control" title="Next Page" /></a>&nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo pages; ?>"><Icon src="control-stop" title="Last Page" /></a>&nbsp; &nbsp;
 // 	<?php
 // 	} else {
 // 		?>
@@ -1840,7 +1768,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	r = '';
 // 	if (url != '' && txt != '') {
 // 		if (substr(url, 0, 1) == '*') {
-// 			r = ' <span class="click" onclick="owin(' . prepare_textdata_js(substr(url, 1)) . ');">' . tohtml(txt) . '</span> ';
+// 			r = ' <span class="click" onClick="owin(' . prepare_textdata_js(substr(url, 1)) . ');">' . tohtml(txt) . '</span> ';
 // 		} else {
 // 			r = ' <a href="' . url . '" target="ru">' . tohtml(txt) . '</a> ';
 // 		}
@@ -1870,9 +1798,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	r = '';
 // 	if (url != '') {
 // 		if (substr(url, 0, 1) == '*') {
-// 			r = '<span class="click" onclick="translateSentence2(' . prepare_textdata_js(substr(url, 1)) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
+// 			r = '<span class="click" onClick="translateSentence2(' . prepare_textdata_js(substr(url, 1)) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
 // 		} else {
-// 			r = '<span class="click" onclick="translateSentence(' . prepare_textdata_js(url) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
+// 			r = '<span class="click" onClick="translateSentence(' . prepare_textdata_js(url) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
 // 		}
 // 	}
 // 	return r;
@@ -1898,11 +1826,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	mysqli_free_result(res);
 // 	r = '';
 // 	r += 'Lookup Term: ';
-// 	r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">Dict1</span> ';
+// 	r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">Dict1</span> ';
 // 	if (wb2 != "")
-// 		r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">Dict2</span> ';
+// 		r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">Dict2</span> ';
 // 	if (wb3 != "")
-// 		r += '<span class="click" onclick="translateWord2(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="translateSentence2(' . prepare_textdata_js(wb3) . ',' . sentctljs . ');">GTr</span>';
+// 		r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onClick="translateSentence2(' . prepare_textdata_js(wb3) . ',' . sentctljs . ');">GTr</span>';
 // 	return r;
 // }
 
@@ -1925,11 +1853,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		wb3 = substr(wb3, 1);
 // 	mysqli_free_result(res);
 // 	r = '<span class="smaller">';
-// 	r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">[1]</span> ';
+// 	r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">[1]</span> ';
 // 	if (wb2 != "")
-// 		r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">[2]</span> ';
+// 		r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">[2]</span> ';
 // 	if (wb3 != "")
-// 		r += '<span class="click" onclick="translateWord3(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">[G]</span>';
+// 		r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">[G]</span>';
 // 	r += '</span>';
 // 	return r;
 // }
@@ -1967,11 +1895,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	mysqli_free_result(res);
 // 	r = '';
 // 	r += 'Lookup Term: ';
-// 	r += '<span class="click" onclick="' . f1 . ',' . wordctljs . ');">Dict1</span> ';
+// 	r += '<span class="click" onClick="' . f1 . ',' . wordctljs . ');">Dict1</span> ';
 // 	if (wb2 != "")
-// 		r += '<span class="click" onclick="' . f2 . ',' . wordctljs . ');">Dict2</span> ';
+// 		r += '<span class="click" onClick="' . f2 . ',' . wordctljs . ');">Dict2</span> ';
 // 	if (wb3 != "")
-// 		r += '<span class="click" onclick="' . f3 . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="' . f4 . ',' . sentctljs . ');">GTr</span>';
+// 		r += '<span class="click" onClick="' . f3 . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onClick="' . f4 . ',' . sentctljs . ');">GTr</span>';
 // 	return r;
 // }
 
@@ -2216,11 +2144,10 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function textwordcount(text)
-// {
-// 	global tbpref;
-// 	return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . text);
-// }
+// TODO
+function textwordcount(text) {
+  // return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . text);
+}
 
 // // -------------------------------------------------------------
 
@@ -2232,11 +2159,10 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function textworkcount(text)
-// {
-// 	global tbpref;
-// 	return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
-// }
+// TODO
+function textworkcount(text) {
+  // return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
+}
 
 // // -------------------------------------------------------------
 
@@ -2248,14 +2174,14 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function texttodocount2(text)
-// {
-// 	c = textwordcount(text) - textworkcount(text);
-// 	if (c > 0)
-// 		return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>&nbsp;&nbsp;&nbsp;<input type="button" onclick="iknowall(' . text . ');" value=" I KNOW ALL " />';
-// 	else
-// 		return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>';
-// }
+function texttodocount2(text) {
+  c = textwordcount(text) - textworkcount(text);
+  return c;
+  // if (c > 0)
+  // 	return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>&nbsp;&nbsp;&nbsp;<input type="button" onClick="iknowall(' . text . ');" value=" I KNOW ALL " />';
+  // else
+  // 	return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>';
+}
 
 // // -------------------------------------------------------------
 
@@ -2326,7 +2252,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // function get20Sentences(lang, wordlc, jsctlname, mode)
 // {
 // 	global tbpref;
-// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
+// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <Icon src="tick-button" title="Choose" /> to copy sentence into above term)</p>';
 // 	sql = 'SELECT DISTINCT SeID, SeText FROM ' . tbpref . 'sentences, ' . tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax(wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
 // 	res = do_mysqli_query(sql);
 // 	r += '<p>';
@@ -2334,7 +2260,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		if (last != record['SeText']) {
 // 			sent = getSentence(record['SeID'], wordlc, mode);
-// 			r += '<span class="click" onclick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . sent[0] . '<br />';
+// 			r += '<span class="click" onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><Icon src="tick-button" title="Choose" /></span> &nbsp;' . sent[0] . '<br />';
 // 		}
 // 		last = record['SeText'];
 // 	}
@@ -2561,7 +2487,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	}
 // 	s = preg_replace('/\s{2,}/u', ' ', s);
 // 	if (id == -1)
-// 		r += "<div style=\"margin-right:50px;\"><h4>Text</h4><p " . (rtlScript ? 'dir="rtl"' : '') . ">" . str_replace("¶", "<br /><br />", tohtml(s)) . "</p>";
+// 		r += "<div style="margin-right:50px;"><h4>Text</h4><p " . (rtlScript ? 'dir="rtl"' : '') . ">" . str_replace("¶", "<br /><br />", tohtml(s)) . "</p>";
 
 // 	s = str_replace('{', '[', s); // because of sent. spc. char
 // 	s = str_replace('}', ']', s);
@@ -2652,7 +2578,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 			}
 // 			sentNumber += 1;
 // 		}
-// 		r += "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
+// 		r += "</ol><h4>Word List <span class="red2">(red = already saved)</span></h4><ul>";
 // 		ksort(wordList);
 // 		anz = 0;
 // 		foreach (wordList as key => value) {
@@ -2662,7 +2588,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 			if (trans == "*")
 // 				trans = "";
 // 			if (trans != "")
-// 				r += "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
+// 				r += "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class="red2">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
 // 			else
 // 				r += "<li " . (rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml(key) . "] — " . value[0] . "</li>";
 // 			anz++;
@@ -2673,7 +2599,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		ksort(wordSeps);
 // 		anz = 0;
 // 		foreach (wordSeps as key => value) {
-// 			r += "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
+// 			r += "<li>[" . str_replace(" ", "<span class="backgray">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
 // 			anz++;
 // 		}
 // 		r += "</ul><p>TOTAL: " . anz . "</p></div>";
@@ -3059,15 +2985,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // }
 
 // // -------------------------------------------------------------
-
-// function get_annotation_link(textid)
-// {
-// 	global tbpref;
-// 	if (get_first_value('select length(TxAnnotatedText) as value from ' . tbpref . 'texts where TxID=' . textid) > 0)
-// 		return ' &nbsp;<a href="print_impr_text.php?text=' . textid . '" target="_top"><img src="icn/tick.png" title="Annotated Text" alt="Annotated Text" /></a>';
-// 	else
-// 		return '';
-// }
 
 // // -------------------------------------------------------------
 
@@ -3528,14 +3445,14 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // if ((!DBCONNECTION) && mysqli_connect_errno() == 1049) {
 // 	DBCONNECTION = @mysqli_connect(server, userid, passwd);
 // 	if (!DBCONNECTION)
-// 		my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
+// 		my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
 // 	runsql("CREATE DATABASE `" . dbname . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", '');
 // 	mysqli_close(DBCONNECTION);
 // 	DBCONNECTION = @mysqli_connect(server, userid, passwd, dbname);
 // }
 
 // if (!DBCONNECTION)
-// 	my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
+// 	my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
 
 // @mysqli_query(DBCONNECTION, "SET NAMES 'utf8'");
 
@@ -3547,7 +3464,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // // fixed_tbpref = Table Prefix is fixed, no changes possible
 // // *** GLOBAL VARAIABLES ***
 
-// // Is tbpref set in connect.inc.php? Take it and fixed_tbpref=1.
+// // Is tbpref set in connect.inc? Take it and fixed_tbpref=1.
 // // If not: fixed_tbpref=0. Is it set in table "_lwtgeneral"? Take it.
 // // If not: Use tbpref = '' (no prefix, old/standard behaviour).
 
@@ -3565,10 +3482,10 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // len_tbpref = strlen(tbpref);
 // if (len_tbpref > 0) {
 // 	if (len_tbpref > 20)
-// 		my_die('Table prefix/set "' . tbpref . '" longer than 20 digits or characters. Please fix in "connect.inc.php".');
+// 		my_die('Table prefix/set "' . tbpref . '" longer than 20 digits or characters. Please fix in "connect.inc".');
 // 	for (i = 0; i < len_tbpref; i++)
 // 		if (strpos("_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", substr(tbpref, i, 1)) === FALSE)
-// 			my_die('Table prefix/set "' . tbpref . '" contains characters or digits other than 0-9, a-z, A-Z or _. Please fix in "connect.inc.php".');
+// 			my_die('Table prefix/set "' . tbpref . '" contains characters or digits other than 0-9, a-z, A-Z or _. Please fix in "connect.inc".');
 // }
 
 // if (!fixed_tbpref)
@@ -3656,7 +3573,7 @@ export function multiActionGo(
 // 				}
 // 				elseif (markaction == 'deltag' ) {
 // 					message = removetaglist(actiondata,list);
-// 					header("Location: edit_words.php");
+// 					header("Location: edit_words");
 // 					exit();
 // 				}
 // 				elseif (markaction == 'spl1' ) {
@@ -3700,7 +3617,7 @@ export function multiActionGo(
 // 				}
 // 				elseif (markaction == 'test' ) {
 // 					$_SESSION['testsql'] = ' ' . tbpref . 'words where WoID in ' . list . ' ';
-// 					header("Location: do_test.php?selection=1");
+// 					header("Location: do_test?selection=1");
 // 					exit();
 // 				}
 // 			}

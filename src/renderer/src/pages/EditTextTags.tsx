@@ -1,7 +1,7 @@
 import { dataService } from '../data/data.service';
 import { Tag2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { Tags2Validator } from '../data/validators';
+import { Tags2Id, Tags2Validator } from '../data/validators';
 import { CheckAndSubmit, RefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
@@ -36,6 +36,15 @@ export function DisplayTextTags({
 
   const recno = tags2.length;
   const { dataOnPage, numPages } = usePager(tags2, page, pageSize);
+
+  const countTextsPerTag: Record<Tags2Id, number> = texttags.reduce(
+    (prev, curr) => ({ ...prev, [curr.TtT2ID]: prev[curr.TtT2ID] + 1 }),
+    Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
+  );
+  const countArchivedTextsPerTag: Record<Tags2Id, number> = archtexttags.reduce(
+    (prev, curr) => ({ ...prev, [curr.AgT2ID]: prev[curr.AgT2ID] + 1 }),
+    Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
+  );
   console.log(page, numPages, pageSize);
   return (
     <>
@@ -197,18 +206,14 @@ export function DisplayTextTags({
 
             {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
             {tags2.map((tag) => {
-              const numTextTags = texttags.filter(
-                ({ TtT2ID }) => tag.T2ID === TtT2ID
-              ).length;
-              const numArchivedTextTags = archtexttags.filter(
-                ({ AgT2ID }) => tag.T2ID === AgT2ID
-              ).length;
+              const numTextTags = countTextsPerTag[tag.T2ID];
+              const numArchivedTextTags = countArchivedTextsPerTag[tag.T2ID];
               return (
                 <tr>
                   {/* TODO */}
                   {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
                   <td className="td1 center">
-                    <A name="rec' . $record['T2ID'] . '">
+                    <A id={`rec${tag['T2ID']}`}>
                       <input
                         name="marked[]"
                         type="checkbox"

@@ -28,19 +28,13 @@ export function InstallDemo() {
     <>
       <Header title="Install LWT Demo Database" />
 
-      {/* prefinfo = "(Default Table Set)";
-	prefinfo = "(Table Set: <i>" . tohtml(substr(tbpref, 0, -1)) . "</i>)"; */}
-
-      {/* echo error_message_with_hide(message, 1); */}
-
       <form encType="multipart/form-data">
-        <table className="tab3" cellSpacing="0" cellPadding="5">
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <th className="th1 center">Install Demo</th>
             <td className="td1">
               <p className="smallgray2">
                 The database <i>{dbname}</i>
-                {/* TODO <?php echo prefinfo; ?>  */}
                 will be <b>replaced</b> by the LWT demo database.
                 {langcnt > 0 && (
                   <>
@@ -69,7 +63,7 @@ export function InstallDemo() {
             </td>
           </tr>
           <tr>
-            <td className="td1 right" colSpan="2">
+            <td className="td1 right" colSpan={2}>
               <input
                 type="button"
                 value="&lt;&lt; Back to LWT Main Menu"

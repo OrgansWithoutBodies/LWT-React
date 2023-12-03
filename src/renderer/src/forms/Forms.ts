@@ -143,7 +143,7 @@ export function CheckAndSubmit<TForm>(
     // TODO reset to default values
     ResetForm(refMap);
   } else if (validationErrors) {
-    console.log({
+    console.log('validationErrors', {
       [validationErrors.path[0] as keyof TForm]: validationErrors.message,
     });
 

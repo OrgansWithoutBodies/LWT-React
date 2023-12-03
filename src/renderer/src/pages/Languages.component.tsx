@@ -79,11 +79,6 @@ function LanguageLine({
         numTextsThisLanguage === 0 ? (
           <span
             className="click"
-            //         if (textcount == 0 && archtextcount == 0 && wordcount == 0)
-            // 	echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';
-            // else
-            // 	echo '&nbsp; <img src="icn/placeholder.png" title="Delete not possible" alt="Delete not possible" />';
-
             onClick={() => {
               if (confirmDelete()) {
                 dataService.deleteLanguage(language.LgID);

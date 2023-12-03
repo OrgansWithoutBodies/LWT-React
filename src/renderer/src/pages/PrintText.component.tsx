@@ -1,10 +1,15 @@
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
+import { useInternalNavigate } from '../hooks/useInternalNav';
+import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
+import { getDirTag } from './Reader.component';
+import { StrengthMapNumericalKey } from './StrengthMap';
 
 export function PrintText({ textID }: { textID: TextsId }) {
   const [{ texts, languages }] = useData(['texts', 'languages']);
+  const navigator = useInternalNavigate();
   const showingText = texts.find(({ TxID }) => TxID === textID);
   if (!showingText) {
     throw new Error('invalid Text ID!');
@@ -36,8 +41,11 @@ export function PrintText({ textID }: { textID: TextsId }) {
           Terms with <b>status(es)</b>{' '}
           <select
             id="status"
-            // onchange="{val=document.getElementById('status').options[document.getElementById('status').selectedIndex].valuelocation.href='print_text?text=" . textid . "&ampstatus=' + val}"
+            onChange={(val) => {
+              navigator(`/print_text?text=${textID}&status=${val}`);
+            }}
           >
+            {/* TODO */}
             echo get_wordstatus_selectoptions(statusrange, true, true, false)
           </select>{' '}
           ...
@@ -53,22 +61,26 @@ export function PrintText({ textID }: { textID: TextsId }) {
           </select>
           <select
             id="annplcmnt"
-            // onchange="{val=document.getElementById('annplcmnt').options[document.getElementById('annplcmnt').selectedIndex].valuelocation.href='print_text?text=" . textid . "&ampannplcmnt=' + val}"
+            // TODO
+            // onchange="{val=document.getElementById('annplcmnt').options[document.getElementById('annplcmnt').selectedIndex].valuelocation.href='print_text?text=" . textID . "&ampannplcmnt=' + val}"
           >
             <option
               value="0"
+              // TODO
               // " . get_selected(0,annplcmnt) . "
             >
               behind
             </option>
             <option
               value="1"
+              // TODO
               // " . get_selected(1,annplcmnt) . "
             >
               in front of
             </option>
             <option
               value="2"
+              // TODO
               // " . get_selected(2,annplcmnt) . "
             >
               above (ruby)
@@ -80,20 +92,41 @@ export function PrintText({ textID }: { textID: TextsId }) {
             type="button"
             value="Print it!"
             onClick={() => window.print()}
-            // onClick="window.print()"
           />{' '}
           (only the text below the line)
-          {/* if ((get_first_value("select length(TxAnnotatedText) as value from " . tbpref . "texts where TxID = " . textid) + 0) > 0) {
-	 &nbsp | &nbsp Or <input type="button" value="Print/Edit/Delete" onclick="location.href='print_impr_text?text=" . textid . "'" /> your <b>Improved Annotated Text</b>" . get_annotation_link(textid) . ".
-} else {
-	 &nbsp | &nbsp <input type="button" value="Create" onclick="location.href='print_impr_text?edit=1&amptext=" . textid . "'" /> an <b>Improved Annotated Text</b> [<img src="icn/tick.png" title="Annotated Text" alt="Annotated Text" />].
-} */}
+          {/* TODO */}
+          {
+            // get_first_value("select length(TxAnnotatedText) as value from " . tbpref . "texts where TxID = " . textID) */
+          }
+          {0 > 0 ? (
+            <>
+              &nbsp | &nbsp Or{' '}
+              <input
+                type="button"
+                value="Print/Edit/Delete"
+                onClick={() => `location.href='print_impr_text?text=${textID}`}
+              />{' '}
+              your <b>Improved Annotated Text</b>
+              {<GetAnnotationLink textID={textID} />}
+            </>
+          ) : (
+            <>
+              &nbsp | &nbsp{' '}
+              <input
+                type="button"
+                value="Create"
+                onClick={() =>
+                  `location.href='print_impr_text?edit=1&amptext=${textID}`
+                }
+              />{' '}
+              an <b>Improved Annotated Text</b> [
+              <Icon src="tick" title="Annotated Text" />
+              ].
+            </>
+          )}
         </p>
       </div>
-      <div
-        id="print"
-        // " . (rtlScript ? ' dir="rtl"' : '') . "
-      >
+      <div id="print" {...getDirTag(language)}>
         <p
           style={{ fontSize: language.LgTextSize }}
           // style="font-size:' . textsize . '%line-height: 1.35 margin-bottom: 10px "
@@ -104,6 +137,77 @@ export function PrintText({ textID }: { textID: TextsId }) {
           {showingText.TxText}
         </p>
       </div>
+    </>
+  );
+}
+
+export function GetAnnotationLink({ textID }: { textID: TextsId }) {
+  // global tbpref;
+  if (
+    // get_first_value('select length(TxAnnotatedText) as value from ' . tbpref . 'texts where TxID=' . textID)
+    0 > 0
+  )
+    return (
+      <>
+        &nbsp;
+        <A href={`/print_impr_text?text=${textID}`} target="_top">
+          <Icon src="tick" title="Annotated Text" />
+        </A>
+      </>
+    );
+  else return <></>;
+}
+
+export function GetWordstatusSelectoptions({
+  // defaultval
+  v = 1,
+  all,
+  not9899,
+  off = true,
+}: {
+  v: any;
+  all: boolean;
+  not9899: false;
+  off?: boolean;
+}) {
+  return (
+    <>
+      {all && off && (
+        <>
+          <option value="" selected>
+            [Filter off]
+          </option>
+        </>
+      )}
+      {(not9899
+        ? Object.keys(StrengthMapNumericalKey).filter(
+            (n) => !(n == 98 || n == 99)
+          )
+        : Object.keys(StrengthMapNumericalKey)
+      ).map((n) => {
+        const status = StrengthMapNumericalKey[n];
+        return (
+          <option value={n}>
+            {status['name']} [{status['abbr']}]
+          </option>
+        );
+      })}
+      <option disabled>--------</option>
+      <option value="12">Learning [1..2]</option>
+      <option value="13">Learning [1..3]</option>
+      <option value="14">Learning [1..4]</option>
+      <option value="15">Learning/-ed [1..5]</option>
+      <option disabled>--------</option>
+      <option value="23">Learning [2..3]</option>
+      <option value="24">Learning [2..4]</option>
+      <option value="25">Learning/-ed [2..5]</option>
+      <option disabled>--------</option>
+      <option value="34">Learning [3..4]</option>
+      <option value="35">Learning/-ed [3..5]</option>
+      <option disabled>--------</option>
+      <option value="45">Learning/-ed [4..5]</option>
+      <option disabled>--------</option>
+      <option value="599">All known [5+WKn]</option>
     </>
   );
 }

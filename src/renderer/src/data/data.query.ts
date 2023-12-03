@@ -88,20 +88,20 @@ export class DataQuery extends Query<DataState> {
   public wordtags = this.select('wordtags');
 
   public settings: Observable<Settings> = this.select('settings').pipe(
-    map((settings) => {
-      console.log('active', settings);
-      return Object.fromEntries(
-        settings.map(
-          ({ StKey, StValue }) =>
-            [
-              StKey,
-              Number.isNaN(Number.parseInt(StValue))
-                ? StValue
-                : Number.parseInt(StValue),
-            ] as [keyof Settings, Settings[keyof Settings]]
-        )
-      ) as Settings;
-    })
+    map(
+      (settings) =>
+        Object.fromEntries(
+          settings.map(
+            ({ StKey, StValue }) =>
+              [
+                StKey,
+                Number.isNaN(Number.parseInt(StValue))
+                  ? StValue
+                  : Number.parseInt(StValue),
+              ] as [keyof Settings, Settings[keyof Settings]]
+          )
+        ) as Settings
+    )
   );
 
   public parsedTexts = this.select('parsedTexts');
@@ -252,9 +252,8 @@ export class DataQuery extends Query<DataState> {
     this.texttags,
     this.tags2,
   ]).pipe(
-    map(([textsForActiveLanguage, texttags, tags]) => {
-      console.log('textDetails', { textsForActiveLanguage });
-      return textsForActiveLanguage.map((text) => ({
+    map(([textsForActiveLanguage, texttags, tags]) =>
+      textsForActiveLanguage.map((text) => ({
         TxID: text.TxID,
         title: text.TxTitle,
         // TODO split
@@ -280,8 +279,8 @@ export class DataQuery extends Query<DataState> {
             const tag = tags.find((tag) => tag.T2ID === textTag.TtT2ID);
             return tag ? tag.T2Text : 'ERROR';
           }),
-      }));
-    })
+      }))
+    )
   );
 }
 export const dataQuery = new DataQuery(dataStore);

@@ -18,10 +18,9 @@ export default function ImportLongText({
 }: {
   onSetVerify: (verify: LongTextType) => void;
 }): JSX.Element {
-  const [{ languages, tags, texts, activeLanguageId }] = useData([
+  // TODO custom eslint hook to make sure in & out are same len? avoid hanging params
+  const [{ languages, activeLanguageId }] = useData([
     'languages',
-    'tags',
-    'texts',
     'activeLanguageId',
   ]);
   const navigate = useInternalNavigate();
@@ -32,210 +31,231 @@ export default function ImportLongText({
     maxSent: ss.number(),
   });
   const { Input: TxInput, refMap } = useFormInput({ validator });
-
   return (
     <>
       <Header title="Import Long Text" />
-      <table className="tab3" cellSpacing={0} cellPadding={5}>
-        <tbody>
-          <tr>
-            <td className="td1 right">Language:</td>
-            <td className="td1">
-              <LanguageDropdown
-                defaultValue={activeLanguageId || undefined}
-                onChange={(val) => dataService.setActiveLanguage(val)}
-                dropdownRef={refMap.TxLgID}
-              />
-              <RequiredLineButton />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Title:</td>
-            <td className="td1">
-              <TxInput
-                type="text"
-                className="notempty checkoutsidebmp"
-                errorName="Title"
-                entryKey="TxTitle"
-                maxLength={200}
-                size={60}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Text:</td>
-            <td className="td1">
-              {/* TODO validate one not both specified (XOR) */}
-              Either specify a <b>File to upload</b>
-              :
-              <br />
-              <input name="file" type="file" />
-              <br />
-              <br />
-              <b>Or</b> paste a text from the clipboard (and do
-              <b>NOT</b>
-              specify file):
-              <br />
-              <textarea
-                className="checkoutsidebmp"
-                ref={refMap.TxText}
-                errorName="Upload"
-                name="Upload"
-                cols={60}
-                rows={15}
-              />
-              <p className="smallgray">
-                If the text is too long, the import may not be possible.
+      <form>
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tbody>
+            <tr>
+              <td className="td1 right">Language:</td>
+              <td className="td1">
+                <LanguageDropdown
+                  defaultValue={activeLanguageId || undefined}
+                  onChange={(val) => dataService.setActiveLanguage(val)}
+                  dropdownRef={refMap.TxLgID}
+                />
+                <RequiredLineButton />
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">Title:</td>
+              <td className="td1">
+                <TxInput
+                  type="text"
+                  className="notempty checkoutsidebmp"
+                  errorName="Title"
+                  entryKey="TxTitle"
+                  maxLength={200}
+                  size={60}
+                  isRequired
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">Text:</td>
+              <td className="td1">
+                {/* TODO validate one not both specified (XOR) */}
+                Either specify a <b>File to upload</b>
+                :
                 <br />
-                Current upload limits (in bytes):
+                <input name="file" type="file" />
                 <br />
-                <b>post_max_size = 8M / upload_max_filesize = 2M</b>
                 <br />
-                If needed, increase in <br />
-                "" <br />
-                and restart server.
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">
-              NEWLINES and
-              <br />
-              Paragraphs:
-            </td>
-            <td className="td1">
-              <select
-                name="paragraph_handling"
-                defaultValue="1"
-                onChange={() => {
-                  // TODO
-                }}
-              >
-                <option value="1">ONE NEWLINE: Paragraph ends</option>
-                <option value="2">
-                  TWO NEWLINEs: Paragraph ends. Single NEWLINE converted to
-                  SPACE
-                </option>
-              </select>
-              <RequiredLineButton />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">
-              Maximum
-              <br />
-              Sentences
-              <br />
-              per Text:
-            </td>
-            <td className="td1">
-              <TxInput
-                type="text"
-                className="notempty posintnumber"
-                errorName="Maximum Sentences per Text"
-                entryKey="maxSent"
-                default
-                maxLength={3}
-                isRequired
-                size={3}
-              />
-              <br />
-              <span className="smallgray">
-                Values higher than 100 may slow down text display.
+                <b>Or</b> paste a text from the clipboard (and do
+                <b>NOT</b>
+                specify file):
                 <br />
-                Very low values (&lt; 5) may result in too many texts.
+                <textarea
+                  className="checkoutsidebmp"
+                  ref={refMap.TxText}
+                  errorName="Upload"
+                  name="Upload"
+                  cols={60}
+                  rows={15}
+                />
+                <p className="smallgray">
+                  If the text is too long, the import may not be possible.
+                  <br />
+                  Current upload limits (in bytes):
+                  <br />
+                  {/* TODO maybe have this limited if using localstorage? */}
+                  <b>post_max_size = 8M / upload_max_filesize = 2M</b>
+                  <br />
+                  If needed, increase in <br />
+                  "" <br />
+                  and restart server.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">
+                NEWLINES and
                 <br />
-                The maximum number of new texts must not exceed 980.
-                <br />A single new text will never exceed the length of 65,000
-                bytes.
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Source URI:</td>
-            <td className="td1">
-              <TxInput
-                type="text"
-                className="checkurl checkoutsidebmp"
-                errorName="Source URI"
-                entryKey="TxSourceURI"
-                maxLength={1000}
-                size={60}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Tags:</td>
-            <td className="td1">
-              <ul
-                id="texttags"
-                className="tagit ui-widget ui-widget-content ui-corner-all"
-              >
-                <li className="tagit-new">
-                  <span
-                    role="status"
-                    aria-live="polite"
-                    className="ui-helper-hidden-accessible"
-                  />
-                  <input
-                    type="text"
-                    maxLength={20}
-                    size={20}
-                    className="ui-widget-content ui-autocomplete-input"
-                    autoComplete="off"
-                  />
-                </li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right" colSpan={2}>
-              <input
-                type="button"
-                value="Cancel"
-                onClick={() => {
-                  resetDirty();
-                  navigate('/');
-                }}
-              />
-              &nbsp; | &nbsp;
-              <input
-                type="button"
-                value="NEXT STEP: Check the Texts"
-                onClick={() => {
-                  console.log('LONGIMPORT', refMap.TxText.current);
+                Paragraphs:
+              </td>
+              <td className="td1">
+                <select
+                  name="paragraph_handling"
+                  defaultValue="1"
+                  onChange={() => {
+                    // TODO
+                  }}
+                >
+                  <option value="1">ONE NEWLINE: Paragraph ends</option>
+                  <option value="2">
+                    TWO NEWLINEs: Paragraph ends. Single NEWLINE converted to
+                    SPACE
+                  </option>
+                </select>
+                <RequiredLineButton />
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">
+                Maximum
+                <br />
+                Sentences
+                <br />
+                per Text:
+              </td>
+              <td className="td1">
+                <TxInput
+                  type="text"
+                  className="notempty posintnumber"
+                  errorName="Maximum Sentences per Text"
+                  entryKey="maxSent"
+                  default
+                  maxLength={3}
+                  isRequired
+                  size={3}
+                />
+                <br />
+                <span className="smallgray">
+                  Values higher than 100 may slow down text display.
+                  <br />
+                  Very low values (&lt; 5) may result in too many texts.
+                  <br />
+                  The maximum number of new texts must not exceed 980.
+                  <br />A single new text will never exceed the length of 65,000
+                  bytes.
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">Source URI:</td>
+              <td className="td1">
+                <TxInput
+                  type="text"
+                  className="checkurl checkoutsidebmp"
+                  errorName="Source URI"
+                  entryKey="TxSourceURI"
+                  maxLength={1000}
+                  size={60}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right">Tags:</td>
+              <td className="td1">
+                <ul
+                  id="texttags"
+                  className="tagit ui-widget ui-widget-content ui-corner-all"
+                >
+                  <li className="tagit-new">
+                    <span
+                      role="status"
+                      aria-live="polite"
+                      className="ui-helper-hidden-accessible"
+                    />
+                    <input
+                      type="text"
+                      maxLength={20}
+                      size={20}
+                      className="ui-widget-content ui-autocomplete-input"
+                      autoComplete="off"
+                    />
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td className="td1 right" colSpan={2}>
+                <input
+                  type="button"
+                  value="Cancel"
+                  onClick={() => {
+                    resetDirty();
+                    navigate('/');
+                  }}
+                />
+                &nbsp; | &nbsp;
+                <input
+                  type="button"
+                  value="NEXT STEP: Check the Texts"
+                  onClick={() => {
+                    console.log('LONGIMPORT', refMap.TxText.current);
 
-                  CheckAndSubmit(
-                    refMap,
-                    { TxLgID: parseNumMap },
-                    validator,
-                    ({ TxText, TxLgID, TxTitle }) => {
-                      // TODO
-                      // console.log(TxLgID);
-                      const splitTexts = buildSentences(
-                        TxText,
-                        languages.find((lang) => lang.LgID === TxLgID)!
-                      );
-                      console.log(splitTexts);
-                      onSetVerify(
-                        splitTexts.map((text, ii) => ({
-                          TxText: text,
-                          TxLgID,
-                          TxTitle: `${TxTitle} [${ii + 1}/${
-                            splitTexts.length
-                          }]`,
-                        }))
-                      );
-                    }
-                  );
-                }}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      {/* </form> */}
+                    CheckAndSubmit(
+                      refMap,
+                      { TxLgID: parseNumMap },
+                      validator,
+                      ({ TxText, TxLgID, TxTitle }) => {
+                        // TODO
+                        // console.log(TxLgID);
+                        const splitTexts = buildSentences(
+                          TxText,
+                          languages.find((lang) => lang.LgID === TxLgID)!
+                        );
+                        console.log(splitTexts);
+                        onSetVerify(
+                          splitTexts.map((text, ii) => ({
+                            TxText: text,
+                            TxLgID,
+                            TxTitle: `${TxTitle} [${ii + 1}/${
+                              splitTexts.length
+                            }]`,
+                          }))
+                        );
+                      }
+                    );
+                  }}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+      <>
+        <p className="smallgray">
+          Import of a <b>single text</b>, max. 65,000 bytes long, with optional
+          audio:
+        </p>
+        <p>
+          <input
+            type="button"
+            value="Standard Text Import"
+            onClick={() => navigate('/edit_texts?new=1')}
+          />{' '}
+        </p>
+
+        <ul
+          className="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all"
+          id="ui-id-1"
+          tabIndex={0}
+          style={{ display: 'none' }}
+        ></ul>
+      </>
     </>
   );
 }
@@ -254,10 +274,4 @@ export function LongText() {
       )}
     </>
   );
-}
-{
-  /* <p class="smallgray">Import of a <b>single text</b>, max. 65,000 bytes long, with optional audio:</p><p><input type="button" value="Standard Text Import" onClick="location.href='edit_texts?new=1';"> </p>
-
-<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabIndex={0} style="display: none;"></ul> </>
-} */
 }

@@ -136,8 +136,8 @@ export function LibraryWrapper() {
           currentPage={page !== null ? Number.parseInt(page) : 1}
           query={query}
           // TODO maybe force these names to be the same for easier compacting
-          filterTag1={tag1 !== null ? Number.parseInt(tag1) : null}
-          filterTag2={tag2 !== null ? Number.parseInt(tag2) : null}
+          tag2={tag1 !== null ? Number.parseInt(tag1) : null}
+          tag1={tag2 !== null ? Number.parseInt(tag2) : null}
         />
         <EditText chgID={Number.parseInt(chg!)} />
       </Switch>
@@ -146,7 +146,8 @@ export function LibraryWrapper() {
   );
 }
 {
-  /* <p><input type="button" value="&lt;&lt; Back" onclick="history.back();" /></p> */
+  // TODO these are used in check text
+  /* <p><input type="button" value="&lt;&lt; Back" onClick="history.back();" /></p> */
 }
 // op === 'check';
 // wordList = array();
@@ -178,7 +179,7 @@ export function LibraryWrapper() {
 //   }
 //   sentNumber += 1;
 // }
-// r .= "</ol><h4>Word List <span class=\"red2\">(red = already saved)</span></h4><ul>";
+// r .= "</ol><h4>Word List <span class="red2">(red = already saved)</span></h4><ul>";
 // ksort(wordList);
 // anz = 0;
 // foreach (wordList as key => value) {
@@ -188,7 +189,7 @@ export function LibraryWrapper() {
 //   if (trans == "*")
 //     trans = "";
 //   if (trans != "")
-//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class=\"red2\">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
+//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class="red2">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
 //   else
 //     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml(key) . "] — " . value[0] . "</li>";
 //   anz++;
@@ -199,7 +200,7 @@ export function LibraryWrapper() {
 // ksort(wordSeps);
 // anz = 0;
 // foreach (wordSeps as key => value) {
-//   r .= "<li>[" . str_replace(" ", "<span class=\"backgray\">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
+//   r .= "<li>[" . str_replace(" ", "<span class="backgray">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
 //   anz++;
 // }
 // r .= "</ul><p>TOTAL: " . anz . "</p></div>";

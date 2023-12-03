@@ -43,12 +43,11 @@ export type WordNoId = typeof WordsValidatorNoId.TYPE;
 
 export type WordTag = typeof WordTagsValidator.TYPE;
 
-export const AddNewWordValidator = ss.omit(WordsValidatorNoId, [
-  'WoStatusChanged',
+export const AddNewWordValidator = ss.omit(WordsValidator, [
+  'WoID',
   'WoTodayScore',
   'WoTomorrowScore',
   'WoRandom',
-  'WoCreated',
   'WoTextLC',
 ]);
 export type AddNewWordType = typeof AddNewWordValidator.TYPE;

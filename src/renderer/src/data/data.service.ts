@@ -230,16 +230,22 @@ export class DataService {
   }
   public editTerm(term: Word) {
     this.dataStore.update((state) => {
-      const ids = state.words.map((word) => word.WoID);
-      const maxId = (Math.max(...ids) + 1) as WordsId;
+      const editedWordIndex = state.words.findIndex(
+        (val) => val.WoID === term.WoID
+      );
+      const editingWord = state.words[editedWordIndex];
+      const filteredWords = [
+        ...state.words.slice(0, editedWordIndex),
+        ...state.words.slice(editedWordIndex + 1),
+      ];
       return {
         ...state,
         notificationMessage: { txt: `Edited Word ${term.WoText}` },
         words: [
-          ...state.words,
+          ...filteredWords,
           {
+            ...editingWord,
             ...term,
-            TgID: maxId,
           },
         ],
       };
@@ -331,6 +337,7 @@ export class DataService {
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
       const maxId = Math.max(...ids) + 1;
+      console.log('TEST123-addterm', maxId, ids);
       if (IDIsUnique(maxId, ids)) {
         return {
           ...state,
@@ -340,11 +347,8 @@ export class DataService {
             {
               ...word,
               WoID: maxId,
-              // TODO
-              WoStatusChanged: Date.now(),
               WoTodayScore: 0,
               WoTomorrowScore: 0,
-              // TODO ? whats this
               WoRandom: 0,
             },
           ],
@@ -498,6 +502,7 @@ export class DataService {
   public addMultipleTerms(terms: Word[]) {
     const mappedTerms = terms.map((word, ii) => ({
       ...word,
+      // TODO move these to prevalidate?
       // TODO check if right
       WoStatusChanged: Date.now(),
       // TODO make sure to do this on edit

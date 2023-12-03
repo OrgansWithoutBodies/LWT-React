@@ -228,7 +228,7 @@ export function KnownTermLines({
       <A href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
         Edit term
       </A>
-      |
+      |{/* TODO confirm here? */}
       <A onClick={() => dataService.deleteTerm(word.WoID)} target="ro">
         Delete term
       </A>

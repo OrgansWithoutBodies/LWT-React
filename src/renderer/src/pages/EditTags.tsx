@@ -17,11 +17,14 @@ import {
   GetTagsortSelectoptions,
 } from './EditTextTags';
 import { FormInput } from './FormInput';
-import { resetDirty } from './Sorting';
+import { Sorting, resetDirty } from './Sorting';
 import { NavigateButton } from './Statistics.component';
 import { tagPreValidateMap } from './preValidateMaps';
 import { confirmDelete } from './utils';
 
+/**
+ *
+ */
 export function DisplayTags({
   query,
 
@@ -30,11 +33,18 @@ export function DisplayTags({
   query: string;
   currentPage: number;
 }): JSX.Element {
-  const [{ tags, settings }] = useData(['tags', 'settings']);
+  const [{ tags, settings, wordtags }] = useData([
+    'wordtags',
+    'tags',
+    'settings',
+  ]);
   const navigate = useInternalNavigate();
-  const tagCount = tags.length;
   const recno = tags.length;
-
+  const countPerTag: Record<TagsId, number> = wordtags.reduce(
+    (prev, curr) => ({ ...prev, [curr.WtTgID]: prev[curr.WtTgID] + 1 }),
+    Object.fromEntries(tags.map((val) => [val.TgID, 0]))
+  );
+  console.log({ countPerTag, wordtags });
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(tags, currentPage, pageSize);
   const { checkboxPropsForEntry, onSelectAll, onSelectNone, selectedValues } =
@@ -106,7 +116,23 @@ export function DisplayTags({
                 Sort Order:
                 <select
                   name="sort"
-                  onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_tags?page=1&sort=' + val;}"
+                  // onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_tags?page=1&sort=' + val;}"
+                  onChange={({ target: { value } }) => {
+                    switch (Number.parseInt(value) as Sorting) {
+                      // todo change url params
+                      case Sorting['Newest first']:
+                        return (a: Tag, b: Tag) => (a.TgID > b.TgID ? 1 : -1);
+                      case Sorting['Oldest first']:
+                        return (a: Tag, b: Tag) => (a.TgID < b.TgID ? 1 : -1);
+                      // TODO add these
+                      case Sorting['Tag Text A-Z']:
+                        return (a: Tag, b: Tag) =>
+                          a.TgText < b.TgText ? 1 : -1;
+                      case Sorting['Tag Comment A-Z']:
+                        return (a: Tag, b: Tag) =>
+                          (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
+                    }
+                  }}
                 >
                   <GetTagsortSelectoptions />
                 </select>
@@ -194,8 +220,7 @@ export function DisplayTags({
               <tr>
                 {/* ' . checkTest(record['TgID'], 'marked') . ' */}
                 <td className="td1 center">
-                  {/* TODO */}
-                  <A name="rec' . record['TgID'] . '">
+                  <A id={`rec${tag['TgID']}`}>
                     <input
                       name="marked[]"
                       type="checkbox"
@@ -213,6 +238,7 @@ export function DisplayTags({
                   &nbsp;
                   <Icon
                     onClick={() => {
+                      // TODO
                       // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
                       if (confirmDelete()) {
                         dataService.deleteTermTag(tag.TgID);
@@ -227,8 +253,10 @@ export function DisplayTags({
                 <td className="td1 center">{tag.TgComment}</td>
                 <td className="td1 center">
                   {/* TODO should be counting with this tag */}
-                  {tagCount > 0 ? (
-                    <A href={`/edit_words?tag1=${tag.TgID}`}>{tagCount}</A>
+                  {countPerTag[tag.TgID] > 0 ? (
+                    <A href={`/edit_words?tag1=${tag.TgID}`}>
+                      {countPerTag[tag.TgID]}
+                    </A>
                   ) : (
                     '0'
                   )}
@@ -270,10 +298,17 @@ export function DisplayTags({
   );
 }
 
+/**
+ *
+ * @param count
+ */
 export function pluralize(count: number) {
   return count == 1 ? '' : 's';
 }
 
+/**
+ *
+ */
 export function NewTag() {
   const validator = TagsValidator;
   const refMap = RefMap<Tag>(validator);
@@ -348,6 +383,9 @@ export function NewTag() {
   );
 }
 
+/**
+ *
+ */
 export function EditTag({ chgId }: { chgId: TagsId }) {
   const [{ tags }] = useData(['tags']);
   const changingTag = tags.find(({ TgID }) => TgID === chgId);
