@@ -1,32 +1,24 @@
+import { over } from 'rambdax';
+import { Language, Word } from '../data/parseMySqlDump';
+import { A } from '../nav/InternalLink';
+import { Icon } from '../ui-kit/Icon';
+import { NumericalStrength } from './AddNewTermTooltip';
 import {
-  createTheDictLink,
-  make_overlib_link_change_status_test,
+  CreateTheDictLink,
+  MakeOverlibLinkChangeStatusTest,
 } from './ReaderPage.component';
+import { StrengthMapNumericalKey } from './StrengthMap';
+import { prepare_textdata_js } from './translateSentence2';
 
-let STATUSES = {
-  1: { abbr: '1', name: 'Learning' },
-  2: { abbr: '2', name: 'Learning' },
-  3: { abbr: '3', name: 'Learning' },
-  4: { abbr: '4', name: 'Learning' },
-  5: { abbr: '5', name: 'Learned' },
-  99: { abbr: 'WKn', name: 'Well Known' },
-  98: { abbr: 'Ign', name: 'Ignored' },
-};
-
-function onWordClick(
-  wb1,
-  wb2,
-
-  wb3
-) {
-  const WBLINK1 = wb1;
-  const WBLINK2 = wb2;
-  const WBLINK3 = wb3;
-  // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (traWBLINK1ns) : (' [' . trans . '] ')) : save ); ?>;
+export function onWordClick(word: Word, language: Language) {
+  // TODO
+  // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (trawBlink1ns) : (' [' . trans . '] ')) : save ); ?>;
   const OPENED = 0;
-  // WID = <?php echo wid; ?>;
-  const onClickWord = () => word_click_event_do_test_test;
-  const onKeyDown = () => keydown_event_do_test_test;
+  // TODO
+  // WoID = <?php echo wid; ?>;
+  const onClickWord = () => word_click_event_do_test_test(language);
+  const onKeyDown = (e) => keydown_event_do_test_test(e, OPENED, word);
+  return { onClickWord, onKeyDown };
 }
 enum KeyStatus {
   'SPACE' = 32,
@@ -36,14 +28,27 @@ enum KeyStatus {
   'E' = 69,
   'I' = 73,
   'W' = 87,
+  // TODO
   // '' = 48,
   // '' = 96,
+}
+
+function cClick() {
+  if (olLoaded) {
+    runHook('hideObject', FREPLACE, over);
+    o3_showingsticky = 0;
+  }
+  return false;
 }
 /**
  *
  * @param e
  */
-function keydown_event_do_test_test(e: KeyboardEvent) {
+function keydown_event_do_test_test(
+  e: KeyboardEvent,
+  OPENED: 0 | 1,
+  { WoID }: Word
+) {
   // TODO update 'which' pattern
   if (e.which == 32 && OPENED == 0) {
     // space : show sol.
@@ -59,17 +64,17 @@ function keydown_event_do_test_test(e: KeyboardEvent) {
   if (OPENED == 0) return true;
   if (e.which == 38) {
     // up : status+1
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&stchange=1`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&stchange=1`;
     return false;
   }
   if (e.which == 40) {
     // down : status-1
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&stchange=-1`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&stchange=-1`;
     return false;
   }
   if (e.which == 27) {
     // esc : dont change status
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=${$(
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=${$(
       '.word'
     ).attr('data_status')}`;
     return false;
@@ -77,52 +82,72 @@ function keydown_event_do_test_test(e: KeyboardEvent) {
   for (let i = 1; i <= 5; i++) {
     if (e.which == 48 + i || e.which == 96 + i) {
       // 1,.. : status=i
-      window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=${i}`;
+      window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=${i}`;
       return false;
     }
   }
   if (e.which == 73) {
     // I : status=98
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=98`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=98`;
     return false;
   }
   if (e.which == 87) {
     // W : status=99
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WID}&status=99`;
+    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=99`;
     return false;
   }
   if (e.which == 69) {
     // E : EDIT
-    window.parent.frames.ro.location.href = `edit_tword?wid=${WID}`;
+    window.parent.frames.ro.location.href = `edit_tword?wid=${WoID}`;
     return false;
   }
   return true;
 }
 
-function word_click_event_do_test_test(this: any) {
-  // wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
-  // wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
-  // wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
+function word_click_event_do_test_test({
+  LgDict1URI: wBlink1,
+  LgDict2URI: wBlink2,
+  LgGoogleTranslateURI: wBlink3,
+  data_wid,
+  data_text,
+  data_trans,
+  data_rom,
+  data_status,
+  data_sent,
+  data_todo,
+}: Language & {
+  data_wid: string;
+  data_text: string;
+  data_trans: string;
+  data_rom: string;
+  data_status: NumericalStrength;
+  data_sent: string;
+  data_todo: string;
+}) {
   run_overlib_test(
-    WBLINK1,
-    WBLINK2,
-    WBLINK3,
-    $(this).attr('data_wid'),
-    $(this).attr('data_text'),
-    $(this).attr('data_trans'),
-    $(this).attr('data_rom'),
-    $(this).attr('data_status'),
-    $(this).attr('data_sent'),
-    $(this).attr('data_todo')
+    wBlink1,
+    wBlink2,
+    wBlink3,
+    data_wid,
+    data_text,
+    data_trans,
+    data_rom,
+    data_status,
+    data_sent,
+    data_todo
+  );
+  // TODO
+  const SOLUTION = prepare_textdata_js(
+    $testtype == 1 ? ($nosent ? $trans : ` [${trans}] `) : $save
   );
   $('.todo').text(SOLUTION);
   return false;
 }
 /**
  *
- * @param wblink1
- * @param wblink2
- * @param wblink3
+ * @param wBlink1
+ * @param wBlink2
+ * @param wBlink3
  * @param wid
  * @param txt
  * @param trans
@@ -132,61 +157,90 @@ function word_click_event_do_test_test(this: any) {
  * @param todo
  */
 function run_overlib_test(
-  wblink1: string,
-  wblink2: string,
-  wblink3: string,
+  wBlink1: string,
+  wBlink2: string,
+  wBlink3: string,
   wid: string,
   txt: string,
-  trans: any,
-  roman: any,
-  stat: string | number,
+  trans: string,
+  roman: string,
+  stat: NumericalStrength,
   sent: string,
   todo: number
   // oldstat: undefined
 ) {
-  const s = parseInt(stat, 10);
-  let c = s + 1;
+  let c = stat + 1;
   if (c > 5) c = 5;
-  let w = s - 1;
+  let w = stat - 1;
   if (w < 1) w = 1;
   let cc = `${stat} ▶ ${c}`;
-  if (c == s) cc = c;
+  if (c == stat) cc = c;
   let ww = `${stat} ▶ ${w}`;
-  if (w == s) ww = w;
-  return overlib(
-    `${
-      todo == 1
-        ? `<center><hr noshade size=1 /><b>${
-            stat >= 1 && stat <= 5
-              ? `${make_overlib_link_change_status_test(
-                  wid,
-                  1,
-                  `<img src=\x22icn/thumb-up.png\x22 title=\x22Got it!\x22 alt=\x22Got it!\x22 /> Got it! [${cc}]`
-                )}<hr noshade size=1 />${make_overlib_link_change_status_test(
-                  wid,
-                  -1,
-                  `<img src=\x22icn/thumb.png\x22 title=\x22Oops!\x22 alt=\x22Oops!\x22 /> Oops! [${ww}]`
-                )}<hr noshade size=1 />`
-              : ''
-          }${make_overlib_link_change_status_alltest(
-            wid,
-            stat
-          )}</b></center><hr noshade size=1 />`
-        : ''
-    }<b>${escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b><br />` +
-      ` <a href=\x22edit_tword?wid=${wid}\x22 target=\x22ro\x22>Edit term</a><br />${createTheDictLink(
-        wblink1,
-        txt,
-        'Dict1',
-        'Lookup Term: '
-      )}${createTheDictLink(wblink2, txt, 'Dict2', '')}${createTheDictLink(
-        wblink3,
-        txt,
-        'GTr',
-        ''
-      )}${createTheDictLink(wblink3, sent, 'GTr', '<br />Lookup Sentence:')}`,
-    CAPTION,
-    'Got it?'
+  if (w == stat) ww = w;
+  overlib;
+  return (
+    <>
+      {todo == 1 ? (
+        <>
+          <center>
+            <hr noshade size={1} />
+            <b>
+              {stat >= 1 && stat <= 5 ? (
+                <>
+                  <MakeOverlibLinkChangeStatusTest
+                    wid={wid}
+                    stat={1}
+                    txt={
+                      <>
+                        <Icon src="thumb-up" title="Got it!" /> Got it! [${cc}]
+                      </>
+                    }
+                  />
+
+                  <hr noshade size={1} />
+                  <MakeOverlibLinkChangeStatusTest
+                    wid={wid}
+                    stat={-1}
+                    txt={
+                      <>
+                        <Icon src="thumb" title="Oops!" /> Oops! [${ww}]
+                      </>
+                    }
+                  />
+                  <hr noshade size={1} />
+                </>
+              ) : (
+                <></>
+              )}
+              <MakeOverlibLinkChangeStatusAlltest wid stat />
+            </b>
+          </center>
+          <hr noshade size={1} />
+        </>
+      ) : (
+        <></>
+      )}
+      <>
+        <b>{escape_html_chars(make_tooltip(txt, trans, roman, stat))}</b>
+        <br />
+      </>
+
+      <A href={`/edit_tword?wid=${wid}`} target="ro">
+        Edit term
+      </A>
+      <br />
+      <CreateTheDictLink u={wBlink1} w={txt} t={'Dict1'} b={'Lookup Term: '} />
+      <CreateTheDictLink u={wBlink2} w={txt} t={'Dict2'} b={''} />
+      <CreateTheDictLink u={wBlink3} w={txt} t={'GTr'} b={''} />
+      <CreateTheDictLink
+        u={wBlink3}
+        w={sent}
+        t={'GTr'}
+        b={'<br />Lookup Sentence:'}
+      />
+      {/* CAPTION, */}
+      {/* 'Got it?' */}
+    </>
   );
 }
 /**
@@ -194,13 +248,31 @@ function run_overlib_test(
  * @param wid
  * @param oldstat
  */
-function make_overlib_link_change_status_alltest(wid: any, oldstat: any) {
-  let result = '';
-  for (let newstat = 1; newstat <= 5; newstat++)
-    result += make_overlib_link_change_status_test2(wid, oldstat, newstat);
-  result += make_overlib_link_change_status_test2(wid, oldstat, 99);
-  result += make_overlib_link_change_status_test2(wid, oldstat, 98);
-  return result;
+function MakeOverlibLinkChangeStatusAlltest(
+  wid: string,
+  oldstat: NumericalStrength
+) {
+  return (
+    <>
+      {[1, 2, 3, 4, 5].map((newstat) => (
+        <MakeOverlibLinkChangeStatusTest2
+          wid={wid}
+          oldstat={oldstat}
+          newstat={newstat as NumericalStrength}
+        />
+      ))}
+      <MakeOverlibLinkChangeStatusTest2
+        wid={wid}
+        oldstat={oldstat}
+        newstat={99}
+      />
+      <MakeOverlibLinkChangeStatusTest2
+        wid={wid}
+        oldstat={oldstat}
+        newstat={98}
+      />
+    </>
+  );
 }
 /**
  *
@@ -208,19 +280,27 @@ function make_overlib_link_change_status_alltest(wid: any, oldstat: any) {
  * @param oldstat
  * @param newstat
  */
-function make_overlib_link_change_status_test2(
-  wid: string,
-  oldstat: any,
-  newstat: string | number
-) {
+function MakeOverlibLinkChangeStatusTest2({
+  wid,
+  oldstat,
+  newstat,
+}: {
+  wid: string;
+  oldstat: NumericalStrength;
+  newstat: NumericalStrength;
+}): JSX.Element {
   if (oldstat == newstat) {
-    return ` <a href=\x22set_test_status?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
-      newstat
-    )}\x22>[◆]</span></a> `;
+    return (
+      <a href={`set_test_status?wid=${wid}&status=${newstat}`} target="ro">
+        <span title={getStatusName(newstat)}>[◆]</span>
+      </a>
+    );
   }
-  return ` <a href=\x22set_test_status?wid=${wid}&amp;status=${newstat}\x22 target=\x22ro\x22><span title=\x22${getStatusName(
-    newstat
-  )}\x22>[${getStatusAbbr(newstat)}]</span></a> `;
+  return (
+    <a href={`set_test_status?wid=${wid}&status=${newstat}`} target="ro">
+      <span title={getStatusName(newstat)}>[{getStatusAbbr(newstat)}]</span>
+    </a>
+  );
 }
 // todo STATUSES comes from her e
 // function get_wordstatus_radiooptions(v)
@@ -242,15 +322,19 @@ function make_overlib_link_change_status_test2(
  *
  * @param status
  */
-function getStatusName(status: string | number) {
-  return STATUSES[status] ? STATUSES[status].name : 'Unknown';
+function getStatusName(status: NumericalStrength) {
+  return StrengthMapNumericalKey[status]
+    ? StrengthMapNumericalKey[status].name
+    : 'Unknown';
 }
 /**
  *
  * @param status
  */
-function getStatusAbbr(status: string | number) {
-  return STATUSES[status] ? STATUSES[status].abbr : '?';
+function getStatusAbbr(status: NumericalStrength) {
+  return StrengthMapNumericalKey[status]
+    ? StrengthMapNumericalKey[status].abbr
+    : '?';
 }
 /**
  *
@@ -274,15 +358,15 @@ export function escape_html_chars(s: string) {
  * @param status
  */
 export function make_tooltip(
-  word: any,
+  word: string,
   trans: string,
-  roman: string,
-  status: any
+  roman: string | undefined,
+  status: NumericalStrength
 ) {
   const nl = '\x0d';
   let title = word;
-  // if (title != '' ) title = '▶ ' + title;
-  if (roman != '') {
+  if (title != '') title = '▶ ' + title;
+  if (roman != '' && roman !== undefined) {
     if (title != '') title += nl;
     title += `▶ ${roman}`;
   }

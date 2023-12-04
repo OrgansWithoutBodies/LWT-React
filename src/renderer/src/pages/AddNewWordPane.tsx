@@ -41,7 +41,7 @@ export function AddNewWordPane({
     formErrors,
     onSubmit,
   } = useFormInput({
-    entry: { WoText: word || '' },
+    entry: { WoText: word || '', WoLgID: langId },
     validator: validator,
   });
   // const setFormErrorLine =
@@ -59,10 +59,9 @@ export function AddNewWordPane({
     <>
       <form name="newword" className="validate">
         <input type="hidden" name="fromAnn" value="" />
-        <input
+        <WoInput
           type="hidden"
-          name="WoLgID"
-          ref={refMap.WoLgID}
+          entryKey="WoLgID"
           id="langfield"
           value={langId}
         />
@@ -100,7 +99,7 @@ export function AddNewWordPane({
                   errorName="New Term"
                   type="text"
                   entryKey="WoText"
-                  // id="wordfield"
+                  id="wordfield"
                   // value={word}
                   default
                   // defaultEntry={FormState}
@@ -223,7 +222,10 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Status:</td>
               <td className="td1">
-                <StatusRadioButtons WoStatus={termStatus} refMap={refMap} />
+                <StatusRadioButtons
+                  defaultStatus={termStatus}
+                  refMap={refMap}
+                />
               </td>
             </tr>
             <tr>
@@ -341,14 +343,16 @@ type SetBoolean = (value: boolean) => void;
  * This is only called from inside the reader, rly more of a pane than a component
  */
 
-export function StatusRadioButtons({
-  WoStatus,
+export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
+  defaultStatus = 1,
   refMap,
-}: Pick<Word, 'WoStatus'> & {
-  refMap: TRefMap<AddNewWordType>;
+}: {
+  defaultStatus?: Word['WoStatus'];
+  refMap: TRefMap<TEntryType>;
 }) {
   const setRef = (event: React.ChangeEvent) =>
     (refMap.WoStatus.current = event.target);
+  const currentStatus = refMap.WoStatus.current;
   return (
     <>
       <span className="status1" title="Learning">
@@ -358,7 +362,7 @@ export function StatusRadioButtons({
           name="WoStatus"
           value="1"
           onChange={setRef}
-          defaultChecked={WoStatus === 1}
+          checked={currentStatus === 1}
           ref={refMap.WoStatus}
         />
         1&nbsp;
@@ -369,7 +373,7 @@ export function StatusRadioButtons({
           type="radio"
           name="WoStatus"
           onChange={setRef}
-          defaultChecked={WoStatus === 2}
+          checked={currentStatus === 2}
           value="2"
         />
         2&nbsp;
@@ -379,7 +383,7 @@ export function StatusRadioButtons({
         <input
           type="radio"
           name="WoStatus"
-          defaultChecked={WoStatus === 3}
+          checked={currentStatus === 3}
           onChange={setRef}
           value="3"
         />
@@ -391,7 +395,7 @@ export function StatusRadioButtons({
           onChange={setRef}
           type="radio"
           name="WoStatus"
-          defaultChecked={WoStatus === 4}
+          checked={currentStatus === 4}
           value="4"
         />
         4&nbsp;
@@ -402,7 +406,7 @@ export function StatusRadioButtons({
           type="radio"
           onChange={setRef}
           name="WoStatus"
-          defaultChecked={WoStatus === 5}
+          checked={currentStatus === 5}
           value="5"
         />
         5&nbsp;
@@ -413,7 +417,7 @@ export function StatusRadioButtons({
           type="radio"
           onChange={setRef}
           name="WoStatus"
-          defaultChecked={WoStatus === 99}
+          checked={defaultStatus === 99}
           value="99"
         />
         WKn&nbsp;
@@ -425,7 +429,7 @@ export function StatusRadioButtons({
           type="radio"
           name="WoStatus"
           value="98"
-          defaultChecked={WoStatus === 98}
+          checked={defaultStatus === 98}
         />
         Ign&nbsp;
       </span>
@@ -435,7 +439,13 @@ export function StatusRadioButtons({
 
 /* TODO get sentences */
 
-function SentencesForWord({ word }: { word: Word }) {
+function SentencesForWord({
+  word,
+  jsctlname,
+}: {
+  word: Word;
+  jsctlname: { value: string };
+}) {
   return (
     <>
       <p>
@@ -451,7 +461,10 @@ function SentencesForWord({ word }: { word: Word }) {
         <span
           className="click"
           // TODO
-          onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"
+          onClick={() => {
+            `${jsctlname}.value=`;
+          }}
+          // onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"
         >
           <Icon src="tick-button" title="Choose" />
         </span>{' '}
@@ -484,7 +497,7 @@ export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
 // function get20Sentences(lang, wordlc, jsctlname, mode)
 // {
 // 	global tbpref;
-// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
+// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <Icon src="tick-button" title="Choose" /> to copy sentence into above term)</p>';
 // 	sql = 'SELECT DISTINCT SeID, SeText FROM ' . tbpref . 'sentences, ' . tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax(wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
 // 	res = do_mysqli_query(sql);
 // 	r .= '<p>';
@@ -492,7 +505,7 @@ export function do_ajax_show_sentences(lang: any, word: any, ctl: any): void {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		if (last != record['SeText']) {
 // 			sent = getSentence(record['SeID'], wordlc, mode);
-// 			r .= '<span class="click" onclick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . sent[0] . '<br />';
+// 			r .= '<span class="click" onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><Icon src="tick-button" title="Choose" /></span> &nbsp;' . sent[0] . '<br />';
 // 		}
 // 		last = record['SeText'];
 // 	}

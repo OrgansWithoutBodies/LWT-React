@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { TextsId, TextsValidator } from '../data/validators';
+import { Tags2Id, TagsId, TextsId, TextsValidator } from '../data/validators';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
@@ -15,9 +15,11 @@ import { Pager } from '../ui-kit/Pager';
 import { resetAll } from './EditArchivedTexts.component';
 import { pluralize } from './EditTags';
 import { GetTextssortSelectoptions } from './EditTextTags';
+import { getDirTag } from './Reader.component';
 import { SelectMediaPath } from './SelectMediaPath';
 import { resetDirty } from './Sorting';
 import { TagAndOr, TagDropDown } from './Terms.component';
+import { confirmDelete } from './utils';
 
 const TextMultiAction = {
   test: (selectedValues: Set<TextsId>) => {
@@ -46,7 +48,9 @@ const TextMultiAction = {
     console.log('arch');
   },
   del: (selectedValues: Set<TextsId>) => {
-    dataService.deleteMultipleTexts([...selectedValues]);
+    if (confirmDelete()) {
+      dataService.deleteMultipleTexts([...selectedValues]);
+    }
   },
 };
 
@@ -266,7 +270,11 @@ function LibraryRow({
         &nbsp;
         <span
           className="click"
-          onClick={() => dataService.deleteText(text.TxID)}
+          onClick={() => {
+            if (confirmDelete()) {
+              dataService.deleteText(text.TxID);
+            }
+          }}
         >
           <Icon src="minus-button" title="Delete" />
         </span>
@@ -297,13 +305,15 @@ function LibraryRow({
 export function Library({
   currentPage,
   query = null,
-  filterTag1 = null,
-  filterTag2 = null,
+  tag2 = null,
+  tag12 = 0,
+  tag1 = null,
 }: {
   currentPage: number;
   query: string | null;
-  filterTag1: number | null;
-  filterTag2: number | null;
+  tag2: number | null;
+  tag1: number | null;
+  tag12: 0 | 1;
 }) {
   const [{ textDetails, activeLanguage, texttags, tags2, settings }] = useData([
     'textDetails',
@@ -312,10 +322,14 @@ export function Library({
     'tags2',
     'settings',
   ]);
-  const pageSize = settings['set-texts-per-page'] || -1;
-
+  const pageSize = settings['set-texts-per-page'] || 1;
+  const filteredTextDetails = tags2;
+  // TODO
+  // const filteredTextDetails = tags2.filter(filterTags( tag1, tag2, tag12))
+  // .map((val)=>texttags.filter((textTag)=>textTag.TtTxID===) val.);
+  // TODO useFilter
   const { numPages, dataOnPage } = usePager(
-    textDetails || [],
+    filteredTextDetails || [],
     currentPage,
     pageSize
   );
@@ -422,23 +436,6 @@ export function Library({
             >
               Tag #1:
               <TagDropDown tags={tags2} tagKey="tag1" />
-              {/* {texttags
-                  .filter((tag) => {
-                    console.log(tag);
-                    return true;
-                  })
-                  .map((tag) => {
-                    return (
-                      <option value={tag.TtTxID}>
-                        {' '}
-                        {
-                          tags2.find(({ T2ID }) => {
-                            return tag.TtT2ID === T2ID;
-                          })?.T2Text
-                        }
-                      </option>
-                    );
-                  })} */}
             </td>
             <TagAndOr
               onChange={({ target: { value } }) => {
@@ -465,7 +462,7 @@ export function Library({
               <select
                 name="sort"
                 // TODO
-                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts?page=1&amp;sort=' + val;}"
+                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts?page=1&sort=' + val;}"
               >
                 <GetTextssortSelectoptions />
               </select>
@@ -499,11 +496,47 @@ export function Library({
   );
 }
 
+export function filterTags<TTag extends TagsId | Tags2Id>(
+  tagID: TTag,
+  tag1: TTag | null,
+  tag2: TTag | null,
+  tag12: 1 | 2
+) {
+  const tag1Specified = tag1 !== null;
+  const tag2Specified = tag2 !== null;
+  const noTagsSpecified = !tag1Specified && !tag2Specified;
+  if (noTagsSpecified) {
+    return true;
+  }
+
+  console.log('TEST123-TAGS SPECIFIED');
+  const onlyUseOneTag =
+    (!tag1Specified && tag2Specified) || (!tag2Specified && tag1Specified);
+
+  const isTag1Equal = tagID === tag1;
+  const isTag2Equal = tagID === tag2;
+  if (onlyUseOneTag) {
+    return tag1Specified ? isTag1Equal : isTag2Equal;
+  }
+  console.log('TEST123-TAGS MULTIPLE');
+
+  const isUsingOr = tag12 === 1;
+  return isUsingOr ? isTag1Equal || isTag2Equal : isTag1Equal && isTag2Equal;
+}
+
 export function EditText({ chgID }: { chgID: TextsId }) {
-  const [{ texts, tags2 }] = useData(['texts', 'tags2']);
+  const [{ texts, tags2, languages }] = useData([
+    'texts',
+    'tags2',
+    'languages',
+  ]);
   const editingText = texts.find(({ TxID }) => TxID === chgID);
   if (!editingText) {
     throw new Error('Invalid change ID');
+  }
+  const language = languages.find(({ LgID }) => LgID === editingText.TxLgID);
+  if (!language) {
+    throw new Error('Invalid text language ID');
   }
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
@@ -559,25 +592,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
             </td>
             <td className="td1">
               <textarea
-                // TODO
-
-                // function getScriptDirectionTag(lid)
-                // {
-                // 	global tbpref;
-                // 	if (!isset(lid))
-                // 		return '';
-                // 	if (trim(lid) == '')
-                // 		return '';
-                // 	if (!is_numeric(lid))
-                // 		return '';
-                // 	r = get_first_value("select LgRightToLeft as value from " . tbpref . "languages where LgID='" . lid . "'");
-                // 	if (isset(r)) {
-                // 		if (r)
-                // 			return ' dir="rtl" ';
-                // 	}
-                // 	return '';
-                // }
-                //  <?php echo getScriptDirectionTag(record['TxLgID']); ?>
+                {...getDirTag(language)}
                 name="TxText"
                 className="notempty checkbytes checkoutsidebmp"
                 maxLength={65000}
@@ -600,7 +615,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                   <input
                     type="button"
                     value="Print/Edit..."
-                    onclick="location.href=\'print_impr_text?text=' . $_REQUEST['chg'] . '\';"
+                    onClick={() => navigator(`/print_impr_text?text=${chgID}`)}
                   />
                 </>
               ) : (
@@ -642,7 +657,6 @@ export function EditText({ chgID }: { chgID: TextsId }) {
                 size={60}
               />
               <span id="mediaselect">
-                {/* TODO */}
                 <SelectMediaPath f="TxAudioURI" />
               </span>
             </td>

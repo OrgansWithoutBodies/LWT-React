@@ -32,7 +32,7 @@ export function InfoExportTemplate() {
         be exported.
       </p>
 
-      <table className="tab3" cellSpacing="0" cellPadding="5">
+      <table className="tab3" cellSpacing={0} cellPadding={5}>
         <tr className="tr1">
           <th className="th1">Placeholders</th>
           <th className="th1">Placeholders replaced by ...</th>
@@ -132,8 +132,7 @@ export function InfoExportTemplate() {
           <th className="th1">
             HTML Text. HTML special characters are escaped:
             <br />
-            &lt; = &amp;lt; / &gt; = &amp;gt; / &amp; = &amp;amp; / &quot; =
-            &amp;quot;
+            &lt; = &lt; / &gt; = &gt; / & = &amp; / &quot; = &quot;
           </th>
         </tr>
 

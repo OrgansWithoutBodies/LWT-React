@@ -7,6 +7,7 @@ import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { do_ajax_update_media_select } from './SelectMediaPath';
 import { textPrevalidateMap } from './preValidateMaps';
 
 export function ImportShortText(): JSX.Element {
@@ -140,11 +141,7 @@ export function ImportShortText(): JSX.Element {
                   or choose a file in ".../lwt/media" (only mp3, ogg, wav files
                   shown): <br />
                   [Directory ".../lwt/media" does not yet exist.] &nbsp; &nbsp;
-                  <span
-                    className="click"
-                    // TODO
-                    onClick="do_ajax_update_media_select();"
-                  >
+                  <span className="click" onClick={do_ajax_update_media_select}>
                     <Icon
                       src="arrow-circle-135"
                       title="Refresh Media Selection"
@@ -218,9 +215,7 @@ export function ImportShortText(): JSX.Element {
       </p>
 
       <ul
-        className="
-        ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all
-      "
+        className="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all"
         id="ui-id-1"
         tabIndex={0}
       />

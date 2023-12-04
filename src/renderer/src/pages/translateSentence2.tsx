@@ -36,30 +36,26 @@ export function translateSentence2(
     }
   }
 }
-// function stripTheSlashesIfNeeded(s) {
-//   if (function_exists("get_magic_quotes_gpc")) {
-//     if (get_magic_quotes_gpc())
-//       return stripslashes(s);
-
-//     else
-//       return s;
-//   } else {
-//     return s;
-//   }
-// }
-// function prepare_textdata(s) {
-//   return stripTheSlashesIfNeeded(s).replace("\r\n", "\n", (s));
-// }
-// function convert_string_to_sqlsyntax(data: string) {
-//   const result = "NULL";
-//   data = trim(prepare_textdata(data));
-//   if (data != "")
-//     result = "'".mysqli_real_escape_string(GLOBALS['DBCONNECTION'], data).; "'";
-//   return result;
-// }
-// function prepare_textdata_js(s: string) {
-//   s = convert_string_to_sqlsyntax(s);
-//   if (s == "NULL")
-//     return "''";
-//   return s.replace("''", "\\'");
-// }
+function stripTheSlashesIfNeeded(s) {
+  if (function_exists('get_magic_quotes_gpc')) {
+    if (get_magic_quotes_gpc()) return stripslashes(s);
+    else return s;
+  } else {
+    return s;
+  }
+}
+function prepare_textdata(s) {
+  return stripTheSlashesIfNeeded(s).replace('\r\n', '\n', s);
+}
+function convert_string_to_sqlsyntax(data: string) {
+  const result = 'NULL';
+  data = prepare_textdata(data).trim();
+  if (data != '')
+    // result = "'".mysqli_real_escape_string(GLOBALS['DBCONNECTION'], data).; "'";
+    return result;
+}
+export function prepare_textdata_js(s: string) {
+  s = convert_string_to_sqlsyntax(s);
+  if (s == 'NULL') return "''";
+  return s.replace("''", "\\'");
+}

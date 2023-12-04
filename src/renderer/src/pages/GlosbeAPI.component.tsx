@@ -22,7 +22,7 @@ export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
 
 // titletext = '<a href="http://glosbe.com/' . from . '/' . dest . '/' . phrase . '">Glosbe Dictionary (' . tohtml(from) . "-" . tohtml(dest) . "):  &nbsp; <span class="red2">" . tohtml(phrase) . "</span></a>";
 // echo '<h3>' . titletext . '</h3>';
-// echo '<p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy word(s) into above term)<br />&nbsp;</p>';
+// echo '<p>(Click on <Icon src="tick-button" title="Choose" /> to copy word(s) into above term)<br />&nbsp;</p>';
 
 export function GlosbeAPI({
   from,
@@ -89,12 +89,21 @@ export function GlosbeAPI({
 			} else if (isset(value['meanings'])) {
 				if (isset(value['meanings'][0]['text']))
 					word = "(" . value['meanings'][0]['text'] . ")";
-			}
-			if (word != '') {
-				word = trim(strip_tags(word));
-				echo '<span class="click" onclick="addTranslation(' . prepare_textdata_js(word) . ');"><img src="icn/tick-button.png" title="Copy" alt="Copy" /> &nbsp; ' . word . '</span><br />' . "\n";
-				i++;
-			}} */}
+			} */}
+          {word != '' && (
+            <>
+              <span
+                className="click"
+                onClick={() =>
+                  "addTranslation(' . prepare_textdata_js(word) . ');"
+                }
+              >
+                <Icon src="tick-button" title="Copy" /> &nbsp;{' '}
+                {trim(strip_tags(word))}
+              </span>
+              <br />
+            </>
+          )}
           &nbsp;
           {/* TODO i numtranslations */}
           <br />' . i . ' translation' . (i==1 ? '' : 's') . ' retrieved via{' '}
@@ -112,7 +121,7 @@ export function GlosbeAPI({
           Unhappy?
           <br />
           Change term:
-          <input type="text" name="phrase" maxlength="250" size="15" value="" />
+          <input type="text" name="phrase" maxLength={250} size={15} value="" />
           <input type="hidden" name="from" value="" />
           <input type="hidden" name="dest" value="" />
           <input type="submit" value="Translate via Glosbe" />
@@ -169,7 +178,7 @@ function addTranslation(s) {
 // 			}
 // 			if (word != '') {
 // 				word = trim(strip_tags(word));
-// 				echo '<span class="click" onclick="addTranslation(' . prepare_textdata_js(word) . ');"><img src="icn/tick-button.png" title="Copy" alt="Copy" /> &nbsp; ' . word . '</span><br />' . "\n";
+// 				echo '<span class="click" onClick="addTranslation(' . prepare_textdata_js(word) . ');"><Icon src="tick-button" title="Copy";
 // 				i++;
 // 			}
 // 		}
@@ -219,7 +228,7 @@ function addTranslation(s) {
 // 						}
 // 						if (word != '') {
 // 							word = trim(strip_tags(word));
-// 							echo '<span class="click" onclick="addTranslation(' . prepare_textdata_js(word) . ');"><img src="icn/tick-button.png" title="Copy" alt="Copy" /> &nbsp; ' . word . '</span><br />' . "\n";
+// 							echo '<span class="click" onClick="addTranslation(' . prepare_textdata_js(word) . ');"><Icon src="tick-button" title="Copy";
 // 							i++;
 // 						}
 // 					}
@@ -250,7 +259,7 @@ function addTranslation(s) {
 // }
 
 // echo '&nbsp;<hr />&nbsp;<form action="glosbe_api" method="get">Unhappy?<br/>Change term:
-// <input type="text" name="phrase" maxlength="250" size="15" value="' . tohtml(phrase) . '">
+// <input type="text" name="phrase" maxlength={250} size={15} value="' . tohtml(phrase) . '">
 // <input type="hidden" name="from" value="' . tohtml(from) . '">
 // <input type="hidden" name="dest" value="' . tohtml(destorig) . '">
 // <input type="submit" value="Translate via Glosbe">

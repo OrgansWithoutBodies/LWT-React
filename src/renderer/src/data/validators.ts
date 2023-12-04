@@ -54,7 +54,16 @@ export const StringInListValidator = <TString extends Readonly<string[]>>(
   );
 const BooleanNumberValidator = NumberInListValidator([0, 1] as const);
 
+// TODO refine this?
 const TimestampValidator = () => ss.number();
+const TimestampStringValidator = ss.refine(
+  ss.string(),
+  'timestamp-string-yyyy-mm-dd hh:mm:ss',
+  (val) =>
+    new RegExp(
+      '[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]'
+    ).test(val)
+);
 // TODO valid reference key id
 const archivedtextsId = brandedNumber('archivedtextsId' as const);
 const archtexttagsId = brandedNumber('archtexttagsId' as const);
@@ -319,12 +328,12 @@ export const WordsValidator = ss.object({
   WoSentence: ss.optional(ss.string()),
   // WoCreated: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   // KEY `WoCreated` (`WoCreated`),
-  WoCreated: TimestampValidator(),
+  WoCreated: TimestampStringValidator,
   // TODO make into unix timestamp ms
   // WoCreated: TimestampValidator(),
   // WoStatusChanged: timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   // KEY `WoStatusChanged` (`WoStatusChanged`),
-  WoStatusChanged: TimestampValidator(),
+  WoStatusChanged: TimestampStringValidator,
   // WoTodayScore: double NOT NULL DEFAULT '0',
   // KEY `WoTodayScore` (`WoTodayScore`),
   WoTodayScore: ss.number(),
@@ -337,6 +346,12 @@ export const WordsValidator = ss.object({
   // UNIQUE KEY `WoLgIDTextLC` (`WoLgID`,`WoTextLC`),
   ...getValidatorPluginsFor(Persistable.words),
 });
+export const EditWordsValidator = ss.omit(WordsValidator, [
+  'WoCreated',
+  'WoTodayScore',
+  'WoTomorrowScore',
+  'WoRandom',
+]);
 export const WordsValidatorNoId = ss.omit(WordsValidator, ['WoID']);
 
 export const WordTagsValidator = ss.object({

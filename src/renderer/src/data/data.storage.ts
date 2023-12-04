@@ -50,7 +50,6 @@ export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,
     parsedTexts: [],
-    wordtags: [],
     notificationMessage: null,
   };
 }

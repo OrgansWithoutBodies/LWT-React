@@ -420,8 +420,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.77861288634931",
-      "WoLgIDTextLC": 14
+      "WoRandom": "0.77861288634931"
     },
     {
       "WoID": 2,
@@ -436,8 +435,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.15276275961917152",
-      "WoLgIDTextLC": 24
+      "WoRandom": "0.15276275961917152"
     },
     {
       "WoID": 3,
@@ -452,8 +450,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.42797516978157235",
-      "WoLgIDTextLC": 34
+      "WoRandom": "0.42797516978157235"
     },
     {
       "WoID": 4,
@@ -468,8 +465,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6815876007839922",
-      "WoLgIDTextLC": 44
+      "WoRandom": "0.6815876007839922"
     },
     {
       "WoID": 170,
@@ -484,8 +480,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5153064034090437",
-      "WoLgIDTextLC": 1704
+      "WoRandom": "0.5153064034090437"
     },
     {
       "WoID": 6,
@@ -500,8 +495,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.1240125253088889",
-      "WoLgIDTextLC": 64
+      "WoRandom": "0.1240125253088889"
     },
     {
       "WoID": 7,
@@ -516,8 +510,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5752998549261129",
-      "WoLgIDTextLC": 74
+      "WoRandom": "0.5752998549261129"
     },
     {
       "WoID": 8,
@@ -532,8 +525,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.5044617294375429",
-      "WoLgIDTextLC": 84
+      "WoRandom": "0.5044617294375429"
     },
     {
       "WoID": 9,
@@ -548,8 +540,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.7964091131430204",
-      "WoLgIDTextLC": 94
+      "WoRandom": "0.7964091131430204"
     },
     {
       "WoID": 10,
@@ -564,8 +555,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.4686604081361186",
-      "WoLgIDTextLC": 104
+      "WoRandom": "0.4686604081361186"
     },
     {
       "WoID": 11,
@@ -580,8 +570,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9540747319851767",
-      "WoLgIDTextLC": 114
+      "WoRandom": "0.9540747319851767"
     },
     {
       "WoID": 12,
@@ -596,8 +585,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.36439246625117255",
-      "WoLgIDTextLC": 124
+      "WoRandom": "0.36439246625117255"
     },
     {
       "WoID": 13,
@@ -612,8 +600,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.9597381660339778",
-      "WoLgIDTextLC": 134
+      "WoRandom": "0.9597381660339778"
     },
     {
       "WoID": 14,
@@ -628,8 +615,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.7055134621500163",
-      "WoLgIDTextLC": 144
+      "WoRandom": "0.7055134621500163"
     },
     {
       "WoID": 15,
@@ -644,8 +630,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6483528433817931",
-      "WoLgIDTextLC": 154
+      "WoRandom": "0.6483528433817931"
     },
     {
       "WoID": 16,
@@ -660,8 +645,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.12522386119256157",
-      "WoLgIDTextLC": 164
+      "WoRandom": "0.12522386119256157"
     },
     {
       "WoID": 17,
@@ -676,8 +660,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6810608065510735",
-      "WoLgIDTextLC": 174
+      "WoRandom": "0.6810608065510735"
     },
     {
       "WoID": 18,
@@ -692,8 +675,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.029632479911327808",
-      "WoLgIDTextLC": 184
+      "WoRandom": "0.029632479911327808"
     },
     {
       "WoID": 19,
@@ -708,8 +690,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10498001063706354",
-      "WoLgIDTextLC": 194
+      "WoRandom": "0.10498001063706354"
     },
     {
       "WoID": 20,
@@ -724,8 +705,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4360026441849793",
-      "WoLgIDTextLC": 204
+      "WoRandom": "0.4360026441849793"
     },
     {
       "WoID": 21,
@@ -740,8 +720,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.8650732197473507",
-      "WoLgIDTextLC": 214
+      "WoRandom": "0.8650732197473507"
     },
     {
       "WoID": 22,
@@ -756,8 +735,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.017358196915460936",
-      "WoLgIDTextLC": 224
+      "WoRandom": "0.017358196915460936"
     },
     {
       "WoID": 23,
@@ -772,8 +750,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4915713560688974",
-      "WoLgIDTextLC": 234
+      "WoRandom": "0.4915713560688974"
     },
     {
       "WoID": 24,
@@ -788,8 +765,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.40578222033174915",
-      "WoLgIDTextLC": 244
+      "WoRandom": "0.40578222033174915"
     },
     {
       "WoID": 25,
@@ -804,8 +780,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5541970641856986",
-      "WoLgIDTextLC": 254
+      "WoRandom": "0.5541970641856986"
     },
     {
       "WoID": 26,
@@ -820,8 +795,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.5536386906668904",
-      "WoLgIDTextLC": 264
+      "WoRandom": "0.5536386906668904"
     },
     {
       "WoID": 27,
@@ -836,8 +810,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10560229151100134",
-      "WoLgIDTextLC": 274
+      "WoRandom": "0.10560229151100134"
     },
     {
       "WoID": 28,
@@ -852,8 +825,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.8670954162879805",
-      "WoLgIDTextLC": 284
+      "WoRandom": "0.8670954162879805"
     },
     {
       "WoID": 29,
@@ -868,8 +840,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.01867023764054313",
-      "WoLgIDTextLC": 294
+      "WoRandom": "0.01867023764054313"
     },
     {
       "WoID": 30,
@@ -884,8 +855,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.49206497007241934",
-      "WoLgIDTextLC": 304
+      "WoRandom": "0.49206497007241934"
     },
     {
       "WoID": 31,
@@ -900,8 +870,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.40431416817411236",
-      "WoLgIDTextLC": 314
+      "WoRandom": "0.40431416817411236"
     },
     {
       "WoID": 32,
@@ -916,8 +885,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5453759613869488",
-      "WoLgIDTextLC": 324
+      "WoRandom": "0.5453759613869488"
     },
     {
       "WoID": 33,
@@ -932,8 +900,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5139373331460518",
-      "WoLgIDTextLC": 334
+      "WoRandom": "0.5139373331460518"
     },
     {
       "WoID": 34,
@@ -948,8 +915,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9335588123030577",
-      "WoLgIDTextLC": 344
+      "WoRandom": "0.9335588123030577"
     },
     {
       "WoID": 35,
@@ -964,8 +930,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12598209281077805",
-      "WoLgIDTextLC": 354
+      "WoRandom": "0.12598209281077805"
     },
     {
       "WoID": 36,
@@ -980,8 +945,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.829234057878362",
-      "WoLgIDTextLC": 364
+      "WoRandom": "0.829234057878362"
     },
     {
       "WoID": 37,
@@ -996,8 +960,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7682240416931212",
-      "WoLgIDTextLC": 374
+      "WoRandom": "0.7682240416931212"
     },
     {
       "WoID": 38,
@@ -1012,8 +975,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.35341806556416494",
-      "WoLgIDTextLC": 384
+      "WoRandom": "0.35341806556416494"
     },
     {
       "WoID": 39,
@@ -1028,8 +990,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4624182334751061",
-      "WoLgIDTextLC": 394
+      "WoRandom": "0.4624182334751061"
     },
     {
       "WoID": 40,
@@ -1044,8 +1005,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2518370014166804",
-      "WoLgIDTextLC": 404
+      "WoRandom": "0.2518370014166804"
     },
     {
       "WoID": 41,
@@ -1060,8 +1020,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8719303373917289",
-      "WoLgIDTextLC": 414
+      "WoRandom": "0.8719303373917289"
     },
     {
       "WoID": 42,
@@ -1076,8 +1035,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6041407134422481",
-      "WoLgIDTextLC": 424
+      "WoRandom": "0.6041407134422481"
     },
     {
       "WoID": 43,
@@ -1092,8 +1050,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4049125857696986",
-      "WoLgIDTextLC": 434
+      "WoRandom": "0.4049125857696986"
     },
     {
       "WoID": 44,
@@ -1108,8 +1065,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.21214081925539377",
-      "WoLgIDTextLC": 444
+      "WoRandom": "0.21214081925539377"
     },
     {
       "WoID": 45,
@@ -1124,8 +1080,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.8459663697015181",
-      "WoLgIDTextLC": 454
+      "WoRandom": "0.8459663697015181"
     },
     {
       "WoID": 46,
@@ -1140,8 +1095,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5934094214750542",
-      "WoLgIDTextLC": 464
+      "WoRandom": "0.5934094214750542"
     },
     {
       "WoID": 47,
@@ -1156,8 +1110,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4291480290043615",
-      "WoLgIDTextLC": 474
+      "WoRandom": "0.4291480290043615"
     },
     {
       "WoID": 48,
@@ -1172,8 +1125,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.36551191133029004",
-      "WoLgIDTextLC": 484
+      "WoRandom": "0.36551191133029004"
     },
     {
       "WoID": 49,
@@ -1188,8 +1140,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5401155003720107",
-      "WoLgIDTextLC": 494
+      "WoRandom": "0.5401155003720107"
     },
     {
       "WoID": 50,
@@ -1204,8 +1155,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6040417986028286",
-      "WoLgIDTextLC": 504
+      "WoRandom": "0.6040417986028286"
     },
     {
       "WoID": 51,
@@ -1220,8 +1170,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3998625226317556",
-      "WoLgIDTextLC": 514
+      "WoRandom": "0.3998625226317556"
     },
     {
       "WoID": 52,
@@ -1236,8 +1185,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.18718724808393722",
-      "WoLgIDTextLC": 524
+      "WoRandom": "0.18718724808393722"
     },
     {
       "WoID": 53,
@@ -1252,8 +1200,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7363487032580643",
-      "WoLgIDTextLC": 534
+      "WoRandom": "0.7363487032580643"
     },
     {
       "WoID": 103,
@@ -1268,8 +1215,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.5647589448511218",
-      "WoLgIDTextLC": 1034
+      "WoRandom": "0.5647589448511218"
     },
     {
       "WoID": 54,
@@ -1284,8 +1230,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.12018180277215484",
-      "WoLgIDTextLC": 544
+      "WoRandom": "0.12018180277215484"
     },
     {
       "WoID": 55,
@@ -1300,8 +1245,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.3918629348202263",
-      "WoLgIDTextLC": 554
+      "WoRandom": "0.3918629348202263"
     },
     {
       "WoID": 56,
@@ -1316,8 +1260,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5987692965183121",
-      "WoLgIDTextLC": 564
+      "WoRandom": "0.5987692965183121"
     },
     {
       "WoID": 57,
@@ -1332,8 +1275,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.8182577088645265",
-      "WoLgIDTextLC": 574
+      "WoRandom": "0.8182577088645265"
     },
     {
       "WoID": 58,
@@ -1348,8 +1290,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.29498068550134143",
-      "WoLgIDTextLC": 584
+      "WoRandom": "0.29498068550134143"
     },
     {
       "WoID": 59,
@@ -1364,8 +1305,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.02013033164677241",
-      "WoLgIDTextLC": 594
+      "WoRandom": "0.02013033164677241"
     },
     {
       "WoID": 60,
@@ -1380,8 +1320,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.2157096324634828",
-      "WoLgIDTextLC": 604
+      "WoRandom": "0.2157096324634828"
     },
     {
       "WoID": 61,
@@ -1396,8 +1335,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.01815719811074175",
-      "WoLgIDTextLC": 614
+      "WoRandom": "0.01815719811074175"
     },
     {
       "WoID": 62,
@@ -1412,8 +1350,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4436571238969053",
-      "WoLgIDTextLC": 624
+      "WoRandom": "0.4436571238969053"
     },
     {
       "WoID": 63,
@@ -1428,8 +1365,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.16381405588594644",
-      "WoLgIDTextLC": 634
+      "WoRandom": "0.16381405588594644"
     },
     {
       "WoID": 64,
@@ -1444,8 +1380,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4880989384726611",
-      "WoLgIDTextLC": 644
+      "WoRandom": "0.4880989384726611"
     },
     {
       "WoID": 65,
@@ -1460,8 +1395,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9490525554391114",
-      "WoLgIDTextLC": 654
+      "WoRandom": "0.9490525554391114"
     },
     {
       "WoID": 66,
@@ -1476,8 +1410,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.2809659925112184",
-      "WoLgIDTextLC": 664
+      "WoRandom": "0.2809659925112184"
     },
     {
       "WoID": 104,
@@ -1492,8 +1425,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.12560323916897478",
-      "WoLgIDTextLC": 1044
+      "WoRandom": "0.12560323916897478"
     },
     {
       "WoID": 68,
@@ -1508,8 +1440,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.557672326972403",
-      "WoLgIDTextLC": 684
+      "WoRandom": "0.557672326972403"
     },
     {
       "WoID": 69,
@@ -1524,8 +1455,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9454636880620044",
-      "WoLgIDTextLC": 694
+      "WoRandom": "0.9454636880620044"
     },
     {
       "WoID": 70,
@@ -1540,8 +1470,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.054301490126458456",
-      "WoLgIDTextLC": 704
+      "WoRandom": "0.054301490126458456"
     },
     {
       "WoID": 71,
@@ -1556,8 +1485,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4351164171799239",
-      "WoLgIDTextLC": 714
+      "WoRandom": "0.4351164171799239"
     },
     {
       "WoID": 72,
@@ -1572,8 +1500,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.012677646253889098",
-      "WoLgIDTextLC": 724
+      "WoRandom": "0.012677646253889098"
     },
     {
       "WoID": 73,
@@ -1588,8 +1515,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7580390104633188",
-      "WoLgIDTextLC": 734
+      "WoRandom": "0.7580390104633188"
     },
     {
       "WoID": 74,
@@ -1604,8 +1530,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7521621442885716",
-      "WoLgIDTextLC": 744
+      "WoRandom": "0.7521621442885716"
     },
     {
       "WoID": 75,
@@ -1620,8 +1545,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.48669372078654705",
-      "WoLgIDTextLC": 754
+      "WoRandom": "0.48669372078654705"
     },
     {
       "WoID": 108,
@@ -1636,8 +1560,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4154293177793075",
-      "WoLgIDTextLC": 1084
+      "WoRandom": "0.4154293177793075"
     },
     {
       "WoID": 77,
@@ -1652,8 +1575,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.17698220180066507",
-      "WoLgIDTextLC": 774
+      "WoRandom": "0.17698220180066507"
     },
     {
       "WoID": 78,
@@ -1668,8 +1590,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4248298773773293",
-      "WoLgIDTextLC": 784
+      "WoRandom": "0.4248298773773293"
     },
     {
       "WoID": 79,
@@ -1684,8 +1605,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5932028122182962",
-      "WoLgIDTextLC": 794
+      "WoRandom": "0.5932028122182962"
     },
     {
       "WoID": 109,
@@ -1700,8 +1620,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.10249195536830645",
-      "WoLgIDTextLC": 1094
+      "WoRandom": "0.10249195536830645"
     },
     {
       "WoID": 83,
@@ -1716,8 +1635,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.691524459693138",
-      "WoLgIDTextLC": 834
+      "WoRandom": "0.691524459693138"
     },
     {
       "WoID": 85,
@@ -1732,8 +1650,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6780138925444464",
-      "WoLgIDTextLC": 854
+      "WoRandom": "0.6780138925444464"
     },
     {
       "WoID": 86,
@@ -1748,8 +1665,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.3154961143764631",
-      "WoLgIDTextLC": 864
+      "WoRandom": "0.3154961143764631"
     },
     {
       "WoID": 87,
@@ -1764,8 +1680,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5434389249826213",
-      "WoLgIDTextLC": 874
+      "WoRandom": "0.5434389249826213"
     },
     {
       "WoID": 88,
@@ -1780,8 +1695,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.770706312517362",
-      "WoLgIDTextLC": 884
+      "WoRandom": "0.770706312517362"
     },
     {
       "WoID": 89,
@@ -1796,24 +1710,22 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.22321481837259122",
-      "WoLgIDTextLC": 894
+      "WoRandom": "0.22321481837259122"
     },
     {
-      "WoID": "105', '5', '語', '語', '4', 'language / speech / word', 'kun: かた.らう、 かた.る / on: ゴ', '日本{語}を話しますか。",
+      "WoID": 105,
       "WoLgID": 5,
-      "WoText": "2020-10-03 18:08:22",
-      "WoTextLC": "46.38244308231173",
-      "WoStatus": "44.63727259730512",
-      "WoTranslation": "0.9337393920251535",
-      "WoRomanization": "$7",
-      "WoSentence": "$8",
-      "WoCreated": "$9",
-      "WoStatusChanged": "$9",
-      "WoTodayScore": "105', '5', '語', '語', '4', 'language / speech / word', 'kun: かた.らう、 かた.る / on: ゴ', '日本{語}を話しますか。'0",
-      "WoTomorrowScore": "105', '5', '語', '語', '4', 'language / speech / word', 'kun: かた.らう、 かた.る / on: ゴ', '日本{語}を話しますか。'1",
-      "WoRandom": "105', '5', '語', '語', '4', 'language / speech / word', 'kun: かた.らう、 かた.る / on: ゴ', '日本{語}を話しますか。'2",
-      "WoLgIDTextLC": "105', '5', '語', '語', '4', 'language / speech / word', 'kun: かた.らう、 かた.る / on: ゴ', '日本{語}を話しますか。'3"
+      "WoText": "語",
+      "WoTextLC": "語",
+      "WoStatus": "4",
+      "WoTranslation": "language / speech / word",
+      "WoRomanization": "kun: かた.らう、 かた.る / on: ゴ",
+      "WoSentence": "日本{語}を話しますか。",
+      "WoCreated": "2011-08-30 12:00:00",
+      "WoStatusChanged": "2020-10-03 18:08:22",
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.9337393920251535
     },
     {
       "WoID": 106,
@@ -1821,15 +1733,14 @@
       "WoText": "話",
       "WoTextLC": "話",
       "WoStatus": 3,
-      "WoTranslation": "tale / talk",
+      "WoTranslation": "tallllllllllle / talk",
       "WoRomanization": "kun: はなし、 はな.す / on: ワ",
       "WoSentence": "日本語を{話}しますか。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.2918872733524882",
-      "WoLgIDTextLC": 1064
+      "WoRandom": "0.2918872733524882"
     },
     {
       "WoID": 92,
@@ -1844,8 +1755,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8039551850445151",
-      "WoLgIDTextLC": 924
+      "WoRandom": "0.8039551850445151"
     },
     {
       "WoID": 93,
@@ -1860,8 +1770,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3501315008384469",
-      "WoLgIDTextLC": 934
+      "WoRandom": "0.3501315008384469"
     },
     {
       "WoID": 94,
@@ -1876,8 +1785,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3387919797923341",
-      "WoLgIDTextLC": 944
+      "WoRandom": "0.3387919797923341"
     },
     {
       "WoID": 96,
@@ -1892,8 +1800,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.6435654271799749",
-      "WoLgIDTextLC": 964
+      "WoRandom": "0.6435654271799749"
     },
     {
       "WoID": 97,
@@ -1908,8 +1815,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.20145122725651715",
-      "WoLgIDTextLC": 974
+      "WoRandom": "0.20145122725651715"
     },
     {
       "WoID": 98,
@@ -1924,8 +1830,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.07655988547630597",
-      "WoLgIDTextLC": 984
+      "WoRandom": "0.07655988547630597"
     },
     {
       "WoID": 99,
@@ -1940,8 +1845,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7784457763456234",
-      "WoLgIDTextLC": 994
+      "WoRandom": "0.7784457763456234"
     },
     {
       "WoID": 100,
@@ -1956,8 +1860,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.6625492560328443",
-      "WoLgIDTextLC": 1004
+      "WoRandom": "0.6625492560328443"
     },
     {
       "WoID": 101,
@@ -1972,8 +1875,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9774089818609962",
-      "WoLgIDTextLC": 1014
+      "WoRandom": "0.9774089818609962"
     },
     {
       "WoID": 102,
@@ -1988,8 +1890,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.899397171940093",
-      "WoLgIDTextLC": 1024
+      "WoRandom": "0.899397171940093"
     },
     {
       "WoID": 107,
@@ -2004,8 +1905,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6582182214206255",
-      "WoLgIDTextLC": 1074
+      "WoRandom": "0.6582182214206255"
     },
     {
       "WoID": 110,
@@ -2020,8 +1920,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2661718542372546",
-      "WoLgIDTextLC": 1104
+      "WoRandom": "0.2661718542372546"
     },
     {
       "WoID": 111,
@@ -2036,8 +1935,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.023383435814998518",
-      "WoLgIDTextLC": 1114
+      "WoRandom": "0.023383435814998518"
     },
     {
       "WoID": 112,
@@ -2052,8 +1950,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.31840164709687385",
-      "WoLgIDTextLC": 1124
+      "WoRandom": "0.31840164709687385"
     },
     {
       "WoID": 113,
@@ -2068,8 +1965,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5218579587730188",
-      "WoLgIDTextLC": 1134
+      "WoRandom": "0.5218579587730188"
     },
     {
       "WoID": 114,
@@ -2084,8 +1980,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6540848833081172",
-      "WoLgIDTextLC": 1144
+      "WoRandom": "0.6540848833081172"
     },
     {
       "WoID": 115,
@@ -2100,8 +1995,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7048505709551746",
-      "WoLgIDTextLC": 1154
+      "WoRandom": "0.7048505709551746"
     },
     {
       "WoID": 116,
@@ -2116,8 +2010,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5619982355851664",
-      "WoLgIDTextLC": 1164
+      "WoRandom": "0.5619982355851664"
     },
     {
       "WoID": 117,
@@ -2132,8 +2025,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.695439495793953",
-      "WoLgIDTextLC": 1174
+      "WoRandom": "0.695439495793953"
     },
     {
       "WoID": 118,
@@ -2148,8 +2040,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7912028029479112",
-      "WoLgIDTextLC": 1184
+      "WoRandom": "0.7912028029479112"
     },
     {
       "WoID": 119,
@@ -2164,8 +2055,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.869695558091342",
-      "WoLgIDTextLC": 1194
+      "WoRandom": "0.869695558091342"
     },
     {
       "WoID": 120,
@@ -2180,8 +2070,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.9748694123466214",
-      "WoLgIDTextLC": 1204
+      "WoRandom": "0.9748694123466214"
     },
     {
       "WoID": 121,
@@ -2196,8 +2085,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.265260418192726",
-      "WoLgIDTextLC": 1214
+      "WoRandom": "0.265260418192726"
     },
     {
       "WoID": 122,
@@ -2212,8 +2100,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.4016938846574108",
-      "WoLgIDTextLC": 1224
+      "WoRandom": "0.4016938846574108"
     },
     {
       "WoID": 123,
@@ -2228,8 +2115,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.21268819944252093",
-      "WoLgIDTextLC": 1234
+      "WoRandom": "0.21268819944252093"
     },
     {
       "WoID": 124,
@@ -2244,8 +2130,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.8583593739740172",
-      "WoLgIDTextLC": 1244
+      "WoRandom": "0.8583593739740172"
     },
     {
       "WoID": 125,
@@ -2260,8 +2145,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.6537323022761683",
-      "WoLgIDTextLC": 1254
+      "WoRandom": "0.6537323022761683"
     },
     {
       "WoID": 126,
@@ -2276,8 +2160,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.6935834201924348",
-      "WoLgIDTextLC": 1264
+      "WoRandom": "0.6935834201924348"
     },
     {
       "WoID": 127,
@@ -2292,8 +2175,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5067202248673143",
-      "WoLgIDTextLC": 1274
+      "WoRandom": "0.5067202248673143"
     },
     {
       "WoID": 128,
@@ -2308,8 +2190,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.452850894492912",
-      "WoLgIDTextLC": 1284
+      "WoRandom": "0.452850894492912"
     },
     {
       "WoID": 129,
@@ -2324,8 +2205,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.744093828596262",
-      "WoLgIDTextLC": 1294
+      "WoRandom": "0.744093828596262"
     },
     {
       "WoID": 130,
@@ -2340,8 +2220,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.36191649023621947",
-      "WoLgIDTextLC": 1304
+      "WoRandom": "0.36191649023621947"
     },
     {
       "WoID": 131,
@@ -2356,8 +2235,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5773009961259561",
-      "WoLgIDTextLC": 1314
+      "WoRandom": "0.5773009961259561"
     },
     {
       "WoID": 132,
@@ -2372,8 +2250,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8007555406547668",
-      "WoLgIDTextLC": 1324
+      "WoRandom": "0.8007555406547668"
     },
     {
       "WoID": 133,
@@ -2388,8 +2265,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.27187474562961117",
-      "WoLgIDTextLC": 1334
+      "WoRandom": "0.27187474562961117"
     },
     {
       "WoID": 134,
@@ -2404,8 +2280,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9571071369174003",
-      "WoLgIDTextLC": 1344
+      "WoRandom": "0.9571071369174003"
     },
     {
       "WoID": 135,
@@ -2420,8 +2295,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9699114784318129",
-      "WoLgIDTextLC": 1354
+      "WoRandom": "0.9699114784318129"
     },
     {
       "WoID": 136,
@@ -2436,8 +2310,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9782360121405087",
-      "WoLgIDTextLC": 1364
+      "WoRandom": "0.9782360121405087"
     },
     {
       "WoID": 137,
@@ -2452,8 +2325,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.98144565614075",
-      "WoLgIDTextLC": 1374
+      "WoRandom": "0.98144565614075"
     },
     {
       "WoID": 139,
@@ -2468,8 +2340,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9725202750158685",
-      "WoLgIDTextLC": 1394
+      "WoRandom": "0.9725202750158685"
     },
     {
       "WoID": 140,
@@ -2484,8 +2355,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9182644373907376",
-      "WoLgIDTextLC": 1404
+      "WoRandom": "0.9182644373907376"
     },
     {
       "WoID": 141,
@@ -2500,8 +2370,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6737613926397277",
-      "WoLgIDTextLC": 1414
+      "WoRandom": "0.6737613926397277"
     },
     {
       "WoID": 142,
@@ -2516,8 +2385,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6140136817600705",
-      "WoLgIDTextLC": 1424
+      "WoRandom": "0.6140136817600705"
     },
     {
       "WoID": 145,
@@ -2532,8 +2400,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.048784261614814646",
-      "WoLgIDTextLC": 1454
+      "WoRandom": "0.048784261614814646"
     },
     {
       "WoID": 146,
@@ -2548,8 +2415,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.40188029352750654",
-      "WoLgIDTextLC": 1464
+      "WoRandom": "0.40188029352750654"
     },
     {
       "WoID": 147,
@@ -2564,8 +2430,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.8630487135267338",
-      "WoLgIDTextLC": 1474
+      "WoRandom": "0.8630487135267338"
     },
     {
       "WoID": 148,
@@ -2580,8 +2445,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10960271778479472",
-      "WoLgIDTextLC": 1484
+      "WoRandom": "0.10960271778479472"
     },
     {
       "WoID": 149,
@@ -2596,8 +2460,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.9588674790774169",
-      "WoLgIDTextLC": 1494
+      "WoRandom": "0.9588674790774169"
     },
     {
       "WoID": 150,
@@ -2612,8 +2475,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4655292727663454",
-      "WoLgIDTextLC": 1504
+      "WoRandom": "0.4655292727663454"
     },
     {
       "WoID": 151,
@@ -2628,8 +2490,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4510439573331214",
-      "WoLgIDTextLC": 1514
+      "WoRandom": "0.4510439573331214"
     },
     {
       "WoID": 152,
@@ -2644,8 +2505,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8586319991002157",
-      "WoLgIDTextLC": 1524
+      "WoRandom": "0.8586319991002157"
     },
     {
       "WoID": 153,
@@ -2660,8 +2520,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9400281542353595",
-      "WoLgIDTextLC": 1534
+      "WoRandom": "0.9400281542353595"
     },
     {
       "WoID": 154,
@@ -2676,8 +2535,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12424480460979492",
-      "WoLgIDTextLC": 1544
+      "WoRandom": "0.12424480460979492"
     },
     {
       "WoID": 155,
@@ -2692,8 +2550,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8011395910765413",
-      "WoLgIDTextLC": 1554
+      "WoRandom": "0.8011395910765413"
     },
     {
       "WoID": 156,
@@ -2708,8 +2565,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6329635722869668",
-      "WoLgIDTextLC": 1564
+      "WoRandom": "0.6329635722869668"
     },
     {
       "WoID": 157,
@@ -2724,8 +2580,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.761399118938855",
-      "WoLgIDTextLC": 1574
+      "WoRandom": "0.761399118938855"
     },
     {
       "WoID": 158,
@@ -2740,8 +2595,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9081049085670196",
-      "WoLgIDTextLC": 1584
+      "WoRandom": "0.9081049085670196"
     },
     {
       "WoID": 159,
@@ -2756,8 +2610,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.25632721675217823",
-      "WoLgIDTextLC": 1594
+      "WoRandom": "0.25632721675217823"
     },
     {
       "WoID": 160,
@@ -2772,8 +2625,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5573213887934773",
-      "WoLgIDTextLC": 1604
+      "WoRandom": "0.5573213887934773"
     },
     {
       "WoID": 161,
@@ -2788,8 +2640,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.017625324444496375",
-      "WoLgIDTextLC": 1614
+      "WoRandom": "0.017625324444496375"
     },
     {
       "WoID": 162,
@@ -2804,8 +2655,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4161624865756952",
-      "WoLgIDTextLC": 1624
+      "WoRandom": "0.4161624865756952"
     },
     {
       "WoID": 163,
@@ -2820,8 +2670,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.027936490278631907",
-      "WoLgIDTextLC": 1634
+      "WoRandom": "0.027936490278631907"
     },
     {
       "WoID": 164,
@@ -2836,8 +2685,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8911950223997189",
-      "WoLgIDTextLC": 1644
+      "WoRandom": "0.8911950223997189"
     },
     {
       "WoID": 165,
@@ -2852,8 +2700,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.37216567189634375",
-      "WoLgIDTextLC": 1654
+      "WoRandom": "0.37216567189634375"
     },
     {
       "WoID": 166,
@@ -2868,8 +2715,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.18724332301620703",
-      "WoLgIDTextLC": 1664
+      "WoRandom": "0.18724332301620703"
     },
     {
       "WoID": 167,
@@ -2884,8 +2730,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.819719630125649",
-      "WoLgIDTextLC": 1674
+      "WoRandom": "0.819719630125649"
     },
     {
       "WoID": 168,
@@ -2900,8 +2745,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.5368682123132685",
-      "WoLgIDTextLC": 1684
+      "WoRandom": "0.5368682123132685"
     },
     {
       "WoID": 169,
@@ -2916,8 +2760,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "20.067133683596026",
       "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.22518220192304086",
-      "WoLgIDTextLC": 1694
+      "WoRandom": "0.22518220192304086"
     },
     {
       "WoID": 171,
@@ -2932,8 +2775,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.900985442009741",
-      "WoLgIDTextLC": 1714
+      "WoRandom": "0.900985442009741"
     },
     {
       "WoID": 172,
@@ -2948,8 +2790,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9590080305552184",
-      "WoLgIDTextLC": 1724
+      "WoRandom": "0.9590080305552184"
     },
     {
       "WoID": 173,
@@ -2964,8 +2805,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "99.99999999999999",
       "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.09208385748051466",
-      "WoLgIDTextLC": 1734
+      "WoRandom": "0.09208385748051466"
     },
     {
       "WoID": 174,
@@ -2980,8 +2820,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.5833952264705629",
-      "WoLgIDTextLC": 1744
+      "WoRandom": "0.5833952264705629"
     },
     {
       "WoID": 175,
@@ -2996,8 +2835,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "46.38244308231173",
       "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.6407245906449152",
-      "WoLgIDTextLC": 1754
+      "WoRandom": "0.6407245906449152"
     },
     {
       "WoID": 176,
@@ -3012,8 +2850,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.4534373045465325",
-      "WoLgIDTextLC": 1764
+      "WoRandom": "0.4534373045465325"
     },
     {
       "WoID": 177,
@@ -3028,8 +2865,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.3450127815315619",
-      "WoLgIDTextLC": 1774
+      "WoRandom": "0.3450127815315619"
     },
     {
       "WoID": 178,
@@ -3044,8 +2880,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.364752024751857",
-      "WoLgIDTextLC": 1784
+      "WoRandom": "0.364752024751857"
     },
     {
       "WoID": 179,
@@ -3060,8 +2895,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.788721809898244",
-      "WoLgIDTextLC": 1794
+      "WoRandom": "0.788721809898244"
     },
     {
       "WoID": 180,
@@ -3076,8 +2910,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8493530059692943",
-      "WoLgIDTextLC": 1804
+      "WoRandom": "0.8493530059692943"
     },
     {
       "WoID": 181,
@@ -3092,8 +2925,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8805996308853846",
-      "WoLgIDTextLC": 1814
+      "WoRandom": "0.8805996308853846"
     },
     {
       "WoID": 182,
@@ -3108,8 +2940,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8549391672526852",
-      "WoLgIDTextLC": 1824
+      "WoRandom": "0.8549391672526852"
     },
     {
       "WoID": 183,
@@ -3124,8 +2955,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6328969743409166",
-      "WoLgIDTextLC": 1834
+      "WoRandom": "0.6328969743409166"
     },
     {
       "WoID": 184,
@@ -3140,8 +2970,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5996674006801727",
-      "WoLgIDTextLC": 1844
+      "WoRandom": "0.5996674006801727"
     },
     {
       "WoID": 185,
@@ -3156,8 +2985,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.09964611111175838",
-      "WoLgIDTextLC": 1854
+      "WoRandom": "0.09964611111175838"
     },
     {
       "WoID": 186,
@@ -3172,8 +3000,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.699228384251919",
-      "WoLgIDTextLC": 1864
+      "WoRandom": "0.699228384251919"
     },
     {
       "WoID": 187,
@@ -3188,8 +3015,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.19720361865796485",
-      "WoLgIDTextLC": 1874
+      "WoRandom": "0.19720361865796485"
     },
     {
       "WoID": 188,
@@ -3204,8 +3030,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8883329712677123",
-      "WoLgIDTextLC": 1884
+      "WoRandom": "0.8883329712677123"
     },
     {
       "WoID": 189,
@@ -3220,8 +3045,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8500540310983118",
-      "WoLgIDTextLC": 1894
+      "WoRandom": "0.8500540310983118"
     },
     {
       "WoID": 190,
@@ -3236,8 +3060,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5852712724220671",
-      "WoLgIDTextLC": 1904
+      "WoRandom": "0.5852712724220671"
     },
     {
       "WoID": 191,
@@ -3252,8 +3075,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3761942995490453",
-      "WoLgIDTextLC": 1914
+      "WoRandom": "0.3761942995490453"
     },
     {
       "WoID": 192,
@@ -3268,8 +3090,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12515771121267016",
-      "WoLgIDTextLC": 1924
+      "WoRandom": "0.12515771121267016"
     },
     {
       "WoID": 193,
@@ -3284,8 +3105,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4972056881498598",
-      "WoLgIDTextLC": 1934
+      "WoRandom": "0.4972056881498598"
     },
     {
       "WoID": 194,
@@ -3300,8 +3120,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.1105553378449337",
-      "WoLgIDTextLC": 1944
+      "WoRandom": "0.1105553378449337"
     },
     {
       "WoID": 195,
@@ -3316,8 +3135,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.061159655508733965",
-      "WoLgIDTextLC": 1954
+      "WoRandom": "0.061159655508733965"
     },
     {
       "WoID": 196,
@@ -3332,8 +3150,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9741322947425137",
-      "WoLgIDTextLC": 1964
+      "WoRandom": "0.9741322947425137"
     },
     {
       "WoID": 197,
@@ -3348,8 +3165,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6871825379200117",
-      "WoLgIDTextLC": 1974
+      "WoRandom": "0.6871825379200117"
     },
     {
       "WoID": 198,
@@ -3364,8 +3180,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5135158361061624",
-      "WoLgIDTextLC": 1984
+      "WoRandom": "0.5135158361061624"
     },
     {
       "WoID": 199,
@@ -3380,8 +3195,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5060315975044217",
-      "WoLgIDTextLC": 1994
+      "WoRandom": "0.5060315975044217"
     },
     {
       "WoID": 200,
@@ -3396,8 +3210,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9896105099372664",
-      "WoLgIDTextLC": 2004
+      "WoRandom": "0.9896105099372664"
     },
     {
       "WoID": 201,
@@ -3412,8 +3225,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.42995778790671174",
-      "WoLgIDTextLC": 2014
+      "WoRandom": "0.42995778790671174"
     },
     {
       "WoID": 202,
@@ -3428,8 +3240,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.18095744045540452",
-      "WoLgIDTextLC": 2024
+      "WoRandom": "0.18095744045540452"
     },
     {
       "WoID": 203,
@@ -3444,8 +3255,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6149138692905324",
-      "WoLgIDTextLC": 2034
+      "WoRandom": "0.6149138692905324"
     },
     {
       "WoID": 204,
@@ -3460,8 +3270,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": "6.84106830122592",
       "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5316970558200935",
-      "WoLgIDTextLC": 2044
+      "WoRandom": "0.5316970558200935"
     },
     {
       "WoID": 205,
@@ -3476,8 +3285,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8137437019625154",
-      "WoLgIDTextLC": 2054
+      "WoRandom": "0.8137437019625154"
     },
     {
       "WoID": 206,
@@ -3492,8 +3300,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.47362737308594155",
-      "WoLgIDTextLC": 2064
+      "WoRandom": "0.47362737308594155"
     },
     {
       "WoID": 207,
@@ -3508,8 +3315,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9269057902758063",
-      "WoLgIDTextLC": 2074
+      "WoRandom": "0.9269057902758063"
     },
     {
       "WoID": 208,
@@ -3524,8 +3330,60 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
       "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2136468628548522",
-      "WoLgIDTextLC": 2084
+      "WoRandom": "0.2136468628548522"
     }
+  ],
+  "wordtags": [
+    { "WtWoID": 1, "WtTgID": 27 },
+    { "WtWoID": 2, "WtTgID": 1 },
+    { "WtWoID": 2, "WtTgID": 14 },
+    { "WtWoID": 2, "WtTgID": 18 },
+    { "WtWoID": 2, "WtTgID": 28 },
+    { "WtWoID": 3, "WtTgID": 13 },
+    { "WtWoID": 6, "WtTgID": 15 },
+    { "WtWoID": 7, "WtTgID": 5 },
+    { "WtWoID": 7, "WtTgID": 19 },
+    { "WtWoID": 8, "WtTgID": 5 },
+    { "WtWoID": 8, "WtTgID": 6 },
+    { "WtWoID": 8, "WtTgID": 7 },
+    { "WtWoID": 8, "WtTgID": 22 },
+    { "WtWoID": 22, "WtTgID": 19 },
+    { "WtWoID": 25, "WtTgID": 1 },
+    { "WtWoID": 25, "WtTgID": 7 },
+    { "WtWoID": 25, "WtTgID": 8 },
+    { "WtWoID": 25, "WtTgID": 18 },
+    { "WtWoID": 25, "WtTgID": 22 },
+    { "WtWoID": 26, "WtTgID": 7 },
+    { "WtWoID": 26, "WtTgID": 17 },
+    { "WtWoID": 33, "WtTgID": 1 },
+    { "WtWoID": 33, "WtTgID": 18 },
+    { "WtWoID": 45, "WtTgID": 19 },
+    { "WtWoID": 46, "WtTgID": 2 },
+    { "WtWoID": 46, "WtTgID": 18 },
+    { "WtWoID": 50, "WtTgID": 1 },
+    { "WtWoID": 50, "WtTgID": 8 },
+    { "WtWoID": 50, "WtTgID": 19 },
+    { "WtWoID": 51, "WtTgID": 11 },
+    { "WtWoID": 51, "WtTgID": 19 },
+    { "WtWoID": 146, "WtTgID": 10 },
+    { "WtWoID": 146, "WtTgID": 19 },
+    { "WtWoID": 147, "WtTgID": 1 },
+    { "WtWoID": 147, "WtTgID": 7 },
+    { "WtWoID": 147, "WtTgID": 8 },
+    { "WtWoID": 147, "WtTgID": 22 },
+    { "WtWoID": 147, "WtTgID": 25 },
+    { "WtWoID": 148, "WtTgID": 2 },
+    { "WtWoID": 148, "WtTgID": 12 },
+    { "WtWoID": 149, "WtTgID": 5 },
+    { "WtWoID": 149, "WtTgID": 7 },
+    { "WtWoID": 149, "WtTgID": 22 },
+    { "WtWoID": 150, "WtTgID": 7 },
+    { "WtWoID": 150, "WtTgID": 10 },
+    { "WtWoID": 150, "WtTgID": 22 },
+    { "WtWoID": 151, "WtTgID": 1 },
+    { "WtWoID": 151, "WtTgID": 19 },
+    { "WtWoID": 171, "WtTgID": 13 },
+    { "WtWoID": 175, "WtTgID": 12 },
+    { "WtWoID": 175, "WtTgID": 16 }
   ]
 }

@@ -7,14 +7,7 @@ const PAGES: Page[] = [
   {
     url: '/',
     name: 'dashboard',
-    component: (
-      <Library
-        currentPage={0}
-        query={null}
-        filterTag1={null}
-        filterTag2={null}
-      />
-    ),
+    component: <Library currentPage={0} query={null} tag2={null} tag1={null} />,
   },
   { url: '/langs', name: 'languages', component: <></> },
   { url: '/read', name: 'reader', component: <></> },

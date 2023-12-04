@@ -148,9 +148,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="preface" id="preface">
-                Preface
-              </a>
+              <a id="preface">Preface</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -205,9 +203,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="current" id="current">
-                Current Version
-              </a>
+              <a id="current">Current Version</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -229,9 +225,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="links" id="links">
-                Important Links
-              </a>
+              <a id="links">Important Links</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -609,9 +603,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="abstract" id="abstract">
-                Abstract
-              </a>
+              <a id="abstract">Abstract</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -814,9 +806,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="features" id="features">
-                Features
-              </a>
+              <a id="features">Features</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -926,9 +916,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="restrictions" id="restrictions">
-                Restrictions
-              </a>
+              <a id="restrictions">Restrictions</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -958,9 +946,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="license" id="license">
-                (Un-) License
-              </a>
+              <a id="license">(Un-) License</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -1268,9 +1254,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="disclaimer" id="disclaimer">
-                Disclaimer
-              </a>
+              <a id="disclaimer">Disclaimer</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -1295,9 +1279,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="install" id="install">
-                Installation on MS Windows, macOS, Linux
-              </a>
+              <a id="install">Installation on MS Windows, macOS, Linux</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -1313,7 +1295,7 @@ $('#floatdiv').addFloating( {
                   Please follow the up-to-date instructions
                   <b>
                     <u>
-                      <bigger>HERE</bigger>
+                      <span className="bigger">HERE</span>
                     </u>
                   </b>
                   (you must be online!).
@@ -1328,9 +1310,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="learn" id="learn">
-                How to learn with LWT
-              </a>
+              <a id="learn">How to learn with LWT</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -1410,9 +1390,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="howto" id="howto">
-                How to use
-              </a>
+              <a id="howto">How to use</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -1468,13 +1446,9 @@ $('#floatdiv').addFloating( {
               </li>
               <li>
                 <b>
-                  <a name="howtolang" id="howtolang">
-                    New/Edit Language
-                  </a>
+                  <a id="howtolang">New/Edit Language</a>
                 </b>
-                <a name="go1" id="go1">
-                  &nbsp;
-                </a>
+                <a id="go1">&nbsp;</a>
                 <br />
                 <br />
                 This is the place to define or edit a language you want to
@@ -1559,7 +1533,7 @@ $('#floatdiv').addFloating( {
                     to open such a dictionary not within the frame set but in a
                     popup window (please don't forget to deactivate popup window
                     blocking in your browser!).
-                    <br /> <br /> <a name="glosbe" />
+                    <br /> <br /> <a id="glosbe" />
                     One dictionary (
                     <a
                       href="http://glosbe.com/"
@@ -1735,7 +1709,7 @@ $('#floatdiv').addFloating( {
                   Hebrew, Farsi, Urdu, etc. <br /> <br />
                 </li>
                 <li>
-                  <a name="extmpl" />
+                  <a id="extmpl" />
                   "Export Template". The export template controls "Flexible"
                   Term Exports for the terms of that language. It consists of a
                   string of characters. Some parts of this string are
@@ -1815,9 +1789,7 @@ $('#floatdiv').addFloating( {
 
             <li>
               <b>
-                <a name="howtotext" id="howtotext">
-                  New/Edit Text (with Check)
-                </a>
+                <a id="howtotext">New/Edit Text (with Check)</a>
               </b>
               <br />
               <br />
@@ -2039,7 +2011,7 @@ $('#floatdiv').addFloating( {
               <img className="grayborder" src="img/21.jpg" alt="Image" />
               <br />
               <br />
-              <a name="il" />
+              <a id="il" />
               <b>
                 How to create, edit, and use an <i>Improved Annotated Text</i>:
               </b>
@@ -2405,7 +2377,7 @@ $('#floatdiv').addFloating( {
 
             <li>
               <b>
-                <a name="mue" />
+                <a id="mue" />
                 Multiple LWT table sets
               </b>
               <br />
@@ -2487,9 +2459,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="faq" id="faq">
-                Questions and Answers
-              </a>
+              <a id="faq">Questions and Answers</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -2597,9 +2567,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="ipad" id="ipad">
-                Setup for Tablets
-              </a>
+              <a id="ipad">Setup for Tablets</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -2636,9 +2604,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="langsetup" id="langsetup">
-                Language Setup
-              </a>
+              <a id="langsetup">Language Setup</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -2840,9 +2806,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="termscores" id="termscores">
-                Term Scores
-              </a>
+              <a id="termscores">Term Scores</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -2907,9 +2871,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="keybind" id="keybind">
-                Key Bindings
-              </a>
+              <a id="keybind">Key Bindings</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -3065,9 +3027,7 @@ $('#floatdiv').addFloating( {
           <dt>
             ▶
             <b>
-              <a name="history" id="history">
-                Changelog
-              </a>
+              <a id="history">Changelog</a>
             </b>
             - <a href="#">[↑]</a>
           </dt>
@@ -3249,14 +3209,13 @@ $('#floatdiv').addFloating( {
     </body>
   );
 }
+
 export function InfoLine({ href, title }: { href: string; title: string }) {
   return (
     <dt>
       ▶
       <b>
-        <a name={href} id={href}>
-          {title}
-        </a>
+        <a id={href}>{title}</a>
       </b>
       - <a href={'#'}>[↑]</a>
     </dt>

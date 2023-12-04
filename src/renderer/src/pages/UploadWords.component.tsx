@@ -13,12 +13,10 @@ import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { SelectBoolean } from './EditLanguage.component';
+import { GetWordstatusSelectoptions } from './PrintText.component';
 import { StrengthMap } from './StrengthMap';
 import { ColumnImportMode, TermName } from './TermName';
 
-/**
- *
- */
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();
@@ -174,7 +172,7 @@ export function UploadWords() {
               :
               <SelectBoolean
                 entry={{ over: 1 }}
-                selKey={'over'}
+                entryKey={'over'}
                 refMap={refMap}
               />
               <br />
@@ -228,7 +226,12 @@ export function UploadWords() {
                       {StrengthMap[key].status} [{key}]
                     </option>
                   ))}
-                {/* <?php echo get_wordstatus_selectoptions(NULL,false,false); ?> */}
+                {/* TODO */}
+                <GetWordstatusSelectoptions
+                  v={null}
+                  all={false}
+                  not9899={false}
+                />
               </select>{' '}
               <RequiredLineButton />
             </td>
@@ -369,72 +372,3 @@ async function parseTermsFromCSV(
     });
   return parsedTerms;
 }
-// function get_wordstatus_selectoptions(v, all, not9899, off = true)
-// {
-// 	if (!isset(v)) {
-// 		if (all)
-// 			v = "";
-// 		else
-// 			v = 1;
-// 	}
-// 	r = "";
-// 	if (all && off) {
-// 		r .= "<option value=\"\"" . get_selected(v, '');
-// 		r .= ">[Filter off]</option>";
-// 	}
-// 	statuses = get_statuses();
-// 	foreach (statuses as n => status) {
-// 		if (not9899 && (n == 98 || n == 99))
-// 			continue;
-// 		r .= "<option value =\"" . n . "\"" . get_selected(v, n);
-// 		r .= ">" . tohtml(status['name']) . " [" .
-// 			tohtml(status['abbr']) . "]</option>";
-// 	}
-// 	if (all) {
-// 		r .= '<option disabled="disabled">--------</option>';
-// 		status_1_name = tohtml(statuses[1]["name"]);
-// 		status_1_abbr = tohtml(statuses[1]["abbr"]);
-// 		r .= "<option value=\"12\"" . get_selected(v, 12);
-// 		r .= ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[2]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"13\"" . get_selected(v, 13);
-// 		r .= ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[3]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"14\"" . get_selected(v, 14);
-// 		r .= ">" . status_1_name . " [" . status_1_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"15\"" . get_selected(v, 15);
-// 		r .= ">Learning/-ed [" . status_1_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r .= '<option disabled="disabled">--------</option>';
-// 		status_2_name = tohtml(statuses[2]["name"]);
-// 		status_2_abbr = tohtml(statuses[2]["abbr"]);
-// 		r .= "<option value=\"23\"" . get_selected(v, 23);
-// 		r .= ">" . status_2_name . " [" . status_2_abbr . ".." .
-// 			tohtml(statuses[3]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"24\"" . get_selected(v, 24);
-// 		r .= ">" . status_2_name . " [" . status_2_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"25\"" . get_selected(v, 25);
-// 		r .= ">Learning/-ed [" . status_2_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r .= '<option disabled="disabled">--------</option>';
-// 		status_3_name = tohtml(statuses[3]["name"]);
-// 		status_3_abbr = tohtml(statuses[3]["abbr"]);
-// 		r .= "<option value=\"34\"" . get_selected(v, 34);
-// 		r .= ">" . status_3_name . " [" . status_3_abbr . ".." .
-// 			tohtml(statuses[4]["abbr"]) . "]</option>";
-// 		r .= "<option value=\"35\"" . get_selected(v, 35);
-// 		r .= ">Learning/-ed [" . status_3_abbr . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r .= '<option disabled="disabled">--------</option>';
-// 		r .= "<option value=\"45\"" . get_selected(v, 45);
-// 		r .= ">Learning/-ed [" . tohtml(statuses[4]["abbr"]) . ".." .
-// 			tohtml(statuses[5]["abbr"]) . "]</option>";
-// 		r .= '<option disabled="disabled">--------</option>';
-// 		r .= "<option value=\"599\"" . get_selected(v, 599);
-// 		r .= ">All known [" . tohtml(statuses[5]["abbr"]) . "+" .
-// 			tohtml(statuses[99]["abbr"]) . "]</option>";
-// 	}
-// 	return r;
-// }

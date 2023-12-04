@@ -9,6 +9,7 @@ import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
+import { SelectBoolean } from './EditLanguage.component';
 import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
 import { openInNewWindow } from './openInNewWindow';
@@ -17,8 +18,6 @@ import { check_dupl_lang } from './utils';
 
 export function NewLanguage() {
   // languages type map
-  // TODO form component?
-  //  - map validator to row - but if row styling is different maybe difficult..
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
   const navigator = useInternalNavigate();
   const validator = LanguageValidatorNoId;
@@ -50,6 +49,7 @@ export function NewLanguage() {
         </a>
       </h4>
       <form className="validate">
+        {/* TODO */}
         {/* onsubmit="return check_dupl_lang(0);" */}
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
@@ -222,20 +222,22 @@ export function NewLanguage() {
                 Make each character a word:
               </td>
               <td className="td1">
-                <select name="LgSplitEachChar" ref={refMap.LgSplitEachChar}>
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
+                <SelectBoolean
+                  refMap={refMap}
+                  entryKey={'LgSplitEachChar'}
+                  entry={{ LgSplitEachChar: 0 }}
+                />
                 (e.g. for Chinese, Japanese, etc.)
               </td>
             </tr>
             <tr>
               <td className="td1 right backlightyellow">Remove spaces:</td>
               <td className="td1">
-                <select name="LgRemoveSpaces" ref={refMap.LgRemoveSpaces}>
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
+                <SelectBoolean
+                  refMap={refMap}
+                  entryKey={'LgRemoveSpaces'}
+                  entry={{ LgRemoveSpaces: 0 }}
+                />
                 (e.g. for Chinese, Japanese, etc.)
               </td>
             </tr>
@@ -244,10 +246,11 @@ export function NewLanguage() {
                 Right-To-Left Script:
               </td>
               <td className="td1">
-                <select ref={refMap.LgRightToLeft} name="LgRightToLeft">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
+                <SelectBoolean
+                  refMap={refMap}
+                  entryKey={'LgRightToLeft'}
+                  entry={{ LgRightToLeft: 0 }}
+                />
                 (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
               </td>
             </tr>

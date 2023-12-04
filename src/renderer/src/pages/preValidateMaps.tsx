@@ -33,18 +33,36 @@ export const tagPreValidateMap: {
   TgText: identityMap,
   TgComment: emptyToNullMap,
 };
-export const wordNoIdPrevalidateMap = {
-  WoStatus: parseNumMap,
-  WoLgID: parseNumMap,
-  WoCreated: () => Date.now(),
-  WoTextLC: (_, refMap) => refMap.WoText.current.value.toLowerCase(),
+export const getTimeAsString = () => {
+  const dt = new Date();
+
+  const padL = (nr: number) => `${nr}`.padStart(2, '0');
+
+  const yyyy = dt.getFullYear();
+  const mm = padL(dt.getMonth() + 1);
+  const dd = padL(dt.getDate());
+  const hh = padL(dt.getHours());
+  const min = padL(dt.getMinutes());
+  const ss = padL(dt.getSeconds());
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
 };
 export const wordPrevalidateMap = {
   WoID: parseNumMap,
+
   WoStatus: parseNumMap,
   WoLgID: parseNumMap,
-  WoCreated: () => Date.now(),
-  WoTextLC: (_, refMap) => refMap.WoText.current.value.toLowerCase(),
+  WoSentence: emptyToNullMap,
+  WoStatusChanged: getTimeAsString,
+  WoTextLC: (_: any, refMap: { WoText: { current: { value: string } } }) =>
+    refMap.WoText.current.value.toLowerCase(),
+  WoTranslation: (val) => (val === undefined ? '' : val),
+} as const;
+
+export const wordNoIdPrevalidateMap = {
+  ...Object.fromEntries(
+    Object.entries(wordPrevalidateMap).filter(([val]) => val !== 'WoID')
+  ),
+  WoCreated: getTimeAsString,
 };
 export const textPrevalidateMap = {
   TxLgID: parseNumMap,

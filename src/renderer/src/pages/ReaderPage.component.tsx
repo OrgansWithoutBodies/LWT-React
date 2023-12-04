@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import SplitPane from 'react-split-pane';
-import { Word } from '../data/parseMySqlDump';
+import { Language, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
+import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { AddNewWordPane } from './AddNewWordPane';
 import { Reader } from './Reader.component';
-import { escape_html_chars, make_tooltip } from './escape_html_chars';
+import { owin } from './translateSentence2';
 import { useTick } from './useTimer';
 
 // TODO
@@ -63,13 +64,13 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
           <table className="width99pc">
             <tr>
               <td
-                class="center"
-                colspan="7"
-                style={{ padding: '2px 5px 5px 5px' }}
-                nowrap="nowrap"
+                className="center"
+                colSpan={7}
+                style={{ whiteSpace: 'nowrap', padding: '2px 5px 5px 5px' }}
               >
                 TO DO:{' '}
                 <span id="learnstatus">
+                  {/* TODO */}
                   {/* <?php echo texttodocount2($_REQUEST['text']); ?> */}
                 </span>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -81,6 +82,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
                   <input
                     type="checkbox"
                     id="showallwords"
+                    // TODO
                     // <?php echo get_checked($showAll); ?>
                   />
                 </span>
@@ -209,12 +211,20 @@ export function TesterPage({
  * @param plusminus
  * @param text
  */
-export function make_overlib_link_change_status_test(
-  wid: string,
-  plusminus: string,
-  text: string
-) {
-  return ` <a href=\x22set_test_status?wid=${wid}&amp;stchange=${plusminus}\x22 target=\x22ro\x22>${text}</a> `;
+export function MakeOverlibLinkChangeStatusTest({
+  wid,
+  plusminus,
+  text,
+}: {
+  wid: number;
+  plusminus: 'plus' | 'minus';
+  text: string | JSX.Element;
+}) {
+  return (
+    <a href={`set_test_status?wid=${wid}&stchange=${plusminus}`} target="ro">
+      {text}
+    </a>
+  );
 }
 
 export function Tester({ modality }: { modality: Modality }) {
@@ -223,8 +233,8 @@ export function Tester({ modality }: { modality: Modality }) {
   const [numWrong, setNumWrong] = useState(0);
   const [numNotTested, setNumNotTested] = useState(10);
   //
-
-  const timer = useTick(1000);
+  const [{ languages }] = useData(['languages']);
+  const { tick } = useTick(1000);
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
   const b_notyet = l_notyet == 0 ? '' : 'borderl';
@@ -233,13 +243,17 @@ export function Tester({ modality }: { modality: Modality }) {
   const l_correct = Math.round(numCorrect * 100);
   const b_correct = l_correct == 0 ? 'borderr' : 'borderl borderr';
 
+  const foundLanguage =
+    testingWord && languages.find((lang) => lang.LgID === testingWord?.WoLgID);
   return (
     <>
-      {testingWord && <RunTestForWord word={testingWord} />}
+      {foundLanguage && (
+        <RunTestForWord word={testingWord} language={foundLanguage} />
+      )}
       <div id="footer">
         <Icon src="clock" title="Elapsed Time" />
         <span id="timer" title="Elapsed Time">
-          {timer}
+          {tick}
         </span>
         &nbsp; &nbsp; &nbsp;
         <Icon
@@ -281,43 +295,96 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
-function RunTestForWord({ word: { WoStatus: status } }: { word: Word }) {
+function RunTestForWord({
+  word: {
+    WoTranslation: trans,
+    WoStatus: status,
+    WoID,
+    WoRomanization: roman,
+    WoText: text,
+  },
+  language: {
+    LgDict1URI: wblink1,
+    LgDict2URI: wblink2,
+    LgGoogleTranslateURI: wblink3,
+  },
+}: {
+  word: Word;
+  language: Language;
+}) {
   return (
     <>
       <center>
-        <hr size={1} />
+        <hr
+          style={{
+            height: '1px',
+            border: 'none',
+            color: '#333',
+            backgroundColor: '#333',
+          }}
+        />
         {status >= 1 && status <= 5 && (
           <>
-            {/* make_overlib_link_change_status_test */}
+            {/* TODO values here */}
+            <MakeOverlibLinkChangeStatusTest
+              wid={0}
+              plusminus={'plus'}
+              text={''}
+            />
             <Icon src="thumb-up" title="Got it!" /> Got it! [
             {`${status} ▶ ${status + 1}`}
             ]
-            <hr size={1} />
-            {/* make_overlib_link_change_status_test */}
+            <hr
+              style={{
+                height: '1px',
+                border: 'none',
+                color: '#333',
+                backgroundColor: '#333',
+              }}
+            />
+            {/* TODO values here */}
+            <MakeOverlibLinkChangeStatusTest
+              wid={0}
+              plusminus={'plus'}
+              text={''}
+            />
             <Icon src="thumb" title="Oops!" /> Oops! [
             {`${status} ▶ ${status - 1}`}
             ]
-            <hr size={1} />
+            <hr
+              style={{
+                height: '1px',
+                border: 'none',
+                color: '#333',
+                backgroundColor: '#333',
+              }}
+            />
+            {/* TODO */}
             <b>{/* make_overlib_link_change_status_alltest(wid,stat) */}</b>
             <br />
-            {/* // </center> */}
           </>
         )}
       </center>
-      <hr size={1} />
-      <b>{escape_html_chars(make_tooltip(Text, trans, roman, stat))}</b>
+      <hr
+        style={{
+          height: '1px',
+          border: 'none',
+          color: '#333',
+          backgroundColor: '#333',
+        }}
+      />
+      {/* <b>{escape_html_chars(make_tooltip(text, trans, roman, stat))}</b> */}
       <br />
-      <a href="edit_tword?wid=" target="ro">
+      <A ref={`/edit_tword?wid=${WoID}`} target="ro">
         Edit term
-      </a>
+      </A>
       <br />
-      {createTheDictLink(wblink1, Text, 'Dict1', 'Lookup Term: ')}
-      {createTheDictLink(wblink2, Text, 'Dict2', '')}
-      {createTheDictLink(wblink3, Text, 'GTr', '')}
-      {/* TODO */}
-      {/* createTheDictLink(wblink3,sent,'GTr','
+
+      <CreateTheDictLink u={wblink1} w={text} t={'Dict1'} b={'Lookup Term: '} />
+      <CreateTheDictLink u={wblink2} w={text} t={'Dict2'} b={''} />
+      <CreateTheDictLink u={wblink3} w={Set} t={'GTr'} b={''} />
       <br />
-      Lookup Sentence:'), */}
+      {/* Lookup Sentence:'), */}
     </>
   );
 }
@@ -330,26 +397,50 @@ function RunTestForWord({ word: { WoStatus: status } }: { word: Word }) {
  * @param t
  * @param b
  */
-export function createTheDictLink(u: string, w: string, t: string, b: string) {
+export function CreateTheDictLink({
+  u,
+  w,
+  t,
+  b,
+}: {
+  u: string;
+  w: string;
+  t: string;
+  b: string;
+}): JSX.Element {
   const url = u.trim();
   const trm = w.trim();
   const txt = t.trim();
   const txtbefore = b.trim();
-  let r = '';
   if (url != '' && txt != '') {
     if (url.substr(0, 1) == '*') {
-      r = ` ${txtbefore} <span class=\x22click\x22 onclick=\x22owin('${createTheDictUrl(
-        url.substring(1),
-        escape_apostrophes(trm)
-      )}');\x22>${txt}</span> `;
+      return (
+        <>
+          {txtbefore}{' '}
+          <span
+            className="click"
+            onClick={() =>
+              owin(
+                `${createTheDictUrl(url.substring(1), escape_apostrophes(trm))}`
+              )
+            }
+          >
+            {txt}
+          </span>
+        </>
+      );
     } else {
-      r = ` ${txtbefore} <a href=\x22${createTheDictUrl(
-        url,
-        trm
-      )}\x22 target=\x22ru\x22>${txt}</a> `;
+      return (
+        <>
+          {txtbefore}{' '}
+          <a href={`${createTheDictUrl(url, trm)}`} target="ru">
+            {txt}
+          </a>
+        </>
+      );
     }
   }
-  return r;
+  return <></>;
 }
 
 /**
