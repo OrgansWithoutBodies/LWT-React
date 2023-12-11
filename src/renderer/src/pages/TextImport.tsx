@@ -10,6 +10,9 @@ import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { do_ajax_update_media_select } from './SelectMediaPath';
 import { textPrevalidateMap } from './preValidateMaps';
 
+/**
+ *
+ */
 export function ImportShortText(): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;

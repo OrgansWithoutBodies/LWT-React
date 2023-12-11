@@ -19,6 +19,9 @@ import {
 // TODO data order
 // TODO 'show all' for ambiguous terms
 
+/**
+ *
+ */
 export function Reader({
   activeId,
   setActiveWord,

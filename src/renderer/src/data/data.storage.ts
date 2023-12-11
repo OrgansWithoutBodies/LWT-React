@@ -46,6 +46,9 @@ const MyPersistanceStrategy = AppVariables.persistMethod;
 export const MyPersistanceHandles =
   PersistenceStrategies[MyPersistanceStrategy];
 
+/**
+ *
+ */
 export function createDemoDBInitialState(): DataState {
   return {
     ...demoDB,

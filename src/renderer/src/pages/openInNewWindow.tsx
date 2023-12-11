@@ -3,6 +3,10 @@
  * @param url
  */
 
+/**
+ *
+ * @param url
+ */
 export function openInNewWindow(url: string | URL | undefined) {
   // TODO
   window.open(

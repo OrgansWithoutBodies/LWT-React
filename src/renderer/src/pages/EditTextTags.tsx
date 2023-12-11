@@ -10,18 +10,28 @@ import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Pager } from '../ui-kit/Pager';
-import { pluralize } from './EditTags';
+import { FilterSortPager } from './EditArchivedTexts.component';
 import { FormInput } from './FormInput';
-import { resetDirty } from './Sorting';
+import {
+  GetAllTagsActionsSelectOptions,
+  GetMultipleTagsActionsSelectOptions,
+  GetTagSortSelectoptions,
+} from './GetTagsortSelectoptions';
+import { SortableHeader, TableFooter } from './Library.component';
+import { TagSorting, resetDirty } from './Sorting';
 import { confirmDelete } from './utils';
 
+/**
+ *
+ */
 export function DisplayTextTags({
   query,
-  page = 1,
+  currentPage = 1,
+  sorting = TagSorting['Tag Text A-Z'],
 }: {
   query: string;
-  page?: number;
+  currentPage?: number;
+  sorting?: TagSorting;
 }) {
   const [{ tags2, archtexttags, texttags, settings }] = useData([
     'tags2',
@@ -33,10 +43,11 @@ export function DisplayTextTags({
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(tags2, 'T2ID');
   const pageSize = settings['set-tags-per-page'] || 1;
+  const sortedTags = [...tags2].sort(sortValues(sorting));
 
   const recno = tags2.length;
-  const { dataOnPage, numPages } = usePager(tags2, page, pageSize);
-
+  const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
+  const navigator = useInternalNavigate();
   const countTextsPerTag: Record<Tags2Id, number> = texttags.reduce(
     (prev, curr) => ({ ...prev, [curr.TtT2ID]: prev[curr.TtT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
@@ -45,7 +56,6 @@ export function DisplayTextTags({
     (prev, curr) => ({ ...prev, [curr.AgT2ID]: prev[curr.AgT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
   );
-  console.log(page, numPages, pageSize);
   return (
     <>
       <Header title="Edit Text Tags" />
@@ -65,8 +75,7 @@ export function DisplayTextTags({
                 type="button"
                 value="Reset All"
                 onClick={() => {
-                  // refMap;
-                  // navigate(`/edit_texttags?page=${1}&query=`);
+                  navigate(`/edit_texttags`);
                 }}
               />
             </th>
@@ -100,26 +109,14 @@ export function DisplayTextTags({
               />
             </td>
           </tr>
-          {/* TODO */}
-          <tr>
-            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-              {recno} Tag{pluralize(recno)}
-            </th>
-            <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-              {/* TODO */}
-              <Pager currentPage={0} numPages={0} />
-            </th>
-            <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-              Sort Order:
-              <select
-                name="sort"
-                // TODO
-                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texttags?page=1&sort=' + val;}"
-              >
-                <GetTagsortSelectoptions />
-              </select>
-            </th>
-          </tr>
+          <FilterSortPager
+            currentPage={currentPage}
+            numPages={numPages}
+            recno={recno}
+            elementName={'Tag'}
+          >
+            <GetTagSortSelectoptions selected={sorting} />
+          </FilterSortPager>
         </table>
       </form>
       {recno === 0 ? (
@@ -190,27 +187,46 @@ export function DisplayTextTags({
             <tr>
               <th className="th1 sorttable_nosort">Mark</th>
               <th className="th1 sorttable_nosort">Actions</th>
-              <th className="th1 clickable">Tag Text</th>
-              <th className="th1 clickable">Tag Comment</th>
-              <th className="th1 clickable">
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Tag Text Z-A']}
+                upSorting={TagSorting['Tag Text A-Z']}
+              >
+                Tag Text
+              </SortableHeader>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Tag Comment Z-A']}
+                upSorting={TagSorting['Tag Comment A-Z']}
+              >
+                Tag Comment
+              </SortableHeader>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Texts With Tag']}
+                upSorting={TagSorting['Texts With Tag (desc)']}
+              >
                 Texts
                 <br />
                 With Tag
-              </th>
-              <th className="th1 clickable">
+              </SortableHeader>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Arch. Texts With Tag']}
+                upSorting={TagSorting['Arch. Texts With Tag (desc)']}
+              >
                 Arch.Texts
                 <br />
                 With Tag
-              </th>
+              </SortableHeader>
             </tr>
 
-            {/* $sql = 'select T2ID, T2Text, T2Comment from ' . $tbpref . 'tags2 where (1=1) ' . $wh_query . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit; */}
             {tags2.map((tag) => {
               const numTextTags = countTextsPerTag[tag.T2ID];
               const numArchivedTextTags = countArchivedTextsPerTag[tag.T2ID];
               return (
                 <tr>
-                  {/* TODO */}
+                  {/* TODO think already taken care of?*/}
                   {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
                   <td className="td1 center">
                     <A id={`rec${tag['T2ID']}`}>
@@ -219,7 +235,7 @@ export function DisplayTextTags({
                         type="checkbox"
                         className="markcheck"
                         {...checkboxPropsForEntry(tag)}
-                        value="' . $record['T2ID'] . '"
+                        value={tag['T2ID']}
                       />
                     </A>
                   </td>
@@ -268,22 +284,23 @@ export function DisplayTextTags({
       )}
       {numPages > 1 && (
         <form name="form3" action="#">
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                {recno} Tag{pluralize(recno)}
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                <Pager currentPage={page} numPages={numPages} />
-              </th>
-            </tr>
-          </table>
+          <TableFooter
+            currentPage={currentPage}
+            pageSize={pageSize}
+            numPages={numPages}
+            recno={recno}
+            elementName={'Tag'}
+            pageSizeSettingsKey={'set-tags-per-page'}
+          />
         </form>
       )}
     </>
   );
 }
 
+/**
+ *
+ */
 export function NewTextTag() {
   const validator = Tags2Validator;
   const refMap = RefMap<Tag2>(validator);
@@ -358,6 +375,9 @@ export function NewTextTag() {
   );
 }
 
+/**
+ *
+ */
 export function EditTextTag({ chgID }: { chgID: number }) {
   const [{ tags2 }] = useData(['tags2']);
   const changingTag = tags2.find(({ T2ID }) => chgID === T2ID);
@@ -442,56 +462,20 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   );
 }
 
-export function GetMultipleTagsActionsSelectOptions() {
-  return (
-    <>
-      <option value="">[Choose...]</option>
-      <option value="del">Delete Marked Tags</option>
-    </>
-  );
-}
-
-export function GetAllTagsActionsSelectOptions() {
-  return (
-    <>
-      <option value="">[Choose...]</option>
-      <option value="delall">Delete ALL Tags</option>
-    </>
-  );
-}
-
-export function GetMultipleArchivedTextActionsSelectOptions() {
-  return (
-    <>
-      <option value="">[Choose...]</option>
-      <option disabled>------------</option>
-      <option value="addtag">Add Tag</option>
-      <option value="deltag">Remove Tag</option>
-      <option disabled>------------</option>
-      <option value="unarch">Unarchive Marked Texts</option>
-      <option disabled>------------</option>
-      <option value="del">Delete Marked Texts</option>
-      <option value="delall">Delete ALL Tags</option>
-    </>
-  );
-}
-
-export function GetTagsortSelectoptions() {
-  return (
-    <>
-      <option value="1">Tag Text A-Z</option>
-      <option value="2">Tag Comment A-Z</option>
-      <option value="3">Newest first</option>
-      <option value="4">Oldest first</option>
-    </>
-  );
-}
-export function GetTextssortSelectoptions() {
-  return (
-    <>
-      <option value="1">Title A-Z</option>
-      <option value="2">Newest first</option>
-      <option value="3">Oldest first</option>
-    </>
-  );
+/**
+ *
+ * @param value
+ */
+function sortValues(value: TagSorting) {
+  switch (value) {
+    case TagSorting['Newest first']:
+      return (a: Tag2, b: Tag2) => (a.T2ID > b.T2ID ? 1 : -1);
+    case TagSorting['Oldest first']:
+      return (a: Tag2, b: Tag2) => (a.T2ID < b.T2ID ? 1 : -1);
+    case TagSorting['Tag Text A-Z']:
+      return (a: Tag2, b: Tag2) => (a.T2Text < b.T2Text ? 1 : -1);
+    case TagSorting['Tag Comment A-Z']:
+      return (a: Tag2, b: Tag2) =>
+        (a.T2Comment || '') < (b.T2Comment || '') ? 1 : -1;
+  }
 }

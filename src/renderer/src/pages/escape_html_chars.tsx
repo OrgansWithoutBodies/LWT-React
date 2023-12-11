@@ -10,6 +10,11 @@ import {
 import { StrengthMapNumericalKey } from './StrengthMap';
 import { prepare_textdata_js } from './translateSentence2';
 
+/**
+ *
+ * @param word
+ * @param language
+ */
 export function onWordClick(word: Word, language: Language) {
   // TODO
   // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (trawBlink1ns) : (' [' . trans . '] ')) : save ); ?>;
@@ -33,6 +38,9 @@ enum KeyStatus {
   // '' = 96,
 }
 
+/**
+ *
+ */
 function cClick() {
   if (olLoaded) {
     runHook('hideObject', FREPLACE, over);
@@ -43,6 +51,7 @@ function cClick() {
 /**
  *
  * @param e
+ * @param OPENED
  */
 function keydown_event_do_test_test(
   e: KeyboardEvent,
@@ -104,6 +113,9 @@ function keydown_event_do_test_test(
   return true;
 }
 
+/**
+ *
+ */
 function word_click_event_do_test_test({
   LgDict1URI: wBlink1,
   LgDict2URI: wBlink2,

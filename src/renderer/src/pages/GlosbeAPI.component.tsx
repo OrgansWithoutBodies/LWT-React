@@ -24,6 +24,9 @@ export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
 // echo '<h3>' . titletext . '</h3>';
 // echo '<p>(Click on <Icon src="tick-button" title="Choose" /> to copy word(s) into above term)<br />&nbsp;</p>';
 
+/**
+ *
+ */
 export function GlosbeAPI({
   from,
   dest,

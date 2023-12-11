@@ -13,6 +13,9 @@ import { LongTextVerify } from './LongTextImportVerify.component';
 import { resetDirty } from './Sorting';
 import { buildSentences } from './utils';
 
+/**
+ *
+ */
 export default function ImportLongText({
   onSetVerify,
 }: {
@@ -262,6 +265,9 @@ export default function ImportLongText({
 // TODO flesh out
 export type LongTextType = Pick<Text, 'TxText' | 'TxLgID' | 'TxTitle'>[];
 
+/**
+ *
+ */
 export function LongText() {
   const [verifying, setVerifying] = useState<LongTextType | null>(null);
   const isVerify = verifying !== null;

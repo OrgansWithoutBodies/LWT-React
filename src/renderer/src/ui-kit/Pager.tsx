@@ -1,6 +1,9 @@
 import { useUpdateParams } from '../hooks/useInternalNav';
 import { Icon } from './Icon';
 
+/**
+ *
+ */
 export function Pager({
   currentPage,
   numPages,
@@ -33,6 +36,7 @@ export function Pager({
           &nbsp;
         </>
       )}
+      Page{' '}
       {numPages === 1 ? (
         '1'
       ) : (
@@ -51,7 +55,7 @@ export function Pager({
           })}
         </select>
       )}
-      {`of ${numPages}`}
+      {` of ${numPages}`}
       {currentPage < numPages ? (
         <>
           <Icon

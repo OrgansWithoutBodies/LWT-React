@@ -8,6 +8,7 @@ import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { AddNewWordPane } from './AddNewWordPane';
 import { Reader } from './Reader.component';
+import { TextToDoCount } from './TextToDoCount';
 import { owin } from './translateSentence2';
 import { useTick } from './useTimer';
 
@@ -15,6 +16,9 @@ import { useTick } from './useTimer';
 //  confirmation screen
 //  details screen
 
+/**
+ *
+ */
 function Pane3() {
   // https://stackoverflow.com/questions/23616226/insert-html-with-react-variable-statements-jsx
   // dictionary pane
@@ -26,6 +30,9 @@ function Pane3() {
 }
 // TODO I Know All
 
+/**
+ *
+ */
 export function ReaderPage({ textId }: { textId: TextsId }) {
   const [{ texts, words }] = useData(['texts', 'words']);
 
@@ -70,8 +77,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
               >
                 TO DO:{' '}
                 <span id="learnstatus">
-                  {/* TODO */}
-                  {/* <?php echo texttodocount2($_REQUEST['text']); ?> */}
+                  <TextToDoCount text={text} />
                 </span>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <span
@@ -83,7 +89,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
                     type="checkbox"
                     id="showallwords"
                     // TODO
-                    // <?php echo get_checked($showAll); ?>
+                    ref={null}
                   />
                 </span>
                 <span id="thetextid" className="hide">
@@ -120,6 +126,9 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
 }
 type Modality = 0 | 1 | 2 | 3 | 4 | 5 | 'table' | null;
 
+/**
+ *
+ */
 export function TesterPage({
   langId,
   textId,
@@ -227,6 +236,9 @@ export function MakeOverlibLinkChangeStatusTest({
   );
 }
 
+/**
+ *
+ */
 export function Tester({ modality }: { modality: Modality }) {
   const [testingWord, setTestingWord] = useState<Word | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
@@ -295,6 +307,9 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
+/**
+ *
+ */
 function RunTestForWord({
   word: {
     WoTranslation: trans,
@@ -420,9 +435,7 @@ export function CreateTheDictLink({
           <span
             className="click"
             onClick={() =>
-              owin(
-                `${createTheDictUrl(url.substring(1), escape_apostrophes(trm))}`
-              )
+              owin(createTheDictUrl(url.substring(1), escape_apostrophes(trm)))
             }
           >
             {txt}
@@ -462,6 +475,9 @@ function createTheDictUrl(u: string, w: string) {
 function escape_apostrophes(s: string) {
   return s.replace(/'/g, "\\'");
 }
+/**
+ *
+ */
 function AudioPlayer({ audioURI }: { audioURI: string }) {
   return <></>;
 }

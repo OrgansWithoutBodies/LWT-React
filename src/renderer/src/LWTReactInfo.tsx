@@ -12,6 +12,9 @@ const infoLines: Parameters<typeof InfoLine>[0][] = [
   { title: 'Current Version', href: 'current' },
   { title: 'Change Log', href: 'changelog' },
 ];
+/**
+ *
+ */
 export function LWTReactInfo() {
   return (
     <>

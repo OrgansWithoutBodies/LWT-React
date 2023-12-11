@@ -1,9 +1,20 @@
+import { useState } from 'react';
+import { useData } from '../data/useAkita';
+import { LanguagesId } from '../data/validators';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { NavigateButton } from './Statistics.component';
 
+/**
+ *
+ */
 export function CheckText(): JSX.Element {
+  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+  // TODO first pass this is undefined for some reason
+  const [languageForText, setLanguageForText] = useState<
+    LanguagesId | undefined
+  >(activeLanguageId);
   return (
     <>
       <Header title="Check Text" />
@@ -15,7 +26,10 @@ export function CheckText(): JSX.Element {
             <tr>
               <td className="td1 right">Language:</td>
               <td className="td1">
-                <LanguageDropdown />
+                <LanguageDropdown
+                  defaultValue={languageForText}
+                  onChange={(val) => setLanguageForText(val)}
+                />
                 <RequiredLineButton />
               </td>
             </tr>

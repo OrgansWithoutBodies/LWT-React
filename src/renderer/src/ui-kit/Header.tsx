@@ -8,7 +8,17 @@ import { Icon } from './Icon';
 export const headerValuesTemp = {
   index: { params: [] },
   edit_texts: {
-    params: ['chg', 'arch', 'page', 'query', 'tag1', 'tag2', 'new'],
+    params: [
+      'chg',
+      'arch',
+      'page',
+      'query',
+      'tag1',
+      'tag2',
+      'tag12',
+      'new',
+      'sort',
+    ],
   },
   edit_archivedtexts: { params: ['page'] },
   edit_texttags: { params: ['page'] },
@@ -61,6 +71,9 @@ export const headerValues = {
   Help: 'info',
 } as const;
 
+/**
+ *
+ */
 export function Header({
   // TODO deprecate?
   afterDropdown,

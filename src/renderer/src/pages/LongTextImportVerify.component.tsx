@@ -5,6 +5,9 @@ import { LongTextType } from './LongTextImport.component';
 import { resetDirty } from './Sorting';
 import { byteSizeOfString } from './utils';
 
+/**
+ *
+ */
 export function LongTextVerify({
   verifying,
 }: {

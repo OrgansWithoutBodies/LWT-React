@@ -17,6 +17,9 @@ import { GetWordstatusSelectoptions } from './PrintText.component';
 import { StrengthMap } from './StrengthMap';
 import { ColumnImportMode, TermName } from './TermName';
 
+/**
+ *
+ */
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();

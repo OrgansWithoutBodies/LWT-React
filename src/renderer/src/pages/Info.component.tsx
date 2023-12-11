@@ -21,6 +21,9 @@ const infoLines: Parameters<typeof InfoLine>[0][] = [
   { title: 'Changelog', href: 'history' },
 ];
 
+/**
+ *
+ */
 export function InfoPage() {
   const navigator = useInternalNavigate();
   return (
@@ -3210,6 +3213,9 @@ $('#floatdiv').addFloating( {
   );
 }
 
+/**
+ *
+ */
 export function InfoLine({ href, title }: { href: string; title: string }) {
   return (
     <dt>

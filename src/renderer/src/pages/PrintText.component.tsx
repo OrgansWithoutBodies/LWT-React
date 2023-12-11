@@ -7,6 +7,9 @@ import { Icon } from '../ui-kit/Icon';
 import { getDirTag } from './Reader.component';
 import { StrengthMapNumericalKey } from './StrengthMap';
 
+/**
+ *
+ */
 export function PrintText({ textID }: { textID: TextsId }) {
   const [{ texts, languages }] = useData(['texts', 'languages']);
   const navigator = useInternalNavigate();
@@ -61,8 +64,9 @@ export function PrintText({ textID }: { textID: TextsId }) {
           </select>
           <select
             id="annplcmnt"
-            // TODO
-            // onchange="{val=document.getElementById('annplcmnt').options[document.getElementById('annplcmnt').selectedIndex].valuelocation.href='print_text?text=" . textID . "&ampannplcmnt=' + val}"
+            onChange={({ target: { value: val } }) => {
+              navigator(`/print_text?text=${textID}&annplcmnt=${val}`);
+            }}
           >
             <option
               value="0"
@@ -128,8 +132,11 @@ export function PrintText({ textID }: { textID: TextsId }) {
       </div>
       <div id="print" {...getDirTag(language)}>
         <p
-          style={{ fontSize: language.LgTextSize }}
-          // style="font-size:' . textsize . '%line-height: 1.35 margin-bottom: 10px "
+          style={{
+            fontSize: language.LgTextSize,
+            lineHeight: '1.35',
+            marginBottom: '10px',
+          }}
         >
           {showingText.TxTitle}
           <br />
@@ -141,6 +148,9 @@ export function PrintText({ textID }: { textID: TextsId }) {
   );
 }
 
+/**
+ *
+ */
 export function GetAnnotationLink({ textID }: { textID: TextsId }) {
   // global tbpref;
   if (
@@ -158,6 +168,9 @@ export function GetAnnotationLink({ textID }: { textID: TextsId }) {
   else return <></>;
 }
 
+/**
+ *
+ */
 export function GetWordstatusSelectoptions({
   // defaultval
   v = 1,

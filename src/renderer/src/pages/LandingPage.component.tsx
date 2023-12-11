@@ -9,6 +9,9 @@ import { PLUGINS } from '../plugins';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { GlosbeAPI } from './GlosbeAPI.component';
 
+/**
+ *
+ */
 export function LandingPage() {
   const {
     releaseDate,

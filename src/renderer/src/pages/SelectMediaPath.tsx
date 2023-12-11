@@ -28,6 +28,9 @@
 // }
 
 // TODO
+/**
+ *
+ */
 export function do_ajax_update_media_select() {
   // $('#mediaselect').html('&nbsp; <img src="icn/waiting2.gif" />');
   // $.post('ajax_update_media_select.php',
@@ -35,6 +38,9 @@ export function do_ajax_update_media_select() {
   // );
 }
 
+/**
+ *
+ */
 export function SelectMediaPath({ f }: { f: string }) {
   const exists = true;
   return (

@@ -59,11 +59,16 @@ FEATURE IDEAS
 - User account plugin
 - User default L1/i18n
 - Direct integration w anki sync server
+- - https://www.npmjs.com/package/@autoanki/sync
+- - https://www.npmjs.com/package/anki-apkg-export
+- - https://www.npmjs.com/package/anki-reader
 - "Offline Mode"?
 - json backup/restore
 - "Local + Sync" backend?
 - other dictionaries than glosbe
 - "merge backup" for disparate backups
+- Calibre Plugin
+- Pleco Plugin Integration
 - consider RxDB for electron-sqlite wrapper? https://github.com/nylas/electron-RxDB
 - - would also need to consider making sure friendly w other plugins
 - Tatoeba/Lute
@@ -72,6 +77,9 @@ FEATURE IDEAS
 - be able to have images in texts?
 - auto read pdf (if has outline)
 - Electron Mobile Mode
+- Dicts
+- - http://ccdb.hemiola.com/
+- - http://ccdb.hemiola.com/js/CcdbUtil.js
 - parse text from web page url
 - implementation as component prop?
 - download audio from youtube

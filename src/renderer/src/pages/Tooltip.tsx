@@ -20,6 +20,9 @@ import React, { useRef } from 'react';
 
 export type Dimension2D<T = number> = { x: T; y: T };
 
+/**
+ *
+ */
 export function Tooltip({ visible }: { visible: boolean }): JSX.Element {
   const { x, y, refs, strategy, context, elements } = useFloating({
     open: visible,
@@ -73,6 +76,9 @@ interface PopoverOptions {
   onOpenChange?: (open: boolean) => void;
 }
 
+/**
+ *
+ */
 export function usePopover({
   initialOpen = false,
   placement = 'bottom',
@@ -151,6 +157,9 @@ export const usePopoverContext = () => {
   return context;
 };
 
+/**
+ *
+ */
 export function Popover({
   children,
   modal = false,

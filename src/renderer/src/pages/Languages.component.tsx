@@ -7,6 +7,9 @@ import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { confirmDelete } from './utils';
 
+/**
+ *
+ */
 function LanguageLine({
   language,
   activeLanguageId,
@@ -133,6 +136,9 @@ function LanguageLine({
   );
 }
 
+/**
+ *
+ */
 export function LanguagesPage(): JSX.Element {
   const [{ languages, activeLanguageId, texts, words, archivedtexts }] =
     useData([

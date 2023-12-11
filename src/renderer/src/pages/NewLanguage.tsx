@@ -16,6 +16,9 @@ import { openInNewWindow } from './openInNewWindow';
 import { languageNoIdPreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
+/**
+ *
+ */
 export function NewLanguage() {
   // languages type map
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
@@ -373,6 +376,9 @@ export function NewLanguage() {
   );
 }
 
+/**
+ *
+ */
 export function TextSizeSelect<
   TData extends Record<string, unknown>,
   TKey extends keyof TData

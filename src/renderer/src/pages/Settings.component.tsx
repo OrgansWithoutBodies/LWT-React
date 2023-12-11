@@ -173,6 +173,9 @@ const DEFAULT_SETTINGS = {
   'set-tags-per-page': 100,
 };
 
+/**
+ *
+ */
 export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();

@@ -2,6 +2,9 @@ import { useRef } from 'react';
 import * as ss from 'superstruct';
 import { ObjectSchema } from 'superstruct/dist/utils';
 
+/**
+ *
+ */
 export function Form<TSchema extends ObjectSchema>({
   validator,
   formData,
@@ -104,6 +107,7 @@ export function ResetForm<TForm>(refMap: TRefMap<TForm>) {
  * @param validator
  * @param takeValidatedObject
  * @param omit
+ * @param onFormErrors
  */
 export function CheckAndSubmit<TForm>(
   refMap: TRefMap<TForm>,
@@ -121,15 +125,13 @@ export function CheckAndSubmit<TForm>(
   const values = Object.fromEntries(
     (Object.keys(refMap) as (keyof typeof refMap)[])
       .filter((val) => (omit === null || val !== omit) && val !== 'clearAll')
-      .map((refKey) => {
-        return [
+      .map((refKey) => [
           refKey,
           (preValidateMap[refKey] || identityMap)(
             refMap[refKey].current?.value,
             refMap
           ),
-        ];
-      })
+        ])
   );
   console.log(values);
 

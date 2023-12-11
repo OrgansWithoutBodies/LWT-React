@@ -55,7 +55,11 @@ export const useUpdateParams = () => {
       .map((param) => [param, searchParams.get(param)])
       .filter(([, val]) => val !== null)
   );
-  return (params: { [path in PathParams]?: string | null }) => {
+  return (params: { [path in PathParams]?: string | null } | null) => {
+    if (params === null) {
+      setSearchParams({});
+      return;
+    }
     const filteredParams: { [path in PathParams]?: string } =
       Object.fromEntries(
         Object.entries({ ...currentParams, ...params }).filter(

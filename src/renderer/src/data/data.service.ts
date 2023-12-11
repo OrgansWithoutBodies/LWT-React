@@ -1,10 +1,10 @@
 import { Gzip } from 'browserify-zlib';
+import demoDB from '../demo_db.json';
 
 import { Persistable } from '../../../shared/Persistable';
 import { StrengthMap } from '../pages/StrengthMap';
 import { splitCheckText } from '../pages/utils';
 import {
-  createDemoDBInitialState,
   DataState,
   dataStore,
   DataStore,
@@ -24,7 +24,7 @@ import {
   Word,
 } from './parseMySqlDump';
 import { serializeJsonToSQL } from './serializeJsonToSQL';
-import Settings from './settings';
+import { Settings } from './settings';
 import { TermStrengthOrUnknown } from './type';
 import {
   ArchivedTextId,
@@ -84,6 +84,7 @@ export class DataService {
     if (MyPersistanceHandles.insert) {
       const { insert: inserter } = MyPersistanceHandles;
       const insertedVal = await inserter(key, insertVal);
+      console.log('INSERT', insertedVal);
       return insertedVal;
     }
   }
@@ -145,6 +146,8 @@ export class DataService {
   }
   /**
    * addSentences
+   *
+   * @param sentences
    */
   public addSentences(sentences: Sentence[]) {
     this.dataStore.update((state) => ({
@@ -275,7 +278,7 @@ export class DataService {
   }
 
   public addTextTag(tag: Tag2NoId) {
-    var maxId = -1 as Tags2Id;
+    let maxId = -1 as Tags2Id;
     this.dataStore.update((state) => {
       const ids = state.tags2.map((tag) => tag.T2ID);
       maxId = (Math.max(...ids) + 1) as Tags2Id;
@@ -681,7 +684,7 @@ export class DataService {
   public installDemoDatabase() {
     // TODO persist this better
     this.dataStore.update(() => ({
-      ...createDemoDBInitialState(),
+      ...demoDB,
       notificationMessage: { txt: 'Installed Demo DB' },
     }));
 
@@ -700,6 +703,12 @@ export class DataService {
     this.persistSet('texttags');
     this.persistSet('words');
     this.persistSet('wordtags');
+
+    Object.keys(demoDB).forEach((fieldName) => {
+      this.persistDelete(fieldName);
+      demoDB[fieldName];
+      this.persistInsert(fieldName);
+    });
   }
 
   public archiveText(archID: TextsId) {
@@ -756,16 +765,21 @@ export class DataService {
   }
 
   public setSettings(settings: Partial<Settings>) {
-    this.dataStore.update(({ settings: oldSettings, ...state }) => ({
-      ...state,
-      notificationMessage: { txt: 'Updated Settings' },
-      settings: Object.entries({
-        ...Object.fromEntries(
-          oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
-        ),
-        ...settings,
-      }).map(([key, val]) => ({ StKey: key, StValue: val })),
-    }));
+    this.dataStore.update(({ settings: oldSettings, ...state }) => {
+      const settingsAsObject = Object.fromEntries(
+        oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
+      );
+      return {
+        ...state,
+        // TODO setting-specific message here?
+        notificationMessage: { txt: 'Updated Settings' },
+        settings: Object.entries({
+          ...settingsAsObject,
+          ...settings,
+        }).map(([key, val]) => ({ StKey: key, StValue: val })),
+      };
+    });
+    this.persistSet('settings');
     Object.entries(settings).forEach(async ([key, val]) => {
       await this.persistDelete('settings', key);
       await this.persistInsert('settings', { StKey: key, StValue: val });
@@ -801,27 +815,8 @@ export class DataService {
       });
   }
 
-  // TODO maybe make into a subclass of broader settings?
   public setActiveLanguage(langId: LanguagesId | null) {
     this.setSettings({ currentlanguage: langId });
-    // this.dataStore.update(({ settings, ...state }) => {
-    //   const currentLangIndex = settings.findIndex(
-    //     (val) => val.StKey === 'currentlanguage'
-    //   );
-    //   return {
-    //     ...state,
-    //     settings: [
-    //       ...settings.slice(0, currentLangIndex),
-    //       { StKey: 'currentlanguage', StValue: langId },
-    //       ...settings.slice(currentLangIndex + 1),
-    //     ],
-    //   };
-    // });
-    // this.persistSet('settings');
-    // this.persistUpdate('settings', {
-    //   StKey: 'currentlanguage',
-    //   StValue: langId,
-    // });
   }
 
   public async getTatoebaSentence(langKey: ThreeLetterString, word: string) {

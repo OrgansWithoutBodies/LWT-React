@@ -13,6 +13,9 @@ import { openInNewWindow } from './openInNewWindow';
 import { languagePreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
+/**
+ *
+ */
 export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   const [{ languages }] = useData(['languages']);
   const changingLang = languages.find(({ LgID }) => LgID === chgID);
@@ -27,7 +30,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
     onSubmit,
   } = useFormInput({
     entry: changingLang,
-    validator: validator,
+    validator,
   });
   return (
     <>
@@ -257,6 +260,9 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   );
 }
 
+/**
+ *
+ */
 export function SelectBoolean<
   TSelKey extends string,
   TEntry extends Record<TSelKey, 0 | 1>

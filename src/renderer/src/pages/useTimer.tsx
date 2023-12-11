@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 /**
  *
  * @param intervalInMs
+ * @param trigger
  */
 export function useTick(intervalInMs: number, trigger?: any) {
   const initialTime = new Date().getTime();
@@ -25,6 +26,9 @@ export function useTick(intervalInMs: number, trigger?: any) {
   return { tick: timeSinceStart, stopTimer };
 }
 
+/**
+ *
+ */
 export function useCountdown({
   countdownInMs,
   intervalInMs,

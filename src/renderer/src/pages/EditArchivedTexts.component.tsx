@@ -1,62 +1,85 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { dataService } from '../data/data.service';
+import {
+  ArchTextTag,
+  Tag,
+  Tag2,
+  TextTag,
+  WordTag,
+} from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { LanguagesId } from '../data/validators';
-import { useInternalNavigate } from '../hooks/useInternalNav';
+import {
+  ArchivedTextId,
+  Tags2Id,
+  TagsId,
+  TextsId,
+  WordsId,
+} from '../data/validators';
+import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
+import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
+import { pluralize } from './EditTags';
 import {
   GetMultipleArchivedTextActionsSelectOptions,
-  GetTextssortSelectoptions,
-} from './EditTextTags';
+  GetTextsSortSelectoptions,
+} from './GetTagsortSelectoptions';
+import { SortableHeader, TableFooter } from './Library.component';
+import { TextSorting } from './Sorting';
 import { TagAndOr, TagDropDown } from './Terms.component';
 import { confirmDelete } from './utils';
 
+/**
+ *
+ */
 export function EditArchivedTexts({
   query,
   currentPage,
+  tag12,
+  tag1,
+  tag2,
+  sorting = TextSorting['Oldest first'],
 }: {
   query: string;
   currentPage: number;
+  tag12: 0 | 1;
+  tag1: TagsId | null;
+  tag2: TagsId | null;
+  sorting?: TextSorting;
 }): JSX.Element {
-  const [{ tags, languages, activeLanguage, numArchivedTexts, archivedtexts }] =
-    useData([
-      'languages',
-      'activeLanguage',
-      'numArchivedTexts',
-      'archivedtexts',
-      'tags',
-    ]);
+  const [
+    { tags, languages, activeLanguage, archivedtexts, archtexttags, tags2 },
+  ] = useData([
+    'languages',
+    'tags2',
+    'activeLanguage',
+    'archivedtexts',
+    'tags',
+    'archtexttags',
+  ]);
   const pageSize = 15;
-
-  const [filterLanguageID, setFilterLanguage] = useState<LanguagesId | null>(
-    activeLanguage ? activeLanguage.LgID : null
+  const textTagLookup: Record<ArchivedTextId, string[]> = buildTextTagLookup(
+    tags2,
+    archtexttags
   );
-
-  // const filterLanguage = languages.map((lang) => {
-  //   return lang.LgID === filterLanguageID;
-  // });
-  const filteredTexts =
-    filterLanguageID !== null
-      ? archivedtexts.filter(({ AtLgID }) => AtLgID === filterLanguageID)
-      : archivedtexts;
+  const filteredTexts = activeLanguage
+    ? archivedtexts.filter(({ AtLgID }) => AtLgID === activeLanguage.LgID)
+    : archivedtexts;
   const { dataOnPage, numPages } = usePager(
     filteredTexts,
     currentPage,
     pageSize
   );
-  const recno = numArchivedTexts;
+  const recno = archivedtexts.length;
   const navigate = useInternalNavigate();
+  const paramUpdater = useUpdateParams();
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(archivedtexts, 'AtID');
-  const queryRef = useRef<HTMLInputElement | undefined>();
-  function pluralize(recno: number): import('react').ReactNode {
-    throw new Error('Function not implemented.');
-  }
+  const queryRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
@@ -79,6 +102,7 @@ export function EditArchivedTexts({
             <td className="td1 center" colSpan={2}>
               Language:
               <LanguageDropdown
+                defaultValue={activeLanguage?.LgID}
                 header="Filter off"
                 onChange={(val) => {
                   if (val === -1) {
@@ -128,38 +152,30 @@ export function EditArchivedTexts({
               style={{ whiteSpace: 'nowrap' }}
             >
               Tag #1:
-              <TagDropDown tags={tags} tagKey="tag1" />
+              {/* TODO filter tags here to only be ones that correspond to an archivedTag */}
+              <TagDropDown tags={tags} tagKey="tag1" defaultValue={tag1} />
             </td>
             <TagAndOr
+              defaultValue={tag12}
               onChange={({ target: { value: val } }) =>
-                navigate(`/edit_archivedtexts?tag12=${val}`)
+                paramUpdater({ tag12: val })
               }
             />
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
-              <TagDropDown tags={tags} tagKey="tag2" />
+              {/* TODO filter tags here to only be ones that correspond to an archivedTag */}
+              <TagDropDown tags={tags} tagKey="tag2" defaultValue={tag2} />
             </td>
           </tr>
-          {/* TODO */}
           {recno > 0 && (
-            <tr>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Text{pluralize(recno)}
-              </th>
-              <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-                {/* TODO */}
-                <Pager currentPage={0} numPages={0} />
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Sort Order:
-                <select
-                  name="sort"
-                  onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_archivedtexts?page=1&sort=' + val;}"
-                >
-                  <GetTextssortSelectoptions />
-                </select>
-              </th>
-            </tr>
+            <FilterSortPager
+              currentPage={currentPage}
+              numPages={numPages}
+              recno={recno}
+              elementName={'Text'}
+            >
+              <GetTextsSortSelectoptions selected={sorting} />
+            </FilterSortPager>
           )}
         </table>
       </form>
@@ -204,22 +220,36 @@ export function EditArchivedTexts({
             <tr>
               <th className="th1 sorttable_nosort">Mark</th>
               <th className="th1 sorttable_nosort">Actions</th>
-              {filterLanguageID === null && (
-                <th className="th1 clickable">Lang.</th>
+              {!activeLanguage && (
+                <SortableHeader
+                  sorting={sorting}
+                  upSorting={TextSorting['Lang.']}
+                  downSorting={TextSorting['Lang. (desc)']}
+                >
+                  Lang.
+                </SortableHeader>
               )}
-              <th className="th1 clickable">
+              <SortableHeader
+                sorting={sorting}
+                upSorting={TextSorting['Title A-Z']}
+                downSorting={TextSorting['Title Z-A']}
+              >
                 Title [Tags] / Audio:&nbsp;
                 <Icon src="speaker-volume" title="With Audio" />
                 , Src.Link:&nbsp;
                 <Icon src="chain" title="Source Link available" />
                 , Ann.Text:&nbsp;
                 <Icon src="tick" title="Annotated Text available" />
-              </th>
+              </SortableHeader>
             </tr>
             {dataOnPage.map((text) => {
               const languageForLine = languages.find(
                 (lang) => lang.LgID === text.AtLgID
               );
+              if (!languageForLine) {
+                throw new Error('Invalid Language line');
+              }
+
               return (
                 <tr>
                   <td className="td1 center">
@@ -229,22 +259,20 @@ export function EditArchivedTexts({
                         className="markcheck"
                         type="checkbox"
                         {...checkboxPropsForEntry(text)}
-                        value="' . record['AtID'] . '"
+                        value={text['AtID']}
                       />
                     </a>
                   </td>
                   {/* ' . checkTest(record['AtID'], 'marked') . '  */}
                   <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
                     &nbsp;
-                    {/* TODO */}
-                    <a href="' . $_SERVER['PHP_SELF'] . '?unarch=' . record['AtID'] . '">
+                    <A href={`/edit_archivedtexts?unarch=${text.AtID}`}>
                       <Icon src="inbox-upload" title="Unarchive" />
-                    </a>
+                    </A>
                     &nbsp;
-                    {/* TODO */}
-                    <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . record['AtID'] . '">
+                    <A href={`/edit_archivedtexts?chg=${text.AtID}`}>
                       <Icon src="document--pencil" title="Edit" />
-                    </a>
+                    </A>
                     &nbsp;
                     <span
                       className="click"
@@ -259,14 +287,14 @@ export function EditArchivedTexts({
                     </span>
                     &nbsp;
                   </td>
-                  {filterLanguageID === null && (
-                    <td className="td1 center">{languageForLine?.LgName}</td>
+                  {!activeLanguage && (
+                    <td className="td1 center">{languageForLine.LgName}</td>
                   )}
                   <td className="td1 center">
                     {text.AtTitle}
                     <span className="smallgray2">
-                      {/* TODO */}
-                      {/* . tohtml(record['taglist']) . */}
+                      {' '}
+                      [{textTagLookup[text.AtID].join(', ')}]
                     </span>
                     {text.AtAudioURI && (
                       <Icon src="speaker-volume" title="With Audio" />
@@ -288,16 +316,14 @@ export function EditArchivedTexts({
       )}
       {numPages > 1 && (
         <form name="form3" action="#">
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Text{pluralize(recno)}
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                <Pager currentPage={currentPage} numPages={numPages} />
-              </th>
-            </tr>
-          </table>
+          <TableFooter
+            recno={recno}
+            currentPage={currentPage}
+            numPages={numPages}
+            pageSize={pageSize}
+            elementName={'Text'}
+            pageSizeSettingsKey={'set-archivedtexts-per-page'}
+          />
         </form>
       )}
 
@@ -311,6 +337,120 @@ export function EditArchivedTexts({
     </>
   );
 }
+
+// TODO better name
+/**
+ *
+ */
+export function FilterSortPager({
+  children,
+  elementName,
+  recno,
+  ...pageProps
+}: React.PropsWithChildren<Parameters<typeof Pager>[0]> & {
+  recno: number;
+  elementName: string;
+}) {
+  const paramUpdater = useUpdateParams();
+  return (
+    <tr>
+      <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+        {recno} {elementName}
+        {pluralize(recno)}
+      </th>
+      <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
+        <Pager {...pageProps} />
+      </th>
+      <th className="th1" style={{ whiteSpace: 'nowrap' }}>
+        Sort Order:
+        <select
+          name="sort"
+          onChange={({ target: { value } }) => {
+            paramUpdater({ sort: value });
+          }}
+        >
+          {children}
+        </select>
+      </th>
+    </tr>
+  );
+}
+export function buildTextTagLookup(
+  tags: Tag[],
+  archtexttags: WordTag[]
+): Record<WordsId, string[]>;
+export function buildTextTagLookup(
+  tags: Tag2[],
+  archtexttags: TextTag[]
+): Record<TextsId, string[]>;
+export function buildTextTagLookup(
+  tags: Tag2[],
+  archtexttags: ArchTextTag[]
+): Record<ArchivedTextId, string[]>;
+/**
+ *
+ * @param tags
+ * @param archtexttags
+ */
+export function buildTextTagLookup(
+  tags: (Tag2 | Tag)[],
+  archtexttags: (ArchTextTag | TextTag | WordTag)[]
+):
+  | Record<WordsId, string[]>
+  | Record<TextsId, string[]>
+  | Record<ArchivedTextId, string[]> {
+  if (!tags[0]) {
+    return {};
+  }
+  // TODO typewise enforce these better instead of free text
+  const tagIDKey = 'TgID' in tags[0] ? 'TgID' : 'T2ID';
+  const tagTextKey = 'TgID' in tags[0] ? 'TgText' : 'T2Text';
+  const intermediaryTagID =
+    'AgT2ID' in archtexttags[0]
+      ? 'AgT2ID'
+      : 'TtT2ID' in archtexttags[0]
+      ? 'TtT2ID'
+      : 'WtTgID';
+  const intermediaryEntryID =
+    'AgT2ID' in archtexttags[0]
+      ? 'AgAtID'
+      : 'TtT2ID' in archtexttags[0]
+      ? 'TtTxID'
+      : 'WtWoID';
+  console.log({
+    tag: tags[0],
+    tagIDKey,
+    tagTextKey,
+    intermediaryTagID,
+    intermediaryEntryID,
+  });
+  const tagTitleLookup: Record<Tags2Id, string> = Object.fromEntries(
+    tags.map((tag) => [tag[tagIDKey], tag[tagTextKey]])
+  );
+  const textTagLookup: Record<ArchivedTextId, string[]> = archtexttags.reduce(
+    (prev, curr) => {
+      if (prev[curr[intermediaryEntryID]]) {
+        prev[curr[intermediaryEntryID]] = [
+          ...prev[curr[intermediaryEntryID]],
+          tagTitleLookup[curr[intermediaryTagID]],
+        ];
+        return prev;
+      }
+      prev[curr[intermediaryEntryID]] = [
+        tagTitleLookup[curr[intermediaryTagID]],
+      ];
+      return prev;
+    },
+    {} as Record<ArchivedTextId, string[]>
+  );
+  console.log({ textTagLookup });
+  return textTagLookup;
+}
+
+/**
+ *
+ * @param refMap
+ */
 export function resetAll(refMap: string): void {
   window.alert('TODO Function not implemented.');
 }

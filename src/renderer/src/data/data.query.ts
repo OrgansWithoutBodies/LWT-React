@@ -127,7 +127,11 @@ export class DataQuery extends Query<DataState> {
   // public wordtagsLen = this.wordtags.pipe(count());
 
   public activeLanguageId = this.settings.pipe(
-    map((val) => val.currentlanguage)
+    map((val) =>
+      val.currentlanguage === undefined || val.currentlanguage === null
+        ? null
+        : val.currentlanguage
+    )
   );
 
   // derived observables
@@ -135,11 +139,12 @@ export class DataQuery extends Query<DataState> {
     this.activeLanguageId,
     this.languages,
   ]).pipe(
-    map(([activeLanguageId, languages]) =>
-      languages.find((language) => {
-        console.log('TATOEBAKEY', language.LgTatoebaKey);
-        return language.LgID === activeLanguageId;
-      })
+    map(
+      ([activeLanguageId, languages]) =>
+        languages.find((language) => {
+          console.log('TATOEBAKEY', language.LgTatoebaKey);
+          return language.LgID === activeLanguageId;
+        }) || null
     )
   );
 
@@ -249,10 +254,8 @@ export class DataQuery extends Query<DataState> {
   // TODO not sure this is best pattern
   public textDetails: Observable<TextDetailRow[]> = combineLatest([
     this.textsForActiveLanguage,
-    this.texttags,
-    this.tags2,
   ]).pipe(
-    map(([textsForActiveLanguage, texttags, tags]) =>
+    map(([textsForActiveLanguage]) =>
       textsForActiveLanguage.map((text) => ({
         TxID: text.TxID,
         title: text.TxTitle,
@@ -266,29 +269,23 @@ export class DataQuery extends Query<DataState> {
         unk: 100,
         // TODO
         unkPerc: 100,
+        TxLgID: text.TxLgID,
         // unkPerc: Math.round(100*)
         // txttodowords = txttotalwords - txtworkedwords;
         // percentunknown = 0;
         // if (txttotalwords != 0) {
         //   percentunknown =
         //     round(100 * txttodowords / txttotalwords, 0);
-
-        tags: texttags
-          .filter((textTag) => textTag.TtTxID === text.TxID)
-          .map((textTag) => {
-            const tag = tags.find((tag) => tag.T2ID === textTag.TtT2ID);
-            return tag ? tag.T2Text : 'ERROR';
-          }),
       }))
     )
   );
 }
 export const dataQuery = new DataQuery(dataStore);
-// TODO map texts to "text detail row"
+
+// TODO expand on this pattern
 export type TextDetailRow = {
   title: string;
   link?: string;
-  tags?: string[];
   annotatedAvailable?: boolean;
   audioAvailable?: boolean;
   totalWords: number;
@@ -296,4 +293,5 @@ export type TextDetailRow = {
   unk: number;
   unkPerc: number;
   TxID: TextsId;
+  TxLgID: LanguagesId;
 };

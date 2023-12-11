@@ -420,7 +420,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.77861288634931"
+      "WoRandom": 0.77861288634931
     },
     {
       "WoID": 2,
@@ -433,9 +433,9 @@
       "WoSentence": "{Bonjour} Manon.",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.15276275961917152"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.15276275961917152
     },
     {
       "WoID": 3,
@@ -448,9 +448,9 @@
       "WoSentence": "{Alors},   je crois qu'il y a pas longtemps,   là,a vous avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.42797516978157235"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.42797516978157235
     },
     {
       "WoID": 4,
@@ -463,9 +463,9 @@
       "WoSentence": "Alors,   je crois qu'{il y a} pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6815876007839922"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.6815876007839922
     },
     {
       "WoID": 170,
@@ -478,9 +478,9 @@
       "WoSentence": "Alors,   je crois qu'il y a {pas} longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2013-03-27 12:21:30",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5153064034090437"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.5153064034090437
     },
     {
       "WoID": 6,
@@ -493,9 +493,9 @@
       "WoSentence": "Alors,   je crois {qu}'il y a pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.1240125253088889"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.1240125253088889
     },
     {
       "WoID": 7,
@@ -508,9 +508,9 @@
       "WoSentence": "Alors,   {je} crois qu'il y a pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5752998549261129"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.5752998549261129
     },
     {
       "WoID": 8,
@@ -523,9 +523,9 @@
       "WoSentence": "Alors,   je {crois} qu'il y a pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.5044617294375429"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.5044617294375429
     },
     {
       "WoID": 9,
@@ -538,9 +538,9 @@
       "WoSentence": "{一}天，{一}个男人走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.7964091131430204"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.7964091131430204
     },
     {
       "WoID": 10,
@@ -553,9 +553,9 @@
       "WoSentence": "一{天}，一个男人走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.4686604081361186"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.4686604081361186
     },
     {
       "WoID": 11,
@@ -569,8 +569,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9540747319851767"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9540747319851767
     },
     {
       "WoID": 12,
@@ -583,9 +583,9 @@
       "WoSentence": "一天，一{个}男人走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.36439246625117255"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.36439246625117255
     },
     {
       "WoID": 13,
@@ -598,9 +598,9 @@
       "WoSentence": "一天，一个{男}人走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.9597381660339778"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.9597381660339778
     },
     {
       "WoID": 14,
@@ -613,9 +613,9 @@
       "WoSentence": "一天，一个男{人}走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.7055134621500163"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.7055134621500163
     },
     {
       "WoID": 15,
@@ -628,9 +628,9 @@
       "WoSentence": "一天，一个{男人}走在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6483528433817931"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.6483528433817931
     },
     {
       "WoID": 16,
@@ -643,9 +643,9 @@
       "WoSentence": "一天，一个男人{走}在街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.12522386119256157"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.12522386119256157
     },
     {
       "WoID": 17,
@@ -658,9 +658,9 @@
       "WoSentence": "一天，一个男人走{在}街上。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.6810608065510735"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.6810608065510735
     },
     {
       "WoID": 18,
@@ -674,8 +674,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.029632479911327808"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.029632479911327808
     },
     {
       "WoID": 19,
@@ -688,9 +688,9 @@
       "WoSentence": "一天，一个男人走在街{上}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10498001063706354"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.10498001063706354
     },
     {
       "WoID": 20,
@@ -704,8 +704,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4360026441849793"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4360026441849793
     },
     {
       "WoID": 21,
@@ -718,9 +718,9 @@
       "WoSentence": "{突然}，他看见前面有一只黑色的大狗，看起来很凶。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.8650732197473507"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.8650732197473507
     },
     {
       "WoID": 22,
@@ -733,9 +733,9 @@
       "WoSentence": "{Qu'est-ce que} vous avez fait,   alors ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.017358196915460936"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.017358196915460936
     },
     {
       "WoID": 23,
@@ -748,9 +748,9 @@
       "WoSentence": "Qu'{est-ce que} vous avez fait,   alors ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4915713560688974"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.4915713560688974
     },
     {
       "WoID": 24,
@@ -763,9 +763,9 @@
       "WoSentence": "Qu'{est-ce} que vous avez fait,   alors ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.40578222033174915"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.40578222033174915
     },
     {
       "WoID": 25,
@@ -779,8 +779,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5541970641856986"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5541970641856986
     },
     {
       "WoID": 26,
@@ -793,9 +793,9 @@
       "WoSentence": "On peut {dire} ça comme ça.",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.5536386906668904"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.5536386906668904
     },
     {
       "WoID": 27,
@@ -808,9 +808,9 @@
       "WoSentence": "{Wie} froh bin ich,   daß ich weg bin!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10560229151100134"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.10560229151100134
     },
     {
       "WoID": 28,
@@ -823,9 +823,9 @@
       "WoSentence": "Wie {froh} bin ich,   daß ich weg bin!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.8670954162879805"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.8670954162879805
     },
     {
       "WoID": 29,
@@ -838,9 +838,9 @@
       "WoSentence": "Wie froh {bin} ich,   daß ich weg {bin}!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.01867023764054313"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.01867023764054313
     },
     {
       "WoID": 30,
@@ -853,9 +853,9 @@
       "WoSentence": "Wie froh bin {ich},   daß {ich} weg bin!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.49206497007241934"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.49206497007241934
     },
     {
       "WoID": 31,
@@ -868,9 +868,9 @@
       "WoSentence": "Wie froh bin ich,   {daß} ich weg bin!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.40431416817411236"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.40431416817411236
     },
     {
       "WoID": 32,
@@ -883,9 +883,9 @@
       "WoSentence": "Wie froh bin ich,   daß ich {weg} bin!",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5453759613869488"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.5453759613869488
     },
     {
       "WoID": 33,
@@ -898,9 +898,9 @@
       "WoSentence": "Alors,   j'ai fait mon premier {don du sang}.",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5139373331460518"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.5139373331460518
     },
     {
       "WoID": 34,
@@ -914,8 +914,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9335588123030577"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9335588123030577
     },
     {
       "WoID": 35,
@@ -929,8 +929,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12598209281077805"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.12598209281077805
     },
     {
       "WoID": 36,
@@ -944,8 +944,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.829234057878362"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.829234057878362
     },
     {
       "WoID": 37,
@@ -959,8 +959,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7682240416931212"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.7682240416931212
     },
     {
       "WoID": 38,
@@ -974,8 +974,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.35341806556416494"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.35341806556416494
     },
     {
       "WoID": 39,
@@ -989,8 +989,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4624182334751061"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4624182334751061
     },
     {
       "WoID": 40,
@@ -1004,8 +1004,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2518370014166804"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.2518370014166804
     },
     {
       "WoID": 41,
@@ -1019,8 +1019,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8719303373917289"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8719303373917289
     },
     {
       "WoID": 42,
@@ -1034,8 +1034,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6041407134422481"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6041407134422481
     },
     {
       "WoID": 43,
@@ -1049,8 +1049,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4049125857696986"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4049125857696986
     },
     {
       "WoID": 44,
@@ -1063,9 +1063,9 @@
       "WoSentence": "{C}'est quoi ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.21214081925539377"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.21214081925539377
     },
     {
       "WoID": 45,
@@ -1078,9 +1078,9 @@
       "WoSentence": "C'est {quoi} ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.8459663697015181"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.8459663697015181
     },
     {
       "WoID": 46,
@@ -1093,9 +1093,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   vous avez fait une {bonne action} ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5934094214750542"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.5934094214750542
     },
     {
       "WoID": 47,
@@ -1109,8 +1109,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4291480290043615"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4291480290043615
     },
     {
       "WoID": 48,
@@ -1124,8 +1124,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.36551191133029004"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.36551191133029004
     },
     {
       "WoID": 49,
@@ -1138,9 +1138,9 @@
       "WoSentence": "你{的}狗咬人吗？",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5401155003720107"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.5401155003720107
     },
     {
       "WoID": 50,
@@ -1154,8 +1154,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6040417986028286"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6040417986028286
     },
     {
       "WoID": 51,
@@ -1169,8 +1169,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3998625226317556"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.3998625226317556
     },
     {
       "WoID": 52,
@@ -1184,8 +1184,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.18718724808393722"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.18718724808393722
     },
     {
       "WoID": 53,
@@ -1199,8 +1199,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7363487032580643"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.7363487032580643
     },
     {
       "WoID": 103,
@@ -1213,9 +1213,9 @@
       "WoSentence": "{日}本語を話しますか。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.5647589448511218"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.5647589448511218
     },
     {
       "WoID": 54,
@@ -1228,9 +1228,9 @@
       "WoSentence": "私{は}イギリスから来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.12018180277215484"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.12018180277215484
     },
     {
       "WoID": 55,
@@ -1243,9 +1243,9 @@
       "WoSentence": "は{い}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.3918629348202263"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.3918629348202263
     },
     {
       "WoID": 56,
@@ -1258,9 +1258,9 @@
       "WoSentence": "いい{え}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5987692965183121"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.5987692965183121
     },
     {
       "WoID": 57,
@@ -1273,9 +1273,9 @@
       "WoSentence": "{す}みません。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.8182577088645265"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.8182577088645265
     },
     {
       "WoID": 58,
@@ -1288,9 +1288,9 @@
       "WoSentence": "す{み}ません。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.29498068550134143"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.29498068550134143
     },
     {
       "WoID": 59,
@@ -1303,9 +1303,9 @@
       "WoSentence": "すみ{ま}せん。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.02013033164677241"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.02013033164677241
     },
     {
       "WoID": 60,
@@ -1318,9 +1318,9 @@
       "WoSentence": "すみま{せ}ん。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.2157096324634828"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.2157096324634828
     },
     {
       "WoID": 61,
@@ -1333,9 +1333,9 @@
       "WoSentence": "すみませ{ん}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.01815719811074175"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.01815719811074175
     },
     {
       "WoID": 62,
@@ -1349,8 +1349,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4436571238969053"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4436571238969053
     },
     {
       "WoID": 63,
@@ -1363,9 +1363,9 @@
       "WoSentence": "{すみません}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.16381405588594644"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.16381405588594644
     },
     {
       "WoID": 64,
@@ -1378,9 +1378,9 @@
       "WoSentence": "{ど}うも。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4880989384726611"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.4880989384726611
     },
     {
       "WoID": 65,
@@ -1393,9 +1393,9 @@
       "WoSentence": "ど{う}も。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9490525554391114"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.9490525554391114
     },
     {
       "WoID": 66,
@@ -1408,9 +1408,9 @@
       "WoSentence": "どう{も}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.2809659925112184"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.2809659925112184
     },
     {
       "WoID": 104,
@@ -1423,9 +1423,9 @@
       "WoSentence": "日{本}語を話しますか。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.12560323916897478"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.12560323916897478
     },
     {
       "WoID": 68,
@@ -1438,9 +1438,9 @@
       "WoSentence": "{あ}りがとうございます。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.557672326972403"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.557672326972403
     },
     {
       "WoID": 69,
@@ -1453,9 +1453,9 @@
       "WoSentence": "あ{り}がとうございます。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9454636880620044"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.9454636880620044
     },
     {
       "WoID": 70,
@@ -1468,9 +1468,9 @@
       "WoSentence": "あり{が}とうございます。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.054301490126458456"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.054301490126458456
     },
     {
       "WoID": 71,
@@ -1483,9 +1483,9 @@
       "WoSentence": "ありが{と}うございます。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4351164171799239"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.4351164171799239
     },
     {
       "WoID": 72,
@@ -1499,8 +1499,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.012677646253889098"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.012677646253889098
     },
     {
       "WoID": 73,
@@ -1513,9 +1513,9 @@
       "WoSentence": "ありがとう{ご}ざいます。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7580390104633188"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.7580390104633188
     },
     {
       "WoID": 74,
@@ -1528,9 +1528,9 @@
       "WoSentence": "ありがとうご{ざ}います。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7521621442885716"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.7521621442885716
     },
     {
       "WoID": 75,
@@ -1544,8 +1544,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.48669372078654705"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.48669372078654705
     },
     {
       "WoID": 108,
@@ -1559,8 +1559,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4154293177793075"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4154293177793075
     },
     {
       "WoID": 77,
@@ -1573,9 +1573,9 @@
       "WoSentence": "どうい{た}しまして。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.17698220180066507"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.17698220180066507
     },
     {
       "WoID": 78,
@@ -1588,9 +1588,9 @@
       "WoSentence": "どういた{し}ま{し}て。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.4248298773773293"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.4248298773773293
     },
     {
       "WoID": 79,
@@ -1603,9 +1603,9 @@
       "WoSentence": "どういたしまし{て}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5932028122182962"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.5932028122182962
     },
     {
       "WoID": 109,
@@ -1619,8 +1619,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.10249195536830645"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.10249195536830645
     },
     {
       "WoID": 83,
@@ -1634,8 +1634,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.691524459693138"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.691524459693138
     },
     {
       "WoID": 85,
@@ -1649,8 +1649,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6780138925444464"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6780138925444464
     },
     {
       "WoID": 86,
@@ -1663,9 +1663,9 @@
       "WoSentence": "日本語{を}話しますか。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.3154961143764631"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.3154961143764631
     },
     {
       "WoID": 87,
@@ -1678,9 +1678,9 @@
       "WoSentence": "日本語を話します{か}。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.5434389249826213"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.5434389249826213
     },
     {
       "WoID": 88,
@@ -1694,8 +1694,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.770706312517362"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.770706312517362
     },
     {
       "WoID": 89,
@@ -1709,15 +1709,15 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.22321481837259122"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.22321481837259122
     },
     {
       "WoID": 105,
       "WoLgID": 5,
       "WoText": "語",
       "WoTextLC": "語",
-      "WoStatus": "4",
+      "WoStatus": 4,
       "WoTranslation": "language / speech / word",
       "WoRomanization": "kun: かた.らう、 かた.る / on: ゴ",
       "WoSentence": "日本{語}を話しますか。",
@@ -1738,9 +1738,9 @@
       "WoSentence": "日本語を{話}しますか。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.2918872733524882"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.2918872733524882
     },
     {
       "WoID": 92,
@@ -1754,8 +1754,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8039551850445151"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8039551850445151
     },
     {
       "WoID": 93,
@@ -1769,8 +1769,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3501315008384469"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.3501315008384469
     },
     {
       "WoID": 94,
@@ -1784,8 +1784,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3387919797923341"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.3387919797923341
     },
     {
       "WoID": 96,
@@ -1798,9 +1798,9 @@
       "WoSentence": "私はイ{ギ}リスから来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.6435654271799749"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.6435654271799749
     },
     {
       "WoID": 97,
@@ -1814,8 +1814,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.20145122725651715"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.20145122725651715
     },
     {
       "WoID": 98,
@@ -1828,9 +1828,9 @@
       "WoSentence": "私は{イ}ギリスから来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.07655988547630597"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.07655988547630597
     },
     {
       "WoID": 99,
@@ -1843,9 +1843,9 @@
       "WoSentence": "私はイギ{リ}スから来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.7784457763456234"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.7784457763456234
     },
     {
       "WoID": 100,
@@ -1858,9 +1858,9 @@
       "WoSentence": "私はイギリ{ス}から来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.6625492560328443"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.6625492560328443
     },
     {
       "WoID": 101,
@@ -1873,9 +1873,9 @@
       "WoSentence": "私はイギリスか{ら}来ています。",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.9774089818609962"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.9774089818609962
     },
     {
       "WoID": 102,
@@ -1889,8 +1889,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.899397171940093"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.899397171940093
     },
     {
       "WoID": 107,
@@ -1904,8 +1904,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6582182214206255"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6582182214206255
     },
     {
       "WoID": 110,
@@ -1919,8 +1919,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2661718542372546"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.2661718542372546
     },
     {
       "WoID": 111,
@@ -1934,8 +1934,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.023383435814998518"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.023383435814998518
     },
     {
       "WoID": 112,
@@ -1949,8 +1949,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.31840164709687385"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.31840164709687385
     },
     {
       "WoID": 113,
@@ -1964,8 +1964,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5218579587730188"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5218579587730188
     },
     {
       "WoID": 114,
@@ -1979,8 +1979,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6540848833081172"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6540848833081172
     },
     {
       "WoID": 115,
@@ -1994,8 +1994,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7048505709551746"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.7048505709551746
     },
     {
       "WoID": 116,
@@ -2009,8 +2009,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5619982355851664"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5619982355851664
     },
     {
       "WoID": 117,
@@ -2024,8 +2024,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.695439495793953"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.695439495793953
     },
     {
       "WoID": 118,
@@ -2039,8 +2039,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.7912028029479112"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.7912028029479112
     },
     {
       "WoID": 119,
@@ -2055,7 +2055,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.869695558091342"
+      "WoRandom": 0.869695558091342
     },
     {
       "WoID": 120,
@@ -2070,7 +2070,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.9748694123466214"
+      "WoRandom": 0.9748694123466214
     },
     {
       "WoID": 121,
@@ -2085,7 +2085,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.265260418192726"
+      "WoRandom": 0.265260418192726
     },
     {
       "WoID": 122,
@@ -2100,7 +2100,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.4016938846574108"
+      "WoRandom": 0.4016938846574108
     },
     {
       "WoID": 123,
@@ -2115,7 +2115,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.21268819944252093"
+      "WoRandom": 0.21268819944252093
     },
     {
       "WoID": 124,
@@ -2130,7 +2130,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.8583593739740172"
+      "WoRandom": 0.8583593739740172
     },
     {
       "WoID": 125,
@@ -2145,7 +2145,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.6537323022761683"
+      "WoRandom": 0.6537323022761683
     },
     {
       "WoID": 126,
@@ -2160,7 +2160,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.6935834201924348"
+      "WoRandom": 0.6935834201924348
     },
     {
       "WoID": 127,
@@ -2174,8 +2174,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5067202248673143"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5067202248673143
     },
     {
       "WoID": 128,
@@ -2189,8 +2189,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.452850894492912"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.452850894492912
     },
     {
       "WoID": 129,
@@ -2204,8 +2204,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.744093828596262"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.744093828596262
     },
     {
       "WoID": 130,
@@ -2219,8 +2219,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.36191649023621947"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.36191649023621947
     },
     {
       "WoID": 131,
@@ -2234,8 +2234,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5773009961259561"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5773009961259561
     },
     {
       "WoID": 132,
@@ -2249,8 +2249,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8007555406547668"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8007555406547668
     },
     {
       "WoID": 133,
@@ -2264,8 +2264,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.27187474562961117"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.27187474562961117
     },
     {
       "WoID": 134,
@@ -2279,8 +2279,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9571071369174003"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9571071369174003
     },
     {
       "WoID": 135,
@@ -2294,8 +2294,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9699114784318129"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9699114784318129
     },
     {
       "WoID": 136,
@@ -2309,8 +2309,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9782360121405087"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9782360121405087
     },
     {
       "WoID": 137,
@@ -2324,8 +2324,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.98144565614075"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.98144565614075
     },
     {
       "WoID": 139,
@@ -2339,8 +2339,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9725202750158685"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9725202750158685
     },
     {
       "WoID": 140,
@@ -2354,8 +2354,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9182644373907376"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9182644373907376
     },
     {
       "WoID": 141,
@@ -2369,8 +2369,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6737613926397277"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6737613926397277
     },
     {
       "WoID": 142,
@@ -2384,8 +2384,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6140136817600705"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6140136817600705
     },
     {
       "WoID": 145,
@@ -2399,8 +2399,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.048784261614814646"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.048784261614814646
     },
     {
       "WoID": 146,
@@ -2413,9 +2413,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   {vous} avez fait une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.40188029352750654"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.40188029352750654
     },
     {
       "WoID": 147,
@@ -2428,9 +2428,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   vous avez {fait} une bonne action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.8630487135267338"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.8630487135267338
     },
     {
       "WoID": 148,
@@ -2443,9 +2443,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   vous avez fait une {bonne} action ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.10960271778479472"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.10960271778479472
     },
     {
       "WoID": 149,
@@ -2458,9 +2458,9 @@
       "WoSentence": "Alors,   j'{ai} fait mon premier don du sang.",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.9588674790774169"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.9588674790774169
     },
     {
       "WoID": 150,
@@ -2473,9 +2473,9 @@
       "WoSentence": "Qu'est-ce que vous {avez} fait,   alors ?",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4655292727663454"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.4655292727663454
     },
     {
       "WoID": 151,
@@ -2488,9 +2488,9 @@
       "WoSentence": "Alors,   j'ai fait {mon} premier don du sang.",
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.4510439573331214"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.4510439573331214
     },
     {
       "WoID": 152,
@@ -2504,8 +2504,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8586319991002157"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8586319991002157
     },
     {
       "WoID": 153,
@@ -2519,8 +2519,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9400281542353595"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9400281542353595
     },
     {
       "WoID": 154,
@@ -2534,8 +2534,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12424480460979492"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.12424480460979492
     },
     {
       "WoID": 155,
@@ -2549,8 +2549,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8011395910765413"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8011395910765413
     },
     {
       "WoID": 156,
@@ -2564,8 +2564,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6329635722869668"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6329635722869668
     },
     {
       "WoID": 157,
@@ -2579,8 +2579,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.761399118938855"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.761399118938855
     },
     {
       "WoID": 158,
@@ -2594,8 +2594,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9081049085670196"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9081049085670196
     },
     {
       "WoID": 159,
@@ -2609,8 +2609,8 @@
       "WoCreated": "2011-08-30 12:00:00",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.25632721675217823"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.25632721675217823
     },
     {
       "WoID": 160,
@@ -2624,8 +2624,8 @@
       "WoCreated": "2011-09-02 19:00:09",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5573213887934773"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5573213887934773
     },
     {
       "WoID": 161,
@@ -2639,8 +2639,8 @@
       "WoCreated": "2011-09-02 19:00:50",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.017625324444496375"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.017625324444496375
     },
     {
       "WoID": 162,
@@ -2654,8 +2654,8 @@
       "WoCreated": "2011-09-02 19:01:21",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4161624865756952"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4161624865756952
     },
     {
       "WoID": 163,
@@ -2669,8 +2669,8 @@
       "WoCreated": "2011-09-02 19:01:50",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.027936490278631907"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.027936490278631907
     },
     {
       "WoID": 164,
@@ -2684,8 +2684,8 @@
       "WoCreated": "2011-09-02 19:21:20",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8911950223997189"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8911950223997189
     },
     {
       "WoID": 165,
@@ -2698,9 +2698,9 @@
       "WoSentence": "{Oui}.",
       "WoCreated": "2013-03-27 12:13:44",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.37216567189634375"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.37216567189634375
     },
     {
       "WoID": 166,
@@ -2713,9 +2713,9 @@
       "WoSentence": "{On} peut dire ça comme ça.",
       "WoCreated": "2013-03-27 12:14:40",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.18724332301620703"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.18724332301620703
     },
     {
       "WoID": 167,
@@ -2728,9 +2728,9 @@
       "WoSentence": "On {peut} dire ça comme ça.",
       "WoCreated": "2013-03-27 12:15:10",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.819719630125649"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.819719630125649
     },
     {
       "WoID": 168,
@@ -2743,9 +2743,9 @@
       "WoSentence": "On peut dire {ça} comme {ça}.",
       "WoCreated": "2013-03-27 12:16:08",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.5368682123132685"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.5368682123132685
     },
     {
       "WoID": 169,
@@ -2758,9 +2758,9 @@
       "WoSentence": "On peut dire ça {comme} ça.",
       "WoCreated": "2013-03-27 12:16:47",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "20.067133683596026",
-      "WoTomorrowScore": "17.74023970358721",
-      "WoRandom": "0.22518220192304086"
+      "WoTodayScore": 20.067133683596026,
+      "WoTomorrowScore": 17.74023970358721,
+      "WoRandom": 0.22518220192304086
     },
     {
       "WoID": 171,
@@ -2773,9 +2773,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas {longtemps},   là,   vous avez fait une bonne action ?",
       "WoCreated": "2013-03-27 12:22:02",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.900985442009741"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.900985442009741
     },
     {
       "WoID": 172,
@@ -2789,8 +2789,8 @@
       "WoCreated": "2013-03-27 12:22:35",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9590080305552184"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9590080305552184
     },
     {
       "WoID": 173,
@@ -2803,9 +2803,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   vous avez fait {une} bonne action ?",
       "WoCreated": "2013-03-27 12:24:25",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "99.99999999999999",
-      "WoTomorrowScore": "98.6038636119947",
-      "WoRandom": "0.09208385748051466"
+      "WoTodayScore": 99.99999999999999,
+      "WoTomorrowScore": 98.6038636119947,
+      "WoRandom": 0.09208385748051466
     },
     {
       "WoID": 174,
@@ -2820,7 +2820,7 @@
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 100,
       "WoTomorrowScore": 100,
-      "WoRandom": "0.5833952264705629"
+      "WoRandom": 0.5833952264705629
     },
     {
       "WoID": 175,
@@ -2833,9 +2833,9 @@
       "WoSentence": "Alors,   j'ai fait mon {premier} don du sang …",
       "WoCreated": "2013-03-27 12:27:33",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "46.38244308231173",
-      "WoTomorrowScore": "44.63727259730512",
-      "WoRandom": "0.6407245906449152"
+      "WoTodayScore": 46.38244308231173,
+      "WoTomorrowScore": 44.63727259730512,
+      "WoRandom": 0.6407245906449152
     },
     {
       "WoID": 176,
@@ -2848,9 +2848,9 @@
       "WoSentence": "Alors,   je crois qu'il {y} a pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2013-03-27 12:32:17",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.4534373045465325"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.4534373045465325
     },
     {
       "WoID": 177,
@@ -2863,9 +2863,9 @@
       "WoSentence": "Alors,   je crois qu'il y {a} pas longtemps,   là,   vous avez fait une bonne action ?",
       "WoCreated": "2013-03-27 12:34:33",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.3450127815315619"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.3450127815315619
     },
     {
       "WoID": 178,
@@ -2878,9 +2878,9 @@
       "WoSentence": "Alors,   je crois qu'il y a pas longtemps,   là,   vous avez fait une bonne {action} ?",
       "WoCreated": "2013-03-27 12:35:08",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.364752024751857"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.364752024751857
     },
     {
       "WoID": 179,
@@ -2894,8 +2894,8 @@
       "WoCreated": "2013-03-27 12:35:50",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.788721809898244"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.788721809898244
     },
     {
       "WoID": 180,
@@ -2909,8 +2909,8 @@
       "WoCreated": "2013-03-27 12:36:09",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8493530059692943"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8493530059692943
     },
     {
       "WoID": 181,
@@ -2924,8 +2924,8 @@
       "WoCreated": "2013-03-27 12:36:17",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8805996308853846"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8805996308853846
     },
     {
       "WoID": 182,
@@ -2939,8 +2939,8 @@
       "WoCreated": "2013-03-27 12:36:32",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8549391672526852"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8549391672526852
     },
     {
       "WoID": 183,
@@ -2954,8 +2954,8 @@
       "WoCreated": "2013-03-27 12:36:48",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6328969743409166"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6328969743409166
     },
     {
       "WoID": 184,
@@ -2969,8 +2969,8 @@
       "WoCreated": "2013-04-18 09:03:32",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5996674006801727"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5996674006801727
     },
     {
       "WoID": 185,
@@ -2984,8 +2984,8 @@
       "WoCreated": "2013-04-18 09:03:53",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.09964611111175838"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.09964611111175838
     },
     {
       "WoID": 186,
@@ -2999,8 +2999,8 @@
       "WoCreated": "2013-04-18 09:04:12",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.699228384251919"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.699228384251919
     },
     {
       "WoID": 187,
@@ -3014,8 +3014,8 @@
       "WoCreated": "2013-04-18 09:04:29",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.19720361865796485"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.19720361865796485
     },
     {
       "WoID": 188,
@@ -3029,8 +3029,8 @@
       "WoCreated": "2013-04-18 09:04:58",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8883329712677123"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8883329712677123
     },
     {
       "WoID": 189,
@@ -3044,8 +3044,8 @@
       "WoCreated": "2013-04-18 09:05:13",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8500540310983118"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8500540310983118
     },
     {
       "WoID": 190,
@@ -3059,8 +3059,8 @@
       "WoCreated": "2013-04-18 09:05:54",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5852712724220671"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5852712724220671
     },
     {
       "WoID": 191,
@@ -3074,8 +3074,8 @@
       "WoCreated": "2013-04-18 09:06:02",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.3761942995490453"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.3761942995490453
     },
     {
       "WoID": 192,
@@ -3089,8 +3089,8 @@
       "WoCreated": "2013-04-18 09:06:08",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.12515771121267016"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.12515771121267016
     },
     {
       "WoID": 193,
@@ -3104,8 +3104,8 @@
       "WoCreated": "2013-04-18 09:06:36",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.4972056881498598"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.4972056881498598
     },
     {
       "WoID": 194,
@@ -3119,8 +3119,8 @@
       "WoCreated": "2013-04-18 09:06:42",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.1105553378449337"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.1105553378449337
     },
     {
       "WoID": 195,
@@ -3134,8 +3134,8 @@
       "WoCreated": "2013-04-18 09:07:12",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.061159655508733965"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.061159655508733965
     },
     {
       "WoID": 196,
@@ -3149,8 +3149,8 @@
       "WoCreated": "2013-04-18 09:07:24",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9741322947425137"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9741322947425137
     },
     {
       "WoID": 197,
@@ -3164,8 +3164,8 @@
       "WoCreated": "2013-04-18 09:07:52",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6871825379200117"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6871825379200117
     },
     {
       "WoID": 198,
@@ -3179,8 +3179,8 @@
       "WoCreated": "2013-04-18 09:08:01",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5135158361061624"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5135158361061624
     },
     {
       "WoID": 199,
@@ -3194,8 +3194,8 @@
       "WoCreated": "2013-04-18 09:08:10",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.5060315975044217"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.5060315975044217
     },
     {
       "WoID": 200,
@@ -3209,8 +3209,8 @@
       "WoCreated": "2013-04-18 09:08:45",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9896105099372664"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9896105099372664
     },
     {
       "WoID": 201,
@@ -3224,8 +3224,8 @@
       "WoCreated": "2013-04-18 09:09:15",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.42995778790671174"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.42995778790671174
     },
     {
       "WoID": 202,
@@ -3239,8 +3239,8 @@
       "WoCreated": "2013-04-18 09:09:29",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.18095744045540452"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.18095744045540452
     },
     {
       "WoID": 203,
@@ -3254,8 +3254,8 @@
       "WoCreated": "2013-04-18 09:10:04",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.6149138692905324"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.6149138692905324
     },
     {
       "WoID": 204,
@@ -3268,9 +3268,9 @@
       "WoSentence": "狗的旁边站着一个{女人}，男人问她：",
       "WoCreated": "2013-04-18 09:10:13",
       "WoStatusChanged": "2020-10-03 18:08:22",
-      "WoTodayScore": "6.84106830122592",
-      "WoTomorrowScore": "3.3507273312126955",
-      "WoRandom": "0.5316970558200935"
+      "WoTodayScore": 6.84106830122592,
+      "WoTomorrowScore": 3.3507273312126955,
+      "WoRandom": 0.5316970558200935
     },
     {
       "WoID": 205,
@@ -3284,8 +3284,8 @@
       "WoCreated": "2013-04-18 09:10:20",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.8137437019625154"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.8137437019625154
     },
     {
       "WoID": 206,
@@ -3299,8 +3299,8 @@
       "WoCreated": "2013-04-18 09:10:29",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.47362737308594155"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.47362737308594155
     },
     {
       "WoID": 207,
@@ -3314,8 +3314,8 @@
       "WoCreated": "2013-04-18 09:10:35",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.9269057902758063"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.9269057902758063
     },
     {
       "WoID": 208,
@@ -3329,8 +3329,8 @@
       "WoCreated": "2013-04-18 09:10:44",
       "WoStatusChanged": "2020-10-03 18:08:22",
       "WoTodayScore": 0,
-      "WoTomorrowScore": "-6.980681940026449",
-      "WoRandom": "0.2136468628548522"
+      "WoTomorrowScore": -6.980681940026449,
+      "WoRandom": 0.2136468628548522
     }
   ],
   "wordtags": [

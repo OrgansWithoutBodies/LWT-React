@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Switch } from './App';
 import { dataService } from './data/data.service';
 import { useData } from './data/useAkita';
-import { LanguagesId, TagsId, TextsId } from './data/validators';
+import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
 import { useInternalParams } from './hooks/useInternalParams';
 import { AddNewWordPane } from './pages/AddNewWordPane';
 import { EditArchivedTexts } from './pages/EditArchivedTexts.component';
@@ -14,10 +14,14 @@ import { EditText, Library } from './pages/Library.component';
 import { NewLanguage } from './pages/NewLanguage';
 import { PrintText } from './pages/PrintText.component';
 import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
+import { WordSorting } from './pages/Sorting';
 import { AddTerm, EditTerm, Terms } from './pages/Terms.component';
 import { ImportShortText } from './pages/TextImport';
 import { UploadWords } from './pages/UploadWords.component';
 
+/**
+ *
+ */
 export function TermsWrapper() {
   const {
     filterlang,
@@ -51,16 +55,20 @@ export function TermsWrapper() {
       <Switch on={chg !== null}>
         <Terms
           pageNum={page !== null ? Number.parseInt(page) : 1}
-          sort={sort ? Number.parseInt(sort) : null}
+          sort={sort ? (Number.parseInt(sort) as WordSorting) : undefined}
           status={status ? Number.parseInt(status) : null}
           textFilter={text === null ? null : Number.parseInt<TextsId>(text)}
-          tag1={tag1 === null ? null : Number.parseInt<TagsId>(tag1)}
+          tag1={
+            tag1 === null || tag1 === '' ? null : Number.parseInt<TagsId>(tag1)
+          }
           tag12={
             tag12 === null || !['0', '1'].includes(tag12)
               ? 0
               : Number.parseInt<0 | 1>(tag12)
           }
-          tag2={tag2 === null ? null : Number.parseInt<TagsId>(tag2)}
+          tag2={
+            tag2 === null || tag2 === '' ? null : Number.parseInt<TagsId>(tag2)
+          }
         />
         <EditTerm chgID={Number.parseInt(chg!)} />
       </Switch>
@@ -68,9 +76,15 @@ export function TermsWrapper() {
     </Switch>
   );
 }
+/**
+ *
+ */
 export function UploadWordsWrapper() {
   return <UploadWords />;
 }
+/**
+ *
+ */
 export function PrintTextWrapper() {
   const { text } = useInternalParams('print_text');
   if (text === null) {
@@ -78,6 +92,9 @@ export function PrintTextWrapper() {
   }
   return <PrintText textID={Number.parseInt(text)} />;
 }
+/**
+ *
+ */
 export function LanguagesWrapper() {
   const [searchParams] = useSearchParams();
   const isNew = searchParams.get('new') === '1';
@@ -100,6 +117,9 @@ export function LanguagesWrapper() {
 {
   /* TODO this only accessed from inside reader, doesnt fit pattern to have own route  */
 }
+/**
+ *
+ */
 export function AddNewWordWrapper() {
   const [searchParams] = useSearchParams();
   // const textID = searchParams.get('text');
@@ -109,6 +129,9 @@ export function AddNewWordWrapper() {
   }
   return <AddNewWordPane langId={Number.parseInt(langID)} />;
 }
+/**
+ *
+ */
 export function LibraryWrapper() {
   const {
     chg,
@@ -117,6 +140,8 @@ export function LibraryWrapper() {
     query,
     tag1,
     tag2,
+    tag12,
+    sort,
     new: newVal,
   } = useInternalParams('edit_texts');
   const isNew = newVal === '1';
@@ -135,9 +160,18 @@ export function LibraryWrapper() {
         <Library
           currentPage={page !== null ? Number.parseInt(page) : 1}
           query={query}
-          // TODO maybe force these names to be the same for easier compacting
-          tag2={tag1 !== null ? Number.parseInt(tag1) : null}
-          tag1={tag2 !== null ? Number.parseInt(tag2) : null}
+          sorting={sort !== null ? Number.parseInt(sort) : undefined}
+          tag2={
+            tag2 === null || tag2 === '' ? null : Number.parseInt<Tags2Id>(tag2)
+          }
+          tag1={
+            tag1 === null || tag1 === '' ? null : Number.parseInt<Tags2Id>(tag1)
+          }
+          tag12={
+            tag12 === null || !['0', '1'].includes(tag12)
+              ? 0
+              : Number.parseInt<0 | 1>(tag12)
+          }
         />
         <EditText chgID={Number.parseInt(chg!)} />
       </Switch>
@@ -205,29 +239,45 @@ export function LibraryWrapper() {
 // }
 // r .= "</ul><p>TOTAL: " . anz . "</p></div>";
 // return r;
+/**
+ *
+ */
 export function EditArchivedTextsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
   const page = searchParams.get('page');
+  const sort = searchParams.get('sort');
+  const tag12 = searchParams.get('tag12');
+  const tag1 = searchParams.get('tag1');
+  const tag2 = searchParams.get('tag2');
   return (
     <EditArchivedTexts
       query={query || ''}
       currentPage={page !== null ? Number.parseInt(page) : 1}
+      tag12={tag12 && ['1', '0'].includes(tag12) ? Number.parseInt(tag12) : 0}
+      tag1={tag1 !== null || tag1 === '' ? Number.parseInt<TagsId>(tag1) : null}
+      tag2={tag2 !== null || tag2 === '' ? Number.parseInt<TagsId>(tag2) : null}
+      sorting={sort !== null ? Number.parseInt(sort) : undefined}
     />
   );
 }
+/**
+ *
+ */
 export function EditTextTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
   const isNew = searchParams.get('new') === '1';
   const chgID = searchParams.get('chg');
+  const sort = searchParams.get('sort');
   const page = searchParams.get('page');
 
   return (
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
         <DisplayTextTags
-          page={page !== null ? Number.parseInt(page) : undefined}
+          currentPage={page !== null ? Number.parseInt(page) : 1}
+          sorting={sort !== null ? Number.parseInt(sort) : undefined}
           query={query || ''}
         />
         <EditTextTag chgID={Number.parseInt(chgID!)} />
@@ -236,11 +286,15 @@ export function EditTextTagsWrapper() {
     </Switch>
   );
 }
+/**
+ *
+ */
 export function EditTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
   const isNew = searchParams.get('new') === '1';
   const page = searchParams.get('page');
+  const sort = searchParams.get('sort');
   const chgId = searchParams.get('chg');
 
   return (
@@ -249,6 +303,7 @@ export function EditTagsWrapper() {
         <DisplayTags
           query={query || ''}
           currentPage={page !== null ? Number.parseInt(page) : 1}
+          sorting={sort !== null ? Number.parseInt(sort) : undefined}
         />
         <NewTag />
       </Switch>
@@ -256,6 +311,9 @@ export function EditTagsWrapper() {
     </Switch>
   );
 }
+/**
+ *
+ */
 export function ReaderWrapper() {
   const [searchParams] = useSearchParams();
   const start = searchParams.get('start');
@@ -263,6 +321,9 @@ export function ReaderWrapper() {
   // TODO verify exists
   return <ReaderPage textId={Number.parseInt(start!)} />;
 }
+/**
+ *
+ */
 export function TestWrapper() {
   const [searchParams] = useSearchParams();
   const textID = searchParams.get('text');
@@ -271,8 +332,8 @@ export function TestWrapper() {
   // TODO verify exists
   return (
     <TesterPage
-      langId={lang !== null ? Number.parseInt(lang) : null}
-      textId={textID !== null ? Number.parseInt(textID) : null}
+      langId={lang !== null ? Number.parseInt<LanguagesId>(lang) : null}
+      textId={textID !== null ? Number.parseInt<TextsId>(textID) : null}
     />
   );
 }

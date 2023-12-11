@@ -18,6 +18,9 @@ const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   98: 'Ign',
   99: 'WKn',
 };
+/**
+ *
+ */
 function ExpressionsLines({
   expressions,
 }: {
@@ -51,6 +54,9 @@ function ApplyTemplate(templateStr: string, valueStr: string): string {
   return replaced;
 }
 
+/**
+ *
+ */
 function TranslateLines({
   language,
   word,
@@ -136,6 +142,9 @@ const TermTooltipClose = React.forwardRef<HTMLDivElement>(
   )
 );
 
+/**
+ *
+ */
 function TermTooltipHeader({
   headerTitle,
   onClose,
@@ -171,6 +180,9 @@ function TermTooltipHeader({
   );
 }
 
+/**
+ *
+ */
 export function UnknownTermLines({ word }: { word: string }): JSX.Element {
   return (
     <>
@@ -190,6 +202,9 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
   );
 }
 
+/**
+ *
+ */
 export function KnownTermLines({
   word,
   tags,
@@ -236,6 +251,9 @@ export function KnownTermLines({
   );
 }
 
+/**
+ *
+ */
 export function AddNewTermTooltip({
   word,
   sentence,

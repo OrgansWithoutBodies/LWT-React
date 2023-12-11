@@ -32,36 +32,12 @@ function wizard_go(
     return;
   }
 
-  // $('input[name="LgName"]', context).val(l2);
-  // $('input[name="LgDict1URI"]', context).val(
-  //   '*https://de.glosbe.com/' +
-  //     LANGDEFS[l2].LgGlosbeKey +
-  //     '/' +
-  //     LANGDEFS[l1].LgGlosbeKey +
-  //     '/###'
-  // );
-  // $('input[name="LgGoogleTranslateURI"]', context).val(
-  //   '*http://translate.google.com/?ie=UTF-8&sl=' +
-  //     LANGDEFS[l2].LgGTransKey +
-  //     '&tl=' +
-  //     LANGDEFS[l1].LgGTransKey +
-  //     '&text=###'
-  // );
-  // $('select[name="LgTextSize"]', context).val(LANGDEFS[l2].LgTextSize);
-  // $('input[name="LgRegexpSplitSentences"]', context).val(
-  //   LANGDEFS[l2].LgRegexpSplitSentences
-  // );
-  // $('input[name="LgRegexpWordCharacters"]', context).val(
-  //   LANGDEFS[l2].LgRegexpWordCharacters
-  // );
-  // $('select[name="LgSplitEachChar"]', context).val(
-  //   LANGDEFS[l2].LgSplitEachChar
-  // );
-  // $('select[name="LgRemoveSpaces"]', context).val(LANGDEFS[l2].LgRemoveSpaces);
-  // $('select[name="LgRightToLeft"]', context).val(LANGDEFS[l2].LgRightToLeft);
   onSuccess(l1, l2);
 }
 
+/**
+ *
+ */
 export default function NewLanguageWizard({
   onSuccess,
   onExit,

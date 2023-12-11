@@ -66,7 +66,6 @@ const TimestampStringValidator = ss.refine(
 );
 // TODO valid reference key id
 const archivedtextsId = brandedNumber('archivedtextsId' as const);
-const archtexttagsId = brandedNumber('archtexttagsId' as const);
 export const languagesId = brandedNumber('languagesId' as const);
 const sentencesId = brandedNumber('sentencesId' as const);
 const settingsId = brandedString('settingsId' as const);
@@ -105,7 +104,6 @@ const texttagId = brandedNumber('texttagsId' as const);
 const wordId = brandedNumber('wordsId' as const);
 const wordtagId = brandedNumber('wordtagsId' as const);
 export type ArchivedTextId = typeof archivedtextsId.TYPE;
-export type ArchTextTagsId = typeof archtexttagsId.TYPE;
 export type LanguagesId = typeof languagesId.TYPE;
 export type SentencesId = typeof sentencesId.TYPE;
 export type SettingsId = typeof settingsId.TYPE;
@@ -140,7 +138,7 @@ export const ArchivedTextsValidator = ss.object({
 export const ArchTextTagsValidator = ss.object({
   // AgAtID: int(11) unsigned NOT NULL,
   // KEY `AgAtID` (`AgAtID`),
-  AgAtID: archtexttagsId,
+  AgAtID: archivedtextsId,
   // AgT2ID: int(11) unsigned NOT NULL,
   // KEY `AgT2ID` (`AgT2ID`)
   AgT2ID: tag2Id,

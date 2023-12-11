@@ -164,18 +164,18 @@ export function confirmDelete(): boolean {
 // 		if (list[i] == textid) {
 // 			if (list[i - 1] !== 0) {
 // 				title = tohtml(getTextTitle(list[i - 1]));
-// 				prev = '<a href="' . url . list[i - 1] . '" target="_top"><Icon src="navigation-180-button" title="Previous Text: ' . title . '" /></a>';
+// 				prev = '<a href="' . url . list[i - 1] . '" target="_top"><img src="icn/navigation-180-button.png" title="Previous Text: ' . title . '" alt="Previous Text: ' . title . '" /></a>';
 // 			} else
-// 				prev = '<Icon src="navigation-180-button-light" title="No Previous Text" />';
+// 				prev = '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" />';
 // 			if (list[i + 1] !== 0) {
 // 				title = tohtml(getTextTitle(list[i + 1]));
-// 				next = '<a href="' . url . list[i + 1] . '" target="_top"><Icon src="navigation-000-button" title="Next Text: ' . title . '" /></a>';
+// 				next = '<a href="' . url . list[i + 1] . '" target="_top"><img src="icn/navigation-000-button.png" title="Next Text: ' . title . '" alt="Next Text: ' . title . '" /></a>';
 // 			} else
-// 				next = '<Icon src="navigation-000-button-light" title="No Next Text" />';
+// 				next = '<img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
 // 			return add . prev . ' ' . next;
 // 		}
 // 	}
-// 	return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
+// 	return add . '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
 // }
 
 // // -------------------------------------------------------------
@@ -447,6 +447,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	return r;
 // }
 // // -------------------------------------------------------------
+// TODO used in chging archived texts
 // function getArchivedTextTags(tid)
 // {
 // 	global tbpref;
@@ -1310,35 +1311,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function get_last_key()
-// {
-// 	return get_first_value('SELECT LAST_INSERT_ID() as value');
-// }
-
-// // -------------------------------------------------------------
-
-// function get_checked(value)
-// {
-// 	if (!isset(value))
-// 		return '';
-// 	if ((int) value != 0)
-// 		return ' checked="checked" ';
-// 	return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function get_selected(value, selval)
-// {
-// 	if (!isset(value))
-// 		return '';
-// 	if (value == selval)
-// 		return ' selected="selected" ';
-// 	return '';
-// }
-
-// // -------------------------------------------------------------
-
 // function make_status_controls_test_table(score, status, wordid)
 // {
 // 	if (score < 0)
@@ -1349,11 +1321,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	if (status <= 5 || status == 98)
 // 		plus = '<img src="icn/plus.png" class="click" title="+" alt="+" onClick="changeTableTestStatus(' . wordid . ',true);" />';
 // 	else
-// 		plus = '<Icon src="placeholder" title="" />';
+// 		plus = '<img src="icn/placeholder.png" title="" alt="" />';
 // 	if (status >= 1)
 // 		minus = '<img src="icn/minus.png" class="click" title="-" alt="-" onClick="changeTableTestStatus(' . wordid . ',false);" />';
 // 	else
-// 		minus = '<Icon src="placeholder" title="" />';
+// 		minus = '<img src="icn/placeholder.png" title="" alt="" />';
 // 	return (status == 98 ? '' : minus . ' ') . scoret . (status == 99 ? '' : ' ' . plus);
 // }
 
@@ -1424,42 +1396,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		r += "<option value="" . i . """ . get_selected(i, currentpage);
 // 		r += ">i</option>";
 // 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_wordssort_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 1;
-// 	r = "<option value="1"" . get_selected(v, 1);
-// 	r += ">Term A-Z</option>";
-// 	r += "<option value="2"" . get_selected(v, 2);
-// 	r += ">Translation A-Z</option>";
-// 	r += "<option value="3"" . get_selected(v, 3);
-// 	r += ">Newest first</option>";
-// 	r += "<option value="7"" . get_selected(v, 7);
-// 	r += ">Oldest first</option>";
-// 	r += "<option value="4"" . get_selected(v, 4);
-// 	r += ">Status</option>";
-// 	r += "<option value="5"" . get_selected(v, 5);
-// 	r += ">Score Value (%)</option>";
-// 	r += "<option value="6"" . get_selected(v, 6);
-// 	r += ">Word Count Active Texts</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_yesno_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 0;
-// 	r = "<option value="0"" . get_selected(v, 0);
-// 	r += ">No</option>";
-// 	r += "<option value="1"" . get_selected(v, 1);
-// 	r += ">Yes</option>";
 // 	return r;
 // }
 
@@ -1627,8 +1563,8 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (currentpage > 1) {
 // 		?>
-// 		&nbsp; &nbsp;<a href="<?php echo script; ?>?page=1"><Icon src="control-stop-180" title="First Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>"><Icon src="control-180" title="Previous Page" /></a>&nbsp;
+// 		&nbsp; &nbsp;<a href="<?php echo script; ?>?page=1"><img src="icn/control-stop-180.png" title="First Page" alt="First Page" /></a>&nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>"><img  src="icn/control-180.png" title="Previous Page" alt="Previous Page" /></a>&nbsp;
 // 	<?php
 // 	} else {
 // 		?>
@@ -1649,8 +1585,8 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	echo ' of ' . pages . '&nbsp; ';
 // 	if (currentpage < pages) {
 // 		?>
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>"><Icon src="control" title="Next Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo pages; ?>"><Icon src="control-stop" title="Last Page" /></a>&nbsp; &nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>"><img src="icn/control.png" title="Next Page" alt="Next Page" /></a>&nbsp;
+// 		<a href="<?php echo script; ?>?page=<?php echo pages; ?>"><img src="icn/control-stop.png" title="Last Page" alt="Last Page" /></a>&nbsp; &nbsp;
 // 	<?php
 // 	} else {
 // 		?>
@@ -1808,34 +1744,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function createDictLinksInEditWin2(lang, sentctljs, wordctljs)
-// {
-// 	global tbpref;
-// 	sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . tbpref . 'languages where LgID = ' . lang;
-// 	res = do_mysqli_query(sql);
-// 	record = mysqli_fetch_assoc(res);
-// 	wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
-// 	if (substr(wb1, 0, 1) == '*')
-// 		wb1 = substr(wb1, 1);
-// 	wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
-// 	if (substr(wb2, 0, 1) == '*')
-// 		wb2 = substr(wb2, 1);
-// 	wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
-// 	if (substr(wb3, 0, 1) == '*')
-// 		wb3 = substr(wb3, 1);
-// 	mysqli_free_result(res);
-// 	r = '';
-// 	r += 'Lookup Term: ';
-// 	r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">Dict1</span> ';
-// 	if (wb2 != "")
-// 		r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">Dict2</span> ';
-// 	if (wb3 != "")
-// 		r += '<span class="click" onClick="translateWord2(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onClick="translateSentence2(' . prepare_textdata_js(wb3) . ',' . sentctljs . ');">GTr</span>';
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function makeDictLinks(lang, wordctljs)
 // {
 // 	global tbpref;
@@ -1901,20 +1809,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	if (wb3 != "")
 // 		r += '<span class="click" onClick="' . f3 . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onClick="' . f4 . ',' . sentctljs . ');">GTr</span>';
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function checkTest(val, name)
-// {
-// 	if (!isset($_REQUEST[name]))
-// 		return ' ';
-// 	if (!is_array($_REQUEST[name]))
-// 		return ' ';
-// 	if (in_array(val, $_REQUEST[name]))
-// 		return ' checked="checked" ';
-// 	else
-// 		return ' ';
 // }
 
 // // -------------------------------------------------------------
@@ -2145,9 +2039,13 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // // -------------------------------------------------------------
 
 // TODO
-function textwordcount(text) {
-  // return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . text);
-}
+/**
+ *
+ * @param text
+ */
+// export function textwordcount(text): number {
+//   return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . text);
+// }
 
 // // -------------------------------------------------------------
 
@@ -2160,28 +2058,15 @@ function textwordcount(text) {
 // // -------------------------------------------------------------
 
 // TODO
-function textworkcount(text) {
-  // return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
-}
-
-// // -------------------------------------------------------------
-
-// function texttodocount(text)
-// {
-// 	return '<span title="To Do" class="status0">&nbsp;' .
-// 		(textwordcount(text) - textworkcount(text)) . '&nbsp;</span>';
+/**
+ *
+ * @param text
+ */
+// export function textworkcount(words:Word[],textitems:TextItem[]): number {
+//   return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
 // }
 
 // // -------------------------------------------------------------
-
-function texttodocount2(text) {
-  c = textwordcount(text) - textworkcount(text);
-  return c;
-  // if (c > 0)
-  // 	return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>&nbsp;&nbsp;&nbsp;<input type="button" onClick="iknowall(' . text . ');" value=" I KNOW ALL " />';
-  // else
-  // 	return '<span title="To Do" class="status0">&nbsp;' . c . '&nbsp;</span>';
-}
 
 // // -------------------------------------------------------------
 
@@ -2252,7 +2137,7 @@ function texttodocount2(text) {
 // function get20Sentences(lang, wordlc, jsctlname, mode)
 // {
 // 	global tbpref;
-// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <Icon src="tick-button" title="Choose" /> to copy sentence into above term)</p>';
+// 	r = '<p><b>Sentences in active texts with <i>' . tohtml(wordlc) . '</i></b></p><p>(Click on <img src="icn/tick-button.png" title="Choose" alt="Choose" /> to copy sentence into above term)</p>';
 // 	sql = 'SELECT DISTINCT SeID, SeText FROM ' . tbpref . 'sentences, ' . tbpref . 'textitems WHERE TiTextLC = ' . convert_string_to_sqlsyntax(wordlc) . ' AND SeID = TiSeID AND SeLgID = ' . lang . ' order by CHAR_LENGTH(SeText), SeText limit 0,20';
 // 	res = do_mysqli_query(sql);
 // 	r += '<p>';
@@ -2260,30 +2145,13 @@ function texttodocount2(text) {
 // 	while (record = mysqli_fetch_assoc(res)) {
 // 		if (last != record['SeText']) {
 // 			sent = getSentence(record['SeID'], wordlc, mode);
-// 			r += '<span class="click" onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><Icon src="tick-button" title="Choose" /></span> &nbsp;' . sent[0] . '<br />';
+// 			r += '<span class="click" onClick="{' . jsctlname . '.value=' . prepare_textdata_js(sent[1]) . '; makeDirty();}"><img src="icn/tick-button.png" title="Choose" alt="Choose" /></span> &nbsp;' . sent[0] . '<br />';
 // 		}
 // 		last = record['SeText'];
 // 	}
 // 	mysqli_free_result(res);
 // 	r += '</p>';
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function getsqlscoreformula(method)
-// {
-// 	// method = 2 (today)
-// 	// method = 3 (tomorrow)
-// 	// Formula: {{{2.4^{Status}+Status-Days-1} over Status -2.4} over 0.14325248}
-
-// 	if (method == 3)
-// 		return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 2) / WoStatus - 2.4) / 0.14325248) END';
-// 	elseif (method == 2)
-// 		return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 1) / WoStatus - 2.4) / 0.14325248) END';
-// 	else
-// 		return '0';
-
 // }
 
 // // -------------------------------------------------------------
@@ -3506,19 +3374,65 @@ function texttodocount2(text) {
 
 /**
  *
+ * @param f
+ * //  * TODO onSubmit?
+ * @param sel
+ * @param n
+ */
+export function allActionGo(f, sel, n) {
+  if (typeof f != 'undefined' && typeof sel != 'undefined') {
+    const v = sel.value;
+    const t = sel.options[sel.selectedIndex].text;
+    if (typeof v == 'string') {
+      if (v == 'addtagall' || v == 'deltagall') {
+        const answer = verifyAddTagWindow(t, sel.options.length);
+        if (answer != '') {
+          f.data.value = answer;
+          f.submit();
+        }
+      } else if (
+        v == 'delall' ||
+        v == 'smi1all' ||
+        v == 'spl1all' ||
+        v == 's1all' ||
+        v == 's5all' ||
+        v == 's98all' ||
+        v == 's99all' ||
+        v == 'todayall' ||
+        v == 'delsentall' ||
+        v == 'capall' ||
+        v == 'lowerall'
+      ) {
+        const answer = confirm(
+          'THIS IS AN ACTION ON ALL RECORDS\nON ALL PAGES OF THE CURRENT QUERY!\n\n*** ' +
+            t +
+            ' ***\n\n*** ' +
+            n +
+            ' Record(s) will be affected ***\n\nARE YOU SURE?'
+        );
+        if (answer) {
+          f.submit();
+        }
+      } else {
+        f.submit();
+      }
+    }
+    sel.value = '';
+  }
+}
+
+/**
+ *
  * @param form
  * @param sel
  */
-export function multiActionGo(
-  form: undefined | HTMLFormElement,
-  sel: undefined | HTMLSelectElement
-) {
-  if (typeof form !== 'undefined' && typeof sel !== 'undefined') {
+export function multiActionGo(sel: undefined | HTMLSelectElement) {
+  if (typeof sel !== 'undefined') {
     const v = sel.value;
     const t = sel.options[sel.selectedIndex].text;
     if (typeof v === 'string') {
       if (v == 'addtag' || v == 'deltag') {
-        const answer: string | null = verifyAddTagWindow(t);
+        const answer: string | null = verifyAddTagWindow(t, sel.options.length);
         if (answer != '') {
           return { tagChange: answer };
         }
@@ -3628,16 +3542,14 @@ export function multiActionGo(
 /**
  *
  * @param t
+ * @param numChecked
  */
-function verifyAddTagWindow(t: string) {
+export function verifyAddTagWindow(t: string, numChecked: number) {
   let notok = 1;
   let answer: string | null = '';
   while (notok) {
     answer = prompt(
-      `*** ${t} ***\n\n*** ${
-        // TODO
-        'input.markcheck:checked'.length
-      } Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`,
+      `*** ${t} ***\n\n*** ${numChecked} Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`,
       answer
     );
     if (typeof answer === 'object') answer = '';
@@ -3760,3 +3672,19 @@ export function buildSentences(
  *
  */
 export function check_dupl_lang() {}
+
+/**
+ *
+ * @param $method
+ */
+function getsqlscoreformula($method) {
+  // $method = 2 (today)
+  // $method = 3 (tomorrow)
+  // Formula: {{{2.4^{Status}+Status-Days-1} over Status -2.4} over 0.14325248}
+
+  if ($method == 3)
+    return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 2) / WoStatus - 2.4) / 0.14325248) END';
+  else if ($method == 2)
+    return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 1) / WoStatus - 2.4) / 0.14325248) END';
+  else return '0';
+}

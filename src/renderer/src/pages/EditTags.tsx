@@ -4,20 +4,21 @@ import { Tag } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TagsId, TagsValidator } from '../data/validators';
 import { CheckAndSubmit, RefMap } from '../forms/Forms';
-import { useInternalNavigate } from '../hooks/useInternalNav';
+import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Pager } from '../ui-kit/Pager';
+import { FilterSortPager } from './EditArchivedTexts.component';
+import { FormInput } from './FormInput';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
-  GetTagsortSelectoptions,
-} from './EditTextTags';
-import { FormInput } from './FormInput';
-import { Sorting, resetDirty } from './Sorting';
+  GetTagSortSelectoptions,
+} from './GetTagsortSelectoptions';
+import { SortableHeader, TableFooter } from './Library.component';
+import { TagSorting, resetDirty } from './Sorting';
 import { NavigateButton } from './Statistics.component';
 import { tagPreValidateMap } from './preValidateMaps';
 import { confirmDelete } from './utils';
@@ -27,10 +28,11 @@ import { confirmDelete } from './utils';
  */
 export function DisplayTags({
   query,
-
+  sorting = TagSorting['Tag Text A-Z'],
   currentPage,
 }: {
   query: string;
+  sorting?: TagSorting;
   currentPage: number;
 }): JSX.Element {
   const [{ tags, settings, wordtags }] = useData([
@@ -39,14 +41,16 @@ export function DisplayTags({
     'settings',
   ]);
   const navigate = useInternalNavigate();
+  const sortedTags = [...tags].sort(sortValues(sorting));
+  console.log('TEST123-sorting', sorting, tags);
   const recno = tags.length;
   const countPerTag: Record<TagsId, number> = wordtags.reduce(
     (prev, curr) => ({ ...prev, [curr.WtTgID]: prev[curr.WtTgID] + 1 }),
     Object.fromEntries(tags.map((val) => [val.TgID, 0]))
   );
-  console.log({ countPerTag, wordtags });
   const pageSize = settings['set-tags-per-page'] || 1;
-  const { dataOnPage, numPages } = usePager(tags, currentPage, pageSize);
+  const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
+  const paramUpdater = useUpdateParams();
   const { checkboxPropsForEntry, onSelectAll, onSelectNone, selectedValues } =
     useSelection(tags, 'TgID');
 
@@ -89,9 +93,7 @@ export function DisplayTags({
                 name="querybutton"
                 value="Filter"
                 onClick={() => {
-                  navigate(
-                    `/edit_tags?page=1&query=${queryRef.current?.value || ''}`
-                  );
+                  paramUpdater({ query: queryRef.current?.value || '' });
                 }}
               />
               &nbsp;
@@ -105,39 +107,14 @@ export function DisplayTags({
             </td>
           </tr>
           {recno > 0 && (
-            <tr>
-              <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-                Tag{pluralize(recno)}
-              </th>
-              <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-                <Pager currentPage={0} numPages={0} />
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Sort Order:
-                <select
-                  name="sort"
-                  // onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_tags?page=1&sort=' + val;}"
-                  onChange={({ target: { value } }) => {
-                    switch (Number.parseInt(value) as Sorting) {
-                      // todo change url params
-                      case Sorting['Newest first']:
-                        return (a: Tag, b: Tag) => (a.TgID > b.TgID ? 1 : -1);
-                      case Sorting['Oldest first']:
-                        return (a: Tag, b: Tag) => (a.TgID < b.TgID ? 1 : -1);
-                      // TODO add these
-                      case Sorting['Tag Text A-Z']:
-                        return (a: Tag, b: Tag) =>
-                          a.TgText < b.TgText ? 1 : -1;
-                      case Sorting['Tag Comment A-Z']:
-                        return (a: Tag, b: Tag) =>
-                          (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
-                    }
-                  }}
-                >
-                  <GetTagsortSelectoptions />
-                </select>
-              </th>
-            </tr>
+            <FilterSortPager
+              currentPage={currentPage}
+              numPages={numPages}
+              recno={recno}
+              elementName={'Tag'}
+            >
+              <GetTagSortSelectoptions selected={sorting} />
+            </FilterSortPager>
           )}
         </table>
       </form>
@@ -212,9 +189,27 @@ export function DisplayTags({
             <tr>
               <th className="th1 sorttable_nosort">Mark</th>
               <th className="th1 sorttable_nosort">Actions</th>
-              <th className="th1 clickable">Tag Text</th>
-              <th className="th1 clickable">Tag Comment</th>
-              <th className="th1 clickable">Terms With Tag</th>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Tag Text A-Z']}
+                upSorting={TagSorting['Tag Text Z-A']}
+              >
+                Tag Text{' '}
+              </SortableHeader>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Tag Comment A-Z']}
+                upSorting={TagSorting['Tag Comment Z-A']}
+              >
+                Tag Comment{' '}
+              </SortableHeader>
+              <SortableHeader
+                sorting={sorting}
+                downSorting={TagSorting['Total Words']}
+                upSorting={TagSorting['Total Words (desc)']}
+              >
+                Terms With Tag{' '}
+              </SortableHeader>
             </tr>
             {dataOnPage.map((tag) => (
               <tr>
@@ -226,7 +221,7 @@ export function DisplayTags({
                       type="checkbox"
                       {...checkboxPropsForEntry(tag)}
                       className="markcheck"
-                      value="' . record['TgID'] . '"
+                      value={tag['TgID']}
                     />
                   </A>
                 </td>
@@ -238,9 +233,9 @@ export function DisplayTags({
                   &nbsp;
                   <Icon
                     onClick={() => {
-                      // TODO
-                      // ref={`' . _SERVER['PHP_SELF'] . '?del=' . record['TgID'] . '`}
+                      // TODO delete in wrapper
                       if (confirmDelete()) {
+                        // TODO Maybe call these from wrapper?
                         dataService.deleteTermTag(tag.TgID);
                       }
                     }}
@@ -252,7 +247,6 @@ export function DisplayTags({
                 <td className="td1 center">{tag.TgText}</td>
                 <td className="td1 center">{tag.TgComment}</td>
                 <td className="td1 center">
-                  {/* TODO should be counting with this tag */}
                   {countPerTag[tag.TgID] > 0 ? (
                     <A href={`/edit_words?tag1=${tag.TgID}`}>
                       {countPerTag[tag.TgID]}
@@ -266,36 +260,41 @@ export function DisplayTags({
           </table>
         </form>
       )}
-      {numPages > 1 && (
-        <form name="form3" action="#">
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Tag
-                {pluralize(recno)}
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }} />
-            </tr>
-          </table>
-        </form>
-      )}
 
       {numPages > 1 && (
         <form name="form3" action="#">
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                Tag{pluralize(recno)}
-              </th>
-              <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-                <Pager currentPage={currentPage} numPages={numPages} />
-              </th>
-            </tr>
-          </table>
+          <TableFooter
+            recno={recno}
+            currentPage={currentPage}
+            numPages={numPages}
+            pageSize={pageSize}
+            elementName={'Tag'}
+            pageSizeSettingsKey={'set-tags-per-page'}
+          />
         </form>
       )}
     </>
   );
+}
+
+/**
+ *
+ * @param value
+ */
+function sortValues(value: TagSorting) {
+  switch (value) {
+    case TagSorting['Newest first']:
+      return (a: Tag, b: Tag) => (a.TgID > b.TgID ? 1 : -1);
+    case TagSorting['Oldest first']:
+      return (a: Tag, b: Tag) => (a.TgID < b.TgID ? 1 : -1);
+    case TagSorting['Tag Text A-Z']:
+      return (a: Tag, b: Tag) => (a.TgText < b.TgText ? 1 : -1);
+    case TagSorting['Tag Comment A-Z']:
+      return (a: Tag, b: Tag) =>
+        (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
+    default:
+      return () => 1;
+  }
 }
 
 /**

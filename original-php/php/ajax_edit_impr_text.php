@@ -46,7 +46,7 @@ function make_trans($i, $wid, $trans, $word, $lang)
 	global $tbpref;
 	$trans = trim($trans);
 	$widset = is_numeric($wid);
-	if ($widset) {
+	if ($widset) {l
 		$alltrans = get_first_value("select WoTranslation as value from " . $tbpref . "words where WoID = " . $wid);
 		$transarr = preg_split('/[' . get_sepas() . ']/u', $alltrans);
 		$r = "";

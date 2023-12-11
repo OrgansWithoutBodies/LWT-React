@@ -22,6 +22,7 @@
     "jsdoc/require-description": "warn",
     "jsdoc/sort-tags": "warn",
     "jsdoc/check-syntax": "warn",
+    "object-shorthand": "error",
     "jsdoc/tag-lines": ["warn", "never", { "startLines": 1 }],
     "jsdoc/require-param": ["warn", { "checkDestructuredRoots": false }],
     // "jsdoc/require-jsdoc": [

@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
+import { Settings } from '../data/settings';
 import { useData } from '../data/useAkita';
-import { Tags2Id, TagsId, TextsId, TextsValidator } from '../data/validators';
+import { Tags2Id, TextsId, TextsValidator } from '../data/validators';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
@@ -12,13 +13,18 @@ import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
-import { resetAll } from './EditArchivedTexts.component';
+import {
+  FilterSortPager,
+  buildTextTagLookup,
+  resetAll,
+} from './EditArchivedTexts.component';
 import { pluralize } from './EditTags';
-import { GetTextssortSelectoptions } from './EditTextTags';
+import { GetTextsSortSelectoptions } from './GetTagsortSelectoptions';
 import { getDirTag } from './Reader.component';
 import { SelectMediaPath } from './SelectMediaPath';
-import { resetDirty } from './Sorting';
-import { TagAndOr, TagDropDown } from './Terms.component';
+import { TextSorting, resetDirty } from './Sorting';
+import { TagAndOr, TagDropDown, buildSortByValue } from './Terms.component';
+import { filterTags } from './filterTags';
 import { confirmDelete } from './utils';
 
 const TextMultiAction = {
@@ -27,7 +33,9 @@ const TextMultiAction = {
   },
   addtag: (selectedValues: Set<TextsId>) => {
     const answer = window.prompt(
-      `*** ${'addTag'} ***\n\n*** ' + $('input.markcheck:checked').length + ' Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`
+      `*** ${'addTag'} ***\n\n*** ${
+        selectedValues.size
+      } Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`
     );
     if (answer === null) {
       return;
@@ -54,6 +62,9 @@ const TextMultiAction = {
   },
 };
 
+/**
+ *
+ */
 export function TextMultiActions({
   onSelectAll,
   onSelectNone,
@@ -113,7 +124,12 @@ export function TextMultiActions({
   );
 }
 
-function LibraryHeader(): JSX.Element {
+/**
+ *
+ */
+function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
+  console.log('TEST123-library-header', sorting);
+  const [{ activeLanguageId }] = useData(['activeLanguageId']);
   return (
     <thead>
       <tr>
@@ -124,53 +140,125 @@ function LibraryHeader(): JSX.Element {
           &&nbsp;Test
         </th>
         <th className="th1 sorttable_nosort">Actions</th>
-        <th className="th1 clickable">
+        {!activeLanguageId && (
+          <SortableHeader
+            sorting={sorting}
+            downSorting={TextSorting['Lang.']}
+            upSorting={TextSorting['Lang. (desc)']}
+          >
+            Lang.
+          </SortableHeader>
+        )}
+        <SortableHeader
+          sorting={sorting}
+          downSorting={TextSorting['Title A-Z']}
+          upSorting={TextSorting['Title Z-A']}
+        >
           Title [Tags] / Audio:&nbsp;
           <Icon src="speaker-volume" title="With Audio" />
           , Src.Link:&nbsp;
           <Icon src="chain" title="Source Link available" />
           , Ann.Text:&nbsp;
           <Icon src="tick" title="Annotated Text available" />
-        </th>
-        <th className="th1 sorttable_numeric clickable">
+        </SortableHeader>
+        <SortableHeader
+          sorting={sorting}
+          downSorting={TextSorting['Total Words (desc)']}
+          upSorting={TextSorting['Total Words']}
+        >
           Total
           <br />
           Words
-        </th>
-        <th className="th1 sorttable_numeric clickable">
+        </SortableHeader>
+        <SortableHeader
+          sorting={sorting}
+          downSorting={TextSorting['Saved Wo+Ex (desc)']}
+          upSorting={TextSorting['Saved Wo+Ex']}
+        >
+          {' '}
           Saved
           <br />
           Wo+Ex
-        </th>
-        <th className="th1 sorttable_numeric clickable">
+        </SortableHeader>
+        <SortableHeader
+          sorting={sorting}
+          downSorting={TextSorting['Unkn. Words (desc)']}
+          upSorting={TextSorting['Unkn. Words']}
+        >
+          {' '}
           Unkn.
           <br />
           Words
-        </th>
-        <th className="th1 sorttable_numeric clickable">
+        </SortableHeader>
+        <SortableHeader
+          sorting={sorting}
+          downSorting={TextSorting['Unkn. %']}
+          upSorting={TextSorting['Unkn. % (desc)']}
+        >
+          {' '}
           Unkn.
           <br />%
-        </th>
+        </SortableHeader>
       </tr>
     </thead>
   );
 }
 
-function LibraryFooter({
-  numTexts,
+/**
+ *
+ */
+export function SortableHeader({
+  sorting,
+  downSorting,
+  upSorting,
+  children,
+}: React.PropsWithChildren<Parameters<typeof SortingArrow>[0]>) {
+  const paramUpdater = useUpdateParams();
+  return (
+    <th
+      className="th1 clickable"
+      onClick={() =>
+        paramUpdater({
+          sort: sorting === upSorting ? downSorting : upSorting,
+          page: null,
+        })
+      }
+    >
+      {children}
+      <SortingArrow
+        sorting={sorting}
+        downSorting={downSorting}
+        upSorting={upSorting}
+      />
+    </th>
+  );
+}
+
+/**
+ *
+ */
+export function TableFooter({
+  recno,
   currentPage,
   numPages,
+  pageSize,
+  elementName,
+  pageSizeSettingsKey,
 }: {
-  numTexts: number;
+  recno: number;
   currentPage: number;
   numPages: number;
+  pageSize: number;
+  elementName: string;
+  pageSizeSettingsKey: keyof Settings;
 }): JSX.Element {
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
         <tr>
           <th style={{ whiteSpace: 'nowrap' }} className="th1">
-            {numTexts} Texts
+            {recno} {elementName}
+            {pluralize(recno)}
           </th>
           <th style={{ whiteSpace: 'nowrap' }} className="th1">
             &nbsp; &nbsp;
@@ -183,9 +271,9 @@ function LibraryFooter({
             <Icon src="placeholder" alt="-" />
             <Icon src="placeholder" alt="-" />
             <ResizePage
-              pageSize={15}
+              pageSize={pageSize}
               onPageResize={function (newSize: number): void {
-                throw new Error('Function not implemented.');
+                dataService.setSettings({ [pageSizeSettingsKey]: newSize });
               }}
             />
           </th>
@@ -195,39 +283,68 @@ function LibraryFooter({
   );
 }
 
-function ResizePage({
+/**
+ *
+ */
+export function ResizePage({
   pageSize,
   onPageResize,
 }: {
   pageSize: number;
   onPageResize: (newSize: number) => void;
 }) {
-  const numberOptions = 15;
+  const numberOptions = 20;
   const options = new Array(numberOptions).fill(0).map((_, ii) => (ii + 1) * 5);
   return (
     <>
-      #/Page:{' '}
-      <select
-        value={pageSize}
-        onChange={(val) => onPageResize(Number.parseInt(val))}
-      >
-        {options.map((val) => (
-          <option value={val}>{val}</option>
-        ))}
-      </select>
+      # / Page:{' '}
+      {options.includes(pageSize) ? (
+        <select
+          value={pageSize}
+          onChange={({ target: { value } }) =>
+            onPageResize(Number.parseInt(value))
+          }
+        >
+          {options.map((val) => (
+            <option value={val}>{val}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type="number"
+          defaultValue={pageSize}
+          onChange={({ target: { value } }) =>
+            onPageResize(Number.parseInt(value))
+          }
+        />
+      )}
     </>
   );
 }
 
+/**
+ *
+ */
 function LibraryRow({
   text,
   checked,
   onChange,
+  textTags,
 }: {
   text: TextDetailRow;
+  textTags: string[];
   checked: boolean;
   onChange: () => void;
 }): JSX.Element {
+  const [{ languages, activeLanguageId }] = useData([
+    'languages',
+    'activeLanguageId',
+  ]);
+  const languageForLine = languages.find((lang) => lang.LgID === text.TxLgID);
+  if (!languageForLine) {
+    throw new Error('Invalid Language line');
+  }
+
   return (
     <tr>
       <td className="td1 center">
@@ -280,12 +397,13 @@ function LibraryRow({
         </span>
         &nbsp;
       </td>
+
+      {!activeLanguageId && (
+        <td className="td1 center">{languageForLine.LgName}</td>
+      )}
       <td className="td1 center">
         {text.title}
-        <span className="smallgray2">
-          {text.tags &&
-            `[${text.tags.map((tag, ii) => (ii > 0 ? ` ${tag}` : tag))}]`}
-        </span>
+        <span className="smallgray2"> [{textTags.join(', ')}]</span>
         {text.audioAvailable && <Icon src="speaker-volume" />}
         {text.link && (
           <a href={text.link} target="_blank">
@@ -302,18 +420,23 @@ function LibraryRow({
   );
 }
 
+/**
+ *
+ */
 export function Library({
   currentPage,
   query = null,
   tag2 = null,
   tag12 = 0,
   tag1 = null,
+  sorting = TextSorting['Oldest first'],
 }: {
   currentPage: number;
   query: string | null;
-  tag2: number | null;
-  tag1: number | null;
+  tag2: Tags2Id | null;
+  tag1: Tags2Id | null;
   tag12: 0 | 1;
+  sorting?: TextSorting;
 }) {
   const [{ textDetails, activeLanguage, texttags, tags2, settings }] = useData([
     'textDetails',
@@ -322,30 +445,34 @@ export function Library({
     'tags2',
     'settings',
   ]);
+  console.log(settings['set-texts-per-page']);
   const pageSize = settings['set-texts-per-page'] || 1;
-  const filteredTextDetails = tags2;
-  // TODO
-  // const filteredTextDetails = tags2.filter(filterTags( tag1, tag2, tag12))
-  // .map((val)=>texttags.filter((textTag)=>textTag.TtTxID===) val.);
+
+  const filteredTags = filterTags(texttags, tag1, tag2, tag12);
+  const filteredTextDetails = (textDetails || []).filter((textDetail) => {
+    // TODO query
+
+    const includesTag = filteredTags[textDetail.TxID] === true;
+    return includesTag;
+  });
+  const filteredSortedTextDetails = filteredTextDetails.sort(
+    sortingMethod(sorting)
+  );
   // TODO useFilter
   const { numPages, dataOnPage } = usePager(
-    filteredTextDetails || [],
+    filteredSortedTextDetails || [],
     currentPage,
     pageSize
   );
   const paramUpdater = useUpdateParams();
   const navigator = useInternalNavigate();
-  const queryRef = useRef<HTMLInputElement | undefined>();
+  const queryRef = useRef<HTMLInputElement | null>(null);
   // TODO
-  const {
-    selectedValues,
-    onSelectAll,
-    onSelectNone,
-    onSelect,
-    checkboxPropsForEntry,
-  } = useSelection(textDetails || [], 'TxID');
+  const { selectedValues, onSelectAll, onSelectNone, checkboxPropsForEntry } =
+    useSelection(textDetails || [], 'TxID');
+  const textTagLookup = buildTextTagLookup(tags2, texttags);
 
-  const recno = (textDetails || []).length;
+  const recno = (filteredTextDetails || []).length;
   return (
     <>
       <Header
@@ -373,7 +500,7 @@ export function Library({
                 value="Reset All"
                 onClick={() => {
                   resetAll('edit_texts');
-                  navigator('/edit_texts');
+                  paramUpdater(null);
                 }}
               />
             </th>
@@ -399,6 +526,7 @@ export function Library({
               <input
                 type="text"
                 name="query"
+                // TODO
                 ref={queryRef}
                 defaultValue={query || ''}
                 maxLength={50}
@@ -410,9 +538,10 @@ export function Library({
                 name="querybutton"
                 value="Filter"
                 onClick={() =>
-                  navigator(
-                    `/edit_texts?page=1&query=${queryRef.current?.value || ''}`
-                  )
+                  paramUpdater({
+                    query: queryRef.current?.value || '',
+                    page: null,
+                  })
                 }
               />
               &nbsp;
@@ -435,39 +564,30 @@ export function Library({
               style={{ whiteSpace: 'nowrap' }}
             >
               Tag #1:
-              <TagDropDown tags={tags2} tagKey="tag1" />
+              <TagDropDown tags={tags2} tagKey="tag1" defaultValue={tag1} />
             </td>
             <TagAndOr
+              defaultValue={tag12}
               onChange={({ target: { value } }) => {
-                paramUpdater({ tag12: value });
+                paramUpdater({ tag12: value, page: null });
               }}
             />
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               Tag #2:
-              <TagDropDown tags={tags2} tagKey="tag2" />
+              <TagDropDown tags={tags2} tagKey="tag2" defaultValue={tag2} />
             </td>
           </tr>
 
-          {/* TODO */}
-          {/* <?php if(recno > 0) { ?> */}
-          <tr>
-            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-              {`${recno} Text${pluralize(recno)}`}
-            </th>
-            <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-              <Pager currentPage={currentPage} numPages={numPages} />
-            </th>
-            <th className="th1" colSpan={1} style={{ whiteSpace: 'nowrap' }}>
-              Sort Order:
-              <select
-                name="sort"
-                // TODO
-                onChange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts?page=1&sort=' + val;}"
-              >
-                <GetTextssortSelectoptions />
-              </select>
-            </th>
-          </tr>
+          {recno > 0 && (
+            <FilterSortPager
+              currentPage={currentPage}
+              numPages={numPages}
+              recno={recno}
+              elementName={'Text'}
+            >
+              <GetTextsSortSelectoptions selected={sorting} />
+            </FilterSortPager>
+          )}
         </table>
       </form>
 
@@ -478,52 +598,34 @@ export function Library({
       />
       <>
         <table className="sortable tab1">
-          <LibraryHeader />
+          <LibraryHeader sorting={sorting} />
           <tbody>
             {dataOnPage &&
               dataOnPage.map((text) => (
-                <LibraryRow text={text} {...checkboxPropsForEntry(text)} />
+                <LibraryRow
+                  text={text}
+                  textTags={textTagLookup[text.TxID]}
+                  {...checkboxPropsForEntry(text)}
+                />
               ))}
           </tbody>
         </table>
-        <LibraryFooter
-          numTexts={textDetails ? textDetails.length : 0}
+        <TableFooter
+          elementName={'Text'}
+          pageSize={pageSize}
+          recno={recno}
           currentPage={currentPage}
           numPages={numPages}
+          pageSizeSettingsKey={'set-texts-per-page'}
         />
       </>
     </>
   );
 }
 
-export function filterTags<TTag extends TagsId | Tags2Id>(
-  tagID: TTag,
-  tag1: TTag | null,
-  tag2: TTag | null,
-  tag12: 1 | 2
-) {
-  const tag1Specified = tag1 !== null;
-  const tag2Specified = tag2 !== null;
-  const noTagsSpecified = !tag1Specified && !tag2Specified;
-  if (noTagsSpecified) {
-    return true;
-  }
-
-  console.log('TEST123-TAGS SPECIFIED');
-  const onlyUseOneTag =
-    (!tag1Specified && tag2Specified) || (!tag2Specified && tag1Specified);
-
-  const isTag1Equal = tagID === tag1;
-  const isTag2Equal = tagID === tag2;
-  if (onlyUseOneTag) {
-    return tag1Specified ? isTag1Equal : isTag2Equal;
-  }
-  console.log('TEST123-TAGS MULTIPLE');
-
-  const isUsingOr = tag12 === 1;
-  return isUsingOr ? isTag1Equal || isTag2Equal : isTag1Equal && isTag2Equal;
-}
-
+/**
+ *
+ */
 export function EditText({ chgID }: { chgID: TextsId }) {
   const [{ texts, tags2, languages }] = useData([
     'texts',
@@ -541,7 +643,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
 
-  const { Input: TxInput, formErrors } = useFormInput({
+  const { Input: TxInput, LanguageSelectInput } = useFormInput({
     entry: editingText,
     validator,
   });
@@ -560,8 +662,8 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Language:</td>
             <td className="td1">
-              <LanguageDropdown defaultValue={editingText.TxLgID} />
-              <RequiredLineButton />
+              {/* TODO this one shouldnt change active language id */}
+              <LanguageSelectInput entryKey={'TxLgID'} isRequired />
             </td>
           </tr>
           <tr>
@@ -641,7 +743,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
             <td className="td1 right">Tags:</td>
             <td className="td1">
               {/* TODO */}
-              <TagDropDown tags={tags2} tagKey={'text'} />
+              <TagDropDown tags={tags2} tagKey={'text'} defaultValue={null} />
             </td>
           </tr>
           <tr>
@@ -696,6 +798,51 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           </tr>
         </table>
       </form>
+    </>
+  );
+}
+const sortingMethod = (
+  sort: TextSorting
+): ((termA: TextDetailRow, termB: TextDetailRow) => 1 | -1 | 0) => {
+  switch (sort) {
+    case TextSorting['Oldest first']:
+      // TODO these wrong
+      return () => -1;
+    // return buildSortByOldest('title');
+    case TextSorting['Newest first']:
+      // TODO these wrong
+      return buildSortByValue('totalWords');
+    // return () => 1;;
+    // return buildSortByNewest('title');
+    // TODO
+    case TextSorting['Title A-Z']:
+      return buildSortByValue('title');
+  }
+};
+const DOWN_ARROW = '▾' as const;
+const UP_ARROW = '▴' as const;
+
+/**
+ *
+ */
+export function SortingArrow<TSort extends Record<string, number>>({
+  sorting,
+  downSorting,
+  upSorting,
+}: {
+  sorting: TSort;
+  downSorting: TSort;
+  upSorting: TSort;
+}) {
+  return (
+    <>
+      {sorting === downSorting ? (
+        <>&nbsp;{DOWN_ARROW}</>
+      ) : sorting === upSorting ? (
+        <>&nbsp;{UP_ARROW}</>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

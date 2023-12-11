@@ -6,12 +6,13 @@ import { AppVariables } from './meta';
 import { LoremIpsum } from './ui-kit/LoremIpsum';
 
 // TODO make literals pass through
-type Plugin<TValidatorKeys extends string = string> = {
+export type Plugin<TValidatorKeys extends string = string> = {
   validators?: {
     [key in Persistable]?: Record<TValidatorKeys, Struct<any>>;
   };
   routes?: Record<InternalPaths, () => JSX.Element>;
   service?: Record<string, (...args: any[]) => Promise<unknown>>;
+  importMethods?: Record<string, (...args: any[]) => Promise<unknown>>;
   landingPageLinks?: ({ link: InternalPaths; label: string } | null)[];
   /**
    * templates: {
@@ -28,6 +29,7 @@ const plugins = [
   //
   // ChineseMeasureWordColumnPlugin,
   // UserPlugin,
+  // AnkiSyncServer,
   // TatoebaPlugin,
   //   OtherPlugin,
   {

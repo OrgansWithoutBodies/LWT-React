@@ -74,6 +74,9 @@ function NoMatch() {
 //   return <Route path={path} {...args} />;
 // }
 
+/**
+ *
+ */
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
   const style = createColors(styleVariant);
@@ -81,6 +84,9 @@ function GlobalStyle(): JSX.Element {
   return <StyleHeader />;
 }
 
+/**
+ *
+ */
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
   const [{ notificationMessage }] = useData(['notificationMessage']);
@@ -151,7 +157,7 @@ function App(): JSX.Element {
   return (
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
-      {notificationMessage === null ? (
+      {notificationMessage === null || notificationMessage === undefined ? (
         <></>
       ) : (
         <NotificationMessage notificationMessage={notificationMessage.txt} />
@@ -178,6 +184,9 @@ function App(): JSX.Element {
   );
 }
 
+/**
+ *
+ */
 function NotificationMessage({
   notificationMessage,
 }: {
@@ -215,6 +224,9 @@ function NotificationMessage({
 
 // TODO typewise enforce conditional (typeguard?)
 
+/**
+ *
+ */
 export function Switch({
   on,
   children,

@@ -14,7 +14,7 @@ export function owin(url: string | URL | undefined): void {
  * @param u
  * @param w
  */
-function createTheDictUrl(u: string, w: string) {
+export function createTheDictUrl(u: string, w: string) {
   // const url = u.trim();
   // const trm = w.trim();
   const r = `trans?x=2&i=${escape(u)}&t=${w}`;
@@ -36,6 +36,10 @@ export function translateSentence2(
     }
   }
 }
+/**
+ *
+ * @param s
+ */
 function stripTheSlashesIfNeeded(s) {
   if (function_exists('get_magic_quotes_gpc')) {
     if (get_magic_quotes_gpc()) return stripslashes(s);
@@ -44,9 +48,17 @@ function stripTheSlashesIfNeeded(s) {
     return s;
   }
 }
+/**
+ *
+ * @param s
+ */
 function prepare_textdata(s) {
   return stripTheSlashesIfNeeded(s).replace('\r\n', '\n', s);
 }
+/**
+ *
+ * @param data
+ */
 function convert_string_to_sqlsyntax(data: string) {
   const result = 'NULL';
   data = prepare_textdata(data).trim();
@@ -54,6 +66,10 @@ function convert_string_to_sqlsyntax(data: string) {
     // result = "'".mysqli_real_escape_string(GLOBALS['DBCONNECTION'], data).; "'";
     return result;
 }
+/**
+ *
+ * @param s
+ */
 export function prepare_textdata_js(s: string) {
   s = convert_string_to_sqlsyntax(s);
   if (s == 'NULL') return "''";

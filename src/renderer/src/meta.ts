@@ -58,6 +58,9 @@ enum LWT_ENV_VARS {
   i18nCsvURI = 'VITE_LWT_I18N_URL',
 }
 
+/**
+ *
+ */
 function GetPersistFromEnv() {
   switch (import.meta.env[LWT_ENV_VARS.persistMethod]) {
     case 'REST':
@@ -71,18 +74,28 @@ function GetPersistFromEnv() {
     // throw new Error('INVALID PERSISTANCE STRATEGY');
   }
 }
+/**
+ *
+ */
 function GetPluginsEnabledFromEnv() {
   if (import.meta.env[LWT_ENV_VARS.disablePlugins] === 'true') {
     return false;
   }
   return true;
 }
+/**
+ *
+ */
 function GetDevModeFromEnv() {
   if (import.meta.env[LWT_ENV_VARS.devMode] === 'true') {
     return true;
   }
   return false;
 }
+/**
+ *
+ * @param val
+ */
 function GetFromEnv(val: LWT_ENV_VARS) {
   return import.meta.env[val];
 }

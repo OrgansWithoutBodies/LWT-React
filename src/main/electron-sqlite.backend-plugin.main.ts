@@ -33,9 +33,12 @@ const tbpref = '';
  * @param entry
  * @param tableKey
  */
-function insertEntry(entry: object, tableKey: string) {
-  const entryKeys = Object.keys(entry).filter(
-    (val) => entry[val] !== undefined
+function insertEntry(entry: object | object[], tableKey: string) {
+  const safeEntries: object[] = tableKey in entry ? [entry] : entry;
+  const safeSingleEntry = safeEntries[0];
+  // TODO finish multiple
+  const entryKeys = Object.keys(safeSingleEntry).filter(
+    (val) => safeSingleEntry[val] !== undefined
   );
   const insertQuery = `INSERT INTO 
   ${tbpref}${tableKey}(
@@ -56,7 +59,7 @@ function insertEntry(entry: object, tableKey: string) {
           Object.fromEntries(
             entryKeys.map((key) => {
               console.log('TEST123-entrykey', key, entry[key]);
-              return [`$${key}`, entry[key]];
+              return [`$${key}`, safeSingleEntry[key]];
             })
           ),
           () => {}
@@ -130,6 +133,9 @@ export async function deleteEntry(tableName: string, deleteID: number) {
     });
 }
 
+/**
+ *
+ */
 export async function emptyDB() {
   return await sql
     .open({
@@ -230,6 +236,9 @@ function isValidKey(key: string) {
   return Object.keys(tableIDLookup).includes(key);
 }
 
+/**
+ *
+ */
 export async function initDB() {
   const creationStrings = [
     `CREATE TABLE IF NOT EXISTS archivedtexts (   

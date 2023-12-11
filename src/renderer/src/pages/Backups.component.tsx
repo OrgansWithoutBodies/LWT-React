@@ -4,6 +4,9 @@ import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { confirmDelete } from './utils';
 
+/**
+ *
+ */
 export function BackupScreen(): JSX.Element {
   // const [] = useData([]);
   const navigate = useInternalNavigate();

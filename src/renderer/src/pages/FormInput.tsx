@@ -4,6 +4,9 @@ import { AppVariables } from '../meta';
 import { VariantMap } from '../styles';
 import { RequiredLineButton } from '../ui-kit/Icon';
 
+/**
+ *
+ */
 export function FormInput<
   TKey extends string,
   TData extends Record<TKey, any>
@@ -61,6 +64,9 @@ export function FormInput<
     </>
   );
 }
+/**
+ *
+ */
 export function FormLineError<TKey extends string>({
   errorName,
   entryKey,
