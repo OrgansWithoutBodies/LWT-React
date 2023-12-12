@@ -40,6 +40,7 @@ import { SortableHeader, TableFooter } from './Library.component';
 import { getDirTag } from './Reader.component';
 import { WordSorting, resetDirty } from './Sorting';
 import { WordTagsSelectDropdown } from './WordTagsSelectDropdown';
+import { getStatusName } from './escape_html_chars';
 import { filterTags } from './filterTags';
 import { wordNoIdPrevalidateMap, wordPrevalidateMap } from './preValidateMaps';
 import {
@@ -111,7 +112,15 @@ function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
     <tr>
       <th className="th1 sorttable_nosort">Mark</th>
       <th className="th1 sorttable_nosort">Act.</th>
-      {activeLanguageId === null && <th className="th1 clickable">Lang.</th>}
+      {activeLanguageId === null && (
+        <SortableHeader
+          sorting={sorting}
+          downSorting={WordSorting['Lang. (desc)']}
+          upSorting={WordSorting['Lang.']}
+        >
+          Lang.
+        </SortableHeader>
+      )}
       <SortableHeader
         sorting={sorting}
         downSorting={WordSorting['Term A-Z']}
@@ -142,8 +151,8 @@ function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
       </SortableHeader>
       <SortableHeader
         sorting={sorting}
-        downSorting={WordSorting['Oldest first']}
-        upSorting={WordSorting['Newest first']}
+        downSorting={WordSorting['Stat./Days']}
+        upSorting={WordSorting['Stat./Days (desc)']}
       >
         Stat./
         <br />
@@ -411,7 +420,7 @@ export function TagAndOr({
 /**
  *
  */
-function TermLine({
+function TermRow({
   word,
   onSelect,
   isSelected,
@@ -495,7 +504,9 @@ function TermLine({
         >
           {word.WoTranslation}
         </span>{' '}
-        <span className="smallgray2">[{tags.join(', ')}]</span>
+        {tags.length > 0 && (
+          <span className="smallgray2">[{tags.join(', ')}]</span>
+        )}
       </td>
       <td className="td1 center">
         <b>
@@ -506,13 +517,22 @@ function TermLine({
           )}
         </b>
       </td>
-      <td
-        className="td1 center"
-        title="' . tohtml(get_status_name($record['WoStatus'])) . '"
-      >
+      <td className="td1 center" title={getStatusName(word.WoStatus)}>
+        {/* <td className="td1 center">
+            <span title="Saved" className="status4">
+              &nbsp;
+              ($txtworkedall > 0 ? '
+                      <a href="edit_words.php?page=1&;query=&;status=&;tag12=0&;tag2=&;tag1=&;text=' . $record['TxID'] . '">
+                        {$txtworkedwords }
+                        +
+                        {$txtworkedexpr }
+                        </a>
+                        : 0)
+              &nbsp;
+            </span>
+          </td> */}
+
         {get_status_abbr(word['WoStatus'])}
-        {/*  */}
-        {/* DATEDIFF( NOW( ) , WoStatusChanged ) AS days */}
         {word['WoStatus'] < 98
           ? `/${Math.floor(
               (new Date().getTime() -
@@ -617,7 +637,7 @@ export function Terms({
   pageNum = null,
   sort = WordSorting['Term A-Z'],
   status = null,
-  textFilter,
+  textFilter = null,
   tag1,
   tag12 = 0,
   tag2,
@@ -638,6 +658,7 @@ export function Terms({
     'settings',
     'wordtags',
   ]);
+  console.log('TEST123-words', words, textFilter);
   const pageSize = settings['set-terms-per-page'] || 10;
 
   const filteredWordTags = filterTags(wordtags, tag1, tag2, tag12);
@@ -652,15 +673,20 @@ export function Terms({
     if (!isRightStatus) {
       return false;
     }
-    const isRightLang = !activeLanguage
-      ? true
-      : word.WoLgID === activeLanguage.LgID;
+    const isRightLang =
+      activeLanguage === null || activeLanguage === undefined
+        ? true
+        : word.WoLgID === activeLanguage.LgID;
     if (!isRightLang) {
       return false;
+    }
+    if (tag1 === null && tag2 === null) {
+      return true;
     }
     const filteredTagsIncludesWord = filteredWordTags[word.WoID] === true;
     return filteredTagsIncludesWord;
   });
+  console.log('WORDFILTER', filteredWordTags);
 
   const textTagLookup = buildTextTagLookup(tags, wordtags);
   const sortedWords =
@@ -720,8 +746,8 @@ export function Terms({
             <TermsHeader sorting={sort} />
             <tbody>
               {displayedWords.map((word) => (
-                <TermLine
-                  tags={textTagLookup[word.WoID]}
+                <TermRow
+                  tags={textTagLookup[word.WoID] || []}
                   word={word}
                   onSelect={onSelect}
                   sorting={sort}

@@ -1,18 +1,34 @@
 import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
-import { useInternalNavigate } from '../hooks/useInternalNav';
+import { useUpdateParams } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { getDirTag } from './Reader.component';
 import { StrengthMapNumericalKey } from './StrengthMap';
-
+enum AnnPlcmnt {
+  'behind' = 0,
+  'in front of' = 1,
+  'above (ruby)' = 2,
+}
 /**
  *
  */
-export function PrintText({ textID }: { textID: TextsId }) {
+export function PrintText({
+  textID,
+  ann,
+  status,
+  annplcmnt,
+}: {
+  textID: TextsId;
+  ann: number;
+  status: number;
+  annplcmnt: AnnPlcmnt;
+}) {
+  // TODO
+  const statusRange = 1;
   const [{ texts, languages }] = useData(['texts', 'languages']);
-  const navigator = useInternalNavigate();
+  const paramUpdater = useUpdateParams();
   const showingText = texts.find(({ TxID }) => TxID === textID);
   if (!showingText) {
     throw new Error('invalid Text ID!');
@@ -44,49 +60,47 @@ export function PrintText({ textID }: { textID: TextsId }) {
           Terms with <b>status(es)</b>{' '}
           <select
             id="status"
-            onChange={(val) => {
-              navigator(`/print_text?text=${textID}&status=${val}`);
+            defaultValue={status}
+            onChange={({ target: { value } }) => {
+              paramUpdater({ status: value });
             }}
           >
-            {/* TODO */}
-            echo get_wordstatus_selectoptions(statusrange, true, true, false)
+            <GetWordstatusSelectoptions
+              v={statusRange}
+              all={true}
+              not9899={true}
+            />
           </select>{' '}
           ...
           <br />
           will be <b>annotated</b> with "
-          <select id="ann">
+          <select
+            id="ann"
+            defaultValue={ann}
+            onChange={({ target: { value } }) => {
+              paramUpdater({ ann: value });
+            }}
+          >
             <option value="0">Nothing</option>
             <option value="1">Translation</option>
-            <option value="5">Translation &amp Tags</option>
+            <option value="5">Translation & Tags</option>
             <option value="2">Romanization</option>
-            <option value="3">Romanization &amp Translation</option>
-            <option value="7">Romanization, Translation &amp Tags</option>
+            <option value="3">Romanization & Translation</option>
+            <option value="7">Romanization, Translation & Tags</option>
           </select>
           <select
             id="annplcmnt"
             onChange={({ target: { value: val } }) => {
-              navigator(`/print_text?text=${textID}&annplcmnt=${val}`);
+              paramUpdater({ annplcmnt: val });
             }}
           >
-            <option
-              value="0"
-              // TODO
-              // " . get_selected(0,annplcmnt) . "
-            >
+            <option value="0" selected={annplcmnt === 0}>
               behind
             </option>
-            <option
-              value="1"
-              // TODO
-              // " . get_selected(1,annplcmnt) . "
-            >
+            <option value="1" selected={annplcmnt === 1}>
               in front of
             </option>
-            <option
-              value="2"
-              // TODO
-              // " . get_selected(2,annplcmnt) . "
-            >
+            <option value="2" selected={annplcmnt === 2}>
               above (ruby)
             </option>
           </select>{' '}
@@ -120,7 +134,7 @@ export function PrintText({ textID }: { textID: TextsId }) {
                 type="button"
                 value="Create"
                 onClick={() =>
-                  `location.href='print_impr_text?edit=1&amptext=${textID}`
+                  `location.href='print_impr_text?edit=1&text=${textID}`
                 }
               />{' '}
               an <b>Improved Annotated Text</b> [

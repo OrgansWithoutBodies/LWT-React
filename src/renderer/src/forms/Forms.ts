@@ -81,7 +81,9 @@ export function RefMap<TForm>(
   const individualRefs = Object.fromEntries(
     values.map((key) => [
       key,
-      useRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(),
+      useRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null>(
+        null
+      ),
     ])
   ) as TRefMap<TForm>;
   individualRefs.clearAll = () => {
@@ -126,12 +128,12 @@ export function CheckAndSubmit<TForm>(
     (Object.keys(refMap) as (keyof typeof refMap)[])
       .filter((val) => (omit === null || val !== omit) && val !== 'clearAll')
       .map((refKey) => [
-          refKey,
-          (preValidateMap[refKey] || identityMap)(
-            refMap[refKey].current?.value,
-            refMap
-          ),
-        ])
+        refKey,
+        (preValidateMap[refKey] || identityMap)(
+          refMap[refKey].current?.value,
+          refMap
+        ),
+      ])
   );
   console.log(values);
 

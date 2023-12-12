@@ -1,4 +1,9 @@
-import { Language, Sentence } from '../data/parseMySqlDump';
+import {
+  Language,
+  LanguageNoId,
+  Sentence,
+  TextItem,
+} from '../data/parseMySqlDump';
 
 /**
  *
@@ -99,83 +104,6 @@ export function confirmDelete(): boolean {
 // 	} else {
 // 		return s;
 // 	}
-// }
-
-// // -------------------------------------------------------------
-
-// function getPreviousAndNextTextLinks(textid, url, onlyann, add)
-// {
-// 	global tbpref;
-// 	currentlang = validateLang(processDBParam("filterlang", 'currentlanguage', '', 0));
-// 	wh_lang = (currentlang != '') ? (' and TxLgID=' . currentlang) : '';
-
-// 	currentquery = processSessParam("query", "currenttextquery", '', 0);
-// 	wh_query = convert_string_to_sqlsyntax(str_replace("*", "%", mb_strtolower(currentquery, 'UTF-8')));
-// 	wh_query = (currentquery != '') ? (' and TxTitle like ' . wh_query) : '';
-
-// 	currenttag1 = validateTextTag(processSessParam("tag1", "currenttexttag1", '', 0), currentlang);
-// 	currenttag2 = validateTextTag(processSessParam("tag2", "currenttexttag2", '', 0), currentlang);
-// 	currenttag12 = processSessParam("tag12", "currenttexttag12", '', 0);
-// 	if (currenttag1 == '' && currenttag2 == '')
-// 		wh_tag = '';
-// 	else {
-// 		if (currenttag1 != '') {
-// 			if (currenttag1 == -1)
-// 				wh_tag1 = "group_concat(TtT2ID) IS NULL";
-// 			else
-// 				wh_tag1 = "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/" . currenttag1 . "/%'";
-// 		}
-// 		if (currenttag2 != '') {
-// 			if (currenttag2 == -1)
-// 				wh_tag2 = "group_concat(TtT2ID) IS NULL";
-// 			else
-// 				wh_tag2 = "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/" . currenttag2 . "/%'";
-// 		}
-// 		if (currenttag1 != '' && currenttag2 == '')
-// 			wh_tag = " having (" . wh_tag1 . ') ';
-// 		elseif (currenttag2 != '' && currenttag1 == '')
-// 			wh_tag = " having (" . wh_tag2 . ') ';
-// 		else
-// 			wh_tag = " having ((" . wh_tag1 . (currenttag12 ? ') AND (' : ') OR (') . wh_tag2 . ')) ';
-// 	}
-
-// 	currentsort = processDBParam("sort", 'currenttextsort', '1', 1);
-// 	sorts = array('TxTitle', 'TxID desc', 'TxID');
-// 	lsorts = count(sorts);
-// 	if (currentsort < 1)
-// 		currentsort = 1;
-// 	if (currentsort > lsorts)
-// 		currentsort = lsorts;
-
-// 	if (onlyann)
-// 		sql = 'select TxID from ((' . tbpref . 'texts left JOIN ' . tbpref . 'texttags ON TxID = TtTxID) left join ' . tbpref . 'tags2 on T2ID = TtT2ID), ' . tbpref . 'languages where LgID = TxLgID AND LENGTH(TxAnnotatedText) > 0 ' . wh_lang . wh_query . ' group by TxID ' . wh_tag . ' order by ' . sorts[currentsort - 1];
-// 	else
-// 		sql = 'select TxID from ((' . tbpref . 'texts left JOIN ' . tbpref . 'texttags ON TxID = TtTxID) left join ' . tbpref . 'tags2 on T2ID = TtT2ID), ' . tbpref . 'languages where LgID = TxLgID ' . wh_lang . wh_query . ' group by TxID ' . wh_tag . ' order by ' . sorts[currentsort - 1];
-
-// 	list = array(0);
-// 	res = do_mysqli_query(sql);
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		array_push(list, (record['TxID'] + 0));
-// 	}
-// 	mysqli_free_result(res);
-// 	array_push(list, 0);
-// 	listlen = count(list);
-// 	for (i = 1; i < listlen - 1; i++) {
-// 		if (list[i] == textid) {
-// 			if (list[i - 1] !== 0) {
-// 				title = tohtml(getTextTitle(list[i - 1]));
-// 				prev = '<a href="' . url . list[i - 1] . '" target="_top"><img src="icn/navigation-180-button.png" title="Previous Text: ' . title . '" alt="Previous Text: ' . title . '" /></a>';
-// 			} else
-// 				prev = '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" />';
-// 			if (list[i + 1] !== 0) {
-// 				title = tohtml(getTextTitle(list[i + 1]));
-// 				next = '<a href="' . url . list[i + 1] . '" target="_top"><img src="icn/navigation-000-button.png" title="Next Text: ' . title . '" alt="Next Text: ' . title . '" /></a>';
-// 			} else
-// 				next = '<img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
-// 			return add . prev . ' ' . next;
-// 		}
-// 	}
-// 	return add . '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
 // }
 
 // // -------------------------------------------------------------
@@ -860,12 +788,13 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	dummy = runsql('OPTIMIZE TABLE ' . tbpref . 'archivedtexts,' . tbpref . 'languages,' . tbpref . 'sentences,' . tbpref . 'textitems,' . tbpref . 'texts,' . tbpref . 'words,' . tbpref . 'settings,' . tbpref . 'tags,' . tbpref . 'wordtags,' . tbpref . 'tags2,' . tbpref . 'texttags,' . tbpref . 'archtexttags, _lwtgeneral', '');
 // }
 
-// // -------------------------------------------------------------
-
-// function remove_soft_hyphens(str)
-// {
-// 	return str_replace('­', '', str); // first '..' contains Softhyphen 0xC2 0xAD
-// }
+/**
+ *
+ * @param softHyphenString
+ */
+export function remove_soft_hyphens(softHyphenString: string) {
+  return softHyphenString.replace('­', ''); // first '..' contains Softhyphen 0xC2 0xAD
+}
 
 // // -------------------------------------------------------------
 
@@ -1018,13 +947,11 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function remove_spaces(s, remove)
-// {
-// 	if (remove)
-// 		return preg_replace('/\s{1,}/u', '', s); // '' enthält &#x200B;
-// 	else
-// 		return s;
-// }
+export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
+  if (remove) return s.replace('/s{1,}/u', '');
+  // '' enthält &#x200B;
+  else return s;
+}
 
 // // -------------------------------------------------------------
 
@@ -1032,16 +959,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // {
 // 	if (isset($_REQUEST[s])) {
 // 		return trim($_REQUEST[s]);
-// 	} else
-// 		return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function getsess(s)
-// {
-// 	if (isset($_SESSION[s])) {
-// 		return trim($_SESSION[s]);
 // 	} else
 // 		return '';
 // }
@@ -2000,15 +1917,14 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	return r;
 // }
 
-// // -------------------------------------------------------------
+// -------------------------------------------------------------
 
-// function replaceTabsWithNewLine(s)
-// {
-// 	s = str_replace(array("\r\n", "\r", "\n", "\t"), ' ', s);
-// 	s = preg_replace('/\s/u', ' ', s);
-// 	s = preg_replace('/\s{2,}/u', ' ', s);
-// 	return trim(s);
-// }
+export function replaceTabsWithNewLine(s: string) {
+  s = s.replace(['\r\n', '\r', '\n', '\t'], ' ');
+  s = s.replace('/s/u', ' ');
+  s = s.replace('/s{2,}/u', ' ');
+  return s.trim();
+}
 
 // // -------------------------------------------------------------
 
@@ -2310,169 +2226,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	}
 // 	return '';
 // }
-
-// // -------------------------------------------------------------
-
-// function echodebug(const, text)
-// {
-// 	global debug;
-// 	if (!debug)
-// 		return;
-// 	echo "<pre> **DEBUGGING** " . tohtml(text) . ' = [[[';
-// 	print_r(const);
-// 	echo "]]]\n--------------</pre>";
-// }
-
-// // -------------------------------------------------------------
-
-// function splitCheckText(text, lid, id)
-// {
-// 	// id = -1     => Check, return protocol
-// 	// id = -2     => Only return sentence array
-// 	// id = TextID => Split: insert sentences/textitems entries in DB
-// 	// TODO this is the sentence/word splitting logic
-// 	global tbpref;
-// 	r = '';
-// 	sql = "select * from " . tbpref . "languages where LgID=" . lid;
-// 	res = do_mysqli_query(sql);
-// 	record = mysqli_fetch_assoc(res);
-// 	if (record == FALSE)
-// 		my_die("Language data not found: sql");
-// 	removeSpaces = record['LgRemoveSpaces'];
-// 	splitEachChar = record['LgSplitEachChar'];
-// 	splitSentence = record['LgRegexpSplitSentences'];
-// 	LgExceptionsSplitSentences = record['LgExceptionsSplitSentences'];
-// 	termchar = record['LgRegexpWordCharacters'];
-// 	replace = explode("|", record['LgCharacterSubstitutions']);
-// 	rtlScript = record['LgRightToLeft'];
-// 	mysqli_free_result(res);
-// 	s = prepare_textdata(text);
-// 	s = str_replace("\n", " ¶ ", s);
-// 	s = str_replace("\t", " ", s);
-// 	s = trim(s);
-// 	if (splitEachChar) {
-// 		s = preg_replace('/([^\s])/u', "$1 ", s);
-// 	}
-// 	s = preg_replace('/\s{2,}/u', ' ', s);
-// 	if (id == -1)
-// 		r += "<div style="margin-right:50px;"><h4>Text</h4><p " . (rtlScript ? 'dir="rtl"' : '') . ">" . str_replace("¶", "<br /><br />", tohtml(s)) . "</p>";
-
-// 	s = str_replace('{', '[', s); // because of sent. spc. char
-// 	s = str_replace('}', ']', s);
-// 	foreach (replace as value) {
-// 		fromto = explode("=", trim(value));
-// 		if (count(fromto) >= 2) {
-// 			s = str_replace(trim(fromto[0]), trim(fromto[1]), s);
-// 		}
-// 	}
-// 	s = trim(s);
-
-// 	if (LgExceptionsSplitSentences != '')
-// 		s = preg_replace('/(' . LgExceptionsSplitSentences . ')\s/u', '$1‧', s);
-// 	s = preg_replace('/([' . splitSentence . '¶])\s/u', "$1\n", s);
-// 	s = str_replace(" ¶\n", "\n¶\n", s);
-// 	s = str_replace('‧', ' ', s);
-
-// 	if (s == '') {
-// 		textLines = array(s);
-// 	} else {
-// 		s = explode("\n", s);
-// 		l = count(s);
-// 		for (i = 0; i < l; i++) {
-// 			s[i] = trim(s[i]);
-// 			if (s[i] != '') {
-// 				pos = strpos(splitSentence, s[i]);
-// 				while (pos !== false && i > 0) {
-// 					s[i - 1] += " " . s[i];
-// 					for (j = i + 1; j < l; j++)
-// 						s[j - 1] = s[j];
-// 					array_pop(s);
-// 					l = count(s);
-// 					pos = strpos(splitSentence, s[i]);
-// 				}
-// 			}
-// 		}
-// 		l = count(s);
-// 		textLines = array();
-// 		for (i = 0; i < l; i++) {
-// 			zz = trim(s[i]);
-// 			if (zz != '')
-// 				textLines[] = zz;
-// 		}
-// 	}
-
-// 	if (id == -2) {
-
-// 		////////////////////////////////////
-// 		// Only return sentence array
-
-// 		return textLines;
-
-// 	}
-
-// 	lineWords = array();
-
-// 	if (id == -1) {
-
-// 		////////////////////////////////////
-// 		// Check, return protocol
-
-// 		wordList = array();
-// 		wordSeps = array();
-// 		r += "<h4>Sentences</h4><ol>";
-// 		sentNumber = 0;
-// 		foreach (textLines as value) {
-// 			r += "<li " . (rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces(value, removeSpaces)) . "</li>";
-// 			lineWords[sentNumber] = preg_split('/([^' . termchar . ']{1,})/u', value, -1, PREG_SPLIT_DELIM_CAPTURE);
-// 			l = count(lineWords[sentNumber]);
-// 			for (i = 0; i < l; i++) {
-// 				term = mb_strtolower(lineWords[sentNumber][i], 'UTF-8');
-// 				if (term != '') {
-// 					if (i % 2 == 0) {
-// 						if (array_key_exists(term, wordList)) {
-// 							wordList[term][0]++;
-// 							wordList[term][1][] = sentNumber;
-// 						} else {
-// 							wordList[term] = array(1, array(sentNumber));
-// 						}
-// 					} else {
-// 						ww = remove_spaces(term, removeSpaces);
-// 						if (array_key_exists(ww, wordSeps))
-// 							wordSeps[ww]++;
-// 						else
-// 							wordSeps[ww] = 1;
-// 					}
-// 				}
-// 			}
-// 			sentNumber += 1;
-// 		}
-// 		r += "</ol><h4>Word List <span class="red2">(red = already saved)</span></h4><ul>";
-// 		ksort(wordList);
-// 		anz = 0;
-// 		foreach (wordList as key => value) {
-// 			trans = get_first_value("select WoTranslation as value from " . tbpref . "words where WoLgID = " . lid . " and WoTextLC = " . convert_string_to_sqlsyntax(key));
-// 			if (!isset(trans))
-// 				trans = "";
-// 			if (trans == "*")
-// 				trans = "";
-// 			if (trans != "")
-// 				r += "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class="red2">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
-// 			else
-// 				r += "<li " . (rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml(key) . "] — " . value[0] . "</li>";
-// 			anz++;
-// 		}
-// 		r += "</ul><p>TOTAL: " . anz . "</p><h4>Non-Word List</h4><ul>";
-// 		if (array_key_exists('', wordSeps))
-// 			unset(wordSeps['']);
-// 		ksort(wordSeps);
-// 		anz = 0;
-// 		foreach (wordSeps as key => value) {
-// 			r += "<li>[" . str_replace(" ", "<span class="backgray">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
-// 			anz++;
-// 		}
-// 		r += "</ul><p>TOTAL: " . anz . "</p></div>";
-// 		return r;
-// 	}
 
 // 	////////////////////////////////////
 // 	// Split: insert sentences/textitems entries in DB
@@ -2850,15 +2603,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 	if (r == '*')
 // 		r = "";
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// // -------------------------------------------------------------
-
-// function trim_value(&value)
-// {
-// 	value = trim(value);
 // }
 
 // // -------------------------------------------------------------
@@ -3539,6 +3283,12 @@ export function multiActionGo(sel: undefined | HTMLSelectElement) {
 // 	}
 // }
 
+export type RawTextItem = Pick<
+  TextItem,
+  'TiIsNotWord' | 'TiText' | 'TiTextLC' | 'TiOrder' | 'TiWordCount'
+  // TODO
+  // | 'TiSeID'
+>;
 /**
  *
  * @param t
@@ -3571,13 +3321,11 @@ export function verifyAddTagWindow(t: string, numChecked: number) {
  * @param id
  */
 export function splitCheckText(text: string, language: Language) {
-  const { LgRegexpWordCharacters } = language;
-  // list of 'A=B' equations
+  const { LgRegexpWordCharacters, LgRemoveSpaces } = language;
   const sArray = buildSentences(text, language);
-  // const wordSeps = [];
 
-  // u here for potential unicode
-  const reTermMatch = new RegExp(
+  // TODO make sure PREG_SPLIT_DELIM_CAPTURE isnt doing anything we're not
+  const reNotTermMatch = new RegExp(
     `([^${LgRegexpWordCharacters.replace(
       // javascript handles unicode different than php
       new RegExp('\\x{([A-F0-9]*)}', 'g'),
@@ -3585,21 +3333,56 @@ export function splitCheckText(text: string, language: Language) {
     )}]{1,})`,
     'g'
   );
-  console.log('MATCH', reTermMatch);
-  const wordList = sArray
+  const symbolList: RawTextItem[] = sArray
     .map(({ SeText: val }) =>
       val
-        .split(reTermMatch)
+        .split(reNotTermMatch)
         .filter((term) => term !== '')
         .map((term) => ({
-          isTerm: !reTermMatch.test(term),
-          text: term.trim(),
+          // TODO should already be even-odd here
+          TiIsNotWord: reNotTermMatch.test(term) ? 1 : 0,
+          // isTerm: ii % 2 === 0,
+          TiText: term.trim(),
+          // TODO locale lowercase?
+          TiTextLC: term.trim().toLowerCase(),
         }))
     )
     .flat();
 
-  // wordList.forEach();
-  return wordList;
+  const { wordCount, sepsCount } = symbolList.reduce<{
+    wordCount: Record<string, number>;
+    sepsCount: Record<string, number>;
+  }>(
+    (prev, curr) => {
+      // TODO
+      // %2===0 => is word
+      // if (ii % 2 === 0) {
+      if (!curr.TiIsNotWord) {
+        const wordKey = curr.TiText.toLowerCase();
+        return {
+          ...prev,
+          wordCount: {
+            ...prev.wordCount,
+            [wordKey]: prev.wordCount[wordKey]
+              ? prev.wordCount[wordKey] + 1
+              : 1,
+          },
+        };
+      }
+      // %2===1 => is sep
+      const sepKey = remove_spaces(curr.TiText, LgRemoveSpaces);
+      return {
+        ...prev,
+        sepsCount: {
+          ...prev.sepsCount,
+          [sepKey]: prev.sepsCount[sepKey] ? prev.sepsCount[sepKey] + 1 : 1,
+        },
+      };
+    },
+    { wordCount: {}, sepsCount: {} }
+  );
+
+  return { wordCount, sArray, sepsCount, symbolList };
 }
 type RawSentence = Pick<Sentence, 'SeOrder' | 'SeText'>;
 
@@ -3617,19 +3400,11 @@ export function buildSentences(
   }: Language
 ): RawSentence[] {
   const replace = LgCharacterSubstitutions.split('|');
-  let s = text
-    .replace('\r\n', '\n')
-    .replace('\n', ' ¶ ')
-    .replace('\t', ' ')
-    .trim();
-  if (LgSplitEachChar) {
-    // add space after anything not a space
-    s = s.replace(/([^\s])/u, '$1 ');
-  }
-  // replace any multiple spaces with single space
-  s = s.replace(/\s{2,}/u, ' ');
-  // TODO r here
+
+  let s = cleanText(text, LgSplitEachChar);
+
   s = s.replace('{', '[').replace('}', ']');
+
   replace.forEach((repEquation) => {
     const repChars = repEquation.split('=');
     if (repChars.length >= 2) {
@@ -3641,29 +3416,64 @@ export function buildSentences(
 
   if (LgExceptionsSplitSentences !== '') {
     const reNoSplit = new RegExp(`/(${LgExceptionsSplitSentences})\\s`, 'g');
-    s = s.replace(reNoSplit, '$1-');
+    s = s.replace(reNoSplit, '$1‧');
   }
-  const reSplitSentence = new RegExp(
-    `([${LgRegexpSplitSentences}:Languages}¶])`,
-    'g'
-  );
+  const reSplitSentence = new RegExp(`([${LgRegexpSplitSentences}¶])`, 'g');
+  console.log('TEST123-PARSE-SENTENCE-PRE', s, reSplitSentence);
   s = s
     // \n seems to be used as an intermediate char here?
     .replace(reSplitSentence, '$1\n')
-    .replace(' ¶\n', '\n¶\n')
+    .replace(new RegExp(' ¶\\n', 'g'), '\n¶\n')
     .replace('‧', ' ')
     .trim();
-  const sArray: RawSentence[] = s
+  console.log('TEST123-PARSE-SENTENCE', s);
+  const sentences: RawSentence[] = s
     .split('\n')
-    .map((sent, ii) => ({ SeText: sent.trim(), SeOrder: ii }));
+    .filter((sent) => sent.trim() !== '')
+    // TODO
+    // 		while ($pos !== false && $i > 0) {
+    // 			$s[$i - 1] .= " " . $s[$i];
+    // 			for ($j = $i + 1; $j < $l; $j++)
+    // 				$s[$j - 1] = $s[$j];
+    // 			array_pop($s);
+    // 			$l = count($s);
+    // 			$pos = strpos(LgRegexpSplitSentences, $s[$i]);
+    // 		}
+    .map((sent, ii) => {
+      const trimmed = sent.trim();
+      const pos = LgRegexpSplitSentences.indexOf(trimmed);
+      return { SeText: trimmed, SeOrder: ii };
+    });
   // .filter((val) => val !== '');
-  const l = sArray.length;
-  sArray.map(({ SeText: val }) => {
+  const l = sentences.length;
+  sentences.map(({ SeText: val }) => {
     const pos = val.indexOf(LgRegexpSplitSentences);
-    // go through each paragraph, step through until asentence splitter is found
     const cleanedVal = val.trim();
   });
-  return sArray;
+  return sentences;
+}
+
+/**
+ *
+ * @param text
+ * @param LgSplitEachChar
+ */
+export function cleanText(
+  text: string,
+  LgSplitEachChar: LanguageNoId['LgSplitEachChar']
+) {
+  let s = text
+    .replace(new RegExp('\\r\\n'), '\n')
+    .replace(new RegExp('\\n', 'g'), ' ¶ ')
+    .replace(new RegExp('\\t'), ' ')
+    .trim();
+  if (LgSplitEachChar) {
+    // add space after anything not a space
+    s = s.replace(/([^\s])/u, '$1 ');
+  }
+  // replace any multiple spaces with single space
+  s = s.replace(/\s{2,}/u, ' ');
+  return s;
 }
 
 // TODO

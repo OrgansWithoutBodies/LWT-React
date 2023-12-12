@@ -261,10 +261,11 @@ export const TextItemsValidator = ss.object({
   TiText: ss.nonempty(ss.string()),
   // TiTextLC: varchar(250) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   // KEY `TiTextLC` (`TiTextLC`),
+  // TODO check isLowerCase
   TiTextLC: ss.nonempty(ss.string()),
   // TiIsNotWord: tinyint(1) NOT NULL,
   // KEY `TiIsNotWord` (`TiIsNotWord`)
-  TiIsNotWord: ss.number(),
+  TiIsNotWord: NumberInListValidator([0, 1]),
   ...getValidatorPluginsFor(Persistable.textitems),
 });
 
@@ -281,7 +282,7 @@ export const TextsValidator = ss.object({
   // TODO max 65,000 bytes
   TxText: ss.nonempty(ss.string()),
   // TxAnnotatedText: longtext NOT NULL,
-  TxAnnotatedText: ss.nonempty(ss.string()),
+  TxAnnotatedText: ss.string(),
   // TxAudioURI: varchar(200) DEFAULT NULL,
   TxAudioURI: ss.optional(URLValidator()),
   // TxSourceURI: varchar(1000) DEFAULT NULL,
@@ -290,6 +291,10 @@ export const TextsValidator = ss.object({
 });
 export const Tags2NoIdValidator = ss.omit(Tags2Validator, ['T2ID']);
 export const TextsValidatorNoId = ss.omit(TextsValidator, ['TxID']);
+export const CheckTextsValidator = ss.pick(TextsValidator, [
+  'TxLgID',
+  'TxText',
+]);
 
 export const TextTagsValidator = ss.object({
   // TtTxID: int(11) unsigned NOT NULL,
@@ -316,7 +321,7 @@ export const WordsValidator = ss.object({
   WoTextLC: ss.nonempty(ss.string()),
   // WoStatus: tinyint(4) NOT NULL,
   // KEY `WoStatus` (`WoStatus`),
-  WoStatus: ss.enums([0, 1, 2, 3, 4, 5, 98, 99]),
+  WoStatus: NumberInListValidator([0, 1, 2, 3, 4, 5, 98, 99] as const),
   // WoTranslation: varchar(500) NOT NULL DEFAULT '*',
   // KEY `WoTranslation` (`WoTranslation`(333)),
   WoTranslation: ss.string(),

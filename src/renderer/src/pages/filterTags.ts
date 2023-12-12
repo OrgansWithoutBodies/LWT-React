@@ -2,7 +2,7 @@ import { TextTag, WordTag } from '../data/parseMySqlDump';
 import { Tags2Id, TagsId, TextsId, WordsId } from '../data/validators';
 
 const isWordTag = (tag: WordTag[] | TextTag[]): tag is WordTag[] =>
-  'WtTgID' in tag[0];
+  tag[0] && 'WtTgID' in tag[0];
 /**
  *
  * filterTags steps through an intermediate table and reduces it to a lookup for the non-tag value

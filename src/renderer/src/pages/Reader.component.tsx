@@ -37,6 +37,7 @@ export function Reader({
     'parsedTexts',
     'languages',
   ]);
+  console.log('TEST123-READER-words', words);
   const [tooltipOpen, setTooltipOpen] = useState<null | number>(null);
   const activeText = texts.find((text) => text.TxID === activeId);
   if (!activeText) {
@@ -75,39 +76,65 @@ export function Reader({
             </PopoverContent>
           )}
           {activeText &&
-            // TODO
             activeParsedText.map((term, ii) => {
+              const { TiIsNotWord, TiTextLC, TiText, TiOrder, TiWordCount } =
+                term;
+              const $spanid = 'ID-' + TiOrder + '-' + TiWordCount;
               const foundWord = words.find(
-                (word) => word.WoText.toLowerCase() === term.text.toLowerCase()
+                (word) => word.WoTextLC === TiTextLC
               );
               const termStatus = foundWord
                 ? ` status${foundWord.WoStatus}`
                 : ' status0';
-              const { isTerm } = term;
               return (
                 <>
-                  {isTerm ? (
+                  {!TiIsNotWord ? (
                     <PopoverTrigger
                       onClickWord={() => {
                         setActiveWord(
                           foundWord !== undefined
                             ? foundWord
-                            : { newWord: term.text }
+                            : { newWord: TiText }
                         );
                         setTooltipOpen(ii);
                       }}
                       termStatus={termStatus}
                     >
-                      {term.text}
+                      {TiText}
                     </PopoverTrigger>
                   ) : (
-                    <>{term.text}</>
+                    <>
+                      <span>{TiText}</span>
+                    </>
+                  )}
+                  {ii < activeParsedText.length - 1 &&
+                  activeParsedText[ii + 1].TiIsNotWord ? (
+                    <></>
+                  ) : (
+                    <> </>
                   )}
                 </>
               );
             })}
-        </Popover>{' '}
+        </Popover>
       </p>
+
+      <>
+        <p>
+          <span id="totalcharcount" className="hide">
+            {/* ' . $currcharcount . ' */}
+          </span>
+        </p>
+        <p
+          style={{
+            fontSize: language.LgTextSize,
+            lineHeight: '1.4',
+            marginBottom: '300px',
+          }}
+        >
+          &nbsp;
+        </p>
+      </>
     </div>
   );
 }

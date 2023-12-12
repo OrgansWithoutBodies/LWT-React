@@ -2,6 +2,7 @@ import { Store, StoreConfig } from '@datorama/akita';
 import { Persistable } from '../../../shared/Persistable';
 import demoDB from '../demo_db.json';
 import { AppVariables } from '../meta';
+import { RawTextItem } from '../pages/utils';
 import {
   PersistedValueGetter,
   PersistenceStrategies,
@@ -37,7 +38,7 @@ export interface DataState {
   words: Word[];
   wordtags: WordTag[];
 
-  parsedTexts: Record<TextsId, { text: string; isTerm: boolean }[]>;
+  parsedTexts: Record<TextsId, RawTextItem[]>;
   notificationMessage: null | { txt: string };
 }
 

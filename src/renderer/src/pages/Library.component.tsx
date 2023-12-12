@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { TextDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
+import { Text } from '../data/parseMySqlDump';
 import { Settings } from '../data/settings';
 import { useData } from '../data/useAkita';
 import { Tags2Id, TextsId, TextsValidator } from '../data/validators';
@@ -13,6 +14,7 @@ import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 import { Pager } from '../ui-kit/Pager';
+import { OnCheckText, TextChecker } from './CheckText';
 import {
   FilterSortPager,
   buildTextTagLookup,
@@ -25,6 +27,7 @@ import { SelectMediaPath } from './SelectMediaPath';
 import { TextSorting, resetDirty } from './Sorting';
 import { TagAndOr, TagDropDown, buildSortByValue } from './Terms.component';
 import { filterTags } from './filterTags';
+import { textPrevalidateMap } from './preValidateMaps';
 import { confirmDelete } from './utils';
 
 const TextMultiAction = {
@@ -402,15 +405,17 @@ function LibraryRow({
         <td className="td1 center">{languageForLine.LgName}</td>
       )}
       <td className="td1 center">
-        {text.title}
+        {text.TxTitle}
         <span className="smallgray2"> [{textTags.join(', ')}]</span>
-        {text.audioAvailable && <Icon src="speaker-volume" />}
-        {text.link && (
-          <a href={text.link} target="_blank">
-            <Icon src="chain" />
+        {text.TxAudioURI && <Icon src="speaker-volume" title="With Audio" />}
+        {text.TxSourceURI && (
+          <a href={text.TxSourceURI} target="_blank">
+            <Icon src="chain" title="Link to Text Source" />
           </a>
         )}
-        {text.annotatedAvailable && <Icon src="tick" />}
+        {text.TxAnnotatedText && (
+          <Icon src="tick" title="Annotated Text available" />
+        )}
       </td>
       <td className="td1 center">{text.totalWords}</td>
       <td className="td1 center">{text.saved}</td>
@@ -445,7 +450,7 @@ export function Library({
     'tags2',
     'settings',
   ]);
-  console.log(settings['set-texts-per-page']);
+  console.log({ textDetails, texttags, tags2 });
   const pageSize = settings['set-texts-per-page'] || 1;
 
   const filteredTags = filterTags(texttags, tag1, tag2, tag12);
@@ -526,7 +531,6 @@ export function Library({
               <input
                 type="text"
                 name="query"
-                // TODO
                 ref={queryRef}
                 defaultValue={query || ''}
                 maxLength={50}
@@ -626,7 +630,13 @@ export function Library({
 /**
  *
  */
-export function EditText({ chgID }: { chgID: TextsId }) {
+export function EditTextPane({
+  chgID,
+  onCheckText,
+}: {
+  chgID: TextsId;
+  onCheckText: OnCheckText;
+}) {
   const [{ texts, tags2, languages }] = useData([
     'texts',
     'tags2',
@@ -643,10 +653,16 @@ export function EditText({ chgID }: { chgID: TextsId }) {
   const validator = TextsValidator;
   const navigator = useInternalNavigate();
 
-  const { Input: TxInput, LanguageSelectInput } = useFormInput({
+  const {
+    onSubmit,
+    refMap,
+    Input: TxInput,
+    LanguageSelectInput,
+  } = useFormInput({
     entry: editingText,
     validator,
   });
+  const editTextPrevalidateMap = textPrevalidateMap;
   return (
     <>
       <Header title="My Texts" />
@@ -695,6 +711,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
             <td className="td1">
               <textarea
                 {...getDirTag(language)}
+                ref={refMap.TxText}
                 name="TxText"
                 className="notempty checkbytes checkoutsidebmp"
                 maxLength={65000}
@@ -706,6 +723,7 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <RequiredLineButton />
             </td>
           </tr>
+          <TxInput type="hidden" entryKey="TxAnnotatedText" fixed />
           <tr>
             <td className="td1 right">Ann.Text:</td>
             <td className="td1">
@@ -742,7 +760,6 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              {/* TODO */}
               <TagDropDown tags={tags2} tagKey={'text'} defaultValue={null} />
             </td>
           </tr>
@@ -776,7 +793,9 @@ export function EditText({ chgID }: { chgID: TextsId }) {
               <input
                 type="button"
                 onClick={() => {
-                  window.alert('TODO');
+                  onSubmit(editTextPrevalidateMap, (val) => {
+                    onCheckText(val);
+                  });
                 }}
                 value="Check"
               />
@@ -798,6 +817,18 @@ export function EditText({ chgID }: { chgID: TextsId }) {
           </tr>
         </table>
       </form>
+    </>
+  );
+}
+export function EditText({ chgID }: { chgID: TextsId }) {
+  const [checkingText, setCheckingText] = useState<null | Text>(null);
+  return (
+    <>
+      {checkingText ? (
+        <TextChecker potentialText={checkingText} />
+      ) : (
+        <EditTextPane chgID={chgID} onCheckText={setCheckingText} />
+      )}
     </>
   );
 }

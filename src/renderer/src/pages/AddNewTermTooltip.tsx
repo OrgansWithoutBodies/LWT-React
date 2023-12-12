@@ -4,9 +4,15 @@ import { Language, Word } from '../data/parseMySqlDump';
 import { TermStrengthOrUnknown, TermStrengths } from '../data/type';
 import { useData } from '../data/useAkita';
 import { A } from '../nav/InternalLink';
-import { StrengthMap } from './StrengthMap';
+import { replaceTemplate } from './AddNewWordPane';
+import {
+  NumericalStrength,
+  StrengthMap,
+  StrengthMapNumericalKey,
+} from './StrengthMap';
+import { getStatusName } from './escape_html_chars';
+import { confirmDelete } from './utils';
 
-export type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
 // TODO dedupe with STATUSES
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
   0: 0,
@@ -43,16 +49,6 @@ function ExpressionsLines({
     </>
   );
 }
-// TODO template vs url branded type
-/**
- *
- * @param templateStr
- * @param valueStr
- */
-function ApplyTemplate(templateStr: string, valueStr: string): string {
-  const replaced = templateStr.replace('###', valueStr);
-  return replaced;
-}
 
 /**
  *
@@ -71,14 +67,14 @@ function TranslateLines({
    * @param translator
    */
   function TranslateWord(translator: string) {
-    ApplyTemplate(translator, word);
+    replaceTemplate(translator, word);
   }
   /**
    *
    * @param translator
    */
   function TranslateSentence(translator: string) {
-    ApplyTemplate(translator, sentence);
+    replaceTemplate(translator, sentence);
   }
 
   return (
@@ -191,7 +187,12 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
         <br />▶ Unknown [?]
       </b>
       <br />
-      <A href={`/insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro">
+      <A
+        href={`_`}
+        // onClick={() => dataService.updateTermStrength(w)}
+        target="ro"
+      >
+        {/* <A href={`/insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro"> */}
         I know this term well
       </A>
       <br />
@@ -216,35 +217,56 @@ export function KnownTermLines({
     <>
       <b>
         {word.WoText}
-        <br />▶{word.WoRomanization}
-        <br />▶{word.WoTranslation}, [{tags.join(', ')}
-        ]
-        <br />▶{/* TODO why undef */}
-        {StrengthMap[ReverseStrengthMap[word.WoStatus]]
-          ? StrengthMap[ReverseStrengthMap[word.WoStatus]].status
-          : ''}{' '}
-        [{ReverseStrengthMap[word.WoStatus]}]
+        {word.WoRomanization && (
+          <>
+            <br />▶{word.WoRomanization}
+          </>
+        )}
+        <br />▶{word.WoTranslation}
+        {tags.length > 0 && <>, [{tags.join(', ')}]</>}
+        <br />▶{StrengthMap[ReverseStrengthMap[word.WoStatus]].status} [
+        {ReverseStrengthMap[word.WoStatus]}]
       </b>
+      <br />
       St:
       {TermStrengths.map((strength) => {
-        if (word.WoStatus === strength) {
-          return <span title="Learned"> ◆</span>;
+        if (StrengthMapNumericalKey[word.WoStatus].abbr === strength) {
+          return (
+            <span title={getStatusName(StrengthMap[strength].classKey)}>
+              {' '}
+              ◆{' '}
+            </span>
+          );
         }
         return (
           <span
-            onClick={() => dataService.changeTermStrength(word.WoID, strength)}
+            className="clickable a"
+            onClick={() =>
+              dataService.updateTermStrength(
+                word.WoID,
+                StrengthMap[strength].classKey
+              )
+            }
             title={StrengthMap[strength].status}
           >
-            [{strength}]
+            [{strength}]{' '}
           </span>
         );
       })}
       <br />
+      {/* TODO onclick */}
       <A href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
         Edit term
       </A>
-      |{/* TODO confirm here? */}
-      <A onClick={() => dataService.deleteTerm(word.WoID)} target="ro">
+      <A
+        onClick={() => {
+          // TODO update text
+          if (confirmDelete()) {
+            dataService.deleteTerm(word.WoID);
+          }
+        }}
+        target="ro"
+      >
         Delete term
       </A>
     </>
@@ -263,14 +285,26 @@ export function AddNewTermTooltip({
   sentence: string;
   onClose: () => void;
 }): JSX.Element {
-  const newTerm = typeof word === 'string';
-  const [{ languages }] = useData(['languages']);
+  const isNewTerm = typeof word === 'string';
+  const [{ languages, wordtags, tags }] = useData([
+    'languages',
+    'wordtags',
+    'tags',
+  ]);
+  const tagsLookup = Object.fromEntries(
+    tags.map((val) => [val.TgID, val.TgText])
+  );
   const language = languages.find((lang) => lang.LgID);
+  const relevantWordTags = isNewTerm
+    ? []
+    : wordtags
+        .filter((val) => val.WtWoID === word.WoID)
+        .map((val) => tagsLookup[val.WtTgID]);
   const expressions: string[] = [];
   if (!language) {
     return <></>;
   }
-  const wordStr = newTerm ? word : word.WoText;
+  const wordStr = isNewTerm ? word : word.WoText;
   // TODO on click on term, change other panes
   return (
     <table
@@ -286,7 +320,7 @@ export function AddNewTermTooltip({
         <tr>
           <td>
             <TermTooltipHeader
-              headerTitle={newTerm ? 'New Word' : 'Word'}
+              headerTitle={isNewTerm ? 'New Word' : 'Word'}
               onClose={onClose}
             />
             <table
@@ -301,10 +335,10 @@ export function AddNewTermTooltip({
                   <td valign="top">
                     {/* <font lucida="' grande',arial,sans-serif,stheiti,"arial="" unicode="' ms',mingliu'='" size={3} face="" color="#000000">  */}
 
-                    {newTerm ? (
+                    {isNewTerm ? (
                       <UnknownTermLines word={word} />
                     ) : (
-                      <KnownTermLines word={word} tags={[]} />
+                      <KnownTermLines word={word} tags={relevantWordTags} />
                     )}
                     <br />
                     <ExpressionsLines expressions={expressions} />

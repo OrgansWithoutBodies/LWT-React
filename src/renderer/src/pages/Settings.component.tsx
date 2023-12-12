@@ -8,6 +8,7 @@ import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { SelectBoolean } from './EditLanguage.component';
+import { resetDirty } from './Sorting';
 import { settingsPrevalidateMap } from './preValidateMaps';
 // TODO abstract this out into a nested settings component
 
@@ -686,8 +687,6 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="<< Back"
                   onClick={() => {
-                    // TODO
-                    const resetDirty = () => {};
                     resetDirty();
                     navigate('/');
                   }}
@@ -697,10 +696,10 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="Reset all settings to default"
                   onClick={() => {
-                    // TODO
-                    const resetDirty = () => {};
                     resetDirty();
-                    navigate('/settings?op=reset');
+                    // TODO verify window
+                    dataService.installDefaultSettings();
+                    navigate('/');
                   }}
                 />
                 &nbsp; &nbsp; | &nbsp; &nbsp;

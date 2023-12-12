@@ -1,8 +1,8 @@
-import { Gzip } from 'browserify-zlib';
+// import { Gzip } from 'browserify-zlib';
 import demoDB from '../demo_db.json';
 
-import { Persistable } from '../../../shared/Persistable';
-import { StrengthMap } from '../pages/StrengthMap';
+import type { Persistable } from '../../../shared/Persistable';
+import type { NumericalStrength } from '../pages/StrengthMap';
 import { splitCheckText } from '../pages/utils';
 import {
   DataState,
@@ -12,8 +12,10 @@ import {
 } from './data.storage';
 import { downloadTextFile } from './downloadTxtFile';
 
+// import { createReadStream, createWriteStream } from 'original-fs';
+import { getCurrentTimeAsString } from '../pages/preValidateMaps';
 import { TatoebaOpenAPIWrapper, ThreeLetterString } from '../pages/TatoebaAPI';
-import {
+import type {
   AddNewTextType,
   AddNewWordType,
   Language,
@@ -24,11 +26,11 @@ import {
   Word,
 } from './parseMySqlDump';
 import { serializeJsonToSQL } from './serializeJsonToSQL';
-import { Settings } from './settings';
-import { TermStrengthOrUnknown } from './type';
+import type { Settings } from './settings';
 import {
   ArchivedTextId,
   LanguagesId,
+  SettingsId,
   Tags2Id,
   TagsId,
   TextsId,
@@ -117,7 +119,7 @@ export class DataService {
   public addLanguage(language: LanguageNoId) {
     this.dataStore.update((state) => {
       const ids = state.languages.map((lang) => lang.LgID);
-      const maxId = Math.max(...ids) + 1;
+      const maxId = (Math.max(...ids) + 1) as LanguagesId;
       return {
         ...state,
         notificationMessage: { txt: `Added New Language ${language.LgName}` },
@@ -172,7 +174,7 @@ export class DataService {
     let maxId = null;
     this.dataStore.update((state) => {
       const ids = state.texts.map((text) => text.TxID);
-      maxId = Math.max(...ids) + 1;
+      maxId = (Math.max(...ids) + 1) as TextsId;
       return {
         ...state,
         notificationMessage: { txt: `Added New Text ${text.TxTitle}` },
@@ -256,8 +258,8 @@ export class DataService {
     this.persistSet('words');
   }
 
-  public editLanguage(chgId: LanguagesId, newData: Language) {
-    window.alert(`TODO-editLanguage${chgId}`);
+  public editLanguage(newData: Language) {
+    window.alert(`TODO-editLanguage${newData}`);
     // this.dataStore.update((state) => {
     //   const ids = state.tags.map((tag) => tag.TgID);
     //   const maxId = (Math.max(...ids) + 1) as TagsId;
@@ -339,7 +341,7 @@ export class DataService {
   public addTerm(word: AddNewWordType) {
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
-      const maxId = Math.max(...ids) + 1;
+      const maxId = (Math.max(...ids) + 1) as WordsId;
       console.log('TEST123-addterm', maxId, ids);
       if (IDIsUnique(maxId, ids)) {
         return {
@@ -349,6 +351,7 @@ export class DataService {
             ...state.words,
             {
               ...word,
+              WoTextLC: word.WoText.toLowerCase(),
               WoID: maxId,
               WoTodayScore: 0,
               WoTomorrowScore: 0,
@@ -360,6 +363,7 @@ export class DataService {
     });
     this.persistSet('words');
     this.persistInsert('words', word);
+    console.log('TEST123-added word', word, this.dataStore.getValue().words);
   }
 
   public deleteTerm(termId: WordsId) {
@@ -370,31 +374,6 @@ export class DataService {
     }));
     this.persistSet('words');
     this.persistDelete('words', termId);
-  }
-
-  public changeTermStrength(
-    termId: WordsId,
-    termStrength: TermStrengthOrUnknown
-  ) {
-    const { words } = this.dataStore.getValue();
-    const wordIndex = words.findIndex((word) => word.WoID === termId);
-    if (wordIndex === -1) {
-      return;
-    }
-    const word = words[wordIndex];
-    const updatedWord: Word = {
-      ...word,
-      WoStatus: StrengthMap[termStrength].classKey,
-    };
-    const newWords = [...words];
-    newWords[wordIndex] = updatedWord;
-    this.dataStore.update((state) => ({
-      ...state,
-      words: newWords,
-      notificationMessage: { txt: 'Updated Term Strength' },
-    }));
-    this.persistSet('words');
-    this.persistUpdate('words', updatedWord);
   }
 
   public addTagToTerm(tagId: TagsId, termId: WordsId) {
@@ -503,11 +482,10 @@ export class DataService {
   }
 
   public addMultipleTerms(terms: Word[]) {
-    const mappedTerms = terms.map((word, ii) => ({
+    const mappedTerms = terms.map((word) => ({
       ...word,
       // TODO move these to prevalidate?
-      // TODO check if right
-      WoStatusChanged: Date.now(),
+      WoStatusChanged: getCurrentTimeAsString(),
       // TODO make sure to do this on edit
       WoTextLC: word.WoText.toLowerCase(),
       WoTodayScore: 0,
@@ -517,7 +495,7 @@ export class DataService {
     }));
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
-      const maxId = Math.max(...ids) + 1;
+      const maxId = (Math.max(...ids) + 1) as WordsId;
       if (IDIsUnique(maxId, ids)) {
         return {
           ...state,
@@ -525,7 +503,10 @@ export class DataService {
           // TODO mapping twice not ideal here
           words: [
             ...state.words,
-            ...mappedTerms.map((word, ii) => ({ ...word, WoID: maxId + ii })),
+            ...mappedTerms.map((word, ii) => ({
+              ...word,
+              WoID: (maxId + ii) as WordsId,
+            })),
           ],
         };
       }
@@ -641,7 +622,7 @@ export class DataService {
     const serializedData = this.serialize(backupType);
     console.log(backupType);
 
-    Gzip();
+    // Gzip();
     // deflate((serializedData as string))
     downloadTextFile(serializedData, backupType);
   }
@@ -679,6 +660,14 @@ export class DataService {
     this.persistSet('wordtags');
 
     this.persistEmpty();
+  }
+  public installDefaultSettings() {
+    this.dataStore.update(() => ({
+      ...Object.fromEntries(
+        Object.entries(demoDB).filter(([key]) => key === 'settings')
+      ),
+      notificationMessage: { txt: 'Installed Default Settings' },
+    }));
   }
 
   public installDemoDatabase() {
@@ -730,6 +719,7 @@ export class DataService {
      */
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
+      console.log('TEST123-arch', archIndex);
       const toArchive = texts[archIndex];
       const poppedTexts = [
         ...texts.slice(0, archIndex),
@@ -757,8 +747,50 @@ export class DataService {
     this.persistSet('texts');
   }
 
-  public unarchiveText() {
-    window.alert('TODO UNARCHIVETEXT');
+  public unarchiveText(unarchID: ArchivedTextId) {
+    // TODO hashmap
+    /**
+     * 	message3 = runsql('delete from ' . tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'],
+     * "Text items deleted");
+     * message2 = runsql('delete from ' . tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'],
+     * "Sentences deleted");
+     * message4 = runsql('insert into ' . tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
+     * id = get_last_key();
+     * runsql('insert into ' . tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . id . ', TtT2ID from ' . tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");
+     * message1 = runsql('delete from ' . tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
+     * message = message4 . " / " . message1 . " / " . message2 . " / " . message3;
+     * adjust_autoincr('texts','TxID');
+     * adjust_autoincr('sentences','SeID');
+     * adjust_autoincr('textitems','TiID');
+     * runsql("DELETE " . tbpref . "texttags FROM (" . tbpref . "texttags LEFT JOIN " . tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'')
+     */
+    this.dataStore.update(({ texts, archivedtexts, ...state }) => {
+      const index = archivedtexts.findIndex((text) => text.AtID === unarchID);
+      const toArchive = archivedtexts[index];
+      const poppedTexts = [
+        ...archivedtexts.slice(0, index),
+        ...archivedtexts.slice(index + 1),
+      ];
+      return {
+        ...state,
+        archivedtexts: poppedTexts,
+        notificationMessage: { txt: 'Archived Text' },
+        texts: [
+          ...texts,
+          {
+            TxAnnotatedText: toArchive.AtAnnotatedText,
+            TxAudioURI: toArchive.AtAudioURI,
+            TxID: toArchive.AtID as any as TextsId,
+            TxLgID: toArchive.AtLgID,
+            TxSourceURI: toArchive.AtSourceURI,
+            TxText: toArchive.AtText,
+            TxTitle: toArchive.AtTitle,
+          },
+        ],
+      };
+    });
+    this.persistSet('archivedtexts');
+    this.persistSet('texts');
   }
   public unarchiveMultipleTexts(textIds: ArchivedTextId[]) {
     window.alert('TODO UNARCHIVETEXT');
@@ -776,7 +808,7 @@ export class DataService {
         settings: Object.entries({
           ...settingsAsObject,
           ...settings,
-        }).map(([key, val]) => ({ StKey: key, StValue: val })),
+        }).map(([key, val]) => ({ StKey: key as SettingsId, StValue: val })),
       };
     });
     this.persistSet('settings');
@@ -798,10 +830,13 @@ export class DataService {
     if (!parsingLanguage) {
       return;
     }
-    const parsedText = splitCheckText(parsingText.TxText, parsingLanguage);
+    const { symbolList: parsedText } = splitCheckText(
+      parsingText.TxText,
+      parsingLanguage
+    );
     this.dataStore.update(({ parsedTexts, ...rest }) => ({
       ...rest,
-      notificationMessage: `parsed text: ${parsingText?.TxTitle}`,
+      notificationMessage: { txt: `parsed text: ${parsingText?.TxTitle}` },
       parsedTexts: { ...parsedTexts, [textId]: parsedText },
     }));
   }
@@ -815,8 +850,19 @@ export class DataService {
       });
   }
 
-  public setActiveLanguage(langId: LanguagesId | null) {
+  public setActiveLanguage(langId: LanguagesId | undefined) {
     this.setSettings({ currentlanguage: langId });
+  }
+
+  public updateTermStrength(wordID: WordsId, newStrength: NumericalStrength) {
+    const word = this.dataStore
+      .getValue()
+      .words.find((val) => val.WoID === wordID);
+    console.log('TEST123-UPDATESTRENGTH', wordID, word, newStrength);
+    if (!word) {
+      return;
+    }
+    this.editTerm({ ...word, WoStatus: newStrength });
   }
 
   public async getTatoebaSentence(langKey: ThreeLetterString, word: string) {
@@ -855,14 +901,14 @@ export class DataService {
 
 export const dataService = new DataService(dataStore);
 
-/**
- *
- * @param input
- * @param output
- */
-async function do_gzip(input, output) {
-  const gzip = createGzip();
-  const source = createReadStream(input);
-  const destination = createWriteStream(output);
-  await pipe(source, gzip, destination);
-}
+// /**
+//  *
+//  * @param input
+//  * @param output
+//  */
+// async function do_gzip(input, output) {
+//   const gzip = createGzip();
+//   const source = createReadStream(input);
+//   const destination = createWriteStream(output);
+//   await pipe(source, gzip, destination);
+// }

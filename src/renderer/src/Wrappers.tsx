@@ -3,6 +3,7 @@ import { Switch } from './App';
 import { dataService } from './data/data.service';
 import { useData } from './data/useAkita';
 import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
+import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
 import { AddNewWordPane } from './pages/AddNewWordPane';
 import { EditArchivedTexts } from './pages/EditArchivedTexts.component';
@@ -16,7 +17,7 @@ import { PrintText } from './pages/PrintText.component';
 import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
 import { WordSorting } from './pages/Sorting';
 import { AddTerm, EditTerm, Terms } from './pages/Terms.component';
-import { ImportShortText } from './pages/TextImport';
+import { ImportShortTextPage } from './pages/TextImport';
 import { UploadWords } from './pages/UploadWords.component';
 
 /**
@@ -86,11 +87,16 @@ export function UploadWordsWrapper() {
  *
  */
 export function PrintTextWrapper() {
-  const { text } = useInternalParams('print_text');
+  const { text, annplcmnt } = useInternalParams('print_text');
   if (text === null) {
     throw new Error('Need To Specify Text ID');
   }
-  return <PrintText textID={Number.parseInt(text)} />;
+  return (
+    <PrintText
+      textID={Number.parseInt(text)}
+      annplcmnt={annplcmnt === null ? 0 : Number.parseInt(annplcmnt)}
+    />
+  );
 }
 /**
  *
@@ -100,9 +106,10 @@ export function LanguagesWrapper() {
   const isNew = searchParams.get('new') === '1';
   const chgID = searchParams.get('chg');
   const refreshID = searchParams.get('refresh');
-
+  const updateParams = useUpdateParams();
   if (refreshID !== null) {
     dataService.reparseText(Number.parseInt(refreshID) as TextsId);
+    updateParams(null);
   }
   return (
     <Switch on={isNew}>
@@ -145,8 +152,11 @@ export function LibraryWrapper() {
     new: newVal,
   } = useInternalParams('edit_texts');
   const isNew = newVal === '1';
+  const paramUpdater = useUpdateParams();
   if (arch !== null) {
+    console.log('TEST123-ARCH', arch);
     dataService.archiveText(Number.parseInt(arch));
+    paramUpdater(null);
   }
   // TODO
   // const [, { archiveText, reparseAllTextsForLanguage }] = useData([]);
@@ -175,70 +185,11 @@ export function LibraryWrapper() {
         />
         <EditText chgID={Number.parseInt(chg!)} />
       </Switch>
-      <ImportShortText />
+      <ImportShortTextPage />
     </Switch>
   );
 }
-{
-  // TODO these are used in check text
-  /* <p><input type="button" value="&lt;&lt; Back" onClick="history.back();" /></p> */
-}
-// op === 'check';
-// wordList = array();
-// wordSeps = array();
-// r .= "<h4>Sentences</h4><ol>";
-// sentNumber = 0;
-// foreach (textLines as value) {
-//   r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . ">" . tohtml(remove_spaces(value, removeSpaces)) . "</li>";
-//   lineWords[sentNumber] = preg_split('/([^' . termchar . ']{1,})/u', value, -1, PREG_SPLIT_DELIM_CAPTURE);
-//   l = count(lineWords[sentNumber]);
-//   for (i = 0; i < l; i++) {
-//     term = mb_strtolower(lineWords[sentNumber][i], 'UTF-8');
-//     if (term != '') {
-//       if (i % 2 == 0) {
-//         if (array_key_exists(term, wordList)) {
-//           wordList[term][0]++;
-//           wordList[term][1][] = sentNumber;
-//         } else {
-//           wordList[term] = array(1, array(sentNumber));
-//         }
-//       } else {
-//         ww = remove_spaces(term, removeSpaces);
-//         if (array_key_exists(ww, wordSeps))
-//           wordSeps[ww]++;
-//         else
-//           wordSeps[ww] = 1;
-//       }
-//     }
-//   }
-//   sentNumber += 1;
-// }
-// r .= "</ol><h4>Word List <span class="red2">(red = already saved)</span></h4><ul>";
-// ksort(wordList);
-// anz = 0;
-// foreach (wordList as key => value) {
-//   trans = get_first_value("select WoTranslation as value from " . tbpref . "words where WoLgID = " . lid . " and WoTextLC = " . convert_string_to_sqlsyntax(key));
-//   if (!isset(trans))
-//     trans = "";
-//   if (trans == "*")
-//     trans = "";
-//   if (trans != "")
-//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . "><span class="red2">[" . tohtml(key) . "] — " . value[0] . " - " . tohtml(replaceTabsWithNewLine(trans)) . "</span></li>";
-//   else
-//     r .= "<li " . (rtlScript ? 'dir="rtl"' : '') . ">[" . tohtml(key) . "] — " . value[0] . "</li>";
-//   anz++;
-// }
-// r .= "</ul><p>TOTAL: " . anz . "</p><h4>Non-Word List</h4><ul>";
-// if (array_key_exists('', wordSeps))
-//   unset(wordSeps['']);
-// ksort(wordSeps);
-// anz = 0;
-// foreach (wordSeps as key => value) {
-//   r .= "<li>[" . str_replace(" ", "<span class="backgray">&nbsp;</span>", tohtml(key)) . "] — " . value . "</li>";
-//   anz++;
-// }
-// r .= "</ul><p>TOTAL: " . anz . "</p></div>";
-// return r;
+
 /**
  *
  */
@@ -250,6 +201,14 @@ export function EditArchivedTextsWrapper() {
   const tag12 = searchParams.get('tag12');
   const tag1 = searchParams.get('tag1');
   const tag2 = searchParams.get('tag2');
+  const unarch = searchParams.get('unarch');
+
+  const paramUpdater = useUpdateParams();
+
+  if (unarch !== null) {
+    dataService.unarchiveText(Number.parseInt(unarch));
+    paramUpdater(null);
+  }
   return (
     <EditArchivedTexts
       query={query || ''}

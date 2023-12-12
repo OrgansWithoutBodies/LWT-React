@@ -20,7 +20,7 @@ export const headerValuesTemp = {
       'sort',
     ],
   },
-  edit_archivedtexts: { params: ['page'] },
+  edit_archivedtexts: { params: ['page', 'unarch', 'sort'] },
   edit_texttags: { params: ['page'] },
   edit_languages: { params: ['page'] },
   edit_words: {
@@ -50,7 +50,7 @@ export const headerValuesTemp = {
   backup_restore: { params: [] },
   settings: { params: [] },
   info: { params: [] },
-  print_text: { params: ['text'] },
+  print_text: { params: ['text', 'annplcmnt', 'ann', 'status'] },
 } as const;
 
 // TODO merge into prev obj

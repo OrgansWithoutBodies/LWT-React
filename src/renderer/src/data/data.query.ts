@@ -10,8 +10,9 @@ import {
   tap,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
-import { Settings } from './settings';
-import { LanguagesId, TextsId } from './validators';
+import type { Text } from './parseMySqlDump';
+import type { Settings } from './settings';
+import type { LanguagesId } from './validators';
 
 const MINS_IN_SECONDS = 60;
 const HOURS_IN_MINS = 60;
@@ -257,12 +258,9 @@ export class DataQuery extends Query<DataState> {
   ]).pipe(
     map(([textsForActiveLanguage]) =>
       textsForActiveLanguage.map((text) => ({
-        TxID: text.TxID,
-        title: text.TxTitle,
+        ...text,
         // TODO split
         totalWords: text.TxText.length,
-        link: text.TxSourceURI,
-        audioAvailable: text.TxAudioURI,
         // TODO
         saved: 'test',
         // TODO
@@ -283,15 +281,17 @@ export class DataQuery extends Query<DataState> {
 export const dataQuery = new DataQuery(dataStore);
 
 // TODO expand on this pattern
-export type TextDetailRow = {
-  title: string;
-  link?: string;
-  annotatedAvailable?: boolean;
-  audioAvailable?: boolean;
+export type TextDetailRow = Pick<
+  Text,
+  | 'TxTitle'
+  | 'TxSourceURI'
+  | 'TxAudioURI'
+  | 'TxID'
+  | 'TxLgID'
+  | 'TxAnnotatedText'
+> & {
   totalWords: number;
   saved: string;
   unk: number;
   unkPerc: number;
-  TxID: TextsId;
-  TxLgID: LanguagesId;
 };

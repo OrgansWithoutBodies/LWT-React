@@ -26,7 +26,7 @@ import { useData } from './data/useAkita';
 import { AppContext, useAppContext } from './hooks/useContext';
 import { InternalPaths } from './hooks/useInternalNav';
 import { BackupScreen } from './pages/Backups.component';
-import { CheckText } from './pages/CheckText';
+import { CheckTextPage } from './pages/CheckText';
 import { InfoPage } from './pages/Info.component';
 import { InfoExportTemplate } from './pages/InfoExportTemplate';
 import { InstallDemo } from './pages/InstallDemo';
@@ -102,7 +102,7 @@ function App(): JSX.Element {
   const routes: { [path in InternalPaths]: () => JSX.Element } = {
     '/': () => <LandingPage />,
     '/index': () => <LandingPage />,
-    '/check_text': () => <CheckText />,
+    '/check_text': () => <CheckTextPage />,
     '/backup_restore': () => <BackupScreen />,
     '/info': () => <InfoPage />,
     '/edit_words': () => <TermsWrapper />,

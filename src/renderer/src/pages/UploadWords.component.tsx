@@ -7,7 +7,7 @@ import {
   NumberInListValidator,
   StringInListValidator,
 } from '../data/validators';
-import { CheckAndSubmit, TRefMap, parseNumMap } from '../forms/Forms';
+import { TRefMap, parseNumMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
@@ -53,7 +53,7 @@ export function UploadWords() {
     c4: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
     c5: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
     delimiter: StringInListValidator(['c', 't', 'h']),
-
+    WoStatus: NumberInListValidator([0, 1, 2, 3, 4, 5, 98, 99] as const),
     file: fileValidator,
     // TODO add hook callback to check if ID given exists
     WoLgID: NumberInListValidator(languages.map((val) => val.LgID)),
@@ -66,6 +66,7 @@ export function UploadWords() {
   const {
     refMap,
     Input: UlInput,
+    onSubmit,
     LanguageSelectInput,
   } = useFormInput({ validator });
   return (
@@ -199,8 +200,8 @@ export function UploadWords() {
               <UlInput entryKey="file" type="file" />
               <br />
               <br />
-              <b>Or</b> type in or paste from clipboard (do
-              <b>NOT</b> specify file):
+              <b>Or</b> type in or paste from clipboard (do <b>NOT</b> specify
+              file):
               <br />
               {/* TODO bring into forminput, take data into account */}
               <textarea
@@ -271,8 +272,7 @@ export function UploadWords() {
                   ) {
                     return;
                   }
-                  CheckAndSubmit(
-                    refMap,
+                  onSubmit(
                     {
                       columns: (_, refMap) => [
                         refMap.c1.current.value,
@@ -291,7 +291,6 @@ export function UploadWords() {
                         fileType: file.current.files[0]?.type,
                       }),
                     },
-                    validator,
                     async (value) => {
                       const parsedTerms = await parseTermsFromCSV(
                         value,

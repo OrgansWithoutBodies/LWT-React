@@ -2,12 +2,11 @@ import { over } from 'rambdax';
 import { Language, Word } from '../data/parseMySqlDump';
 import { A } from '../nav/InternalLink';
 import { Icon } from '../ui-kit/Icon';
-import { NumericalStrength } from './AddNewTermTooltip';
 import {
   CreateTheDictLink,
   MakeOverlibLinkChangeStatusTest,
 } from './ReaderPage.component';
-import { StrengthMapNumericalKey } from './StrengthMap';
+import { NumericalStrength, StrengthMapNumericalKey } from './StrengthMap';
 import { prepare_textdata_js } from './translateSentence2';
 
 /**
@@ -334,7 +333,7 @@ function MakeOverlibLinkChangeStatusTest2({
  *
  * @param status
  */
-function getStatusName(status: NumericalStrength) {
+export function getStatusName(status: NumericalStrength) {
   return StrengthMapNumericalKey[status]
     ? StrengthMapNumericalKey[status].name
     : 'Unknown';

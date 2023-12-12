@@ -16,16 +16,89 @@ import { useTick } from './useTimer';
 //  confirmation screen
 //  details screen
 
+function ShowAllMessage({ $showAll }: { $showAll: 0 | 1 }) {
+  <p>
+    <span id="waiting">
+      <img src="icn/waiting.gif" alt="Please wait" title="Please wait" />
+      &nbsp;&nbsp;Please wait ...
+    </span>
+    {$showAll == 1 ? (
+      <>
+        <p>
+          <b>
+            <i>Show All</i>
+          </b>{' '}
+          is set to <b>ON</b>.<br />
+          <br />
+          ALL terms are now shown, and all multi-word terms are shown as
+          superscripts before the first word. The superscript indicates the
+          number of words in the multi-word term.
+          <br />
+          <br />
+          To concentrate more on the multi-word terms and to display them
+          without superscript, set <i>Show All</i> to OFF.
+        </p>
+      </>
+    ) : (
+      <>
+        <p>
+          <b>
+            <i>Show All</i>
+          </b>{' '}
+          is set to <b>OFF</b>.<br />
+          <br />
+          Multi-word terms now hide single words and shorter or overlapping
+          multi-word terms. The creation and deletion of multi-word terms can be
+          a bit slow in long texts.
+          <br />
+          <br />
+          To manipulate ALL terms, set <i>Show All</i> to ON.
+        </p>
+      </>
+    )}
+  </p>;
+}
 /**
  *
  */
-function Pane3() {
+function IFramePane({ url }: { url: string | null }) {
+  console.log('TEST123-IFRAME', url);
   // https://stackoverflow.com/questions/23616226/insert-html-with-react-variable-statements-jsx
   // dictionary pane
+  // const frameRef = useRef<HTMLIFrameElement | null>(null);
+  // useEffect(() => {
+  //   const frame = frameRef.current;
+  //   // if (!frame) {
+  //   //   return;
+  //   // }
+  //   console.log('TEST123-frame-addListener', { frame });
+  //   function loadHandler() {
+  //     console.log('TEST123-loaded', frame?.contentWindow);
+  //     console.log(
+  //       'TEST123-select',
+  //       frame?.contentWindow?.document.getSelection()
+  //     );
+  //     frame.contentWindow.addEventListener('click', (e) => {
+  //       console.log('TEST123-click', e.target);
+  //     });
+  //   }
+  //   frame.addEventListener('load', loadHandler);
+  //   return () => frame.removeEventListener('load', loadHandler);
+  // }, []);
+
   return (
-    <div style={{ backgroundColor: 'yellow', width: '100%', height: '100%' }}>
-      TEST1
-    </div>
+    <>
+      {
+        <iframe
+          name="ru"
+          {...(url ? { src: url } : {})}
+          width={'100%'}
+          height={'100%'}
+          // ref={frameRef}
+          // onClick={() => console.log('TEST123-click')}
+        />
+      }
+    </>
   );
 }
 // TODO I Know All
@@ -34,11 +107,23 @@ function Pane3() {
  *
  */
 export function ReaderPage({ textId }: { textId: TextsId }) {
-  const [{ texts, words }] = useData(['texts', 'words']);
-
+  const [{ texts, words, settings }] = useData(['texts', 'words', 'settings']);
+  const {
+    ['set-text-l-framewidth-percent']: lFrameWidthPerc,
+    ['set-text-r-frameheight-percent']: rFrameHeightPerc,
+    ['set-text-h-frameheight-no-audio']: setTextHFrameheightNoAudio,
+    ['set-text-h-frameheight-with-audio']: setTextHFrameheightWithAudio,
+  } = settings;
+  console.log({
+    rFrameHeightPerc,
+    lFrameWidthPerc,
+    setTextHFrameheightNoAudio,
+    setTextHFrameheightWithAudio,
+  });
   const [activeWord, setActiveWord] = useState<
     Word | { newWord: string } | null
   >(null);
+  const [iFrameURL, setIFrameURL] = useState<string | null>(null);
   const text = texts.find((text) => text.TxID === textId);
   const activeText =
     activeWord === null
@@ -49,13 +134,18 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
   if (!text) {
     return <></>;
   }
+  console.log('TEST123-reader', activeWord, activeText);
   return (
-    <SplitPane split="vertical" minSize={50} defaultSize="55%">
+    <SplitPane
+      split="vertical"
+      minSize={50}
+      defaultSize={`${lFrameWidthPerc}%`}
+    >
       <SplitPane
         style={{ overflowWrap: 'break-word' }}
         split="horizontal"
         minSize={50}
-        defaultSize="20%"
+        defaultSize={`${rFrameHeightPerc}%`}
       >
         <>
           <Header
@@ -84,6 +174,7 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
                   title="[Show All] = ON: ALL terms are shown, and all multi-word terms are shown as superscripts before the first word. The superscript indicates the number of words in the multi-word term. 
 [Show All] = OFF: Multi-word terms now hide single words and shorter or overlapping multi-word terms."
                 >
+                  {/* TODO Show All */}
                   Show All&nbsp;
                   <input
                     type="checkbox"
@@ -101,25 +192,29 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
             {text.TxAudioURI && <AudioPlayer audioURI={text.TxAudioURI} />}
           </table>
         </>
-        {/* TODO Show All */}
         <Reader
           activeId={textId}
           setActiveWord={setActiveWord}
           activeWord={activeWord}
         />
       </SplitPane>
-      <SplitPane split="horizontal" minSize={50} defaultSize="60%">
-        {activeWord && 'newWord' in activeWord ? (
+      <SplitPane
+        split="horizontal"
+        minSize={50}
+        defaultSize={`${rFrameHeightPerc}%`}
+      >
+        {activeWord && activeText ? (
           <AddNewWordPane
             word={activeText}
+            existingTerm={'WoID' in activeWord ? activeWord : undefined}
             langId={text.TxLgID}
-            // TODO horribly inefficient
-            existingTerm={words.find(({ WoText }) => activeText === WoText)}
+            onClearActiveWord={() => setActiveWord(null)}
+            setIFrameURL={setIFrameURL}
           />
         ) : (
           <></>
         )}
-        <Pane3 />
+        {iFrameURL ? <IFramePane url={iFrameURL} /> : <></>}
       </SplitPane>
     </SplitPane>
   );
@@ -208,7 +303,7 @@ export function TesterPage({
         ) : (
           <></>
         )}
-        <Pane3 />
+        <IFramePane />
       </SplitPane>
     </SplitPane>
   );
@@ -481,3 +576,148 @@ function escape_apostrophes(s: string) {
 function AudioPlayer({ audioURI }: { audioURI: string }) {
   return <></>;
 }
+
+// TODO deprecate?
+// function getPreviousAndNextTextLinks(textid, url, onlyann, add) {
+//   const currentlang = validateLang(
+//     processDBParam('filterlang', 'currentlanguage', '', 0)
+//   );
+//   const wh_lang = currentlang != '' ? ' and TxLgID='.currentlang : '';
+
+//   const currentquery = processSessParam('query', 'currenttextquery', '', 0);
+//   const wh_query = convert_string_to_sqlsyntax(
+//     str_replace('*', '%', mb_strtolower(currentquery, 'UTF-8'))
+//   );
+//   const wh_query = currentquery != '' ? ' and TxTitle like '.wh_query : '';
+
+//   const currenttag1 = validateTextTag(
+//     processSessParam('tag1', 'currenttexttag1', '', 0),
+//     currentlang
+//   );
+//   const currenttag2 = validateTextTag(
+//     processSessParam('tag2', 'currenttexttag2', '', 0),
+//     currentlang
+//   );
+//   const currenttag12 = processSessParam('tag12', 'currenttexttag12', '', 0);
+//   if (currenttag1 == '' && currenttag2 == '') const wh_tag = '';
+//   else {
+//     if (currenttag1 != '') {
+//       if (currenttag1 == -1) {
+//         const wh_tag1 = 'group_concat(TtT2ID) IS NULL';
+//       } else {
+//         const wh_tag1 =
+//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
+//         // . currenttag1 .
+//         ("/%'");
+//       }
+//     }
+//     if (currenttag2 != '') {
+//       if (currenttag2 == -1) {
+//         const wh_tag2 = 'group_concat(TtT2ID) IS NULL';
+//       } else {
+//         const wh_tag2 =
+//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
+//         // . currenttag2 .
+//         ("/%'");
+//       }
+//     }
+//     if (currenttag1 != '' && currenttag2 == '') {
+//       const wh_tag = ' having (';
+//       // . wh_tag1 .
+//       (') ');
+//     } else if (currenttag2 != '' && currenttag1 == '') {
+//       const wh_tag = ' having (';
+//       // . wh_tag2 .
+//       (') ');
+//     } else {
+//       const wh_tag = ' having (('(
+//         //  . wh_tag1 .
+//         currenttag12 ? ') AND (' : ') OR ('
+//       );
+//       // . wh_tag2 .
+//       (')) ');
+//     }
+//   }
+
+//   const currentsort = processDBParam('sort', 'currenttextsort', '1', 1);
+//   const sorts = array('TxTitle', 'TxID desc', 'TxID');
+//   const lsorts = count(sorts);
+//   if (currentsort < 1) const currentsort = 1;
+//   if (currentsort > lsorts) const currentsort = lsorts;
+
+//   if (onlyann) {
+//     const sql =
+//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID AND LENGTH(TxAnnotatedText) > 0 ';
+//     //  . wh_lang . wh_query .
+//     // ' group by TxID '
+//     //  . wh_tag .
+//     // ' order by '
+//     //  . sorts[currentsort - 1];
+//   } else {
+//     const sql =
+//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID ';
+//     // . wh_lang . wh_query .
+//     // ' group by TxID '
+//     // . wh_tag .
+//     // ' order by '
+//     // . sorts[currentsort - 1];
+//   }
+//   const list = array(0);
+//   while ((record = mysqli_fetch_assoc(res))) {
+//     array_push(list, record['TxID'] + 0);
+//   }
+//   array_push(list, 0);
+//   const listlen = count(list);
+//   for (let i = 1; i < listlen - 1; i++) {
+//     if (list[i] == textid) {
+//       if (list[i - 1] !== 0) {
+//         const title = tohtml(getTextTitle(list[i - 1]));
+//         const prev = (
+//           <>
+//             <a href={`${url}${list[i - 1]}`} target="_top">
+//               <img
+//                 src="icn/navigation-180-button.png"
+//                 title="Previous Text: ' . title . '"
+//                 alt="Previous Text: ' . title . '"
+//               />
+//             </a>
+//           </>
+//         );
+//       } else
+//         const prev = (
+//           <>
+//             <img
+//               src="icn/navigation-180-button-light.png"
+//               title="No Previous Text"
+//               alt="No Previous Text"
+//             />
+//           </>
+//         );
+//       if (list[i + 1] !== 0) {
+//         const title = tohtml(getTextTitle(list[i + 1]));
+//         const next = (
+//           <>
+//             <a href={`${url}${list[i + 1]}`} target="_top">
+//               <img
+//                 src="icn/navigation-000-button.png"
+//                 title="Next Text: ' . title . '"
+//                 alt="Next Text: ' . title . '"
+//               />
+//             </a>
+//           </>
+//         );
+//       } else {
+//         const next = (
+//           <>
+//             <img
+//               src="icn/navigation-000-button-light.png"
+//               title="No Next Text"
+//               alt="No Next Text"
+//             />
+//           </>
+//         );
+//       } // return add . prev . ' ' . next;
+//     }
+//   }
+//   // return add . '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
+// }

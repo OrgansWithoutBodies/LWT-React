@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { dataService } from '../data/data.service';
-import { AddNewTextValidator } from '../data/parseMySqlDump';
+import { AddNewTextValidator, Text } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { CheckAndSubmit, ResetForm } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
@@ -7,13 +8,30 @@ import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { OnCheckText, TextChecker } from './CheckText';
 import { do_ajax_update_media_select } from './SelectMediaPath';
-import { textPrevalidateMap } from './preValidateMaps';
+import { textNoIdPrevalidateMap } from './preValidateMaps';
 
+export function ImportShortTextPage() {
+  const [checkingText, setCheckingText] = useState<null | Text>(null);
+  return (
+    <>
+      {checkingText ? (
+        <TextChecker potentialText={checkingText} />
+      ) : (
+        <ImportShortText onCheckText={setCheckingText} />
+      )}
+    </>
+  );
+}
 /**
  *
  */
-export function ImportShortText(): JSX.Element {
+export function ImportShortText({
+  onCheckText,
+}: {
+  onCheckText: OnCheckText;
+}): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;
 
@@ -164,13 +182,20 @@ export function ImportShortText(): JSX.Element {
                     navigator('/edit_texts');
                   }}
                 />
-                <input type="submit" name="op" value="Check" />
                 <input
                   type="button"
-                  name="op"
+                  value="Check"
+                  onClick={() => {
+                    onSubmit(textNoIdPrevalidateMap, (value) => {
+                      onCheckText(value);
+                    });
+                  }}
+                />
+                <input
+                  type="button"
                   value="Save"
                   onClick={() => {
-                    onSubmit(textPrevalidateMap, (value) => {
+                    onSubmit(textNoIdPrevalidateMap, (value) => {
                       const textId = dataService.addText(value);
                       if (textId !== null) {
                         dataService.reparseText(textId);
@@ -187,7 +212,7 @@ export function ImportShortText(): JSX.Element {
                   onClick={() => {
                     CheckAndSubmit(
                       refMap,
-                      textPrevalidateMap,
+                      textNoIdPrevalidateMap,
                       validator,
                       (value) => {
                         const textId = dataService.addText(value);

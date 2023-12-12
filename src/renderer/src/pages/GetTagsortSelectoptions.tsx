@@ -1,5 +1,4 @@
-import { NumericalStrength } from './AddNewTermTooltip';
-import { StrengthMapNumericalKey } from './StrengthMap';
+import { NumericalStrength, StrengthMapNumericalKey } from './StrengthMap';
 
 /**
  *

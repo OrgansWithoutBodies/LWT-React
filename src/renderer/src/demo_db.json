@@ -44,7 +44,7 @@
     {
       "LgID": 2,
       "LgName": "Chinese",
-      "LgDict1URI": "http://ce.linedict.com/dict.html#/cnen/search?query=###",
+      "LgDict1URI": "https://english.dict.naver.com/english-chinese-dictionary/#/search?query=###",
       "LgDict2URI": "http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=###",
       "LgGoogleTranslateURI": "*http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=###",
       "LgExportTemplate": "$y\\t$t\\n",
@@ -60,7 +60,7 @@
     {
       "LgID": 3,
       "LgName": "German",
-      "LgDict1URI": "http://de-esyn.dict.cc/?s=#",
+      "LgDict1URI": "*http://de-esyn.dict.cc/?s=#",
       "LgDict2URI": null,
       "LgGoogleTranslateURI": "*http://translate.google.com/?ie=UTF-8&sl=de&tl=en&text=###",
       "LgExportTemplate": "$y\\t$t\\n",
@@ -76,7 +76,7 @@
     {
       "LgID": 4,
       "LgName": "Chinese2",
-      "LgDict1URI": "http://ce.linedict.com/dict.html#/cnen/search?query=###",
+      "LgDict1URI": "https://english.dict.naver.com/english-chinese-dictionary/#/search?query=###",
       "LgDict2URI": "http://chinesedictionary.mobi/?handler=QueryWorddict&mwdqb=###",
       "LgGoogleTranslateURI": "*http://translate.google.com/?ie=UTF-8&sl=zh&tl=en&text=###",
       "LgExportTemplate": "$y\\t$t\\n",
@@ -110,7 +110,7 @@
       "LgName": "Korean",
       "LgDict1URI": "*http://endic.naver.com/search.nhn?sLn=kr&isOnlyViewEE=N&query=###",
       "LgDict2URI": null,
-      "LgGoogleTranslateURI": " '*http://translate.google.com/?text=###&ie=UTF-8&sl=ko&tl=en",
+      "LgGoogleTranslateURI": "*http://translate.google.com/?text=###&ie=UTF-8&sl=ko&tl=en",
       "LgExportTemplate": "$y\\t$t\\n",
       "LgTextSize": 150,
       "LgCharacterSubstitutions": "",

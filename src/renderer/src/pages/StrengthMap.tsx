@@ -1,5 +1,5 @@
 import { TermStrengthOrUnknown } from '../data/type';
-import { NumericalStrength } from './AddNewTermTooltip';
+export type NumericalStrength = 0 | 1 | 2 | 3 | 4 | 5 | 98 | 99;
 
 export const StrengthMap: Record<
   TermStrengthOrUnknown,

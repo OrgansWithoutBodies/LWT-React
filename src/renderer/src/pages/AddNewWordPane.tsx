@@ -17,17 +17,21 @@ import { owin, translateSentence2 } from './translateSentence2';
 export function AddNewWordPane({
   word,
   langId,
+  onClearActiveWord,
   existingTerm = undefined,
+  setIFrameURL,
 }: {
-  word?: string;
+  word: string;
+  // TODO
+  // wordInSentence:string
   existingTerm?: Word;
   langId: LanguagesId;
+  onClearActiveWord: () => void;
+  setIFrameURL: (url: string | null) => void;
 }): JSX.Element {
-  // TODO reset form on new word
-  // TODO verify dialog on change
   const validator = AddNewWordValidator;
   const [{ languages }] = useData(['languages']);
-  const navigator = useInternalNavigate();
+
   // TODO hashmap here avoid lookup
   const lang = languages.find((lang) => lang.LgID === langId);
   const {
@@ -39,41 +43,21 @@ export function AddNewWordPane({
     entry: { WoText: word || '', WoLgID: langId },
     validator,
   });
-  // const setFormErrorLine =
-  //   (key: keyof AddNewWordType): SetBoolean =>
-  //   (value) =>
-  //     setformErrors({ ...formErrors, [key]: value });
+
   const isEdit = existingTerm !== undefined;
   const termStatus = isEdit ? existingTerm.WoStatus : 1;
 
   if (!lang) {
     throw new Error('Incorrect Language Set!');
   }
-  const langString = lang.LgName;
+  const { LgName } = lang;
   return (
     <>
       <form name="newword" className="validate">
         <input type="hidden" name="fromAnn" value="" />
-        <WoInput
-          type="hidden"
-          entryKey="WoLgID"
-          id="langfield"
-          value={langId}
-        />
-        <input
-          type="hidden"
-          name="WoCreated"
-          ref={refMap.WoCreated}
-          id="langfield"
-          // TODO add creation val
-          value={langId}
-        />
-        <input
-          type="hidden"
-          name="WoTextLC"
-          ref={refMap.WoTextLC}
-          // value={word?.toLowerCase()}
-        />
+        <WoInput type="hidden" entryKey="WoLgID" id="langfield" />
+        <WoInput type="hidden" entryKey="WoCreated" id="langfield" />
+        <WoInput type="hidden" entryKey="WoTextLC" />
         {/* TODO what are these */}
         <input type="hidden" name="tid" value="11" />
         <input type="hidden" name="ord" value="7" />
@@ -82,7 +66,7 @@ export function AddNewWordPane({
           <tbody>
             <tr>
               <td className="td1 right">Language:</td>
-              <td className="td1">{langString}</td>
+              <td className="td1">{LgName}</td>
             </tr>
             <tr title="Only change uppercase/lowercase!">
               <td className="td1 right">
@@ -132,7 +116,10 @@ export function AddNewWordPane({
                   id="termtags"
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
-                  <GetTagsList WoID={existingTerm?.WoID || null} />
+                  <GetTagsList
+                    EntryID={existingTerm?.WoID || null}
+                    tagKey="tags"
+                  />
                   <li className="tagit-new">
                     <span
                       role="status"
@@ -145,6 +132,7 @@ export function AddNewWordPane({
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
                       autoComplete="off"
+                      entryKey={'WoTags'}
                     />
                   </li>
                 </ul>
@@ -164,12 +152,6 @@ export function AddNewWordPane({
                 />
               </td>
             </tr>
-            {formErrors.WoRomanization && (
-              <tr title="Only change uppercase/lowercase!">
-                <td style={{ color: 'red' }}>ERROR</td>
-                <td />
-              </tr>
-            )}
             <tr>
               <td className="td1 right">
                 Sentence
@@ -202,26 +184,40 @@ export function AddNewWordPane({
                 <script type="text/javascript" />
                 Lookup Term:
                 {/* external link */}
-                <a
-                  href={replaceTemplate(lang.LgDict1URI, word)}
-                  // TODO whats this
-                  target="ru"
+                <MultiFunctionalURL
+                  templateStr={lang.LgDict1URI}
+                  word={word}
+                  setIFrameURL={setIFrameURL}
                 >
                   Dict1
-                </a>
-                {/* TODO */}
-                {/* external link */}
-                <a href={replaceTemplate(lang.LgDict2URI, word)} target="ru">
-                  Dict2
-                </a>
-                <span
-                  className="click"
-                  onClick={() => {
-                    owin(replaceTemplate(lang.LgGoogleTranslateURI, word));
-                  }}
+                </MultiFunctionalURL>{' '}
+                {lang.LgDict2URI && (
+                  <a href={replaceTemplate(lang.LgDict2URI, word)} target="ru">
+                    Dict2
+                  </a>
+                )}
+                {/* <CreateTheDictLink
+                  u={lang.LgDict1URI}
+                  w={word}
+                  t={'Dict1'}
+                  b={'Lookup Term: '}
+                />
+                // external link
+                // TODO 
+                {lang.LgDict2URI && (
+                  <CreateTheDictLink
+                    u={lang.LgDict2URI}
+                    w={word}
+                    t={'Dict2'}
+                    b={''}
+                  /> */}{' '}
+                <MultiFunctionalURL
+                  word={word}
+                  templateStr={lang.LgGoogleTranslateURI}
+                  setIFrameURL={setIFrameURL}
                 >
                   GTr
-                </span>
+                </MultiFunctionalURL>{' '}
                 | Sent.:
                 <span
                   className="click"
@@ -242,8 +238,10 @@ export function AddNewWordPane({
                   value="Save"
                   onClick={() => {
                     onSubmit(wordNoIdPrevalidateMap, (value) => {
+                      console.log('TEST123-saving word', value);
                       dataService.addTerm(value);
-                      navigator('/edit_words');
+                      // navigator('/edit_words');
+                      onClearActiveWord();
                     });
                   }}
                 />
@@ -396,6 +394,7 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
                       autoComplete="off"
+                      entryKey={''}
                     />
                   </li>
                 </ul>
@@ -491,7 +490,7 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                   onClick={() => {
                     onSubmit(wordNoIdPrevalidateMap, (value) => {
                       dataService.addTerm(value);
-                      navigator('/edit_words');
+                      // navigator('/edit_words');
                     });
                   }}
                 />
@@ -530,11 +529,44 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
  * @param templateStr
  * @param word
  */
-function replaceTemplate(templateStr: string, word: string): string {
-  // TODO could start with *
-  return templateStr.replace('###', word);
+export function replaceTemplate(templateStr: string, word: string): string {
+  console.log('TEST123-replaceTemplate', templateStr, word);
+  // TODO template vs url branded type
+  const startsWithStar = templateStr.startsWith('*');
+  return (startsWithStar ? templateStr.slice(1) : templateStr).replace(
+    '###',
+    word
+  );
 }
 
+export function MultiFunctionalURL({
+  templateStr,
+  word,
+  setIFrameURL,
+  children,
+}: React.PropsWithChildren<{
+  templateStr: string;
+  word: string;
+  setIFrameURL: (url: string | null) => void;
+}>) {
+  const startsWithStar = templateStr.startsWith('*');
+  if (!startsWithStar) {
+    return (
+      <span
+        className="a"
+        onClick={() => setIFrameURL(replaceTemplate(templateStr, word))}
+      >
+        {children}
+      </span>
+    );
+  }
+  return (
+    // TODO target specific new frame?
+    <a target="_blank" href={replaceTemplate(templateStr, word)}>
+      {children}
+    </a>
+  );
+}
 /**
  *
  */
@@ -545,9 +577,16 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
   defaultStatus?: Word['WoStatus'];
   refMap: TRefMap<TEntryType>;
 }) {
-  const setRef = (event: React.ChangeEvent) =>
-    (refMap.WoStatus.current = event.target);
-  const currentStatus = refMap.WoStatus.current;
+  // const [currentStatus, setcurrentStatus] = useState(second)
+  const setRef = (event: React.ChangeEvent<HTMLInputElement>) => {
+    refMap.WoStatus.current = event.target;
+    console.log(
+      'TEST123-StatusRadio-setref',
+      event.target,
+      refMap.WoStatus.current.value
+    );
+  };
+  // console.log('TEST123-StatusRadio-currentStatus', currentStatus);
   return (
     <>
       <span className="status1" title="Learning">
@@ -557,7 +596,10 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           name="WoStatus"
           value="1"
           onChange={setRef}
-          checked={currentStatus === 1}
+          checked={
+            refMap.WoStatus.current === null ||
+            refMap.WoStatus.current.value === '1'
+          }
           ref={refMap.WoStatus}
         />
         1&nbsp;
@@ -568,7 +610,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           type="radio"
           name="WoStatus"
           onChange={setRef}
-          checked={currentStatus === 2}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '2'
+          }
           value="2"
         />
         2&nbsp;
@@ -578,7 +622,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
         <input
           type="radio"
           name="WoStatus"
-          checked={currentStatus === 3}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '3'
+          }
           onChange={setRef}
           value="3"
         />
@@ -590,7 +636,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           onChange={setRef}
           type="radio"
           name="WoStatus"
-          checked={currentStatus === 4}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '4'
+          }
           value="4"
         />
         4&nbsp;
@@ -601,7 +649,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           type="radio"
           onChange={setRef}
           name="WoStatus"
-          checked={currentStatus === 5}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '5'
+          }
           value="5"
         />
         5&nbsp;
@@ -612,7 +662,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           type="radio"
           onChange={setRef}
           name="WoStatus"
-          checked={defaultStatus === 99}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '99'
+          }
           value="99"
         />
         WKn&nbsp;
@@ -624,7 +676,9 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
           type="radio"
           name="WoStatus"
           value="98"
-          checked={defaultStatus === 98}
+          checked={
+            refMap.WoStatus.current && refMap.WoStatus.current.value === '98'
+          }
         />
         Ign&nbsp;
       </span>

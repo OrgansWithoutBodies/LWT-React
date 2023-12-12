@@ -10,11 +10,13 @@ import { byteSizeOfString } from './utils';
  */
 export function LongTextVerify({
   verifying,
+  onCancelVerify,
 }: {
   verifying: LongTextType;
+  onCancelVerify: () => void;
 }): JSX.Element {
   const navigate = useInternalNavigate();
-
+  console.log('TEST123-longtext', verifying);
   return (
     <>
       <Header title="Long Text Import" />
@@ -56,7 +58,7 @@ export function LongTextVerify({
                   value="Go Back"
                   onClick={() => {
                     resetDirty();
-                    history.back();
+                    onCancelVerify();
                   }}
                 />
                 &nbsp; | &nbsp;
@@ -75,10 +77,7 @@ export function LongTextVerify({
             {verifying.map(({ TxText }, ii) => (
               <tr>
                 <td className="td1 right">
-                  <b>
-                    Text
-                    {ii + 1}:
-                  </b>
+                  <b>Text {ii + 1}:</b>
                   <br />
                   <br />
                   <br />

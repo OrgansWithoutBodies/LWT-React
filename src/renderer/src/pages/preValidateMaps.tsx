@@ -33,7 +33,7 @@ export const tagPreValidateMap: {
   TgText: identityMap,
   TgComment: emptyToNullMap,
 };
-export const getTimeAsString = () => {
+export const getCurrentTimeAsString = () => {
   const dt = new Date();
 
   const padL = (nr: number) => `${nr}`.padStart(2, '0');
@@ -52,7 +52,7 @@ export const wordPrevalidateMap = {
   WoStatus: parseNumMap,
   WoLgID: parseNumMap,
   WoSentence: emptyToNullMap,
-  WoStatusChanged: getTimeAsString,
+  WoStatusChanged: getCurrentTimeAsString,
   WoTextLC: (_: any, refMap: { WoText: { current: { value: string } } }) =>
     refMap.WoText.current.value.toLowerCase(),
   WoTranslation: (val) => (val === undefined ? '' : val),
@@ -62,9 +62,15 @@ export const wordNoIdPrevalidateMap = {
   ...Object.fromEntries(
     Object.entries(wordPrevalidateMap).filter(([val]) => val !== 'WoID')
   ),
-  WoCreated: getTimeAsString,
+  WoCreated: getCurrentTimeAsString,
+};
+export const textNoIdPrevalidateMap = {
+  TxLgID: parseNumMap,
+  TxAudioURI: emptyToNullMap,
+  TxSourceURI: emptyToNullMap,
 };
 export const textPrevalidateMap = {
+  TxID: parseNumMap,
   TxLgID: parseNumMap,
   TxAudioURI: emptyToNullMap,
   TxSourceURI: emptyToNullMap,

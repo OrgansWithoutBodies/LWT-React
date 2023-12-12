@@ -49,7 +49,7 @@ export function SelectMediaPath({ f }: { f: string }) {
       ogg, wav files shown):{' '}
       {exists ? (
         <>
-          {is_dir('media') ? (
+          {/* {is_dir('media') ? (
             <></>
           ) : (
             <>
@@ -57,7 +57,7 @@ export function SelectMediaPath({ f }: { f: string }) {
               [Error: ".../{basename(getcwd())}/media" exists, but it is not a
               directory.]
             </>
-          )}
+          )} */}
         </>
       ) : (
         <>

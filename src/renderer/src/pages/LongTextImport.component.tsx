@@ -3,7 +3,7 @@ import * as ss from 'superstruct';
 import { dataService } from '../data/data.service';
 import { Text } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
-import { CheckAndSubmit, parseNumMap } from '../forms/Forms';
+import { parseNumMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
@@ -33,7 +33,7 @@ export default function ImportLongText({
     TxTitle: ss.string(),
     maxSent: ss.number(),
   });
-  const { Input: TxInput, refMap } = useFormInput({ validator });
+  const { Input: TxInput, refMap, onSubmit } = useFormInput({ validator });
   return (
     <>
       <Header title="Import Long Text" />
@@ -75,8 +75,7 @@ export default function ImportLongText({
                 <input name="file" type="file" />
                 <br />
                 <br />
-                <b>Or</b> paste a text from the clipboard (and do
-                <b>NOT</b>
+                <b>Or</b> paste a text from the clipboard (and do <b>NOT</b>{' '}
                 specify file):
                 <br />
                 <textarea
@@ -209,11 +208,9 @@ export default function ImportLongText({
                   onClick={() => {
                     console.log('LONGIMPORT', refMap.TxText.current);
 
-                    CheckAndSubmit(
-                      refMap,
-                      { TxLgID: parseNumMap },
-                      validator,
-                      ({ TxText, TxLgID, TxTitle }) => {
+                    onSubmit(
+                      { TxLgID: parseNumMap, maxSent: parseNumMap },
+                      ({ TxText, TxLgID, TxTitle, maxSent }) => {
                         // TODO
                         // console.log(TxLgID);
                         const splitTexts = buildSentences(
@@ -221,14 +218,23 @@ export default function ImportLongText({
                           languages.find((lang) => lang.LgID === TxLgID)!
                         );
                         console.log(splitTexts);
+                        const numTexts = Math.ceil(splitTexts.length / maxSent);
+                        // TODO split sentences only maxSent # of sentences long
                         onSetVerify(
-                          splitTexts.map((text, ii) => ({
-                            TxText: text,
-                            TxLgID,
-                            TxTitle: `${TxTitle} [${ii + 1}/${
-                              splitTexts.length
-                            }]`,
-                          }))
+                          new Array(numTexts).fill(0).map((_, ii) => {
+                            const sentences = splitTexts.slice(
+                              ii * maxSent,
+                              (ii + 1) * maxSent
+                            );
+                            return {
+                              TxText: sentences
+                                .map((val) => val.SeText)
+                                .join(' ')
+                                .replace(new RegExp('¶', 'g'), '\n'),
+                              TxLgID,
+                              TxTitle: `${TxTitle} [${ii + 1}/${numTexts}]`,
+                            };
+                          })
                         );
                       }
                     );
@@ -274,7 +280,12 @@ export function LongText() {
   return (
     <>
       {isVerify ? (
-        <LongTextVerify verifying={verifying} />
+        <LongTextVerify
+          verifying={verifying}
+          onCancelVerify={() => {
+            setVerifying(null);
+          }}
+        />
       ) : (
         <ImportLongText onSetVerify={setVerifying} />
       )}

@@ -294,7 +294,13 @@ export function EditArchivedTexts({
                     {text.AtTitle}
                     <span className="smallgray2">
                       {' '}
-                      [{textTagLookup[text.AtID].join(', ')}]
+                      {textTagLookup[text.AtID] && (
+                        <>
+                          {'['}
+                          {textTagLookup[text.AtID].join(', ')}
+                          {']'}
+                        </>
+                      )}
                     </span>
                     {text.AtAudioURI && (
                       <Icon src="speaker-volume" title="With Audio" />

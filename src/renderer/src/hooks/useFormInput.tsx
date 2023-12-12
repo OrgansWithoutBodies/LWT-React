@@ -65,8 +65,8 @@ export function useFormInput<
     ]
   );
   const onSubmit = (
-    preValidateMap,
-    onValidatedData,
+    preValidateMap: Parameters<typeof CheckAndSubmit>[1],
+    onValidatedData: Parameters<typeof CheckAndSubmit>[3],
     omit: keyof TData | null = null
   ) =>
     CheckAndSubmit(
