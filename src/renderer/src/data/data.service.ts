@@ -1,7 +1,7 @@
 // import { Gzip } from 'browserify-zlib';
 import demoDB from '../demo_db.json';
 
-import type { Persistable } from '../../../shared/Persistable';
+import { Persistable } from '../../../shared/Persistable';
 import type { NumericalStrength } from '../pages/StrengthMap';
 import { splitCheckText } from '../pages/utils';
 import {
@@ -259,24 +259,21 @@ export class DataService {
   }
 
   public editLanguage(newData: Language) {
-    window.alert(`TODO-editLanguage${newData}`);
-    // this.dataStore.update((state) => {
-    //   const ids = state.tags.map((tag) => tag.TgID);
-    //   const maxId = (Math.max(...ids) + 1) as TagsId;
-    //   return {
-    //     ...state,
-    //     notificationMessage: { txt: `Edited Tag ${tag.TgText}` },
-    //     tags: [
-    //       ...state.tags,
-    //       {
-    //         ...tag,
-    //         TgID: maxId,
-    //       },
-    //     ],
-    //   };
-    // });
-    // this.persistChange('tags');
-    // this.persistUpdate('tags',newData);
+    this.dataStore.update(({ languages: immutableLanguages, ...rest }) => {
+      const languages = [...immutableLanguages];
+      const idOfExistingValue = languages.findIndex(
+        (lang) => lang.LgID === newData.LgID
+      );
+
+      languages[idOfExistingValue] = newData;
+      return {
+        ...rest,
+        notificationMessage: { txt: `Edited Language ${newData.LgName}` },
+        languages,
+      };
+    });
+    this.persistSet('languages');
+    this.persistUpdate('languages', newData);
   }
 
   public addTextTag(tag: Tag2NoId) {
@@ -797,20 +794,18 @@ export class DataService {
   }
 
   public setSettings(settings: Partial<Settings>) {
-    this.dataStore.update(({ settings: oldSettings, ...state }) => {
-      const settingsAsObject = Object.fromEntries(
-        oldSettings.map(({ StValue, StKey }) => [StKey, StValue])
-      );
-      return {
-        ...state,
-        // TODO setting-specific message here?
-        notificationMessage: { txt: 'Updated Settings' },
-        settings: Object.entries({
-          ...settingsAsObject,
-          ...settings,
-        }).map(([key, val]) => ({ StKey: key as SettingsId, StValue: val })),
-      };
-    });
+    this.dataStore.update(({ settings: oldSettings, ...state }) => ({
+      ...state,
+      // TODO setting-specific message here?
+      notificationMessage: { txt: 'Updated Settings' },
+      settings: Object.entries({
+        ...oldSettings,
+        ...settings,
+      }).map(([key, val]) => ({
+        StKey: key as SettingsId,
+        StValue: val as any,
+      })),
+    }));
     this.persistSet('settings');
     Object.entries(settings).forEach(async ([key, val]) => {
       await this.persistDelete('settings', key);

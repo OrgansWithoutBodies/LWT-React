@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SplitPane from 'react-split-pane';
+import { useThemeColors } from '../App';
+import { APITranslateTerm } from '../data/deepl.plugin';
 import { Language, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
+import { PLUGINS } from '../plugins';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
+import { TranslationAPI } from './APITranslation.component';
 import { AddNewWordPane } from './AddNewWordPane';
+import { Loader } from './Loader';
 import { Reader } from './Reader.component';
 import { TextToDoCount } from './TextToDoCount';
 import { owin } from './translateSentence2';
@@ -63,6 +68,22 @@ function ShowAllMessage({ $showAll }: { $showAll: 0 | 1 }) {
  */
 function IFramePane({ url }: { url: string | null }) {
   console.log('TEST123-IFRAME', url);
+  const [loading, setLoading] = useState<boolean>(false);
+  const frameRef = useRef<HTMLIFrameElement | null>(null);
+  useEffect(() => {
+    const frame = frameRef.current;
+    const loadHandler = () => {
+      setLoading(false);
+    };
+    setLoading(true);
+    frame.addEventListener('load', loadHandler);
+
+    return () => {
+      frame.removeEventListener('load', loadHandler);
+    };
+  }, [url]);
+
+  const colors = useThemeColors();
   // https://stackoverflow.com/questions/23616226/insert-html-with-react-variable-statements-jsx
   // dictionary pane
   // const frameRef = useRef<HTMLIFrameElement | null>(null);
@@ -87,18 +108,20 @@ function IFramePane({ url }: { url: string | null }) {
   // }, []);
 
   return (
-    <>
+    <div
+      style={{ height: '100%', width: '100%', backgroundColor: colors.lum6 }}
+    >
+      {loading && <Loader height={'50%'} width={'50%'} />}
       {
         <iframe
           name="ru"
-          {...(url ? { src: url } : {})}
+          src={url || undefined}
           width={'100%'}
           height={'100%'}
-          // ref={frameRef}
-          // onClick={() => console.log('TEST123-click')}
+          ref={frameRef}
         />
       }
-    </>
+    </div>
   );
 }
 // TODO I Know All
@@ -124,6 +147,9 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
     Word | { newWord: string } | null
   >(null);
   const [iFrameURL, setIFrameURL] = useState<string | null>(null);
+  const [translateAPIParams, setTranslateAPIParams] = useState<
+    (APITranslateTerm<string, string> & { apiKey: string }) | null
+  >(null);
   const text = texts.find((text) => text.TxID === textId);
   const activeText =
     activeWord === null
@@ -134,7 +160,24 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
   if (!text) {
     return <></>;
   }
-  console.log('TEST123-reader', activeWord, activeText);
+  const availableAPIPlugins = Object.fromEntries(
+    PLUGINS.filter((val) => val.api !== undefined).map((plugin) => [
+      plugin.pluginName,
+      plugin.api!,
+    ])
+  );
+  const currentlyActiveAPI = translateAPIParams
+    ? availableAPIPlugins[translateAPIParams?.apiKey]
+    : null;
+  console.log(
+    'TEST123-reader',
+    availableAPIPlugins,
+    currentlyActiveAPI,
+    PLUGINS
+  );
+  if (!currentlyActiveAPI && translateAPIParams) {
+    throw new Error('Invalid API Plugin Specified!');
+  }
   return (
     <SplitPane
       split="vertical"
@@ -210,11 +253,24 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
             langId={text.TxLgID}
             onClearActiveWord={() => setActiveWord(null)}
             setIFrameURL={setIFrameURL}
+            setTranslateAPIParams={setTranslateAPIParams}
           />
         ) : (
           <></>
         )}
-        {iFrameURL ? <IFramePane url={iFrameURL} /> : <></>}
+        {translateAPIParams && currentlyActiveAPI ? (
+          <TranslationAPI
+            onAcceptLine={(data) =>
+              console.log('TEST123-ACCEPTING TRANSLATION: ', data)
+            }
+            api={currentlyActiveAPI}
+            sourceKey={translateAPIParams.sourceKey}
+            targetKey={translateAPIParams.targetKey}
+            word={translateAPIParams.word}
+          />
+        ) : (
+          <IFramePane url={iFrameURL} />
+        )}
       </SplitPane>
     </SplitPane>
   );
@@ -290,7 +346,13 @@ export function TesterPage({
             />
           </p>
         </>
-        {testModality === null ? <></> : <Tester modality={testModality} />}
+        {testModality === null ? (
+          <></>
+        ) : testModality === 'table' ? (
+          <TesterTable />
+        ) : (
+          <Tester modality={testModality} />
+        )}
       </SplitPane>
       <SplitPane split="horizontal" minSize={50} defaultSize="60%">
         {/* TODO RHS panes */}
@@ -574,6 +636,7 @@ function escape_apostrophes(s: string) {
  *
  */
 function AudioPlayer({ audioURI }: { audioURI: string }) {
+  // TODO
   return <></>;
 }
 
@@ -719,5 +782,176 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //       } // return add . prev . ' ' . next;
 //     }
 //   }
-//   // return add . '<img src="icn/navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light.png" title="No Next Text" alt="No Next Text" />';
+//   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
 // }
+export function TesterTable() {
+  // TODO;
+  // BETWEEN 1 AND 5 AND WoTranslation != \'\' AND WoTranslation != \'*\'
+  return (
+    <>
+      <p>
+        <input
+          type="checkbox"
+          id="cbEdit"
+          //  <?php echo get_checked($currenttabletestsetting1); ?>
+        />{' '}
+        Edit
+        <input
+          type="checkbox"
+          id="cbStatus"
+          //  <?php echo get_checked($currenttabletestsetting2); ?>
+        />{' '}
+        Status
+        <input
+          type="checkbox"
+          id="cbTerm"
+          //  <?php echo get_checked($currenttabletestsetting3); ?>
+        />{' '}
+        Term
+        <input
+          type="checkbox"
+          id="cbTrans"
+          //  <?php echo get_checked($currenttabletestsetting4); ?>
+        />{' '}
+        Translation
+        <input
+          type="checkbox"
+          id="cbRom"
+          //  <?php echo get_checked($currenttabletestsetting5); ?>
+        />{' '}
+        Romanization
+        <input
+          type="checkbox"
+          id="cbSentence"
+          //  <?php echo get_checked($currenttabletestsetting6); ?>
+        />{' '}
+        Sentence
+      </p>
+
+      <table
+        class="sortable tab1"
+        style={{ width: 'auto' }}
+        cellspacing="0"
+        cellpadding="5"
+      >
+        <tr>
+          <th className="th1">Ed</th>
+          <th className="th1 clickable">Status</th>
+          <th className="th1 clickable">Term</th>
+          <th className="th1 clickable">Translation</th>
+          <th className="th1 clickable">Romanization</th>
+          <th className="th1 clickable">Sentence</th>
+        </tr>
+        {/* <?php
+
+	$sql = 'SELECT DISTINCT WoID, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, WoTodayScore As Score FROM ' . $testsql . ' AND WoStatus BETWEEN 1 AND 5 AND WoTranslation != \'\' AND WoTranslation != \'*\' order by WoTodayScore, WoRandom*RAND()';
+	if ($debug)
+		echo $sql;
+	$res = do_mysqli_query($sql);
+	while ($record = mysqli_fetch_assoc($res)) {
+		$sent = tohtml(repl_tab_nl($record["WoSentence"]));
+		$sent1 = str_replace("{", ' <b>[', str_replace(
+			"}",
+			']</b> ',
+			mask_term_in_sentence($sent, $regexword)
+		)
+		);
+		?> */}
+        <tr>
+          <td className="td1 center" nowrap="nowrap">
+            <a
+              href="edit_tword.php?wid=<?php echo $record['WoID']; ?>"
+              target="ro"
+            >
+              <Icon src="sticky-note--pencil" title="Edit Term" />
+            </a>
+          </td>
+          <td className="td1 center" nowrap="nowrap">
+            <span id="STAT<?php echo $record['WoID']; ?>">
+              {/* <?php echo make_status_controls_test_table($record['Score'], $record['WoStatus'], $record['WoID']); ?> */}
+            </span>
+          </td>
+          <td className="td1 center" style={{ fontSize: language.LgTextSize }}>
+            {/* <?php echo $span1; ?> */}
+            <span id="TERM<?php echo $record['WoID']; ?>">
+              {/* <?php echo tohtml($record['WoText']); ?> */}
+            </span>
+            {/* <?php echo $span2; ?> */}
+          </td>
+          <td className="td1 center">
+            <span id="TRAN<?php echo $record['WoID']; ?>">
+              {/* <?php echo tohtml($record['WoTranslation']); ?> */}
+            </span>
+          </td>
+          <td className="td1 center">
+            <span id="ROMA<?php echo $record['WoID']; ?>">
+              {/* <?php echo tohtml($record['WoRomanization']); ?> */}
+            </span>
+          </td>
+          <td className="td1 center">
+            {/* <?php echo $span1; ?> */}
+            <span id="SENT<?php echo $record['WoID']; ?>">
+              {/* <?php echo $sent1; ?> */}
+            </span>
+            {/* <?php echo $span2; ?> */}
+          </td>
+        </tr>
+      </table>
+    </>
+  );
+}
+function make_status_controls_test_table($score, $status, $wordid) {
+  if ($score < 0) $score = '<span class="red2">';
+  // . get_status_abbr($status) .
+  //  '</span>';
+  else $score = get_status_abbr($status);
+
+  return (
+    <>
+      {$status == 98 ? (
+        <></>
+      ) : $status >= 1 ? (
+        <img
+          src="icn/minus.png"
+          className="click"
+          title="-"
+          alt="-"
+          onClick="changeTableTestStatus(' . $wordid . ',false);"
+        />
+      ) : (
+        <Icon src="placeholder" title="" />
+      )}{' '}
+      {$score < 0 ? (
+        <span className="red2">get_status_abbr($status)</span>
+      ) : (
+        <>{get_status_abbr($status)}</>
+      )}{' '}
+      {$status == 99 ? (
+        <></>
+      ) : (
+        <>
+          {' '}
+          {$status <= 5 || $status == 98 ? (
+            <img
+              src="icn/plus.png"
+              className="click"
+              title="+"
+              alt="+"
+              onclick="changeTableTestStatus(' . $wordid . ',true);"
+            />
+          ) : (
+            <Icon src="placeholder" title="" />
+          )}
+        </>
+      )}
+      ;
+    </>
+  );
+}
+
+// TODO
+{
+  // pagestart_nobody('', 'html, body { margin:3px; padding:0; }');
+  /* <p class="center">&nbsp;<br />Sorry - No terms to display or to test at this time.</p> */
+  // '<p>Sorry - The selected terms are in ' . $cntlang . ' languages, but tests are only possible in one language at a time.</p>
+}

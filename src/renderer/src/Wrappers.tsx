@@ -6,6 +6,7 @@ import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
 import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
 import { AddNewWordPane } from './pages/AddNewWordPane';
+import { AnnotateText } from './pages/AnnotateText';
 import { EditArchivedTexts } from './pages/EditArchivedTexts.component';
 import { EditLanguage } from './pages/EditLanguage.component';
 import { DisplayTags, EditTag, NewTag } from './pages/EditTags';
@@ -39,17 +40,19 @@ export function TermsWrapper() {
   } = useInternalParams('edit_words');
   const [{ activeLanguageId }] = useData(['activeLanguageId']);
   const isNew = newVal === '1';
-
+  const updateParams = useUpdateParams();
   // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
   if (filterlang === '') {
     if (activeLanguageId !== null) {
       dataService.setActiveLanguage(null);
+      updateParams({ filterlang: null });
     }
   } else if (
     filterlang !== null &&
     Number.parseInt(filterlang) !== activeLanguageId
   ) {
     dataService.setActiveLanguage(Number.parseInt<LanguagesId>(filterlang));
+    updateParams({ filterlang: null });
   }
   return (
     <Switch on={isNew}>
@@ -75,6 +78,22 @@ export function TermsWrapper() {
       </Switch>
       <AddTerm langId={Number.parseInt(lang!)} />
     </Switch>
+  );
+}
+
+/**
+ *
+ */
+export function AnnotatedTextsWrapper() {
+  const { text, annplcmnt, ann, status } = useInternalParams('print_impr_text');
+  if (text === null) {
+    throw new Error('Need To Specify Text ID');
+  }
+  return (
+    <AnnotateText
+      textID={Number.parseInt(text)}
+      annplcmnt={annplcmnt === null ? 0 : Number.parseInt(annplcmnt)}
+    />
   );
 }
 /**

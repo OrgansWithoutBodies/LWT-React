@@ -12,6 +12,7 @@ export const languageNoIdPreValidateMap: {
   LgRemoveSpaces: parseNumMap,
   LgSplitEachChar: parseNumMap,
   LgRightToLeft: parseNumMap,
+  LgCharacterSubstitutions: emptyToNullMap,
   LgDict2URI: emptyToNullMap,
 };
 export const languagePreValidateMap: {

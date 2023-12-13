@@ -1,18 +1,15 @@
-// Call: glosbe_api?from=...&dest=...&phrase=...
-//       ... from=L2 language code (see Glosbe)
-//       ... dest=L1 language code (see Glosbe)
+// Call: API_api?from=...&dest=...&phrase=...
+//       ... from=L2 language code (see API)
+//       ... dest=L1 language code (see API)
 //       ... phrase=... word or expression to be translated by
-//                      Glosbe API (see http://glosbe.com/a-api)
+//                      API API (see http://API.com/a-api)
 
 import { useEffect, useState } from 'react';
+import { APITranslateTerm, GenericTranslationAPI } from '../data/deepl.plugin';
 import { Icon } from '../ui-kit/Icon';
 import { pluralize } from './EditTags';
-import { GlosbeOpenAPIWrapper } from './GlosbeAPI';
-import { GlosbeKeys } from './GlosbeKeys';
 
-export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
-
-// Call Glosbe Translation API, analyze and present JSON results
+// Call API Translation API, analyze and present JSON results
 // for easily filling the "new word form"
 
 // from = trim(stripTheSlashesIfNeeded($_REQUEST["from"]));
@@ -21,64 +18,55 @@ export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
 // phrase = mb_strtolower(trim(stripTheSlashesIfNeeded($_REQUEST["phrase"])), 'UTF-8');
 // ok = FALSE;
 
-// titletext = '<a href="http://glosbe.com/' . from . '/' . dest . '/' . phrase . '">Glosbe Dictionary (' . tohtml(from) . "-" . tohtml(dest) . "):  &nbsp; <span class="red2">" . tohtml(phrase) . "</span></a>";
+// titletext = '<a href="http://API.com/' . from . '/' . dest . '/' . phrase . '">API Dictionary (' . tohtml(from) . "-" . tohtml(dest) . "):  &nbsp; <span class="red2">" . tohtml(phrase) . "</span></a>";
 // echo '<h3>' . titletext . '</h3>';
 // echo '<p>(Click on <Icon src="tick-button" title="Choose" /> to copy word(s) into above term)<br />&nbsp;</p>';
 
 /**
  *
  */
-export function GlosbeAPI({
-  from,
-  dest,
-  phrase,
-}: {
-  from: GlosbeLangKeyShortString;
-  dest: GlosbeLangKeyShortString;
-  phrase: string;
+export function TranslationAPI<TSource extends string, TTarget extends string>({
+  sourceKey,
+  targetKey,
+  word,
+  api: api,
+  onAcceptLine,
+}: APITranslateTerm<TSource, TTarget> & {
+  api: GenericTranslationAPI<TSource, TTarget>;
+  onAcceptLine: (data: string) => void;
 }) {
-  const glosbeAPIHandler = new GlosbeOpenAPIWrapper();
-  const [data, setData] = useState<null | { phrase: string; tuc: string }>(
-    null
-  );
+  const [data, setData] = useState<null | string[]>(null);
   useEffect(() => {
-    const setDataFromGlosbe = async () => {
-      const glosbeData = await glosbeAPIHandler.getPath('/gapi/translate', {
-        dest,
-        from,
-        phrase,
-        format: 'json',
-      });
-      setData(glosbeData.data);
+    const setDataFromAPI = async () => {
+      const APIData = await api.getTranslations({ sourceKey, targetKey, word });
+      setData(APIData);
     };
-    setDataFromGlosbe();
+    setDataFromAPI();
     return () => {};
-  }, [dest, from, phrase]);
+  }, [sourceKey, targetKey, word, api]);
   if (!data) {
     return <></>;
   }
-  if (!data.phrase) {
-    return <></>;
-  }
-  const ok = data.phrase == phrase && data.tuc !== undefined;
+  // const ok = data.phrase == word && data.tuc !== undefined;
+  const ok = true;
   if (!ok) {
     return (
       <p>
         &nbsp;
         <br />
-        Retrieval error ({from}-{dest}). Possible reason: There is a limit of
-        Glosbe API calls that may be done from one IP address in a fixed period
-        of time, to prevent from abuse.
+        Retrieval error ({sourceKey}-{targetKey}). Possible reason: There is a
+        limit of API API calls that may be done from one IP address in a fixed
+        period of time, to prevent from abuse.
       </p>
     );
   }
-  const i = data === null ? 0 : 1;
+  const i = data === null ? 0 : data.length;
   return (
     <>
       <h3>
-        <a href={`http://glosbe.com/${from}/${dest}/${phrase}`}>
-          Glosbe Dictionary ({from}-{dest}
-          ): &nbsp; <span className="red2">{phrase}</span>
+        <a href={api.apiHomePage}>
+          {api.apiName} API ({sourceKey}-{targetKey}
+          ): &nbsp; <span className="red2">{word}</span>
         </a>
       </h3>
       <p>
@@ -95,26 +83,22 @@ export function GlosbeAPI({
 				if (isset(value['meanings'][0]['text']))
 					word = "(" . value['meanings'][0]['text'] . ")";
 			} */}
-          {data && (
-            <>
-              <span
-                className="click"
-                onClick={() =>
-                  "addTranslation(' . prepare_textdata_js(word) . ');"
-                }
-              >
-                <Icon src="tick-button" title="Copy" /> &nbsp;{' '}
-                {/* {trim(strip_tags(word))} */}
-              </span>
-              <br />
-            </>
-          )}
+          {data &&
+            data.map((val) => (
+              <>
+                <span className="click" onClick={() => onAcceptLine(val)}>
+                  <Icon src="tick-button" title="Copy" /> &nbsp; {val}
+                  {/* {trim(strip_tags(word))} */}
+                </span>
+                <br />
+              </>
+            ))}
           &nbsp;
           {/* TODO i numtranslations */}
           <br />
           {i} translation{pluralize(i)} retrieved via{' '}
-          <a href="http://glosbe.com/a-api" target="_blank">
-            Glosbe API
+          <a href={api.apiHomePage} target="_blank">
+            {api.apiName} API
           </a>
           .
         </p>
@@ -123,14 +107,15 @@ export function GlosbeAPI({
         &nbsp;
         <hr />
         &nbsp;
-        <form action="glosbe_api" method="get">
+        <form action="API_api" method="get">
           Unhappy?
           <br />
           Change term:
           <input type="text" name="phrase" maxLength={250} size={15} value="" />
+          {/* TODO */}
           <input type="hidden" name="from" value="" />
           <input type="hidden" name="dest" value="" />
-          <input type="submit" value="Translate via Glosbe" />
+          <input type="button" value={`Translate via ${api.apiName} API`} />
         </form>
       </>
     </>
@@ -190,7 +175,7 @@ function addTranslation(s) {
 // 		}
 // 		echo "</p>";
 // 		if (i) {
-// 		echo '<p>&nbsp;<br/>' . i . ' translation' . (i==1 ? '' : 's') . ' retrieved via <a href="http://glosbe.com/a-api" target="_blank">Glosbe API</a>.</p>';
+// 		echo '<p>&nbsp;<br/>' . i . ' translation' . (i==1 ? '' : 's') . ' retrieved via <a href="http://API.com/a-api" target="_blank">API API</a>.</p>';
 // 		}
 
 // 	} else {
@@ -202,14 +187,14 @@ function addTranslation(s) {
 // 			ok = FALSE;
 
 // 			dest = "en";
-// 			titletext = '<a href="http://glosbe.com/' . from . '/' . dest . '/' . phrase . '">Glosbe Dictionary (' . tohtml(from) . "-" . tohtml(dest) . "):  &nbsp; <span class="red2">" . tohtml(phrase) . "</span></a>";
+// 			titletext = '<a href="http://API.com/' . from . '/' . dest . '/' . phrase . '">API Dictionary (' . tohtml(from) . "-" . tohtml(dest) . "):  &nbsp; <span class="red2">" . tohtml(phrase) . "</span></a>";
 // 			echo '<hr /><p>&nbsp;</p><h3>' . titletext . '</h3>';
 
-// 			glosbe_data = file_get_contents('http://glosbe.com/gapi/translate?from=' . urlencode(from) . '&dest=' . urlencode(dest) . '&format=json&phrase=' . urlencode(phrase));
+// 			API_data = file_get_contents('http://API.com/API/translate?from=' . urlencode(from) . '&dest=' . urlencode(dest) . '&format=json&phrase=' . urlencode(phrase));
 
-// 			if(! (glosbe_data === FALSE)) {
+// 			if(! (API_data === FALSE)) {
 
-// 				data = json_decode (glosbe_data, true);
+// 				data = json_decode (API_data, true);
 // 				if ( isset(data['phrase']) ) {
 // 					ok = ((data['phrase'] == phrase) && (isset(data['tuc'])));
 // 				}
@@ -240,7 +225,7 @@ function addTranslation(s) {
 // 					}
 // 					echo "</p>";
 // 					if (i) {
-// 					echo '<p>&nbsp;<br/>' . i . ' translation' . (i==1 ? '' : 's') . ' retrieved via <a href="http://glosbe.com/a-api" target="_blank">Glosbe API</a>.</p>';
+// 					echo '<p>&nbsp;<br/>' . i . ' translation' . (i==1 ? '' : 's') . ' retrieved via <a href="http://API.com/a-api" target="_blank">API API</a>.</p>';
 // 					}
 
 // 				} else {
@@ -251,7 +236,7 @@ function addTranslation(s) {
 
 // 			} else {
 
-// 				echo '<p>&nbsp;<br/>Retrieval error (' . tohtml(from) . '-' . tohtml(dest) . '). Possible reason: There is a limit of Glosbe API calls that may be done from one IP address in a fixed period of time, to prevent from abuse.</p>';
+// 				echo '<p>&nbsp;<br/>Retrieval error (' . tohtml(from) . '-' . tohtml(dest) . '). Possible reason: There is a limit of API API calls that may be done from one IP address in a fixed period of time, to prevent from abuse.</p>';
 
 // 			}
 // 		}
@@ -260,15 +245,15 @@ function addTranslation(s) {
 
 // } else {
 
-// 	echo '<p>Retrieval error (' . tohtml(from) . '-' . tohtml(dest) . '). Possible reason: There is a limit of Glosbe API calls that may be done from one IP address in a fixed period of time, to prevent from abuse.</p>';
+// 	echo '<p>Retrieval error (' . tohtml(from) . '-' . tohtml(dest) . '). Possible reason: There is a limit of API API calls that may be done from one IP address in a fixed period of time, to prevent from abuse.</p>';
 
 // }
 
-// echo '&nbsp;<hr />&nbsp;<form action="glosbe_api" method="get">Unhappy?<br/>Change term:
+// echo '&nbsp;<hr />&nbsp;<form action="API_api" method="get">Unhappy?<br/>Change term:
 // <input type="text" name="phrase" maxlength={250} size={15} value="' . tohtml(phrase) . '">
 // <input type="hidden" name="from" value="' . tohtml(from) . '">
 // <input type="hidden" name="dest" value="' . tohtml(destorig) . '">
-// <input type="submit" value="Translate via Glosbe">
+// <input type="submit" value="Translate via API">
 // </form>';
 
 // pageend();

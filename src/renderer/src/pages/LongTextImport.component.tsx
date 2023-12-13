@@ -55,7 +55,6 @@ export default function ImportLongText({
               <td className="td1 right">Title:</td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="notempty checkoutsidebmp"
                   errorName="Title"
                   entryKey="TxTitle"
@@ -133,7 +132,6 @@ export default function ImportLongText({
               </td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="notempty posintnumber"
                   errorName="Maximum Sentences per Text"
                   entryKey="maxSent"
@@ -158,7 +156,6 @@ export default function ImportLongText({
               <td className="td1 right">Source URI:</td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="checkurl checkoutsidebmp"
                   errorName="Source URI"
                   entryKey="TxSourceURI"

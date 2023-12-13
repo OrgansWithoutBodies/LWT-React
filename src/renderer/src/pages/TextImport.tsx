@@ -71,7 +71,6 @@ export function ImportShortText({
               <td className="td1 right">Title:</td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="notempty checkoutsidebmp"
                   errorName="Title"
                   entryKey="TxTitle"
@@ -111,7 +110,6 @@ export function ImportShortText({
               <td className="td1 right">Source URI:</td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="checkurl checkoutsidebmp"
                   errorName="Source URI"
                   entryKey="TxSourceURI"
@@ -149,7 +147,6 @@ export function ImportShortText({
               <td className="td1 right">Audio-URI:</td>
               <td className="td1">
                 <TxInput
-                  type="text"
                   className="checkoutsidebmp"
                   errorName="Audio-URI"
                   entryKey="TxAudioURI"

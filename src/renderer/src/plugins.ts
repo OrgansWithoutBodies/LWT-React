@@ -1,38 +1,19 @@
-import { Struct } from 'superstruct';
-import { Persistable } from '../../shared/Persistable';
 import { LWTReactInfo } from './LWTReactInfo';
-import { InternalPaths } from './hooks/useInternalNav';
+import { Plugin } from './Plugin';
+import { TatoebaPlugin } from './data/tatoeba.plugin';
 import { AppVariables } from './meta';
 import { LoremIpsum } from './ui-kit/LoremIpsum';
 
-// TODO make literals pass through
-export type Plugin<TValidatorKeys extends string = string> = {
-  validators?: {
-    [key in Persistable]?: Record<TValidatorKeys, Struct<any>>;
-  };
-  routes?: Record<InternalPaths, () => JSX.Element>;
-  service?: Record<string, (...args: any[]) => Promise<unknown>>;
-  importMethods?: Record<string, (...args: any[]) => Promise<unknown>>;
-  landingPageLinks?: ({ link: InternalPaths; label: string } | null)[];
-  /**
-   * templates: {
-   * TODO maybe have list of template slots predefined?
-   *    R
-   * };
-   */
-
-  // apis?
-  // routes?
-  // parsers?
-};
-const plugins = [
+const plugins: Plugin<any, any, any>[] = [
   //
   // ChineseMeasureWordColumnPlugin,
   // UserPlugin,
   // AnkiSyncServer,
-  // TatoebaPlugin,
+  TatoebaPlugin,
   //   OtherPlugin,
+  // DeeplPlugin,
   {
+    pluginName: 'lwt-react-info',
     landingPageLinks: [
       null,
       { link: '/lwt_react_info', label: 'LWT React Info' },
@@ -40,8 +21,12 @@ const plugins = [
     routes: { '/lwt_react_info': LWTReactInfo },
   },
   {
-    landingPageLinks: [null, { link: '/test', label: 'Demo Plugin Route' }],
-    routes: { '/test': () => LoremIpsum(100) },
+    pluginName: 'demo-lorem-ipsum',
+    landingPageLinks: [
+      null,
+      { link: '/lorem_ipsum', label: 'Demo Plugin Route' },
+    ],
+    routes: { '/lorem_ipsum': () => LoremIpsum(100) },
   },
 ] as const;
 

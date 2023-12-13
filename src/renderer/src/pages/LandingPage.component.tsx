@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import { PersistanceStrategy } from '../data/PersistedValueGetter';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
@@ -281,25 +282,35 @@ if (! isset(mb)) mb = '0.0';
           </tr>
         </tbody>
       </table>
-      {AppVariables.devMode && false && (
-        <>
-          <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
-          <button
-            onClick={() => {
-              dataService.getTatoebaSentence('eng', 'test');
-            }}
-          >
-            TEST TATOEBA
-          </button>
-          <button
-            onClick={() => {
-              dataService.getTatoebaSentence('eng', 'test');
-            }}
-          >
-            TEST TATOEBA
-          </button>
-        </>
-      )}
+      <DevModeGate>
+        {false && (
+          <>
+            <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
+            <button
+              onClick={() => {
+                dataService.getTatoebaSentence('eng', 'test');
+              }}
+            >
+              TEST TATOEBA
+            </button>
+            <button
+              onClick={() => {
+                dataService.getTatoebaSentence('eng', 'test');
+              }}
+            >
+              TEST TATOEBA
+            </button>
+          </>
+        )}
+      </DevModeGate>
     </>
   );
+}
+
+/**
+ * Only render children when in devMode otherwise render nothing
+ */
+export function DevModeGate({ children }: PropsWithChildren<object>) {
+  const { devMode } = useAppContext();
+  return <>{devMode ? { children } : <></>}</>;
 }

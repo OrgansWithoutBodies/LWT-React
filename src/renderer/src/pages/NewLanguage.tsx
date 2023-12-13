@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import Modal from 'react-modal';
+import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
 import { TextSize } from '../data/type';
 import { LanguageValidatorNoId } from '../data/validators';
@@ -9,13 +10,56 @@ import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { SelectBoolean } from './EditLanguage.component';
+import { PluginEntries, SelectBoolean } from './EditLanguage.component';
 import { resetDirty } from './Sorting';
 import NewLanguageWizard from './Wizard.component';
 import { openInNewWindow } from './openInNewWindow';
 import { languageNoIdPreValidateMap } from './preValidateMaps';
 import { check_dupl_lang } from './utils';
 
+export interface EntryRowType {
+  headerClasses?: string[];
+  entryTitle?: string;
+  headerText: string;
+  headerInfoLink?: string;
+  headerDir?: 'left' | 'right' | 'center';
+}
+
+export function EntryRow({
+  headerClasses = [],
+  entryTitle,
+  children,
+  headerText,
+  headerInfoLink,
+  headerDir = 'right',
+}: PropsWithChildren<EntryRowType>): JSX.Element {
+  return (
+    <tr title={entryTitle}>
+      <td className={`td1 ${headerDir} ${headerClasses.join(' ')}`}>
+        {headerText.split('\n').map((val) => (
+          <>
+            {val}
+            {headerInfoLink ? (
+              <Icon
+                className="click"
+                src="question-frame"
+                title="Help"
+                onClick={() => {
+                  openInNewWindow(headerInfoLink);
+                }}
+              />
+            ) : (
+              <></>
+            )}
+            :
+            <br />
+          </>
+        ))}
+      </td>
+      <td className="td1">{children}</td>
+    </tr>
+  );
+}
 /**
  *
  */
@@ -52,8 +96,6 @@ export function NewLanguage() {
         </a>
       </h4>
       <form className="validate">
-        {/* TODO */}
-        {/* onsubmit="return check_dupl_lang(0);" */}
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -91,198 +133,165 @@ export function NewLanguage() {
 
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
-            <tr>
-              <td className="td1 right backlightyellow">
-                Study Language "L2":
-              </td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="notempty setfocus checkoutsidebmp"
-                  entryKey="LgName"
-                  maxLength={40}
-                  size={40}
-                  default
-                  isRequired
-                  errorName="Study Language"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">Dictionary 1 URI:</td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkdicturl notempty checkoutsidebmp"
-                  entryKey="LgDict1URI"
-                  isRequired
-                  maxLength={200}
-                  errorName="Dictionary 1 URI"
-                  size={60}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">Dictionary 2 URI:</td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkdicturl checkoutsidebmp"
-                  entryKey="LgDict2URI"
-                  maxLength={200}
-                  errorName="Dictionary 2 URI"
-                  size={60}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">
-                GoogleTranslate URI:
-              </td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkdicturl checkoutsidebmp"
-                  entryKey="LgGoogleTranslateURI"
-                  maxLength={200}
-                  size={60}
-                  default
-                  errorName="GoogleTranslate URI"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">Text Size:</td>
-              <td className="td1">
-                <TextSizeSelect refMap={refMap} entryKey="LgTextSize" />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">Character Substitutions:</td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkoutsidebmp"
-                  entryKey="LgCharacterSubstitutions"
-                  maxLength={500}
-                  size={60}
-                  default
-                  errorName="Character Substitutions"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">
-                RegExp Split Sentences:
-              </td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="notempty checkoutsidebmp"
-                  entryKey="LgRegexpSplitSentences"
-                  default
-                  maxLength={500}
-                  size={60}
-                  isRequired
-                  errorName="RegExp Split Sentences"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">Exceptions Split Sentences:</td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkoutsidebmp"
-                  entryKey="LgExceptionsSplitSentences"
-                  default
-                  maxLength={500}
-                  size={60}
-                  isRequired
-                  errorName="Exceptions Split Sentences"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">
-                RegExp Word Characters:
-              </td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="notempty checkoutsidebmp"
-                  entryKey="LgRegexpWordCharacters"
-                  default
-                  maxLength={500}
-                  isRequired
-                  size={60}
-                  errorName="RegExp Word Characters"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">
-                Make each character a word:
-              </td>
-              <td className="td1">
-                <SelectBoolean
-                  refMap={refMap}
-                  entryKey={'LgSplitEachChar'}
-                  entry={{ LgSplitEachChar: 0 }}
-                />
-                (e.g. for Chinese, Japanese, etc.)
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">Remove spaces:</td>
-              <td className="td1">
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText={'Study Language "L2"'}
+            >
+              <LgInput
+                className="notempty setfocus checkoutsidebmp"
+                entryKey="LgName"
+                maxLength={40}
+                size={40}
+                default
+                isRequired
+                errorName="Study Language"
+              />
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText={'Dictionary 1 URI'}
+            >
+              <LgInput
+                className="checkdicturl notempty checkoutsidebmp"
+                entryKey="LgDict1URI"
+                isRequired
+                maxLength={200}
+                errorName="Dictionary 1 URI"
+                size={60}
+              />
+            </EntryRow>
+            <EntryRow headerText={'Dictionary 2 URI'}>
+              <LgInput
+                className="checkdicturl checkoutsidebmp"
+                entryKey="LgDict2URI"
+                maxLength={200}
+                errorName="Dictionary 2 URI"
+                size={60}
+              />
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText={'GoogleTranslate URI'}
+            >
+              <LgInput
+                className="checkdicturl checkoutsidebmp"
+                entryKey="LgGoogleTranslateURI"
+                maxLength={200}
+                size={60}
+                default
+                errorName="GoogleTranslate URI"
+              />
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText={'Text Size'}
+            >
+              <TextSizeSelect refMap={refMap} entryKey="LgTextSize" />
+            </EntryRow>
+            <EntryRow headerText={'Character Substitutions'}>
+              <LgInput
+                className="checkoutsidebmp"
+                entryKey="LgCharacterSubstitutions"
+                maxLength={500}
+                size={60}
+                default
+                errorName="Character Substitutions"
+              />{' '}
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText={'RegExp Split Sentences'}
+            >
+              <LgInput
+                className="notempty checkoutsidebmp"
+                entryKey="LgRegexpSplitSentences"
+                default
+                maxLength={500}
+                size={60}
+                isRequired
+                errorName="RegExp Split Sentences"
+              />{' '}
+            </EntryRow>
+            <EntryRow headerText="Exceptions Split Sentences">
+              <LgInput
+                className="checkoutsidebmp"
+                entryKey="LgExceptionsSplitSentences"
+                default
+                maxLength={500}
+                size={60}
+                isRequired
+                errorName="Exceptions Split Sentences"
+              />
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText="RegExp Word Characters"
+            >
+              <LgInput
+                className="notempty checkoutsidebmp"
+                entryKey="LgRegexpWordCharacters"
+                default
+                maxLength={500}
+                isRequired
+                size={60}
+                errorName="RegExp Word Characters"
+              />
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText="Make each character a word"
+            >
+              <SelectBoolean
+                refMap={refMap}
+                entryKey={'LgSplitEachChar'}
+                entry={{ LgSplitEachChar: 0 }}
+              />
+              (e.g. for Chinese, Japanese, etc.)
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText="Remove spaces"
+            >
+              <>
                 <SelectBoolean
                   refMap={refMap}
                   entryKey={'LgRemoveSpaces'}
                   entry={{ LgRemoveSpaces: 0 }}
                 />
                 (e.g. for Chinese, Japanese, etc.)
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right backlightyellow">
-                Right-To-Left Script:
-              </td>
-              <td className="td1">
+              </>
+            </EntryRow>
+            <EntryRow
+              headerClasses={['backlightyellow']}
+              headerText="Right-To-Left Script"
+            >
+              <>
                 <SelectBoolean
                   refMap={refMap}
                   entryKey={'LgRightToLeft'}
                   entry={{ LgRightToLeft: 0 }}
                 />
                 (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">
-                Export Template
-                <Icon
-                  className="click"
-                  src="question-frame"
-                  title="Help"
-                  onClick={() => {
-                    openInNewWindow('info_export_template');
-                  }}
-                />
-                :
-              </td>
-              <td className="td1">
-                <LgInput
-                  type="text"
-                  className="checkoutsidebmp"
-                  entryKey="LgExportTemplate"
-                  default
-                  maxLength={1000}
-                  size={60}
-                />
+              </>
+            </EntryRow>
+            <EntryRow
+              headerText={'Export Template'}
+              headerInfoLink="/info_export_template"
+            >
+              <LgInput
+                className="checkoutsidebmp"
                 errorName="Export Template"
-              </td>
-            </tr>
-            {/* {TODO rows for plugins here} */}
+                entryKey="LgExportTemplate"
+                default
+                maxLength={1000}
+                size={60}
+              />
+            </EntryRow>
+            <PluginEntries
+              persistable={Persistable.languages}
+              refMap={refMap}
+              InputComponent={LgInput}
+            />{' '}
             <tr>
               <td className="td1 right" colSpan={2}>
                 <input
@@ -299,6 +308,13 @@ export function NewLanguage() {
                   value="Save"
                   onClick={() => {
                     check_dupl_lang();
+
+                    {
+                      /* TODO */
+                    }
+                    {
+                      /* check_dupl_lang(0) */
+                    }
                     onSubmit(languageNoIdPreValidateMap, (value) => {
                       dataService.addLanguage(value);
                       navigator('/edit_languages');

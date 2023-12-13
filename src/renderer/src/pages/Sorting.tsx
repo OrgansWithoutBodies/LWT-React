@@ -51,4 +51,6 @@ export const enum TagSorting {
   'Texts With Tag (desc)' = 10,
   'Arch. Texts With Tag' = 11,
   'Arch. Texts With Tag (desc)' = 12,
+  'Term Count' = 13,
+  'Term Count (desc)' = 14,
 }

@@ -37,6 +37,7 @@ import {
   get_status_abbr,
 } from './GetTagsortSelectoptions';
 import { SortableHeader, TableFooter } from './Library.component';
+import { EntryRow } from './NewLanguage';
 import { getDirTag } from './Reader.component';
 import { WordSorting, resetDirty } from './Sorting';
 import { WordTagsSelectDropdown } from './WordTagsSelectDropdown';
@@ -822,7 +823,6 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
               <WoInput
                 {...getDirTag(termLanguage)}
                 className="notempty setfocus checkoutsidebmp"
-                type="text"
                 id="wordfield"
                 errorName="Term"
                 entryKey="WoText"
@@ -859,7 +859,6 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
             <td className="td1 right">Romaniz.:</td>
             <td className="td1">
               <WoInput
-                type="text"
                 className="checkoutsidebmp"
                 maxLength={100}
                 size={40}
@@ -971,88 +970,67 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
       <form name="newword" className="validate">
         <WoInput type="hidden" entryKey="WoLgID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Language:</td>
-            <td className="td1">{language.LgName}</td>
-          </tr>
-          <tr title="Normally only change uppercase/lowercase here!">
-            <td className="td1 right">Term:</td>
-            <td className="td1">
-              <WoInput
-                {...getDirTag(language)}
-                className="notempty setfocus checkoutsidebmp"
-                type="text"
-                id="wordfield"
-                errorName="Term"
-                entryKey="WoText"
-                maxLength={250}
-                isRequired
-                size={40}
-              />
-            </td>
-          </tr>
+          <EntryRow headerText={'Language'}>
+            <>{language.LgName}</>
+          </EntryRow>
+          <EntryRow
+            entryTitle="Normally only change uppercase/lowercase here!"
+            headerText={'Term'}
+          >
+            <WoInput
+              {...getDirTag(language)}
+              className="notempty setfocus checkoutsidebmp"
+              id="wordfield"
+              errorName="Term"
+              entryKey="WoText"
+              maxLength={250}
+              isRequired
+              size={40}
+            />
+          </EntryRow>
           <PrintSimilarTermsTabrow />
-          <tr>
-            <td className="td1 right">Translation:</td>
-            <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
-                maxLength={500}
-                errorName="Translation"
-                name="WoTranslation"
-                cols={40}
-                rows={3}
-                ref={refMap.WoTranslation}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Tags:</td>
-            <td className="td1">
-              <GetTagsList EntryID={null} tagKey={'tags'} />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Romaniz.:</td>
-            <td className="td1">
-              <WoInput
-                type="text"
-                className="checkoutsidebmp"
-                maxLength={100}
-                size={40}
-                entryKey="WoRomanization"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">
-              Sentence
-              <br />
-              Term in {'{...}'}:
-            </td>
-            <td className="td1">
-              <textarea
-                {...getDirTag(language)}
-                className="textarea-noreturn checklength checkoutsidebmp"
-                maxLength={1000}
-                errorName="Sentence"
-                name="WoSentence"
-                cols={40}
-                rows={3}
-                ref={refMap.WoSentence}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Status:</td>
+          <EntryRow headerText={'Translation'}>
+            <textarea
+              className="textarea-noreturn checklength checkoutsidebmp"
+              maxLength={500}
+              errorName="Translation"
+              name="WoTranslation"
+              cols={40}
+              rows={3}
+              ref={refMap.WoTranslation}
+            />
+          </EntryRow>
+          <EntryRow headerText={'Tags'}>
+            <GetTagsList EntryID={null} tagKey={'tags'} />
+          </EntryRow>
+          <EntryRow headerText={'Romaniz.'}>
+            <WoInput
+              className="checkoutsidebmp"
+              maxLength={100}
+              size={40}
+              entryKey="WoRomanization"
+            />
+          </EntryRow>
+          <EntryRow headerText={'Sentence\nTerm in {...}'}>
+            <textarea
+              {...getDirTag(language)}
+              className="textarea-noreturn checklength checkoutsidebmp"
+              maxLength={1000}
+              errorName="Sentence"
+              name="WoSentence"
+              cols={40}
+              rows={3}
+              rezf={refMap.WoSentence}
+            />
+          </EntryRow>
+          <EntryRow headerText="Status">
             <StatusRadioButtons refMap={refMap} />
-          </tr>
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               &nbsp;
-              {/* TODO */}
               <CreateDictLinksInEditWin2
-                lang={lang}
+                lang={language}
                 // 'document.forms[\'editword\'].WoSentence'
                 sentctljs={undefined}
                 // 'document.forms[\'editword\'].WoText'

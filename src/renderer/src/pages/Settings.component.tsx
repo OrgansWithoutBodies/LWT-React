@@ -1,4 +1,5 @@
 import * as ss from 'superstruct';
+import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
 import { SettingsObjValidator } from '../data/validators';
@@ -7,7 +8,7 @@ import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
-import { SelectBoolean } from './EditLanguage.component';
+import { PluginEntries, SelectBoolean } from './EditLanguage.component';
 import { resetDirty } from './Sorting';
 import { settingsPrevalidateMap } from './preValidateMaps';
 // TODO abstract this out into a nested settings component
@@ -216,7 +217,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right setfocus"
-                  type="text"
                   entryKey="set-text-h-frameheight-no-audio"
                   errorName="Height of left top frame without audioplayer"
                   maxLength={3}
@@ -240,7 +240,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-text-h-frameheight-with-audio"
                   errorName="Height of left top frame with audioplayer"
                   default
@@ -260,7 +259,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-text-l-framewidth-percent"
                   errorName="Width of left frames"
                   default
@@ -280,7 +278,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-text-r-frameheight-percent"
                   errorName="Height of right top frame"
                   default
@@ -305,7 +302,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-test-h-frameheight"
                   errorName="Height of left top frame"
                   default
@@ -325,7 +321,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-test-l-framewidth-percent"
                   errorName="Width of left frames"
                   default
@@ -345,7 +340,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-test-r-frameheight-percent"
                   errorName="Height of right top frame"
                   default
@@ -370,7 +364,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty zeroposintnumber right"
-                  type="text"
                   entryKey="set-test-main-frame-waiting-time"
                   errorName="Waiting time after assessment to display next test"
                   value="0"
@@ -393,7 +386,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty zeroposintnumber right"
-                  type="text"
                   entryKey="set-test-edit-frame-waiting-time"
                   errorName="Waiting Time to clear the message/edit frame"
                   default
@@ -546,7 +538,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty zeroposintnumber right"
-                  type="text"
                   entryKey="set-similar-terms-count"
                   errorName="Similar terms to be displayed while adding/editing a term"
                   default
@@ -575,7 +566,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty center"
-                  type="text"
                   entryKey="set-term-translation-delimiters"
                   default
                   maxLength={8}
@@ -597,7 +587,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-texts-per-page"
                   errorName="Texts per Page"
                   default
@@ -632,7 +621,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-archivedtexts-per-page"
                   errorName="Archived Texts per Page"
                   default
@@ -650,7 +638,6 @@ export function SettingsComponent(): JSX.Element {
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-terms-per-page"
                   errorName="Terms per Page"
                   default
@@ -662,13 +649,11 @@ export function SettingsComponent(): JSX.Element {
                 <RequiredLineButton />
               </td>
             </tr>
-
             <tr>
               <td className="td1 center">Tags per Page</td>
               <td className="td1 center">
                 <StInput
                   className="notempty posintnumber right"
-                  type="text"
                   entryKey="set-tags-per-page"
                   errorName="Tags per Page"
                   default
@@ -680,7 +665,11 @@ export function SettingsComponent(): JSX.Element {
                 <RequiredLineButton />
               </td>
             </tr>
-
+            <PluginEntries
+              persistable={Persistable.settings}
+              refMap={refMap}
+              InputComponent={StInput}
+            />
             <tr>
               <td className="td1 right" colSpan={4}>
                 <input

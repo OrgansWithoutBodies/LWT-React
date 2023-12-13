@@ -26,7 +26,10 @@ export class TatoebaOpenAPIWrapper
           [key in keyof TatoebaPaths[TKey]['parameters']['query']]: TatoebaPaths[TKey]['parameters']['query'][key];
         }
       : never
-  ) => Promise<AxiosResponse> = (path, queryParams) => {
+  ) => Promise<AxiosResponse<TatoebaPaths[TKey]['get']['responses'][200]>> = (
+    path,
+    queryParams
+  ) => {
     const getURL = `${this.wrapperAPIUrl}${path}?${Object.keys(queryParams)
       .map((queryKey) => `${queryKey}=${queryParams[queryKey]}`)
       .join('&')}`;

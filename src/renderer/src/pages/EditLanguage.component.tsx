@@ -1,13 +1,18 @@
+import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
 import { useData } from '../data/useAkita';
-import { LanguagesId, LanguagesValidator } from '../data/validators';
+import {
+  LanguagesId,
+  LanguagesValidator,
+  getEntryLinePluginsFor,
+} from '../data/validators';
 import { TRefMap } from '../forms/Forms';
-import { useFormInput } from '../hooks/useFormInput';
+import { FormInputComponent, useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { TextSizeSelect } from './NewLanguage';
+import { EntryRow, TextSizeSelect } from './NewLanguage';
 import { resetDirty } from './Sorting';
 import { openInNewWindow } from './openInNewWindow';
 import { languagePreValidateMap } from './preValidateMaps';
@@ -22,6 +27,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   if (!changingLang) {
     throw new Error('Invalid Change ID!');
   }
+  console.log('TEST123-');
   const validator = LanguagesValidator;
   const navigator = useInternalNavigate();
   const {
@@ -32,6 +38,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
     entry: changingLang,
     validator,
   });
+
   return (
     <>
       <Header title="TODO" />
@@ -48,7 +55,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Study Language "L2":</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="notempty setfocus checkoutsidebmp"
                 errorName="Study Language"
                 entryKey="LgName"
@@ -63,7 +69,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Dictionary 1 URI:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="notempty checkdicturl checkoutsidebmp"
                 entryKey="LgDict1URI"
                 default
@@ -78,7 +83,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Dictionary 2 URI:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="checkdicturl checkoutsidebmp"
                 entryKey="LgDict2URI"
                 default
@@ -93,7 +97,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1">
               <LgInput
                 default
-                type="text"
                 className="checkdicturl checkoutsidebmp"
                 entryKey="LgGoogleTranslateURI"
                 maxLength={200}
@@ -112,7 +115,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Character Substitutions:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="checkoutsidebmp"
                 errorName="Character Substitutions"
                 entryKey="LgCharacterSubstitutions"
@@ -126,7 +128,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">RegExp Split Sentences:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="notempty checkoutsidebmp"
                 entryKey="LgRegexpSplitSentences"
                 default
@@ -141,7 +142,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">Exceptions Split Sentences:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="checkoutsidebmp"
                 errorName="Exceptions Split Sentences"
                 entryKey="LgExceptionsSplitSentences"
@@ -155,7 +155,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             <td className="td1 right">RegExp Word Characters:</td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="notempty checkoutsidebmp"
                 errorName="RegExp Word Characters"
                 entryKey="LgRegexpWordCharacters"
@@ -214,7 +213,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
             </td>
             <td className="td1">
               <LgInput
-                type="text"
                 className="checkoutsidebmp"
                 errorName="Export Template"
                 entryKey="LgExportTemplate"
@@ -224,6 +222,11 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
               />
             </td>
           </tr>
+          <PluginEntries
+            persistable={Persistable.languages}
+            refMap={refMap}
+            InputComponent={LgInput}
+          />
           <tr>
             <td className="td1 right" colSpan={2}>
               <input
@@ -238,11 +241,10 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 type="button"
                 value="Change"
                 onClick={() => {
-                  // TODO
                   check_dupl_lang();
                   onSubmit(languagePreValidateMap, (value) => {
-                    dataService.editLanguage(chgID, value);
-                    navigator('/edit_words');
+                    dataService.editLanguage(value);
+                    navigator('/edit_languages');
                   });
                 }}
               />
@@ -287,5 +289,41 @@ export function SelectBoolean<
         Yes
       </option>
     </select>
+  );
+}
+export function PluginEntries({
+  persistable,
+  refMap,
+  InputComponent,
+}: {
+  persistable: Persistable;
+  refMap: TRefMap<any>;
+  InputComponent: FormInputComponent;
+}) {
+  const PluginLines = getEntryLinePluginsFor(persistable);
+
+  return (
+    <>
+      {' '}
+      {Object.keys(PluginLines).map((lineKey) => {
+        console.log('TEST123-plugin', lineKey);
+        const { child: PluginLine, ...entryRowArgs } = PluginLines[lineKey];
+        return (
+          <EntryRow {...entryRowArgs}>
+            <PluginLine
+              refMap={refMap}
+              Component={(args) => (
+                <InputComponent
+                  {...args}
+                  entryKey={lineKey}
+                  size={60}
+                  default
+                />
+              )}
+            />
+          </EntryRow>
+        );
+      })}
+    </>
   );
 }

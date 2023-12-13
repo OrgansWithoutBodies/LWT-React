@@ -1,12 +1,12 @@
 import { dataService } from '../data/data.service';
-import { AddNewWordValidator, Word } from '../data/parseMySqlDump';
+import { APITranslateTerm } from '../data/deepl.plugin';
+import { AddNewWordValidator, Language, Word } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { LanguagesId, WordsId, WordsValidator } from '../data/validators';
 import { TRefMap } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { Icon } from '../ui-kit/Icon';
-import { FormInput } from './FormInput';
 import { GetTagsList } from './Terms.component';
 import { wordNoIdPrevalidateMap } from './preValidateMaps';
 import { owin, translateSentence2 } from './translateSentence2';
@@ -20,6 +20,7 @@ export function AddNewWordPane({
   onClearActiveWord,
   existingTerm = undefined,
   setIFrameURL,
+  setTranslateAPIParams,
 }: {
   word: string;
   // TODO
@@ -28,6 +29,9 @@ export function AddNewWordPane({
   langId: LanguagesId;
   onClearActiveWord: () => void;
   setIFrameURL: (url: string | null) => void;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
 }): JSX.Element {
   const validator = AddNewWordValidator;
   const [{ languages }] = useData(['languages']);
@@ -76,7 +80,6 @@ export function AddNewWordPane({
                 <WoInput
                   className="notempty checkoutsidebmp"
                   errorName="New Term"
-                  type="text"
                   entryKey="WoText"
                   id="wordfield"
                   // value={word}
@@ -127,7 +130,6 @@ export function AddNewWordPane({
                       className="ui-helper-hidden-accessible"
                     />
                     <WoInput
-                      type="text"
                       maxLength={20}
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
@@ -141,12 +143,10 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Romaniz.:</td>
               <td className="td1">
-                <FormInput
-                  type="text"
+                <WoInput
                   className="checkoutsidebmp"
                   errorName="Romanization"
                   entryKey="WoRomanization"
-                  refMap={refMap}
                   maxLength={100}
                   size={35}
                 />
@@ -188,6 +188,8 @@ export function AddNewWordPane({
                   templateStr={lang.LgDict1URI}
                   word={word}
                   setIFrameURL={setIFrameURL}
+                  setTranslateAPIParams={setTranslateAPIParams}
+                  language={lang}
                 >
                   Dict1
                 </MultiFunctionalURL>{' '}
@@ -341,7 +343,6 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                 <WoInput
                   className="notempty checkoutsidebmp"
                   errorName="New Term"
-                  type="text"
                   entryKey="WoText"
                   id="wordfield"
                   // value={word}
@@ -389,7 +390,6 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                       className="ui-helper-hidden-accessible"
                     />
                     <WoInput
-                      type="text"
                       maxLength={20}
                       size={20}
                       className="ui-widget-content ui-autocomplete-input"
@@ -403,23 +403,15 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
             <tr>
               <td className="td1 right">Romaniz.:</td>
               <td className="td1">
-                <FormInput
-                  type="text"
+                <WoInput
                   className="checkoutsidebmp"
                   errorName="Romanization"
                   entryKey="WoRomanization"
-                  refMap={refMap}
                   maxLength={100}
                   size={35}
                 />
               </td>
             </tr>
-            {formErrors.WoRomanization && (
-              <tr title="Only change uppercase/lowercase!">
-                <td style={{ color: 'red' }}>ERROR</td>
-                <td />
-              </tr>
-            )}
             <tr>
               <td className="td1 right">
                 Sentence
@@ -544,11 +536,37 @@ export function MultiFunctionalURL({
   word,
   setIFrameURL,
   children,
+  setTranslateAPIParams,
+  language,
 }: React.PropsWithChildren<{
   templateStr: string;
+  language: Language;
   word: string;
   setIFrameURL: (url: string | null) => void;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
 }>) {
+  const apiStrPos = templateStr.indexOf('api://');
+  if (apiStrPos === 0) {
+    console.log('TEST123-API', word);
+    return (
+      <span
+        className="a"
+        onClick={() =>
+          setTranslateAPIParams({
+            // TODO get 'LgTatoebaKey' from
+            sourceKey: language.LgTatoebaKey,
+            targetKey: 'eng',
+            word,
+            apiKey: templateStr.slice(6),
+          })
+        }
+      >
+        {children}
+      </span>
+    );
+  }
   const startsWithStar = templateStr.startsWith('*');
   if (!startsWithStar) {
     return (

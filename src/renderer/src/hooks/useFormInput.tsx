@@ -5,6 +5,17 @@ import { FormInput, FormLineError } from '../pages/FormInput';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
+export type FormInputComponentParams = Omit<
+  Parameters<typeof FormInput>[0],
+  'refMap' | 'defaultEntry' | 'fixedEntry' | 'type'
+> & {
+  type?: string;
+  fixed?: boolean;
+  default?: boolean;
+};
+export type FormInputComponent = (
+  args: FormInputComponentParams
+) => JSX.Element;
 /**
  *
  * @param refMap
@@ -34,18 +45,11 @@ export function useFormInput<
 
   const ReturnedComponent = useMemo(
     () =>
-      function (
-        args: Omit<
-          Parameters<typeof FormInput>[0],
-          'refMap' | 'defaultEntry' | 'fixedEntry'
-        > & {
-          fixed?: boolean;
-          default?: boolean;
-        }
-      ) {
+      function (args: FormInputComponentParams) {
         return (
           <FormInput
             {...args}
+            type={args.type === undefined ? 'text' : args.type}
             refMap={refMap}
             formErrors={formErrors}
             fixedEntry={

@@ -1,10 +1,13 @@
 import * as ss from 'superstruct';
 import { Persistable } from '../../../shared/Persistable';
+import { EntryRowType } from '../pages/NewLanguage';
+import { EntryRowComponent } from '../Plugin';
 import { PLUGINS } from '../plugins';
 import { brandedNumber, brandedString, BrandedString } from './branding';
 
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
+type APIURLTemplate = `api://${string}`;
 
 // todo why cant use straight string for persistable here
 const getValidatorPluginsFor = <
@@ -12,16 +15,41 @@ const getValidatorPluginsFor = <
   TTableKeys extends string = string
 >(
   key: TKey
-): { [k in TTableKeys]: ss.Struct<any, unknown> } =>
-  Object.fromEntries(
+): { [k in TTableKeys]: ss.Struct<any, unknown> } => {
+  const val = Object.fromEntries(
     PLUGINS.filter(
       ({ validators }) => validators && validators[key] !== undefined
-    ).map(({ validators }) => {
-      const safeKeyValidator = validators[key]!;
+    )
+      .map(({ validators }) => {
+        const safeKeyValidator = validators[key]!;
 
-      return Object.entries(safeKeyValidator);
-    })
+        return Object.entries(safeKeyValidator);
+      })
+      .flat()
   );
+  console.log('TEST123-validator', val);
+  return val;
+};
+export const getEntryLinePluginsFor = <
+  TKey extends Persistable,
+  TTableKeys extends string = string
+>(
+  key: TKey
+): { [k in TTableKeys]: EntryRowType & { child: EntryRowComponent } } =>
+  Object.fromEntries(
+    PLUGINS.filter(
+      ({ entryLines }) => entryLines && entryLines[key] !== undefined
+    )
+      .map(({ entryLines }) => {
+        const safeKeyEntryLines = entryLines![key]!;
+        console.log('TEST123-entry', Object.entries(safeKeyEntryLines));
+        return Object.entries(safeKeyEntryLines);
+      })
+      .flat()
+  );
+const isValidAPIURL = (
+  validationString: string
+): validationString is APIURLTemplate => validationString.startsWith('api://');
 const isValidURL = (validationString: string): validationString is URL =>
   validationString.startsWith('http://') ||
   validationString.startsWith('https://');
@@ -33,9 +61,14 @@ const isValidURLTemplate = (
 
 const URLValidator = () =>
   ss.string() && ss.define<BrandedString<'URL'>>('url', isValidURL);
+// TODO
+const APIURLValidator = () =>
+  ss.string() && ss.define<APIURLTemplate>('api-url', isValidAPIURL);
 const URLTemplateValidator = (): ss.Struct<any, any> =>
   ss.string() && ss.define('urlTemplate', isValidURLTemplate);
-
+const DictURLValidator: ss.Struct<
+  APIURLTemplate | URLTemplate | BrandedString<'URL'>
+> = ss.union([URLTemplateValidator(), APIURLValidator(), URLValidator()]);
 export const NumberInListValidator = <TNum extends Readonly<number[]>>(
   numbers: TNum
 ) =>
@@ -156,21 +189,21 @@ export const LanguagesValidator = ss.object({
   // TODO no duplicates
   LgName: ss.size(ss.string(), 1, 40),
   // LgDict1URI: varchar(200) NOT NULL,
-  LgDict1URI: ss.nonempty(URLTemplateValidator()),
+  LgDict1URI: ss.nonempty(DictURLValidator),
   // LgDict2URI: varchar(200) DEFAULT NULL,
-  LgDict2URI: ss.optional(URLTemplateValidator()),
+  LgDict2URI: ss.optional(DictURLValidator),
   // LgGoogleTranslateURI: varchar(200) DEFAULT NULL,
-  LgGoogleTranslateURI: ss.optional(URLTemplateValidator()),
+  LgGoogleTranslateURI: ss.optional(DictURLValidator),
   // LgExportTemplate: varchar(1000) DEFAULT NULL,
   LgExportTemplate: ss.optional(ss.string()),
   // LgTextSize: int(5) unsigned NOT NULL DEFAULT '100',
   LgTextSize: NumberInListValidator(textSizes),
   // LgCharacterSubstitutions: varchar(500) NOT NULL,
-  LgCharacterSubstitutions: ss.nonempty(ss.string()),
+  LgCharacterSubstitutions: ss.string(),
   // LgRegexpSplitSentences: varchar(500) NOT NULL,
   LgRegexpSplitSentences: ss.nonempty(ss.string()),
   // LgExceptionsSplitSentences: varchar(500) NOT NULL,
-  LgExceptionsSplitSentences: ss.nonempty(ss.string()),
+  LgExceptionsSplitSentences: ss.string(),
   // LgRegexpWordCharacters: varchar(500) NOT NULL,
   LgRegexpWordCharacters: ss.nonempty(ss.string()),
   // LgRemoveSpaces: int(1) unsigned NOT NULL DEFAULT '0',

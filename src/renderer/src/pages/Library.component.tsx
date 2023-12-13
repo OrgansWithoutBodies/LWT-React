@@ -18,7 +18,6 @@ import { OnCheckText, TextChecker } from './CheckText';
 import {
   FilterSortPager,
   buildTextTagLookup,
-  resetAll,
 } from './EditArchivedTexts.component';
 import { pluralize } from './EditTags';
 import { GetTextsSortSelectoptions } from './GetTagsortSelectoptions';
@@ -414,7 +413,9 @@ function LibraryRow({
           </a>
         )}
         {text.TxAnnotatedText && (
-          <Icon src="tick" title="Annotated Text available" />
+          <A href={`/print_impr_text?text=${text.TxID}`}>
+            <Icon src="tick" title="Annotated Text available" />
+          </A>
         )}
       </td>
       <td className="td1 center">{text.totalWords}</td>
@@ -452,7 +453,8 @@ export function Library({
   ]);
   console.log({ textDetails, texttags, tags2 });
   const pageSize = settings['set-texts-per-page'] || 1;
-
+  // TODO
+  // const tags2ForLanguage=tags2.filter((val)=>val.)
   const filteredTags = filterTags(texttags, tag1, tag2, tag12);
   const filteredTextDetails = (textDetails || []).filter((textDetail) => {
     // TODO query
@@ -504,7 +506,7 @@ export function Library({
                 type="button"
                 value="Reset All"
                 onClick={() => {
-                  resetAll('edit_texts');
+                  // resetAll('edit_texts');
                   paramUpdater(null);
                 }}
               />
@@ -686,7 +688,6 @@ export function EditTextPane({
             <td className="td1 right">Title:</td>
             <td className="td1">
               <TxInput
-                type="text"
                 className="notempty checkoutsidebmp"
                 errorName="Title"
                 entryKey="TxTitle"
@@ -747,7 +748,6 @@ export function EditTextPane({
             <td className="td1 right">Source URI:</td>
             <td className="td1">
               <TxInput
-                type="text"
                 className="checkurl checkoutsidebmp"
                 errorName="Source URI"
                 entryKey="TxSourceURI"
@@ -767,7 +767,6 @@ export function EditTextPane({
             <td className="td1 right">Audio-URI:</td>
             <td className="td1">
               <TxInput
-                type="text"
                 className="checkoutsidebmp"
                 errorName="Audio-URI"
                 entryKey="TxAudioURI"

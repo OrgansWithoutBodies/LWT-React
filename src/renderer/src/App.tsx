@@ -11,6 +11,7 @@ import { LandingPage } from './pages/LandingPage.component';
 
 import {
   AddNewWordWrapper,
+  AnnotatedTextsWrapper,
   EditArchivedTextsWrapper,
   EditTagsWrapper,
   EditTextTagsWrapper,
@@ -35,7 +36,7 @@ import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { useCountdown } from './pages/useTimer';
 import { PLUGINS } from './plugins';
-import { createColors } from './styles';
+import { VariantMap, createColors } from './styles';
 import { Header } from './ui-kit/Header';
 
 declare global {
@@ -83,7 +84,10 @@ function GlobalStyle(): JSX.Element {
   const StyleHeader = createGlobalStyle(style);
   return <StyleHeader />;
 }
-
+export function useThemeColors() {
+  const { styleVariant } = useAppContext();
+  return VariantMap[styleVariant];
+}
 /**
  *
  */
@@ -118,8 +122,7 @@ function App(): JSX.Element {
     '/do_text': () => <ReaderWrapper />,
     '/do_test': () => <TestWrapper />,
     '/print_text': () => <PrintTextWrapper />,
-    // TODO
-    '/print_impr_text': () => <PrintTextWrapper />,
+    '/print_impr_text': () => <AnnotatedTextsWrapper />,
     '/upload_words': () => <UploadWordsWrapper />,
     '/install_demo': () => <InstallDemo />,
     '/info_export_template': () => <InfoExportTemplate />,

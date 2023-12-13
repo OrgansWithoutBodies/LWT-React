@@ -74,7 +74,7 @@ export function EditArchivedTexts({
     currentPage,
     pageSize
   );
-  const recno = archivedtexts.length;
+  const recno = filteredTexts.length;
   const navigate = useInternalNavigate();
   const paramUpdater = useUpdateParams();
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =

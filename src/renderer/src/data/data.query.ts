@@ -10,7 +10,7 @@ import {
   tap,
 } from 'rxjs';
 import { DataState, DataStore, dataStore } from './data.storage';
-import type { Text } from './parseMySqlDump';
+import type { ArchivedText, Tag, Tag2, Text } from './parseMySqlDump';
 import type { Settings } from './settings';
 import type { LanguagesId } from './validators';
 
@@ -280,7 +280,15 @@ export class DataQuery extends Query<DataState> {
 }
 export const dataQuery = new DataQuery(dataStore);
 
-// TODO expand on this pattern
+/** ================== */
+
+export type WordTagDetailRow = Tag & { termCount: number };
+
+export type TextTagDetailRow = Tag2 & {
+  textCount: number;
+  archTextCount: number;
+};
+
 export type TextDetailRow = Pick<
   Text,
   | 'TxTitle'
@@ -289,6 +297,21 @@ export type TextDetailRow = Pick<
   | 'TxID'
   | 'TxLgID'
   | 'TxAnnotatedText'
+> & {
+  totalWords: number;
+  saved: string;
+  unk: number;
+  unkPerc: number;
+};
+
+export type ArchivedTextDetailRow = Pick<
+  ArchivedText,
+  | 'AtTitle'
+  | 'AtSourceURI'
+  | 'AtAudioURI'
+  | 'AtID'
+  | 'AtLgID'
+  | 'AtAnnotatedText'
 > & {
   totalWords: number;
   saved: string;

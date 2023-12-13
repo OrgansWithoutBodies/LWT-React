@@ -1,9 +1,11 @@
 import { useRef } from 'react';
+import { WordTagDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
 import { Tag } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { TagsId, TagsValidator } from '../data/validators';
-import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { RefMap } from '../forms/Forms';
+import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate, useUpdateParams } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
 import { useSelection } from '../hooks/useSelection';
@@ -11,7 +13,6 @@ import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { FilterSortPager } from './EditArchivedTexts.component';
-import { FormInput } from './FormInput';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -41,13 +42,15 @@ export function DisplayTags({
     'settings',
   ]);
   const navigate = useInternalNavigate();
-  const sortedTags = [...tags].sort(sortValues(sorting));
   console.log('TEST123-sorting', sorting, tags);
   const recno = tags.length;
   const countPerTag: Record<TagsId, number> = wordtags.reduce(
     (prev, curr) => ({ ...prev, [curr.WtTgID]: prev[curr.WtTgID] + 1 }),
     Object.fromEntries(tags.map((val) => [val.TgID, 0]))
   );
+  const sortedTags = tags
+    .map((tag) => ({ ...tag, termCount: countPerTag[tag.TgID] }))
+    .sort(sortValues(sorting));
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
   const paramUpdater = useUpdateParams();
@@ -171,7 +174,7 @@ export function DisplayTags({
                     if (value === 'del') {
                       if (
                         window.confirm(
-                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+                          `${selectedValues.size} Record(s) will be affected ***\n\nARE YOU SURE?`
                         )
                       ) {
                         dataService.deleteMultipleTermTags([...selectedValues]);
@@ -205,8 +208,8 @@ export function DisplayTags({
               </SortableHeader>
               <SortableHeader
                 sorting={sorting}
-                downSorting={TagSorting['Total Words']}
-                upSorting={TagSorting['Total Words (desc)']}
+                downSorting={TagSorting['Term Count']}
+                upSorting={TagSorting['Term Count (desc)']}
               >
                 Terms With Tag{' '}
               </SortableHeader>
@@ -247,10 +250,8 @@ export function DisplayTags({
                 <td className="td1 center">{tag.TgText}</td>
                 <td className="td1 center">{tag.TgComment}</td>
                 <td className="td1 center">
-                  {countPerTag[tag.TgID] > 0 ? (
-                    <A href={`/edit_words?tag1=${tag.TgID}`}>
-                      {countPerTag[tag.TgID]}
-                    </A>
+                  {tag.termCount > 0 ? (
+                    <A href={`/edit_words?tag1=${tag.TgID}`}>{tag.termCount}</A>
                   ) : (
                     '0'
                   )}
@@ -284,14 +285,29 @@ export function DisplayTags({
 function sortValues(value: TagSorting) {
   switch (value) {
     case TagSorting['Newest first']:
-      return (a: Tag, b: Tag) => (a.TgID > b.TgID ? 1 : -1);
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.TgID > b.TgID ? 1 : -1;
     case TagSorting['Oldest first']:
-      return (a: Tag, b: Tag) => (a.TgID < b.TgID ? 1 : -1);
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.TgID < b.TgID ? 1 : -1;
     case TagSorting['Tag Text A-Z']:
-      return (a: Tag, b: Tag) => (a.TgText < b.TgText ? 1 : -1);
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.TgText < b.TgText ? 1 : -1;
     case TagSorting['Tag Comment A-Z']:
-      return (a: Tag, b: Tag) =>
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
         (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
+    case TagSorting['Tag Text Z-A']:
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.TgText < b.TgText ? -1 : 1;
+    case TagSorting['Tag Comment Z-A']:
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        (a.TgComment || '') < (b.TgComment || '') ? -1 : 1;
+    case TagSorting['Term Count (desc)']:
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.termCount < b.termCount ? 1 : -1;
+    case TagSorting['Term Count']:
+      return (a: WordTagDetailRow, b: WordTagDetailRow) =>
+        a.termCount < b.termCount ? -1 : 1;
     default:
       return () => 1;
   }
@@ -314,6 +330,7 @@ export function NewTag() {
 
   const navigator = useInternalNavigate();
 
+  const { Input: TgInput, onSubmit } = useFormInput({ validator });
   return (
     <>
       <Header title="My Term Tags" />
@@ -323,11 +340,9 @@ export function NewTag() {
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <FormInput
+              <TgInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                type="text"
                 entryKey="TgText"
-                refMap={refMap}
                 maxLength={20}
                 size={20}
                 isRequired
@@ -362,10 +377,8 @@ export function NewTag() {
                 name="op"
                 value="Save"
                 onClick={() => {
-                  CheckAndSubmit(
-                    refMap,
+                  onSubmit(
                     tagPreValidateMap,
-                    validator,
                     (value) => {
                       dataService.addTag(value);
                       navigator('/edit_tags');
@@ -394,28 +407,23 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
   const validator = TagsValidator;
   const refMap = RefMap<Tag>(validator);
 
+  const { onSubmit, Input: TgInput } = useFormInput({
+    validator,
+    entry: changingTag,
+  });
   const navigator = useInternalNavigate();
-  Comment;
   return (
     <>
       <Header title="My Term Tags" />
       <h4>Edit Tag</h4>
-      <form
-        name="newtag"
-        className="validate"
-        //
-        method="post"
-      >
+      <form name="newtag" className="validate">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <FormInput
+              <TgInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                type="text"
                 entryKey="TgText"
-                defaultEntry={changingTag}
-                refMap={refMap}
                 maxLength={20}
                 size={20}
                 isRequired
@@ -451,10 +459,8 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
                 name="op"
                 value="Save"
                 onClick={() => {
-                  CheckAndSubmit(
-                    refMap,
+                  onSubmit(
                     tagPreValidateMap,
-                    validator,
                     (value) => {
                       dataService.editTag(changingTag.TgID, value);
                       navigator('/edit_tags');

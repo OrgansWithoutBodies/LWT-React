@@ -1,8 +1,8 @@
+import { TextTagDetailRow } from '../data/data.query';
 import { dataService } from '../data/data.service';
-import { Tag2 } from '../data/parseMySqlDump';
 import { useData } from '../data/useAkita';
 import { Tags2Id, Tags2Validator } from '../data/validators';
-import { CheckAndSubmit, RefMap } from '../forms/Forms';
+import { CheckAndSubmit } from '../forms/Forms';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { usePager } from '../hooks/usePager';
@@ -11,7 +11,6 @@ import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { FilterSortPager } from './EditArchivedTexts.component';
-import { FormInput } from './FormInput';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -20,7 +19,6 @@ import {
 import { SortableHeader, TableFooter } from './Library.component';
 import { TagSorting, resetDirty } from './Sorting';
 import { confirmDelete } from './utils';
-
 /**
  *
  */
@@ -43,11 +41,6 @@ export function DisplayTextTags({
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(tags2, 'T2ID');
   const pageSize = settings['set-tags-per-page'] || 1;
-  const sortedTags = [...tags2].sort(sortValues(sorting));
-
-  const recno = tags2.length;
-  const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
-  const navigator = useInternalNavigate();
   const countTextsPerTag: Record<Tags2Id, number> = texttags.reduce(
     (prev, curr) => ({ ...prev, [curr.TtT2ID]: prev[curr.TtT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
@@ -56,6 +49,16 @@ export function DisplayTextTags({
     (prev, curr) => ({ ...prev, [curr.AgT2ID]: prev[curr.AgT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
   );
+
+  const sortedTags = tags2
+    .map((tag) => ({
+      ...tag,
+      textCount: countTextsPerTag[tag.T2ID],
+      archTextCount: countArchivedTextsPerTag[tag.T2ID],
+    }))
+    .sort(sortValues(sorting));
+  const recno = tags2.length;
+  const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
   return (
     <>
       <Header title="Edit Text Tags" />
@@ -221,9 +224,9 @@ export function DisplayTextTags({
               </SortableHeader>
             </tr>
 
-            {tags2.map((tag) => {
-              const numTextTags = countTextsPerTag[tag.T2ID];
-              const numArchivedTextTags = countArchivedTextsPerTag[tag.T2ID];
+            {sortedTags.map((tag) => {
+              const { textCount } = tag;
+              const { archTextCount } = tag;
               return (
                 <tr>
                   {/* TODO think already taken care of?*/}
@@ -261,16 +264,16 @@ export function DisplayTextTags({
                   <td className="td1 center">{tag.T2Text}</td>
                   <td className="td1 center">{tag.T2Comment}</td>
                   <td className="td1 center">
-                    {numTextTags > 0 ? (
-                      <A href={`/edit_texts?tag1=${tag.T2ID}`}>{numTextTags}</A>
+                    {textCount > 0 ? (
+                      <A href={`/edit_texts?tag1=${tag.T2ID}`}>{textCount}</A>
                     ) : (
                       '0'
                     )}
                   </td>
                   <td className="td1 center">
-                    {numArchivedTextTags > 0 ? (
+                    {archTextCount > 0 ? (
                       <A href={`/edit_archivedtexts?tag1=${tag.T2ID}`}>
-                        {numArchivedTextTags}
+                        {archTextCount}
                       </A>
                     ) : (
                       '0'
@@ -303,8 +306,8 @@ export function DisplayTextTags({
  */
 export function NewTextTag() {
   const validator = Tags2Validator;
-  const refMap = RefMap<Tag2>(validator);
   const navigator = useInternalNavigate();
+  const { Input: TtInput, refMap } = useFormInput({ validator });
   return (
     <>
       <Header title="My Text Tags" />
@@ -314,11 +317,9 @@ export function NewTextTag() {
           <tr>
             <td className="td1 right">Tag:</td>
             <td className="td1">
-              <FormInput
+              <TtInput
                 className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                type="text"
                 entryKey="T2Text"
-                refMap={refMap}
                 errorName="Tag"
                 maxLength={20}
                 size={20}
@@ -469,13 +470,36 @@ export function EditTextTag({ chgID }: { chgID: number }) {
 function sortValues(value: TagSorting) {
   switch (value) {
     case TagSorting['Newest first']:
-      return (a: Tag2, b: Tag2) => (a.T2ID > b.T2ID ? 1 : -1);
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.T2ID > b.T2ID ? 1 : -1;
     case TagSorting['Oldest first']:
-      return (a: Tag2, b: Tag2) => (a.T2ID < b.T2ID ? 1 : -1);
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.T2ID < b.T2ID ? 1 : -1;
     case TagSorting['Tag Text A-Z']:
-      return (a: Tag2, b: Tag2) => (a.T2Text < b.T2Text ? 1 : -1);
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.T2Text < b.T2Text ? 1 : -1;
+    case TagSorting['Tag Text Z-A']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.T2Text < b.T2Text ? -1 : 1;
     case TagSorting['Tag Comment A-Z']:
-      return (a: Tag2, b: Tag2) =>
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
         (a.T2Comment || '') < (b.T2Comment || '') ? 1 : -1;
+    case TagSorting['Tag Comment Z-A']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        (a.T2Comment || '') < (b.T2Comment || '') ? -1 : 1;
+
+    case TagSorting['Texts With Tag']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.textCount > b.textCount ? 1 : -1;
+    case TagSorting['Texts With Tag (desc)']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.textCount > b.textCount ? -1 : 1;
+
+    case TagSorting['Arch. Texts With Tag']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.archTextCount > b.archTextCount ? 1 : -1;
+    case TagSorting['Arch. Texts With Tag (desc)']:
+      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
+        a.archTextCount > b.archTextCount ? -1 : 1;
   }
 }

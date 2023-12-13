@@ -56,7 +56,7 @@ CODE TODOs
 
 FEATURE IDEAS
 
-- User account plugin
+- User account plugin - WP plugin login
 - User default L1/i18n
 - Direct integration w anki sync server
 - - https://www.npmjs.com/package/@autoanki/sync

@@ -166,6 +166,16 @@ export function LWTReactInfo() {
               </li>
 
               <li>
+                Since Glosbe API has now been deprecated, LWT-React has
+                abstracted that interface to allow for any api-based translation
+                engine. Tatoeba is free and doesn't require an account, so
+                that's the default demo example. In order to activate an API,
+                set a dict value to the template string "api://API_PLUGIN_NAME"
+                where API_PLUGIN_NAME is the name of an installed plugin. You
+                will likely have to input a key in the language settings.
+              </li>
+
+              <li>
                 A piece of software will be never completely free of "bugs" -
                 please inform me of any problem you will encounter. Your
                 feedback and ideas are always welcome.
