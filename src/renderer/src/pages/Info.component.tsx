@@ -117,7 +117,7 @@ $('#floatdiv').addFloating( {
           <select
             id="topicjump"
             onChange={({ target: { value } }) => {
-              if (value != '-1') {
+              if (value !== '-1') {
                 navigator('#' + value, true);
               }
             }}

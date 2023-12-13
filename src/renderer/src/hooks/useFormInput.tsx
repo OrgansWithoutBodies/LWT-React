@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import * as ss from 'superstruct';
 import { CheckAndSubmit, RefMap } from '../forms/Forms';
-import { FormInput, FormLineError } from '../pages/FormInput';
+import { FormInput, FormLineError } from '../pages/IO/FormInput';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 

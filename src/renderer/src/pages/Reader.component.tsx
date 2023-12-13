@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Language, Word } from '../data/parseMySqlDump';
-import { useData } from '../data/useAkita';
 import { TextsId } from '../data/validators';
-import { AddNewTermTooltip } from './AddNewTermTooltip';
+import { useData } from '../hooks/useAkita';
+import { APITranslateTerm } from '../plugins/deepl.plugin';
 import {
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-} from './Tooltip';
+} from '../ui-kit/Tooltip';
+import { Language, Word } from '../utils/parseMySqlDump';
+import { AddNewTermTooltip } from './Term/AddNewTermTooltip';
 
 // TODO map color from termstrength type
 // TODO frame
@@ -25,16 +26,23 @@ import {
 export function Reader({
   activeId,
   setActiveWord,
+  setIFrameURL,
+  setTranslateAPIParams,
   activeWord,
 }: {
   activeId: TextsId;
   setActiveWord: (word: Word | { newWord: string } | null) => void;
   activeWord: Word | { newWord: string } | null;
+  setIFrameURL: (url: string | null) => void;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
 }): JSX.Element {
-  const [{ languages, texts, words, parsedTexts }] = useData([
+  const [{ languages, texts, words, sentences, textitems }] = useData([
     'texts',
     'words',
-    'parsedTexts',
+    'sentences',
+    'textitems',
     'languages',
   ]);
   console.log('TEST123-READER-words', words);
@@ -47,7 +55,16 @@ export function Reader({
   if (!language) {
     return <></>;
   }
-  const activeParsedText = parsedTexts[activeId];
+
+  const wordLookupKeyedByTextLC = Object.fromEntries(
+    words
+      .filter((word) => word.WoLgID === language.LgID)
+      .map((val) => [val.WoTextLC, val])
+  );
+  const activeParsedText = textitems.filter(
+    (val) => val.TiTxID === activeId && val.TiLgID === language.LgID
+  );
+  // TODO key by order?
   return (
     <div id="thetext" {...getDirTag(language)}>
       <p
@@ -71,51 +88,51 @@ export function Reader({
                   }
                   sentence="sentence"
                   onClose={() => setTooltipOpen(null)}
+                  setIFrameURL={setIFrameURL}
+                  setTranslateAPIParams={setTranslateAPIParams}
+                  textLanguage={language}
                 />
               </PopoverBody>
             </PopoverContent>
           )}
-          {activeText &&
-            activeParsedText.map((term, ii) => {
-              const { TiIsNotWord, TiTextLC, TiText, TiOrder, TiWordCount } =
-                term;
-              const $spanid = 'ID-' + TiOrder + '-' + TiWordCount;
-              const foundWord = words.find(
-                (word) => word.WoTextLC === TiTextLC
-              );
-              const termStatus = foundWord
-                ? ` status${foundWord.WoStatus}`
-                : ' status0';
-              return (
-                <>
-                  {!TiIsNotWord ? (
-                    <PopoverTrigger
-                      onClickWord={() => {
-                        setActiveWord(
-                          foundWord !== undefined
-                            ? foundWord
-                            : { newWord: TiText }
-                        );
-                        setTooltipOpen(ii);
-                      }}
-                      termStatus={termStatus}
-                    >
-                      {TiText}
-                    </PopoverTrigger>
-                  ) : (
-                    <>
-                      <span>{TiText}</span>
-                    </>
-                  )}
-                  {ii < activeParsedText.length - 1 &&
-                  activeParsedText[ii + 1].TiIsNotWord ? (
-                    <></>
-                  ) : (
-                    <> </>
-                  )}
-                </>
-              );
-            })}
+          {activeParsedText.map((term, ii) => {
+            const { TiIsNotWord, TiTextLC, TiText, TiOrder, TiWordCount } =
+              term;
+            const foundWord = wordLookupKeyedByTextLC[TiTextLC];
+            const $spanid = 'ID-' + TiOrder + '-' + TiWordCount;
+            const termStatus = foundWord
+              ? ` status${foundWord.WoStatus}`
+              : ' status0';
+            return (
+              <>
+                {!TiIsNotWord ? (
+                  <PopoverTrigger
+                    onClickWord={() => {
+                      setActiveWord(
+                        foundWord !== undefined
+                          ? foundWord
+                          : { newWord: TiText }
+                      );
+                      setTooltipOpen(ii);
+                    }}
+                    termStatus={termStatus}
+                  >
+                    {TiText}
+                  </PopoverTrigger>
+                ) : (
+                  <>
+                    <span>{TiText}</span>
+                  </>
+                )}
+                {ii < activeParsedText.length - 1 &&
+                activeParsedText[ii + 1].TiIsNotWord ? (
+                  <></>
+                ) : (
+                  <> </>
+                )}
+              </>
+            );
+          })}
         </Popover>
       </p>
 

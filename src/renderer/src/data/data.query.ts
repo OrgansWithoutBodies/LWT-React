@@ -9,8 +9,8 @@ import {
   take,
   tap,
 } from 'rxjs';
+import type { ArchivedText, Tag, Tag2, Text } from '../utils/parseMySqlDump';
 import { DataState, DataStore, dataStore } from './data.storage';
-import type { ArchivedText, Tag, Tag2, Text } from './parseMySqlDump';
 import type { Settings } from './settings';
 import type { LanguagesId } from './validators';
 
@@ -130,7 +130,8 @@ export class DataQuery extends Query<DataState> {
   public activeLanguageId = this.settings.pipe(
     map((val) =>
       val.currentlanguage === undefined || val.currentlanguage === null
-        ? null
+        ? // semantically null's more meaningful here because null is an explicit state we can set
+          null
         : val.currentlanguage
     )
   );
@@ -271,7 +272,7 @@ export class DataQuery extends Query<DataState> {
         // unkPerc: Math.round(100*)
         // txttodowords = txttotalwords - txtworkedwords;
         // percentunknown = 0;
-        // if (txttotalwords != 0) {
+        // if (txttotalwords !== 0) {
         //   percentunknown =
         //     round(100 * txttodowords / txttotalwords, 0);
       }))

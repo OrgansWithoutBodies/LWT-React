@@ -1,4 +1,4 @@
-import { Language } from './parseMySqlDump';
+import { Language } from '../utils/parseMySqlDump';
 
 // TODO get more details from wikidata?
 // https://www.wikidata.org/wiki/Property:P4132

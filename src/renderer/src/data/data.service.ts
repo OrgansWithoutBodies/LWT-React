@@ -3,18 +3,20 @@ import demoDB from '../demo_db.json';
 
 import { Persistable } from '../../../shared/Persistable';
 import type { NumericalStrength } from '../pages/StrengthMap';
-import { splitCheckText } from '../pages/utils';
+import { downloadTextFile } from '../utils/downloadTxtFile';
+import { splitCheckText } from '../utils/utils';
 import {
   DataState,
   dataStore,
   DataStore,
   MyPersistanceHandles,
 } from './data.storage';
-import { downloadTextFile } from './downloadTxtFile';
 
 // import { createReadStream, createWriteStream } from 'original-fs';
-import { getCurrentTimeAsString } from '../pages/preValidateMaps';
-import { TatoebaOpenAPIWrapper, ThreeLetterString } from '../pages/TatoebaAPI';
+import {
+  TatoebaOpenAPIWrapper,
+  ThreeLetterString,
+} from '../plugins/TatoebaAPI';
 import type {
   AddNewTextType,
   AddNewWordType,
@@ -24,15 +26,18 @@ import type {
   Tag,
   Tag2NoId,
   Word,
-} from './parseMySqlDump';
-import { serializeJsonToSQL } from './serializeJsonToSQL';
+} from '../utils/parseMySqlDump';
+import { serializeJsonToSQL } from '../utils/serializeJsonToSQL';
+import { getCurrentTimeAsString } from './preValidateMaps';
 import type { Settings } from './settings';
 import {
   ArchivedTextId,
   LanguagesId,
+  SentencesId,
   SettingsId,
   Tags2Id,
   TagsId,
+  TextItemsId,
   TextsId,
   WordsId,
 } from './validators';
@@ -794,6 +799,7 @@ export class DataService {
   }
 
   public setSettings(settings: Partial<Settings>) {
+    console.log('TEST123-settings', settings);
     this.dataStore.update(({ settings: oldSettings, ...state }) => ({
       ...state,
       // TODO setting-specific message here?
@@ -814,7 +820,10 @@ export class DataService {
   }
 
   public reparseText(textId: TextsId) {
-    const { texts, languages } = this.dataStore.getValue();
+    const { texts, languages, sentences, textitems } =
+      this.dataStore.getValue();
+    const filteredSentences = sentences.filter((val) => val.SeTxID !== textId);
+    const filteredTextItems = textitems.filter((val) => val.TiTxID !== textId);
     const parsingText = texts.find(({ TxID }) => TxID === textId);
     if (!parsingText) {
       return;
@@ -825,15 +834,29 @@ export class DataService {
     if (!parsingLanguage) {
       return;
     }
-    const { symbolList: parsedText } = splitCheckText(
-      parsingText.TxText,
-      parsingLanguage
+    const maxSentenceID = filteredSentences.reduce(
+      (prev, curr) => (prev > curr.SeID ? prev : curr.SeID),
+      -1 as SentencesId
     );
-    this.dataStore.update(({ parsedTexts, ...rest }) => ({
+    const maxTextItemID = filteredTextItems.reduce(
+      (prev, curr) => (prev > curr.TiID ? prev : curr.TiID),
+      -1 as TextItemsId
+    );
+    const { symbolList: parsedTextItems, sArray: parsedSentences } =
+      splitCheckText(
+        parsingText,
+        parsingLanguage,
+        (maxSentenceID + 1) as SentencesId,
+        (maxTextItemID + 1) as TextItemsId
+      );
+    this.dataStore.update(({ ...rest }) => ({
       ...rest,
       notificationMessage: { txt: `parsed text: ${parsingText?.TxTitle}` },
-      parsedTexts: { ...parsedTexts, [textId]: parsedText },
+      textitems: [...filteredTextItems, ...parsedTextItems],
+      sentences: [...filteredSentences, ...parsedSentences],
     }));
+    this.persistSet('sentences');
+    this.persistSet('textitems');
   }
 
   public reparseAllTextsForLanguage(langId: LanguagesId) {
@@ -845,8 +868,11 @@ export class DataService {
       });
   }
 
-  public setActiveLanguage(langId: LanguagesId | undefined) {
-    this.setSettings({ currentlanguage: langId });
+  public setActiveLanguage(langId: LanguagesId | undefined | null) {
+    this.setSettings({
+      currentlanguage:
+        langId === undefined || langId === null ? undefined : langId,
+    });
   }
 
   public updateTermStrength(wordID: WordsId, newStrength: NumericalStrength) {
@@ -870,10 +896,10 @@ export class DataService {
 
   constructor(private dataStore: DataStore) {
     this.getInitialAsync();
-    const { languages } = this.dataStore.getValue();
-    languages.forEach((lang) => {
-      this.reparseAllTextsForLanguage(lang.LgID);
-    });
+    // const { languages } = this.dataStore.getValue();
+    // languages.forEach((lang) => {
+    //   this.reparseAllTextsForLanguage(lang.LgID);
+    // });
     this.TatoebaAPI = new TatoebaOpenAPIWrapper();
   }
 

@@ -1,6 +1,6 @@
 import * as ss from 'superstruct';
 import { Persistable } from '../../../shared/Persistable';
-import { EntryRowType } from '../pages/NewLanguage';
+import { EntryRowType } from '../pages/Language/NewLanguage';
 import { EntryRowComponent } from '../Plugin';
 import { PLUGINS } from '../plugins';
 import { brandedNumber, brandedString, BrandedString } from './branding';
@@ -216,6 +216,8 @@ export const LanguagesValidator = ss.object({
     Persistable.languages
   ),
 });
+export type DictURITemplateType =
+  (typeof LanguagesValidator.TYPE)['LgDict1URI'];
 export const LanguageValidatorNoId = ss.omit(LanguagesValidator, ['LgID']);
 export const SentenceValidator = ss.object({
   // SeID: int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -244,7 +246,7 @@ export const SettingsValidator = ss.object({
   StValue: ss.nonempty(ss.string()),
 
   // this  adds a column to ****EVERY**** settings entry
-  ...getValidatorPluginsFor(Persistable.settings),
+  // ...getValidatorPluginsFor(Persistable.settings),
 });
 
 export const TagsValidator = ss.object({
@@ -298,7 +300,7 @@ export const TextItemsValidator = ss.object({
   TiTextLC: ss.nonempty(ss.string()),
   // TiIsNotWord: tinyint(1) NOT NULL,
   // KEY `TiIsNotWord` (`TiIsNotWord`)
-  TiIsNotWord: NumberInListValidator([0, 1]),
+  TiIsNotWord: NumberInListValidator([0, 1] as const),
   ...getValidatorPluginsFor(Persistable.textitems),
 });
 
@@ -404,7 +406,7 @@ export const SettingsObjValidator = ss.object({
   dbversion: ss.string(),
   showallwords: NumberInListValidator([0, 1]),
   currenttext: textId,
-  currentlanguage: languagesId,
+  currentlanguage: ss.optional(languagesId),
   lastscorecalc: ss.number(),
   'set-text-h-frameheight-no-audio': ss.number(),
   'set-text-h-frameheight-with-audio': ss.number(),
@@ -428,6 +430,6 @@ export const SettingsObjValidator = ss.object({
     1, 2, 3, 4, 5, 12, 13, 14, 15, 23, 24, 25, 34, 35, 45, 599,
   ]),
   'set-term-translation-delimiters': ss.string(),
-  // TODO differentiate
-  // ...getValidatorPluginsFor(Persistable.settings),
+  // TODO differentiate from every entry
+  ...getValidatorPluginsFor(Persistable.settings),
 });

@@ -1,16 +1,27 @@
-import { LWTReactInfo } from './LWTReactInfo';
 import { Plugin } from './Plugin';
-import { TatoebaPlugin } from './data/tatoeba.plugin';
 import { AppVariables } from './meta';
+import { LWTReactInfo } from './plugins/LWTReactInfo';
+import { TatoebaPlugin } from './plugins/tatoeba.plugin';
 import { LoremIpsum } from './ui-kit/LoremIpsum';
 
 const plugins: Plugin<any, any, any>[] = [
   //
   // ChineseMeasureWordColumnPlugin,
+  // Term conjugation
+  // Japanese Parser a la Lute
   // UserPlugin,
   // AnkiSyncServer,
   TatoebaPlugin,
   //   OtherPlugin,
+  // Pons
+  // LibreTranslate
+  // MyMemory
+  // GoogleTranslate
+  // MicrosoftTranslate
+  // PapagoTranslate
+  // YandexTranslate
+  // PonsTranslate
+
   // DeeplPlugin,
   {
     pluginName: 'lwt-react-info',

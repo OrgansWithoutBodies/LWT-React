@@ -56,8 +56,14 @@ CODE TODOs
 
 FEATURE IDEAS
 
+- copyright for api retrieved vals
+- encrypt api keys?
+- simplify dict vs gtr - have translations, sentence translations, example sentence lookups
+- word pronunciation - get via plugin api?
 - User account plugin - WP plugin login
 - User default L1/i18n
+- https://mt.qcri.org/api/v1/ref
+- Linguee translation server https://github.com/imankulov/linguee-api
 - Direct integration w anki sync server
 - - https://www.npmjs.com/package/@autoanki/sync
 - - https://www.npmjs.com/package/anki-apkg-export

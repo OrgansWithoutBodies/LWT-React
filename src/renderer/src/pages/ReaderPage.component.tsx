@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { useThemeColors } from '../App';
-import { APITranslateTerm } from '../data/deepl.plugin';
-import { Language, Word } from '../data/parseMySqlDump';
-import { useData } from '../data/useAkita';
 import { LanguagesId, TextsId } from '../data/validators';
-import { A } from '../nav/InternalLink';
+import { useData } from '../hooks/useAkita';
+import { useTick } from '../hooks/useTimer';
 import { PLUGINS } from '../plugins';
+import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { TranslationAPI } from './APITranslation.component';
-import { AddNewWordPane } from './AddNewWordPane';
+import { Language, Word } from '../utils/parseMySqlDump';
+import { TranslationAPI } from './IO/APITranslation.component';
 import { Loader } from './Loader';
 import { Reader } from './Reader.component';
+import { RunTestForWord } from './RunTestForWord';
+import { AddNewWordPane } from './Term/AddNewWordPane';
 import { TextToDoCount } from './TextToDoCount';
 import { owin } from './translateSentence2';
-import { useTick } from './useTimer';
 
 // TODO
 //  confirmation screen
@@ -27,7 +27,7 @@ function ShowAllMessage({ $showAll }: { $showAll: 0 | 1 }) {
       <img src="icn/waiting.gif" alt="Please wait" title="Please wait" />
       &nbsp;&nbsp;Please wait ...
     </span>
-    {$showAll == 1 ? (
+    {$showAll === 1 ? (
       <>
         <p>
           <b>
@@ -130,7 +130,7 @@ function IFramePane({ url }: { url: string | null }) {
  *
  */
 export function ReaderPage({ textId }: { textId: TextsId }) {
-  const [{ texts, words, settings }] = useData(['texts', 'words', 'settings']);
+  const [{ texts, settings }] = useData(['texts', 'settings']);
   const {
     ['set-text-l-framewidth-percent']: lFrameWidthPerc,
     ['set-text-r-frameheight-percent']: rFrameHeightPerc,
@@ -239,6 +239,8 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
           activeId={textId}
           setActiveWord={setActiveWord}
           activeWord={activeWord}
+          setIFrameURL={setIFrameURL}
+          setTranslateAPIParams={setTranslateAPIParams}
         />
       </SplitPane>
       <SplitPane
@@ -287,20 +289,46 @@ export function TesterPage({
   textId: TextsId | null;
   langId: LanguagesId | null;
 }) {
-  const [{ texts, words }] = useData(['texts', 'words']);
+  const [{ texts, words, languages, textitems }] = useData([
+    'texts',
+    'words',
+    'languages',
+    'textitems',
+  ]);
 
   const [activeWord, setActiveWord] = useState<string | null>();
-
-  // TODO
+  // TODO can be multiple texts?
   const text =
     textId !== null
       ? texts.find((text) => text.TxID === textId)
       : texts.find((text) => text.TxLgID === langId);
 
   const [testModality, setTestModality] = useState<Modality>(null);
+  const language = languages.find(
+    (val) => val.LgID === (langId ? langId : text.TxLgID)
+  );
+  // TODO might be no text & only specified language?
   if (!text) {
     return <></>;
   }
+  if (!language) {
+    return <></>;
+  }
+  const wordLookupKeyedByTextLC = Object.fromEntries(
+    words
+      .filter((word) => word.WoLgID === language.LgID)
+      .map((val) => [val.WoTextLC, val])
+  );
+  const tableWords = textitems
+    .filter(
+      (ti) =>
+        ti.TiTxID === text.TxID &&
+        ti.TiLgID === language.LgID &&
+        ti.TiIsNotWord === 0 &&
+        wordLookupKeyedByTextLC[ti.TiTextLC]
+    )
+    .map((ti) => wordLookupKeyedByTextLC[ti.TiTextLC]);
+  console.log('TEST123-table', tableWords);
   return (
     <SplitPane split="vertical" minSize={50} defaultSize="55%">
       <SplitPane
@@ -349,7 +377,7 @@ export function TesterPage({
         {testModality === null ? (
           <></>
         ) : testModality === 'table' ? (
-          <TesterTable />
+          <TesterTable language={language} words={tableWords} />
         ) : (
           <Tester modality={testModality} />
         )}
@@ -406,11 +434,11 @@ export function Tester({ modality }: { modality: Modality }) {
   const { tick } = useTick(1000);
   const totalTests = numWrong + numCorrect + numNotTested;
   const l_notyet = Math.round(numNotTested * 100);
-  const b_notyet = l_notyet == 0 ? '' : 'borderl';
+  const b_notyet = l_notyet === 0 ? '' : 'borderl';
   const l_wrong = Math.round(numWrong * 100);
-  const b_wrong = l_wrong == 0 ? '' : 'borderl';
+  const b_wrong = l_wrong === 0 ? '' : 'borderl';
   const l_correct = Math.round(numCorrect * 100);
-  const b_correct = l_correct == 0 ? 'borderr' : 'borderl borderr';
+  const b_correct = l_correct === 0 ? 'borderr' : 'borderl borderr';
 
   const foundLanguage =
     testingWord && languages.find((lang) => lang.LgID === testingWord?.WoLgID);
@@ -464,103 +492,6 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
-/**
- *
- */
-function RunTestForWord({
-  word: {
-    WoTranslation: trans,
-    WoStatus: status,
-    WoID,
-    WoRomanization: roman,
-    WoText: text,
-  },
-  language: {
-    LgDict1URI: wblink1,
-    LgDict2URI: wblink2,
-    LgGoogleTranslateURI: wblink3,
-  },
-}: {
-  word: Word;
-  language: Language;
-}) {
-  return (
-    <>
-      <center>
-        <hr
-          style={{
-            height: '1px',
-            border: 'none',
-            color: '#333',
-            backgroundColor: '#333',
-          }}
-        />
-        {status >= 1 && status <= 5 && (
-          <>
-            {/* TODO values here */}
-            <MakeOverlibLinkChangeStatusTest
-              wid={0}
-              plusminus={'plus'}
-              text={''}
-            />
-            <Icon src="thumb-up" title="Got it!" /> Got it! [
-            {`${status} ▶ ${status + 1}`}
-            ]
-            <hr
-              style={{
-                height: '1px',
-                border: 'none',
-                color: '#333',
-                backgroundColor: '#333',
-              }}
-            />
-            {/* TODO values here */}
-            <MakeOverlibLinkChangeStatusTest
-              wid={0}
-              plusminus={'plus'}
-              text={''}
-            />
-            <Icon src="thumb" title="Oops!" /> Oops! [
-            {`${status} ▶ ${status - 1}`}
-            ]
-            <hr
-              style={{
-                height: '1px',
-                border: 'none',
-                color: '#333',
-                backgroundColor: '#333',
-              }}
-            />
-            {/* TODO */}
-            <b>{/* make_overlib_link_change_status_alltest(wid,stat) */}</b>
-            <br />
-          </>
-        )}
-      </center>
-      <hr
-        style={{
-          height: '1px',
-          border: 'none',
-          color: '#333',
-          backgroundColor: '#333',
-        }}
-      />
-      {/* <b>{escape_html_chars(make_tooltip(text, trans, roman, stat))}</b> */}
-      <br />
-      <A ref={`/edit_tword?wid=${WoID}`} target="ro">
-        Edit term
-      </A>
-      <br />
-
-      <CreateTheDictLink u={wblink1} w={text} t={'Dict1'} b={'Lookup Term: '} />
-      <CreateTheDictLink u={wblink2} w={text} t={'Dict2'} b={''} />
-      <CreateTheDictLink u={wblink3} w={Set} t={'GTr'} b={''} />
-      <br />
-      {/* Lookup Sentence:'), */}
-    </>
-  );
-}
-
 // TODO
 /**
  *
@@ -584,8 +515,8 @@ export function CreateTheDictLink({
   const trm = w.trim();
   const txt = t.trim();
   const txtbefore = b.trim();
-  if (url != '' && txt != '') {
-    if (url.substr(0, 1) == '*') {
+  if (url !== '' && txt !== '') {
+    if (url.substr(0, 1) === '*') {
       return (
         <>
           {txtbefore}{' '}
@@ -645,13 +576,13 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //   const currentlang = validateLang(
 //     processDBParam('filterlang', 'currentlanguage', '', 0)
 //   );
-//   const wh_lang = currentlang != '' ? ' and TxLgID='.currentlang : '';
+//   const wh_lang = currentlang !== '' ? ' and TxLgID='.currentlang : '';
 
 //   const currentquery = processSessParam('query', 'currenttextquery', '', 0);
-//   const wh_query = convert_string_to_sqlsyntax(
+//   const wh_query = (
 //     str_replace('*', '%', mb_strtolower(currentquery, 'UTF-8'))
 //   );
-//   const wh_query = currentquery != '' ? ' and TxTitle like '.wh_query : '';
+//   const wh_query = currentquery !== '' ? ' and TxTitle like '.wh_query : '';
 
 //   const currenttag1 = validateTextTag(
 //     processSessParam('tag1', 'currenttexttag1', '', 0),
@@ -662,10 +593,10 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //     currentlang
 //   );
 //   const currenttag12 = processSessParam('tag12', 'currenttexttag12', '', 0);
-//   if (currenttag1 == '' && currenttag2 == '') const wh_tag = '';
+//   if (currenttag1 === '' && currenttag2 === '') const wh_tag = '';
 //   else {
-//     if (currenttag1 != '') {
-//       if (currenttag1 == -1) {
+//     if (currenttag1 !== '') {
+//       if (currenttag1 === -1) {
 //         const wh_tag1 = 'group_concat(TtT2ID) IS NULL';
 //       } else {
 //         const wh_tag1 =
@@ -674,8 +605,8 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //         ("/%'");
 //       }
 //     }
-//     if (currenttag2 != '') {
-//       if (currenttag2 == -1) {
+//     if (currenttag2 !== '') {
+//       if (currenttag2 === -1) {
 //         const wh_tag2 = 'group_concat(TtT2ID) IS NULL';
 //       } else {
 //         const wh_tag2 =
@@ -684,11 +615,11 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //         ("/%'");
 //       }
 //     }
-//     if (currenttag1 != '' && currenttag2 == '') {
+//     if (currenttag1 !== '' && currenttag2 === '') {
 //       const wh_tag = ' having (';
 //       // . wh_tag1 .
 //       (') ');
-//     } else if (currenttag2 != '' && currenttag1 == '') {
+//     } else if (currenttag2 !== '' && currenttag1 === '') {
 //       const wh_tag = ' having (';
 //       // . wh_tag2 .
 //       (') ');
@@ -732,7 +663,7 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //   array_push(list, 0);
 //   const listlen = count(list);
 //   for (let i = 1; i < listlen - 1; i++) {
-//     if (list[i] == textid) {
+//     if (list[i] === textid) {
 //       if (list[i - 1] !== 0) {
 //         const title = tohtml(getTextTitle(list[i - 1]));
 //         const prev = (
@@ -784,9 +715,15 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //   }
 //   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
 // }
-export function TesterTable() {
+export function TesterTable({
+  language,
+  words: words,
+}: {
+  language: Language;
+  words: Word[];
+}) {
   // TODO;
-  // BETWEEN 1 AND 5 AND WoTranslation != \'\' AND WoTranslation != \'*\'
+  // BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\'
   return (
     <>
       <p>
@@ -844,7 +781,7 @@ export function TesterTable() {
         </tr>
         {/* <?php
 
-	$sql = 'SELECT DISTINCT WoID, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, WoTodayScore As Score FROM ' . $testsql . ' AND WoStatus BETWEEN 1 AND 5 AND WoTranslation != \'\' AND WoTranslation != \'*\' order by WoTodayScore, WoRandom*RAND()';
+	$sql = 'SELECT DISTINCT WoID, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, WoTodayScore As Score FROM ' . $testsql . ' AND WoStatus BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\' order by WoTodayScore, WoRandom*RAND()';
 	if ($debug)
 		echo $sql;
 	$res = do_mysqli_query($sql);
@@ -857,45 +794,54 @@ export function TesterTable() {
 		)
 		);
 		?> */}
-        <tr>
-          <td className="td1 center" nowrap="nowrap">
-            <a
-              href="edit_tword.php?wid=<?php echo $record['WoID']; ?>"
-              target="ro"
+        {words.map((word) => (
+          <tr>
+            <td className="td1 center" nowrap="nowrap">
+              <a
+                href="edit_tword.php?wid=<?php echo $record['WoID']; ?>"
+                target="ro"
+              >
+                <Icon src="sticky-note--pencil" title="Edit Term" />
+              </a>
+            </td>
+            <td className="td1 center" nowrap="nowrap">
+              <span id="STAT<?php echo $record['WoID']; ?>">
+                {/* <?php echo make_status_controls_test_table($record['Score'], $record['WoStatus'], $record['WoID']); ?> */}
+              </span>
+            </td>
+            <td
+              className="td1 center"
+              style={{ fontSize: language.LgTextSize }}
             >
-              <Icon src="sticky-note--pencil" title="Edit Term" />
-            </a>
-          </td>
-          <td className="td1 center" nowrap="nowrap">
-            <span id="STAT<?php echo $record['WoID']; ?>">
-              {/* <?php echo make_status_controls_test_table($record['Score'], $record['WoStatus'], $record['WoID']); ?> */}
-            </span>
-          </td>
-          <td className="td1 center" style={{ fontSize: language.LgTextSize }}>
-            {/* <?php echo $span1; ?> */}
-            <span id="TERM<?php echo $record['WoID']; ?>">
-              {/* <?php echo tohtml($record['WoText']); ?> */}
-            </span>
-            {/* <?php echo $span2; ?> */}
-          </td>
-          <td className="td1 center">
-            <span id="TRAN<?php echo $record['WoID']; ?>">
-              {/* <?php echo tohtml($record['WoTranslation']); ?> */}
-            </span>
-          </td>
-          <td className="td1 center">
-            <span id="ROMA<?php echo $record['WoID']; ?>">
-              {/* <?php echo tohtml($record['WoRomanization']); ?> */}
-            </span>
-          </td>
-          <td className="td1 center">
-            {/* <?php echo $span1; ?> */}
-            <span id="SENT<?php echo $record['WoID']; ?>">
-              {/* <?php echo $sent1; ?> */}
-            </span>
-            {/* <?php echo $span2; ?> */}
-          </td>
-        </tr>
+              {/* <?php echo $span1; ?> */}
+              <span id="TERM<?php echo $record['WoID']; ?>">
+                {word.WoText}
+                {/* <?php echo tohtml($record['WoText']); ?> */}
+              </span>
+              {/* <?php echo $span2; ?> */}
+            </td>
+            <td className="td1 center">
+              <span id="TRAN<?php echo $record['WoID']; ?>">
+                {/* <?php echo tohtml($record['WoTranslation']); ?> */}
+                {word.WoTranslation}
+              </span>
+            </td>
+            <td className="td1 center">
+              <span id="ROMA<?php echo $record['WoID']; ?>">
+                {word.WoRomanization}
+                {/* <?php echo tohtml($record['WoRomanization']); ?> */}
+              </span>
+            </td>
+            <td className="td1 center">
+              {/* <?php echo $span1; ?> */}
+              <span id="SENT<?php echo $record['WoID']; ?>">
+                {/* {word.WoRomanization} */}
+                {/* <?php echo $sent1; ?> */}
+              </span>
+              {/* <?php echo $span2; ?> */}
+            </td>
+          </tr>
+        ))}
       </table>
     </>
   );
@@ -908,7 +854,7 @@ function make_status_controls_test_table($score, $status, $wordid) {
 
   return (
     <>
-      {$status == 98 ? (
+      {$status === 98 ? (
         <></>
       ) : $status >= 1 ? (
         <img
@@ -926,12 +872,12 @@ function make_status_controls_test_table($score, $status, $wordid) {
       ) : (
         <>{get_status_abbr($status)}</>
       )}{' '}
-      {$status == 99 ? (
+      {$status === 99 ? (
         <></>
       ) : (
         <>
           {' '}
-          {$status <= 5 || $status == 98 ? (
+          {$status <= 5 || $status === 98 ? (
             <img
               src="icn/plus.png"
               className="click"

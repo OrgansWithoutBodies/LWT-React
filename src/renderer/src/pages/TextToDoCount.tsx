@@ -1,5 +1,5 @@
-import { Text } from '../data/parseMySqlDump';
-import { useData } from '../data/useAkita';
+import { useData } from '../hooks/useAkita';
+import { Text } from '../utils/parseMySqlDump';
 
 /**
  *

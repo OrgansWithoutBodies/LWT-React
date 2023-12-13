@@ -1,14 +1,13 @@
 import { PropsWithChildren } from 'react';
-import { PersistanceStrategy } from '../data/PersistedValueGetter';
 import { dataService } from '../data/data.service';
-import { useData } from '../data/useAkita';
+import { useData } from '../hooks/useAkita';
 import { useAppContext } from '../hooks/useContext';
-import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
+import { InternalPaths } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
+import { PersistanceStrategy } from '../persist/PersistedValueGetter';
 import { PLUGINS } from '../plugins';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
-import { GlosbeAPI } from './GlosbeAPI.component';
 
 /**
  *
@@ -17,7 +16,6 @@ export function LandingPage() {
   const {
     releaseDate,
     dbBackend,
-    versionNumber,
     dbVersion,
     server,
     serverVersion,
@@ -60,7 +58,6 @@ export function LandingPage() {
     ...pluginLinks,
   ];
 
-  const navigate = useInternalNavigate();
   return (
     <>
       {languages.length === 0 && (
@@ -80,7 +77,8 @@ export function LandingPage() {
               <br />
               If you've never used LWT before, check out the{' '}
               <A href="/info">original docs</A> - and check out the{' '}
-              <A href="/lwt_react_info">React Port docs</A>!
+              {/* TODO show this from lwt_react_info plugin */}
+              <A href={'/lwt_react_info' as any}>React Port docs</A>!
             </th>
           </tr>
         </table>
@@ -192,7 +190,7 @@ export function LandingPage() {
                   More information and detailed Unlicense ...
                 </a>
                 <br />
-                This is LWT-React Version {versionNumber} (Released:{' '}
+                This is LWT-React Version {frontendVersion} (Released:{' '}
                 {releaseDate}
                 )
                 <br />
@@ -215,7 +213,7 @@ export function LandingPage() {
                 >
                   <i>Default</i> Table Set
                   {/* TODO table set size */}
-                  {/* mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . convert_string_to_sqlsyntax(dbname) . " and table_name in (" .
+                  {/* mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . (dbname) . " and table_name in (" .
 	"CONCAT(" . p . ",'archivedtexts')," .
 	"CONCAT(" . p . ",'archtexttags')," .
 	"CONCAT(" . p . ",'languages')," .
@@ -282,27 +280,7 @@ if (! isset(mb)) mb = '0.0';
           </tr>
         </tbody>
       </table>
-      <DevModeGate>
-        {false && (
-          <>
-            <GlosbeAPI from={'en'} dest={'de'} phrase={'test'} />
-            <button
-              onClick={() => {
-                dataService.getTatoebaSentence('eng', 'test');
-              }}
-            >
-              TEST TATOEBA
-            </button>
-            <button
-              onClick={() => {
-                dataService.getTatoebaSentence('eng', 'test');
-              }}
-            >
-              TEST TATOEBA
-            </button>
-          </>
-        )}
-      </DevModeGate>
+      <DevModeGate></DevModeGate>
     </>
   );
 }

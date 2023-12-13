@@ -1,25 +1,29 @@
 import { useSearchParams } from 'react-router-dom';
 import { Switch } from './App';
 import { dataService } from './data/data.service';
-import { useData } from './data/useAkita';
 import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
+import { useData } from './hooks/useAkita';
 import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
-import { AddNewWordPane } from './pages/AddNewWordPane';
-import { AnnotateText } from './pages/AnnotateText';
-import { EditArchivedTexts } from './pages/EditArchivedTexts.component';
-import { EditLanguage } from './pages/EditLanguage.component';
-import { DisplayTags, EditTag, NewTag } from './pages/EditTags';
-import { DisplayTextTags, EditTextTag, NewTextTag } from './pages/EditTextTags';
-import { LanguagesPage } from './pages/Languages.component';
-import { EditText, Library } from './pages/Library.component';
-import { NewLanguage } from './pages/NewLanguage';
-import { PrintText } from './pages/PrintText.component';
+import { EditArchivedTexts } from './pages/ArchivedText/EditArchivedTexts.component';
+import { UploadWords } from './pages/IO/UploadWords.component';
+import { EditLanguage } from './pages/Language/EditLanguage.component';
+import { LanguagesPage } from './pages/Language/Languages.component';
+import { NewLanguage } from './pages/Language/NewLanguage';
 import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
 import { WordSorting } from './pages/Sorting';
-import { AddTerm, EditTerm, Terms } from './pages/Terms.component';
-import { ImportShortTextPage } from './pages/TextImport';
-import { UploadWords } from './pages/UploadWords.component';
+import { AddNewWordPane } from './pages/Term/AddNewWordPane';
+import { AddTerm, EditTerm, Terms } from './pages/Term/Terms.component';
+import { DisplayTags, EditTag, NewTag } from './pages/TermTag/EditTags';
+import { AnnotateText } from './pages/Text/AnnotateText';
+import { EditText, Library } from './pages/Text/Library.component';
+import { PrintText } from './pages/Text/PrintText.component';
+import { ImportShortTextPage } from './pages/Text/TextImport';
+import {
+  DisplayTextTags,
+  EditTextTag,
+  NewTextTag,
+} from './pages/TextTag/EditTextTags';
 
 /**
  *
@@ -43,7 +47,7 @@ export function TermsWrapper() {
   const updateParams = useUpdateParams();
   // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
   if (filterlang === '') {
-    if (activeLanguageId !== null) {
+    if (activeLanguageId !== null && activeLanguageId !== undefined) {
       dataService.setActiveLanguage(null);
       updateParams({ filterlang: null });
     }

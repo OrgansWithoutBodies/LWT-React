@@ -2,11 +2,10 @@ import { Store, StoreConfig } from '@datorama/akita';
 import { Persistable } from '../../../shared/Persistable';
 import demoDB from '../demo_db.json';
 import { AppVariables } from '../meta';
-import { RawTextItem } from '../pages/utils';
 import {
   PersistedValueGetter,
   PersistenceStrategies,
-} from './PersistedValueGetter';
+} from '../persist/PersistedValueGetter';
 import {
   ArchTextTag,
   ArchivedText,
@@ -20,7 +19,8 @@ import {
   TextTag,
   Word,
   WordTag,
-} from './parseMySqlDump';
+} from '../utils/parseMySqlDump';
+import { RawTextItem } from '../utils/utils';
 import { TextsId } from './validators';
 
 export interface DataState {

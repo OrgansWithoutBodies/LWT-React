@@ -1,10 +1,10 @@
 import { Struct } from 'superstruct';
 import { Persistable } from '../../shared/Persistable';
-import { GenericTranslationAPI } from './data/deepl.plugin';
 import { TRefMap } from './forms/Forms';
 import { FormInputComponent } from './hooks/useFormInput';
 import { InternalPaths } from './hooks/useInternalNav';
-import type { EntryRowType } from './pages/NewLanguage';
+import type { EntryRowType } from './pages/Language/NewLanguage';
+import { GenericTranslationAPI } from './plugins/deepl.plugin';
 
 export type EntryRowComponent = (args: {
   refMap: TRefMap<string>;

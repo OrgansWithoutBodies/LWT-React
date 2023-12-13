@@ -25,7 +25,6 @@
     "preview": "vite preview",
     "test": "jest",
     "start": "webpack-dev-server --mode development",
-    "openapi": "openapi-generator generate -i ./api/*.openapi.json -g typescript-axios -o ./api/out",
     "generateTypeSchemas": "npx openapi-typescript src/shared/apis/src/** --output src/shared/apis/out/",
     "mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js"
   },
@@ -105,6 +104,7 @@
     "openapi-typescript": "^6.7.1",
     "playwright": "^1.40.1",
     "prettier": "^2.4.1",
+    "swagger2openapi": "^7.0.8",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.4.0",
     "tsdoc": "^0.0.4",

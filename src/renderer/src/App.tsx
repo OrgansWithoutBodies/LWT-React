@@ -23,18 +23,18 @@ import {
   TestWrapper,
   UploadWordsWrapper,
 } from './Wrappers';
-import { useData } from './data/useAkita';
+import { useData } from './hooks/useAkita';
 import { AppContext, useAppContext } from './hooks/useContext';
 import { InternalPaths } from './hooks/useInternalNav';
-import { BackupScreen } from './pages/Backups.component';
-import { CheckTextPage } from './pages/CheckText';
+import { useCountdown } from './hooks/useTimer';
+import { BackupScreen } from './pages/IO/Backups.component';
+import { InstallDemo } from './pages/IO/InstallDemo';
 import { InfoPage } from './pages/Info.component';
 import { InfoExportTemplate } from './pages/InfoExportTemplate';
-import { InstallDemo } from './pages/InstallDemo';
-import { LongText } from './pages/LongTextImport.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
-import { useCountdown } from './pages/useTimer';
+import { CheckTextPage } from './pages/Text/CheckText';
+import { LongText } from './pages/Text/LongTextImport.component';
 import { PLUGINS } from './plugins';
 import { VariantMap, createColors } from './styles';
 import { Header } from './ui-kit/Header';

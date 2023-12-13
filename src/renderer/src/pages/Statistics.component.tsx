@@ -1,9 +1,9 @@
-import { Word } from '../data/parseMySqlDump';
-import { useData } from '../data/useAkita';
 import { LanguagesId } from '../data/validators';
+import { useData } from '../hooks/useAkita';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
+import { Word } from '../utils/parseMySqlDump';
 
 // const CAKSlices = [
 //   'Today',

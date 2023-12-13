@@ -1,16 +1,17 @@
 import * as ss from 'superstruct';
 import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
-import { useData } from '../data/useAkita';
+import { settingsPrevalidateMap } from '../data/preValidateMaps';
 import { SettingsObjValidator } from '../data/validators';
 import { CheckAndSubmit } from '../forms/Forms';
+import { useData } from '../hooks/useAkita';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
+import { PluginEntries } from '../plugins/PluginEntries';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
-import { PluginEntries, SelectBoolean } from './EditLanguage.component';
+import { SelectBoolean } from './Language/EditLanguage.component';
 import { resetDirty } from './Sorting';
-import { settingsPrevalidateMap } from './preValidateMaps';
 // TODO abstract this out into a nested settings component
 
 const validator = ss.omit(SettingsObjValidator, [
@@ -665,7 +666,13 @@ export function SettingsComponent(): JSX.Element {
                 <RequiredLineButton />
               </td>
             </tr>
+
             <PluginEntries
+              PreMapComponent={({ numElements }) => (
+                <th className="th1 center" rowSpan={numElements}>
+                  Plugins
+                </th>
+              )}
               persistable={Persistable.settings}
               refMap={refMap}
               InputComponent={StInput}

@@ -1,6 +1,6 @@
-import { TextTag } from '../../renderer/src/data/parseMySqlDump';
 import { Tags2Id } from '../../renderer/src/data/validators';
-import { filterTags } from '../../renderer/src/pages/filterTags';
+import { filterTags } from '../../renderer/src/utils/filterTags';
+import { TextTag } from '../../renderer/src/utils/parseMySqlDump';
 
 describe('filterTags', () => {
   // TODO use data from demo db

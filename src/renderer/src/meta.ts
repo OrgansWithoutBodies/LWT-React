@@ -1,9 +1,9 @@
-import { PersistanceStrategy } from './data/PersistedValueGetter';
+import { PersistanceStrategy } from './persist/PersistedValueGetter';
 import { StyleVariant } from './styles';
 
 type VersionNumber =
-  | `${number}.${number}.${number}`
-  | `LEGACY-${number}.${number}.${number}`;
+  | `${number}.${number}.${number}${`-${string}` | ''}`
+  | `LEGACY-${number}.${number}.${number}${`-${string}` | ''}`;
 type FullMonthName =
   | 'January'
   | 'February'
@@ -100,7 +100,6 @@ function GetFromEnv(val: LWT_ENV_VARS) {
   return import.meta.env[val];
 }
 export const AppVariables: TAppContext = {
-  versionNumber: 'LEGACY-0.0.0-PRE-ALPHA-DEMO',
   releaseDate: 'November 30 2023',
   // Prob dont need to be an env var
   styleVariant: 'dark',
@@ -112,6 +111,8 @@ export const AppVariables: TAppContext = {
 
   dbBackend: 'SQLite',
   dbVersion: '1.0.0',
+
+  electronBuildTarget: 'Linux',
 
   devMode: GetDevModeFromEnv(),
 

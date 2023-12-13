@@ -1,3 +1,5 @@
+import { DictURITemplateType } from '../data/validators';
+
 /**
  *
  * @param url
@@ -26,52 +28,32 @@ export function createTheDictUrl(u: string, w: string) {
  * @param sentctl
  */
 export function translateSentence2(
-  url: string,
-  sentctl: { value: any } | undefined
+  url: DictURITemplateType,
+  sentctl: { value: string } | undefined
 ) {
-  if (typeof sentctl !== 'undefined' && url != '') {
+  if (sentctl !== undefined && url !== '') {
     const text = sentctl.value;
     if (typeof text === 'string') {
       owin(createTheDictUrl(url, text.replace(/[{}]/g, '')));
     }
   }
 }
+
 /**
  *
  * @param s
  */
-function stripTheSlashesIfNeeded(s) {
-  if (function_exists('get_magic_quotes_gpc')) {
-    if (get_magic_quotes_gpc()) return stripslashes(s);
-    else return s;
-  } else {
-    return s;
-  }
-}
-/**
- *
- * @param s
- */
-function prepare_textdata(s) {
-  return stripTheSlashesIfNeeded(s).replace('\r\n', '\n', s);
-}
-/**
- *
- * @param data
- */
-function convert_string_to_sqlsyntax(data: string) {
-  const result = 'NULL';
-  data = prepare_textdata(data).trim();
-  if (data != '')
-    // result = "'".mysqli_real_escape_string(GLOBALS['DBCONNECTION'], data).; "'";
-    return result;
+export function prepare_textdata(s: string) {
+  return s.replace('\r\n', '\n');
 }
 /**
  *
  * @param s
  */
 export function prepare_textdata_js(s: string) {
-  s = convert_string_to_sqlsyntax(s);
-  if (s == 'NULL') return "''";
-  return s.replace("''", "\\'");
+  const val = s;
+  if (val === null) {
+    return "''";
+  }
+  return val.replace("''", "\\'");
 }

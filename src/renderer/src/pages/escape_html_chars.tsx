@@ -1,12 +1,13 @@
 import { over } from 'rambdax';
-import { Language, Word } from '../data/parseMySqlDump';
+import { WordsId } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { Icon } from '../ui-kit/Icon';
+import { Language, Word } from '../utils/parseMySqlDump';
 import {
   CreateTheDictLink,
   MakeOverlibLinkChangeStatusTest,
 } from './ReaderPage.component';
-import { NumericalStrength, StrengthMapNumericalKey } from './StrengthMap';
+import { NumericalStrength, getStatusAbbr, getStatusName } from './StrengthMap';
 import { prepare_textdata_js } from './translateSentence2';
 
 /**
@@ -14,14 +15,19 @@ import { prepare_textdata_js } from './translateSentence2';
  * @param word
  * @param language
  */
-export function onWordClick(word: Word, language: Language) {
+function onTestWordClick(
+  word: Word,
+  language: Language,
+  onEditWord: (woID: WordsId) => void
+) {
   // TODO
   // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (trawBlink1ns) : (' [' . trans . '] ')) : save ); ?>;
   const OPENED = 0;
   // TODO
   // WoID = <?php echo wid; ?>;
   const onClickWord = () => word_click_event_do_test_test(language);
-  const onKeyDown = (e) => keydown_event_do_test_test(e, OPENED, word);
+  const onKeyDown: React.EventHandler<KeyboardEvent> = (e) =>
+    keydown_event_do_test_test(e, OPENED, word, onEditWord);
   return { onClickWord, onKeyDown };
 }
 enum KeyStatus {
@@ -55,58 +61,59 @@ function cClick() {
 function keydown_event_do_test_test(
   e: KeyboardEvent,
   OPENED: 0 | 1,
-  { WoID }: Word
+  { WoID }: Word,
+  onEditWord: (woID: WordsId) => void
 ) {
   // TODO update 'which' pattern
-  if (e.which == 32 && OPENED == 0) {
+  if (e.which === 32 && OPENED === 0) {
     // space : show sol.
-    $('.word').click();
+    // TODO
+    // $('.word').click();
 
     cClick();
-    window.parent.frames.ro.location.href = `show_word?wid=${$('.word').attr(
-      'data_wid'
-    )}&ann=`;
+    // window.parent.frames.ro.location.href =
+    `show_word?wid=${WoID}&ann=`;
     OPENED = 1;
     return false;
   }
-  if (OPENED == 0) return true;
-  if (e.which == 38) {
+  if (OPENED === 0) return true;
+  if (e.which === 38) {
     // up : status+1
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&stchange=1`;
+    // const stchange=1
     return false;
   }
-  if (e.which == 40) {
+  if (e.which === 40) {
     // down : status-1
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&stchange=-1`;
+    // TODO
+    // const stchange=-1;
     return false;
   }
-  if (e.which == 27) {
+  if (e.which === 27) {
     // esc : dont change status
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=${$(
-      '.word'
-    ).attr('data_status')}`;
+    // TODO still advance?
     return false;
   }
   for (let i = 1; i <= 5; i++) {
-    if (e.which == 48 + i || e.which == 96 + i) {
+    if (e.which === 48 + i || e.which === 96 + i) {
       // 1,.. : status=i
-      window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=${i}`;
+      // const status=i
       return false;
     }
   }
-  if (e.which == 73) {
+  if (e.which === 73) {
     // I : status=98
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=98`;
+    // const status=98
     return false;
   }
-  if (e.which == 87) {
+  if (e.which === 87) {
     // W : status=99
-    window.parent.frames.ro.location.href = `set_test_status?wid=${WoID}&status=99`;
+    // const status=99
     return false;
   }
-  if (e.which == 69) {
+  if (e.which === 69) {
     // E : EDIT
-    window.parent.frames.ro.location.href = `edit_tword?wid=${WoID}`;
+    onEditWord(WoID);
+    // window.parent.frames.ro.location.href = `edit_tword?wid=${WoID}`;
     return false;
   }
   return true;
@@ -135,21 +142,21 @@ function word_click_event_do_test_test({
   data_sent: string;
   data_todo: string;
 }) {
-  run_overlib_test(
-    wBlink1,
-    wBlink2,
-    wBlink3,
-    data_wid,
-    data_text,
-    data_trans,
-    data_rom,
-    data_status,
-    data_sent,
-    data_todo
-  );
+  <RunOverlibTest
+    wBlink1={wBlink1}
+    wBlink2={wBlink2}
+    wBlink3={wBlink3}
+    data_wid={data_wid}
+    data_text={data_text}
+    data_trans={data_trans}
+    data_rom={data_rom}
+    data_status={data_status}
+    data_sent={data_sent}
+    data_todo={data_todo}
+  />;
   // TODO
   const SOLUTION = prepare_textdata_js(
-    $testtype == 1 ? ($nosent ? $trans : ` [${trans}] `) : $save
+    $testtype === 1 ? ($nosent ? $trans : ` [${trans}] `) : $save
   );
   $('.todo').text(SOLUTION);
   return false;
@@ -167,31 +174,42 @@ function word_click_event_do_test_test({
  * @param sent
  * @param todo
  */
-function run_overlib_test(
-  wBlink1: string,
-  wBlink2: string,
-  wBlink3: string,
-  wid: string,
-  txt: string,
-  trans: string,
-  roman: string,
-  stat: NumericalStrength,
-  sent: string,
-  todo: number
-  // oldstat: undefined
+function RunOverlibTest(
+  {
+    wBlink1,
+    wBlink2,
+    wBlink3,
+    wid,
+    txt,
+    trans,
+    roman,
+    stat,
+    sent,
+    todo,
+  }: {
+    wBlink1: string;
+    wBlink2: string;
+    wBlink3: string;
+    wid: number;
+    txt: string;
+    trans: string;
+    roman: string;
+    stat: NumericalStrength;
+    sent: string;
+    todo: number;
+  } // oldstat: undefined
 ) {
   let c = stat + 1;
   if (c > 5) c = 5;
   let w = stat - 1;
   if (w < 1) w = 1;
   let cc = `${stat} ▶ ${c}`;
-  if (c == stat) cc = c;
+  if (c === stat) cc = c;
   let ww = `${stat} ▶ ${w}`;
-  if (w == stat) ww = w;
-  overlib;
+  if (w === stat) ww = w;
   return (
     <>
-      {todo == 1 ? (
+      {todo === 1 ? (
         <>
           <center>
             <hr noshade size={1} />
@@ -259,10 +277,10 @@ function run_overlib_test(
  * @param wid
  * @param oldstat
  */
-function MakeOverlibLinkChangeStatusAlltest(
+export function MakeOverlibLinkChangeStatusAlltest(
   wid: string,
   oldstat: NumericalStrength
-) {
+): JSX.Element {
   return (
     <>
       {[1, 2, 3, 4, 5].map((newstat) => (
@@ -300,52 +318,15 @@ function MakeOverlibLinkChangeStatusTest2({
   oldstat: NumericalStrength;
   newstat: NumericalStrength;
 }): JSX.Element {
-  if (oldstat == newstat) {
-    return (
-      <a href={`set_test_status?wid=${wid}&status=${newstat}`} target="ro">
-        <span title={getStatusName(newstat)}>[◆]</span>
-      </a>
-    );
-  }
-  return (
+  return oldstat === newstat ? (
+    <a href={`set_test_status?wid=${wid}&status=${newstat}`} target="ro">
+      <span title={getStatusName(newstat)}>[◆]</span>
+    </a>
+  ) : (
     <a href={`set_test_status?wid=${wid}&status=${newstat}`} target="ro">
       <span title={getStatusName(newstat)}>[{getStatusAbbr(newstat)}]</span>
     </a>
   );
-}
-// todo STATUSES comes from her e
-// function get_wordstatus_radiooptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 1;
-// 	r = "";
-// 	statuses = get_statuses();
-// 	foreach (statuses as n => status) {
-// 		r .= '<span class="status' . n . '" title="' . tohtml(status["name"]) . '">';
-// 		r .= '&nbsp;<input type="radio" name="WoStatus" value="' . n . '"';
-// 		if (v == n)
-// 			r .= ' checked="checked"';
-// 		r .= ' />' . tohtml(status["abbr"]) . "&nbsp;</span> ";
-// 	}
-// 	return r;
-// }
-/**
- *
- * @param status
- */
-export function getStatusName(status: NumericalStrength) {
-  return StrengthMapNumericalKey[status]
-    ? StrengthMapNumericalKey[status].name
-    : 'Unknown';
-}
-/**
- *
- * @param status
- */
-function getStatusAbbr(status: NumericalStrength) {
-  return StrengthMapNumericalKey[status]
-    ? StrengthMapNumericalKey[status].abbr
-    : '?';
 }
 /**
  *
@@ -376,16 +357,16 @@ export function make_tooltip(
 ) {
   const nl = '\x0d';
   let title = word;
-  if (title != '') title = '▶ ' + title;
-  if (roman != '' && roman !== undefined) {
-    if (title != '') title += nl;
+  if (title !== '') title = '▶ ' + title;
+  if (roman !== '' && roman !== undefined) {
+    if (title !== '') title += nl;
     title += `▶ ${roman}`;
   }
-  if (trans != '' && trans != '*') {
-    if (title != '') title += nl;
+  if (trans !== '' && trans !== '*') {
+    if (title !== '') title += nl;
     title += `▶ ${trans}`;
   }
-  if (title != '') title += nl;
+  if (title !== '') title += nl;
   title += `▶ ${getStatusName(status)} [${getStatusAbbr(status)}]`;
   return title;
 }

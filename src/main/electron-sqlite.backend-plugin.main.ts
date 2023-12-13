@@ -1,13 +1,13 @@
 import path from 'path';
 import * as sql from 'sqlite';
+import { LanguagesId } from '../renderer/src/data/validators';
 import {
   PersistedValueEmptyer,
   PersistedValueGetter,
   PersistedValueInserter,
   PersistedValueSetter,
-} from '../renderer/src/data/PersistedValueGetter';
-import { Language } from '../renderer/src/data/parseMySqlDump';
-import { LanguagesId } from '../renderer/src/data/validators';
+} from '../renderer/src/persist/PersistedValueGetter';
+import { Language } from '../renderer/src/utils/parseMySqlDump';
 import { Persistable } from '../shared/Persistable';
 
 const { Database, OPEN_CREATE } = require('sqlite3');
