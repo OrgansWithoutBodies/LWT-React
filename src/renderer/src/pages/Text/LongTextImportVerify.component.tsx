@@ -16,6 +16,8 @@ export function LongTextVerify({
   onCancelVerify: () => void;
 }): JSX.Element {
   const navigate = useInternalNavigate();
+  // TODO
+  // useDirtyForm()
   console.log('TEST123-longtext', verifying);
   return (
     <>
@@ -66,9 +68,7 @@ export function LongTextVerify({
                   type="button"
                   value={`Create ${verifying.length} texts`}
                   onClick={() => {
-                    verifying.forEach((text) => {
-                      dataService.addText(text);
-                    });
+                    dataService.addMultipleTexts(verifying);
                   }}
                 />
               </td>

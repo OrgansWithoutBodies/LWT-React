@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { BrandedNumber } from '../../data/branding';
 import { dataService } from '../../data/data.service';
 import {
   wordNoIdPrevalidateMap,
   wordPrevalidateMap,
 } from '../../data/preValidateMaps';
+import { HOUR_IN_DAY, MIN_IN_HOUR, MS_IN_S, S_IN_MIN } from '../../data/time';
 import {
   EditWordsValidator,
   LanguagesId,
@@ -22,9 +24,11 @@ import {
 import { usePager } from '../../hooks/usePager';
 import { useSelection } from '../../hooks/useSelection';
 import { A } from '../../nav/InternalLink';
+import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
+import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { WordTagsSelectDropdown } from '../../ui-kit/WordTagsSelectDropdown';
 import { filterTags } from '../../utils/filterTags';
@@ -40,6 +44,7 @@ import {
   FilterSortPager,
   buildTextTagLookup,
 } from '../ArchivedText/EditArchivedTexts.component';
+import { markClick, textareaKeydown } from '../IO/CheckForm';
 import { EntryRow } from '../Language/NewLanguage';
 import { getDirTag } from '../Reader.component';
 import {
@@ -53,13 +58,8 @@ import {
   createTheDictUrl,
   owin,
   prepare_textdata_js,
-  translateSentence2,
 } from '../translateSentence2';
-import {
-  SentencesForWord,
-  StatusRadioButtons,
-  do_ajax_show_sentences,
-} from './AddNewWordPane';
+import { MultiFunctionalURL, SentencesForWord } from './AddNewWordPane';
 
 const isTags = (tags: Tag[] | Tag2[]): tags is Tag[] =>
   tags[0] && 'TgID' in tags[0];
@@ -225,7 +225,6 @@ export function TermsFilterBox({
   const [{ tags, texts }] = useData(['tags', 'texts']);
   // TODO usePager available here - contextprovider?
   // TODO why would need pager in filter box?
-  const navigate = useInternalNavigate();
   const updateParams = useUpdateParams();
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
@@ -443,10 +442,6 @@ function TermRow({
   if (!foundLanguage && !activeLanguageId) {
     throw new Error('Invalid Word Language ID!');
   }
-  const MS_IN_S = 1000;
-  const S_IN_MIN = 60;
-  const MIN_IN_HOUR = 60;
-  const HOUR_IN_DAY = 24;
   return (
     <tr>
       <td id={`rec${termID}`} className="td1 center">
@@ -454,7 +449,7 @@ function TermRow({
           <input
             name="marked[]"
             type="checkbox"
-            className="markcheck"
+            onClick={markClick}
             checked={isSelected}
             value={termID}
             onChange={({ target: { checked } }) => {
@@ -519,11 +514,11 @@ function TermRow({
         {/* <td className="td1 center">
             <span title="Saved" className="status4">
               &nbsp;
-              ($txtworkedall > 0 ? '
-                      <a href="edit_words.php?page=1&;query=&;status=&;tag12=0&;tag2=&;tag1=&;text=' . $record['TxID'] . '">
-                        {$txtworkedwords }
+              (txtworkedall > 0 ? '
+                      <a href="edit_words.php?page=1&;query=&;status=&;tag12=0&;tag2=&;tag1=&;text=' . record['TxID'] . '">
+                        {txtworkedwords }
                         +
-                        {$txtworkedexpr }
+                        {txtworkedexpr }
                         </a>
                         : 0)
               &nbsp;
@@ -555,11 +550,13 @@ function TermRow({
             )}
           </span>
         )}
+        {/* TODO */}
+        {/* echo '<td class="td1 center" nowrap="nowrap">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?chg=' . record['WoID'] . '"><img src="icn/sticky-note--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <a class="confirmdelete" href="' . $_SERVER['PHP_SELF'] . '?del=' . record['WoID'] . '"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></a>&nbsp;</td>'; */}
       </td>
       {sorting === WordSorting['Word Count Active Texts'] && (
         <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
           {/* TODO */}
-          {/* ' . $record['textswordcount'] . ' */}
+          {/* ' . record['textswordcount'] . ' */}
         </td>
       )}
     </tr>
@@ -720,6 +717,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
     Input: WoInput,
     onSubmit,
     refMap,
+    TextArea,
   } = useFormInput({ validator, entry: term });
 
   if (!term) {
@@ -745,7 +743,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
       <h4>Edit Term</h4>
       <form name="editword" className="validate">
         <WoInput type="hidden" entryKey="WoID" fixed />
-        <WoInput type="hidden" entryKey="WoLgID" fixed />
+        <WoInput type="hidden" entryKey="WoLgID" fixed id="langfield" />
         <WoInput type="hidden" entryKey="WoCreated" fixed />
         {/* TODO */}
         <input type="hidden" name="WoOldStatus" value={term.WoStatus} />
@@ -760,6 +758,8 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
               <WoInput
                 {...getDirTag(termLanguage)}
                 className="notempty setfocus checkoutsidebmp"
+                // TODO
+                // onBlur={do_ajax_show_similar_terms}
                 id="wordfield"
                 errorName="Term"
                 entryKey="WoText"
@@ -770,19 +770,22 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
               />
             </td>
           </tr>
-          <PrintSimilarTermsTabrow />
+          <PrintSimilarTermsTabrow
+            word={refMap.WoText.current}
+            lang={refMap.WoLgID.current}
+          />
           <tr>
             <td className="td1 right">Translation:</td>
             <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
+              <TextArea
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={500}
                 errorName="Translation"
                 name="WoTranslation"
                 cols={40}
                 rows={3}
-                ref={refMap.WoTranslation}
-                defaultValue={term.WoTranslation}
+                default
               />
             </td>
           </tr>
@@ -811,9 +814,10 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
               Term in {'{...}'}:
             </td>
             <td className="td1">
-              <textarea
+              <TextArea
                 {...getDirTag(termLanguage)}
-                className="textarea-noreturn checklength checkoutsidebmp"
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={1000}
                 errorName="Sentence"
                 name="WoSentence"
@@ -835,10 +839,10 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right" colSpan={2}>
               &nbsp;
-              <CreateDictLinksInEditWin2
+              <DictionaryLinks
                 lang={termLanguage}
-                sentctljs={term.WoSentence}
-                wordctljs={term.WoText}
+                sentenceString={term.WoSentence}
+                wordString={term.WoText}
               />
               &nbsp; &nbsp;
               <input
@@ -854,6 +858,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 value="Change"
                 onClick={() => {
                   onSubmit(wordPrevalidateMap, (val) => {
+                    // TODO
                     dataService.editTerm(val);
                     navigator('/edit_words');
                   });
@@ -897,11 +902,13 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   }
   const navigator = useInternalNavigate();
   const validator = AddNewWordValidator;
+  const [showingSentences, setShowingSentences] = useState<boolean>(false);
 
   const {
     Input: WoInput,
     refMap,
     onSubmit,
+    TextArea,
   } = useFormInput({
     entry: { WoLgID: langId },
     validator,
@@ -924,6 +931,8 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
             <WoInput
               {...getDirTag(language)}
               className="notempty setfocus checkoutsidebmp"
+              // TODO
+              // onBlur={do_ajax_show_similar_terms}
               id="wordfield"
               errorName="Term"
               entryKey="WoText"
@@ -932,16 +941,19 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
               size={40}
             />
           </EntryRow>
-          <PrintSimilarTermsTabrow />
+          <PrintSimilarTermsTabrow
+            word={refMap.WoText.current}
+            lang={refMap.WoLgID.current}
+          />
           <EntryRow headerText={'Translation'}>
-            <textarea
-              className="textarea-noreturn checklength checkoutsidebmp"
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={textareaKeydown}
               maxLength={500}
               errorName="Translation"
               name="WoTranslation"
               cols={40}
               rows={3}
-              ref={refMap.WoTranslation}
             />
           </EntryRow>
           <EntryRow headerText={'Tags'}>
@@ -956,9 +968,10 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
             />
           </EntryRow>
           <EntryRow headerText={'Sentence\nTerm in {...}'}>
-            <textarea
+            <TextArea
               {...getDirTag(language)}
-              className="textarea-noreturn checklength checkoutsidebmp"
+              className="checklength checkoutsidebmp"
+              onKeyDown={textareaKeydown}
               maxLength={1000}
               errorName="Sentence"
               name="WoSentence"
@@ -973,12 +986,13 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
           <tr>
             <td className="td1 right" colSpan={2}>
               &nbsp;
-              <CreateDictLinksInEditWin2
+              <DictionaryLinks
                 lang={language}
+                // TODO
                 // 'document.forms[\'editword\'].WoSentence'
-                sentctljs={undefined}
+                sentenceString={undefined}
                 // 'document.forms[\'editword\'].WoText'
-                wordctljs={undefined}
+                wordString={undefined}
               />
               &nbsp; &nbsp;
               <input
@@ -1005,21 +1019,23 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
         </table>
       </form>
       <div id="exsent">
-        <span
-          className="click"
-          // TODO
-          onClick={() => {
-            // TODO prepare_textdata_js
-            do_ajax_show_sentences(
-              refMap.WoLgID.current.value,
-              refMap.WoText.current.value,
-              refMap.WoSentence.current.value
-            );
-          }}
-        >
-          <Icon src="sticky-notes-stack" title="Show Sentences" /> Show
-          Sentences
-        </span>
+        {showingSentences && existingTerm ? (
+          <SentencesForWord
+            // TODO where get term?
+            word={existingTerm}
+            onChooseSentence={(sentence) => console.log(sentence)}
+          />
+        ) : (
+          <span
+            className="click"
+            onClick={() => {
+              setShowingSentences(true);
+            }}
+          >
+            <Icon src="sticky-notes-stack" title="Show Sentences" />
+            Show Sentences
+          </span>
+        )}
       </div>
     </>
   );
@@ -1055,8 +1071,16 @@ export function TermMultiActions({
               <b>ALL</b> {recno === 1 ? '1 Term' : `${recno} Terms`}&nbsp;
               <select
                 name="allaction"
-                onChange={({ target: { value } }) => {
-                  allActionGo(value);
+                onChange={({ target: { value, innerText } }) => {
+                  allActionGo({
+                    numRecords: recno,
+                    sel: { value, text: innerText },
+                    onSetCapitalization: (upperCase) => {},
+                    onAddTag: (tagStr) => {},
+                    onClear: () => {},
+                    onExport: () => {},
+                    onSetStrength: (strength) => {},
+                  });
                 }}
               >
                 <GetAllWordsActionsSelectOptions />
@@ -1090,8 +1114,25 @@ export function TermMultiActions({
 /**
  *
  */
-export function PrintSimilarTermsTabrow() {
+function PrintSimilarTermsTabrow({
+  word,
+  lang,
+}: {
+  word: string;
+  lang: LanguagesId;
+}) {
   const [{ settings }] = useData(['settings']);
+
+  // TODO trigger onBlur
+  const [showingSimilar, setShowingSimilar] = useState(false);
+
+  useEffect(() => {
+    if (word && lang) {
+      setShowingSimilar(true);
+    } else {
+      setShowingSimilar(false);
+    }
+  }, [word, lang]);
   return (
     <>
       {settings['set-similar-terms-count'] > 0 && (
@@ -1104,6 +1145,15 @@ export function PrintSimilarTermsTabrow() {
           <td className="td1">
             <span id="simwords" className="smaller">
               &nbsp;
+              {showingSimilar ? (
+                <>
+                  <PrintSimilarTerms lang_id={lang} compared_term={word} />
+                </>
+              ) : (
+                <>
+                  <img src="icn/waiting2.gif" />
+                </>
+              )}
             </span>
           </td>
         </tr>
@@ -1115,10 +1165,85 @@ export function PrintSimilarTermsTabrow() {
 /**
  *
  */
+function PrintSimilarTerms({
+  lang_id,
+  compared_term,
+}: {
+  lang_id: LanguagesId;
+  compared_term: string;
+}) {
+  const [{ settings, words }] = useData(['settings', 'words']);
+  const max_count = settings['set-similar-terms-count'];
+  if (max_count <= 0) {
+    return <></>;
+  }
+  if (compared_term.trim() == '') {
+    return <>&nbsp;</>;
+  }
+  // compare = tohtml(compared_term);
+  const termarr = get_similar_terms(lang_id, compared_term, max_count, 0.33);
+  // rarr = array();
+  return (
+    <>
+      {termarr.map((termid: BrandedNumber<'wordsId'>) => {
+        const record = words.find((val) => val.WoID === termid)!;
+        const term = record['WoText'];
+        const tra = record['WoTranslation'];
+        if (tra == '*') {
+          tra = '???';
+        }
+
+        const { rom, romd } =
+          record.WoRomanization && record.WoRomanization.trim() !== ''
+            ? {
+                romd: ` [${record['WoRomanization']}]`,
+                rom: record.WoRomanization,
+              }
+            : { rom: '', romd: '' };
+        return (
+          <>
+            <Icon
+              className="clickedit"
+              src="tick-button-small"
+              title="Copy → Translation &amp; Romanization Field(s)"
+              onClick={() =>
+                setTransRoman(
+                  prepare_textdata_js(tra),
+                  prepare_textdata_js(rom)
+                )
+              }
+            />{' '}
+            {stripos(compare, term) !== FALSE ? (
+              <span className="red3">{term}</span>
+            ) : (
+              <span className="red3">
+                {/* TODO */}
+                <u>{' . term.replace(compare)=>this compare . '}</u>
+              </span>
+            )}
+            {romd} — {tra}
+            <br />
+          </>
+        );
+      })}
+    </>
+  );
+}
+
+/**
+ * TODO
+ */
 export function WordTag() {
   return (
     <>
+      {/* // Create tag.
+            var tag = $('<li></li>')
+                .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
+                .addClass(additionalClass)
+                .append(label); */}
+
       <li className="tagit-choice ui-widget-content ui-state-default ui-corner-all">
+        {/* TODO */}
         {/* this.options.onTagClicked */}
         <a className="tagit-label"></a>
         <span className="tagit-label"></span>
@@ -1146,7 +1271,10 @@ export function GetTagsList({
     tagKey,
   ]);
   return (
-    <ul id="termtags">
+    <ul
+      id="termtags"
+      // TODO tagit
+    >
       {EntryID !== null && (
         <>
           {instance
@@ -1167,53 +1295,71 @@ export function GetTagsList({
 /**
  *
  */
-export function CreateDictLinksInEditWin2({
+export function DictionaryLinks({
   lang,
-  sentctljs,
-  wordctljs,
+  sentenceString: sentenceString,
+  wordString: wordString,
+  setTranslateAPIParams,
+  setIFrameURL,
+  breakSent,
 }: {
   lang: Language;
-  sentctljs;
-  wordctljs;
+  sentenceString: string;
+  wordString: string;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
+  setIFrameURL: (url: string | null) => void;
+  breakSent?: boolean;
 }) {
-  const { LgDict1URI: wb1, LgDict2URI: wb2, LgGoogleTranslateURI: wb3 } = lang;
+  const { LgDict1URI, LgDict2URI, LgGoogleTranslateURI } = lang;
   return (
     <>
-      Lookup Term:{' '}
-      <span
-        className="click"
-        onClick={() => {
-          // TODO
-          translateWord2(prepare_textdata_js(wb1), wordctljs);
-        }}
+      Lookup Term:
+      <MultiFunctionalURL
+        templateStr={LgDict1URI}
+        word={wordString}
+        setIFrameURL={setIFrameURL}
+        setTranslateAPIParams={setTranslateAPIParams}
+        language={lang}
       >
         Dict1
-      </span>
-      {wb2 !== '' && (
-        <span
-          className="click"
-          onClick={() => translateWord2(prepare_textdata_js(wb2), wordctljs)}
+      </MultiFunctionalURL>
+      {LgDict2URI && (
+        <MultiFunctionalURL
+          templateStr={LgDict2URI}
+          word={wordString}
+          setIFrameURL={setIFrameURL}
+          setTranslateAPIParams={setTranslateAPIParams}
+          language={lang}
         >
           Dict2
-        </span>
+        </MultiFunctionalURL>
       )}
-      {wb3 !== '' && (
+      {LgGoogleTranslateURI && (
+        <MultiFunctionalURL
+          templateStr={LgGoogleTranslateURI}
+          word={wordString}
+          setIFrameURL={setIFrameURL}
+          setTranslateAPIParams={setTranslateAPIParams}
+          language={lang}
+        >
+          GTr
+        </MultiFunctionalURL>
+      )}
+      {breakSent && <br />}
+      {LgGoogleTranslateURI && (
         <>
-          <span
-            className="click"
-            onClick={() => translateWord2(prepare_textdata_js(wb3), wordctljs)}
+          {breakSent ? '| Sent.' : 'Lookup Sentence'}:
+          <MultiFunctionalURL
+            templateStr={LgGoogleTranslateURI}
+            word={sentenceString}
+            setIFrameURL={setIFrameURL}
+            setTranslateAPIParams={setTranslateAPIParams}
+            language={lang}
           >
             GTr
-          </span>{' '}
-          | Sent.:{' '}
-          <span
-            className="click"
-            onClick={() =>
-              translateSentence2(prepare_textdata_js(wb3), sentctljs)
-            }
-          >
-            GTr
-          </span>
+          </MultiFunctionalURL>
         </>
       )}
     </>
@@ -1225,11 +1371,118 @@ export function CreateDictLinksInEditWin2({
  * @param url
  * @param wordctl
  */
-function translateWord2(url, wordctl) {
+function translateWord2(url: string, wordctl: { value: any }) {
   if (typeof wordctl !== 'undefined' && url !== '') {
     const text = wordctl.value;
     if (typeof text === 'string') {
       owin(createTheDictUrl(url, text));
     }
   }
+}
+
+/**
+ *
+ * @param tra
+ * @param rom
+ */
+function setTransRoman(tra: string, rom: string) {
+  if ($('textarea[name="WoTranslation"]').length == 1)
+    $('textarea[name="WoTranslation"]').val(tra);
+  if ($('input[name="WoRomanization"]').length == 1)
+    $('input[name="WoRomanization"]').val(rom);
+  makeDirty();
+}
+
+/**
+ *
+ * @param lang_id
+ * @param compared_term
+ * @param max_count
+ * @param min_ranking
+ * @param words
+ */
+function get_similar_terms(
+  lang_id: LanguagesId,
+  compared_term: string,
+  max_count: number,
+  min_ranking: number,
+  words: Word[]
+) {
+  // For a language lang_id and a term compared_term (UTF-8),
+  // return an array with max_count wordids with a similarity ranking
+  // > min_ranking, sorted decending.
+  // If string is already in database, it will be excluded in results.
+  const compared_term_lc = compared_term.toLowerCase();
+  const sql = words.filter(
+    (word) => word.WoLgID === lang_id && word.WoTextLC !== compared_term_lc
+  );
+  const termlsd = Object.fromEntries(
+    sql.map((record) => [
+      record['WoID'],
+      getSimilarityRanking(compared_term_lc, record['WoTextLC']),
+    ])
+  );
+  // arsort(termlsd, SORT_NUMERIC);
+  const r: string[] = [];
+  let i = 0;
+  Object.entries(termlsd).forEach(([key, val]) => {
+    if (i >= max_count) {
+      // TODO check behavior against php break
+      return;
+    }
+    if (val < min_ranking) {
+      return;
+    }
+    i++;
+    r[i] = key;
+  });
+  return r;
+}
+
+/**
+ *
+ * @param str1
+ * @param str2
+ */
+function getSimilarityRanking(str1: string, str2: string) {
+  // Returns SimilarityRanking of two UTF-8 strings str1 and str2
+  // Source http://www.catalysoft.com/articles/StrikeAMatch.html
+  // Source http://stackoverflow.com/questions/653157
+  const pairs1 = wordLetterPairs(str1);
+  const pairs2 = wordLetterPairs(str2);
+  const union = pairs1.length + pairs2.length;
+  if (union == 0) {
+    return 0;
+  }
+  const intersection = new Set(...pairs1, ...pairs2).size;
+  return (2.0 * intersection) / union;
+}
+
+/**
+ *
+ * @param str
+ */
+function wordLetterPairs(str: string) {
+  const allPairs = [];
+  const words = str.split(' ');
+  for (let w = 0; w < words.length; w++) {
+    const pairsInWord = letterPairs(words[w]);
+    for (let p = 0; p < pairsInWord.length; p++) {
+      allPairs[pairsInWord[p]] = pairsInWord[p];
+    }
+  }
+  return array_values(allPairs);
+}
+
+/**
+ *
+ * @param str
+ */
+function letterPairs(str: string) {
+  const numPairs = str.length - 1;
+  const pairs = [];
+  for (let i = 0; i < numPairs; i++) {
+    pairs[i] = mb_substr(str, i, 2);
+  }
+  return pairs;
 }

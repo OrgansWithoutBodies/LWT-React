@@ -335,7 +335,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // function getWordTags(wid)
 // {
 // 	global tbpref;
-// 	r = '<ul id="termtags">';
+// 	r = '<ul id="termtags"
+// TODO tagit
+// >';
 // 	if (wid > 0) {
 // 		sql = 'select TgText from ' . tbpref . 'wordtags, ' . tbpref . 'tags where TgID = WtTgID and WtWoID = ' . wid . ' order by TgText';
 // 		res = do_mysqli_query(sql);
@@ -351,7 +353,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // function getTextTags(tid)
 // {
 // 	global tbpref;
-// 	r = '<ul id="texttags">';
+// 	r = '<ul id="texttags"
+// TODO tagit
+// >';
 // 	if (tid > 0) {
 // 		sql = 'select T2Text from ' . tbpref . 'texttags, ' . tbpref . 'tags2 where T2ID = TtT2ID and TtTxID = ' . tid . ' order by T2Text';
 // 		res = do_mysqli_query(sql);
@@ -368,7 +372,9 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // function getArchivedTextTags(tid)
 // {
 // 	global tbpref;
-// 	r = '<ul id="texttags">';
+// 	r = '<ul id="texttags"
+// TODO tagit
+// >';
 // 	if (tid > 0) {
 // 		sql = 'select T2Text from ' . tbpref . 'archtexttags, ' . tbpref . 'tags2 where T2ID = AgT2ID and AgAtID = ' . tid . ' order by T2Text';
 // 		res = do_mysqli_query(sql);
@@ -1577,34 +1583,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function createDictLinksInEditWin(lang, word, sentctljs, openfirst)
-// {
-// 	global tbpref;
-// 	sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . tbpref . 'languages where LgID = ' . lang;
-// 	res = do_mysqli_query(sql);
-// 	record = mysqli_fetch_assoc(res);
-// 	wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
-// 	wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
-// 	wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
-// 	mysqli_free_result(res);
-// 	r = '';
-// 	if (openfirst) {
-// 		r += '<script type="text/javascript">';
-// 		r += "\n//<![CDATA[\n";
-// 		r += makeOpenDictStrJS(createTheDictLink(wb1, word));
-// 		r += "//]]>\n</script>\n";
-// 	}
-// 	r += 'Lookup Term: ';
-// 	r += makeOpenDictStr(createTheDictLink(wb1, word), "Dict1");
-// 	if (wb2 !== "")
-// 		r += makeOpenDictStr(createTheDictLink(wb2, word), "Dict2");
-// 	if (wb3 !== "")
-// 		r += makeOpenDictStr(createTheDictLink(wb3, word), "GTr") . ' | Sent.: ' . makeOpenDictStrDynSent(wb3, sentctljs, "GTr");
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function makeOpenDictStr(url, txt)
 // {
 // 	r = '';
@@ -1673,47 +1651,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 // 	if (wb3 !== "")
 // 		r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">[G]</span>';
 // 	r += '</span>';
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function createDictLinksInEditWin3(lang, sentctljs, wordctljs)
-// {
-// 	global tbpref;
-// 	sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . tbpref . 'languages where LgID = ' . lang;
-// 	res = do_mysqli_query(sql);
-// 	record = mysqli_fetch_assoc(res);
-
-// 	wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
-// 	if (substr(wb1, 0, 1) === '*')
-// 		f1 = 'translateWord2(' . prepare_textdata_js(substr(wb1, 1));
-// 	else
-// 		f1 = 'translateWord(' . prepare_textdata_js(wb1);
-
-// 	wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
-// 	if (substr(wb2, 0, 1) === '*')
-// 		f2 = 'translateWord2(' . prepare_textdata_js(substr(wb2, 1));
-// 	else
-// 		f2 = 'translateWord(' . prepare_textdata_js(wb2);
-
-// 	wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
-// 	if (substr(wb3, 0, 1) === '*') {
-// 		f3 = 'translateWord2(' . prepare_textdata_js(substr(wb3, 1));
-// 		f4 = 'translateSentence2(' . prepare_textdata_js(substr(wb3, 1));
-// 	} else {
-// 		f3 = 'translateWord(' . prepare_textdata_js(wb3);
-// 		f4 = 'translateSentence(' . prepare_textdata_js(wb3);
-// 	}
-
-// 	mysqli_free_result(res);
-// 	r = '';
-// 	r += 'Lookup Term: ';
-// 	r += '<span class="click" onClick="' . f1 . ',' . wordctljs . ');">Dict1</span> ';
-// 	if (wb2 !== "")
-// 		r += '<span class="click" onClick="' . f2 . ',' . wordctljs . ');">Dict2</span> ';
-// 	if (wb3 !== "")
-// 		r += '<span class="click" onClick="' . f3 . ',' . wordctljs . ');">GTr</span> | Sent.: <span class="click" onClick="' . f4 . ',' . sentctljs . ');">GTr</span>';
 // 	return r;
 // }
 
@@ -3113,28 +3050,27 @@ export function replaceTabsWithNewLine(s: string) {
  * @param n
  */
 export function allActionGo({
-  f,
   sel,
-  n,
+  numRecords: numRecords,
   onAddTag,
   onSetCapitalization,
   onSetStrength,
+  onExport,
+  onClear,
 }: {
-  f: string;
-  sel:
-    | { value: string; options: string | any[]; selectedIndex: string | number }
-    | undefined;
-  n: string | undefined;
+  sel: { value: string; text: string } | undefined;
+  numRecords: number;
+  onExport: () => void;
+  onClear: () => void;
   onAddTag: (tagStr: string) => void;
   onSetCapitalization: (upperCase: boolean) => void;
   onSetStrength: (strength: NumericalStrength) => void;
 }) {
-  if (typeof f !== 'undefined' && typeof sel !== 'undefined') {
+  if (sel !== undefined) {
     const v = sel.value;
-    const t = sel.options[sel.selectedIndex].text;
     if (typeof v === 'string') {
       if (v === 'addtagall' || v === 'deltagall') {
-        const answer = verifyAddTagWindow(t, sel.options.length);
+        const answer = verifyAddTagWindow(sel.text, numRecords);
         if (answer !== '') {
           onAddTag(answer);
         }
@@ -3153,9 +3089,9 @@ export function allActionGo({
       ) {
         const answer = confirm(
           'THIS IS AN ACTION ON ALL RECORDS\nON ALL PAGES OF THE CURRENT QUERY!\n\n*** ' +
-            t +
+            sel.text +
             ' ***\n\n*** ' +
-            n +
+            numRecords +
             ' Record(s) will be affected ***\n\nARE YOU SURE?'
         );
         if (answer) {
@@ -3176,9 +3112,10 @@ export function allActionGo({
           }
         }
       } else if (v === 'expall' || v === 'expall2' || v === 'expall3') {
+        return onExport();
       }
     }
-    sel.value = '';
+    onClear();
   }
 }
 
@@ -3462,13 +3399,13 @@ export function buildSentences(
     .split('\n')
     .filter((sent) => sent.trim() !== '')
     // TODO
-    // 		while ($pos !== false && $i > 0) {
-    // 			$s[$i - 1] .= " " . $s[$i];
-    // 			for ($j = $i + 1; $j < $l; $j++)
-    // 				$s[$j - 1] = $s[$j];
-    // 			array_pop($s);
-    // 			$l = count($s);
-    // 			$pos = strpos(LgRegexpSplitSentences, $s[$i]);
+    // 		while (pos !== false && i > 0) {
+    // 			s[i - 1] .= " " . s[i];
+    // 			for (j = i + 1; j < l; j++)
+    // 				s[j - 1] = s[j];
+    // 			array_pop(s);
+    // 			l = count(s);
+    // 			pos = strpos(LgRegexpSplitSentences, s[i]);
     // 		}
     .map((sent, ii) => {
       const trimmed = sent.trim();
@@ -3522,16 +3459,16 @@ export function check_dupl_lang() {}
 
 /**
  *
- * @param $method
+ * @param method
  */
-function getsqlscoreformula($method: number) {
-  // $method = 2 (today)
-  // $method = 3 (tomorrow)
+function getsqlscoreformula(method: number) {
+  // method = 2 (today)
+  // method = 3 (tomorrow)
   // Formula: {{{2.4^{Status}+Status-Days-1} over Status -2.4} over 0.14325248}
 
-  if ($method === 3)
+  if (method === 3)
     return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 2) / WoStatus - 2.4) / 0.14325248) END';
-  else if ($method === 2)
+  else if (method === 2)
     return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 1) / WoStatus - 2.4) / 0.14325248) END';
   else return '0';
 }

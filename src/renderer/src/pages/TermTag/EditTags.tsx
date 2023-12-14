@@ -18,6 +18,7 @@ import { Icon } from '../../ui-kit/Icon';
 import { Tag } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/EditArchivedTexts.component';
+import { markClick, textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -226,7 +227,7 @@ export function DisplayTags({
                       name="marked[]"
                       type="checkbox"
                       {...checkboxPropsForEntry(tag)}
-                      className="markcheck"
+                      onClick={markClick}
                       value={tag['TgID']}
                     />
                   </A>
@@ -318,14 +319,6 @@ function sortValues(value: TagSorting) {
 
 /**
  *
- * @param count
- */
-export function pluralize(count: number) {
-  return count === 1 ? '' : 's';
-}
-
-/**
- *
  */
 export function NewTag() {
   const validator = TagsValidator;
@@ -333,7 +326,7 @@ export function NewTag() {
 
   const navigator = useInternalNavigate();
 
-  const { Input: TgInput, onSubmit } = useFormInput({ validator });
+  const { Input: TgInput, onSubmit, TextArea } = useFormInput({ validator });
   return (
     <>
       <Header title="My Term Tags" />
@@ -355,11 +348,11 @@ export function NewTag() {
           <tr>
             <td className="td1 right">Comment:</td>
             <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
+              <TextArea
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={200}
-                ref={refMap.TgComment}
-                name="TgComment"
+                entryKey="TgComment"
                 cols={40}
                 rows={3}
               />
@@ -410,7 +403,11 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
   const validator = TagsValidator;
   const refMap = RefMap<Tag>(validator);
 
-  const { onSubmit, Input: TgInput } = useFormInput({
+  const {
+    onSubmit,
+    Input: TgInput,
+    TextArea,
+  } = useFormInput({
     validator,
     entry: changingTag,
   });
@@ -436,11 +433,11 @@ export function EditTag({ chgId }: { chgId: TagsId }) {
           <tr>
             <td className="td1 right">Comment:</td>
             <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
+              <TextArea
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={200}
-                ref={refMap.TgComment}
-                name="TgComment"
+                entryKey="TgComment"
                 cols={40}
                 defaultValue={changingTag.TgComment}
                 rows={3}

@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { TRefMap } from '../../forms/Forms';
 import { AppVariables } from '../../meta';
 import { VariantMap } from '../../styles';
@@ -7,6 +7,63 @@ import { RequiredLineButton } from '../../ui-kit/Icon';
 /**
  *
  */
+export function FormTextArea<
+  TKey extends string,
+  TData extends Record<TKey, any>
+>({
+  // TODO onChange
+  // TODO partial input & make sure key matches partial
+  entryKey,
+  refMap,
+  defaultEntry,
+  fixedEntry,
+  formErrors,
+  errorName,
+  isRequired = false,
+  ...nativeProps
+}: Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'defaultValue' | 'ref' | 'name'
+> & {
+  entryKey: TKey;
+  // TODO need refmap if fixed entry?
+  refMap: TRefMap<TData>;
+  isRequired?: boolean;
+  defaultEntry?: TData;
+  fixedEntry?: TData;
+  errorName?: string;
+  formErrors?: {
+    [key in TKey]?: string;
+  };
+}) {
+  // TODO dynamically add constraint to validator here? or just hardcode
+  // const { maxLength } = nativeProps;
+  if (fixedEntry && defaultEntry) {
+    throw new Error("Can't have fixed and default set!");
+  }
+  return (
+    <>
+      <textarea
+        defaultValue={
+          defaultEntry === undefined ? undefined : defaultEntry[entryKey]
+        }
+        value={fixedEntry === undefined ? undefined : fixedEntry[entryKey]}
+        name={entryKey}
+        ref={refMap[entryKey]}
+        {...nativeProps}
+      />
+      {isRequired && <RequiredLineButton />}
+      <br />
+      {formErrors && formErrors[entryKey] !== undefined && (
+        <FormLineError<TKey>
+          errorName={errorName}
+          entryKey={entryKey}
+          formError={formErrors[entryKey]!}
+        />
+      )}
+    </>
+  );
+}
 export function FormInput<
   TKey extends string,
   TData extends Record<TKey, any>
@@ -54,11 +111,11 @@ export function FormInput<
       />
       {isRequired && <RequiredLineButton />}
       <br />
-      {formErrors && formErrors[entryKey] && (
+      {formErrors && formErrors[entryKey] !== undefined && (
         <FormLineError<TKey>
           errorName={errorName}
           entryKey={entryKey}
-          formError={formErrors[entryKey]}
+          formError={formErrors[entryKey]!}
         />
       )}
     </>

@@ -16,6 +16,7 @@ type NonHeaderLinks =
   | 'install_demo'
   | 'print_text'
   | 'print_impr_text'
+  | 'display_impr_text'
   | 'do_text';
 
 type BasePath = InternalPathsFromHeader | NonHeaderLinks | '/';

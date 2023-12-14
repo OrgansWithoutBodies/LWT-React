@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../ui-kit/Tooltip';
-import { Language, Word } from '../utils/parseMySqlDump';
+import { Language, TextItem, Word } from '../utils/parseMySqlDump';
 import { AddNewTermTooltip } from './Term/AddNewTermTooltip';
 
 // TODO map color from termstrength type
@@ -31,8 +31,16 @@ export function Reader({
   activeWord,
 }: {
   activeId: TextsId;
-  setActiveWord: (word: Word | { newWord: string } | null) => void;
-  activeWord: Word | { newWord: string } | null;
+  setActiveWord: (
+    word:
+      | (Word & Pick<TextItem, 'TiSeID'>)
+      | ({ newWord: string } & Pick<TextItem, 'TiSeID'>)
+      | null
+  ) => void;
+  activeWord:
+    | (Word & Pick<TextItem, 'TiSeID'>)
+    | ({ newWord: string } & Pick<TextItem, 'TiSeID'>)
+    | null;
   setIFrameURL: (url: string | null) => void;
   setTranslateAPIParams: (
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
@@ -86,7 +94,12 @@ export function Reader({
                   word={
                     'WoText' in activeWord ? activeWord : activeWord.newWord
                   }
-                  sentence="sentence"
+                  sentence={
+                    sentences.find(
+                      (sentence) => sentence.SeID === activeWord.TiSeID
+                      // TODO no !
+                    )!
+                  }
                   onClose={() => setTooltipOpen(null)}
                   setIFrameURL={setIFrameURL}
                   setTranslateAPIParams={setTranslateAPIParams}
@@ -96,10 +109,17 @@ export function Reader({
             </PopoverContent>
           )}
           {activeParsedText.map((term, ii) => {
-            const { TiIsNotWord, TiTextLC, TiText, TiOrder, TiWordCount } =
-              term;
+            const {
+              TiIsNotWord,
+              TiTextLC,
+              TiText,
+              // TiOrder,
+              // TiWordCount,
+              TiSeID,
+            } = term;
             const foundWord = wordLookupKeyedByTextLC[TiTextLC];
-            const $spanid = 'ID-' + TiOrder + '-' + TiWordCount;
+            // TODO
+            // const spanid = 'ID-' + TiOrder + '-' + TiWordCount;
             const termStatus = foundWord
               ? ` status${foundWord.WoStatus}`
               : ' status0';
@@ -110,8 +130,8 @@ export function Reader({
                     onClickWord={() => {
                       setActiveWord(
                         foundWord !== undefined
-                          ? foundWord
-                          : { newWord: TiText }
+                          ? { ...foundWord, TiSeID }
+                          : { newWord: TiText, TiSeID }
                       );
                       setTooltipOpen(ii);
                     }}
@@ -139,7 +159,7 @@ export function Reader({
       <>
         <p>
           <span id="totalcharcount" className="hide">
-            {/* ' . $currcharcount . ' */}
+            {/* ' . currcharcount . ' */}
           </span>
         </p>
         <p

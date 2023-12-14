@@ -1,6 +1,4 @@
 import { Store, StoreConfig } from '@datorama/akita';
-import { Persistable } from '../../../shared/Persistable';
-import demoDB from '../demo_db.json';
 import { AppVariables } from '../meta';
 import {
   PersistedValueGetter,
@@ -20,8 +18,6 @@ import {
   Word,
   WordTag,
 } from '../utils/parseMySqlDump';
-import { RawTextItem } from '../utils/utils';
-import { TextsId } from './validators';
 
 export interface DataState {
   archivedtexts: ArchivedText[];
@@ -38,7 +34,6 @@ export interface DataState {
   words: Word[];
   wordtags: WordTag[];
 
-  parsedTexts: Record<TextsId, RawTextItem[]>;
   notificationMessage: null | { txt: string };
 }
 
@@ -47,23 +42,18 @@ const MyPersistanceStrategy = AppVariables.persistMethod;
 export const MyPersistanceHandles =
   PersistenceStrategies[MyPersistanceStrategy];
 
-/**
- *
- */
-export function createDemoDBInitialState(): DataState {
-  return {
-    ...demoDB,
-    parsedTexts: [],
-    notificationMessage: null,
-  };
-}
-
 @StoreConfig({ name: 'data' })
+// TODO
 export class DataStore extends Store<DataState> {
   constructor() {
     const { get: persistGetter } = MyPersistanceHandles;
     // TODO type issues
-    super(getPersistedData(persistGetter));
+    super(
+      getPersistedData(
+        // TODO
+        (key) => (_key, defaultVal) => persistGetter(key, defaultVal)
+      )
+    );
   }
 }
 
@@ -73,21 +63,23 @@ export const dataStore = new DataStore();
  * @param persistGetter
  */
 function getPersistedData(
-  persistGetter: PersistedValueGetter
-): Partial<DataState> {
+  persistGetter: <TKey extends keyof DataState>(
+    key: TKey
+  ) => PersistedValueGetter<TKey>
+): DataState {
   return {
-    settings: persistGetter('settings', []),
-    parsedTexts: persistGetter('parsedTexts', []),
-    sentences: persistGetter('sentences', []),
-    archivedtexts: persistGetter(Persistable.archivedtexts, []),
-    archtexttags: persistGetter(Persistable.archtexttags, []),
-    languages: persistGetter(Persistable.languages, []),
-    tags2: persistGetter(Persistable.tags2, []),
-    tags: persistGetter(Persistable.tags, []),
-    textitems: persistGetter(Persistable.textitems, []),
-    texts: persistGetter(Persistable.texts, []),
-    texttags: persistGetter(Persistable.texttags, []),
-    words: persistGetter(Persistable.words, []),
-    wordtags: persistGetter(Persistable.wordtags, []),
+    settings: persistGetter('settings')('settings', []),
+    sentences: persistGetter('sentences')('sentences', []),
+    archivedtexts: persistGetter('archivedtexts')('archivedtexts', []),
+    archtexttags: persistGetter('archtexttags')('archtexttags', []),
+    languages: persistGetter('languages')('languages', []),
+    tags2: persistGetter('tags2')('tags2', []),
+    tags: persistGetter('tags')('tags', []),
+    textitems: persistGetter('textitems')('textitems', []),
+    texts: persistGetter('texts')('texts', []),
+    texttags: persistGetter('texttags')('texttags', []),
+    words: persistGetter('words')('words', []),
+    wordtags: persistGetter('wordtags')('wordtags', []),
+    notificationMessage: null,
   };
 }

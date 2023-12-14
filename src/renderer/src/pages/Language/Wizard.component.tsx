@@ -9,6 +9,7 @@ import { Icon } from '../../ui-kit/Icon';
  * @param onSuccess
  */
 function wizard_go(
+  // TODO these can be moved to a validator
   refL1: React.MutableRefObject<HTMLSelectElement | undefined>,
   refL2: React.MutableRefObject<HTMLSelectElement | undefined>,
   onSuccess: (l1: string, l2: string) => void
@@ -16,7 +17,6 @@ function wizard_go(
   const l1 = refL1.current?.value;
   const l2 = refL2.current?.value;
 
-  // TODO these can be moved to a validator
   if (l1 === undefined || l2 === undefined) {
     throw new Error('Undefined refs');
   }

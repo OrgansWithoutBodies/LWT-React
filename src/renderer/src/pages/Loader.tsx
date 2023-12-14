@@ -15,7 +15,7 @@ export function Loader(
 ) {
   return (
     <>
-      <img {...args} src="icn/waiting.gif" />
+      <img {...args} src="icn/waiting2.gif" />
     </>
   );
 }

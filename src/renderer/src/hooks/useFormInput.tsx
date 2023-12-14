@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import * as ss from 'superstruct';
-import { CheckAndSubmit, RefMap } from '../forms/Forms';
-import { FormInput, FormLineError } from '../pages/IO/FormInput';
+import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
+import { FormInput, FormLineError, FormTextArea } from '../pages/IO/FormInput';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
@@ -10,6 +10,13 @@ export type FormInputComponentParams = Omit<
   'refMap' | 'defaultEntry' | 'fixedEntry' | 'type'
 > & {
   type?: string;
+  fixed?: boolean;
+  default?: boolean;
+};
+export type FormTextAreaComponentParams = Omit<
+  Parameters<typeof FormTextArea>[0],
+  'refMap' | 'defaultEntry' | 'fixedEntry'
+> & {
   fixed?: boolean;
   default?: boolean;
 };
@@ -43,6 +50,31 @@ export function useFormInput<
     [key in keyof typeof validator.TYPE]?: string;
   }>({});
 
+  const TextArea = useMemo(
+    () =>
+      function (args: FormTextAreaComponentParams) {
+        return (
+          <FormTextArea
+            {...args}
+            type={args.type === undefined ? 'text' : args.type}
+            refMap={refMap}
+            formErrors={formErrors}
+            fixedEntry={
+              entry && args.fixed && entry[args.entryKey] ? entry : undefined
+            }
+            defaultEntry={
+              entry && args.default && entry[args.entryKey] ? entry : undefined
+            }
+          />
+        );
+      },
+    [
+      ...Object.values(entry || {}),
+      // TODO right now this deletes data on error
+      formErrors,
+      // ...Object.values(formErrors ? formErrors : {}),
+    ]
+  );
   const ReturnedComponent = useMemo(
     () =>
       function (args: FormInputComponentParams) {
@@ -69,8 +101,13 @@ export function useFormInput<
     ]
   );
   const onSubmit = (
-    preValidateMap: Parameters<typeof CheckAndSubmit>[1],
-    onValidatedData: Parameters<typeof CheckAndSubmit>[3],
+    preValidateMap: {
+      [key in keyof TData]?: (
+        value: string,
+        refMap: TRefMap<TData>
+      ) => any | null;
+    },
+    onValidatedData: (value: { [key in keyof TData]: any }) => void,
     omit: keyof TData | null = null
   ) =>
     CheckAndSubmit(
@@ -113,6 +150,7 @@ export function useFormInput<
   console.log(formErrors);
   return {
     Input: ReturnedComponent,
+    TextArea,
     onSubmit,
     refMap,
     formErrors,

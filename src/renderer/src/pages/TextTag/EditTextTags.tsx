@@ -1,7 +1,6 @@
 import { TextTagDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { Tags2Id, Tags2Validator } from '../../data/validators';
-import { CheckAndSubmit } from '../../forms/Forms';
 import { useData } from '../../hooks/useAkita';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
@@ -12,6 +11,7 @@ import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/EditArchivedTexts.component';
+import { markClick, textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -230,13 +230,13 @@ export function DisplayTextTags({
               return (
                 <tr>
                   {/* TODO think already taken care of?*/}
-                  {/*  ' . checkTest($record['T2ID'], 'marked') . ' */}
+                  {/*  ' . checkTest(record['T2ID'], 'marked') . ' */}
                   <td className="td1 center">
                     <A id={`rec${tag['T2ID']}`}>
                       <input
                         name="marked[]"
                         type="checkbox"
-                        className="markcheck"
+                        onClick={markClick}
                         {...checkboxPropsForEntry(tag)}
                         value={tag['T2ID']}
                       />
@@ -307,7 +307,7 @@ export function DisplayTextTags({
 export function NewTextTag() {
   const validator = Tags2Validator;
   const navigator = useInternalNavigate();
-  const { Input: TtInput, refMap } = useFormInput({ validator });
+  const { onSubmit, Input: TtInput, TextArea } = useFormInput({ validator });
   return (
     <>
       <Header title="My Text Tags" />
@@ -330,12 +330,12 @@ export function NewTextTag() {
           <tr>
             <td className="td1 right">Comment:</td>
             <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
+              <TextArea
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={200}
                 errorName="Comment"
-                name="T2Comment"
-                ref={refMap.T2Comment}
+                entryKey="T2Comment"
                 cols={40}
                 rows={3}
               />
@@ -356,10 +356,8 @@ export function NewTextTag() {
                 name="op"
                 value="Save"
                 onClick={() => {
-                  CheckAndSubmit(
-                    refMap,
+                  onSubmit(
                     {},
-                    validator,
                     (value) => {
                       dataService.addTextTag(value);
                       navigator('/edit_texttags');
@@ -390,7 +388,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   const {
     Input: TgInput,
     onSubmit,
-    refMap,
+    TextArea,
   } = useFormInput({ validator, entry: changingTag });
   return (
     <>
@@ -417,12 +415,12 @@ export function EditTextTag({ chgID }: { chgID: number }) {
           <tr>
             <td className="td1 right">Comment:</td>
             <td className="td1">
-              <textarea
-                className="textarea-noreturn checklength checkoutsidebmp"
+              <TextArea
+                className="checklength checkoutsidebmp"
+                onKeyDown={textareaKeydown}
                 maxLength={200}
                 errorName="Comment"
-                name="T2Comment"
-                ref={refMap.T2Comment}
+                entryKey="T2Comment"
                 cols={40}
                 rows={3}
                 defaultValue={changingTag.T2Comment}

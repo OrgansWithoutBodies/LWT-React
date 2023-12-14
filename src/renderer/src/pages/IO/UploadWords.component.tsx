@@ -1,11 +1,7 @@
 import { parse } from 'papaparse';
-import * as ss from 'superstruct';
 import { dataService } from '../../data/data.service';
-import {
-  NumberInListValidator,
-  StringInListValidator,
-} from '../../data/validators';
-import { TRefMap, parseNumMap } from '../../forms/Forms';
+import { UploadTermsValidator } from '../../data/validators';
+import { parseNumMap } from '../../forms/Forms';
 import { useData } from '../../hooks/useAkita';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
@@ -15,7 +11,13 @@ import { Word } from '../../utils/parseMySqlDump';
 import { SelectBoolean } from '../Language/EditLanguage.component';
 import { StrengthMap } from '../StrengthMap';
 import { GetWordstatusSelectoptions } from '../Text/PrintText.component';
-import { ColumnImportMode, TermName } from '../columnImportMode';
+import {
+  ColumnImportMode,
+  ColumnImportModeTermParam,
+  ItemsFromWord,
+  RelevantTermName,
+  TermName,
+} from '../columnImportMode';
 
 /**
  *
@@ -23,49 +25,11 @@ import { ColumnImportMode, TermName } from '../columnImportMode';
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();
-  // TODO check magics
-  const fileValidator = ss.object({
-    file: ss.any(),
-    fileName: ss.refine(ss.string(), 'ends-with-csv', (val) =>
-      val.endsWith('.csv')
-    ),
-    fileType: ss.refine(
-      ss.string(),
-      'is-text-csv',
-      (val) => val === 'text/csv'
-    ),
-  });
-  const validator = ss.object({
-    // TODO at least has term
-    // columns: ss.refine(
-    //   ss.nonempty(ss.array()),
-    //   'no-dupes',
-    //   (vals) =>
-    //     ['w', 't', 'r', 's', 'g', 'x'].findIndex(
-    //       (key) => vals.filter((keyVal) => keyVal !== key).length > 1
-    //     ) === -1
-    // ),
-    columns: ss.nonempty(ss.array()),
-    over: NumberInListValidator([0, 1]),
-    c1: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
-    c2: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
-    c3: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
-    c4: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
-    c5: StringInListValidator(['w', 't', 'r', 's', 'g', 'x']),
-    delimiter: StringInListValidator(['c', 't', 'h']),
-    WoStatus: NumberInListValidator([0, 1, 2, 3, 4, 5, 98, 99] as const),
-    file: fileValidator,
-    // TODO add hook callback to check if ID given exists
-    WoLgID: NumberInListValidator(languages.map((val) => val.LgID)),
-    // WoStatus: NumberInListValidator(
-    //   Object.keys(StrengthMap).map(
-    //     (strengthKey) => StrengthMap[strengthKey].classKey
-    //   )
-    // ),
-  } as const);
+  const validator = UploadTermsValidator(languages);
   const {
     refMap,
     Input: UlInput,
+    TextArea,
     onSubmit,
     LanguageSelectInput,
   } = useFormInput({ validator });
@@ -203,11 +167,10 @@ export function UploadWords() {
               <b>Or</b> type in or paste from clipboard (do <b>NOT</b> specify
               file):
               <br />
-              {/* TODO bring into forminput, take data into account */}
-              <textarea
+              <TextArea
                 className="checkoutsidebmp"
                 errorName="Upload"
-                name="Upload"
+                entryKey="Upload"
                 cols={60}
                 rows={25}
               />
@@ -223,13 +186,15 @@ export function UploadWords() {
                 className="notempty"
                 name="WoStatus"
               >
-                {Object.keys(StrengthMap)
-                  .filter((val) => val !== '0')
-                  .map((key) => (
-                    <option value={StrengthMap[key].classKey}>
-                      {StrengthMap[key].status} [{key}]
-                    </option>
-                  ))}
+                {(
+                  Object.keys(StrengthMap).filter(
+                    (val) => val !== 0
+                  ) as (keyof typeof StrengthMap)[]
+                ).map((key) => (
+                  <option value={StrengthMap[key].classKey}>
+                    {StrengthMap[key].status} [{key}]
+                  </option>
+                ))}
                 {/* TODO */}
                 <GetWordstatusSelectoptions
                   v={null}
@@ -292,10 +257,7 @@ export function UploadWords() {
                       }),
                     },
                     async (value) => {
-                      const parsedTerms = await parseTermsFromCSV(
-                        value,
-                        refMap
-                      );
+                      const parsedTerms = await parseTermsFromCSV(value);
                       dataService.addMultipleTerms(parsedTerms);
                     }
                   );
@@ -328,10 +290,11 @@ const delimiterMap = { c: ',', t: '\t', h: '#' };
  *
  * @param refMap
  */
-async function parseTermsFromCSV(
-  value: { [x: string]: any },
-  refMap: TRefMap<{ [x: string]: any }>
-) {
+async function parseTermsFromCSV<
+  TData extends ReturnType<typeof UploadTermsValidator>['TYPE'] = ReturnType<
+    typeof UploadTermsValidator
+  >['TYPE']
+>(value: TData) {
   const fileBlob = value.file.file;
   console.log('blob', fileBlob);
   const stringdata = await fileBlob?.text();
@@ -356,13 +319,18 @@ async function parseTermsFromCSV(
           (row[4] === undefined || row[4] === '')
         )
     )
-    .map((row, ii) => {
+    .map((row) => {
+      type TaggableWord = Pick<Word, ItemsFromWord> & {
+        // TODO do something with this
+        TagList: string[];
+      };
+
       const term = Object.fromEntries(
         colIndsToCareAbout.map(
           ([ind, colKey]) =>
             [ColumnImportMode[colKey]['termParam'], row[ind]] as [
-              (typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam'],
-              Word[(typeof ColumnImportMode)[keyof typeof ColumnImportMode]['termParam']]
+              (typeof ColumnImportMode)[RelevantTermName]['termParam'],
+              TaggableWord[ColumnImportModeTermParam]
             ]
         )
       );
@@ -370,7 +338,7 @@ async function parseTermsFromCSV(
         ...term,
         WoLgID: value.WoLgID,
         WoStatus: value.WoStatus,
-      } as Word;
+      };
     });
   return parsedTerms;
 }

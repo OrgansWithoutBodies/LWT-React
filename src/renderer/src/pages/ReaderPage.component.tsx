@@ -1,67 +1,82 @@
 import { useEffect, useRef, useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { useThemeColors } from '../App';
+import { dataService } from '../data/data.service';
 import { LanguagesId, TextsId } from '../data/validators';
 import { useData } from '../hooks/useAkita';
 import { useTick } from '../hooks/useTimer';
+import { A } from '../nav/InternalLink';
 import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Language, Word } from '../utils/parseMySqlDump';
+import { Language, TextItem, Word } from '../utils/parseMySqlDump';
 import { TranslationAPI } from './IO/APITranslation.component';
 import { Loader } from './Loader';
 import { Reader } from './Reader.component';
-import { RunTestForWord } from './RunTestForWord';
 import { AddNewWordPane } from './Term/AddNewWordPane';
 import { TextToDoCount } from './TextToDoCount';
+import { MakeOverlibLinkChangeStatusAlltest } from './escape_html_chars';
 import { owin } from './translateSentence2';
 
 // TODO
 //  confirmation screen
 //  details screen
 
-function ShowAllMessage({ $showAll }: { $showAll: 0 | 1 }) {
-  <p>
-    <span id="waiting">
-      <img src="icn/waiting.gif" alt="Please wait" title="Please wait" />
-      &nbsp;&nbsp;Please wait ...
-    </span>
-    {$showAll === 1 ? (
-      <>
-        <p>
-          <b>
-            <i>Show All</i>
-          </b>{' '}
-          is set to <b>ON</b>.<br />
-          <br />
-          ALL terms are now shown, and all multi-word terms are shown as
-          superscripts before the first word. The superscript indicates the
-          number of words in the multi-word term.
-          <br />
-          <br />
-          To concentrate more on the multi-word terms and to display them
-          without superscript, set <i>Show All</i> to OFF.
-        </p>
-      </>
-    ) : (
-      <>
-        <p>
-          <b>
-            <i>Show All</i>
-          </b>{' '}
-          is set to <b>OFF</b>.<br />
-          <br />
-          Multi-word terms now hide single words and shorter or overlapping
-          multi-word terms. The creation and deletion of multi-word terms can be
-          a bit slow in long texts.
-          <br />
-          <br />
-          To manipulate ALL terms, set <i>Show All</i> to ON.
-        </p>
-      </>
-    )}
-  </p>;
+/**
+ *
+ */
+function showallwordsClick(
+  text: TextsId,
+  newVal: 0 | 1,
+  onShowChanged: (args: { text: TextsId; mode: 0 | 1 }) => void
+) {
+  dataService.setSettings({ showallwords: newVal });
+  onShowChanged({ text, mode: newVal });
+}
+function ShowAllMessage({ showAll: showAll }: { showAll: 0 | 1 }) {
+  return (
+    <p>
+      <span id="waiting">
+        <img src="icn/waiting.gif" alt="Please wait" title="Please wait" />
+        &nbsp;&nbsp;Please wait ...
+      </span>
+      {showAll === 1 ? (
+        <>
+          <p>
+            <b>
+              <i>Show All</i>
+            </b>{' '}
+            is set to <b>ON</b>.<br />
+            <br />
+            ALL terms are now shown, and all multi-word terms are shown as
+            superscripts before the first word. The superscript indicates the
+            number of words in the multi-word term.
+            <br />
+            <br />
+            To concentrate more on the multi-word terms and to display them
+            without superscript, set <i>Show All</i> to OFF.
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            <b>
+              <i>Show All</i>
+            </b>{' '}
+            is set to <b>OFF</b>.<br />
+            <br />
+            Multi-word terms now hide single words and shorter or overlapping
+            multi-word terms. The creation and deletion of multi-word terms can
+            be a bit slow in long texts.
+            <br />
+            <br />
+            To manipulate ALL terms, set <i>Show All</i> to ON.
+          </p>
+        </>
+      )}
+    </p>
+  );
 }
 /**
  *
@@ -72,6 +87,9 @@ function IFramePane({ url }: { url: string | null }) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   useEffect(() => {
     const frame = frameRef.current;
+    if (!frame) {
+      return () => {};
+    }
     const loadHandler = () => {
       setLoading(false);
     };
@@ -129,7 +147,13 @@ function IFramePane({ url }: { url: string | null }) {
 /**
  *
  */
-export function ReaderPage({ textId }: { textId: TextsId }) {
+export function ReaderPage({
+  textId,
+}: // onShowChanged,
+{
+  textId: TextsId;
+  // onShowChanged: (args: { text: TextsId; mode: 0 | 1 }) => void;
+}) {
   const [{ texts, settings }] = useData(['texts', 'settings']);
   const {
     ['set-text-l-framewidth-percent']: lFrameWidthPerc,
@@ -144,8 +168,14 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
     setTextHFrameheightWithAudio,
   });
   const [activeWord, setActiveWord] = useState<
-    Word | { newWord: string } | null
+    | (Word & Pick<TextItem, 'TiSeID'>)
+    | ({ newWord: string } & Pick<TextItem, 'TiSeID'>)
+    | null
   >(null);
+  const [showChanged, setShowChanged] = useState<{
+    text: TextsId;
+    mode: 0 | 1;
+  } | null>(null);
   const [iFrameURL, setIFrameURL] = useState<string | null>(null);
   const [translateAPIParams, setTranslateAPIParams] = useState<
     (APITranslateTerm<string, string> & { apiKey: string }) | null
@@ -222,10 +252,14 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
                   <input
                     type="checkbox"
                     id="showallwords"
+                    onClick={(val) =>
+                      showallwordsClick(text.TxID, val, setShowChanged)
+                    }
                     // TODO
                     ref={null}
                   />
                 </span>
+                {/* TODO deprecate */}
                 <span id="thetextid" className="hide">
                   {text.TxID}
                 </span>
@@ -257,6 +291,10 @@ export function ReaderPage({ textId }: { textId: TextsId }) {
             setIFrameURL={setIFrameURL}
             setTranslateAPIParams={setTranslateAPIParams}
           />
+        ) : showChanged ? (
+          <>
+            <ShowAllMessage showAll={showChanged.mode} />
+          </>
         ) : (
           <></>
         )}
@@ -393,7 +431,7 @@ export function TesterPage({
         ) : (
           <></>
         )}
-        <IFramePane />
+        <IFramePane url={null} />
       </SplitPane>
     </SplitPane>
   );
@@ -488,6 +526,106 @@ export function Tester({ modality }: { modality: Modality }) {
           {numCorrect}
         </span>
       </div>
+    </>
+  );
+}
+
+/**
+ *
+ */
+function RunTestForWord({
+  word: {
+    WoTranslation: trans,
+    WoStatus: status,
+    WoID,
+    WoRomanization: roman,
+    WoText: text,
+  },
+  language: {
+    LgDict1URI: wblink1,
+    LgDict2URI: wblink2,
+    LgGoogleTranslateURI: wblink3,
+  },
+}: {
+  word: Word;
+  language: Language;
+}) {
+  return (
+    <>
+      <center>
+        <hr
+          style={{
+            height: '1px',
+            border: 'none',
+            color: '#333',
+            backgroundColor: '#333',
+          }}
+        />
+        {status >= 1 && status <= 5 && (
+          <>
+            {/* TODO values here */}
+            <MakeOverlibLinkChangeStatusTest
+              wid={0}
+              plusminus={'plus'}
+              text={''}
+            />
+            <Icon src="thumb-up" title="Got it!" /> Got it! [
+            {`${status} ▶ ${status + 1}`}
+            ]
+            <hr
+              style={{
+                height: '1px',
+                border: 'none',
+                color: '#333',
+                backgroundColor: '#333',
+              }}
+            />
+            {/* TODO values here */}
+            <MakeOverlibLinkChangeStatusTest
+              wid={0}
+              plusminus={'plus'}
+              text={''}
+            />
+            <Icon src="thumb" title="Oops!" /> Oops! [
+            {`${status} ▶ ${status - 1}`}
+            ]
+            <hr
+              style={{
+                height: '1px',
+                border: 'none',
+                color: '#333',
+                backgroundColor: '#333',
+              }}
+            />
+            {/* TODO */}
+            <b>
+              {' '}
+              <MakeOverlibLinkChangeStatusAlltest />
+            </b>
+            <br />
+          </>
+        )}
+      </center>
+      <hr
+        style={{
+          height: '1px',
+          border: 'none',
+          color: '#333',
+          backgroundColor: '#333',
+        }}
+      />
+      {/* <b>{escape_html_chars(make_tooltip(text, trans, roman, stat))}</b> */}
+      <br />
+      <A ref={`/edit_tword?wid=${WoID}`} target="ro">
+        Edit term
+      </A>
+      <br />
+
+      <CreateTheDictLink u={wblink1} w={text} t={'Dict1'} b={'Lookup Term: '} />
+      <CreateTheDictLink u={wblink2} w={text} t={'Dict2'} b={''} />
+      <CreateTheDictLink u={wblink3} w={Set} t={'GTr'} b={''} />
+      <br />
+      {/* Lookup Sentence:'), */}
     </>
   );
 }
@@ -730,37 +868,37 @@ export function TesterTable({
         <input
           type="checkbox"
           id="cbEdit"
-          //  <?php echo get_checked($currenttabletestsetting1); ?>
+          //  <?php echo get_checked(currenttabletestsetting1); ?>
         />{' '}
         Edit
         <input
           type="checkbox"
           id="cbStatus"
-          //  <?php echo get_checked($currenttabletestsetting2); ?>
+          //  <?php echo get_checked(currenttabletestsetting2); ?>
         />{' '}
         Status
         <input
           type="checkbox"
           id="cbTerm"
-          //  <?php echo get_checked($currenttabletestsetting3); ?>
+          //  <?php echo get_checked(currenttabletestsetting3); ?>
         />{' '}
         Term
         <input
           type="checkbox"
           id="cbTrans"
-          //  <?php echo get_checked($currenttabletestsetting4); ?>
+          //  <?php echo get_checked(currenttabletestsetting4); ?>
         />{' '}
         Translation
         <input
           type="checkbox"
           id="cbRom"
-          //  <?php echo get_checked($currenttabletestsetting5); ?>
+          //  <?php echo get_checked(currenttabletestsetting5); ?>
         />{' '}
         Romanization
         <input
           type="checkbox"
           id="cbSentence"
-          //  <?php echo get_checked($currenttabletestsetting6); ?>
+          //  <?php echo get_checked(currenttabletestsetting6); ?>
         />{' '}
         Sentence
       </p>
@@ -781,64 +919,64 @@ export function TesterTable({
         </tr>
         {/* <?php
 
-	$sql = 'SELECT DISTINCT WoID, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, WoTodayScore As Score FROM ' . $testsql . ' AND WoStatus BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\' order by WoTodayScore, WoRandom*RAND()';
-	if ($debug)
-		echo $sql;
-	$res = do_mysqli_query($sql);
-	while ($record = mysqli_fetch_assoc($res)) {
-		$sent = tohtml(repl_tab_nl($record["WoSentence"]));
-		$sent1 = str_replace("{", ' <b>[', str_replace(
+	sql = 'SELECT DISTINCT WoID, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, WoTodayScore As Score FROM ' . testsql . ' AND WoStatus BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\' order by WoTodayScore, WoRandom*RAND()';
+	if (debug)
+		echo sql;
+	res = do_mysqli_query(sql);
+	while (record = mysqli_fetch_assoc(res)) {
+		sent = tohtml(repl_tab_nl(record["WoSentence"]));
+		sent1 = str_replace("{", ' <b>[', str_replace(
 			"}",
 			']</b> ',
-			mask_term_in_sentence($sent, $regexword)
+			mask_term_in_sentence(sent, regexword)
 		)
 		);
 		?> */}
         {words.map((word) => (
           <tr>
-            <td className="td1 center" nowrap="nowrap">
+            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               <a
-                href="edit_tword.php?wid=<?php echo $record['WoID']; ?>"
+                href="edit_tword.php?wid=<?php echo record['WoID']; ?>"
                 target="ro"
               >
                 <Icon src="sticky-note--pencil" title="Edit Term" />
               </a>
             </td>
-            <td className="td1 center" nowrap="nowrap">
-              <span id="STAT<?php echo $record['WoID']; ?>">
-                {/* <?php echo make_status_controls_test_table($record['Score'], $record['WoStatus'], $record['WoID']); ?> */}
+            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+              <span id="STAT<?php echo record['WoID']; ?>">
+                {/* <?php echo make_status_controls_test_table(record['Score'], record['WoStatus'], record['WoID']); ?> */}
               </span>
             </td>
             <td
               className="td1 center"
               style={{ fontSize: language.LgTextSize }}
             >
-              {/* <?php echo $span1; ?> */}
-              <span id="TERM<?php echo $record['WoID']; ?>">
+              {/* <?php echo span1; ?> */}
+              <span id="TERM<?php echo record['WoID']; ?>">
                 {word.WoText}
-                {/* <?php echo tohtml($record['WoText']); ?> */}
+                {/* <?php echo tohtml(record['WoText']); ?> */}
               </span>
-              {/* <?php echo $span2; ?> */}
+              {/* <?php echo span2; ?> */}
             </td>
             <td className="td1 center">
-              <span id="TRAN<?php echo $record['WoID']; ?>">
-                {/* <?php echo tohtml($record['WoTranslation']); ?> */}
+              <span id="TRAN<?php echo record['WoID']; ?>">
+                {/* <?php echo tohtml(record['WoTranslation']); ?> */}
                 {word.WoTranslation}
               </span>
             </td>
             <td className="td1 center">
-              <span id="ROMA<?php echo $record['WoID']; ?>">
+              <span id="ROMA<?php echo record['WoID']; ?>">
                 {word.WoRomanization}
-                {/* <?php echo tohtml($record['WoRomanization']); ?> */}
+                {/* <?php echo tohtml(record['WoRomanization']); ?> */}
               </span>
             </td>
             <td className="td1 center">
-              {/* <?php echo $span1; ?> */}
-              <span id="SENT<?php echo $record['WoID']; ?>">
+              {/* <?php echo span1; ?> */}
+              <span id="SENT<?php echo record['WoID']; ?>">
                 {/* {word.WoRomanization} */}
-                {/* <?php echo $sent1; ?> */}
+                {/* <?php echo sent1; ?> */}
               </span>
-              {/* <?php echo $span2; ?> */}
+              {/* <?php echo span2; ?> */}
             </td>
           </tr>
         ))}
@@ -846,44 +984,44 @@ export function TesterTable({
     </>
   );
 }
-function make_status_controls_test_table($score, $status, $wordid) {
-  if ($score < 0) $score = '<span class="red2">';
-  // . get_status_abbr($status) .
+function make_status_controls_test_table(score, status, wordid) {
+  if (score < 0) score = '<span class="red2">';
+  // . get_status_abbr(status) .
   //  '</span>';
-  else $score = get_status_abbr($status);
+  else score = get_status_abbr(status);
 
   return (
     <>
-      {$status === 98 ? (
+      {status === 98 ? (
         <></>
-      ) : $status >= 1 ? (
+      ) : status >= 1 ? (
         <img
           src="icn/minus.png"
           className="click"
           title="-"
           alt="-"
-          onClick="changeTableTestStatus(' . $wordid . ',false);"
+          onClick="changeTableTestStatus(' . wordid . ',false);"
         />
       ) : (
         <Icon src="placeholder" title="" />
       )}{' '}
-      {$score < 0 ? (
-        <span className="red2">get_status_abbr($status)</span>
+      {score < 0 ? (
+        <span className="red2">get_status_abbr(status)</span>
       ) : (
-        <>{get_status_abbr($status)}</>
+        <>{get_status_abbr(status)}</>
       )}{' '}
-      {$status === 99 ? (
+      {status === 99 ? (
         <></>
       ) : (
         <>
           {' '}
-          {$status <= 5 || $status === 98 ? (
+          {status <= 5 || status === 98 ? (
             <img
               src="icn/plus.png"
               className="click"
               title="+"
               alt="+"
-              onclick="changeTableTestStatus(' . $wordid . ',true);"
+              onclick="changeTableTestStatus(' . wordid . ',true);"
             />
           ) : (
             <Icon src="placeholder" title="" />
@@ -899,5 +1037,5 @@ function make_status_controls_test_table($score, $status, $wordid) {
 {
   // pagestart_nobody('', 'html, body { margin:3px; padding:0; }');
   /* <p class="center">&nbsp;<br />Sorry - No terms to display or to test at this time.</p> */
-  // '<p>Sorry - The selected terms are in ' . $cntlang . ' languages, but tests are only possible in one language at a time.</p>
+  // '<p>Sorry - The selected terms are in ' . cntlang . ' languages, but tests are only possible in one language at a time.</p>
 }

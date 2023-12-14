@@ -20,6 +20,10 @@ export const enum WordSorting {
   'Score Value (%) (desc)' = 10,
   'Word Count Active Texts (desc)' = 11,
   'Word Count Active Texts' = 6,
+  'Stat./Days' = 12,
+  'Stat./Days (desc)' = 13,
+  'Lang.' = 14,
+  'Lang. (desc)' = 15,
 }
 export const enum TextSorting {
   'Title A-Z' = 1,
@@ -55,7 +59,7 @@ export const enum TagSorting {
   'Arch. Texts With Tag (desc)' = 12,
   'Term Count' = 13,
   'Term Count (desc)' = 14,
-} // $sorts = array('WoTextLC', 'lower(WoTranslation)', 'WoID desc', 'WoStatus, WoTextLC', 'WoTodayScore', 'textswordcount desc, WoTextLC asc', 'WoID');
+} // sorts = array('WoTextLC', 'lower(WoTranslation)', 'WoID desc', 'WoStatus, WoTextLC', 'WoTodayScore', 'textswordcount desc, WoTextLC asc', 'WoID');
 
 export const sortingMethod = (
   sort: WordSorting
@@ -75,6 +79,18 @@ export const sortingMethod = (
       return buildSortByValue('WoText', false);
     case WordSorting['Term Z-A']:
       return buildSortByValue('WoText', true);
+    case WordSorting['Stat./Days']:
+      // TODO
+      return buildSortByValue('WoTranslation', false);
+    case WordSorting['Stat./Days (desc)']:
+      // TODO
+      return buildSortByValue('WoTranslation', false);
+    case WordSorting['Lang.']:
+      // TODO
+      return buildSortByValue('WoTranslation', false);
+    case WordSorting['Lang. (desc)']:
+      // TODO
+      return buildSortByValue('WoTranslation', false);
     case WordSorting['Translation A-Z']:
       return buildSortByValue('WoTranslation', false);
     case WordSorting['Translation Z-A']:

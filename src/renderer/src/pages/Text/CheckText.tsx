@@ -5,7 +5,7 @@ import { useData } from '../../hooks/useAkita';
 import { useFormInput } from '../../hooks/useFormInput';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
-import { Language, Text } from '../../utils/parseMySqlDump';
+import { Language } from '../../utils/parseMySqlDump';
 import {
   cleanText,
   remove_spaces,
@@ -19,7 +19,7 @@ import { NavigateButton } from '../Statistics.component';
  *
  */
 export function CheckTextPage() {
-  const [checkingText, setCheckingText] = useState<null | Text>(null);
+  const [checkingText, setCheckingText] = useState<null | CheckTextType>(null);
   return (
     <>
       {checkingText ? (
@@ -31,8 +31,8 @@ export function CheckTextPage() {
   );
 }
 
-export type OnCheckText = (text: null | Text) => void;
-
+export type CheckTextType = (typeof CheckTextsValidator)['TYPE'];
+export type OnCheckText = (text: null | CheckTextType) => void;
 // TODO bring into edit/adding text
 /**
  *
@@ -43,7 +43,9 @@ export function CheckText({
   onCheckText: OnCheckText;
 }): JSX.Element {
   const validator = CheckTextsValidator;
-  const { refMap, LanguageSelectInput, onSubmit } = useFormInput({ validator });
+  const { LanguageSelectInput, onSubmit, TextArea } = useFormInput({
+    validator,
+  });
   return (
     <>
       <Header title="Check Text" />
@@ -74,9 +76,8 @@ export function CheckText({
                 bytes)
               </td>
               <td className="td1">
-                <textarea
-                  ref={refMap.TxText}
-                  name="TxText"
+                <TextArea
+                  entryKey="TxText"
                   className="notempty checkbytes checkoutsidebmp"
                   maxLength={65000}
                   errorName="Text"
@@ -110,9 +111,9 @@ export function CheckText({
 
 // TODO
 // if (strlen(prepare_textdata($_REQUEST['TxText'])) > 65000) {
-//   $message = "Error: Text too long, must be below 65000 Bytes";
-//   if ($no_pagestart)
-//     pagestart('My ' . getLanguage($currentlang) . ' Texts', true);
+//   message = "Error: Text too long, must be below 65000 Bytes";
+//   if (no_pagestart)
+//     pagestart('My ' . getLanguage(currentlang) . ' Texts', true);
 
 /**
  *
@@ -121,7 +122,7 @@ export function TextChecker({
   // TODO better name
   potentialText: { TxText, TxLgID },
 }: {
-  potentialText: Text;
+  potentialText: CheckTextType;
 }) {
   const [{ languages }] = useData(['languages']);
   const language = languages.find((val) => val.LgID === TxLgID);
@@ -139,7 +140,7 @@ export function TextChecker({
           onClick={() => window.history.back()}
         />
       </p>
-      <CheckTextSentences language={language} $s={TxText} />
+      <CheckTextSentences language={language} s={TxText} />
       <p>
         <input
           type="button"
@@ -155,10 +156,10 @@ export function TextChecker({
  */
 export function CheckTextSentences({
   language,
-  $s,
+  s,
 }: {
   language: Language;
-  $s: string;
+  s: string;
 }) {
   const { LgRemoveSpaces: removeSpaces } = language;
   // const wordList = [];
@@ -167,7 +168,7 @@ export function CheckTextSentences({
     sArray: textlines,
     wordCount,
     sepsCount,
-  } = splitCheckText({ TxText: $s, TxID: -1 as TextsId }, language);
+  } = splitCheckText({ TxText: s, TxID: -1 as TextsId }, language);
   // const sentNumber = 0;
   // TODO
   const anz = 0;
@@ -177,7 +178,7 @@ export function CheckTextSentences({
       <div style={{ marginRight: '50px' }}>
         <h4>Text</h4>
         <p {...getDirTag(language)}>
-          {cleanText($s, language.LgSplitEachChar)
+          {cleanText(s, language.LgSplitEachChar)
             .split('¶')
             .map((val) => (
               <>
@@ -228,7 +229,7 @@ export function CheckTextSentences({
             .sort((a, b) => (a > b ? 1 : -1))
             .map((key) => {
               const trans = words.find((word) => word.WoTextLC === key);
-              // trans = get_first_value("select WoTranslation as value from " . tbpref . "words where WoLgID = " . lid . " and WoTextLC = " . convert_string_to_sqlsyntax(key));
+              // trans = get_first_value("select WoTranslation as value from " . tbpref . "words where WoLgID = " . lid . " and WoTextLC = " . (key));
               // TODO when does this happen?
               // if (trans === '*') {
               //   trans = '';
@@ -257,7 +258,8 @@ export function CheckTextSentences({
         <ul>
           {/* ksort(wordSeps); */}
           {/* anz = 0; */}
-          {Object.keys(sepsCount).map(
+          {/* TODO why cast needed */}
+          {(Object.keys(sepsCount) as string[]).map(
             (key) => (
               <li>
                 [

@@ -3,7 +3,10 @@ import { BackendPlugin } from '../plugins/electron-sqlite.backend-plugin.rendere
 
 export type PersistedValueGetter<
   TKey extends keyof DataState = keyof DataState
-> = (key: TKey, nullFallback?: DataState[TKey]) => DataState[TKey];
+> = (
+  key: TKey,
+  nullFallback?: DataState[TKey]
+) => TKey extends keyof DataState ? DataState[TKey] : never;
 export type PersistedValueGetterAsync<
   TKey extends keyof DataState = keyof DataState
 > = (key: TKey, nullFallback?: DataState[TKey]) => Promise<DataState[TKey]>;
@@ -71,7 +74,7 @@ export enum PersistanceStrategy {
 
 export interface PersistenceHandles {
   get: PersistedValueGetter;
-  set: PersistedValueSetter;
+  set?: PersistedValueSetter;
 
   getAsync?: PersistedValueGetterAsync;
 

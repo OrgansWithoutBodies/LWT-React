@@ -4,7 +4,7 @@ import { LWTReactInfo } from './plugins/LWTReactInfo';
 import { TatoebaPlugin } from './plugins/tatoeba.plugin';
 import { LoremIpsum } from './ui-kit/LoremIpsum';
 
-const plugins: Plugin<any, any, any>[] = [
+const plugins = [
   //
   // ChineseMeasureWordColumnPlugin,
   // Term conjugation

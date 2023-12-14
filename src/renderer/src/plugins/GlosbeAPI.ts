@@ -1,6 +1,9 @@
 // TODO seems this is deprecated
 import axios, { AxiosResponse } from 'axios';
-import { AxiosOpenAPIWrapper, BaseOpenAPIWrapper } from './BaseOpenAPIWrapper';
+import {
+  AxiosOpenAPIWrapper,
+  BaseOpenAPIWrapper,
+} from '../pages/IO/BaseOpenAPIWrapper';
 import { GlosbeKeys } from './GlosbeKeys';
 export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
 

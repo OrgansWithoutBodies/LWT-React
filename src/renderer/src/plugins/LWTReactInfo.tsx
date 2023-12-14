@@ -105,7 +105,8 @@ export function LWTReactInfo() {
             id="topicjump"
             onChange={({ target: { value } }) => {
               if (value !== '-1') {
-                navigator('#' + value, true);
+                // TODO no any, make option values typed & plugin route work
+                navigator(('/lwt_react_info#' + value) as any, true);
               }
             }}
           >

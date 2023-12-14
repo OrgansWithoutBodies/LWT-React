@@ -4,7 +4,7 @@ import {
   GenericTranslationAPI,
 } from '../../plugins/deepl.plugin';
 import { Icon } from '../../ui-kit/Icon';
-import { pluralize } from '../TermTag/EditTags';
+import { pluralize } from '../TermTag/pluralize';
 
 /**
  * Call a given Translation API, analyze and present JSON results

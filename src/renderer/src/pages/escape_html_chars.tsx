@@ -156,7 +156,7 @@ function word_click_event_do_test_test({
   />;
   // TODO
   const SOLUTION = prepare_textdata_js(
-    $testtype === 1 ? ($nosent ? $trans : ` [${trans}] `) : $save
+    testtype === 1 ? (nosent ? trans : ` [${trans}] `) : save
   );
   $('.todo').text(SOLUTION);
   return false;
@@ -277,10 +277,13 @@ function RunOverlibTest(
  * @param wid
  * @param oldstat
  */
-export function MakeOverlibLinkChangeStatusAlltest(
-  wid: string,
-  oldstat: NumericalStrength
-): JSX.Element {
+export function MakeOverlibLinkChangeStatusAlltest({
+  wid,
+  oldstat,
+}: {
+  wid: WordsId;
+  oldstat: NumericalStrength;
+}): JSX.Element {
   return (
     <>
       {[1, 2, 3, 4, 5].map((newstat) => (
@@ -314,7 +317,7 @@ function MakeOverlibLinkChangeStatusTest2({
   oldstat,
   newstat,
 }: {
-  wid: string;
+  wid: WordsId;
   oldstat: NumericalStrength;
   newstat: NumericalStrength;
 }): JSX.Element {

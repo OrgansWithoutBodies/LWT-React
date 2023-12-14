@@ -2,19 +2,19 @@ import { useState } from 'react';
 import { dataService } from '../../data/data.service';
 import { wordNoIdPrevalidateMap } from '../../data/preValidateMaps';
 import { LanguagesId, WordsId, WordsValidator } from '../../data/validators';
-import { TRefMap } from '../../forms/Forms';
 import { useData } from '../../hooks/useAkita';
 import { useFormInput } from '../../hooks/useFormInput';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { Icon } from '../../ui-kit/Icon';
+import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
 import {
   AddNewWordValidator,
   Language,
   Sentence,
   Word,
 } from '../../utils/parseMySqlDump';
-import { owin, translateSentence2 } from '../translateSentence2';
-import { GetTagsList } from './Terms.component';
+import { textareaKeydown } from '../IO/CheckForm';
+import { DictionaryLinks, GetTagsList } from './Terms.component';
 
 /**
  * This is only called from inside the reader, rly more of a pane than a component
@@ -48,6 +48,7 @@ export function AddNewWordPane({
     refMap,
     formErrors,
     onSubmit,
+    TextArea,
   } = useFormInput({
     entry: { WoText: word || '', WoLgID: langId },
     validator,
@@ -87,6 +88,8 @@ export function AddNewWordPane({
                   className="notempty checkoutsidebmp"
                   errorName="New Term"
                   entryKey="WoText"
+                  // TODO
+                  // onBlur={do_ajax_show_similar_terms}
                   id="wordfield"
                   // value={word}
                   default
@@ -100,12 +103,12 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Translation:</td>
               <td className="td1">
-                <textarea
+                <TextArea
                   name="WoTranslation"
                   // value={FormState.WoTranslation}
-                  ref={refMap.WoTranslation}
-                  className="setfocus textarea-noreturn checklength checkoutsidebmp"
+                  className="setfocus checklength checkoutsidebmp"
                   maxLength={500}
+                  onKeyDown={textareaKeydown}
                   errorName="Translation"
                   cols={35}
                   rows={3}
@@ -123,6 +126,7 @@ export function AddNewWordPane({
               <td className="td1">
                 <ul
                   id="termtags"
+                  // TODO tagit
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
                   <GetTagsList
@@ -165,14 +169,14 @@ export function AddNewWordPane({
                 Term in :
               </td>
               <td className="td1">
-                <textarea
+                <TextArea
                   name="WoSentence"
-                  className="textarea-noreturn checklength checkoutsidebmp"
+                  className="checklength checkoutsidebmp"
+                  onKeyDown={textareaKeydown}
                   maxLength={1000}
                   errorName="Sentence"
                   cols={35}
                   rows={3}
-                  ref={refMap.WoSentence}
                 />
               </td>
             </tr>
@@ -187,53 +191,13 @@ export function AddNewWordPane({
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
-                Lookup Term:
-                {/* external link */}
-                <MultiFunctionalURL
-                  templateStr={LgDict1URI}
-                  word={word}
-                  setIFrameURL={setIFrameURL}
+                <DictionaryLinks
+                  lang={lang}
+                  sentenceString={refMap.WoSentence.current}
+                  wordString={refMap.WoText.current}
                   setTranslateAPIParams={setTranslateAPIParams}
-                  language={lang}
-                >
-                  Dict1
-                </MultiFunctionalURL>{' '}
-                {LgDict2URI && (
-                  <a href={replaceTemplate(LgDict2URI, word)} target="ru">
-                    Dict2
-                  </a>
-                )}{' '}
-                {LgGoogleTranslateURI !== undefined && (
-                  <>
-                    <MultiFunctionalURL
-                      word={word}
-                      templateStr={LgGoogleTranslateURI}
-                      setIFrameURL={setIFrameURL}
-                      language={lang}
-                      setTranslateAPIParams={setTranslateAPIParams}
-                    >
-                      GTr
-                    </MultiFunctionalURL>{' '}
-                  </>
-                )}
-                {LgGoogleTranslateURI !== undefined && (
-                  <>
-                    | Sent.:
-                    <span
-                      className="click"
-                      onClick={() => {
-                        // TODO
-                        // replaceTemplate(lang.LgGoogleTranslateURI, word)
-                        translateSentence2(
-                          LgGoogleTranslateURI,
-                          refMap.WoSentence.current
-                        );
-                      }}
-                    >
-                      GTr
-                    </span>
-                  </>
-                )}
+                  setIFrameURL={setIFrameURL}
+                />
                 &nbsp; &nbsp; &nbsp;
                 <input
                   type="button"
@@ -283,7 +247,17 @@ export function AddNewWordPane({
 /**
  * This is only called from inside the reader, rly more of a pane than a component
  */
-export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
+export function EditWordPane({
+  chgId,
+  setTranslateAPIParams,
+  setIFrameURL,
+}: {
+  chgId: WordsId;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
+  setIFrameURL: (url: string | null) => void;
+}): JSX.Element {
   // TODO reset form on new word
   // TODO verify dialog on change
   const validator = WordsValidator;
@@ -303,6 +277,7 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
     refMap,
     formErrors,
     onSubmit,
+    TextArea,
   } = useFormInput({
     entry: { WoText: word || '', WoLgID: word.WoLgID },
     validator,
@@ -324,10 +299,9 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
           // TODO add creation val
           value={LgID}
         />
-        <input
+        <WoInput
           type="hidden"
-          name="WoTextLC"
-          ref={refMap.WoTextLC}
+          entryKey="WoTextLC"
           // value={word?.toLowerCase()}
         />
         {/* TODO what are these */}
@@ -349,6 +323,8 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                   className="notempty checkoutsidebmp"
                   errorName="New Term"
                   entryKey="WoText"
+                  // TODO
+                  // onBlur={do_ajax_show_similar_terms}
                   id="wordfield"
                   // value={word}
                   default
@@ -362,11 +338,11 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
             <tr>
               <td className="td1 right">Translation:</td>
               <td className="td1">
-                <textarea
+                <TextArea
                   name="WoTranslation"
                   // value={FormState.WoTranslation}
-                  ref={refMap.WoTranslation}
-                  className="setfocus textarea-noreturn checklength checkoutsidebmp"
+                  className="setfocus checklength checkoutsidebmp"
+                  onKeyDown={textareaKeydown}
                   maxLength={500}
                   errorName="Translation"
                   cols={35}
@@ -385,9 +361,10 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
               <td className="td1">
                 <ul
                   id="termtags"
+                  // TODO tagit
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
-                  <GetTagsList EntryID={chgId} tagKey="TODO" />
+                  <GetTagsList EntryID={chgId} tagKey="tags" />
                   <li className="tagit-new">
                     <span
                       role="status"
@@ -424,14 +401,14 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
                 Term in :
               </td>
               <td className="td1">
-                <textarea
+                <TextArea
                   name="WoSentence"
-                  className="textarea-noreturn checklength checkoutsidebmp"
+                  className="checklength checkoutsidebmp"
+                  onKeyDown={textareaKeydown}
                   maxLength={1000}
                   errorName="Sentence"
                   cols={35}
                   rows={3}
-                  ref={refMap.WoSentence}
                 />
               </td>
             </tr>
@@ -443,49 +420,13 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
-                <script type="text/javascript" />
-                Lookup Term:
-                {/* external link */}
-                <a
-                  href={replaceTemplate(LgDict1URI, WoText)}
-                  // TODO whats this
-                  target="ru"
-                >
-                  Dict1
-                </a>
-                {LgDict2URI && (
-                  <a href={replaceTemplate(LgDict2URI, WoText)} target="ru">
-                    Dict2
-                  </a>
-                )}
-                {LgGoogleTranslateURI && (
-                  <span
-                    className="click"
-                    onClick={() => {
-                      owin(replaceTemplate(LgGoogleTranslateURI, WoText));
-                    }}
-                  >
-                    GTr
-                  </span>
-                )}
-                {LgGoogleTranslateURI && (
-                  <>
-                    | Sent.:
-                    <span
-                      className="click"
-                      onClick={() => {
-                        // TODO
-                        // replaceTemplate(lang.LgGoogleTranslateURI, word)
-                        translateSentence2(
-                          LgGoogleTranslateURI,
-                          refMap.WoSentence.current
-                        );
-                      }}
-                    >
-                      GTr
-                    </span>
-                  </>
-                )}
+                <DictionaryLinks
+                  lang={lang}
+                  sentenceString={refMap.WoSentence.current}
+                  wordString={refMap.WoText.current}
+                  setTranslateAPIParams={setTranslateAPIParams}
+                  setIFrameURL={setIFrameURL}
+                />
                 &nbsp; &nbsp; &nbsp;
                 <input
                   type="button"
@@ -535,7 +476,7 @@ export function EditWordPane({ chgId }: { chgId: WordsId }): JSX.Element {
  * @param templateStr
  * @param word
  */
-export function replaceTemplate(templateStr: string, word: string): string {
+function replaceTemplate(templateStr: string, word: string): string {
   console.log('TEST123-replaceTemplate', templateStr, word);
   // TODO template vs url branded type
   const startsWithStar = templateStr.startsWith('*');
@@ -569,7 +510,7 @@ export function MultiFunctionalURL({
         className="a"
         onClick={() =>
           setTranslateAPIParams({
-            // TODO get 'LgTatoebaKey' from
+            // TODO get 'LgTatoebaKey' from api
             sourceKey: language.LgTatoebaKey,
             targetKey: 'eng',
             word,
@@ -599,125 +540,6 @@ export function MultiFunctionalURL({
     </a>
   );
 }
-/**
- * TODO this not updating
- */
-export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
-  defaultStatus = 1,
-  refMap,
-}: {
-  defaultStatus?: Word['WoStatus'];
-  refMap: TRefMap<TEntryType>;
-}) {
-  // const [currentStatus, setcurrentStatus] = useState(second)
-  const setRef = (event: React.ChangeEvent<HTMLInputElement>) => {
-    refMap.WoStatus.current = event.target;
-    console.log(
-      'TEST123-StatusRadio-setref',
-      event.target,
-      refMap.WoStatus.current.value
-    );
-  };
-  // console.log('TEST123-StatusRadio-currentStatus', currentStatus);
-  return (
-    <>
-      <span className="status1" title="Learning">
-        &nbsp;
-        <input
-          type="radio"
-          name="WoStatus"
-          value="1"
-          onChange={setRef}
-          checked={
-            refMap.WoStatus.current === null ||
-            refMap.WoStatus.current.value === '1'
-          }
-          ref={refMap.WoStatus}
-        />
-        1&nbsp;
-      </span>
-      <span className="status2" title="Learning">
-        &nbsp;
-        <input
-          type="radio"
-          name="WoStatus"
-          onChange={setRef}
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '2'
-          }
-          value="2"
-        />
-        2&nbsp;
-      </span>
-      <span className="status3" title="Learning">
-        &nbsp;
-        <input
-          type="radio"
-          name="WoStatus"
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '3'
-          }
-          onChange={setRef}
-          value="3"
-        />
-        3&nbsp;
-      </span>
-      <span className="status4" title="Learning">
-        &nbsp;
-        <input
-          onChange={setRef}
-          type="radio"
-          name="WoStatus"
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '4'
-          }
-          value="4"
-        />
-        4&nbsp;
-      </span>
-      <span className="status5" title="Learned">
-        &nbsp;
-        <input
-          type="radio"
-          onChange={setRef}
-          name="WoStatus"
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '5'
-          }
-          value="5"
-        />
-        5&nbsp;
-      </span>
-      <span className="status99" title="Well Known">
-        &nbsp;
-        <input
-          type="radio"
-          onChange={setRef}
-          name="WoStatus"
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '99'
-          }
-          value="99"
-        />
-        WKn&nbsp;
-      </span>
-      <span className="status98" title="Ignored">
-        &nbsp;
-        <input
-          onChange={setRef}
-          type="radio"
-          name="WoStatus"
-          value="98"
-          checked={
-            refMap.WoStatus.current && refMap.WoStatus.current.value === '98'
-          }
-        />
-        Ign&nbsp;
-      </span>
-    </>
-  );
-}
-
 /**
  *
  */

@@ -42,8 +42,6 @@ import {
   WordsId,
 } from './validators';
 
-type LongTextForm = {};
-
 export enum CRUD {
   Create,
   Read,
@@ -52,6 +50,7 @@ export enum CRUD {
 }
 // TODO most of these are actually just identical C.UD operations - formalize that
 // TODO sometimes with a callback to add more object keys (maybe best handled in form submission?)
+// TODO don't need to duplicate updates if we just retrigger the query observable on persist?
 /**
  *
  * @param id
@@ -479,8 +478,11 @@ export class DataService {
     this.persistSet('wordtags');
   }
 
-  public addLongText(longTextForm: LongTextForm) {
-    window.alert('TODO ADDLONGTEXT');
+  public addMultipleTexts(texts: AddNewTextType[]) {
+    // TODO insertmany
+    texts.forEach((text) => {
+      this.addText(text);
+    });
   }
 
   public addMultipleTerms(terms: Word[]) {
@@ -544,7 +546,8 @@ export class DataService {
         return;
       }
       if (fileExt === 'sql') {
-        const parsedData = {};
+        // TODO
+        // const parsedData = {};
         // TODO count how many columns in this table?
         const splitTablesRegex = new RegExp(' *CREATE TABLE `', 'g');
         const tableStrings = readData.split(splitTablesRegex).slice(1);
@@ -559,8 +562,9 @@ export class DataService {
               );
               const entryVal = entryVals[0].match(entryValRegex);
               if (entryVal && entryVal?.length > 1) {
-                const entryColRegex = new RegExp('(.*),');
-                entryVal[1].split();
+                // TODO
+                // const entryColRegex = new RegExp('(.*),');
+                // entryVal[1].split();
               }
             }
           }
@@ -636,7 +640,6 @@ export class DataService {
       archivedtexts: [],
       archtexttags: [],
       languages: [],
-      parsedTexts: [],
       sentences: [],
       tags2: [],
       tags: [],
@@ -651,7 +654,6 @@ export class DataService {
     this.persistSet('archivedtexts');
     this.persistSet('archtexttags');
     this.persistSet('languages');
-    this.persistSet('parsedTexts');
     this.persistSet('sentences');
     this.persistSet('tags2');
     this.persistSet('tags');
@@ -685,7 +687,6 @@ export class DataService {
     this.persistSet('archivedtexts');
     this.persistSet('archtexttags');
     this.persistSet('languages');
-    this.persistSet('parsedTexts');
     this.persistSet('sentences');
     this.persistSet('tags2');
     this.persistSet('tags');
@@ -696,9 +697,9 @@ export class DataService {
     this.persistSet('wordtags');
 
     Object.keys(demoDB).forEach((fieldName) => {
+      // TODO
       this.persistDelete(fieldName);
-      demoDB[fieldName];
-      this.persistInsert(fieldName);
+      this.persistInsert(fieldName, demoDB[fieldName]);
     });
   }
 
@@ -795,7 +796,12 @@ export class DataService {
     this.persistSet('texts');
   }
   public unarchiveMultipleTexts(textIds: ArchivedTextId[]) {
-    window.alert('TODO UNARCHIVETEXT');
+    // TODO updateMany
+    textIds.forEach((textId) => this.unarchiveText(textId));
+  }
+  public archiveMultipleTexts(textIds: TextsId[]) {
+    // TODO updateMany
+    textIds.forEach((textId) => this.archiveText(textId));
   }
 
   public setSettings(settings: Partial<Settings>) {

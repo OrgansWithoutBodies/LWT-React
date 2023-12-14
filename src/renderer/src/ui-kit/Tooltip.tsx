@@ -24,7 +24,15 @@ export type Dimension2D<T = number> = { x: T; y: T };
  *
  */
 export function Tooltip({ visible }: { visible: boolean }): JSX.Element {
-  const { x, y, refs, strategy, context, elements } = useFloating({
+  const {
+    x,
+    y,
+    refs,
+    strategy,
+    context,
+    // TODO use this?
+    // elements
+  } = useFloating({
     open: visible,
     placement: 'top',
     // Make sure the tooltip stays on the screen
@@ -79,7 +87,7 @@ interface PopoverOptions {
 /**
  *
  */
-export function usePopover({
+function usePopover({
   initialOpen = false,
   placement = 'bottom',
   modal,
@@ -147,7 +155,7 @@ type ContextType =
 
 const PopoverContext = React.createContext<ContextType>(null);
 
-export const usePopoverContext = () => {
+const usePopoverContext = () => {
   const context = React.useContext(PopoverContext);
 
   if (context === null) {
@@ -196,7 +204,7 @@ export const PopoverTrigger = React.forwardRef<
     const childrenRef = (children as any).ref;
 
     const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
-    const divRef = useRef<HTMLSpanElement>();
+    const divRef = useRef<HTMLSpanElement | null>(null);
     // `asChild` allows the user to pass any element as the anchor
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(

@@ -4,7 +4,7 @@ import { TermStrengthOrUnknown, TermStrengths } from '../../data/type';
 import { useData } from '../../hooks/useAkita';
 import { A } from '../../nav/InternalLink';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
-import { Language, Word } from '../../utils/parseMySqlDump';
+import { Language, Sentence, TextItem, Word } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
 import {
   NumericalStrength,
@@ -12,8 +12,7 @@ import {
   StrengthMapNumericalKey,
   getStatusName,
 } from '../StrengthMap';
-import { translateSentence2 } from '../translateSentence2';
-import { MultiFunctionalURL, replaceTemplate } from './AddNewWordPane';
+import { DictionaryLinks } from './Terms.component';
 
 // TODO dedupe with STATUSES
 const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
@@ -32,20 +31,20 @@ const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
 function ExpressionsLines({
   expressions,
 }: {
-  expressions: string[];
+  expressions: TextItem[];
 }): JSX.Element {
   return (
     <>
       Expr:
       {expressions.map((expression, ii) => (
-        // TODO numbers here
         <A
-          href={`/edit_mword?tid=${44}&ord=${55}&txt=${expression}`}
+          // TODO make sure works
+          href={`/edit_mword?tid=${expression.TiTxID}&ord=${expression.TiOrder}&txt=${expression.TiText}`}
           target="ro"
         >
           {ii + 2}
           ..
-          {expression}
+          {expression.TiText}
         </A>
       ))}
     </>
@@ -56,74 +55,42 @@ function ExpressionsLines({
  *
  */
 function TranslateLines({
-  language: lang,
+  language,
   word,
-  sentence,
   setIFrameURL,
+  sentence,
   setTranslateAPIParams,
 }: {
   language: Language;
+  sentence: Sentence;
   word: string;
-  sentence: string;
   setIFrameURL: (url: string | null) => void;
   setTranslateAPIParams: (
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
 }): JSX.Element {
-  console.log('TEST123-tooltip', lang.LgDict1URI);
   return (
     <>
-      Lookup Term:
-      {/* external link */}
-      <MultiFunctionalURL
-        templateStr={lang.LgDict1URI}
-        word={word}
-        setIFrameURL={setIFrameURL}
+      <DictionaryLinks
+        lang={language}
+        sentenceString={sentence.SeText}
+        wordString={word}
         setTranslateAPIParams={setTranslateAPIParams}
-        language={lang}
-      >
-        Dict1
-      </MultiFunctionalURL>{' '}
-      {lang.LgDict2URI && (
-        <a href={replaceTemplate(lang.LgDict2URI, word)} target="ru">
-          Dict2
-        </a>
-      )}{' '}
-      <MultiFunctionalURL
-        word={word}
-        templateStr={lang.LgGoogleTranslateURI}
         setIFrameURL={setIFrameURL}
-      >
-        GTr
-      </MultiFunctionalURL>
-      <br />
-      Lookup Sentence:
-      <span
-        className="click"
-        onClick={() => {
-          // TODO
-          // replaceTemplate(lang.LgGoogleTranslateURI, word)
-          translateSentence2(
-            lang.LgGoogleTranslateURI,
-            refMap.WoSentence.current
-          );
-        }}
-      >
-        GTr
-      </span>
+      />
     </>
   );
 }
-const TermTooltipClose = React.forwardRef<HTMLDivElement>(
-  (
-    {
-      // children,
-      onClose,
-      ...props
-    }: React.PropsWithChildren<{ onClose: () => void }>,
-    ref
-  ) => (
-    // const { setOpen } = usePopoverContext();
+function TermTooltipCloseImpl(
+  {
+    // children,
+    onClose,
+    ...props
+  }: React.PropsWithChildren<{ onClose: () => void }>,
+  ref: React.ForwardedRef<HTMLDivElement>
+) {
+  // const { setOpen } = usePopoverContext();
+  return (
     <div
       className="click"
       {...props}
@@ -138,8 +105,12 @@ const TermTooltipClose = React.forwardRef<HTMLDivElement>(
       Close
       {/* </font>  */}
     </div>
-  )
-);
+  );
+}
+const TermTooltipClose = React.forwardRef<
+  HTMLDivElement,
+  React.PropsWithChildren<{ onClose: () => void }>
+>(TermTooltipCloseImpl);
 
 /**
  *
@@ -191,7 +162,7 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
       </b>
       <br />
       <A
-        href={`_`}
+        // href={`_`}
         // onClick={() => dataService.updateTermStrength(w)}
         target="ro"
       >
@@ -288,7 +259,7 @@ export function AddNewTermTooltip({
   textLanguage,
 }: {
   word: Word | string;
-  sentence: string;
+  sentence: Sentence;
   textLanguage: Language;
   onClose: () => void;
   setIFrameURL: (url: string | null) => void;
@@ -306,7 +277,7 @@ export function AddNewTermTooltip({
     : wordtags
         .filter((val) => val.WtWoID === word.WoID)
         .map((val) => tagsLookup[val.WtTgID]);
-  const expressions: string[] = [];
+  const expressions: TextItem[] = [];
 
   const wordStr = isNewTerm ? word : word.WoText;
   // TODO on click on term, change other panes
@@ -317,6 +288,7 @@ export function AddNewTermTooltip({
       cellPadding={1}
       border={0}
       style={{
+        // TODO theme color
         backgroundColor: '#333399',
       }}
     >
@@ -337,6 +309,7 @@ export function AddNewTermTooltip({
               <tbody>
                 <tr>
                   <td valign="top">
+                    {/* TODO */}
                     {/* <font lucida="' grande',arial,sans-serif,stheiti,"arial="" unicode="' ms',mingliu'='" size={3} face="" color="#000000">  */}
 
                     {isNewTerm ? (
@@ -350,7 +323,6 @@ export function AddNewTermTooltip({
                     <TranslateLines
                       word={wordStr}
                       language={textLanguage}
-                      sentence={sentence}
                       setIFrameURL={setIFrameURL}
                       setTranslateAPIParams={setTranslateAPIParams}
                     />

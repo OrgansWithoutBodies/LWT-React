@@ -126,12 +126,13 @@ function App(): JSX.Element {
     '/upload_words': () => <UploadWordsWrapper />,
     '/install_demo': () => <InstallDemo />,
     '/info_export_template': () => <InfoExportTemplate />,
+    // TODO
+    '/display_impr_text': () => <InfoExportTemplate />,
     // all_words_wellknown
     // delete_mword
     // delete_word
     // display_impr_text_header
     // display_impr_text_text
-    // display_impr_text
     // edit_archivedtexts
     // edit_languages
     // // TODO

@@ -17,7 +17,8 @@ export type EntryRowComponent = (args: {
 export type Plugin<
   TValidatorKeys extends string = string,
   TSource extends string = string,
-  TTarget extends string = string
+  TTarget extends string = string,
+  TPaths extends string = string
 > = {
   pluginName: string;
   validators?: {
@@ -29,10 +30,12 @@ export type Plugin<
       EntryRowType & { child: EntryRowComponent }
     >;
   };
-  routes?: Record<InternalPaths, () => JSX.Element>;
+  routes?: Record<TPaths, () => JSX.Element>;
   service?: Record<string, (...args: any[]) => Promise<unknown>>;
   api?: GenericTranslationAPI<TSource, TTarget>;
   importMethods?: Record<string, (...args: any[]) => Promise<unknown>>;
 
-  landingPageLinks?: ({ link: InternalPaths; label: string } | null)[];
+  landingPageLinks?: Readonly<
+    ({ link: TPaths | InternalPaths; label: string } | null)[]
+  >;
 };

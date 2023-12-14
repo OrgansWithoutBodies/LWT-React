@@ -8,7 +8,7 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { Text } from '../../utils/parseMySqlDump';
+import { AddNewTextType } from '../../utils/parseMySqlDump';
 import { buildSentences } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
 import { LongTextVerify } from './LongTextImportVerify.component';
@@ -33,7 +33,12 @@ export default function ImportLongText({
     TxTitle: ss.string(),
     maxSent: ss.number(),
   });
-  const { Input: TxInput, refMap, onSubmit } = useFormInput({ validator });
+  const {
+    Input: TxInput,
+    refMap,
+    onSubmit,
+    TextArea,
+  } = useFormInput({ validator });
   return (
     <>
       <Header title="Import Long Text" />
@@ -77,11 +82,10 @@ export default function ImportLongText({
                 <b>Or</b> paste a text from the clipboard (and do <b>NOT</b>{' '}
                 specify file):
                 <br />
-                <textarea
+                <TextArea
                   className="checkoutsidebmp"
-                  ref={refMap.TxText}
                   errorName="Upload"
-                  name="Upload"
+                  entryKey="Upload"
                   cols={60}
                   rows={15}
                 />
@@ -169,6 +173,7 @@ export default function ImportLongText({
               <td className="td1">
                 <ul
                   id="texttags"
+                  // TODO tagit
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
                   <li className="tagit-new">
@@ -266,8 +271,7 @@ export default function ImportLongText({
   );
 }
 // TODO flesh out
-export type LongTextType = Pick<Text, 'TxText' | 'TxLgID' | 'TxTitle'>[];
-
+export type LongTextType = AddNewTextType[];
 /**
  *
  */

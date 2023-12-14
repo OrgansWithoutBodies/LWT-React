@@ -39,8 +39,10 @@ export function Form<TSchema extends ObjectSchema>({
 export const identityMap = (val: string) => val;
 
 export const parseNumMap = (value: string) => Number.parseInt(value, 10);
-export const emptyToNullMap = (value: string) =>
+export const emptyToUndefinedMap = (value: string) =>
   value === '' ? undefined : value;
+export const undefinedToBlankMap = (value: string | undefined) =>
+  value === undefined ? '' : value;
 export const binaryMap = (val: '0' | '1') => val === '0';
 
 /**

@@ -35,6 +35,7 @@ DEV NICETIES:
 
 CODE TODOs
 
+- mirror jquery ui-widget-content etc
 - use superstruct coercion instead of prevalidatemaps https://docs.superstructjs.org/guides/03-coercing-data
 - remove anys, fix type problems
 - add more comments & clean up

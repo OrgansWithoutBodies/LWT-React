@@ -50,34 +50,34 @@
 //   // header("Content-disposition: attachment; filename=lwt_anki_export_" . date('Y-m-d-H-i-s') . ".txt");
 // }
 
-// function mask_term_in_sentence($s: any, $regexword: any)
+// function mask_term_in_sentence(s: any, regexword: any)
 // {
-// 	$l = mb_strlen($s, 'utf-8');
-// 	$r = '';
-// 	$on = 0;
-// 	for ($i = 0; $i < $l; $i++) {
-// 		$c = mb_substr($s, $i, 1, 'UTF-8');
-// 		if ($c === '}')
-// 			$on = 0;
-// 		if ($on) {
-// 			if (preg_match('/[' . $regexword . ']/u', $c)) {
-// 				// $r .= '•';
+// 	l = mb_strlen(s, 'utf-8');
+// 	r = '';
+// 	on = 0;
+// 	for (i = 0; i < l; i++) {
+// 		c = mb_substr(s, i, 1, 'UTF-8');
+// 		if (c === '}')
+// 			on = 0;
+// 		if (on) {
+// 			if (preg_match('/[' . regexword . ']/u', c)) {
+// 				// r .= '•';
 // 			} else {
-// 				// $r .= $c;
+// 				// r .= c;
 // 			}
 // 		} else {
-// 			// $r .= $c;
+// 			// r .= c;
 // 		}
-// 		if ($c === '{')
-// 			$on = 1;
+// 		if (c === '{')
+// 			on = 1;
 // 	}
-// 	return $r;
+// 	return r;
 // }
 
-// export function replaceTabsWithNewLine($s: string | undefined)
+// export function replaceTabsWithNewLine(s: string | undefined)
 // {
-// 	$s =  $s.replace(["\r\n", "\r", "\n", "\t"], ' ',);
-// 	$s = $s.replace('/\s/u', ' ',);
-// 	$s = $s.replace('/\s{2,}/u', ' ');
-// 	return $s.trim()
+// 	s =  s.replace(["\r\n", "\r", "\n", "\t"], ' ',);
+// 	s = s.replace('/\s/u', ' ',);
+// 	s = s.replace('/\s{2,}/u', ' ');
+// 	return s.trim()
 // }

@@ -1,6 +1,11 @@
 // TODO table component?
 
-import { emptyToNullMap, identityMap, parseNumMap } from '../forms/Forms';
+import {
+  emptyToUndefinedMap,
+  identityMap,
+  parseNumMap,
+  undefinedToBlankMap,
+} from '../forms/Forms';
 import { Language, LanguageNoId, Tag } from '../utils/parseMySqlDump';
 
 export const languageNoIdPreValidateMap: {
@@ -12,8 +17,8 @@ export const languageNoIdPreValidateMap: {
   LgRemoveSpaces: parseNumMap,
   LgSplitEachChar: parseNumMap,
   LgRightToLeft: parseNumMap,
-  LgCharacterSubstitutions: emptyToNullMap,
-  LgDict2URI: emptyToNullMap,
+  LgCharacterSubstitutions: emptyToUndefinedMap,
+  LgDict2URI: emptyToUndefinedMap,
 };
 export const languagePreValidateMap: {
   [key in keyof Language]?: (
@@ -25,14 +30,14 @@ export const languagePreValidateMap: {
   LgRemoveSpaces: parseNumMap,
   LgSplitEachChar: parseNumMap,
   LgRightToLeft: parseNumMap,
-  LgDict2URI: emptyToNullMap,
+  LgDict2URI: emptyToUndefinedMap,
 };
 
 export const tagPreValidateMap: {
   [key in keyof Tag]?: (value: string) => any | null;
 } = {
   TgText: identityMap,
-  TgComment: emptyToNullMap,
+  TgComment: emptyToUndefinedMap,
 };
 export const getCurrentTimeAsString = () => {
   const dt = new Date();
@@ -52,11 +57,11 @@ export const wordPrevalidateMap = {
 
   WoStatus: parseNumMap,
   WoLgID: parseNumMap,
-  WoSentence: emptyToNullMap,
+  WoSentence: emptyToUndefinedMap,
   WoStatusChanged: getCurrentTimeAsString,
   WoTextLC: (_: any, refMap: { WoText: { current: { value: string } } }) =>
     refMap.WoText.current.value.toLowerCase(),
-  WoTranslation: (val) => (val === undefined ? '' : val),
+  WoTranslation: undefinedToBlankMap,
 } as const;
 
 export const wordNoIdPrevalidateMap = {
@@ -67,14 +72,14 @@ export const wordNoIdPrevalidateMap = {
 };
 export const textNoIdPrevalidateMap = {
   TxLgID: parseNumMap,
-  TxAudioURI: emptyToNullMap,
-  TxSourceURI: emptyToNullMap,
+  TxAudioURI: emptyToUndefinedMap,
+  TxSourceURI: emptyToUndefinedMap,
 };
 export const textPrevalidateMap = {
   TxID: parseNumMap,
   TxLgID: parseNumMap,
-  TxAudioURI: emptyToNullMap,
-  TxSourceURI: emptyToNullMap,
+  TxAudioURI: emptyToUndefinedMap,
+  TxSourceURI: emptyToUndefinedMap,
 };
 export const settingsPrevalidateMap = {
   'set-text-h-frameheight-no-audio': parseNumMap,

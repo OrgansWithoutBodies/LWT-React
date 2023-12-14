@@ -3,7 +3,6 @@ import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
 import { settingsPrevalidateMap } from '../data/preValidateMaps';
 import { SettingsObjValidator } from '../data/validators';
-import { CheckAndSubmit } from '../forms/Forms';
 import { useData } from '../hooks/useAkita';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
@@ -185,7 +184,11 @@ export function SettingsComponent(): JSX.Element {
   // const validator = ss.array(SettingsValidator);
   // TODO use
   SettingsLayout;
-  const { Input: StInput, refMap } = useFormInput({
+  const {
+    Input: StInput,
+    refMap,
+    onSubmit,
+  } = useFormInput({
     validator,
     entry: { ...DEFAULT_SETTINGS, ...settings },
   });
@@ -703,17 +706,12 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="Save"
                   onClick={() => {
-                    CheckAndSubmit(
-                      refMap,
-                      settingsPrevalidateMap,
-                      validator,
-                      (val) => {
-                        console.log(val);
-                        // if (false) {
-                        dataService.setSettings(val);
-                        // }
-                      }
-                    );
+                    onSubmit(settingsPrevalidateMap, (val) => {
+                      console.log(val);
+                      // if (false) {
+                      dataService.setSettings(val);
+                      // }
+                    });
                   }}
                 />
               </td>

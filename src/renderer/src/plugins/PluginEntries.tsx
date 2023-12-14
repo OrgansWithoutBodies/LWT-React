@@ -4,7 +4,7 @@ import { TRefMap } from '../forms/Forms';
 import { FormInputComponent } from '../hooks/useFormInput';
 import { EntryRow } from '../pages/Language/NewLanguage';
 
-export function PluginEntries({
+export function PluginEntries<TData>({
   persistable,
   refMap,
   InputComponent,
@@ -12,7 +12,7 @@ export function PluginEntries({
   PreMapComponent,
 }: React.PropsWithChildren<{
   persistable: Persistable;
-  refMap: TRefMap<any>;
+  refMap: TRefMap<TData>;
   InputComponent: FormInputComponent;
   PreMapComponent?: (args: { numElements: number }) => JSX.Element;
 }>) {

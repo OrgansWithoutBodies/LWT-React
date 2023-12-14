@@ -7,6 +7,8 @@ export const YoutubePlugin = {
     },
   } as const,
   service: {
-    getYoutubeMP3AndURL: async (youtubeUrl: string) => {},
+    getYoutubeMP3AndURL: async (youtubeUrl: string) => {
+      console.log('TEST123-TODO', youtubeUrl);
+    },
   },
 };

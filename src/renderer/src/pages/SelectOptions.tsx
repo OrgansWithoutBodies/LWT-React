@@ -204,18 +204,18 @@ function GetSetStatusOption({
 
 /**
  *
- * @param $n
+ * @param n
  */
-function get_status_name($n: NumericalStrength) {
-  return StrengthMapNumericalKey[$n].name;
+function get_status_name(n: NumericalStrength) {
+  return StrengthMapNumericalKey[n].name;
 }
 
 // -------------------------------------------------------------
 
 /**
  *
- * @param $n
+ * @param n
  */
-export function get_status_abbr($n: NumericalStrength) {
-  return StrengthMapNumericalKey[$n].abbr;
+export function get_status_abbr(n: NumericalStrength) {
+  return StrengthMapNumericalKey[n].abbr;
 }

@@ -1,64 +1,55 @@
 import { Query } from '@datorama/akita';
-import {
-  Observable,
-  combineLatest,
-  count,
-  interval,
-  map,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { Observable, combineLatest, count, map, tap } from 'rxjs';
 import type { ArchivedText, Tag, Tag2, Text } from '../utils/parseMySqlDump';
 import { DataState, DataStore, dataStore } from './data.storage';
 import type { Settings } from './settings';
 import type { LanguagesId } from './validators';
 
-const MINS_IN_SECONDS = 60;
-const HOURS_IN_MINS = 60;
-const DAYS_IN_HOURS = 24;
-const DAYS_IN_SECONDS = DAYS_IN_HOURS * HOURS_IN_MINS * MINS_IN_SECONDS;
-const TICKER_INTERVAL = 50;
-const TICKER_MAX_STEPS = 20;
+// const MINS_IN_SECONDS = 60;
+// const HOURS_IN_MINS = 60;
+// const DAYS_IN_HOURS = 24;
+// const DAYS_IN_SECONDS = DAYS_IN_HOURS * HOURS_IN_MINS * MINS_IN_SECONDS;
+// const TICKER_INTERVAL = 50;
+// const TICKER_MAX_STEPS = 20;
 
-/**
- *
- * @param startValue
- * @param endValue
- */
-function ticker(startValue: number, endValue: number): Observable<number> {
-  return interval(TICKER_INTERVAL).pipe(
-    take(TICKER_MAX_STEPS),
-    map((count) => ++count),
-    map((count) =>
-      Math.floor(
-        startValue * ((TICKER_MAX_STEPS - count) / TICKER_MAX_STEPS) +
-          endValue * (count / TICKER_MAX_STEPS)
-      )
-    )
-  );
-}
+// /**
+//  *
+//  * @param startValue
+//  * @param endValue
+//  */
+// function ticker(startValue: number, endValue: number): Observable<number> {
+//   return interval(TICKER_INTERVAL).pipe(
+//     take(TICKER_MAX_STEPS),
+//     map((count) => ++count),
+//     map((count) =>
+//       Math.floor(
+//         startValue * ((TICKER_MAX_STEPS - count) / TICKER_MAX_STEPS) +
+//           endValue * (count / TICKER_MAX_STEPS)
+//       )
+//     )
+//   );
+// }
 
-/**
- *
- * @param startObservable
- * @param endObservable
- * @param ticker_interval
- */
-function timedSwitchMap<
-  TObservableA extends Observable<unknown>,
-  TObservableB extends Observable<unknown>
->(
-  startObservable: TObservableA,
-  endObservable: TObservableB,
-  ticker_interval: number
-) {
-  return interval(ticker_interval).pipe(
-    take(1),
-    map((count) => ++count),
-    switchMap((count) => (count === 0 ? startObservable : endObservable))
-  );
-}
+// /**
+//  *
+//  * @param startObservable
+//  * @param endObservable
+//  * @param ticker_interval
+//  */
+// function timedSwitchMap<
+//   TObservableA extends Observable<unknown>,
+//   TObservableB extends Observable<unknown>
+// >(
+//   startObservable: TObservableA,
+//   endObservable: TObservableB,
+//   ticker_interval: number
+// ) {
+//   return interval(ticker_interval).pipe(
+//     take(1),
+//     map((count) => ++count),
+//     switchMap((count) => (count === 0 ? startObservable : endObservable))
+//   );
+// }
 export class DataQuery extends Query<DataState> {
   constructor(protected store: DataStore) {
     super(store);
@@ -104,8 +95,6 @@ export class DataQuery extends Query<DataState> {
         ) as Settings
     )
   );
-
-  public parsedTexts = this.select('parsedTexts');
 
   public notificationMessage = this.select('notificationMessage');
 
@@ -189,69 +178,77 @@ export class DataQuery extends Query<DataState> {
   public languageStatusStatistics = combineLatest([
     this.languages,
     this.words,
-    this.tags,
+    // this.tags,
   ]).pipe(
-    map(([languages, words, tags]) => {
-      const statisticMapEntries = words.reduce(
-        (prev, curr) => {
-          const val = prev;
-          // while we're here may as well just count em all up to avoid another pass
-          val[curr.WoLgID].total = val[curr.WoLgID].total + 1;
-          if (curr.WoStatus === 0) {
-            return val;
-          }
-          // mutable
-          val[curr.WoLgID][curr.WoStatus] = val[curr.WoLgID][curr.WoStatus] + 1;
-
-          if (curr.WoStatus >= 1 && curr.WoStatus <= 5) {
-            val[curr.WoLgID][15] = val[curr.WoLgID][15] + 1;
-            if (curr.WoStatus <= 4) {
-              val[curr.WoLgID][14] = val[curr.WoLgID][14] + 1;
+    map(
+      ([
+        languages,
+        words,
+        // tags
+      ]) => {
+        const statisticMapEntries = words.reduce(
+          (prev, curr) => {
+            const val = prev;
+            // while we're here may as well just count em all up to avoid another pass
+            val[curr.WoLgID].total = val[curr.WoLgID].total + 1;
+            if (curr.WoStatus === 0) {
+              return val;
             }
-          }
-          return val;
-        },
-        Object.fromEntries(
-          languages.map((lang) => [
-            lang.LgID,
-            {
-              total: 0,
-              1: 0,
-              2: 0,
-              3: 0,
-              4: 0,
-              5: 0,
-              15: 0,
-              14: 0,
-              99: 0,
-              599: 0,
-              98: 0,
-            },
-          ])
-        )
-      );
-      const statisticMap: Record<
-        LanguagesId,
-        Record<1 | 2 | 3 | 4 | 5 | 15 | 14 | 99 | 599 | 98 | 'total', number>
-      > = statisticMapEntries;
-      return statisticMap;
-    })
+            // mutable
+            val[curr.WoLgID][curr.WoStatus] =
+              val[curr.WoLgID][curr.WoStatus] + 1;
+
+            if (curr.WoStatus >= 1 && curr.WoStatus <= 5) {
+              val[curr.WoLgID][15] = val[curr.WoLgID][15] + 1;
+              if (curr.WoStatus <= 4) {
+                val[curr.WoLgID][14] = val[curr.WoLgID][14] + 1;
+              }
+            }
+            return val;
+          },
+          Object.fromEntries(
+            languages.map((lang) => [
+              lang.LgID,
+              {
+                total: 0,
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: 0,
+                15: 0,
+                14: 0,
+                99: 0,
+                599: 0,
+                98: 0,
+              },
+            ])
+          )
+        );
+        const statisticMap: Record<
+          LanguagesId,
+          Record<1 | 2 | 3 | 4 | 5 | 15 | 14 | 99 | 599 | 98 | 'total', number>
+        > = statisticMapEntries;
+        return statisticMap;
+      }
+    )
   );
 
-  public termTimeStatistics = combineLatest([this.words]).pipe(
-    map(([words]) => {
-      const getWordsWithinOffset = (numDays: number) =>
-        words.map(
-          (word) => word.WoCreated > new Date().getTime() + DAYS_IN_SECONDS
-        );
-      const todaysWords = getWordsWithinOffset(0);
-      const yesterdaysWords = getWordsWithinOffset(1);
-      const lastWeekWords = getWordsWithinOffset(7);
-      const lastThirtyWords = getWordsWithinOffset(30);
-      const lastYearWords = getWordsWithinOffset(365);
-      // Today	Yesterday	Last 7 d	Last 30 d	Last 365 d	All Time
-    })
-  );
+  // TODO reincorporate working into here
+  // public termTimeStatistics = combineLatest([this.words]).pipe(
+  //   map(([words]) => {
+  //     const getWordsWithinOffset = (numDays: number) =>
+  //       words.map(
+  //         (word) => word.WoCreated > new Date().getTime() + DAYS_IN_SECONDS
+  //       );
+  //     // const todaysWords = getWordsWithinOffset(0);
+  //     // const yesterdaysWords = getWordsWithinOffset(1);
+  //     // const lastWeekWords = getWordsWithinOffset(7);
+  //     // const lastThirtyWords = getWordsWithinOffset(30);
+  //     // const lastYearWords = getWordsWithinOffset(365);
+  //     // Today	Yesterday	Last 7 d	Last 30 d	Last 365 d	All Time
+  //   })
+  // );
 
   // TODO not sure this is best pattern
   public textDetails: Observable<TextDetailRow[]> = combineLatest([

@@ -25,12 +25,13 @@ import {
   FilterSortPager,
   buildTextTagLookup,
 } from '../ArchivedText/EditArchivedTexts.component';
+import { markClick } from '../IO/CheckForm';
 import { getDirTag } from '../Reader.component';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { GetTextsSortSelectoptions } from '../SelectOptions';
 import { TextSorting, buildSortByValue, resetDirty } from '../Sorting';
 import { TagDropDown } from '../Term/Terms.component';
-import { pluralize } from '../TermTag/EditTags';
+import { pluralize } from '../TermTag/pluralize';
 import { OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
@@ -217,11 +218,15 @@ export function SortableHeader({
   sorting,
   downSorting,
   upSorting,
+  title,
   children,
-}: React.PropsWithChildren<Parameters<typeof SortingArrow>[0]>) {
+}: React.PropsWithChildren<
+  Parameters<typeof SortingArrow>[0] & { title?: string }
+>) {
   const paramUpdater = useUpdateParams();
   return (
     <th
+      title={title}
       className="th1 clickable"
       onClick={() =>
         paramUpdater({
@@ -358,7 +363,7 @@ function LibraryRow({
           {/* name="rec2" */}
           <input
             name="marked[]"
-            className="markcheck"
+            onClick={markClick}
             type="checkbox"
             checked={checked}
             onChange={() => onChange()}
@@ -661,8 +666,8 @@ export function EditTextPane({
 
   const {
     onSubmit,
-    refMap,
     Input: TxInput,
+    TextArea,
     LanguageSelectInput,
   } = useFormInput({
     entry: editingText,
@@ -714,16 +719,15 @@ export function EditTextPane({
               bytes)
             </td>
             <td className="td1">
-              <textarea
+              <TextArea
                 {...getDirTag(language)}
-                ref={refMap.TxText}
-                name="TxText"
+                entryKey="TxText"
                 className="notempty checkbytes checkoutsidebmp"
                 maxLength={65000}
                 errorName="Text"
                 cols={60}
                 rows={20}
-                defaultValue={editingText.TxText}
+                default
               />
               <RequiredLineButton />
             </td>

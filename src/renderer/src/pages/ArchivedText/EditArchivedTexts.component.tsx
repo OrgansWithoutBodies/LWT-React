@@ -28,13 +28,14 @@ import {
   WordTag,
 } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
+import { markClick } from '../IO/CheckForm';
 import {
   GetMultipleArchivedTextActionsSelectOptions,
   GetTextsSortSelectoptions,
 } from '../SelectOptions';
 import { TextSorting } from '../Sorting';
 import { TagDropDown } from '../Term/Terms.component';
-import { pluralize } from '../TermTag/EditTags';
+import { pluralize } from '../TermTag/pluralize';
 import { SortableHeader, TableFooter } from '../Text/Library.component';
 
 /**
@@ -206,11 +207,13 @@ export function EditArchivedTexts({
                   id="markaction"
                   disabled={selectedValues.size === 0}
                   onChange={({ target: { value } }) => {
+                    // TODO rest
                     if (value === 'del') {
-                      // TODO confirm
-                      dataService.deleteMultipleArchivedTexts([
-                        ...selectedValues,
-                      ]);
+                      if (confirmDelete()) {
+                        dataService.deleteMultipleArchivedTexts([
+                          ...selectedValues,
+                        ]);
+                      }
                     }
                   }}
                 >
@@ -260,8 +263,8 @@ export function EditArchivedTexts({
                     <a id={`rec${text['AtID']}`}>
                       <input
                         name="marked[]"
-                        className="markcheck"
                         type="checkbox"
+                        onClick={markClick}
                         {...checkboxPropsForEntry(text)}
                         value={text['AtID']}
                       />
@@ -385,6 +388,8 @@ export function FilterSortPager({
     </tr>
   );
 }
+
+// TODO This is a mess
 export function buildTextTagLookup(
   tags: Tag[],
   archtexttags: WordTag[]
@@ -427,28 +432,18 @@ export function buildTextTagLookup(
       : 'TtT2ID' in archtexttags[0]
       ? 'TtTxID'
       : 'WtWoID';
-  console.log({
-    tag: tags[0],
-    tagIDKey,
-    tagTextKey,
-    intermediaryTagID,
-    intermediaryEntryID,
-  });
   const tagTitleLookup: Record<Tags2Id, string> = Object.fromEntries(
     tags.map((tag) => [tag[tagIDKey], tag[tagTextKey]])
   );
   const textTagLookup: Record<ArchivedTextId, string[]> = archtexttags.reduce(
     (prev, curr) => {
-      if (prev[curr[intermediaryEntryID]]) {
-        prev[curr[intermediaryEntryID]] = [
-          ...prev[curr[intermediaryEntryID]],
-          tagTitleLookup[curr[intermediaryTagID]],
-        ];
+      const entryTextID = curr[intermediaryEntryID as keyof typeof curr];
+      const tagTextID = curr[intermediaryTagID as keyof typeof curr];
+      if (prev[entryTextID]) {
+        prev[entryTextID] = [...prev[entryTextID], tagTitleLookup[tagTextID]];
         return prev;
       }
-      prev[curr[intermediaryEntryID]] = [
-        tagTitleLookup[curr[intermediaryTagID]],
-      ];
+      prev[entryTextID] = [tagTitleLookup[tagTextID]];
       return prev;
     },
     {} as Record<ArchivedTextId, string[]>

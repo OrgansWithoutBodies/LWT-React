@@ -77,12 +77,10 @@ export const headerValues = {
  */
 export function Header({
   // TODO deprecate?
-  afterDropdown,
   title,
   link = '/',
   readerProps = undefined,
 }: {
-  afterDropdown?: string[];
   title: string;
   link?: InternalPaths;
   readerProps?: {
@@ -121,7 +119,8 @@ export function Header({
               return;
             }
             // TODO validate?
-            navigate(`/${val.target.value}`);
+            // TODO no cast if possible
+            navigate(`/${val.target.value}` as InternalPaths);
           }}
         >
           <option disabled>[Menu]</option>

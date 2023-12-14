@@ -7,7 +7,10 @@ import { useData } from '../hooks/useAkita';
 export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
   const [{ wordtags, tags }] = useData(['wordtags', 'tags']);
   return (
-    <ul id="termtags">
+    <ul
+      id="termtags"
+      // TODO tagit
+    >
       {wordtags
         .filter(({ WtWoID }) => WtWoID === wordID)
         .map((tag) => (

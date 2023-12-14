@@ -5,9 +5,9 @@ import {
   BaseOpenAPIWrapper,
 } from '../pages/IO/BaseOpenAPIWrapper';
 
-type TatoebaOpenAPI = TatoebaPaths;
-type TatoebaGetSentencePath =
-  TatoebaOpenAPI['/unstable/sentences']['parameters']['query'];
+// type TatoebaOpenAPI = TatoebaPaths;
+// type TatoebaGetSentencePath =
+//   TatoebaOpenAPI['/unstable/sentences']['parameters']['query'];
 //   type TatoebaAPIReqParamKeys=keyofTatoebaAPIQueryParamObjects['query']
 
 export type PathStartingWithSlash = `/${string}`;
@@ -41,37 +41,37 @@ export class TatoebaOpenAPIWrapper
   };
 }
 
-type RomanCharLowercase =
-  | 'a'
-  | 'b'
-  | 'c'
-  | 'd'
-  | 'e'
-  | 'f'
-  | 'g'
-  | 'h'
-  | 'i'
-  | 'j'
-  | 'k'
-  | 'l'
-  | 'm'
-  | 'n'
-  | 'o'
-  | 'p'
-  | 'q'
-  | 'r'
-  | 's'
-  | 't'
-  | 'u'
-  | 'v'
-  | 'w'
-  | 'x'
-  | 'y'
-  | 'z';
+// type RomanCharLowercase =
+//   | 'a'
+//   | 'b'
+//   | 'c'
+//   | 'd'
+//   | 'e'
+//   | 'f'
+//   | 'g'
+//   | 'h'
+//   | 'i'
+//   | 'j'
+//   | 'k'
+//   | 'l'
+//   | 'm'
+//   | 'n'
+//   | 'o'
+//   | 'p'
+//   | 'q'
+//   | 'r'
+//   | 's'
+//   | 't'
+//   | 'u'
+//   | 'v'
+//   | 'w'
+//   | 'x'
+//   | 'y'
+//   | 'z';
 
-type TwoLetterString = `${RomanCharLowercase}${RomanCharLowercase}`;
-export type ThreeLetterString =
-  `${RomanCharLowercase}${RomanCharLowercase}${RomanCharLowercase}`;
+// type TwoLetterString = `${RomanCharLowercase}${RomanCharLowercase}`;
+// export type ThreeLetterString =
+//   `${RomanCharLowercase}${RomanCharLowercase}${RomanCharLowercase}`;
 // type WordBool = 'yes' | 'no';
 // type TatoebaAPIReqParams = {
 //   from: string;

@@ -15,7 +15,14 @@ export function TagAndOr({
       <select
         defaultValue={defaultValue}
         name="tag12"
-        onChange={onChange as (arg: { target: { value: any } }) => void}
+        onChange={
+          onChange as (arg: {
+            target: {
+              value: any;
+              //  as '0' | '1'
+            };
+          }) => void
+        }
       >
         <option value={0}>... OR ...</option>
         <option value={1}>... AND ...</option>

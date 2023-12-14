@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { dataService } from '../../data/data.service';
 import { textNoIdPrevalidateMap } from '../../data/preValidateMaps';
-import { CheckAndSubmit, ResetForm } from '../../forms/Forms';
+import { ResetForm } from '../../forms/Forms';
 import { useData } from '../../hooks/useAkita';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { AddNewTextValidator, Text } from '../../utils/parseMySqlDump';
+import { AddNewTextValidator } from '../../utils/parseMySqlDump';
 import { do_ajax_update_media_select } from '../SelectMediaPath';
-import { OnCheckText, TextChecker } from './CheckText';
+import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
 
 export function ImportShortTextPage() {
-  const [checkingText, setCheckingText] = useState<null | Text>(null);
+  const [checkingText, setCheckingText] = useState<null | CheckTextType>(null);
   return (
     <>
       {checkingText ? (
@@ -35,7 +35,12 @@ export function ImportShortText({
   const [{ activeLanguage }] = useData(['activeLanguage']);
   const validator = AddNewTextValidator;
 
-  const { Input: TxInput, refMap, onSubmit } = useFormInput({ validator });
+  const {
+    Input: TxInput,
+    refMap,
+    onSubmit,
+    TextArea,
+  } = useFormInput({ validator });
 
   const navigator = useInternalNavigate();
   return (
@@ -93,9 +98,8 @@ export function ImportShortText({
                 bytes)
               </td>
               <td className="td1">
-                <textarea
-                  name="TxText"
-                  ref={refMap.TxText}
+                <TextArea
+                  entryKey="TxText"
                   className="notempty checkbytes checkoutsidebmp"
                   // TODO move these to validators
                   maxLength={65000}
@@ -124,6 +128,8 @@ export function ImportShortText({
               <td className="td1">
                 <ul
                   id="texttags"
+                  // TODO tagit
+
                   className="tagit ui-widget ui-widget-content ui-corner-all"
                 >
                   <li className="tagit-new">
@@ -207,18 +213,13 @@ export function ImportShortText({
                   name="op"
                   value="Save and Open"
                   onClick={() => {
-                    CheckAndSubmit(
-                      refMap,
-                      textNoIdPrevalidateMap,
-                      validator,
-                      (value) => {
-                        const textId = dataService.addText(value);
-                        if (textId !== null) {
-                          dataService.reparseText(textId);
-                          navigator(`/do_text?start=${textId}`);
-                        }
+                    onSubmit(textNoIdPrevalidateMap, (value) => {
+                      const textId = dataService.addText(value);
+                      if (textId !== null) {
+                        dataService.reparseText(textId);
+                        navigator(`/do_text?start=${textId}`);
                       }
-                    );
+                    });
                   }}
                 />
               </td>

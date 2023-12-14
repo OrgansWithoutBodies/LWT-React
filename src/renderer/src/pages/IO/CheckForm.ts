@@ -1,7 +1,11 @@
 // TODO these are activated on class key
-
+import * as ss from 'superstruct';
+import { useTagIt } from '../../utils/TagIt';
 import { confirmDelete } from '../../utils/utils';
 
+/**
+ *
+ */
 function noShowAfter3Secs() {
   $('#hide3').slideUp();
 }
@@ -108,40 +112,19 @@ function check() {
       }
     }
   });
-  $('input.posintnumber').each(function (n: any) {
-    if ($(this).val().trim().length > 0) {
-      if (!(isInt($(this).val().trim()) && $(this).val().trim() + 0 > 0)) {
-        alert(
-          'ERROR\n\nField "' +
-            $(this).attr('data_info') +
-            '" must be an integer number > 0.'
-        );
-        count++;
-      }
-    }
-  });
-  $('input.zeroposintnumber').each(function (n: any) {
-    if ($(this).val().trim().length > 0) {
-      if (!(isInt($(this).val().trim()) && $(this).val().trim() + 0 >= 0)) {
-        alert(
-          'ERROR\n\nField "' +
-            $(this).attr('data_info') +
-            '" must be an integer number >= 0.'
-        );
-        count++;
-      }
-    }
-  });
-  $('input.checkoutsidebmp').each(function (n: any) {
-    if ($(this).val().trim().length > 0) {
-      if (containsCharacterOutsideBasicMultilingualPlane($(this).val())) {
-        count += alertFirstCharacterOutsideBasicMultilingualPlane(
-          $(this).val(),
-          $(this).attr('data_info')
-        );
-      }
-    }
-  });
+  // 'ERROR\n\nField "' +
+  //           $(this).attr('data_info') +
+  //           '" must be an integer number > 0.'
+  $('input.posintnumber').each(checkPosIntNumberValidator);
+  // 'ERROR\n\nField "' +
+  //   $(this).attr('data_info') +
+  //   '" must be an integer number >= 0.'
+  $('input.zeroposintnumber').each(checkZeroPosIntNumberValidator);
+  // count += alertFirstCharacterOutsideBasicMultilingualPlane(
+  //   $(this).val(),
+  //   $(this).attr('data_info')
+  // );
+  $('input.checkoutsidebmp').each(checkOutsideBMPValidator);
   $('textarea.checklength').each(function (n: any) {
     if ($(this).val().trim().length > 0 + $(this).attr('data_maxlength')) {
       alert(
@@ -154,14 +137,11 @@ function check() {
       count++;
     }
   });
-  $('textarea.checkoutsidebmp').each(function (n: any) {
-    if (containsCharacterOutsideBasicMultilingualPlane($(this).val())) {
-      count += alertFirstCharacterOutsideBasicMultilingualPlane(
-        $(this).val(),
-        $(this).attr('data_info')
-      );
-    }
-  });
+  // count += alertFirstCharacterOutsideBasicMultilingualPlane(
+  //   $(this).val(),
+  //   $(this).attr('data_info')
+  // );
+  $('textarea.checkoutsidebmp').each(checkOutsideBMPValidator);
   $('textarea.checkbytes').each(function (n: any) {
     if (
       getUTF8Length($(this).val().trim()) >
@@ -177,16 +157,10 @@ function check() {
       count++;
     }
   });
-  $('input.noblanksnocomma').each(function (n: any) {
-    if ($(this).val().indexOf(' ') > 0 || $(this).val().indexOf(',') > 0) {
-      alert(
-        'ERROR\n\nNo spaces or commas allowed in field "' +
-          $(this).attr('data_info') +
-          '", please remove!'
-      );
-      count++;
-    }
-  });
+  // 'ERROR\n\nNo spaces or commas allowed in field "' +
+  //   $(this).attr('data_info') +
+  //   '", please remove!'
+  $('input.noblanksnocomma').each(checkNoBlanksNoCommaValidator);
   return count === 0;
 }
 
@@ -194,11 +168,28 @@ const checkNotEmptyValidator = () => {};
 const checkURLValidator = () => {};
 const checkDictURLValidator = () => {};
 const checkLengthValidator = () => {};
-const checkPosIntNumberValidator = () => {};
-const checkZeroPosIntNumberValidator = () => {};
-const checkOutsideBMPValidator = () => {};
+const checkPosIntNumberValidator = () =>
+  ss.refine(ss.number(), 'pos-int', (val) => val > 0 && Number.isInteger(val));
+const checkZeroPosIntNumberValidator = () =>
+  ss.refine(
+    ss.number(),
+    'zero-pos-int',
+    (val) => val >= 0 && Number.isInteger(val)
+  );
+const checkOutsideBMPValidator = () =>
+  ss.refine(ss.string(), 'is-inside-bmp', (val) =>
+    containsCharacterOutsideBasicMultilingualPlane(val)
+  );
 const checkBytesValidator = () => {};
-const checkNoBlanksNoCommaValidator = () => {};
+const checkNoBlanksNoCommaValidator = () =>
+  ss.refine(ss.string(), 'no-blanks-no-commas', (val) => {
+    for (const char of val) {
+      if (char === '' || char === ',') {
+        return false;
+      }
+    }
+    return true;
+  });
 
 // TODO
 /**
@@ -211,7 +202,7 @@ function setTheFocus() {
 /**
  *
  */
-function changeImprAnnRadio() {
+export function changeImprAnnRadio(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
   const elem = $(this).attr('name');
   const idwait = '#wait' + elem.substring(2);
@@ -220,7 +211,7 @@ function changeImprAnnRadio() {
   $.post(
     'ajax_save_impr_text.php',
     { id: textid, elem, data: thedata },
-    function (d) {
+    function (d: string) {
       $(idwait).html('<img src="icn/empty.gif" />');
       if (d !== 'OK')
         alert('Saving your changes failed, please reload page and try again!');
@@ -231,7 +222,7 @@ function changeImprAnnRadio() {
 /**
  *
  */
-function changeImprAnnText() {
+export function changeImprAnnText(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
   $(this).prev('input:radio').attr('checked', 'checked');
   const elem = $(this).attr('name');
@@ -241,7 +232,7 @@ function changeImprAnnText() {
   $.post(
     'ajax_save_impr_text.php',
     { id: textid, elem, data: thedata },
-    function (d) {
+    function (d: string) {
       $(idwait).html('<img src="icn/empty.gif" />');
       if (d !== 'OK')
         alert('Saving your changes failed, please reload page and try again!');
@@ -252,7 +243,7 @@ function changeImprAnnText() {
 /**
  *
  */
-function markClick() {
+export function markClick() {
   if ($('input.markcheck:checked').length > 0) {
     $('#markaction').removeAttr('disabled');
   } else {
@@ -263,14 +254,7 @@ function markClick() {
 /**
  *
  */
-function showallwordsClick() {
-  const option = $('#showallwords:checked').length;
-  const text = $('#thetextid').text();
-  window.parent.frames['ro'].location.href =
-    'set_text_mode.php?mode=' + option + '&text=' + text;
-}
-
-function textareaKeydown(event) {
+export function textareaKeydown(event: { keyCode: string }) {
   if (event.keyCode && event.keyCode === '13') {
     if (check()) $('input:submit').last().click();
     return false;
@@ -289,37 +273,27 @@ $(document).ready(function () {
     rows: 3,
     cols: 35,
   });
-  $('input.impr-ann-text').change(changeImprAnnText);
-  $('input.impr-ann-radio').change(changeImprAnnRadio);
   $('form.validate').submit(check);
-  $('input.markcheck').click(markClick);
   $('.confirmdelete').click(confirmDelete);
-  $('#showallwords').click(showallwordsClick);
   $('textarea.textarea-noreturn').keydown(textareaKeydown);
-  $('#termtags').tagit({
-    beforeTagAdded(event, ui) {
-      return !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text());
-    },
-    availableTags: TAGS,
+  const termTags = [] as string[];
+  const textTags = [] as string[];
+  const tagItTermTags = useTagIt({
+    availableTags: termTags,
     fieldName: 'TermTags[TagList][]',
+    beforeTagAdded: (event, ui) =>
+      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
   });
-  $('#texttags').tagit({
-    beforeTagAdded(event, ui) {
-      return !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text());
-    },
-    availableTags: TEXTTAGS,
+  const tagItTextTags = useTagIt({
+    availableTags: textTags,
     fieldName: 'TextTags[TagList][]',
+    beforeTagAdded: (event, ui) =>
+      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
   });
+
   markClick();
   setTheFocus();
-  if (
-    $('#simwords').length > 0 &&
-    $('#langfield').length > 0 &&
-    $('#wordfield').length > 0
-  ) {
-    $('#wordfield').blur(do_ajax_show_similar_terms);
-    do_ajax_show_similar_terms();
-  }
+
   window.setTimeout(noShowAfter3Secs, 3000);
 });
 
@@ -333,7 +307,7 @@ export function do_ajax_show_similar_terms() {
   $.post(
     'ajax_show_similar_terms.php',
     { lang: $('#langfield').val(), word: $('#wordfield').val() },
-    function (data) {
+    function (data: any) {
       $('#simwords').html(data);
     }
   );
