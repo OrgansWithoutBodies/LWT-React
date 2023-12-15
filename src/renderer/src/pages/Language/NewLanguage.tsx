@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from 'react';
+import { useState } from 'react';
 import Modal from 'react-modal';
 import { Persistable } from '../../../../shared/Persistable';
 import { dataService } from '../../data/data.service';
@@ -10,64 +10,14 @@ import { TRefMap } from '../../forms/Forms';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { PluginEntries } from '../../plugins/PluginEntries';
+import { EntryRow } from '../../ui-kit/EntryRow';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
-import { openInNewWindow } from '../../utils/openInNewWindow';
+import { SelectBoolean } from '../../ui-kit/SelectBoolean';
 import { check_dupl_lang } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
-import { SelectBoolean } from './EditLanguage.component';
 import NewLanguageWizard from './Wizard.component';
 
-export interface EntryRowType {
-  headerClasses?: string[];
-  // TODO hacky
-  PreMapComponent?: () => JSX.Element;
-  entryTitle?: string;
-  headerText: string;
-  headerInfoLink?: string;
-  headerDir?: 'left' | 'right' | 'center';
-}
-
-export function EntryRow({
-  headerClasses = [],
-  entryTitle,
-  children,
-  headerText,
-  headerInfoLink,
-  headerDir = 'right',
-  PreMapComponent,
-}: PropsWithChildren<EntryRowType>): JSX.Element {
-  return (
-    <tr title={entryTitle}>
-      {PreMapComponent && <PreMapComponent />}
-      <td className={`td1 ${headerDir} ${headerClasses.join(' ')}`}>
-        {headerText.split('\n').map((val) => (
-          <>
-            {val}
-            {headerInfoLink ? (
-              <Icon
-                className="click"
-                src="question-frame"
-                title="Help"
-                onClick={() => {
-                  openInNewWindow(headerInfoLink);
-                }}
-              />
-            ) : (
-              <></>
-            )}
-            :
-            <br />
-          </>
-        ))}
-      </td>
-      <td className="td1">{children}</td>
-    </tr>
-  );
-}
-/**
- *
- */
 export function NewLanguage() {
   // languages type map
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
@@ -397,9 +347,6 @@ export function NewLanguage() {
   );
 }
 
-/**
- *
- */
 export function TextSizeSelect<
   TData extends Record<string, unknown>,
   TKey extends keyof TData

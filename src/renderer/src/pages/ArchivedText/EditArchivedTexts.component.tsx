@@ -1,13 +1,7 @@
 import { useRef } from 'react';
 import { dataService } from '../../data/data.service';
-import {
-  ArchivedTextId,
-  Tags2Id,
-  TagsId,
-  TextsId,
-  WordsId,
-} from '../../data/validators';
-import { useData } from '../../hooks/useAkita';
+import { ArchivedTextId, TagsId } from '../../data/validators';
+import { useData } from '../../hooks/useData';
 import {
   useInternalNavigate,
   useUpdateParams,
@@ -18,15 +12,10 @@ import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { Pager } from '../../ui-kit/Pager';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
+import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
-import {
-  ArchTextTag,
-  Tag,
-  Tag2,
-  TextTag,
-  WordTag,
-} from '../../utils/parseMySqlDump';
+import { TagDropDown } from '../../ui-kit/TagDropDown';
 import { confirmDelete } from '../../utils/utils';
 import { markClick } from '../IO/CheckForm';
 import {
@@ -34,13 +23,9 @@ import {
   GetTextsSortSelectoptions,
 } from '../SelectOptions';
 import { TextSorting } from '../Sorting';
-import { TagDropDown } from '../Term/Terms.component';
-import { pluralize } from '../TermTag/pluralize';
-import { SortableHeader, TableFooter } from '../Text/Library.component';
+import { FilterSortPager } from './FilterSortPager';
+import { buildTextTagLookup } from './buildTextTagLookup';
 
-/**
- *
- */
 export function EditArchivedTexts({
   query,
   currentPage,
@@ -349,107 +334,6 @@ export function EditArchivedTexts({
       </p>
     </>
   );
-}
-
-// TODO better name
-/**
- *
- */
-export function FilterSortPager({
-  children,
-  elementName,
-  recno,
-  ...pageProps
-}: React.PropsWithChildren<Parameters<typeof Pager>[0]> & {
-  recno: number;
-  elementName: string;
-}) {
-  const paramUpdater = useUpdateParams();
-  return (
-    <tr>
-      <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-        {recno} {elementName}
-        {pluralize(recno)}
-      </th>
-      <th className="th1" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-        <Pager {...pageProps} />
-      </th>
-      <th className="th1" style={{ whiteSpace: 'nowrap' }}>
-        Sort Order:
-        <select
-          name="sort"
-          onChange={({ target: { value } }) => {
-            paramUpdater({ sort: value });
-          }}
-        >
-          {children}
-        </select>
-      </th>
-    </tr>
-  );
-}
-
-// TODO This is a mess
-export function buildTextTagLookup(
-  tags: Tag[],
-  archtexttags: WordTag[]
-): Record<WordsId, string[]>;
-export function buildTextTagLookup(
-  tags: Tag2[],
-  archtexttags: TextTag[]
-): Record<TextsId, string[]>;
-export function buildTextTagLookup(
-  tags: Tag2[],
-  archtexttags: ArchTextTag[]
-): Record<ArchivedTextId, string[]>;
-/**
- *
- * @param tags
- * @param archtexttags
- */
-export function buildTextTagLookup(
-  tags: (Tag2 | Tag)[],
-  archtexttags: (ArchTextTag | TextTag | WordTag)[]
-):
-  | Record<WordsId, string[]>
-  | Record<TextsId, string[]>
-  | Record<ArchivedTextId, string[]> {
-  if (!tags[0]) {
-    return {};
-  }
-  // TODO typewise enforce these better instead of free text
-  const tagIDKey = 'TgID' in tags[0] ? 'TgID' : 'T2ID';
-  const tagTextKey = 'TgID' in tags[0] ? 'TgText' : 'T2Text';
-  const intermediaryTagID =
-    'AgT2ID' in archtexttags[0]
-      ? 'AgT2ID'
-      : 'TtT2ID' in archtexttags[0]
-      ? 'TtT2ID'
-      : 'WtTgID';
-  const intermediaryEntryID =
-    'AgT2ID' in archtexttags[0]
-      ? 'AgAtID'
-      : 'TtT2ID' in archtexttags[0]
-      ? 'TtTxID'
-      : 'WtWoID';
-  const tagTitleLookup: Record<Tags2Id, string> = Object.fromEntries(
-    tags.map((tag) => [tag[tagIDKey], tag[tagTextKey]])
-  );
-  const textTagLookup: Record<ArchivedTextId, string[]> = archtexttags.reduce(
-    (prev, curr) => {
-      const entryTextID = curr[intermediaryEntryID as keyof typeof curr];
-      const tagTextID = curr[intermediaryTagID as keyof typeof curr];
-      if (prev[entryTextID]) {
-        prev[entryTextID] = [...prev[entryTextID], tagTitleLookup[tagTextID]];
-        return prev;
-      }
-      prev[entryTextID] = [tagTitleLookup[tagTextID]];
-      return prev;
-    },
-    {} as Record<ArchivedTextId, string[]>
-  );
-  console.log({ textTagLookup });
-  return textTagLookup;
 }
 
 /**

@@ -10,9 +10,6 @@ export function setupAppContext(context: TAppContext) {
 }
 export const AppContext = setupAppContext(AppVariables);
 
-/**
- *
- */
 export function useAppContext() {
   return useContext(AppContext);
 }

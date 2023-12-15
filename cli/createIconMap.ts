@@ -1,8 +1,5 @@
 import * as fs from 'fs';
 
-/**
- *
- */
 export default function CreateIconMap() {
   const srcDirectoryRoot = './src/icons';
   const srcDirectory = `${srcDirectoryRoot}/icn`;

@@ -2,7 +2,7 @@ import { Persistable } from '../../../shared/Persistable';
 import { getEntryLinePluginsFor } from '../data/validators';
 import { TRefMap } from '../forms/Forms';
 import { FormInputComponent } from '../hooks/useFormInput';
-import { EntryRow } from '../pages/Language/NewLanguage';
+import { EntryRow } from '../ui-kit/EntryRow';
 
 export function PluginEntries<TData>({
   persistable,

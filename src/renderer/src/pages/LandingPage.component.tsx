@@ -1,17 +1,15 @@
 import { PropsWithChildren } from 'react';
 import { dataService } from '../data/data.service';
-import { useData } from '../hooks/useAkita';
 import { useAppContext } from '../hooks/useContext';
+import { useData } from '../hooks/useData';
 import { InternalPaths } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
 import { PersistanceStrategy } from '../persist/PersistedValueGetter';
 import { PLUGINS } from '../plugins';
+import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
-/**
- *
- */
 export function LandingPage() {
   const {
     releaseDate,
@@ -23,11 +21,16 @@ export function LandingPage() {
     frontendVersion,
     frontendSource,
   } = useAppContext();
-  const [{ languages, activeLanguageId, activeLanguage }] = useData([
-    'languages',
-    'activeLanguageId',
-    'activeLanguage',
-  ]);
+  const [{ texts, languages, activeLanguageId, activeLanguage, settings }] =
+    useData([
+      'languages',
+      'activeLanguageId',
+      'activeLanguage',
+      'settings',
+      'texts',
+    ]);
+  const currentTextID = settings['currenttext'];
+  const currentText = texts.find((text) => text.TxID === currentTextID);
   console.log('LANGS', languages);
   const pluginLinks = PLUGINS.filter(
     ({ landingPageLinks }) => landingPageLinks !== undefined
@@ -53,9 +56,10 @@ export function LandingPage() {
     { link: '/settings', label: 'Settings/Preferences' },
     null,
     { link: '/info', label: 'Help/Information' },
-    // TODO
+    // TODO?
     // { link: '/mobile', label: 'Mobile LWT (Experimental)' },
-    ...pluginLinks,
+    // TODO typing
+    ...(pluginLinks as any),
   ];
 
   return (
@@ -121,12 +125,38 @@ export function LandingPage() {
               }
             />
           </div>
-          {activeLanguage && (
-            <div>
-              {/* TODO */}
-              My last Text (in
-              {` ${activeLanguage.LgName}`})
-            </div>
+          {currentText && activeLanguage && (
+            <ul>
+              <li>
+                My last Text (in
+                {activeLanguage.LgName}):
+                <br /> <i>{currentText.TxTitle}</i>
+                <br />
+                <A href={`/do_text?start=${currentText.TxID}`}>
+                  <Icon src="book-open-bookmark" title="Read" />
+                  &nbsp;Read
+                </A>
+                &nbsp; &nbsp;
+                <A href={`/do_test?text=${currentText.TxID}`}>
+                  <Icon src="question-balloon" title="Test" />
+                  &nbsp;Test
+                </A>
+                &nbsp; &nbsp;
+                <A href={`/print_text?text=${currentText.TxID}`}>
+                  <Icon src="printer" title="Print" />
+                  &nbsp;Print
+                </A>
+                {currentText.TxAnnotatedText.length > 0 && (
+                  <>
+                    &nbsp; &nbsp;
+                    <A href={`/print_impr_text?text=${currentText.TxID}`}>
+                      <Icon src="tick" title="Improved Annotated Text" />
+                      &nbsp;Ann. Text
+                    </A>
+                  </>
+                )}
+              </li>
+            </ul>
           )}
         </div>
 

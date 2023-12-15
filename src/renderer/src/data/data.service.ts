@@ -198,10 +198,11 @@ export class DataService {
     return maxId;
   }
 
-  public addTag(tag: Tag) {
+  public addTag(tag: Omit<Tag, 'TgID'>) {
+    let maxId = null;
     this.dataStore.update((state) => {
       const ids = state.tags.map((tag) => tag.TgID);
-      const maxId = (Math.max(...ids) + 1) as TagsId;
+      maxId = (Math.max(...ids) + 1) as TagsId;
       return {
         ...state,
         notificationMessage: { txt: `Added New Tag ${tag.TgText}` },
@@ -216,6 +217,10 @@ export class DataService {
     });
     this.persistSet('tags');
     this.persistInsert('tags', tag);
+    if (maxId === null) {
+      throw new Error('Error during tag creation or persist');
+    }
+    return maxId as TagsId;
   }
 
   public editTag(chgId: TagsId, tag: Tag) {
@@ -383,6 +388,46 @@ export class DataService {
       notificationMessage: { txt: 'Added Tag To Term' },
       wordtags: [...state.wordtags, { WtTgID: tagId, WtWoID: termId }],
     }));
+    this.persistSet('wordtags');
+    // TODO
+  }
+  public setTermTextUppercase(termIds: WordsId[]) {
+    this.dataStore.update((state) => ({
+      ...state,
+      notificationMessage: { txt: `Made ${termIds.length} terms uppercase` },
+      words: state.words.map((word) =>
+        termIds.includes(word.WoID)
+          ? { ...word, WoText: word.WoTextLC.toUpperCase() }
+          : word
+      ),
+    }));
+    this.persistSet('words');
+  }
+  public setTermTextLowercase(termIds: WordsId[]) {
+    this.dataStore.update((state) => ({
+      ...state,
+      notificationMessage: { txt: `Made ${termIds.length} terms lowercase` },
+      words: state.words.map((word) =>
+        termIds.includes(word.WoID) ? { ...word, WoText: word.WoTextLC } : word
+      ),
+    }));
+    this.persistSet('words');
+  }
+  public addPotentiallyNewTagToTerms(tagString: string, termIds: WordsId[]) {
+    this.dataStore.update((state) => {
+      const foundTag = state.tags.find((val) => val.TgText === tagString);
+      const tagId = foundTag
+        ? foundTag.TgID
+        : this.addTag({ TgText: tagString });
+      return {
+        ...state,
+        notificationMessage: { txt: 'Added Tag To Term' },
+        wordtags: [
+          ...state.wordtags,
+          ...termIds.map((termId) => ({ WtTgID: tagId, WtWoID: termId })),
+        ],
+      };
+    });
     this.persistSet('wordtags');
     // TODO
   }
@@ -885,11 +930,14 @@ export class DataService {
     const word = this.dataStore
       .getValue()
       .words.find((val) => val.WoID === wordID);
-    console.log('TEST123-UPDATESTRENGTH', wordID, word, newStrength);
     if (!word) {
       return;
     }
-    this.editTerm({ ...word, WoStatus: newStrength });
+    this.editTerm({
+      ...word,
+      WoStatus: newStrength,
+      WoStatusChanged: getCurrentTimeAsString(),
+    });
   }
 
   public async getTatoebaSentence(langKey: ThreeLetterString, word: string) {

@@ -2,9 +2,8 @@ import { useRef, useState } from 'react';
 import { TextDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { textPrevalidateMap } from '../../data/preValidateMaps';
-import { Settings } from '../../data/settings';
 import { Tags2Id, TextsId, TextsValidator } from '../../data/validators';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import {
   useInternalNavigate,
@@ -16,22 +15,20 @@ import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { Pager } from '../../ui-kit/Pager';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
+import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
+import { TagDropDown } from '../../ui-kit/TagDropDown';
+import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
 import { Text } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
-import {
-  FilterSortPager,
-  buildTextTagLookup,
-} from '../ArchivedText/EditArchivedTexts.component';
+import { FilterSortPager } from '../ArchivedText/FilterSortPager';
+import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { markClick } from '../IO/CheckForm';
-import { getDirTag } from '../Reader.component';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { GetTextsSortSelectoptions } from '../SelectOptions';
 import { TextSorting, buildSortByValue, resetDirty } from '../Sorting';
-import { TagDropDown } from '../Term/Terms.component';
-import { pluralize } from '../TermTag/pluralize';
 import { OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
@@ -69,9 +66,6 @@ const TextMultiAction = {
   },
 };
 
-/**
- *
- */
 export function TextMultiActions({
   onSelectAll,
   onSelectNone,
@@ -131,9 +125,6 @@ export function TextMultiActions({
   );
 }
 
-/**
- *
- */
 function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
   console.log('TEST123-library-header', sorting);
   const [{ activeLanguageId }] = useData(['activeLanguageId']);
@@ -211,131 +202,6 @@ function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
   );
 }
 
-/**
- *
- */
-export function SortableHeader({
-  sorting,
-  downSorting,
-  upSorting,
-  title,
-  children,
-}: React.PropsWithChildren<
-  Parameters<typeof SortingArrow>[0] & { title?: string }
->) {
-  const paramUpdater = useUpdateParams();
-  return (
-    <th
-      title={title}
-      className="th1 clickable"
-      onClick={() =>
-        paramUpdater({
-          sort: sorting === upSorting ? downSorting : upSorting,
-          page: null,
-        })
-      }
-    >
-      {children}
-      <SortingArrow
-        sorting={sorting}
-        downSorting={downSorting}
-        upSorting={upSorting}
-      />
-    </th>
-  );
-}
-
-/**
- *
- */
-export function TableFooter({
-  recno,
-  currentPage,
-  numPages,
-  pageSize,
-  elementName,
-  pageSizeSettingsKey,
-}: {
-  recno: number;
-  currentPage: number;
-  numPages: number;
-  pageSize: number;
-  elementName: string;
-  pageSizeSettingsKey: keyof Settings;
-}): JSX.Element {
-  return (
-    <table className="tab1" cellSpacing={0} cellPadding={5}>
-      <tbody>
-        <tr>
-          <th style={{ whiteSpace: 'nowrap' }} className="th1">
-            {recno} {elementName}
-            {pluralize(recno)}
-          </th>
-          <th style={{ whiteSpace: 'nowrap' }} className="th1">
-            &nbsp; &nbsp;
-            <Icon src="placeholder" alt="-" />
-            <Icon src="placeholder" alt="-" />
-            <Pager currentPage={currentPage} numPages={numPages} />
-          </th>
-          <th style={{ whiteSpace: 'nowrap' }} className="th1">
-            &nbsp; &nbsp;
-            <Icon src="placeholder" alt="-" />
-            <Icon src="placeholder" alt="-" />
-            <ResizePage
-              pageSize={pageSize}
-              onPageResize={function (newSize: number): void {
-                dataService.setSettings({ [pageSizeSettingsKey]: newSize });
-              }}
-            />
-          </th>
-        </tr>
-      </tbody>
-    </table>
-  );
-}
-
-/**
- *
- */
-export function ResizePage({
-  pageSize,
-  onPageResize,
-}: {
-  pageSize: number;
-  onPageResize: (newSize: number) => void;
-}) {
-  const numberOptions = 20;
-  const options = new Array(numberOptions).fill(0).map((_, ii) => (ii + 1) * 5);
-  return (
-    <>
-      # / Page:{' '}
-      {options.includes(pageSize) ? (
-        <select
-          value={pageSize}
-          onChange={({ target: { value } }) =>
-            onPageResize(Number.parseInt(value))
-          }
-        >
-          {options.map((val) => (
-            <option value={val}>{val}</option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type="number"
-          defaultValue={pageSize}
-          onChange={({ target: { value } }) =>
-            onPageResize(Number.parseInt(value))
-          }
-        />
-      )}
-    </>
-  );
-}
-
-/**
- *
- */
 function LibraryRow({
   text,
   checked,
@@ -435,9 +301,6 @@ function LibraryRow({
   );
 }
 
-/**
- *
- */
 export function Library({
   currentPage,
   query = null,
@@ -638,9 +501,6 @@ export function Library({
   );
 }
 
-/**
- *
- */
 export function EditTextPane({
   chgID,
   onCheckText,
@@ -857,30 +717,3 @@ const sortingMethod = (
       return buildSortByValue('title');
   }
 };
-const DOWN_ARROW = '▾' as const;
-const UP_ARROW = '▴' as const;
-
-/**
- *
- */
-export function SortingArrow<TSort extends number>({
-  sorting,
-  downSorting,
-  upSorting,
-}: {
-  sorting: TSort;
-  downSorting: TSort;
-  upSorting: TSort;
-}) {
-  return (
-    <>
-      {sorting === downSorting ? (
-        <>&nbsp;{DOWN_ARROW}</>
-      ) : sorting === upSorting ? (
-        <>&nbsp;{UP_ARROW}</>
-      ) : (
-        <></>
-      )}
-    </>
-  );
-}

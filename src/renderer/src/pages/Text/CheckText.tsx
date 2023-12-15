@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { CheckTextsValidator, TextsId } from '../../data/validators';
 import { parseNumMap } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
+import { getDirTag } from '../../ui-kit/getDirTag';
 import { Language } from '../../utils/parseMySqlDump';
 import {
   cleanText,
@@ -12,12 +13,8 @@ import {
   replaceTabsWithNewLine,
   splitCheckText,
 } from '../../utils/utils';
-import { getDirTag } from '../Reader.component';
 import { NavigateButton } from '../Statistics.component';
 
-/**
- *
- */
 export function CheckTextPage() {
   const [checkingText, setCheckingText] = useState<null | CheckTextType>(null);
   return (
@@ -34,9 +31,7 @@ export function CheckTextPage() {
 export type CheckTextType = (typeof CheckTextsValidator)['TYPE'];
 export type OnCheckText = (text: null | CheckTextType) => void;
 // TODO bring into edit/adding text
-/**
- *
- */
+
 export function CheckText({
   onCheckText,
 }: {
@@ -115,9 +110,6 @@ export function CheckText({
 //   if (no_pagestart)
 //     pagestart('My ' . getLanguage(currentlang) . ' Texts', true);
 
-/**
- *
- */
 export function TextChecker({
   // TODO better name
   potentialText: { TxText, TxLgID },
@@ -151,9 +143,7 @@ export function TextChecker({
     </>
   );
 }
-/**
- *
- */
+
 export function CheckTextSentences({
   language,
   s,

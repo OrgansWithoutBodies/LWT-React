@@ -1,9 +1,7 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import { AppVariables } from '../meta';
-import {
-  PersistedValueGetter,
-  PersistenceStrategies,
-} from '../persist/PersistedValueGetter';
+import { PersistenceStrategies } from '../persist/PersistedValueGetter';
+import { PersistedValueGetter } from '../persist/PersistedValueGetter.types';
 import {
   ArchTextTag,
   ArchivedText,

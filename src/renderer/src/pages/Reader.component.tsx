@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TextsId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import {
   Popover,
@@ -8,7 +8,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../ui-kit/Tooltip';
-import { Language, TextItem, Word } from '../utils/parseMySqlDump';
+import { getDirTag } from '../ui-kit/getDirTag';
+import { TextItem, Word } from '../utils/parseMySqlDump';
 import { AddNewTermTooltip } from './Term/AddNewTermTooltip';
 
 // TODO map color from termstrength type
@@ -20,9 +21,6 @@ import { AddNewTermTooltip } from './Term/AddNewTermTooltip';
 // TODO data order
 // TODO 'show all' for ambiguous terms
 
-/**
- *
- */
 export function Reader({
   activeId,
   setActiveWord,
@@ -175,6 +173,3 @@ export function Reader({
     </div>
   );
 }
-export const getDirTag = (language: Language) => ({
-  dir: language.LgRightToLeft ? 'rtl' : 'ltr',
-});

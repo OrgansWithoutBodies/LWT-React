@@ -1,33 +1,14 @@
 import React from 'react';
-import { dataService } from '../../data/data.service';
-import { TermStrengthOrUnknown, TermStrengths } from '../../data/type';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { A } from '../../nav/InternalLink';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { Language, Sentence, TextItem, Word } from '../../utils/parseMySqlDump';
-import { confirmDelete } from '../../utils/utils';
 import {
-  NumericalStrength,
-  StrengthMap,
-  StrengthMapNumericalKey,
-  getStatusName,
-} from '../StrengthMap';
-import { DictionaryLinks } from './Terms.component';
+  DictionaryLinks,
+  KnownTermLines,
+  UnknownTermLines,
+} from './DictionaryLinks';
 
-// TODO dedupe with STATUSES
-const ReverseStrengthMap: Record<NumericalStrength, TermStrengthOrUnknown> = {
-  0: 0,
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  98: 'Ign',
-  99: 'WKn',
-};
-/**
- *
- */
 function ExpressionsLines({
   expressions,
 }: {
@@ -51,9 +32,6 @@ function ExpressionsLines({
   );
 }
 
-/**
- *
- */
 function TranslateLines({
   language,
   word,
@@ -112,9 +90,6 @@ const TermTooltipClose = React.forwardRef<
   React.PropsWithChildren<{ onClose: () => void }>
 >(TermTooltipCloseImpl);
 
-/**
- *
- */
 function TermTooltipHeader({
   headerTitle,
   onClose,
@@ -150,106 +125,6 @@ function TermTooltipHeader({
   );
 }
 
-/**
- *
- */
-export function UnknownTermLines({ word }: { word: string }): JSX.Element {
-  return (
-    <>
-      <b>
-        {word}
-        <br />▶ Unknown [?]
-      </b>
-      <br />
-      <A
-        // href={`_`}
-        // onClick={() => dataService.updateTermStrength(w)}
-        target="ro"
-      >
-        {/* <A href={`/insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro"> */}
-        I know this term well
-      </A>
-      <br />
-      <A href={`/insert_word_ignore?tid=${44}&ord=${1504}`} target="ro">
-        Ignore this term
-      </A>
-    </>
-  );
-}
-
-/**
- *
- */
-export function KnownTermLines({
-  word,
-  tags,
-}: {
-  word: Word;
-  tags: string[];
-}): JSX.Element {
-  return (
-    <>
-      <b>
-        {word.WoText}
-        {word.WoRomanization && (
-          <>
-            <br />▶{word.WoRomanization}
-          </>
-        )}
-        <br />▶{word.WoTranslation}
-        {tags.length > 0 && <>, [{tags.join(', ')}]</>}
-        <br />▶{StrengthMap[ReverseStrengthMap[word.WoStatus]].status} [
-        {ReverseStrengthMap[word.WoStatus]}]
-      </b>
-      <br />
-      St:
-      {TermStrengths.map((strength) => {
-        if (StrengthMapNumericalKey[word.WoStatus].abbr === strength) {
-          return (
-            <span title={getStatusName(StrengthMap[strength].classKey)}>
-              {' '}
-              ◆{' '}
-            </span>
-          );
-        }
-        return (
-          <span
-            className="clickable a"
-            onClick={() =>
-              dataService.updateTermStrength(
-                word.WoID,
-                StrengthMap[strength].classKey
-              )
-            }
-            title={StrengthMap[strength].status}
-          >
-            [{strength}]{' '}
-          </span>
-        );
-      })}
-      <br />
-      {/* TODO onclick */}
-      <A href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
-        Edit term
-      </A>
-      <A
-        onClick={() => {
-          // TODO update text
-          if (confirmDelete()) {
-            dataService.deleteTerm(word.WoID);
-          }
-        }}
-        target="ro"
-      >
-        Delete term
-      </A>
-    </>
-  );
-}
-
-/**
- *
- */
 export function AddNewTermTooltip({
   word,
   sentence,
@@ -321,6 +196,7 @@ export function AddNewTermTooltip({
                     <ExpressionsLines expressions={expressions} />
                     <br />
                     <TranslateLines
+                      sentence={sentence}
                       word={wordStr}
                       language={textLanguage}
                       setIFrameURL={setIFrameURL}

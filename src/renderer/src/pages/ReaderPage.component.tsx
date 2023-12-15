@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import SplitPane from 'react-split-pane';
-import { useThemeColors } from '../App';
 import { dataService } from '../data/data.service';
 import { LanguagesId, TextsId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
+import { useThemeColors } from '../hooks/useThemeColors';
 import { useTick } from '../hooks/useTimer';
+import { useUpdateActiveText } from '../hooks/useUpdateActiveText';
 import { A } from '../nav/InternalLink';
 import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
@@ -15,17 +16,18 @@ import { TranslationAPI } from './IO/APITranslation.component';
 import { Loader } from './Loader';
 import { Reader } from './Reader.component';
 import { AddNewWordPane } from './Term/AddNewWordPane';
+import { DictionaryLinks } from './Term/DictionaryLinks';
 import { TextToDoCount } from './TextToDoCount';
-import { MakeOverlibLinkChangeStatusAlltest } from './escape_html_chars';
+import {
+  MakeOverlibLinkChangeStatusAlltest,
+  MakeOverlibLinkChangeStatusTest,
+} from './escape_html_chars';
 import { owin } from './translateSentence2';
 
 // TODO
 //  confirmation screen
 //  details screen
 
-/**
- *
- */
 function showallwordsClick(
   text: TextsId,
   newVal: 0 | 1,
@@ -78,9 +80,7 @@ function ShowAllMessage({ showAll: showAll }: { showAll: 0 | 1 }) {
     </p>
   );
 }
-/**
- *
- */
+
 function IFramePane({ url }: { url: string | null }) {
   console.log('TEST123-IFRAME', url);
   const [loading, setLoading] = useState<boolean>(false);
@@ -144,29 +144,24 @@ function IFramePane({ url }: { url: string | null }) {
 }
 // TODO I Know All
 
-/**
- *
- */
 export function ReaderPage({
-  textId,
+  textID: textID,
 }: // onShowChanged,
 {
-  textId: TextsId;
+  textID: TextsId;
   // onShowChanged: (args: { text: TextsId; mode: 0 | 1 }) => void;
 }) {
   const [{ texts, settings }] = useData(['texts', 'settings']);
   const {
     ['set-text-l-framewidth-percent']: lFrameWidthPerc,
     ['set-text-r-frameheight-percent']: rFrameHeightPerc,
+    // TODO use
     ['set-text-h-frameheight-no-audio']: setTextHFrameheightNoAudio,
     ['set-text-h-frameheight-with-audio']: setTextHFrameheightWithAudio,
   } = settings;
-  console.log({
-    rFrameHeightPerc,
-    lFrameWidthPerc,
-    setTextHFrameheightNoAudio,
-    setTextHFrameheightWithAudio,
-  });
+
+  useUpdateActiveText(textID);
+
   const [activeWord, setActiveWord] = useState<
     | (Word & Pick<TextItem, 'TiSeID'>)
     | ({ newWord: string } & Pick<TextItem, 'TiSeID'>)
@@ -180,7 +175,7 @@ export function ReaderPage({
   const [translateAPIParams, setTranslateAPIParams] = useState<
     (APITranslateTerm<string, string> & { apiKey: string }) | null
   >(null);
-  const text = texts.find((text) => text.TxID === textId);
+  const text = texts.find((text) => text.TxID === textID);
   const activeText =
     activeWord === null
       ? null
@@ -270,7 +265,7 @@ export function ReaderPage({
           </table>
         </>
         <Reader
-          activeId={textId}
+          activeId={textID}
           setActiveWord={setActiveWord}
           activeWord={activeWord}
           setIFrameURL={setIFrameURL}
@@ -317,15 +312,12 @@ export function ReaderPage({
 }
 type Modality = 0 | 1 | 2 | 3 | 4 | 5 | 'table' | null;
 
-/**
- *
- */
 export function TesterPage({
-  langId,
-  textId,
+  langID: langId,
+  textID: textId,
 }: {
-  textId: TextsId | null;
-  langId: LanguagesId | null;
+  textID: TextsId | null;
+  langID: LanguagesId | null;
 }) {
   const [{ texts, words, languages, textitems }] = useData([
     'texts',
@@ -333,6 +325,7 @@ export function TesterPage({
     'languages',
     'textitems',
   ]);
+  useUpdateActiveText(textID);
 
   const [activeWord, setActiveWord] = useState<string | null>();
   // TODO can be multiple texts?
@@ -427,6 +420,19 @@ export function TesterPage({
             word={activeWord}
             langId={text.TxLgID}
             existingTerm={words.find(({ WoText }) => activeWord === WoText)}
+            onClearActiveWord={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+            setIFrameURL={function (url: string | null): void {
+              throw new Error('Function not implemented.');
+            }}
+            setTranslateAPIParams={function (
+              vals:
+                | (APITranslateTerm<string, string> & { apiKey: string })
+                | null
+            ): void {
+              throw new Error('Function not implemented.');
+            }}
           />
         ) : (
           <></>
@@ -437,31 +443,6 @@ export function TesterPage({
   );
 }
 
-/**
- *
- * @param wid
- * @param plusminus
- * @param text
- */
-export function MakeOverlibLinkChangeStatusTest({
-  wid,
-  plusminus,
-  text,
-}: {
-  wid: number;
-  plusminus: 'plus' | 'minus';
-  text: string | JSX.Element;
-}) {
-  return (
-    <a href={`set_test_status?wid=${wid}&stchange=${plusminus}`} target="ro">
-      {text}
-    </a>
-  );
-}
-
-/**
- *
- */
 export function Tester({ modality }: { modality: Modality }) {
   const [testingWord, setTestingWord] = useState<Word | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
@@ -530,22 +511,9 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
-/**
- *
- */
 function RunTestForWord({
-  word: {
-    WoTranslation: trans,
-    WoStatus: status,
-    WoID,
-    WoRomanization: roman,
-    WoText: text,
-  },
-  language: {
-    LgDict1URI: wblink1,
-    LgDict2URI: wblink2,
-    LgGoogleTranslateURI: wblink3,
-  },
+  word: { WoStatus: WoStatus, WoID, WoText: WoText },
+  language,
 }: {
   word: Word;
   language: Language;
@@ -561,16 +529,16 @@ function RunTestForWord({
             backgroundColor: '#333',
           }}
         />
-        {status >= 1 && status <= 5 && (
+        {WoStatus >= 1 && WoStatus <= 5 && (
           <>
             {/* TODO values here */}
             <MakeOverlibLinkChangeStatusTest
-              wid={0}
+              WoID={0}
               plusminus={'plus'}
               text={''}
             />
             <Icon src="thumb-up" title="Got it!" /> Got it! [
-            {`${status} ▶ ${status + 1}`}
+            {`${WoStatus} ▶ ${WoStatus + 1}`}
             ]
             <hr
               style={{
@@ -582,12 +550,12 @@ function RunTestForWord({
             />
             {/* TODO values here */}
             <MakeOverlibLinkChangeStatusTest
-              wid={0}
+              WoID={0}
               plusminus={'plus'}
               text={''}
             />
             <Icon src="thumb" title="Oops!" /> Oops! [
-            {`${status} ▶ ${status - 1}`}
+            {`${WoStatus} ▶ ${WoStatus - 1}`}
             ]
             <hr
               style={{
@@ -600,7 +568,10 @@ function RunTestForWord({
             {/* TODO */}
             <b>
               {' '}
-              <MakeOverlibLinkChangeStatusAlltest />
+              <MakeOverlibLinkChangeStatusAlltest
+                WoID={WoID}
+                oldstat={WoStatus}
+              />
             </b>
             <br />
           </>
@@ -614,18 +585,20 @@ function RunTestForWord({
           backgroundColor: '#333',
         }}
       />
-      {/* <b>{escape_html_chars(make_tooltip(text, trans, roman, stat))}</b> */}
+      {/* <b>{escape_html_chars(makeTooltipTitle(text, trans, roman, stat))}</b> */}
       <br />
       <A ref={`/edit_tword?wid=${WoID}`} target="ro">
         Edit term
       </A>
       <br />
-
-      <CreateTheDictLink u={wblink1} w={text} t={'Dict1'} b={'Lookup Term: '} />
-      <CreateTheDictLink u={wblink2} w={text} t={'Dict2'} b={''} />
-      <CreateTheDictLink u={wblink3} w={Set} t={'GTr'} b={''} />
-      <br />
-      {/* Lookup Sentence:'), */}
+      <DictionaryLinks
+        lang={language}
+        sentenceString={''}
+        wordString={WoText}
+        setTranslateAPIParams={setTranslateAPIParams}
+        setIFrameURL={setIFrameURL}
+        breakSent
+      />
     </>
   );
 }
@@ -701,9 +674,7 @@ function createTheDictUrl(u: string, w: string) {
 function escape_apostrophes(s: string) {
   return s.replace(/'/g, "\\'");
 }
-/**
- *
- */
+
 function AudioPlayer({ audioURI }: { audioURI: string }) {
   // TODO
   return <></>;

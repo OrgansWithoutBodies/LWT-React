@@ -1,5 +1,5 @@
 import { Persistable } from '../../../shared/Persistable';
-import { PersistenceHandles } from '../persist/PersistedValueGetter';
+import { PersistenceHandles } from '../persist/PersistedValueGetter.types';
 
 export const BackendPlugin: PersistenceHandles = {
   getAsync: async (key) => {

@@ -4,7 +4,7 @@ import { dataService } from '../../data/data.service';
 import { tagPreValidateMap } from '../../data/preValidateMaps';
 import { TagsId, TagsValidator } from '../../data/validators';
 import { RefMap } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import {
   useInternalNavigate,
@@ -15,9 +15,11 @@ import { useSelection } from '../../hooks/useSelection';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
+import { TableFooter } from '../../ui-kit/TableFooter';
 import { Tag } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
-import { FilterSortPager } from '../ArchivedText/EditArchivedTexts.component';
+import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { markClick, textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
@@ -26,11 +28,7 @@ import {
 } from '../SelectOptions';
 import { TagSorting, resetDirty } from '../Sorting';
 import { NavigateButton } from '../Statistics.component';
-import { SortableHeader, TableFooter } from '../Text/Library.component';
 
-/**
- *
- */
 export function DisplayTags({
   query,
   sorting = TagSorting['Tag Text A-Z'],
@@ -317,9 +315,6 @@ function sortValues(value: TagSorting) {
   }
 }
 
-/**
- *
- */
 export function NewTag() {
   const validator = TagsValidator;
   const refMap = RefMap<Tag>(validator);
@@ -391,9 +386,6 @@ export function NewTag() {
   );
 }
 
-/**
- *
- */
 export function EditTag({ chgId }: { chgId: TagsId }) {
   const [{ tags }] = useData(['tags']);
   const changingTag = tags.find(({ TgID }) => TgID === chgId);

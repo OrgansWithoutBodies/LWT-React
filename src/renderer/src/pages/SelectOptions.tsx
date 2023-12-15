@@ -1,8 +1,5 @@
 import { NumericalStrength, StrengthMapNumericalKey } from './StrengthMap';
 
-/**
- *
- */
 export function GetMultipleTagsActionsSelectOptions() {
   return (
     <>
@@ -12,9 +9,6 @@ export function GetMultipleTagsActionsSelectOptions() {
   );
 }
 
-/**
- *
- */
 export function GetAllTagsActionsSelectOptions() {
   return (
     <>
@@ -24,9 +18,6 @@ export function GetAllTagsActionsSelectOptions() {
   );
 }
 
-/**
- *
- */
 export function GetMultipleArchivedTextActionsSelectOptions() {
   return (
     <>
@@ -43,9 +34,6 @@ export function GetMultipleArchivedTextActionsSelectOptions() {
   );
 }
 
-/**
- *
- */
 export function GetTagSortSelectoptions({
   selected,
 }: {
@@ -68,9 +56,7 @@ export function GetTagSortSelectoptions({
     </>
   );
 }
-/**
- *
- */
+
 export function GetTextsSortSelectoptions({
   selected,
 }: {
@@ -129,9 +115,6 @@ const AllWordsSelectOption = {
   delall: 'Delete ALL Terms',
 } as const;
 
-/**
- *
- */
 function ActionsSelectOptionComponent({
   option,
 }: {
@@ -139,9 +122,7 @@ function ActionsSelectOptionComponent({
 }) {
   return <option value={option}>{AllWordsSelectOption[option]}</option>;
 }
-/**
- *
- */
+
 export function GetAllWordsActionsSelectOptions() {
   return (
     <>
@@ -178,16 +159,11 @@ export function GetAllWordsActionsSelectOptions() {
     </>
   );
 }
-/**
- *
- */
+
 export function DisabledLine() {
   return <option disabled>------------</option>;
 }
 
-/**
- *
- */
 function GetSetStatusOption({
   n,
   suffix,

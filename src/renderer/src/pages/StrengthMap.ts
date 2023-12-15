@@ -60,3 +60,18 @@ export function getStatusAbbr(status: NumericalStrength) {
     ? StrengthMapNumericalKey[status].abbr
     : '?';
 }
+// TODO dedupe with STATUSES
+
+export const ReverseStrengthMap: Record<
+  NumericalStrength,
+  TermStrengthOrUnknown
+> = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  98: 'Ign',
+  99: 'WKn',
+};

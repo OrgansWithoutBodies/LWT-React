@@ -23,8 +23,8 @@ import {
   TestWrapper,
   UploadWordsWrapper,
 } from './Wrappers';
-import { useData } from './hooks/useAkita';
 import { AppContext, useAppContext } from './hooks/useContext';
+import { useData } from './hooks/useData';
 import { InternalPaths } from './hooks/useInternalNav';
 import { useCountdown } from './hooks/useTimer';
 import { BackupScreen } from './pages/IO/Backups.component';
@@ -36,7 +36,7 @@ import { StatisticsComponent } from './pages/Statistics.component';
 import { CheckTextPage } from './pages/Text/CheckText';
 import { LongText } from './pages/Text/LongTextImport.component';
 import { PLUGINS } from './plugins';
-import { VariantMap, createColors } from './styles';
+import { createColors } from './styles';
 import { Header } from './ui-kit/Header';
 
 declare global {
@@ -75,22 +75,12 @@ function NoMatch() {
 //   return <Route path={path} {...args} />;
 // }
 
-/**
- *
- */
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
   const style = createColors(styleVariant);
   const StyleHeader = createGlobalStyle(style);
   return <StyleHeader />;
 }
-export function useThemeColors() {
-  const { styleVariant } = useAppContext();
-  return VariantMap[styleVariant];
-}
-/**
- *
- */
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
   const [{ notificationMessage }] = useData(['notificationMessage']);
@@ -128,6 +118,8 @@ function App(): JSX.Element {
     '/info_export_template': () => <InfoExportTemplate />,
     // TODO
     '/display_impr_text': () => <InfoExportTemplate />,
+    // TODO
+    '/edit_tword': () => <InfoExportTemplate />,
     // all_words_wellknown
     // delete_mword
     // delete_word
@@ -188,9 +180,6 @@ function App(): JSX.Element {
   );
 }
 
-/**
- *
- */
 function NotificationMessage({
   notificationMessage,
 }: {
@@ -226,16 +215,4 @@ function NotificationMessage({
   );
 }
 
-// TODO typewise enforce conditional (typeguard?)
-
-/**
- *
- */
-export function Switch({
-  on,
-  children,
-}: { on: boolean } & React.PropsWithChildren) {
-  const [firstChild, secondChild] = React.Children.toArray(children);
-  return on ? secondChild : firstChild;
-}
 export default App;

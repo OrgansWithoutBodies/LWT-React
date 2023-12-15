@@ -1,5 +1,5 @@
 import { LanguagesId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
 import { Header } from '../ui-kit/Header';
@@ -24,9 +24,6 @@ const ONE_DAY_IN_MS =
   ONE_MINUTE_IN_SECONDS *
   ONE_SECOND_IN_MS;
 
-/**
- *
- */
 export function StatisticsComponent(): JSX.Element {
   const [{ words, languages, languageStatusStatistics }] = useData([
     'languages',
@@ -633,9 +630,6 @@ enum RouterPage {
   HOME = '/',
 }
 
-/**
- *
- */
 export function getWordsInLastNMS({
   words,
   currentTime,
@@ -665,9 +659,6 @@ export function getWordsInLastNMS({
   );
 }
 
-/**
- *
- */
 export function NavigateButton({
   value,
   navigateTo,

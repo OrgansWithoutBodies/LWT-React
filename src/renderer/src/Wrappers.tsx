@@ -1,8 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
-import { Switch } from './App';
 import { dataService } from './data/data.service';
 import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
-import { useData } from './hooks/useAkita';
+import { useData } from './hooks/useData';
 import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
 import { EditArchivedTexts } from './pages/ArchivedText/EditArchivedTexts.component';
@@ -24,10 +23,8 @@ import {
   EditTextTag,
   NewTextTag,
 } from './pages/TextTag/EditTextTags';
+import { Switch } from './ui-kit/Switch';
 
-/**
- *
- */
 export function TermsWrapper() {
   const {
     filterlang,
@@ -85,9 +82,6 @@ export function TermsWrapper() {
   );
 }
 
-/**
- *
- */
 export function AnnotatedTextsWrapper() {
   const { text, annplcmnt, ann, status } = useInternalParams('print_impr_text');
   if (text === null) {
@@ -100,15 +94,11 @@ export function AnnotatedTextsWrapper() {
     />
   );
 }
-/**
- *
- */
+
 export function UploadWordsWrapper() {
   return <UploadWords />;
 }
-/**
- *
- */
+
 export function PrintTextWrapper() {
   const { text, annplcmnt } = useInternalParams('print_text');
   if (text === null) {
@@ -121,9 +111,7 @@ export function PrintTextWrapper() {
     />
   );
 }
-/**
- *
- */
+
 export function LanguagesWrapper() {
   const [searchParams] = useSearchParams();
   const isNew = searchParams.get('new') === '1';
@@ -147,9 +135,7 @@ export function LanguagesWrapper() {
 {
   /* TODO this only accessed from inside reader, doesnt fit pattern to have own route  */
 }
-/**
- *
- */
+
 export function AddNewWordWrapper() {
   const [searchParams] = useSearchParams();
   // const textID = searchParams.get('text');
@@ -159,9 +145,7 @@ export function AddNewWordWrapper() {
   }
   return <AddNewWordPane langId={Number.parseInt(langID)} />;
 }
-/**
- *
- */
+
 export function LibraryWrapper() {
   const {
     chg,
@@ -213,9 +197,6 @@ export function LibraryWrapper() {
   );
 }
 
-/**
- *
- */
 export function EditArchivedTextsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
@@ -243,9 +224,7 @@ export function EditArchivedTextsWrapper() {
     />
   );
 }
-/**
- *
- */
+
 export function EditTextTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
@@ -268,9 +247,7 @@ export function EditTextTagsWrapper() {
     </Switch>
   );
 }
-/**
- *
- */
+
 export function EditTagsWrapper() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
@@ -293,19 +270,15 @@ export function EditTagsWrapper() {
     </Switch>
   );
 }
-/**
- *
- */
+
 export function ReaderWrapper() {
   const [searchParams] = useSearchParams();
   const start = searchParams.get('start');
   // TODO sanitize
   // TODO verify exists
-  return <ReaderPage textId={Number.parseInt(start!)} />;
+  return <ReaderPage textID={Number.parseInt(start!)} />;
 }
-/**
- *
- */
+
 export function TestWrapper() {
   const [searchParams] = useSearchParams();
   const textID = searchParams.get('text');
@@ -314,8 +287,8 @@ export function TestWrapper() {
   // TODO verify exists
   return (
     <TesterPage
-      langId={lang !== null ? Number.parseInt<LanguagesId>(lang) : null}
-      textId={textID !== null ? Number.parseInt<TextsId>(textID) : null}
+      langID={lang !== null ? Number.parseInt<LanguagesId>(lang) : null}
+      textID={textID !== null ? Number.parseInt<TextsId>(textID) : null}
     />
   );
 }

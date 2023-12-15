@@ -2,19 +2,19 @@ import { useState } from 'react';
 import { dataService } from '../../data/data.service';
 import { wordNoIdPrevalidateMap } from '../../data/preValidateMaps';
 import { LanguagesId, WordsId, WordsValidator } from '../../data/validators';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { GetTagsList } from '../../ui-kit/GetTagsList';
 import { Icon } from '../../ui-kit/Icon';
 import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
 import {
   AddNewWordValidator,
-  Language,
   Sentence,
   Word,
 } from '../../utils/parseMySqlDump';
 import { textareaKeydown } from '../IO/CheckForm';
-import { DictionaryLinks, GetTagsList } from './Terms.component';
+import { DictionaryLinks } from './DictionaryLinks';
 
 /**
  * This is only called from inside the reader, rly more of a pane than a component
@@ -471,78 +471,6 @@ export function EditWordPane({
   );
 }
 
-/**
- *
- * @param templateStr
- * @param word
- */
-function replaceTemplate(templateStr: string, word: string): string {
-  console.log('TEST123-replaceTemplate', templateStr, word);
-  // TODO template vs url branded type
-  const startsWithStar = templateStr.startsWith('*');
-  return (startsWithStar ? templateStr.slice(1) : templateStr).replace(
-    '###',
-    word
-  );
-}
-
-export function MultiFunctionalURL({
-  templateStr,
-  word,
-  setIFrameURL,
-  children,
-  setTranslateAPIParams,
-  language,
-}: React.PropsWithChildren<{
-  templateStr: string;
-  language: Language;
-  word: string;
-  setIFrameURL: (url: string | null) => void;
-  setTranslateAPIParams: (
-    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
-  ) => void;
-}>) {
-  const apiStrPos = templateStr.indexOf('api://');
-  if (apiStrPos === 0) {
-    console.log('TEST123-API', word);
-    return (
-      <span
-        className="a"
-        onClick={() =>
-          setTranslateAPIParams({
-            // TODO get 'LgTatoebaKey' from api
-            sourceKey: language.LgTatoebaKey,
-            targetKey: 'eng',
-            word,
-            apiKey: templateStr.slice(6),
-          })
-        }
-      >
-        {children}
-      </span>
-    );
-  }
-  const startsWithStar = templateStr.startsWith('*');
-  if (!startsWithStar) {
-    return (
-      <span
-        className="a"
-        onClick={() => setIFrameURL(replaceTemplate(templateStr, word))}
-      >
-        {children}
-      </span>
-    );
-  }
-  return (
-    // TODO target specific new frame?
-    <a target="_blank" href={replaceTemplate(templateStr, word)}>
-      {children}
-    </a>
-  );
-}
-/**
- *
- */
 export function SentencesForWord({
   word,
   onChooseSentence,

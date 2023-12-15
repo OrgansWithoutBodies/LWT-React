@@ -2,9 +2,6 @@ import { useRef } from 'react';
 import * as ss from 'superstruct';
 import { ObjectSchema } from 'superstruct/dist/utils';
 
-/**
- *
- */
 export function Form<TSchema extends ObjectSchema>({
   validator,
   formData,

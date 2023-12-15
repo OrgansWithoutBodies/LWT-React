@@ -133,9 +133,7 @@ const defaultOptions: TagItOptions = {
   onTagClicked: null,
   onTagLimitExceeded: null,
 };
-/**
- *
- */
+
 function TagInput({
   options: {
     readOnly,
@@ -145,6 +143,7 @@ function TagInput({
     autocomplete,
     availableTags,
     removeConfirmation,
+    allowSpaces,
   },
   handlers,
   tagger: {
@@ -164,7 +163,7 @@ function TagInput({
     showChoices: (arg0: any) => void
   ) {
     const filter = search.term.toLowerCase();
-    const choices = $.grep(availableTags, function (element: string) {
+    const choices = (availableTags || []).find(function (element: string) {
       // Only match autocomplete options that begin with the search term.
       // (Case insensitive.)
       return element.toLowerCase().indexOf(filter) === 0;
@@ -181,6 +180,19 @@ function TagInput({
       autocomplete.minLength = 0;
     }
   }
+
+  // Autocomplete.
+  const autoCompleteOptions =
+    availableTags || autocomplete.source
+      ? {
+          select(event: any, ui: { item: { value: any } }) {
+            createTag(ui.item.value);
+            // Preventing the tag input to be updated with the chosen value.
+            return false;
+          },
+          ...autocomplete,
+        }
+      : undefined;
   const [autocompleteOpen, setAutocompleteOpen] = useState(false);
   return (
     <>
@@ -194,10 +206,7 @@ function TagInput({
         }}
         onKeyDown={(event) => {
           // Backspace is not detected within a keypress, so it must use keydown.
-          if (
-            event.which == $.ui.keyCode.BACKSPACE &&
-            that.tagInput.val() === ''
-          ) {
+          if (event.key == 'Backspace' && that.tagInput.val() === '') {
             const tag = that._lastTag();
             if (!removeConfirmation || tag.hasClass('remove')) {
               // When backspace is pressed, the last tag is deleted.
@@ -213,26 +222,20 @@ function TagInput({
           // except when there is an open quote or if setting allowSpaces = true.
           // Tab will also create a tag, unless the tag input is empty,
           // in which case it isn't caught.
+          const inputValClean = that.tagInput.val().trim();
           if (
-            event.which === $.ui.keyCode.COMMA ||
-            event.which === $.ui.keyCode.ENTER ||
-            (event.which == $.ui.keyCode.TAB && that.tagInput.val() !== '') ||
-            (event.which == $.ui.keyCode.SPACE &&
-              that.options.allowSpaces !== true &&
-              ($.trim(that.tagInput.val()).replace(/^s*/, '').charAt(0) !=
-                '"' ||
-                ($.trim(that.tagInput.val()).charAt(0) == '"' &&
-                  $.trim(that.tagInput.val()).charAt(
-                    $.trim(that.tagInput.val()).length - 1
-                  ) == '"' &&
-                  $.trim(that.tagInput.val()).length - 1 !== 0)))
+            event.key === 'Comma' ||
+            event.key === 'Enter' ||
+            (event.key == 'Tab' && that.tagInput.val() !== '') ||
+            (event.key == 'Space' &&
+              allowSpaces !== true &&
+              (inputValClean.replace(/^s*/, '').charAt(0) != '"' ||
+                (inputValClean.charAt(0) == '"' &&
+                  inputValClean.charAt(inputValClean.length - 1) == '"' &&
+                  inputValClean.length - 1 !== 0)))
           ) {
             // Enter submits the form if there's no text in the input.
-            if (
-              !(
-                event.which === $.ui.keyCode.ENTER && that.tagInput.val() === ''
-              )
-            ) {
+            if (!(event.key === 'Enter' && that.tagInput.val() === '')) {
               event.preventDefault();
             }
 
@@ -253,8 +256,8 @@ function TagInput({
         onFocus={() => {
           _showAutoComplete();
         }}
-        maxlength="20"
-        size="20"
+        maxLength={20}
+        size={20}
         disabled={readOnly ? true : undefined}
         tabindex={tabIndex ? tabIndex : undefined}
         placeholder={placeholderText ? placeholderText : undefined}
@@ -263,9 +266,7 @@ function TagInput({
     </>
   );
 }
-/**
- *
- */
+
 function TagList({
   options,
   handlers,
@@ -276,6 +277,19 @@ function TagList({
   tagger: PrivateTagger;
 }) {
   // TODO
+
+  // There are 2 kinds of DOM nodes this widget can be instantiated on:
+  //     1. UL, OL, or some element containing either of these.
+  //     2. INPUT, in which case 'singleField' is overridden to true,
+  //        a UL is created and the INPUT is hidden.
+  // if (element.is('input')) {
+  //   tagList = $('<ul></ul>').insertAfter(element);
+  //   options.singleField = true;
+  //   options.singleFieldNode = element;
+  //   element.css('display', 'none');
+  // } else {
+  //   tagList = element.find('ul, ol').andSelf().last();
+  // }
   // // Single field support.
   // let addedExistingFromSingleFieldNode = false;
   // if (options.singleField) {
@@ -284,7 +298,7 @@ function TagList({
   //     const node = $(options.singleFieldNode);
   //     const tags = node.val().split(options.singleFieldDelimiter);
   //     node.val('');
-  //     $.each(tags, function (index: any, tag: any) {
+  //     $.each(tags, function (index, tag) {
   //       that.createTag(tag, null, true);
   //       addedExistingFromSingleFieldNode = true;
   //     });
@@ -323,14 +337,14 @@ function TagList({
           if (!tag.hasClass('removed') && handlers.onTagClicked) {
             handlers.onTagClicked(e, {
               tag,
-              tagLabel: that.tagLabel(tag),
+              tagLabel: tagger.tagLabel(tag),
             });
           }
         } else {
           // Sets the focus() to the input field, if the user
           // clicks anywhere inside the UL. This is needed
           // because the input field needs to be of a small size.
-          that.tagInput.focus();
+          tagInput.focus();
         }
       }}
     >
@@ -342,7 +356,7 @@ function TagList({
 }
 type TagType = string;
 type TagEventHandler = (
-  e: React.MouseEvent,
+  e: React.MouseEvent | null,
   tag: {
     tag: TagType;
     tagLabel: string;
@@ -362,25 +376,29 @@ type TagItHandlers = {
 
 type PublicTagger = {
   assignedTags: () => void;
-  tagLabel: (tag: TagType) => void;
-  createTag: () => void;
+  tagLabel: (tag: TagType) => string;
+  createTag: (
+    value: string,
+    additionalClass: any,
+    duringInitialization: any
+  ) => void;
   removeTag: (
     tag: {
       addClass: (arg0: string) => void;
       remove: () => void;
       fadeOut: (arg0: string) => {
-        (): any;
-        new (): any;
+        ();
+        new ();
         hide: {
-          (): any;
-          new (): any;
+          ();
+          new ();
           apply: {
             (arg0: any, arg1: (string | { direction: string })[]): {
-              (): any;
-              new (): any;
-              dequeue: { (): void; new (): any };
+              ();
+              new ();
+              dequeue: { (): void; new () };
             };
-            new (): any;
+            new ();
           };
         };
       };
@@ -394,13 +412,13 @@ type PrivateTagger = PublicTagger & {
   _cleanedInput: () => void;
   _lastTag: () => void;
   _tags: () => void;
-  _updateSingleTagsField: () => void;
-  _subtractArray: () => void;
+  _updateSingleTagsField: (tags: string[]) => void;
+  _subtractArray: (a1: any[], a2: any[]) => void;
   _showAutoComplete: () => void;
   _findTagByLabel: () => void;
-  _isNew: () => void;
-  _formatStr: () => void;
-  _effectExists: () => void;
+  _isNew: (str: string) => void;
+  _formatStr: (str: string) => void;
+  _effectExists: (name: string | number) => void;
 };
 type TaggerOutput = PublicTagger & {
   TagInput: () => JSX.Element;
@@ -441,14 +459,36 @@ export function useTagIt(
       return $(tag).find('input:first').val();
     }
   };
-  const removeAll = () => {
+  const removeAll: PublicTagger['removeAll'] = () => {
     // Removes all tags.
     const that = this;
-    _tags().each(function (index: any, tag: any) {
+    _tags().each(function (
+      index: any,
+      tag: {
+        addClass: (arg0: string) => void;
+        remove: () => void;
+        fadeOut: (arg0: string) => {
+          (): any;
+          new (): any;
+          hide: {
+            (): any;
+            new (): any;
+            apply: {
+              (arg0: any, arg1: (string | { direction: string })[]): {
+                (): any;
+                new (): any;
+                dequeue: { (): void; new (): any };
+              };
+              new (): any;
+            };
+          };
+        };
+      }
+    ) {
       removeTag(tag, false);
     });
   };
-  const _cleanedInput = () =>
+  const _cleanedInput: PrivateTagger['_cleanedInput'] = () =>
     // Returns the contents of the tag input, cleaned and ready to be passed to createTag
     tagInput
       .val()
@@ -456,13 +496,15 @@ export function useTagIt(
       .trim();
   const _lastTag = () => tagList.find('.tagit-choice:last:not(.removed)');
   const _tags = () => tagItTags.find('.tagit-choice:not(.removed)');
-  const _updateSingleTagsField = (tags: any[]) => {
+  const _updateSingleTagsField: PrivateTagger['_updateSingleTagsField'] = (
+    tags
+  ) => {
     // Takes a list of tag string values, updates options.singleFieldNode.val to the tags delimited by options.singleFieldDelimiter
     $(options.singleFieldNode)
       .val(tags.join(options.singleFieldDelimiter))
       .trigger('change');
   };
-  const _subtractArray = (a1: any[], a2: any[]) => {
+  const _subtractArray: PrivateTagger['_subtractArray'] = (a1, a2) => {
     const result = [];
     for (let i = 0; i < a1.length; i++) {
       if ($.inArray(a1[i], a2) == -1) {
@@ -471,10 +513,10 @@ export function useTagIt(
     }
     return result;
   };
-  const _showAutoComplete = () => {
+  const _showAutoComplete: PrivateTagger['_showAutoComplete'] = () => {
     tagInput.autocomplete('search', '');
   };
-  const _findTagByLabel = (name: any) => {
+  const _findTagByLabel: PrivateTagger['_findTagByLabel'] = (name: string) => {
     const that = this;
     let tag = null;
     _tags().each(function () {
@@ -485,23 +527,23 @@ export function useTagIt(
     });
     return tag;
   };
-  const _isNew = (name: any) => !_findTagByLabel(name);
-  const _formatStr = (str: string) => {
+  const _isNew: PrivateTagger['_isNew'] = (name) => !_findTagByLabel(name);
+  const _formatStr: PrivateTagger['_formatStr'] = (str) => {
     if (options.caseSensitive) {
       return str;
     }
     return str.toLowerCase().trim();
   };
-  const _effectExists = (name: string | number) =>
+  const _effectExists: PrivateTagger['_effectExists'] = (name) =>
     Boolean(
       $.effects &&
         ($.effects[name] || ($.effects.effect && $.effects.effect[name]))
     );
 
-  const createTag = (
-    value: string,
-    additionalClass: any,
-    duringInitialization: any
+  const createTag: PublicTagger['createTag'] = (
+    value,
+    additionalClass,
+    duringInitialization
   ) => {
     const that = this;
 
@@ -567,10 +609,11 @@ export function useTagIt(
         )}
         {!options.singleField && (
           // Unless options.singleField is set, each tag has a hidden input field inline.
+
           <input
             type="hidden"
             style={{ display: 'none' }}
-            value={label}
+            value={label.html()}
             name={options.fieldName}
           />
         )}
@@ -578,6 +621,7 @@ export function useTagIt(
     );
 
     if (
+      handlers.beforeTagAdded &&
       handlers.beforeTagAdded(null, {
         tag,
         tagLabel: tagLabel(tag),
@@ -600,11 +644,14 @@ export function useTagIt(
     // Insert tag.
     tagInput.parent().before(tag);
 
-    handlers.afterTagAdded(null, {
-      tag,
-      tagLabel: tagLabel(tag),
-      duringInitialization,
-    });
+    {
+      handlers.afterTagAdded &&
+        handlers.afterTagAdded(null, {
+          tag,
+          tagLabel: tagLabel(tag),
+          duringInitialization,
+        });
+    }
 
     if (options.showAutocompleteOnFocus && !duringInitialization) {
       setTimeout(function () {
@@ -648,6 +695,7 @@ export function useTagIt(
     } else {
       tag.remove();
     }
+
     if (handlers.afterTagRemoved) {
       handlers.afterTagRemoved(null, {
         tag,
@@ -655,21 +703,45 @@ export function useTagIt(
       });
     }
   };
-  const removeTagByLabel = (tagLabel: string, animate: any) => {
+  const removeTagByLabel: PublicTagger['removeTagByLabel'] = (
+    tagLabel: string,
+    animate: boolean | undefined
+  ) => {
     const toRemove = _findTagByLabel(tagLabel);
     if (!toRemove) {
       throw "No such tag exists with the name '" + tagLabel + "'";
     }
     removeTag(toRemove, animate);
   };
-  return {
-    TagInput,
+  const publicTagger = {
     assignedTags,
     tagLabel,
     createTag,
     removeTag,
     removeTagByLabel,
     removeAll,
+  };
+  const totalTagger = {
+    ...publicTagger,
+    _cleanedInput,
+    _lastTag,
+    _tags,
+    _updateSingleTagsField,
+    _subtractArray,
+    _showAutoComplete,
+    _findTagByLabel,
+    _isNew,
+    _formatStr,
+    _effectExists,
+  };
+  return {
+    ...publicTagger,
+    TagInput: () => (
+      <TagInput options={options} handlers={handlers} tagger={totalTagger} />
+    ),
+    TagList: () => (
+      <TagList options={options} handlers={handlers} tagger={totalTagger} />
+    ),
   };
 }
 /**
@@ -684,54 +756,12 @@ export function tagIt(options: typeof defaultOptions) {
       // for handling static scoping inside callbacks
       const that = this;
 
-      // There are 2 kinds of DOM nodes this widget can be instantiated on:
-      //     1. UL, OL, or some element containing either of these.
-      //     2. INPUT, in which case 'singleField' is overridden to true,
-      //        a UL is created and the INPUT is hidden.
-      if (element.is('input')) {
-        tagList = $('<ul></ul>').insertAfter(element);
-        options.singleField = true;
-        options.singleFieldNode = element;
-        element.css('display', 'none');
-      } else {
-        tagList = element.find('ul, ol').andSelf().last();
-      }
-
       // Bind autocomplete.source callback functions to this context.
       if ($.isFunction(options.autocomplete.source)) {
         options.autocomplete.source = $.proxy(
           options.autocomplete.source,
           this
         );
-      }
-
-      // Autocomplete.
-      if (
-        options.availableTags ||
-        options.tagSource ||
-        options.autocomplete.source
-      ) {
-        const autocompleteOptions = {
-          select(event: any, ui: { item: { value: any } }) {
-            that.createTag(ui.item.value);
-            // Preventing the tag input to be updated with the chosen value.
-            return false;
-          },
-        };
-        $.extend(autocompleteOptions, options.autocomplete);
-
-        // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
-        // while tagSource is left null by default.
-        autocompleteOptions.source = autocompleteOptions.source;
-
-        tagInput
-          .autocomplete(autocompleteOptions)
-          .bind('autocompleteopen', function (event: any, ui: any) {
-            that.tagInput.data('autocomplete-open', true);
-          })
-          .bind('autocompleteclose', function (event: any, ui: any) {
-            that.tagInput.data('autocomplete-open', false);
-          });
       }
     },
   };

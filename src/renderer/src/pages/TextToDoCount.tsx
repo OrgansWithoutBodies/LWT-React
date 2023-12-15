@@ -1,5 +1,5 @@
 import { TextsId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 import { Text } from '../utils/parseMySqlDump';
 
 /**
@@ -33,7 +33,7 @@ function iknowall(t: TextsId, onSetAllKnown: (t: TextsId) => void) {
 // 		make_score_random_insert_update('id') . ')', '');
 // 	$wid = get_last_key();
 // 	if ($count1 > 0)
-// 		$javascript .= "title = make_tooltip(" . prepare_textdata_js($term) . ",'*','','99');";
+// 		$javascript .= "title = makeTooltipTitle(" . prepare_textdata_js($term) . ",'*','','99');";
 // 	$javascript .= "$('.TERM" . strToClassName($termlc) . "', context).removeClass('status0').addClass('status99 word" . $wid . "').attr('data_status','99').attr('data_wid','" . $wid . "').attr('title',title);";
 // 	$count += $count1;
 // }

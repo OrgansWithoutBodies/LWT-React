@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { headerValuesTemp } from '../ui-kit/Header';
+import { headerValuesTemp } from '../ui-kit/headerValues';
 
 /**
  *

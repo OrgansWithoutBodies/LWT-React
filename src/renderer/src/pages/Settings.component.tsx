@@ -3,13 +3,13 @@ import { Persistable } from '../../../shared/Persistable';
 import { dataService } from '../data/data.service';
 import { settingsPrevalidateMap } from '../data/preValidateMaps';
 import { SettingsObjValidator } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 import { useFormInput } from '../hooks/useFormInput';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { PluginEntries } from '../plugins/PluginEntries';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
-import { SelectBoolean } from './Language/EditLanguage.component';
+import { SelectBoolean } from '../ui-kit/SelectBoolean';
 import { resetDirty } from './Sorting';
 // TODO abstract this out into a nested settings component
 
@@ -175,9 +175,6 @@ const DEFAULT_SETTINGS = {
   'set-tags-per-page': 100,
 };
 
-/**
- *
- */
 export function SettingsComponent(): JSX.Element {
   const [{ settings }] = useData(['settings']);
   const navigate = useInternalNavigate();

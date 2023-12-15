@@ -26,9 +26,6 @@ export function useTick(intervalInMs: number, trigger?: any) {
   return { tick: timeSinceStart, stopTimer };
 }
 
-/**
- *
- */
 export function useCountdown({
   countdownInMs,
   intervalInMs,

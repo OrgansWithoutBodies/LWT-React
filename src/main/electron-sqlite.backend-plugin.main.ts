@@ -6,7 +6,7 @@ import {
   PersistedValueGetter,
   PersistedValueInserter,
   PersistedValueSetter,
-} from '../renderer/src/persist/PersistedValueGetter';
+} from '../renderer/src/persist/PersistedValueGetter.types';
 import { Language } from '../renderer/src/utils/parseMySqlDump';
 import { Persistable } from '../shared/Persistable';
 
@@ -133,9 +133,6 @@ export async function deleteEntry(tableName: string, deleteID: number) {
     });
 }
 
-/**
- *
- */
 export async function emptyDB() {
   return await sql
     .open({
@@ -236,9 +233,6 @@ function isValidKey(key: string) {
   return Object.keys(tableIDLookup).includes(key);
 }
 
-/**
- *
- */
 export async function initDB() {
   const creationStrings = [
     `CREATE TABLE IF NOT EXISTS archivedtexts (   

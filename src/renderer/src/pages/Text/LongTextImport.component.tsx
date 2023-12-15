@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as ss from 'superstruct';
 import { dataService } from '../../data/data.service';
 import { parseNumMap } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
@@ -13,13 +13,10 @@ import { buildSentences } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
 import { LongTextVerify } from './LongTextImportVerify.component';
 
-/**
- *
- */
 export default function ImportLongText({
   onSetVerify,
 }: {
-  onSetVerify: (verify: LongTextType) => void;
+  onSetVerify: (verify: AddNewTextType[]) => void;
 }): JSX.Element {
   // TODO custom eslint hook to make sure in & out are same len? avoid hanging params
   const [{ languages, activeLanguageId }] = useData([
@@ -270,13 +267,9 @@ export default function ImportLongText({
     </>
   );
 }
-// TODO flesh out
-export type LongTextType = AddNewTextType[];
-/**
- *
- */
+
 export function LongText() {
-  const [verifying, setVerifying] = useState<LongTextType | null>(null);
+  const [verifying, setVerifying] = useState<AddNewTextType[] | null>(null);
   const isVerify = verifying !== null;
   return (
     <>

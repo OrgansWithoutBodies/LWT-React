@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { headerValues, headerValuesTemp } from '../ui-kit/Header';
+import { headerValues, headerValuesTemp } from '../ui-kit/headerValues';
 
 type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
@@ -9,6 +9,7 @@ type NonHeaderLinks =
   | 'info_export_template'
   | 'insert_word_ignore'
   | 'edit_word'
+  | 'edit_tword'
   | 'table_set_management'
   | 'do_test'
   | 'edit_mword'

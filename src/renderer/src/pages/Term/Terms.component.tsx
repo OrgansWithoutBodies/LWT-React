@@ -1,121 +1,54 @@
 import { useEffect, useState } from 'react';
-import { BrandedNumber } from '../../data/branding';
 import { dataService } from '../../data/data.service';
 import {
   wordNoIdPrevalidateMap,
   wordPrevalidateMap,
 } from '../../data/preValidateMaps';
-import { HOUR_IN_DAY, MIN_IN_HOUR, MS_IN_S, S_IN_MIN } from '../../data/time';
+import { DateDiff } from '../../data/time';
 import {
   EditWordsValidator,
   LanguagesId,
-  Tags2Id,
   TagsId,
   TextsId,
   WordsId,
 } from '../../data/validators';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import {
-  PathParams,
   useInternalNavigate,
   useUpdateParams,
 } from '../../hooks/useInternalNav';
 import { usePager } from '../../hooks/usePager';
 import { useSelection } from '../../hooks/useSelection';
 import { A } from '../../nav/InternalLink';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { EntryRow } from '../../ui-kit/EntryRow';
+import { GetTagsList } from '../../ui-kit/GetTagsList';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
 import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
+import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
+import { TagDropDown } from '../../ui-kit/TagDropDown';
 import { WordTagsSelectDropdown } from '../../ui-kit/WordTagsSelectDropdown';
+import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
-import {
-  AddNewWordValidator,
-  Language,
-  Tag,
-  Tag2,
-  Word,
-} from '../../utils/parseMySqlDump';
+import { AddNewWordValidator, Word } from '../../utils/parseMySqlDump';
 import { allActionGo, confirmDelete } from '../../utils/utils';
-import {
-  FilterSortPager,
-  buildTextTagLookup,
-} from '../ArchivedText/EditArchivedTexts.component';
+import { FilterSortPager } from '../ArchivedText/FilterSortPager';
+import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { markClick, textareaKeydown } from '../IO/CheckForm';
-import { EntryRow } from '../Language/NewLanguage';
-import { getDirTag } from '../Reader.component';
 import {
   GetAllWordsActionsSelectOptions,
   get_status_abbr,
 } from '../SelectOptions';
 import { WordSorting, resetDirty, sortingMethod } from '../Sorting';
 import { getStatusName } from '../StrengthMap';
-import { SortableHeader, TableFooter } from '../Text/Library.component';
-import {
-  createTheDictUrl,
-  owin,
-  prepare_textdata_js,
-} from '../translateSentence2';
-import { MultiFunctionalURL, SentencesForWord } from './AddNewWordPane';
+import { prepare_textdata_js } from '../translateSentence2';
+import { SentencesForWord } from './AddNewWordPane';
+import { DictionaryLinks } from './DictionaryLinks';
 
-const isTags = (tags: Tag[] | Tag2[]): tags is Tag[] =>
-  tags[0] && 'TgID' in tags[0];
-// TODO tagKey type restricted to path param
-
-/**
- *
- */
-export function TagDropDown<TTag extends Tag | Tag2>({
-  tags,
-  tagKey,
-  defaultValue = null,
-}: TTag extends Tag
-  ? {
-      defaultValue: TagsId | null;
-      tags: TTag[];
-      tagKey: PathParams;
-    }
-  : {
-      defaultValue: Tags2Id | null;
-      tags: TTag[];
-      tagKey: PathParams;
-    }): JSX.Element {
-  const updateParams = useUpdateParams();
-  return (
-    <select
-      name="tag1"
-      onChange={({ target: { value } }) => {
-        updateParams({ [tagKey]: value, page: null });
-      }}
-    >
-      <option value="" selected={defaultValue === null}>
-        [Filter off]
-      </option>
-      {isTags(tags)
-        ? tags.map((tag) => (
-            <option value={tag.TgID} selected={defaultValue === tag.TgID}>
-              {tag.TgText}
-            </option>
-          ))
-        : tags.map((tag) => (
-            <option value={tag.T2ID} selected={defaultValue === tag.T2ID}>
-              {tag.T2Text}
-            </option>
-          ))}
-
-      <option disabled>--------</option>
-      {/* TODO */}
-      <option value="-1">UNTAGGED</option>
-    </select>
-  );
-}
-
-/**
- *
- */
 function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
   const [{ activeLanguageId }] = useData(['activeLanguageId']);
   return (
@@ -194,9 +127,6 @@ function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
 
 // TODO abstract out filterbox
 
-/**
- *
- */
 export function TermsFilterBox({
   numTerms,
 
@@ -414,9 +344,6 @@ export function TermsFilterBox({
   );
 }
 
-/**
- *
- */
 function TermRow({
   word,
   onSelect,
@@ -527,11 +454,7 @@ function TermRow({
 
         {get_status_abbr(word['WoStatus'])}
         {word['WoStatus'] < 98
-          ? `/${Math.floor(
-              (new Date().getTime() -
-                new Date(word.WoStatusChanged).getTime()) /
-                (MS_IN_S * S_IN_MIN * MIN_IN_HOUR * HOUR_IN_DAY)
-            )}`
+          ? `/${DateDiff(new Date(), new Date(word.WoStatusChanged))}`
           : ''}
       </td>
       <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
@@ -554,6 +477,23 @@ function TermRow({
         {/* echo '<td class="td1 center" nowrap="nowrap">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?chg=' . record['WoID'] . '"><img src="icn/sticky-note--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <a class="confirmdelete" href="' . $_SERVER['PHP_SELF'] . '?del=' . record['WoID'] . '"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></a>&nbsp;</td>'; */}
       </td>
       {sorting === WordSorting['Word Count Active Texts'] && (
+        // TODO
+        // if ($currentsort == 6) {
+        //   if ($currenttext != '')
+        //     $sql = '';
+        //   else
+        //     $sql = 'select WoID, 0 AS textswordcount, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist, WoTextLC, WoTodayScore from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoTextLC NOT IN (SELECT DISTINCT TiTextLC from ' . $tbpref . 'textitems where TiLgID = LgID) ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' UNION ';
+        //   $sql .= 'select WoID, count(WoID) AS textswordcount, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist, WoTextLC, WoTodayScore from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and WoLgID = LgID ';
+        //   if ($currenttext != '')
+        //     $sql .= 'and TiTxID = ' . $currenttext . ' ';
+        //   $sql .= $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
+        // } else {
+        //   if ($currenttext == '') {
+        //     $sql = 'select WoID, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
+        //   } else {
+        //     $sql = 'select distinct WoID, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like \'%{%}%\' as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and TiTxID = ' . $currenttext . ' and WoLgID = LgID ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
+        //   }
+        // }
         <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
           {/* TODO */}
           {/* ' . record['textswordcount'] . ' */}
@@ -563,9 +503,6 @@ function TermRow({
   );
 }
 
-/**
- *
- */
 export function Terms({
   pageNum = null,
   sort = WordSorting['Term A-Z'],
@@ -703,9 +640,6 @@ export function Terms({
   );
 }
 
-/**
- *
- */
 export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   const [{ words, languages }] = useData(['words', 'languages']);
   const validator = EditWordsValidator;
@@ -734,6 +668,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   if (!term) {
     throw new Error(`Invalid Change ID! ${chgID}`);
   }
+  const onCopyTransRoman: CopyTransRomanHandler = () => {};
   return (
     <>
       <Header
@@ -771,6 +706,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
             </td>
           </tr>
           <PrintSimilarTermsTabrow
+            onCopyTransRoman={onCopyTransRoman}
             word={refMap.WoText.current}
             lang={refMap.WoLgID.current}
           />
@@ -891,9 +827,6 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   );
 }
 
-/**
- *
- */
 export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
   const [{ languages }] = useData(['languages']);
   const language = languages.find((val) => val.LgID === langId);
@@ -913,6 +846,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
     entry: { WoLgID: langId },
     validator,
   });
+  const onCopyTransRoman: CopyTransRomanHandler = () => {};
   return (
     <>
       <Header title="TODO" />
@@ -944,6 +878,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
           <PrintSimilarTermsTabrow
             word={refMap.WoText.current}
             lang={refMap.WoLgID.current}
+            onCopyTransRoman={onCopyTransRoman}
           />
           <EntryRow headerText={'Translation'}>
             <TextArea
@@ -1019,7 +954,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
         </table>
       </form>
       <div id="exsent">
-        {showingSentences && existingTerm ? (
+        {/* {showingSentences && existingTerm ? (
           <SentencesForWord
             // TODO where get term?
             word={existingTerm}
@@ -1035,15 +970,12 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
             <Icon src="sticky-notes-stack" title="Show Sentences" />
             Show Sentences
           </span>
-        )}
+        )} */}
       </div>
     </>
   );
 }
 
-/**
- *
- */
 export function TermMultiActions({
   selectedTerms,
   onSelectAll,
@@ -1075,11 +1007,26 @@ export function TermMultiActions({
                   allActionGo({
                     numRecords: recno,
                     sel: { value, text: innerText },
-                    onSetCapitalization: (upperCase) => {},
-                    onAddTag: (tagStr) => {},
+                    onSetCapitalization: (upperCase) => {
+                      if (upperCase) {
+                        return dataService.setTermTextUppercase(allTermIDs);
+                      }
+                      return dataService.setTermTextUppercase(allTermIDs);
+                    },
+                    onAddTag: (tagStr) => {
+                      dataService.addPotentiallyNewTagToTerms(
+                        tagStr,
+                        allTermIDs
+                      );
+                    },
                     onClear: () => {},
                     onExport: () => {},
-                    onSetStrength: (strength) => {},
+                    onSetStrength: (newStrength) => {
+                      // TODO shouldn't need to map
+                      allTermIDs.map((val) => {
+                        dataService.updateTermStrength(val, newStrength);
+                      });
+                    },
                   });
                 }}
               >
@@ -1111,15 +1058,14 @@ export function TermMultiActions({
   );
 }
 
-/**
- *
- */
 function PrintSimilarTermsTabrow({
   word,
   lang,
+  onCopyTransRoman,
 }: {
   word: string;
   lang: LanguagesId;
+  onCopyTransRoman: CopyTransRomanHandler;
 }) {
   const [{ settings }] = useData(['settings']);
 
@@ -1147,7 +1093,11 @@ function PrintSimilarTermsTabrow({
               &nbsp;
               {showingSimilar ? (
                 <>
-                  <PrintSimilarTerms lang_id={lang} compared_term={word} />
+                  <PrintSimilarTerms
+                    lang_id={lang}
+                    compared_term={word}
+                    onCopyTransRoman={onCopyTransRoman}
+                  />
                 </>
               ) : (
                 <>
@@ -1162,15 +1112,18 @@ function PrintSimilarTermsTabrow({
   );
 }
 
-/**
- *
- */
+type CopyTransRomanHandler = (
+  copyData: Pick<Word, 'WoTranslation' | 'WoRomanization'>
+) => void;
+
 function PrintSimilarTerms({
   lang_id,
   compared_term,
+  onCopyTransRoman,
 }: {
   lang_id: LanguagesId;
   compared_term: string;
+  onCopyTransRoman: CopyTransRomanHandler;
 }) {
   const [{ settings, words }] = useData(['settings', 'words']);
   const max_count = settings['set-similar-terms-count'];
@@ -1180,26 +1133,31 @@ function PrintSimilarTerms({
   if (compared_term.trim() == '') {
     return <>&nbsp;</>;
   }
-  // compare = tohtml(compared_term);
-  const termarr = get_similar_terms(lang_id, compared_term, max_count, 0.33);
+  const termarr = get_similar_terms(
+    lang_id,
+    compared_term,
+    max_count,
+    0.33,
+    words
+  );
   // rarr = array();
   return (
     <>
-      {termarr.map((termid: BrandedNumber<'wordsId'>) => {
-        const record = words.find((val) => val.WoID === termid)!;
-        const term = record['WoText'];
-        const tra = record['WoTranslation'];
-        if (tra == '*') {
-          tra = '???';
-        }
+      {termarr.map((termid) => {
+        const word = words.find((val) => val.WoID === termid)!;
+        const termText = word['WoText'];
+        const tra =
+          word['WoTranslation'] === '*' ? '???' : word['WoTranslation'];
 
         const { rom, romd } =
-          record.WoRomanization && record.WoRomanization.trim() !== ''
+          word.WoRomanization && word.WoRomanization.trim() !== ''
             ? {
-                romd: ` [${record['WoRomanization']}]`,
-                rom: record.WoRomanization,
+                romd: ` [${word['WoRomanization']}]`,
+                rom: word.WoRomanization,
               }
             : { rom: '', romd: '' };
+        const compare = compared_term;
+
         return (
           <>
             <Icon
@@ -1207,14 +1165,14 @@ function PrintSimilarTerms({
               src="tick-button-small"
               title="Copy → Translation &amp; Romanization Field(s)"
               onClick={() =>
-                setTransRoman(
-                  prepare_textdata_js(tra),
-                  prepare_textdata_js(rom)
-                )
+                onCopyTransRoman({
+                  WoTranslation: prepare_textdata_js(tra),
+                  WoRomanization: prepare_textdata_js(rom),
+                })
               }
             />{' '}
-            {stripos(compare, term) !== FALSE ? (
-              <span className="red3">{term}</span>
+            {compare.includes('term') !== false ? (
+              <span className="red3">{termText}</span>
             ) : (
               <span className="red3">
                 {/* TODO */}
@@ -1228,156 +1186,6 @@ function PrintSimilarTerms({
       })}
     </>
   );
-}
-
-/**
- * TODO
- */
-export function WordTag() {
-  return (
-    <>
-      {/* // Create tag.
-            var tag = $('<li></li>')
-                .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
-                .addClass(additionalClass)
-                .append(label); */}
-
-      <li className="tagit-choice ui-widget-content ui-state-default ui-corner-all">
-        {/* TODO */}
-        {/* this.options.onTagClicked */}
-        <a className="tagit-label"></a>
-        <span className="tagit-label"></span>
-      </li>
-    </>
-  );
-}
-
-/**
- *
- */
-export function GetTagsList({
-  EntryID,
-  tagKey,
-}:
-  | { EntryID: WordsId | null; tagKey: 'tags' }
-  | { EntryID: TextsId | null; tagKey: 'tags2' }) {
-  const guardedTagKey = (key: 'tags' | 'tags2'): key is 'tags' =>
-    key === 'tags';
-  const { instanceKey, idKey } = guardedTagKey(tagKey)
-    ? ({ instanceKey: 'wordtags', idKey: 'WtTgID' } as const)
-    : ({ instanceKey: 'texttags', idKey: 'TtTxID' } as const);
-  const [{ [instanceKey]: instance, [tagKey]: tags }] = useData([
-    instanceKey,
-    tagKey,
-  ]);
-  return (
-    <ul
-      id="termtags"
-      // TODO tagit
-    >
-      {EntryID !== null && (
-        <>
-          {instance
-            .filter((row) => row[idKey] === EntryID)
-            .map((row) => {
-              const tag = tags.find((tag) => tag[idKey] === row[idKey]);
-              if (!tag) {
-                return <></>;
-              }
-              return <li>{tag[idKey]}</li>;
-            })}
-        </>
-      )}
-    </ul>
-  );
-}
-
-/**
- *
- */
-export function DictionaryLinks({
-  lang,
-  sentenceString: sentenceString,
-  wordString: wordString,
-  setTranslateAPIParams,
-  setIFrameURL,
-  breakSent,
-}: {
-  lang: Language;
-  sentenceString: string;
-  wordString: string;
-  setTranslateAPIParams: (
-    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
-  ) => void;
-  setIFrameURL: (url: string | null) => void;
-  breakSent?: boolean;
-}) {
-  const { LgDict1URI, LgDict2URI, LgGoogleTranslateURI } = lang;
-  return (
-    <>
-      Lookup Term:
-      <MultiFunctionalURL
-        templateStr={LgDict1URI}
-        word={wordString}
-        setIFrameURL={setIFrameURL}
-        setTranslateAPIParams={setTranslateAPIParams}
-        language={lang}
-      >
-        Dict1
-      </MultiFunctionalURL>
-      {LgDict2URI && (
-        <MultiFunctionalURL
-          templateStr={LgDict2URI}
-          word={wordString}
-          setIFrameURL={setIFrameURL}
-          setTranslateAPIParams={setTranslateAPIParams}
-          language={lang}
-        >
-          Dict2
-        </MultiFunctionalURL>
-      )}
-      {LgGoogleTranslateURI && (
-        <MultiFunctionalURL
-          templateStr={LgGoogleTranslateURI}
-          word={wordString}
-          setIFrameURL={setIFrameURL}
-          setTranslateAPIParams={setTranslateAPIParams}
-          language={lang}
-        >
-          GTr
-        </MultiFunctionalURL>
-      )}
-      {breakSent && <br />}
-      {LgGoogleTranslateURI && (
-        <>
-          {breakSent ? '| Sent.' : 'Lookup Sentence'}:
-          <MultiFunctionalURL
-            templateStr={LgGoogleTranslateURI}
-            word={sentenceString}
-            setIFrameURL={setIFrameURL}
-            setTranslateAPIParams={setTranslateAPIParams}
-            language={lang}
-          >
-            GTr
-          </MultiFunctionalURL>
-        </>
-      )}
-    </>
-  );
-}
-
-/**
- *
- * @param url
- * @param wordctl
- */
-function translateWord2(url: string, wordctl: { value: any }) {
-  if (typeof wordctl !== 'undefined' && url !== '') {
-    const text = wordctl.value;
-    if (typeof text === 'string') {
-      owin(createTheDictUrl(url, text));
-    }
-  }
 }
 
 /**
@@ -1422,9 +1230,12 @@ function get_similar_terms(
       getSimilarityRanking(compared_term_lc, record['WoTextLC']),
     ])
   );
+  // TODO
   // arsort(termlsd, SORT_NUMERIC);
-  const r: string[] = [];
+  const r: WordsId[] = [];
   let i = 0;
+
+  // TODO this is just a filter
   Object.entries(termlsd).forEach(([key, val]) => {
     if (i >= max_count) {
       // TODO check behavior against php break

@@ -2,22 +2,19 @@ import { Persistable } from '../../../../shared/Persistable';
 import { dataService } from '../../data/data.service';
 import { languagePreValidateMap } from '../../data/preValidateMaps';
 import { LanguagesId, LanguagesValidator } from '../../data/validators';
-import { TRefMap } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { A } from '../../nav/InternalLink';
 import { PluginEntries } from '../../plugins/PluginEntries';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
+import { SelectBoolean } from '../../ui-kit/SelectBoolean';
 import { openInNewWindow } from '../../utils/openInNewWindow';
 import { check_dupl_lang } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
 import { TextSizeSelect } from './NewLanguage';
 
-/**
- *
- */
 export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
   const [{ languages }] = useData(['languages']);
   const changingLang = languages.find(({ LgID }) => LgID === chgID);
@@ -256,35 +253,5 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
         </p>
       </form>
     </>
-  );
-}
-
-/**
- *
- */
-export function SelectBoolean<
-  TSelKey extends string,
-  TEntry extends Record<TSelKey, 0 | 1>
->({
-  entry,
-  entryKey,
-  refMap,
-}: {
-  entry: TEntry;
-  entryKey: TSelKey;
-  refMap: TRefMap<TEntry>;
-}) {
-  const entryVal = entry[entryKey];
-  return (
-    <select ref={refMap[entryKey]} name={entryKey}>
-      {/* TODO can i get away w/o setting selected here */}
-      {/* TODO bring all yes/no dropdowns into using this */}
-      <option value={0} selected={entryVal === 0}>
-        No
-      </option>
-      <option value={1} selected={entryVal === 1}>
-        Yes
-      </option>
-    </select>
   );
 }

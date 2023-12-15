@@ -1,14 +1,14 @@
 import { parse } from 'papaparse';
+import { UploadTermsValidator } from '../../data/UploadTermsValidator';
 import { dataService } from '../../data/data.service';
-import { UploadTermsValidator } from '../../data/validators';
 import { parseNumMap } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
+import { SelectBoolean } from '../../ui-kit/SelectBoolean';
 import { Word } from '../../utils/parseMySqlDump';
-import { SelectBoolean } from '../Language/EditLanguage.component';
 import { StrengthMap } from '../StrengthMap';
 import { GetWordstatusSelectoptions } from '../Text/PrintText.component';
 import {
@@ -19,9 +19,6 @@ import {
   TermName,
 } from '../columnImportMode';
 
-/**
- *
- */
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();

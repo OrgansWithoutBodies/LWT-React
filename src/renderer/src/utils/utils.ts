@@ -1,3 +1,4 @@
+import { DateDiff } from '../data/time';
 import { SentencesId, TextItemsId } from '../data/validators';
 import { NumericalStrength } from '../pages/StrengthMap';
 import {
@@ -6,6 +7,7 @@ import {
   Sentence,
   Text,
   TextItem,
+  Word,
 } from './parseMySqlDump';
 
 /**
@@ -16,9 +18,6 @@ export function byteSizeOfString(str: string): number {
   return new Blob([str]).size;
 }
 
-/**
- *
- */
 export function confirmDelete(): boolean {
   return window.confirm('CONFIRM\n\nAre you sure you want to delete?');
 }
@@ -1846,10 +1845,9 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 // -------------------------------------------------------------
 
 export function replaceTabsWithNewLine(s: string) {
-  s = s.replace(['\r\n', '\r', '\n', '\t'], ' ');
-  s = s.replace('/s/u', ' ');
-  s = s.replace('/s{2,}/u', ' ');
-  return s.trim();
+  return ['\r\n', '\r', '\n', '\t', '/s/u', '/s{2,}/u']
+    .reduce((prev, curr) => prev.replace(curr, ' '), s)
+    .trim();
 }
 
 // // -------------------------------------------------------------
@@ -2731,18 +2729,19 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-// function make_score_random_insert_update(type)
-// { // type='iv'/'id'/'u'
-// 	if (type === 'iv') {
-// 		return ' WoTodayScore, WoTomorrowScore, WoRandom ';
-// 	} elseif (type === 'id') {
-// 		return ' ' . getsqlscoreformula(2) . ', ' . getsqlscoreformula(3) . ', RAND() ';
-// 	} elseif (type === 'u') {
-// 		return ' WoTodayScore = ' . getsqlscoreformula(2) . ', WoTomorrowScore = ' . getsqlscoreformula(3) . ', WoRandom = RAND() ';
-// 	} else {
-// 		return '';
-// 	}
-// }
+function make_score_random_insert_update(
+  word: Word
+): Pick<Word, 'WoTodayScore' | 'WoTomorrowScore' | 'WoRandom'> {
+  // type='iv'/'id'/'u'
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  const WoTodayScore = getsqlscoreformula(today, word);
+  const WoTomorrowScore = getsqlscoreformula(tomorrow, word);
+  // TODO check range
+  const WoRandom = Math.random();
+  return { WoTodayScore, WoTomorrowScore, WoRandom };
+}
 
 // // -------------------------------------------------------------
 
@@ -3409,7 +3408,8 @@ export function buildSentences(
     // 		}
     .map((sent, ii) => {
       const trimmed = sent.trim();
-      const pos = LgRegexpSplitSentences.indexOf(trimmed);
+      // TODO
+      // const pos = LgRegexpSplitSentences.indexOf(trimmed);
       return {
         SeText: trimmed,
         SeOrder: ii,
@@ -3419,11 +3419,12 @@ export function buildSentences(
       };
     });
   // .filter((val) => val !== '');
-  const l = sentences.length;
-  sentences.map(({ SeText: val }) => {
-    const pos = val.indexOf(LgRegexpSplitSentences);
-    const cleanedVal = val.trim();
-  });
+  // TODO
+  // const l = sentences.length;
+  // sentences.map(({ SeText: val }) => {
+  // const pos = val.indexOf(LgRegexpSplitSentences);
+  // const cleanedVal = val.trim();
+  // });
   return sentences;
 }
 
@@ -3452,23 +3453,26 @@ export function cleanText(
 
 // TODO
 
-/**
- *
- */
 export function check_dupl_lang() {}
-
 /**
  *
  * @param method
  */
-function getsqlscoreformula(method: number) {
+export function getsqlscoreformula(checkingDate: Date, word: Word) {
   // method = 2 (today)
   // method = 3 (tomorrow)
   // Formula: {{{2.4^{Status}+Status-Days-1} over Status -2.4} over 0.14325248}
-
-  if (method === 3)
-    return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 2) / WoStatus - 2.4) / 0.14325248) END';
-  else if (method === 2)
-    return 'CASE WHEN WoStatus > 5 THEN 100 ELSE (((POWER(2.4,WoStatus) + WoStatus - DATEDIFF(NOW(),WoStatusChanged) - 1) / WoStatus - 2.4) / 0.14325248) END';
-  else return '0';
+  const { WoStatus, WoStatusChanged } = word;
+  if (WoStatus > 5) {
+    return 100;
+  }
+  const score =
+    (((2.4 ^ WoStatus) +
+      WoStatus -
+      DateDiff(checkingDate, new Date(WoStatusChanged)) -
+      1) /
+      WoStatus -
+      2.4) /
+    0.14325248;
+  return score;
 }

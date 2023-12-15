@@ -1,5 +1,5 @@
 import { WordsId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 import { Icon } from '../ui-kit/Icon';
 import { changeImprAnnRadio, changeImprAnnText } from './IO/CheckForm';
 
@@ -14,9 +14,9 @@ import { changeImprAnnRadio, changeImprAnnText } from './IO/CheckForm';
 export function MakeTrans(
   i: number,
   wid: WordsId,
-  trans: string | number | readonly string[] | undefined,
-  word: string,
-  lang: any
+  trans: string | number | readonly string[] | undefined
+  // word: string,
+  // lang: any
 ) {
   const [{ words }] = useData(['words']);
   const alltrans = words.find((val) => val.WoID === wid)?.WoTranslation;
@@ -116,14 +116,16 @@ export function MakeTrans(
               src="eraser"
               title="Erase Text Field"
               className="click"
-              onClick="$(\'#tx' . i . '\').val(\'\').trigger(\'change\');"
+              onClick={() => onChange()}
+              // onClick="$(\'#tx' . i . '\').val(\'\').trigger(\'change\');"
             />
             &nbsp;
             <Icon
               src="star"
               title="* (Set to Term)"
               className="click"
-              onClick="$(\'#tx' . i . '\').val(\'*\').trigger(\'change\');"
+              onClick={() => onChange()}
+              // onClick="$(\'#tx' . i . '\').val(\'*\').trigger(\'change\');"
             />
             {widset ? (
               <>
@@ -132,7 +134,8 @@ export function MakeTrans(
                   src="plus-button"
                   title="Save another translation to existent term"
                   className="click"
-                  onClick="addTermTranslation(' . wid . ', \'#tx' . i . '\',\'\',' . lang . ');"
+                  onClick={() => onAddTermTranslation()}
+                  // onClick="addTermTranslation(' . wid . ', \'#tx' . i . '\',\'\',' . lang . ');"
                 />
                 ';
               </>
@@ -143,7 +146,9 @@ export function MakeTrans(
                   src="plus-button"
                   title="Save translation to new term"
                   className="click"
-                  onClick="addTermTranslation(0, \'#tx' . i . '\',' . prepare_textdata_js(word) . ',' . lang . ');"
+                  onClick={() => onAddTermTranslation()}
+
+                  // onClick="addTermTranslation(0, \'#tx' . i . '\',' . prepare_textdata_js(word) . ',' . lang . ');"
                 />
                 &nbsp;&nbsp;
                 <span id="wait' . i . '">

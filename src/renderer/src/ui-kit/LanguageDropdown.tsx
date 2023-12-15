@@ -1,10 +1,7 @@
 import React from 'react';
 import { LanguagesId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 
-/**
- *
- */
 export function LanguageDropdown({
   header = 'Choose...',
   name = 'LgID',

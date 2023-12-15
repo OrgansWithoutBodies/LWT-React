@@ -1,14 +1,19 @@
 import { TextsId } from '../../data/validators';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
+import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 export function AnnotateText({
-  textid,
+  textID: textID,
   editmode: editmode,
+  annplcmnt,
 }: {
-  textid: TextsId;
+  textID: TextsId;
+  annplcmnt: number;
   editmode: boolean;
 }) {
+  useUpdateActiveText(textID);
+
   // const delmode = getreq('del');
   // const delmode = (delmode === '' ? 0 : (delmode+0));
   // const ann = get_first_value("select TxAnnotatedText as value from " . tbpref . "texts where TxID = " . textid);
@@ -113,7 +118,7 @@ export function AnnotateText({
               type="button"
               value="Edit"
               onClick={() =>
-                navigator(`/print_impr_text?edit=1&text=${textid}`)
+                navigator(`/print_impr_text?edit=1&text=${textID}`)
               }
             ></input>
           </>
@@ -124,7 +129,7 @@ export function AnnotateText({
           value="Delete"
           onClick={() => {
             if (window.confirm('Are you sure?')) {
-              navigator(`/print_impr_text?del=1&text=${textid}`);
+              navigator(`/print_impr_text?del=1&text=${textID}`);
             }
           }}
         />
@@ -136,7 +141,7 @@ export function AnnotateText({
           value="Display"
           // TODO
           //  . ((audio !== '') ? ' with Audio Player' : '') . " in new Window"
-          onClick={() => navigator(`/display_impr_text?text=${textid}`)}
+          onClick={() => navigator(`/display_impr_text?text=${textID}`)}
         />
       </p>
     </div>

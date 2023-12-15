@@ -1,7 +1,7 @@
 import { TextTagDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { Tags2Id, Tags2Validator } from '../../data/validators';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { usePager } from '../../hooks/usePager';
@@ -9,8 +9,10 @@ import { useSelection } from '../../hooks/useSelection';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
+import { TableFooter } from '../../ui-kit/TableFooter';
 import { confirmDelete } from '../../utils/utils';
-import { FilterSortPager } from '../ArchivedText/EditArchivedTexts.component';
+import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { markClick, textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
@@ -18,10 +20,7 @@ import {
   GetTagSortSelectoptions,
 } from '../SelectOptions';
 import { TagSorting, resetDirty } from '../Sorting';
-import { SortableHeader, TableFooter } from '../Text/Library.component';
-/**
- *
- */
+
 export function DisplayTextTags({
   query,
   currentPage = 1,
@@ -301,9 +300,6 @@ export function DisplayTextTags({
   );
 }
 
-/**
- *
- */
 export function NewTextTag() {
   const validator = Tags2Validator;
   const navigator = useInternalNavigate();
@@ -374,9 +370,6 @@ export function NewTextTag() {
   );
 }
 
-/**
- *
- */
 export function EditTextTag({ chgID }: { chgID: number }) {
   const [{ tags2 }] = useData(['tags2']);
   const changingTag = tags2.find(({ T2ID }) => chgID === T2ID);

@@ -1,9 +1,6 @@
 import { WordsId } from '../data/validators';
-import { useData } from '../hooks/useAkita';
+import { useData } from '../hooks/useData';
 
-/**
- *
- */
 export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
   const [{ wordtags, tags }] = useData(['wordtags', 'tags']);
   return (

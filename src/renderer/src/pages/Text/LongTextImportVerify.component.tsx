@@ -1,18 +1,15 @@
 import { dataService } from '../../data/data.service';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
+import { AddNewTextType } from '../../utils/parseMySqlDump';
 import { byteSizeOfString } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
-import { LongTextType } from './LongTextImport.component';
 
-/**
- *
- */
 export function LongTextVerify({
   verifying,
   onCancelVerify,
 }: {
-  verifying: LongTextType;
+  verifying: AddNewTextType[];
   onCancelVerify: () => void;
 }): JSX.Element {
   const navigate = useInternalNavigate();

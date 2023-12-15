@@ -1,11 +1,8 @@
 import { dataService } from '../../data/data.service';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 
-/**
- *
- */
 export function InstallDemo() {
   //   if (Set(Request['install'])) {
   //     // file = getcwd() . '/install_demo_db.sql.gz';

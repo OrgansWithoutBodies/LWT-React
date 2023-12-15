@@ -3,9 +3,6 @@ import * as ss from 'superstruct';
 import { useTagIt } from '../../utils/TagIt';
 import { confirmDelete } from '../../utils/utils';
 
-/**
- *
- */
 function noShowAfter3Secs() {
   $('#hide3').slideUp();
 }
@@ -17,9 +14,7 @@ function noShowAfter3Secs() {
 function getUTF8Length(s: any) {
   return new Blob([String(s)]).size;
 }
-/**
- *
- */
+
 function isInt(value: { length: number; charAt: (arg0: any) => number }) {
   for (let i = 0; i < value.length; i++) {
     if (value.charAt(i) < '0' || value.charAt(i) > '9') {
@@ -63,9 +58,6 @@ function alertFirstCharacterOutsideBasicMultilingualPlane(
   }
 }
 
-/**
- *
- */
 function check() {
   let count = 0;
   $('.notempty').each(function (n: any) {
@@ -192,16 +184,11 @@ const checkNoBlanksNoCommaValidator = () =>
   });
 
 // TODO
-/**
- *
- */
+
 function setTheFocus() {
   $('.setfocus').focus().select();
 }
 
-/**
- *
- */
 export function changeImprAnnRadio(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
   const elem = $(this).attr('name');
@@ -219,9 +206,6 @@ export function changeImprAnnRadio(this: any) {
   );
 }
 
-/**
- *
- */
 export function changeImprAnnText(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
   $(this).prev('input:radio').attr('checked', 'checked');
@@ -240,9 +224,6 @@ export function changeImprAnnText(this: any) {
   );
 }
 
-/**
- *
- */
 export function markClick() {
   if ($('input.markcheck:checked').length > 0) {
     $('#markaction').removeAttr('disabled');
@@ -251,11 +232,8 @@ export function markClick() {
   }
 }
 
-/**
- *
- */
-export function textareaKeydown(event: { keyCode: string }) {
-  if (event.keyCode && event.keyCode === '13') {
+export function textareaKeydown(event: KeyboardEvent) {
+  if (event.key && event.key === 'Enter') {
     if (check()) $('input:submit').last().click();
     return false;
   } else {
@@ -299,9 +277,6 @@ $(document).ready(function () {
 
 // TODO
 
-/**
- *
- */
 export function do_ajax_show_similar_terms() {
   $('#simwords').html('<img src="icn/waiting2.gif" />');
   $.post(

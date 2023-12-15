@@ -7,9 +7,6 @@ import { BackendPlugin } from './electron-sqlite.backend-plugin.main';
 
 let mainWindow;
 
-/**
- *
- */
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,

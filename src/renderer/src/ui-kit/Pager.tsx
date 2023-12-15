@@ -1,9 +1,6 @@
 import { useUpdateParams } from '../hooks/useInternalNav';
 import { Icon } from './Icon';
 
-/**
- *
- */
 export function Pager({
   currentPage,
   numPages,

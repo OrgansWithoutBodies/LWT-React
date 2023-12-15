@@ -1,7 +1,3 @@
-/**
- *
- */
-
 export function TagAndOr({
   onChange,
   defaultValue,

@@ -36,9 +36,6 @@ function wizard_go(
   onSuccess(l1, l2);
 }
 
-/**
- *
- */
 export default function NewLanguageWizard({
   onSuccess,
   onExit,

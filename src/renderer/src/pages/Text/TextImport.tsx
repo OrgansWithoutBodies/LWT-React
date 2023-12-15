@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { dataService } from '../../data/data.service';
 import { textNoIdPrevalidateMap } from '../../data/preValidateMaps';
 import { ResetForm } from '../../forms/Forms';
-import { useData } from '../../hooks/useAkita';
+import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
@@ -24,9 +24,7 @@ export function ImportShortTextPage() {
     </>
   );
 }
-/**
- *
- */
+
 export function ImportShortText({
   onCheckText,
 }: {
