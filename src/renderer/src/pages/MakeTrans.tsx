@@ -1,4 +1,4 @@
-import { WordsId } from '../data/validators';
+import { WordsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { Icon } from '../ui-kit/Icon';
 import { changeImprAnnRadio, changeImprAnnText } from './IO/CheckForm';
@@ -13,7 +13,7 @@ import { changeImprAnnRadio, changeImprAnnText } from './IO/CheckForm';
  */
 export function MakeTrans(
   i: number,
-  wid: WordsId,
+  wid: WordsID,
   trans: string | number | readonly string[] | undefined
   // word: string,
   // lang: any

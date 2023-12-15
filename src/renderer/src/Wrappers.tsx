@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { dataService } from './data/data.service';
-import { LanguagesId, Tags2Id, TagsId, TextsId } from './data/validators';
+import { LanguagesID, Tags2ID, TagsID, TextsID } from './data/validators';
 import { useData } from './hooks/useData';
 import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
@@ -39,20 +39,20 @@ export function TermsWrapper() {
     text,
     lang,
   } = useInternalParams('edit_words');
-  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+  const [{ activeLanguageID }] = useData(['activeLanguageID']);
   const isNew = newVal === '1';
   const updateParams = useUpdateParams();
   // 'filterlang' is set as a keyword but with an empty value instead of being missing altogether
   if (filterlang === '') {
-    if (activeLanguageId !== null && activeLanguageId !== undefined) {
+    if (activeLanguageID !== null && activeLanguageID !== undefined) {
       dataService.setActiveLanguage(null);
       updateParams({ filterlang: null });
     }
   } else if (
     filterlang !== null &&
-    Number.parseInt(filterlang) !== activeLanguageId
+    Number.parseInt(filterlang) !== activeLanguageID
   ) {
-    dataService.setActiveLanguage(Number.parseInt<LanguagesId>(filterlang));
+    dataService.setActiveLanguage(Number.parseInt<LanguagesID>(filterlang));
     updateParams({ filterlang: null });
   }
   return (
@@ -62,9 +62,9 @@ export function TermsWrapper() {
           pageNum={page !== null ? Number.parseInt(page) : 1}
           sort={sort ? (Number.parseInt(sort) as WordSorting) : undefined}
           status={status ? Number.parseInt(status) : null}
-          textFilter={text === null ? null : Number.parseInt<TextsId>(text)}
+          textFilter={text === null ? null : Number.parseInt<TextsID>(text)}
           tag1={
-            tag1 === null || tag1 === '' ? null : Number.parseInt<TagsId>(tag1)
+            tag1 === null || tag1 === '' ? null : Number.parseInt<TagsID>(tag1)
           }
           tag12={
             tag12 === null || !['0', '1'].includes(tag12)
@@ -72,12 +72,12 @@ export function TermsWrapper() {
               : Number.parseInt<0 | 1>(tag12)
           }
           tag2={
-            tag2 === null || tag2 === '' ? null : Number.parseInt<TagsId>(tag2)
+            tag2 === null || tag2 === '' ? null : Number.parseInt<TagsID>(tag2)
           }
         />
         <EditTerm chgID={Number.parseInt(chg!)} />
       </Switch>
-      <AddTerm langId={Number.parseInt(lang!)} />
+      <AddTerm langID={Number.parseInt(lang!)} />
     </Switch>
   );
 }
@@ -119,7 +119,7 @@ export function LanguagesWrapper() {
   const refreshID = searchParams.get('refresh');
   const updateParams = useUpdateParams();
   if (refreshID !== null) {
-    dataService.reparseText(Number.parseInt(refreshID) as TextsId);
+    dataService.reparseText(Number.parseInt(refreshID) as TextsID);
     updateParams(null);
   }
   return (
@@ -143,7 +143,7 @@ export function AddNewWordWrapper() {
   if (langID === null) {
     throw new Error('Need To Specify Language ID');
   }
-  return <AddNewWordPane langId={Number.parseInt(langID)} />;
+  return <AddNewWordPane langID={Number.parseInt(langID)} />;
 }
 
 export function LibraryWrapper() {
@@ -168,7 +168,7 @@ export function LibraryWrapper() {
   // TODO
   // const [, { archiveText, reparseAllTextsForLanguage }] = useData([]);
   // if (refreshID !== null) {
-  //   dataService.reparseText(Number.parseInt(refreshID) as TextsId);
+  //   dataService.reparseText(Number.parseInt(refreshID) as TextsID);
   // }
   console.log('new', isNew);
   return (
@@ -179,10 +179,10 @@ export function LibraryWrapper() {
           query={query}
           sorting={sort !== null ? Number.parseInt(sort) : undefined}
           tag2={
-            tag2 === null || tag2 === '' ? null : Number.parseInt<Tags2Id>(tag2)
+            tag2 === null || tag2 === '' ? null : Number.parseInt<Tags2ID>(tag2)
           }
           tag1={
-            tag1 === null || tag1 === '' ? null : Number.parseInt<Tags2Id>(tag1)
+            tag1 === null || tag1 === '' ? null : Number.parseInt<Tags2ID>(tag1)
           }
           tag12={
             tag12 === null || !['0', '1'].includes(tag12)
@@ -218,8 +218,8 @@ export function EditArchivedTextsWrapper() {
       query={query || ''}
       currentPage={page !== null ? Number.parseInt(page) : 1}
       tag12={tag12 && ['1', '0'].includes(tag12) ? Number.parseInt(tag12) : 0}
-      tag1={tag1 !== null || tag1 === '' ? Number.parseInt<TagsId>(tag1) : null}
-      tag2={tag2 !== null || tag2 === '' ? Number.parseInt<TagsId>(tag2) : null}
+      tag1={tag1 !== null || tag1 === '' ? Number.parseInt<TagsID>(tag1) : null}
+      tag2={tag2 !== null || tag2 === '' ? Number.parseInt<TagsID>(tag2) : null}
       sorting={sort !== null ? Number.parseInt(sort) : undefined}
     />
   );
@@ -254,10 +254,10 @@ export function EditTagsWrapper() {
   const isNew = searchParams.get('new') === '1';
   const page = searchParams.get('page');
   const sort = searchParams.get('sort');
-  const chgId = searchParams.get('chg');
+  const chgID = searchParams.get('chg');
 
   return (
-    <Switch on={chgId !== null}>
+    <Switch on={chgID !== null}>
       <Switch on={isNew}>
         <DisplayTags
           query={query || ''}
@@ -266,7 +266,7 @@ export function EditTagsWrapper() {
         />
         <NewTag />
       </Switch>
-      <EditTag chgId={Number.parseInt(chgId!)} />
+      <EditTag chgID={Number.parseInt(chgID!)} />
     </Switch>
   );
 }
@@ -287,8 +287,8 @@ export function TestWrapper() {
   // TODO verify exists
   return (
     <TesterPage
-      langID={lang !== null ? Number.parseInt<LanguagesId>(lang) : null}
-      textID={textID !== null ? Number.parseInt<TextsId>(textID) : null}
+      langID={lang !== null ? Number.parseInt<LanguagesID>(lang) : null}
+      textID={textID !== null ? Number.parseInt<TextsID>(textID) : null}
     />
   );
 }

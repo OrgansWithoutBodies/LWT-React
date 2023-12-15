@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { dataService } from '../../data/data.service';
 import {
-  wordNoIdPrevalidateMap,
+  wordNoIDPrevalidateMap,
   wordPrevalidateMap,
 } from '../../data/preValidateMaps';
 import { DateDiff } from '../../data/time';
 import {
   EditWordsValidator,
-  LanguagesId,
-  TagsId,
-  TextsId,
-  WordsId,
+  LanguagesID,
+  TagsID,
+  TextsID,
+  WordsID,
 } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -31,7 +31,7 @@ import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
-import { WordTagsSelectDropdown } from '../../ui-kit/WordTagsSelectDropdown';
+import { WordTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
 import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
 import { AddNewWordValidator, Word } from '../../utils/parseMySqlDump';
@@ -50,12 +50,12 @@ import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
 
 function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
-  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+  const [{ activeLanguageID }] = useData(['activeLanguageID']);
   return (
     <tr>
       <th className="th1 sorttable_nosort">Mark</th>
       <th className="th1 sorttable_nosort">Act.</th>
-      {activeLanguageId === null && (
+      {activeLanguageID === null && (
         <SortableHeader
           sorting={sorting}
           downSorting={WordSorting['Lang. (desc)']}
@@ -131,7 +131,7 @@ export function TermsFilterBox({
   numTerms,
 
   currentPage,
-  activeLanguageId,
+  activeLanguageID,
   numPages,
   tag12,
   tag1,
@@ -140,15 +140,15 @@ export function TermsFilterBox({
   status,
   textFilter,
 }: {
-  textFilter: TextsId | null;
+  textFilter: TextsID | null;
 
-  activeLanguageId: LanguagesId | null;
+  activeLanguageID: LanguagesID | null;
   numTerms: number;
   numPages: number;
   currentPage: number;
   status: number | null;
-  tag1: TagsId | null;
-  tag2: TagsId | null;
+  tag1: TagsID | null;
+  tag2: TagsID | null;
   tag12: 0 | 1;
   sorting: WordSorting;
 }): JSX.Element {
@@ -183,7 +183,7 @@ export function TermsFilterBox({
                 }
               }}
               defaultValue={
-                activeLanguageId !== null ? activeLanguageId : undefined
+                activeLanguageID !== null ? activeLanguageID : undefined
               }
               header="Filter off"
             />
@@ -203,8 +203,8 @@ export function TermsFilterBox({
               <option value={-1} selected>
                 [Filter off]
               </option>
-              {(activeLanguageId !== null
-                ? texts.filter(({ TxLgID }) => TxLgID === activeLanguageId)
+              {(activeLanguageID !== null
+                ? texts.filter(({ TxLgID }) => TxLgID === activeLanguageID)
                 : texts
               ).map((text) => (
                 <option value={text.TxID}>{text.TxTitle}</option>
@@ -359,14 +359,14 @@ function TermRow({
 }): JSX.Element {
   const termID = word.WoID;
   const sentence = word.WoSentence;
-  const [{ activeLanguageId, languages }] = useData([
-    'activeLanguageId',
+  const [{ activeLanguageID, languages }] = useData([
+    'activeLanguageID',
     'languages',
   ]);
-  const foundLanguage = activeLanguageId
+  const foundLanguage = activeLanguageID
     ? null
     : languages.find((val) => val.LgID === word.WoLgID);
-  if (!foundLanguage && !activeLanguageId) {
+  if (!foundLanguage && !activeLanguageID) {
     throw new Error('Invalid Word Language ID!');
   }
   return (
@@ -402,7 +402,7 @@ function TermRow({
         />
         &nbsp;
       </td>
-      {!activeLanguageId && (
+      {!activeLanguageID && (
         <td className="td1 center">{foundLanguage?.LgName}</td>
       )}
       <td className="td1">
@@ -442,7 +442,7 @@ function TermRow({
             <span title="Saved" className="status4">
               &nbsp;
               (txtworkedall > 0 ? '
-                      <a href="edit_words.php?page=1&;query=&;status=&;tag12=0&;tag2=&;tag1=&;text=' . record['TxID'] . '">
+                      <a href="edit_words?page=1&;query=&;status=&;tag12=0&;tag2=&;tag1=&;text=' . record['TxID'] . '">
                         {txtworkedwords }
                         +
                         {txtworkedexpr }
@@ -478,17 +478,17 @@ function TermRow({
       </td>
       {sorting === WordSorting['Word Count Active Texts'] && (
         // TODO
-        // if ($currentsort == 6) {
-        //   if ($currenttext != '')
+        // if ($currentsort === 6) {
+        //   if ($currenttext !== '')
         //     $sql = '';
         //   else
         //     $sql = 'select WoID, 0 AS textswordcount, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist, WoTextLC, WoTodayScore from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoTextLC NOT IN (SELECT DISTINCT TiTextLC from ' . $tbpref . 'textitems where TiLgID = LgID) ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' UNION ';
         //   $sql .= 'select WoID, count(WoID) AS textswordcount, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist, WoTextLC, WoTodayScore from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and WoLgID = LgID ';
-        //   if ($currenttext != '')
+        //   if ($currenttext !== '')
         //     $sql .= 'and TiTxID = ' . $currenttext . ' ';
         //   $sql .= $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
         // } else {
-        //   if ($currenttext == '') {
+        //   if ($currenttext === '') {
         //     $sql = 'select WoID, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
         //   } else {
         //     $sql = 'select distinct WoID, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like \'%{%}%\' as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and TiTxID = ' . $currenttext . ' and WoLgID = LgID ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort - 1] . ' ' . $limit;
@@ -512,13 +512,13 @@ export function Terms({
   tag12 = 0,
   tag2,
 }: {
-  textFilter: TextsId | null;
+  textFilter: TextsID | null;
   pageNum: number | null;
-  // filterlang: LanguagesId | null;
+  // filterlang: LanguagesID | null;
   status: number | null;
-  tag1: TagsId | null;
+  tag1: TagsID | null;
   tag12: 0 | 1;
-  tag2: TagsId | null;
+  tag2: TagsID | null;
   sort?: WordSorting;
 }): JSX.Element {
   const [{ words, activeLanguage, settings, tags, wordtags }] = useData([
@@ -598,7 +598,7 @@ export function Terms({
             sorting={sort}
             status={status}
             tag12={tag12}
-            activeLanguageId={activeLanguage ? activeLanguage.LgID : null}
+            activeLanguageID={activeLanguage ? activeLanguage.LgID : null}
             numTerms={sortedWords.length}
             currentPage={currentPage}
             numPages={numPages}
@@ -728,7 +728,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              <WordTagsSelectDropdown wordID={term.WoID} />
+              <WordTagsSelectList />
             </td>
           </tr>
           <tr>
@@ -827,9 +827,9 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
   );
 }
 
-export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
+export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
   const [{ languages }] = useData(['languages']);
-  const language = languages.find((val) => val.LgID === langId);
+  const language = languages.find((val) => val.LgID === langID);
   if (!language) {
     throw new Error('Invalid Language ID!');
   }
@@ -843,13 +843,13 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
     onSubmit,
     TextArea,
   } = useFormInput({
-    entry: { WoLgID: langId },
+    entry: { WoLgID: langID },
     validator,
   });
   const onCopyTransRoman: CopyTransRomanHandler = () => {};
   return (
     <>
-      <Header title="TODO" />
+      <Header title={`My ${language.LgName} Terms (Words and Expressions)`} />
 
       <h4>New Term</h4>
       <form name="newword" className="validate">
@@ -942,7 +942,7 @@ export function AddTerm({ langId }: { langId: LanguagesId }): JSX.Element {
                 type="button"
                 value="Save"
                 onClick={() => {
-                  onSubmit(wordNoIdPrevalidateMap, (val) => {
+                  onSubmit(wordNoIDPrevalidateMap, (val) => {
                     console.log('ADDING TERM', val);
                     dataService.addTerm(val);
                     navigator('/edit_words');
@@ -982,10 +982,10 @@ export function TermMultiActions({
   onSelectNone,
   allTermIDs,
 }: {
-  selectedTerms: Set<WordsId>;
+  selectedTerms: Set<WordsID>;
   onSelectAll: () => void;
   onSelectNone: () => void;
-  allTermIDs: WordsId[];
+  allTermIDs: WordsID[];
 }) {
   const recno = allTermIDs.length;
   return (
@@ -1064,7 +1064,7 @@ function PrintSimilarTermsTabrow({
   onCopyTransRoman,
 }: {
   word: string;
-  lang: LanguagesId;
+  lang: LanguagesID;
   onCopyTransRoman: CopyTransRomanHandler;
 }) {
   const [{ settings }] = useData(['settings']);
@@ -1121,7 +1121,7 @@ function PrintSimilarTerms({
   compared_term,
   onCopyTransRoman,
 }: {
-  lang_id: LanguagesId;
+  lang_id: LanguagesID;
   compared_term: string;
   onCopyTransRoman: CopyTransRomanHandler;
 }) {
@@ -1130,7 +1130,7 @@ function PrintSimilarTerms({
   if (max_count <= 0) {
     return <></>;
   }
-  if (compared_term.trim() == '') {
+  if (compared_term.trim() === '') {
     return <>&nbsp;</>;
   }
   const termarr = get_similar_terms(
@@ -1194,9 +1194,9 @@ function PrintSimilarTerms({
  * @param rom
  */
 function setTransRoman(tra: string, rom: string) {
-  if ($('textarea[name="WoTranslation"]').length == 1)
+  if ($('textarea[name="WoTranslation"]').length === 1)
     $('textarea[name="WoTranslation"]').val(tra);
-  if ($('input[name="WoRomanization"]').length == 1)
+  if ($('input[name="WoRomanization"]').length === 1)
     $('input[name="WoRomanization"]').val(rom);
   makeDirty();
 }
@@ -1210,7 +1210,7 @@ function setTransRoman(tra: string, rom: string) {
  * @param words
  */
 function get_similar_terms(
-  lang_id: LanguagesId,
+  lang_id: LanguagesID,
   compared_term: string,
   max_count: number,
   min_ranking: number,
@@ -1232,7 +1232,7 @@ function get_similar_terms(
   );
   // TODO
   // arsort(termlsd, SORT_NUMERIC);
-  const r: WordsId[] = [];
+  const r: WordsID[] = [];
   let i = 0;
 
   // TODO this is just a filter
@@ -1262,7 +1262,7 @@ function getSimilarityRanking(str1: string, str2: string) {
   const pairs1 = wordLetterPairs(str1);
   const pairs2 = wordLetterPairs(str2);
   const union = pairs1.length + pairs2.length;
-  if (union == 0) {
+  if (union === 0) {
     return 0;
   }
   const intersection = new Set(...pairs1, ...pairs2).size;

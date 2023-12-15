@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import { Persistable } from '../../../../shared/Persistable';
 import { dataService } from '../../data/data.service';
-import { languageNoIdPreValidateMap } from '../../data/preValidateMaps';
+import { languageNoIDPreValidateMap } from '../../data/preValidateMaps';
 import { TextSize } from '../../data/type';
-import { LanguageValidatorNoId } from '../../data/validators';
+import { LanguageValidatorNoID } from '../../data/validators';
 import { LANGDEFS } from '../../data/wizardData';
 import { TRefMap } from '../../forms/Forms';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -22,7 +22,7 @@ export function NewLanguage() {
   // languages type map
   const [wizardOpen, setWizardOpen] = useState<boolean>(false);
   const navigator = useInternalNavigate();
-  const validator = LanguageValidatorNoId;
+  const validator = LanguageValidatorNoID;
 
   const defaultLgForm = {
     LgRegexpWordCharacters: 'a-zA-ZÀ-ÖØ-öø-ȳ',
@@ -43,7 +43,7 @@ export function NewLanguage() {
   });
   return (
     <>
-      <Header title="New Language" />
+      <Header title="My Languages" />
       <h4>
         New Language
         <a target="_blank" href="info#howtolang">
@@ -270,7 +270,7 @@ export function NewLanguage() {
                     {
                       /* check_dupl_lang(0) */
                     }
-                    onSubmit(languageNoIdPreValidateMap, (value) => {
+                    onSubmit(languageNoIDPreValidateMap, (value) => {
                       dataService.addLanguage(value);
                       navigator('/edit_languages');
                     });

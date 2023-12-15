@@ -47,7 +47,7 @@
       "post": {
         "tags": ["TranslateText"],
         "summary": "Request Translation",
-        "operationId": "translateText",
+        "operationID": "translateText",
         "description": "The translate function.\n\n\nThe total request body size must not exceed 128 KiB (128 \u00b7 1024 bytes). Please split up your text into multiple\ncalls if it exceeds this limit.",
         "requestBody": {
           "required": true,
@@ -84,7 +84,7 @@
                   "glossary_id": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/GlossaryId"
+                        "$ref": "#/components/schemas/GlossaryID"
                       },
                       {
                         "description": "Specify the glossary to use for the translation. **Important:** This requires the `source_lang`\nparameter to be set and the language pair of the glossary has to match the language pair of the\nrequest.",
@@ -125,7 +125,7 @@
                     "text": ["Hello, world!"],
                     "target_lang": "DE",
                     "source_lang": "EN",
-                    "glossary_id": "[yourGlossaryId]"
+                    "glossary_id": "[yourGlossaryID]"
                   }
                 },
                 "MultipleSentences": {
@@ -176,7 +176,7 @@
                   "glossary_id": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/GlossaryId"
+                        "$ref": "#/components/schemas/GlossaryID"
                       }
                     ],
                     "description": "Specify the glossary to use for the translation. **Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request."
@@ -332,7 +332,7 @@
       "post": {
         "tags": ["TranslateDocuments"],
         "summary": "Upload and Translate a Document",
-        "operationId": "translateDocument",
+        "operationID": "translateDocument",
         "description": "This call uploads a document and queues it for translation.\nThe call returns once the upload is complete, returning a document ID and key which can be used to\n[query the translation status](https://www.deepl.com/docs-api/documents/get-document-status)\nand to [download the translated document](https://www.deepl.com/docs-api/documents/download-document) once translation is complete.\n\n\n\nBecause the request includes a file upload, it must be an HTTP POST request with content type `multipart/form-data`.\n\n\nPlease be aware that the uploaded document is automatically removed from the server once the translated document has been downloaded.\nYou have to upload the document again in order to restart the translation.\n\n\nThe maximum upload limit for documents is [available here](https://support.deepl.com/hc/articles/360020582359-Document-formats)\nand may vary based on API plan and document type.\n\n\nYou may specify the glossary to use for the document translation using the `glossary_id` parameter.\n**Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.",
         "requestBody": {
           "required": true,
@@ -352,7 +352,7 @@
                     "source_lang": "EN",
                     "target_lang": "DE",
                     "file": "@document.docx",
-                    "glossary_id": "[yourGlossaryId]"
+                    "glossary_id": "[yourGlossaryID]"
                   }
                 }
               },
@@ -379,7 +379,7 @@
                     "$ref": "#/components/schemas/Formality"
                   },
                   "glossary_id": {
-                    "$ref": "#/components/schemas/GlossaryId"
+                    "$ref": "#/components/schemas/GlossaryID"
                   }
                 }
               }
@@ -451,7 +451,7 @@
         "tags": ["TranslateDocuments"],
         "summary": "Check Document Status",
         "description": "Retrieve the current status of a document translation process.\nIf the translation is still in progress, the estimated time remaining is also included in the response.",
-        "operationId": "getDocumentStatus",
+        "operationID": "getDocumentStatus",
         "parameters": [
           {
             "$ref": "#/components/parameters/DocumentID"
@@ -587,7 +587,7 @@
       "post": {
         "tags": ["TranslateDocuments"],
         "summary": "Download Translated Document",
-        "operationId": "downloadDocument",
+        "operationID": "downloadDocument",
         "description": "Once the status of the document translation process is `done`, the result can be downloaded.\n\n\nFor privacy reasons the translated document is automatically removed from the server once it was downloaded and cannot be downloaded again.",
         "parameters": [
           {
@@ -678,7 +678,7 @@
         "tags": ["ManageGlossaries"],
         "summary": "List Language Pairs Supported by Glossaries",
         "description": "Retrieve the list of language pairs supported by the glossary feature.",
-        "operationId": "listGlossaryLanguages",
+        "operationID": "listGlossaryLanguages",
         "responses": {
           "200": {
             "description": "A JSON object containing the language pairs in its `supported_languages` property.",
@@ -767,7 +767,7 @@
       "post": {
         "tags": ["ManageGlossaries"],
         "summary": "Create a Glossary",
-        "operationId": "createGlossary",
+        "operationID": "createGlossary",
         "requestBody": {
           "required": true,
           "content": {
@@ -849,7 +849,7 @@
       "get": {
         "tags": ["ManageGlossaries"],
         "summary": "List all Glossaries",
-        "operationId": "listGlossaries",
+        "operationID": "listGlossaries",
         "description": "List all glossaries and their meta-information, but not the glossary entries.",
         "responses": {
           "200": {
@@ -929,7 +929,7 @@
         "tags": ["ManageGlossaries"],
         "summary": "Retrieve Glossary Details",
         "description": "Retrieve meta information for a single glossary, omitting the glossary entries.",
-        "operationId": "getGlossary",
+        "operationID": "getGlossary",
         "parameters": [
           {
             "$ref": "#/components/parameters/GlossaryID"
@@ -999,7 +999,7 @@
         "tags": ["ManageGlossaries"],
         "summary": "Delete a Glossary",
         "description": "Deletes the specified glossary.",
-        "operationId": "deleteGlossary",
+        "operationID": "deleteGlossary",
         "parameters": [
           {
             "$ref": "#/components/parameters/GlossaryID"
@@ -1054,7 +1054,7 @@
       "get": {
         "tags": ["ManageGlossaries"],
         "summary": "Retrieve Glossary Entries",
-        "operationId": "getGlossaryEntries",
+        "operationID": "getGlossaryEntries",
         "description": "List the entries of a single glossary in the format specified by the `Accept` header.",
         "parameters": [
           {
@@ -1135,7 +1135,7 @@
         "tags": ["MetaInformation"],
         "summary": "Check Usage and Limits",
         "description": "Retrieve usage information within the current billing period together with the corresponding account limits. Usage is returned for:\n- translated characters\n- translated documents\n- translated documents, team totals (for team accounts only)\n\nCharacter usage includes both text and document translations, and is measured by the source text length in Unicode code points,\nso for example \"A\", \"\u0394\", \"\u3042\", and \"\u6df1\" are each counted as a single character.\n\nDocument usage only includes document translations, and is measured in individual documents.\n\nDepending on the user account type, some usage types will be omitted.\nCharacter usage is only included for developer accounts.\nDocument usage is only included for non-developer accounts, and team-combined document usage is only included for non-developer team accounts.",
-        "operationId": "getUsage",
+        "operationID": "getUsage",
         "responses": {
           "200": {
             "description": "The account's usage and limits.",
@@ -1223,7 +1223,7 @@
         "tags": ["MetaInformation"],
         "summary": "Retrieve Supported Languages",
         "description": "Retrieve the list of languages that are currently supported for translation, either as source or target language, respectively.",
-        "operationId": "getLanguages",
+        "operationID": "getLanguages",
         "parameters": [
           {
             "name": "type",
@@ -1672,7 +1672,7 @@
         "enum": ["default", "more", "less", "prefer_more", "prefer_less"],
         "default": "default"
       },
-      "GlossaryId": {
+      "GlossaryID": {
         "type": "string",
         "description": "A unique ID assigned to a glossary.",
         "example": "def3a26b-3e84-45b3-84ae-0c0aaf3525f7"
@@ -1681,7 +1681,7 @@
         "type": "object",
         "properties": {
           "glossary_id": {
-            "$ref": "#/components/schemas/GlossaryId"
+            "$ref": "#/components/schemas/GlossaryID"
           },
           "name": {
             "description": "Name associated with the glossary.",
@@ -1827,7 +1827,7 @@
             "$ref": "#/components/schemas/TagCommaSeparatedList"
           }
         ],
-        "description": "Comma-separated list of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute Idee gewesen.</par><par> Durchf\u00fchrung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgef\u00fchrt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here)."
+        "description": "Comma-separated list of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute IDee gewesen.</par><par> Durchf\u00fchrung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgef\u00fchrt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here)."
       },
       "NonSplittingTagList": {
         "allOf": [
@@ -1835,7 +1835,7 @@
             "$ref": "#/components/schemas/TagList"
           }
         ],
-        "description": "List of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute Idee gewesen.</par><par> Durchf\u00fchrung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgef\u00fchrt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here)."
+        "description": "List of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute IDee gewesen.</par><par> Durchf\u00fchrung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgef\u00fchrt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here)."
       },
       "SplittingTagCommaSeparatedList": {
         "allOf": [

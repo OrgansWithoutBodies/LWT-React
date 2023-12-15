@@ -1,23 +1,28 @@
-import { WordsId } from '../data/validators';
 import { useData } from '../hooks/useData';
+import { containsCharacterOutsideBasicMultilingualPlane } from '../pages/IO/CheckForm';
+import { useTagIt } from '../utils/TagIt';
 
-export function WordTagsSelectDropdown({ wordID }: { wordID: WordsId }) {
-  const [{ wordtags, tags }] = useData(['wordtags', 'tags']);
-  return (
-    <ul
-      id="termtags"
-      // TODO tagit
-    >
-      {wordtags
-        .filter(({ WtWoID }) => WtWoID === wordID)
-        .map((tag) => (
-          <li>
-            {
-              // TODO better lookup very inefficient
-              tags.find(({ TgID }) => tag.WtTgID === TgID)!.TgText
-            }
-          </li>
-        ))}
-    </ul>
-  );
+export function WordTagsSelectList() {
+  const [{ tags }] = useData(['tags']);
+  const { TagList } = useTagIt({
+    availableTags: tags.map((value) => ({ value: value.TgText })),
+    fieldName: 'TermTags[TagList][]',
+    beforeTagAdded: (event, ui) =>
+      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.value),
+  });
+
+  // TODO set ref to be list of selected tags
+  return <TagList id="termtags" />;
+}
+export function TextTagsSelectList() {
+  const [{ tags2 }] = useData(['tags2']);
+  const { TagList } = useTagIt({
+    availableTags: tags2.map((value) => ({ value: value.T2Text })),
+    fieldName: 'TextTags[TagList][]',
+    beforeTagAdded: (event, ui) =>
+      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.value),
+  });
+
+  // TODO set ref to be list of selected tags
+  return <TagList id="texttags" />;
 }

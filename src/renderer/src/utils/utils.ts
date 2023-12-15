@@ -1,9 +1,9 @@
 import { DateDiff } from '../data/time';
-import { SentencesId, TextItemsId } from '../data/validators';
+import { SentencesID, TextItemsID } from '../data/validators';
 import { NumericalStrength } from '../pages/StrengthMap';
 import {
   Language,
-  LanguageNoId,
+  LanguageNoID,
   Sentence,
   Text,
   TextItem,
@@ -721,7 +721,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // function quickMenu()
 // {
-// 	?><select id="quickmenu" onchange="{const qm = document.getElementById('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val !== '') { if (val === 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '';}}}">
+// 	?><select id="quickmenu" onchange="{const qm = document.getElementByID('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val !== '') { if (val === 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '';}}}">
 // 	<option value="" selected="selected">[Menu]</option>
 // 	<option value="index">Home</option>
 // 	<option value="edit_texts">Texts</option>
@@ -2729,7 +2729,7 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-function make_score_random_insert_update(
+export function make_score_random_insert_update(
   word: Word
 ): Pick<Word, 'WoTodayScore' | 'WoTomorrowScore' | 'WoRandom'> {
   // type='iv'/'id'/'u'
@@ -3276,8 +3276,8 @@ export function verifyAddTagWindow(t: string, numChecked: number) {
 export function splitCheckText(
   text: Pick<Text, 'TxText' | 'TxID'>,
   language: Language,
-  sentenceStartID: SentencesId = 0 as SentencesId,
-  textItemStartID: TextItemsId = 0 as TextItemsId
+  sentenceStartID: SentencesID = 0 as SentencesID,
+  textItemStartID: TextItemsID = 0 as TextItemsID
 ) {
   const { LgRegexpWordCharacters, LgRemoveSpaces } = language;
   const sArray = buildSentences(text, language, sentenceStartID);
@@ -3309,7 +3309,7 @@ export function splitCheckText(
           TiLgID: language.LgID,
           TiTxID: text.TxID,
           TiSeID: SeID,
-          TiID: (textItemStartID + ii) as TextItemsId,
+          TiID: (textItemStartID + ii) as TextItemsID,
         }))
     )
     .flat();
@@ -3364,7 +3364,7 @@ export function buildSentences(
     LgExceptionsSplitSentences,
     LgID,
   }: Language,
-  startAt: SentencesId = 0 as SentencesId
+  startAt: SentencesID = 0 as SentencesID
 ): RawSentence[] {
   const replace = LgCharacterSubstitutions.split('|');
 
@@ -3413,7 +3413,7 @@ export function buildSentences(
       return {
         SeText: trimmed,
         SeOrder: ii,
-        SeID: (ii + startAt) as SentencesId,
+        SeID: (ii + startAt) as SentencesID,
         SeLgID: LgID,
         SeTxID: text.TxID,
       };
@@ -3435,7 +3435,7 @@ export function buildSentences(
  */
 export function cleanText(
   text: string,
-  LgSplitEachChar: LanguageNoId['LgSplitEachChar']
+  LgSplitEachChar: LanguageNoID['LgSplitEachChar']
 ) {
   let s = text
     .replace(new RegExp('\\r\\n'), '\n')

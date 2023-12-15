@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { dataService } from '../data/data.service';
-import { LanguagesId, TextsId } from '../data/validators';
+import { LanguagesID, TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { useThemeColors } from '../hooks/useThemeColors';
 import { useTick } from '../hooks/useTimer';
@@ -11,16 +11,29 @@ import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Language, TextItem, Word } from '../utils/parseMySqlDump';
+import { Language, Text, TextItem, Word } from '../utils/parseMySqlDump';
 import { TranslationAPI } from './IO/APITranslation.component';
 import { Loader } from './Loader';
 import { Reader } from './Reader.component';
+import { get_status_abbr } from './SelectOptions';
 import { AddNewWordPane } from './Term/AddNewWordPane';
-import { DictionaryLinks } from './Term/DictionaryLinks';
+import {
+  DictionaryLinks,
+  LanguageDictionaryDataTempHack,
+} from './Term/DictionaryLinks';
+import { LanguageDictionaryData } from './Term/limitedTypes';
 import { TextToDoCount } from './TextToDoCount';
 import {
   MakeOverlibLinkChangeStatusAlltest,
   MakeOverlibLinkChangeStatusTest,
+  RunOverlibMultiword,
+  RunOverlibStatus1To5,
+  RunOverlibStatus98,
+  RunOverlibStatus99,
+  RunOverlibStatusUnknown,
+  cClick,
+  makeTooltipTitleObj,
+  makeTooltipTitleString,
 } from './escape_html_chars';
 import { owin } from './translateSentence2';
 
@@ -28,14 +41,23 @@ import { owin } from './translateSentence2';
 //  confirmation screen
 //  details screen
 
+/**
+ *
+ * @param text
+ * @param newVal
+ * @param onShowChanged
+ */
 function showallwordsClick(
-  text: TextsId,
+  text: TextsID,
   newVal: 0 | 1,
-  onShowChanged: (args: { text: TextsId; mode: 0 | 1 }) => void
+  onShowChanged: (args: { text: TextsID; mode: 0 | 1 }) => void
 ) {
   dataService.setSettings({ showallwords: newVal });
   onShowChanged({ text, mode: newVal });
 }
+/**
+ *
+ */
 function ShowAllMessage({ showAll: showAll }: { showAll: 0 | 1 }) {
   return (
     <p>
@@ -81,6 +103,9 @@ function ShowAllMessage({ showAll: showAll }: { showAll: 0 | 1 }) {
   );
 }
 
+/**
+ *
+ */
 function IFramePane({ url }: { url: string | null }) {
   console.log('TEST123-IFRAME', url);
   const [loading, setLoading] = useState<boolean>(false);
@@ -144,22 +169,43 @@ function IFramePane({ url }: { url: string | null }) {
 }
 // TODO I Know All
 
+/**
+ *
+ */
 export function ReaderPage({
   textID: textID,
 }: // onShowChanged,
 {
-  textID: TextsId;
-  // onShowChanged: (args: { text: TextsId; mode: 0 | 1 }) => void;
+  textID: TextsID;
+  // onShowChanged: (args: { text: TextsID; mode: 0 | 1 }) => void;
 }) {
   const [{ texts, settings }] = useData(['texts', 'settings']);
   const {
     ['set-text-l-framewidth-percent']: lFrameWidthPerc,
     ['set-text-r-frameheight-percent']: rFrameHeightPerc,
     // TODO use
+    ['set-text-visit-statuses-via-key']: ADDFILTER,
     ['set-text-h-frameheight-no-audio']: setTextHFrameheightNoAudio,
     ['set-text-h-frameheight-with-audio']: setTextHFrameheightWithAudio,
   } = settings;
 
+  // ANN_ARRAY = <?php echo annotation_to_json($ann); ?>;
+  // TEXTPOS = -1;
+  // OPENED = 0;
+  // TODO
+  // $(document).ready(function () {
+  //   $('.word').each(word_each_do_text_text);
+  //   $('.mword').each(mword_each_do_text_text);
+  // });
+  // TODO
+  // useEffect(() => {
+  //   // TODO getTextItem from current item?
+  //   const onKeyDown = (e) => keydown_event_do_text_text(e, { textItem, word });
+  //   document.addEventListener('keydown', onKeyDown);
+  //   return () => {
+  //     document.removeEventListener('keydown', onKeyDown);
+  //   };
+  // }, []);
   useUpdateActiveText(textID);
 
   const [activeWord, setActiveWord] = useState<
@@ -167,8 +213,10 @@ export function ReaderPage({
     | ({ newWord: string } & Pick<TextItem, 'TiSeID'>)
     | null
   >(null);
+  // TODO bad pattern
+  const [showAll, setShowAll] = useState<boolean>(false);
   const [showChanged, setShowChanged] = useState<{
-    text: TextsId;
+    text: TextsID;
     mode: 0 | 1;
   } | null>(null);
   const [iFrameURL, setIFrameURL] = useState<string | null>(null);
@@ -242,16 +290,17 @@ export function ReaderPage({
                   title="[Show All] = ON: ALL terms are shown, and all multi-word terms are shown as superscripts before the first word. The superscript indicates the number of words in the multi-word term. 
 [Show All] = OFF: Multi-word terms now hide single words and shorter or overlapping multi-word terms."
                 >
-                  {/* TODO Show All */}
                   Show All&nbsp;
                   <input
                     type="checkbox"
                     id="showallwords"
-                    onClick={(val) =>
-                      showallwordsClick(text.TxID, val, setShowChanged)
-                    }
+                    onClick={({ target: { value } }) => {
+                      // showallwordsClick(text.TxID, val, setShowChanged)
+                      // TODO
+                      setShowAll(value);
+                    }}
                     // TODO
-                    ref={null}
+                    // ref={null}
                   />
                 </span>
                 {/* TODO deprecate */}
@@ -265,7 +314,7 @@ export function ReaderPage({
           </table>
         </>
         <Reader
-          activeId={textID}
+          activeID={textID}
           setActiveWord={setActiveWord}
           activeWord={activeWord}
           setIFrameURL={setIFrameURL}
@@ -281,7 +330,7 @@ export function ReaderPage({
           <AddNewWordPane
             word={activeText}
             existingTerm={'WoID' in activeWord ? activeWord : undefined}
-            langId={text.TxLgID}
+            langID={text.TxLgID}
             onClearActiveWord={() => setActiveWord(null)}
             setIFrameURL={setIFrameURL}
             setTranslateAPIParams={setTranslateAPIParams}
@@ -312,12 +361,15 @@ export function ReaderPage({
 }
 type Modality = 0 | 1 | 2 | 3 | 4 | 5 | 'table' | null;
 
+/**
+ *
+ */
 export function TesterPage({
-  langID: langId,
-  textID: textId,
+  langID: langID,
+  textID: textID,
 }: {
-  textID: TextsId | null;
-  langID: LanguagesId | null;
+  textID: TextsID | null;
+  langID: LanguagesID | null;
 }) {
   const [{ texts, words, languages, textitems }] = useData([
     'texts',
@@ -330,13 +382,13 @@ export function TesterPage({
   const [activeWord, setActiveWord] = useState<string | null>();
   // TODO can be multiple texts?
   const text =
-    textId !== null
-      ? texts.find((text) => text.TxID === textId)
-      : texts.find((text) => text.TxLgID === langId);
+    textID !== null
+      ? texts.find((text) => text.TxID === textID)
+      : texts.find((text) => text.TxLgID === langID);
 
   const [testModality, setTestModality] = useState<Modality>(null);
   const language = languages.find(
-    (val) => val.LgID === (langId ? langId : text.TxLgID)
+    (val) => val.LgID === (langID ? langID : text.TxLgID)
   );
   // TODO might be no text & only specified language?
   if (!text) {
@@ -369,7 +421,8 @@ export function TesterPage({
         defaultSize="20%"
       >
         <>
-          <Header title="" />
+          <Header title={`TEST ▶ ${text.TxTitle} (Due: TODO of TODO)`} />
+
           <p style={{ marginBottom: 0 }}>
             <input
               type="button"
@@ -418,7 +471,7 @@ export function TesterPage({
         {activeWord ? (
           <AddNewWordPane
             word={activeWord}
-            langId={text.TxLgID}
+            langID={text.TxLgID}
             existingTerm={words.find(({ WoText }) => activeWord === WoText)}
             onClearActiveWord={function (): void {
               throw new Error('Function not implemented.');
@@ -443,6 +496,9 @@ export function TesterPage({
   );
 }
 
+/**
+ *
+ */
 export function Tester({ modality }: { modality: Modality }) {
   const [testingWord, setTestingWord] = useState<Word | null>(null);
   const [numCorrect, setNumCorrect] = useState(0);
@@ -511,12 +567,21 @@ export function Tester({ modality }: { modality: Modality }) {
   );
 }
 
+/**
+ *
+ */
 function RunTestForWord({
   word: { WoStatus: WoStatus, WoID, WoText: WoText },
   language,
+  setTranslateAPIParams,
+  setIFrameURL,
 }: {
   word: Word;
   language: Language;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
+  setIFrameURL: (url: string | null) => void;
 }) {
   return (
     <>
@@ -533,7 +598,7 @@ function RunTestForWord({
           <>
             {/* TODO values here */}
             <MakeOverlibLinkChangeStatusTest
-              WoID={0}
+              WoID={WoID}
               plusminus={'plus'}
               text={''}
             />
@@ -550,7 +615,7 @@ function RunTestForWord({
             />
             {/* TODO values here */}
             <MakeOverlibLinkChangeStatusTest
-              WoID={0}
+              WoID={WoID}
               plusminus={'plus'}
               text={''}
             />
@@ -569,7 +634,7 @@ function RunTestForWord({
             <b>
               {' '}
               <MakeOverlibLinkChangeStatusAlltest
-                WoID={WoID}
+                word={{ WoID }}
                 oldstat={WoStatus}
               />
             </b>
@@ -675,6 +740,9 @@ function escape_apostrophes(s: string) {
   return s.replace(/'/g, "\\'");
 }
 
+/**
+ *
+ */
 function AudioPlayer({ audioURI }: { audioURI: string }) {
   // TODO
   return <></>;
@@ -824,6 +892,9 @@ function AudioPlayer({ audioURI }: { audioURI: string }) {
 //   }
 //   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
 // }
+/**
+ *
+ */
 export function TesterTable({
   language,
   words: words,
@@ -875,7 +946,7 @@ export function TesterTable({
       </p>
 
       <table
-        class="sortable tab1"
+        className="sortable tab1"
         style={{ width: 'auto' }}
         cellspacing="0"
         cellpadding="5"
@@ -907,7 +978,7 @@ export function TesterTable({
           <tr>
             <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
               <a
-                href="edit_tword.php?wid=<?php echo record['WoID']; ?>"
+                href="edit_tword?wid=<?php echo record['WoID']; ?>"
                 target="ro"
               >
                 <Icon src="sticky-note--pencil" title="Edit Term" />
@@ -955,7 +1026,13 @@ export function TesterTable({
     </>
   );
 }
-function make_status_controls_test_table(score, status, wordid) {
+/**
+ *
+ * @param score
+ * @param status
+ * @param wordid
+ */
+function MakeStatusControlsTestTable(score, status, wordid) {
   if (score < 0) score = '<span class="red2">';
   // . get_status_abbr(status) .
   //  '</span>';
@@ -966,8 +1043,8 @@ function make_status_controls_test_table(score, status, wordid) {
       {status === 98 ? (
         <></>
       ) : status >= 1 ? (
-        <img
-          src="icn/minus.png"
+        <Icon
+          src="minus"
           className="click"
           title="-"
           alt="-"
@@ -987,12 +1064,12 @@ function make_status_controls_test_table(score, status, wordid) {
         <>
           {' '}
           {status <= 5 || status === 98 ? (
-            <img
-              src="icn/plus.png"
+            <Icon
+              src="plus"
               className="click"
               title="+"
               alt="+"
-              onclick="changeTableTestStatus(' . wordid . ',true);"
+              onClick="changeTableTestStatus(' . wordid . ',true);"
             />
           ) : (
             <Icon src="placeholder" title="" />
@@ -1009,4 +1086,435 @@ function make_status_controls_test_table(score, status, wordid) {
   // pagestart_nobody('', 'html, body { margin:3px; padding:0; }');
   /* <p class="center">&nbsp;<br />Sorry - No terms to display or to test at this time.</p> */
   // '<p>Sorry - The selected terms are in ' . cntlang . ' languages, but tests are only possible in one language at a time.</p>
+}
+
+/**
+ *
+ */
+export function word_dblclick_event_do_text_text({
+  totalcharcount,
+  data_pos,
+  setPos,
+}: {
+  totalcharcount: number;
+  data_pos: number;
+  setPos: (val: number) => void;
+}) {
+  const t = totalcharcount;
+  if (t === 0) {
+    return;
+  }
+  const p = Math.max(0, (100 * (data_pos - 5)) / t);
+  // TODO
+  setPos(p);
+}
+
+// function annotation_to_json($ann) {
+//   if ($ann === '') return '{}';
+//   $arr = array();
+//   $items = preg_split('/[\n]/u', $ann);
+//   $arr = $items.map(($item) => {
+//     $vals = preg_split('/[\t]/u', $item);
+//     if (count($vals) > 3 && $vals[0] >= 0 && $vals[2] > 0) {
+//       $arr[$vals[0] - 1] = array($vals[1], $vals[2], $vals[3]);
+//     }
+//   });
+//   return json_encode($arr);
+// }
+
+/**
+ *
+ * @param i
+ * @param word
+ * @param annArray
+ * @param setTitle
+ */
+export function word_each_do_text_text(
+  word: Pick<
+    Word,
+    'WoText' | 'WoTranslation' | 'WoRomanization' | 'WoStatus'
+  > & { WoID?: Word['WoID'] },
+  { TiOrder: TiOrder }: Pick<TextItem, 'TiOrder'>,
+  annArray: string[],
+  setTitle: (val: string) => void
+) {
+  setTitle(makeTooltipTitleString(makeTooltipTitleObj(word)));
+  const wid = word.WoID;
+  if (wid !== undefined) {
+    const order = TiOrder;
+    if (order in annArray) {
+      if (wid === annArray[order][1]) {
+        $(this).attr('data_ann', annArray[order][2]);
+      }
+    }
+  }
+}
+
+/**
+ *
+ * @param i
+ * @param word
+ * @param annArray
+ * @param setDataAnn
+ * @param setTitle
+ */
+export function MWordEachDoTextText(
+  i,
+  { TiOrder: TiOrder }: Pick<TextItem, 'TiOrder'>,
+  word: Pick<Word, 'WoText' | 'WoRomanization' | 'WoTranslation'> &
+    Partial<Pick<Word, 'WoStatus' | 'WoID'>>,
+  annArray: string[],
+  setDataAnn: (val: string) => void,
+  setTitle: (val: string) => void
+) {
+  word.WoStatus;
+  if (word.WoStatus !== undefined) {
+    setTitle(makeTooltipTitleString(makeTooltipTitleObj(word)));
+    const wid = word.WoID;
+    if (wid !== undefined) {
+      const order = TiOrder;
+      for (let j = 2; j <= 16; j = j + 2) {
+        const index = (order + j).toString();
+        if (index in annArray) {
+          if (wid === annArray[index][1]) {
+            setDataAnn(annArray[index][2]);
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+/**
+ *
+ */
+export function WordClickEventDoTextText({
+  word: { WoStatus: data_status, WoID: wid },
+  language: { LgRightToLeft: RTL, ...lang },
+  textItem: { TiOrder },
+  data_ann,
+  mw,
+  TxID,
+}: {
+  word: Pick<Word, 'WoStatus' | 'WoID'>;
+  language: LanguageDictionaryDataTempHack & Pick<Language, 'LgRightToLeft'>;
+  textItem: Pick<TextItem, 'TiOrder'>;
+  TxID: TextsID;
+  data_ann?: string;
+  mw: [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ];
+}) {
+  const status = data_status;
+  let ann = '';
+  if (data_ann !== undefined) {
+    ann = data_ann;
+  }
+
+  if (status < 1) {
+    RunOverlibStatusUnknown({
+      lang,
+      hints: $(this).attr('title'),
+      TxID,
+      TiOrder,
+      txt: $(this).text(),
+      mw29: mw.slice(2, 9),
+      rtl: RTL,
+    });
+    top.frames['ro'].location.href =
+      'edit_word?tid=' + TxID + '&ord=' + TiOrder + '&wid=';
+  } else if (status === 99)
+    RunOverlibStatus99({
+      lang,
+      hints: $(this).attr('title'),
+      TxID,
+      TiOrder,
+      txt: $(this).text(),
+      WoID: wid,
+      mw29: mw.slice(2, 9),
+      rtl: RTL,
+      ann,
+    });
+  else if (status === 98)
+    RunOverlibStatus98({
+      lang,
+      hints: $(this).attr('title'),
+      TxID,
+      TiOrder,
+      txt: $(this).text(),
+      WoID: wid,
+      mw29: mw.slice(2, 9),
+      rtl: RTL,
+      ann,
+    });
+  else
+    RunOverlibStatus1To5({
+      lang,
+      hints: $(this).attr('title'),
+      TxID,
+      TiOrder,
+      txt: $(this).text(),
+      WoID: wid,
+      stat: status,
+      mw29: mw.slice(2, 9),
+      rtl: RTL,
+      ann,
+    });
+  return false;
+}
+/**
+ *
+ */
+export function MwordClickEventDoTextText({
+  word: { WoStatus: data_status, WoID: data_wid },
+  language: lang,
+  textItem: { TiOrder: TiOrder, TiText: data_text, TiWordCount: data_code },
+  data_ann,
+  mw,
+  TxID,
+}: {
+  word: Pick<Word, 'WoStatus' | 'WoID'>;
+  language: LanguageDictionaryData;
+  textItem: Pick<TextItem, 'TiOrder' | 'TiText' | 'TiWordCount'>;
+  TxID: TextsID;
+  data_ann?: string;
+  mw: [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ];
+}) {
+  const status = data_status;
+  if (status !== undefined) {
+    const ann = data_ann !== undefined ? data_ann : '';
+    RunOverlibMultiword({
+      lang,
+      hints: $(this).attr('title'),
+      TxID,
+      TiOrder,
+      txt: data_text,
+      WoID: data_wid,
+      stat: status,
+      wcnt: data_code,
+      ann,
+    });
+  }
+  return false;
+}
+/**
+ *
+ * @param e
+ */
+export function KeydownEventDoTextText(
+  e: KeyboardEvent,
+  {
+    text: { TxID },
+    textItem: { TiOrder: TiOrder },
+    word: { WoID },
+  }: {
+    text: Pick<Text, 'TxID'>;
+    textItem: Pick<TextItem, 'TiOrder'>;
+    word: Pick<Word, 'WoID'>;
+  }
+) {
+  if (e.key === 'Escape') {
+    // esc = reset all
+    TEXTPOS = -1;
+    $('span.uwordmarked').removeClass('uwordmarked');
+    $('span.kwordmarked').removeClass('kwordmarked');
+    cClick();
+    return false;
+  }
+
+  if (e.key === 'Return') {
+    // return = edit next unknown word
+    $('span.uwordmarked').removeClass('uwordmarked');
+    const unknownwordlist = $('span.status0.word:not(.hide):first');
+    if (unknownwordlist.size() === 0) return false;
+    $(window).scrollTo(unknownwordlist, { axis: 'y', offset: -150 });
+    unknownwordlist.addClass('uwordmarked').click();
+    cClick();
+    return false;
+  }
+
+  const knownwordlist = $(
+    'span.word:not(.hide):not(.status0)' +
+      ADDFILTER +
+      ',span.mword:not(.hide)' +
+      ADDFILTER
+  );
+  const l_knownwordlist = knownwordlist.size();
+  // console.log(knownwordlist);
+  if (l_knownwordlist === 0) return true;
+
+  // the following only for a non-zero known words list
+  if (e.which === 36) {
+    // home : known word navigation -> first
+    $('span.kwordmarked').removeClass('kwordmarked');
+    TEXTPOS = 0;
+    curr = knownwordlist.eq(TEXTPOS);
+    curr.addClass('kwordmarked');
+    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    let ann = '';
+    if (typeof curr.attr('data_ann') !== 'undefined')
+      ann = curr.attr('data_ann');
+    window.parent.frames['ro'].location.href =
+      'show_word?wid=' +
+      curr.attr('data_wid') +
+      '&ann=' +
+      encodeURIComponent(ann);
+    return false;
+  }
+  if (e.which === 35) {
+    // end : known word navigation -> last
+    $('span.kwordmarked').removeClass('kwordmarked');
+    TEXTPOS = l_knownwordlist - 1;
+    curr = knownwordlist.eq(TEXTPOS);
+    curr.addClass('kwordmarked');
+    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    let ann = '';
+    if (typeof curr.attr('data_ann') !== 'undefined')
+      ann = curr.attr('data_ann');
+    window.parent.frames['ro'].location.href =
+      'show_word?wid=' +
+      curr.attr('data_wid') +
+      '&ann=' +
+      encodeURIComponent(ann);
+    return false;
+  }
+  if (e.which === 37) {
+    // left : known word navigation
+    const marked = $('span.kwordmarked');
+    const currid =
+      marked.length === 0 ? 100000000 : get_position_from_id(marked.attr('id'));
+    $('span.kwordmarked').removeClass('kwordmarked');
+    // console.log(currid);
+    TEXTPOS = l_knownwordlist - 1;
+    for (let i = l_knownwordlist - 1; i >= 0; i--) {
+      const iid = get_position_from_id(knownwordlist.eq(i).attr('id'));
+      // console.log(iid);
+      if (iid < currid) {
+        TEXTPOS = i;
+        break;
+      }
+    }
+    // TEXTPOS--;
+    // if (TEXTPOS < 0) TEXTPOS = l_knownwordlist - 1;
+    curr = knownwordlist.eq(TEXTPOS);
+    curr.addClass('kwordmarked');
+    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    let ann = '';
+    if (typeof curr.attr('data_ann') !== 'undefined')
+      ann = curr.attr('data_ann');
+    window.parent.frames['ro'].location.href =
+      'show_word?wid=' +
+      curr.attr('data_wid') +
+      '&ann=' +
+      encodeURIComponent(ann);
+    return false;
+  }
+  if (e.which === 39 || e.which === 32) {
+    // space /right : known word navigation
+    const marked = $('span.kwordmarked');
+    const currid =
+      marked.length === 0 ? -1 : get_position_from_id(marked.attr('id'));
+    $('span.kwordmarked').removeClass('kwordmarked');
+    // console.log(currid);
+    TEXTPOS = 0;
+    for (let i = 0; i < l_knownwordlist; i++) {
+      const iid = get_position_from_id(knownwordlist.eq(i).attr('id'));
+      // console.log(iid);
+      if (iid > currid) {
+        TEXTPOS = i;
+        break;
+      }
+    }
+    // TEXTPOS++;
+    // if (TEXTPOS >= l_knownwordlist) TEXTPOS = 0;
+    curr = knownwordlist.eq(TEXTPOS);
+    curr.addClass('kwordmarked');
+    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    let ann = '';
+    if (typeof curr.attr('data_ann') !== 'undefined')
+      ann = curr.attr('data_ann');
+    window.parent.frames['ro'].location.href =
+      'show_word?wid=' +
+      curr.attr('data_wid') +
+      '&ann=' +
+      encodeURIComponent(ann);
+    return false;
+  }
+
+  if (TEXTPOS < 0 || TEXTPOS >= l_knownwordlist) return true;
+  let curr = knownwordlist.eq(TEXTPOS);
+  const wid = WoID;
+  const ord = TiOrder;
+
+  // the following only with valid pos.
+  for (let i = 1; i <= 5; i++) {
+    if (e.which === 48 + i || e.which === 96 + i) {
+      // 1,.. : status=i
+      window.parent.frames[
+        'ro'
+      ].location.href = `set_word_status?wid=${wid}&tid=${TxID}&ord=${ord}&status=${i}`;
+      return false;
+    }
+  }
+  if (e.which === 73) {
+    // I : status=98
+    window.parent.frames[
+      'ro'
+    ].location.href = `set_word_status?wid=${wid}&tid=${TxID}&ord=${ord}&status=98`;
+    return false;
+  }
+  if (e.which === 87) {
+    // W : status=99
+    window.parent.frames[
+      'ro'
+    ].location.href = `set_word_status?wid=${wid}&tid=${TxID}&ord=${ord}&status=99`;
+    return false;
+  }
+  if (e.which === 65) {
+    // A : set audio pos.
+    let p = curr.attr('data_pos');
+    const t = parseInt($('#totalcharcount').text(), 10);
+    if (t === 0) return true;
+    p = (100 * (p - 5)) / t;
+    if (p < 0) p = 0;
+    if (typeof window.parent.frames['h'].new_pos === 'function')
+      window.parent.frames['h'].new_pos(p);
+    else return true;
+    return false;
+  }
+  if (e.which === 69) {
+    //  E : EDIT
+    if (curr.has('.mword'))
+      window.parent.frames[
+        'ro'
+      ].location.href = `edit_mword?wi=${wid}&ti=${TxID}&ord=${ord}`;
+    else {
+      window.parent.frames[
+        'ro'
+      ].location.href = `edit_word?wi=${wid}&ti=${TxID}&ord=${ord}`;
+    }
+    return false;
+  }
+
+  return true;
 }

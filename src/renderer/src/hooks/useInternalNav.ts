@@ -5,12 +5,9 @@ type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
 type NonHeaderLinks =
   | ''
-  | 'insert_word_wellknown'
   | 'info_export_template'
-  | 'insert_word_ignore'
   | 'edit_word'
   | 'edit_tword'
-  | 'table_set_management'
   | 'do_test'
   | 'edit_mword'
   | 'new_word'

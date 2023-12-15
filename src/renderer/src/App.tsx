@@ -57,9 +57,10 @@ function NoMatch() {
   return (
     <div>
       <Header title={'404 - Page Not Found'} />
-      <h3 className="red2" style={{ fontSize: 30 }}>
+      <h1>Error!</h1>
+      <h2 className="red3">
         No match for <code>{location.pathname}</code>
-      </h3>
+      </h2>
     </div>
   );
 }
@@ -75,12 +76,18 @@ function NoMatch() {
 //   return <Route path={path} {...args} />;
 // }
 
+/**
+ *
+ */
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
   const style = createColors(styleVariant);
   const StyleHeader = createGlobalStyle(style);
   return <StyleHeader />;
 }
+/**
+ *
+ */
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
   const [{ notificationMessage }] = useData(['notificationMessage']);
@@ -93,7 +100,7 @@ function App(): JSX.Element {
   //   const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
   // (12/12 tables dropped/created, 355 records added), 0 failed.`;
 
-  const routes: { [path in InternalPaths]: () => JSX.Element } = {
+  const routes: { [path in InternalPaths | '*']: () => JSX.Element } = {
     '/': () => <LandingPage />,
     '/index': () => <LandingPage />,
     '/check_text': () => <CheckTextPage />,
@@ -125,8 +132,6 @@ function App(): JSX.Element {
     // delete_word
     // display_impr_text_header
     // display_impr_text_text
-    // edit_archivedtexts
-    // edit_languages
     // // TODO
     // edit_mword
     // edit_tword
@@ -143,8 +148,14 @@ function App(): JSX.Element {
     // show_word
     // simterms.inc
     // start
-    // table_set_management
     // trans
+
+    '/edit_word'(): JSX.Element {
+      throw new Error('Function not implemented.');
+    },
+    '/edit_mword'(): JSX.Element {
+      throw new Error('Function not implemented.');
+    },
     // yells about multiple specs without this cast TODO
     ...(pluginRoutes as object),
     '*': () => <NoMatch />,
@@ -180,6 +191,9 @@ function App(): JSX.Element {
   );
 }
 
+/**
+ *
+ */
 function NotificationMessage({
   notificationMessage,
 }: {

@@ -1,6 +1,6 @@
 import path from 'path';
 import * as sql from 'sqlite';
-import { LanguagesId } from '../renderer/src/data/validators';
+import { LanguagesID } from '../renderer/src/data/validators';
 import {
   PersistedValueEmptyer,
   PersistedValueGetter,
@@ -74,21 +74,21 @@ function insertEntry(entry: object | object[], tableKey: string) {
  *
  * @param lgID
  */
-function countTextsForLanguage(lgID: LanguagesId) {
+function countTextsForLanguage(lgID: LanguagesID) {
   `select count(TxID) as value from ${tbpref}texts where TxLgID=${lgID}`;
 }
 /**
  *
  * @param lgID
  */
-function countArchivedTextsForLanguage(lgID: LanguagesId) {
+function countArchivedTextsForLanguage(lgID: LanguagesID) {
   `select count(AtID) as value from ${tbpref}archivedtexts where AtLgID=${lgID}`;
 }
 /**
  *
  * @param lgID
  */
-function countWordsForLanguage(lgID: LanguagesId) {
+function countWordsForLanguage(lgID: LanguagesID) {
   `select count(WoID) as value from ${tbpref}words where WoLgID=${lgID}`;
 }
 /**

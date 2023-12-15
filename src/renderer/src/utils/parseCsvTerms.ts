@@ -6,10 +6,10 @@ const ColumnType = [
   'Tag List',
   "Don't import",
 ] as const;
-const ColumnId = ['C1', 'C2', 'C3', 'C4', 'C5'] as const;
+const ColumnID = ['C1', 'C2', 'C3', 'C4', 'C5'] as const;
 const overwriteTermsStr = 'Overwrite existent terms: ';
 type ColumnAssignment = {
-  [columnNumber in typeof ColumnId[number]]: typeof ColumnType[number];
+  [columnNumber in (typeof ColumnID)[number]]: (typeof ColumnType)[number];
 };
 /**
  *

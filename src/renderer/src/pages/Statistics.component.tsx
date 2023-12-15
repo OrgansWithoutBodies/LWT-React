@@ -1,4 +1,4 @@
-import { LanguagesId } from '../data/validators';
+import { LanguagesID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
@@ -34,31 +34,31 @@ export function StatisticsComponent(): JSX.Element {
   const emptyLanguageMap = Object.fromEntries(
     languages.map((val) => [val.LgID, 0])
   );
-  const wordsMadeInLast1Days: Record<LanguagesId, number> = getWordsInLastNMS({
+  const wordsMadeInLast1Days: Record<LanguagesID, number> = getWordsInLastNMS({
     words,
     emptyLanguageMap,
     currentTime,
     interval: 1 * ONE_DAY_IN_MS,
   });
-  const wordsMadeInLast2Days: Record<LanguagesId, number> = getWordsInLastNMS({
+  const wordsMadeInLast2Days: Record<LanguagesID, number> = getWordsInLastNMS({
     words,
     emptyLanguageMap,
     currentTime,
     interval: 2 * ONE_DAY_IN_MS,
   });
-  const wordsMadeInLast7Days: Record<LanguagesId, number> = getWordsInLastNMS({
+  const wordsMadeInLast7Days: Record<LanguagesID, number> = getWordsInLastNMS({
     words,
     emptyLanguageMap,
     currentTime,
     interval: 7 * ONE_DAY_IN_MS,
   });
-  const wordsMadeInLast30Days: Record<LanguagesId, number> = getWordsInLastNMS({
+  const wordsMadeInLast30Days: Record<LanguagesID, number> = getWordsInLastNMS({
     words,
     emptyLanguageMap,
     currentTime,
     interval: 30 * ONE_DAY_IN_MS,
   });
-  const wordsMadeInLast365Days: Record<LanguagesId, number> = getWordsInLastNMS(
+  const wordsMadeInLast365Days: Record<LanguagesID, number> = getWordsInLastNMS(
     {
       words,
       emptyLanguageMap,
@@ -66,14 +66,14 @@ export function StatisticsComponent(): JSX.Element {
       interval: 365 * ONE_DAY_IN_MS,
     }
   );
-  const wordsMadeInAllTime: Record<LanguagesId, number> = getWordsInLastNMS({
+  const wordsMadeInAllTime: Record<LanguagesID, number> = getWordsInLastNMS({
     words,
     emptyLanguageMap,
     currentTime,
   });
   //
 
-  const wordsStatusChangedInLast1Days: Record<LanguagesId, number> =
+  const wordsStatusChangedInLast1Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -81,7 +81,7 @@ export function StatisticsComponent(): JSX.Element {
       interval: 1 * ONE_DAY_IN_MS,
       createdKey: 'WoStatusChanged',
     });
-  const wordsStatusChangedInLast2Days: Record<LanguagesId, number> =
+  const wordsStatusChangedInLast2Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -89,7 +89,7 @@ export function StatisticsComponent(): JSX.Element {
       interval: 2 * ONE_DAY_IN_MS,
       createdKey: 'WoStatusChanged',
     });
-  const wordsStatusChangedInLast7Days: Record<LanguagesId, number> =
+  const wordsStatusChangedInLast7Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -97,7 +97,7 @@ export function StatisticsComponent(): JSX.Element {
       interval: 7 * ONE_DAY_IN_MS,
       createdKey: 'WoStatusChanged',
     });
-  const wordsStatusChangedInLast30Days: Record<LanguagesId, number> =
+  const wordsStatusChangedInLast30Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -105,7 +105,7 @@ export function StatisticsComponent(): JSX.Element {
       interval: 30 * ONE_DAY_IN_MS,
       createdKey: 'WoStatusChanged',
     });
-  const wordsStatusChangedInLast365Days: Record<LanguagesId, number> =
+  const wordsStatusChangedInLast365Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -113,7 +113,7 @@ export function StatisticsComponent(): JSX.Element {
       interval: 365 * ONE_DAY_IN_MS,
       createdKey: 'WoStatusChanged',
     });
-  const wordsStatusChangedInAllTime: Record<LanguagesId, number> =
+  const wordsStatusChangedInAllTime: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -122,7 +122,7 @@ export function StatisticsComponent(): JSX.Element {
     });
 
   //
-  const wordsMarkedWellKnownInLast1Days: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInLast1Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -131,7 +131,7 @@ export function StatisticsComponent(): JSX.Element {
       createdKey: 'WoStatusChanged',
       statuses: [5, 99],
     });
-  const wordsMarkedWellKnownInLast2Days: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInLast2Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -140,7 +140,7 @@ export function StatisticsComponent(): JSX.Element {
       createdKey: 'WoStatusChanged',
       statuses: [5, 99],
     });
-  const wordsMarkedWellKnownInLast7Days: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInLast7Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -149,7 +149,7 @@ export function StatisticsComponent(): JSX.Element {
       createdKey: 'WoStatusChanged',
       statuses: [5, 99],
     });
-  const wordsMarkedWellKnownInLast30Days: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInLast30Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -158,7 +158,7 @@ export function StatisticsComponent(): JSX.Element {
       createdKey: 'WoStatusChanged',
       statuses: [5, 99],
     });
-  const wordsMarkedWellKnownInLast365Days: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInLast365Days: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -167,7 +167,7 @@ export function StatisticsComponent(): JSX.Element {
       createdKey: 'WoStatusChanged',
       statuses: [5, 99],
     });
-  const wordsMarkedWellKnownInAllTime: Record<LanguagesId, number> =
+  const wordsMarkedWellKnownInAllTime: Record<LanguagesID, number> =
     getWordsInLastNMS({
       words,
       emptyLanguageMap,
@@ -643,8 +643,8 @@ export function getWordsInLastNMS({
   interval?: number | null;
   createdKey?: 'WoCreated' | 'WoStatusChanged';
   statuses?: Word['WoStatus'][] | null;
-  emptyLanguageMap: Record<LanguagesId, number>;
-}): Record<LanguagesId, number> {
+  emptyLanguageMap: Record<LanguagesID, number>;
+}): Record<LanguagesID, number> {
   return words.reduce(
     (prev, curr) => ({
       ...prev,

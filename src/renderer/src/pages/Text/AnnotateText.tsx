@@ -1,4 +1,5 @@
-import { TextsId } from '../../data/validators';
+import { TextsID } from '../../data/validators';
+import { useData } from '../../hooks/useData';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { Header } from '../../ui-kit/Header';
@@ -8,12 +9,16 @@ export function AnnotateText({
   editmode: editmode,
   annplcmnt,
 }: {
-  textID: TextsId;
+  textID: TextsID;
   annplcmnt: number;
   editmode: boolean;
 }) {
   useUpdateActiveText(textID);
-
+  const [{ texts }] = useData(['texts']);
+  const text = texts.find((val) => val.TxID === textID);
+  if (!text) {
+    throw new Error('Invalid Text ID');
+  }
   // const delmode = getreq('del');
   // const delmode = (delmode === '' ? 0 : (delmode+0));
   // const ann = get_first_value("select TxAnnotatedText as value from " . tbpref . "texts where TxID = " . textid);
@@ -24,7 +29,7 @@ export function AnnotateText({
   // }
 
   // if(textid==0) {
-  // 	Header("Location: edit_texts.php");
+  // 	Header("Location: edit_texts");
   // 	xit();
   // }
 
@@ -33,7 +38,7 @@ export function AnnotateText({
   // 			'TxAnnotatedText = ' . ("") . ' where TxID = ' . textid, "");
   // 	const ann_exists = ((get_first_value("select length(TxAnnotatedText) as value from " . tbpref . "texts where TxID = " . textid) + 0) > 0);
   // 	if ( ! ann_exists ) {
-  // 		header("Location: print_text.php?text=" . textid);
+  // 		header("Location: print_text?text=" . textid);
   // 		xit();
   // 	}
   // }
@@ -62,25 +67,36 @@ export function AnnotateText({
   return (
     <div className="noprint">
       <h4>
-        <Header title={'TODO'} />
-        <a href="edit_texts.php" target="_top">
+        <Header
+          title={`ANN.TEXT ▶ ${text.TxTitle}`}
+          TitleDecoration={
+            text.TxSourceURI
+              ? () => (
+                  <a href={`${text.TxSourceURI}`} target="_blank">
+                    <Icon src={'chain'} title="Text Source" />
+                  </a>
+                )
+              : undefined
+          }
+        />
+        <a href="edit_texts" target="_top">
           LWT
         </a>
         &nbsp; | &nbsp; quickMenu(); echo getPreviousAndNextTextLinks(textid,
-        'print_impr_text.php?text=', TRUE, '&nbsp; | &nbsp;'); &nbsp; | &nbsp;
-        <a href="do_text.php?start=' . textid . '" target="_top">
+        'print_impr_text?text=', TRUE, '&nbsp; | &nbsp;'); &nbsp; | &nbsp;
+        <a href="do_text?start=' . textid . '" target="_top">
           <Icon src="book-open-bookmark" title="Read" />
         </a>{' '}
         &nbsp;
-        <a href="do_test.php?text=' . textid . '" target="_top">
+        <a href="do_test?text=' . textid . '" target="_top">
           <Icon src="question-balloon" title="Test" />
         </a>{' '}
         &nbsp;
-        <a href="print_text.php?text=' . textid . '" target="_top">
+        <a href="print_text?text=' . textid . '" target="_top">
           <Icon src="printer" title="Print" />{' '}
         </a>
         &nbsp;
-        <a target="_top" href="edit_texts.php?chg=' . textid . '">
+        <a target="_top" href="edit_texts?chg=' . textid . '">
           <Icon src="document--pencil" title="Edit Text" />
         </a>
       </h4>
@@ -178,7 +194,7 @@ export function AnnotateText({
     </script>
   <?php
     }
-    <div className="noprint"><input type="button" value="Display/Print Mode" onClick="location.href=\'print_impr_text.php?text=' . textid . '\';" /></div>
+    <div className="noprint"><input type="button" value="Display/Print Mode" onClick="location.href=\'print_impr_text?text=' . textid . '\';" /></div>
 
   }
 

@@ -1,4 +1,4 @@
-import { TextsId } from '../data/validators';
+import { TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { Text } from '../utils/parseMySqlDump';
 
@@ -6,12 +6,12 @@ import { Text } from '../utils/parseMySqlDump';
  *
  * @param t
  */
-function iknowall(t: TextsId, onSetAllKnown: (t: TextsId) => void) {
+function iknowall(t: TextsID, onSetAllKnown: (t: TextsID) => void) {
   const answer = confirm('Are you sure?');
   if (answer) {
     onSetAllKnown(t);
   }
-  // top.frames['ro'].location.href = 'all_words_wellknown.php?text=' + t;
+  // top.frames['ro'].location.href = 'all_words_wellknown?text=' + t;
 }
 
 // TODO

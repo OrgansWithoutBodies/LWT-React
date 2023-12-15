@@ -6,13 +6,13 @@ export type TextSize = (typeof textSizes)[number];
 export const TermStrengths = [1, 2, 3, 4, 5, 'WKn', 'Ign'] as const;
 export type TermStrength = (typeof TermStrengths)[number];
 export type TermStrengthOrUnknown = TermStrength | 0;
-type LanguageId = BrandedString<'Language ID'>;
+type LanguageID = BrandedString<'Language ID'>;
 
 type Tag = string;
-type TermId = BrandedString<'Term ID'>;
+type TermID = BrandedString<'Term ID'>;
 export type Term = {
-  id: TermId;
-  langId: LanguageId;
+  id: TermID;
+  langID: LanguageID;
   tags: Tag[];
   romanization?: string;
   sentenceTermIn: string;

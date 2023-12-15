@@ -148,8 +148,8 @@ app.whenReady().then(() => {
   ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) =>
     BackendPlugin!.update(key, dataEntry)
   );
-  ipcMain.handle('backend-plugin-delete', (_, { key, deleteId }) =>
-    BackendPlugin!.delete(key, deleteId)
+  ipcMain.handle('backend-plugin-delete', (_, { key, deleteID }) =>
+    BackendPlugin!.delete(key, deleteID)
   );
   ipcMain.handle('backend-plugin-empty', () => BackendPlugin!.empty());
 

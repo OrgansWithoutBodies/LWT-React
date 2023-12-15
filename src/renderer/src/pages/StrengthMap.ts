@@ -46,8 +46,8 @@ export const StrengthMapNumericalKey: Record<
  *
  * @param status
  */
-export function getStatusName(status: NumericalStrength) {
-  return StrengthMapNumericalKey[status]
+export function getStatusName(status: NumericalStrength | undefined) {
+  return status !== undefined
     ? StrengthMapNumericalKey[status].name
     : 'Unknown';
 }
@@ -55,10 +55,8 @@ export function getStatusName(status: NumericalStrength) {
  *
  * @param status
  */
-export function getStatusAbbr(status: NumericalStrength) {
-  return StrengthMapNumericalKey[status]
-    ? StrengthMapNumericalKey[status].abbr
-    : '?';
+export function getStatusAbbr(status: NumericalStrength | undefined) {
+  return status !== undefined ? StrengthMapNumericalKey[status].abbr : '?';
 }
 // TODO dedupe with STATUSES
 

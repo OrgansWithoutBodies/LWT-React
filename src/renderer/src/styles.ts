@@ -642,5 +642,78 @@ export const createColors = (
     ' .Resizer::before': {
       left: 0,
     },
+
+    /**
+     ***********************************************************
+     * Tagger
+     **************************************************************
+     */
+
+    'ul.tagit': {
+      padding: '1px 5px',
+      overflow: 'auto',
+      marginLeft: 'inherit' /* usually we don't want the regular ul margins. */,
+      marginRight: 'inherit',
+    },
+
+    'ul.tagit li': {
+      display: 'block',
+      float: 'left',
+      margin: '2px 5px 2px 0',
+    },
+    'ul.tagit li.tagit-choice ': {
+      position: 'relative',
+      lineHeight: 'inherit',
+    },
+
+    'ul.tagit li.tagit-choice-read-only': {
+      padding: '.2em .5em .2em .5em',
+    },
+
+    'ul.tagit li.tagit-choice-editable': {
+      padding: '.2em 18px .2em .5em',
+    },
+
+    'ul.tagit li.tagit-new': {
+      padding: '.25em 4px .25em 0',
+    },
+
+    'ul.tagit li.tagit-choice a.tagit-label': {
+      cursor: 'pointer',
+      textDecoration: 'none',
+    },
+
+    'ul.tagit li.tagit-choice .tagit-close': {
+      cursor: 'pointer',
+      position: 'absolute',
+      right: '.1em',
+      top: '50%',
+      marginTop: '-8px',
+    },
+
+    /* used for some custom themes that don't need image icons */
+
+    'ul.tagit li.tagit-choice .tagit-close .text-icon': {
+      display: 'none',
+    },
+
+    'ul.tagit li.tagit-choice input': {
+      display: 'block',
+      float: 'left',
+      margin: '2px 5px 2px 0',
+    },
+
+    'ul.tagit input[type="text"]': {
+      '-moz-box-sizing': 'border-box',
+      '-webkit-box-sizing': 'border-box',
+      boxSizing: 'border-box',
+
+      border: 'none',
+      margin: 0,
+      padding: 0,
+      width: 'inherit',
+      backgroundColor: 'inherit',
+      outline: 'none',
+    },
   };
 };

@@ -1,28 +1,31 @@
 import { useLocation } from 'react-router-dom';
-import { LanguagesId, TextsId } from '../data/validators';
+import { LanguagesID, TextsID } from '../data/validators';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
 import { Icon } from './Icon';
 import { headerValues } from './headerValues';
 
+// TODO Header is the same on all crud ops of a given
 export function Header({
   // TODO deprecate?
   title,
   link = '/',
+  TitleDecoration: TitleDecoration,
   readerProps = undefined,
 }: {
   title: string;
+  TitleDecoration?: () => JSX.Element;
   link?: InternalPaths;
   readerProps?: {
-    prevTextID: TextsId;
-    nextTextID: TextsId;
+    prevTextID: TextsID;
+    nextTextID: TextsID;
 
     prevTextString: string;
     nextTextString: string;
 
-    textID: TextsId;
-    langID: LanguagesId;
+    textID: TextsID;
+    langID: LanguagesID;
   };
 }) {
   const logoSize = 48;
@@ -112,6 +115,7 @@ export function Header({
                   <span className="red">DEBUG</span>
                 </>
               )}
+              {TitleDecoration && <TitleDecoration />}
             </h3>
           </tr>
         </tbody>

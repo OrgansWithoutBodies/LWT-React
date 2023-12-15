@@ -8,6 +8,7 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
+import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
 import { AddNewTextType } from '../../utils/parseMySqlDump';
 import { buildSentences } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
@@ -19,9 +20,9 @@ export default function ImportLongText({
   onSetVerify: (verify: AddNewTextType[]) => void;
 }): JSX.Element {
   // TODO custom eslint hook to make sure in & out are same len? avoid hanging params
-  const [{ languages, activeLanguageId }] = useData([
+  const [{ languages, activeLanguageID }] = useData([
     'languages',
-    'activeLanguageId',
+    'activeLanguageID',
   ]);
   const navigate = useInternalNavigate();
   const validator = ss.object({
@@ -38,7 +39,7 @@ export default function ImportLongText({
   } = useFormInput({ validator });
   return (
     <>
-      <Header title="Import Long Text" />
+      <Header title="Long Text Import" />
       <form>
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
@@ -46,7 +47,7 @@ export default function ImportLongText({
               <td className="td1 right">Language:</td>
               <td className="td1">
                 <LanguageDropdown
-                  defaultValue={activeLanguageId || undefined}
+                  defaultValue={activeLanguageID || undefined}
                   onChange={(val) => dataService.setActiveLanguage(val)}
                   dropdownRef={refMap.TxLgID}
                 />
@@ -168,26 +169,7 @@ export default function ImportLongText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <ul
-                  id="texttags"
-                  // TODO tagit
-                  className="tagit ui-widget ui-widget-content ui-corner-all"
-                >
-                  <li className="tagit-new">
-                    <span
-                      role="status"
-                      aria-live="polite"
-                      className="ui-helper-hidden-accessible"
-                    />
-                    <input
-                      type="text"
-                      maxLength={20}
-                      size={20}
-                      className="ui-widget-content ui-autocomplete-input"
-                      autoComplete="off"
-                    />
-                  </li>
-                </ul>
+                <TextTagsSelectList />
               </td>
             </tr>
             <tr>

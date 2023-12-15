@@ -31,7 +31,7 @@
 
 export function do_ajax_update_media_select() {
   // $('#mediaselect').html('&nbsp; <img src="icn/waiting2.gif" />');
-  // $.post('ajax_update_media_select.php',
+  // $.post('ajax_update_media_select',
   // 	function(data) { $('#mediaselect').html(data); }
   // );
 }

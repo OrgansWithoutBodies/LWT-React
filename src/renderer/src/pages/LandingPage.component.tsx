@@ -21,10 +21,10 @@ export function LandingPage() {
     frontendVersion,
     frontendSource,
   } = useAppContext();
-  const [{ texts, languages, activeLanguageId, activeLanguage, settings }] =
+  const [{ texts, languages, activeLanguageID, activeLanguage, settings }] =
     useData([
       'languages',
-      'activeLanguageId',
+      'activeLanguageID',
       'activeLanguage',
       'settings',
       'texts',
@@ -121,7 +121,7 @@ export function LandingPage() {
                 dataService.setActiveLanguage(val);
               }}
               defaultValue={
-                activeLanguageId !== null ? activeLanguageId : undefined
+                activeLanguageID !== null ? activeLanguageID : undefined
               }
             />
           </div>
@@ -232,18 +232,8 @@ export function LandingPage() {
                   Database
                 </a>
                 {/* TODO server url & type? */}:<i>lwt</i> on
-                <i>{dbBackend}</i> /
-                <span
-                  title="Manage Table Sets"
-                  onClick={() => {
-                    // TODO
-                    // navigate('/table_set_management');
-                  }}
-                  className="click"
-                >
-                  <i>Default</i> Table Set
-                  {/* TODO table set size */}
-                  {/* mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . (dbname) . " and table_name in (" .
+                <i>{dbBackend}</i>
+                {/* mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) as value FROM information_schema.TABLES where table_schema = " . (dbname) . " and table_name in (" .
 	"CONCAT(" . p . ",'archivedtexts')," .
 	"CONCAT(" . p . ",'archtexttags')," .
 	"CONCAT(" . p . ",'languages')," .
@@ -258,9 +248,8 @@ export function LandingPage() {
 	"CONCAT(" . p . ",'wordtags'))");
 if (! isset(mb)) mb = '0.0';
  */}
-                </span>
                 {/* TODO */}
-                / Size: 94.5 MB
+                {/* / Size: 94.5 MB */}
                 <br />
                 <b>Persistence strategy: </b>
                 {PersistanceStrategy[AppVariables.persistMethod]}

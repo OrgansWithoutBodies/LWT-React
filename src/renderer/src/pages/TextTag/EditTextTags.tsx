@@ -1,6 +1,6 @@
 import { TextTagDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
-import { Tags2Id, Tags2Validator } from '../../data/validators';
+import { Tags2ID, Tags2Validator } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
@@ -40,11 +40,11 @@ export function DisplayTextTags({
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(tags2, 'T2ID');
   const pageSize = settings['set-tags-per-page'] || 1;
-  const countTextsPerTag: Record<Tags2Id, number> = texttags.reduce(
+  const countTextsPerTag: Record<Tags2ID, number> = texttags.reduce(
     (prev, curr) => ({ ...prev, [curr.TtT2ID]: prev[curr.TtT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
   );
-  const countArchivedTextsPerTag: Record<Tags2Id, number> = archtexttags.reduce(
+  const countArchivedTextsPerTag: Record<Tags2ID, number> = archtexttags.reduce(
     (prev, curr) => ({ ...prev, [curr.AgT2ID]: prev[curr.AgT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
   );
@@ -60,7 +60,7 @@ export function DisplayTextTags({
   const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
   return (
     <>
-      <Header title="Edit Text Tags" />
+      <Header title="My Text Tags" />
       <p>
         <A href="/edit_texttags?new=1">
           <Icon src="plus-button" title="New" alt="New" /> New Text Tag ...

@@ -1,12 +1,12 @@
-import { TextsId, WordsId } from '../data/validators';
+import { TextsID, WordsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 
 export function GetTagsList({
   EntryID,
   tagKey,
 }:
-  | { EntryID: WordsId | null; tagKey: 'tags' }
-  | { EntryID: TextsId | null; tagKey: 'tags2' }) {
+  | { EntryID: WordsID | null; tagKey: 'tags' }
+  | { EntryID: TextsID | null; tagKey: 'tags2' }) {
   const guardedTagKey = (key: 'tags' | 'tags2'): key is 'tags' =>
     key === 'tags';
   const { instanceKey, idKey } = guardedTagKey(tagKey)

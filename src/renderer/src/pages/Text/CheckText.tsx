@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckTextsValidator, TextsId } from '../../data/validators';
+import { CheckTextsValidator, TextsID } from '../../data/validators';
 import { parseNumMap } from '../../forms/Forms';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -158,7 +158,7 @@ export function CheckTextSentences({
     sArray: textlines,
     wordCount,
     sepsCount,
-  } = splitCheckText({ TxText: s, TxID: -1 as TextsId }, language);
+  } = splitCheckText({ TxText: s, TxID: -1 as TextsID }, language);
   // const sentNumber = 0;
   // TODO
   const anz = 0;

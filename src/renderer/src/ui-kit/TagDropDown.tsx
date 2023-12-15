@@ -1,4 +1,4 @@
-import { Tags2Id, TagsId } from '../data/validators';
+import { Tags2ID, TagsID } from '../data/validators';
 import { PathParams, useUpdateParams } from '../hooks/useInternalNav';
 import { Tag, Tag2 } from '../utils/parseMySqlDump';
 
@@ -13,12 +13,12 @@ export function TagDropDown<TTag extends Tag | Tag2>({
   defaultValue = null,
 }: TTag extends Tag
   ? {
-      defaultValue: TagsId | null;
+      defaultValue: TagsID | null;
       tags: TTag[];
       tagKey: PathParams;
     }
   : {
-      defaultValue: Tags2Id | null;
+      defaultValue: Tags2ID | null;
       tags: TTag[];
       tagKey: PathParams;
     }): JSX.Element {

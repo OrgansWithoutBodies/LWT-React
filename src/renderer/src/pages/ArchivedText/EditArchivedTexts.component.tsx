@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { dataService } from '../../data/data.service';
-import { ArchivedTextId, TagsId } from '../../data/validators';
+import { ArchivedTextID, TagsID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import {
   useInternalNavigate,
@@ -37,8 +37,8 @@ export function EditArchivedTexts({
   query: string;
   currentPage: number;
   tag12: 0 | 1;
-  tag1: TagsId | null;
-  tag2: TagsId | null;
+  tag1: TagsID | null;
+  tag2: TagsID | null;
   sorting?: TextSorting;
 }): JSX.Element {
   const [
@@ -52,7 +52,7 @@ export function EditArchivedTexts({
     'archtexttags',
   ]);
   const pageSize = 15;
-  const textTagLookup: Record<ArchivedTextId, string[]> = buildTextTagLookup(
+  const textTagLookup: Record<ArchivedTextID, string[]> = buildTextTagLookup(
     tags2,
     archtexttags
   );
@@ -73,7 +73,11 @@ export function EditArchivedTexts({
 
   return (
     <>
-      <Header title={`My ${activeLanguage?.LgName || ''} Text Archive`} />
+      <Header
+        title={`My ${
+          activeLanguage ? `${activeLanguage.LgName} ` : ''
+        }Text Archive`}
+      />
       <p>&nbsp;</p>
       <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>

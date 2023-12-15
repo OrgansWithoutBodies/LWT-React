@@ -13,6 +13,13 @@ import {
 } from '../StrengthMap';
 import { LanguageDictionaryData, WordKnownTermLines } from './limitedTypes';
 
+export type LanguageDictionaryDataTempHack = LanguageDictionaryData &
+  Pick<
+    Language,
+    // TODO dont rely on tatoebakey here explicitly
+    'LgTatoebaKey'
+  >;
+
 /**
  *
  */
@@ -24,12 +31,7 @@ export function DictionaryLinks({
   setIFrameURL,
   breakSent,
 }: {
-  lang: LanguageDictionaryData &
-    Pick<
-      Language,
-      // TODO dont rely on tatoebakey here explicitly
-      'LgTatoebaKey'
-    >;
+  lang: LanguageDictionaryDataTempHack;
   sentenceString: string;
   wordString: string;
   setTranslateAPIParams: (
@@ -210,8 +212,12 @@ export function KnownTermLines({
         );
       })}
       <br />
-      {/* TODO onclick */}
-      <A href={`/edit_word?tid=${44}&ord=${55}&wid=${369}`} target="ro">
+      <A
+        // TODO
+        // onClick={() => onEditWord({wid:word.WoID,ord:TODO,tid:TODO})}
+        // href={`/edit_word?tid=${44}&ord=${55}&wid=${word.WoID}`}
+        target="ro"
+      >
         Edit term
       </A>
       <A
@@ -237,15 +243,18 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
       </b>
       <br />
       <A
-        // href={`_`}
+        // TODO
         // onClick={() => dataService.updateTermStrength(w)}
         target="ro"
       >
-        {/* <A href={`/insert_word_wellknown?tid=${44}&ord=${1504}`} target="ro"> */}
         I know this term well
       </A>
       <br />
-      <A href={`/insert_word_ignore?tid=${44}&ord=${1504}`} target="ro">
+      <A
+        // TODO
+        // onClick={() => dataService.updateTermStrength(w)}
+        target="ro"
+      >
         Ignore this term
       </A>
     </>

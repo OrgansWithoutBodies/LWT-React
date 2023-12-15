@@ -6,10 +6,10 @@ import {
   parseNumMap,
   undefinedToBlankMap,
 } from '../forms/Forms';
-import { Language, LanguageNoId, Tag } from '../utils/parseMySqlDump';
+import { Language, LanguageNoID, Tag } from '../utils/parseMySqlDump';
 
-export const languageNoIdPreValidateMap: {
-  [key in keyof LanguageNoId]?: (
+export const languageNoIDPreValidateMap: {
+  [key in keyof LanguageNoID]?: (
     value: string
   ) => number | string | undefined | null;
 } = {
@@ -64,13 +64,13 @@ export const wordPrevalidateMap = {
   WoTranslation: undefinedToBlankMap,
 } as const;
 
-export const wordNoIdPrevalidateMap = {
+export const wordNoIDPrevalidateMap = {
   ...Object.fromEntries(
     Object.entries(wordPrevalidateMap).filter(([val]) => val !== 'WoID')
   ),
   WoCreated: getCurrentTimeAsString,
 };
-export const textNoIdPrevalidateMap = {
+export const textNoIDPrevalidateMap = {
   TxLgID: parseNumMap,
   TxAudioURI: emptyToUndefinedMap,
   TxSourceURI: emptyToUndefinedMap,

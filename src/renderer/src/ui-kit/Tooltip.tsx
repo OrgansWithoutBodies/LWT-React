@@ -89,8 +89,8 @@ function usePopover({
   onOpenChange: setControlledOpen,
 }: PopoverOptions = {}) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
-  const [labelId, setLabelId] = React.useState<string | undefined>();
-  const [descriptionId, setDescriptionId] = React.useState<
+  const [labelID, setLabelID] = React.useState<string | undefined>();
+  const [descriptionID, setDescriptionID] = React.useState<
     string | undefined
   >();
 
@@ -129,19 +129,19 @@ function usePopover({
       ...interactions,
       ...data,
       modal,
-      labelId,
-      descriptionId,
-      setLabelId,
-      setDescriptionId,
+      labelID,
+      descriptionID,
+      setLabelID,
+      setDescriptionID,
     }),
-    [open, setOpen, interactions, data, modal, labelId, descriptionId]
+    [open, setOpen, interactions, data, modal, labelID, descriptionID]
   );
 }
 
 type ContextType =
   | (ReturnType<typeof usePopover> & {
-      setLabelId: React.Dispatch<React.SetStateAction<string | undefined>>;
-      setDescriptionId: React.Dispatch<
+      setLabelID: React.Dispatch<React.SetStateAction<string | undefined>>;
+      setDescriptionID: React.Dispatch<
         React.SetStateAction<string | undefined>
       >;
     })
@@ -254,8 +254,8 @@ export const PopoverContent = React.forwardRef<
               width: 'max-content',
               ...props.style,
             }}
-            aria-labelledby={context.labelId}
-            aria-describedby={context.descriptionId}
+            aria-labelledby={context.labelID}
+            aria-describedby={context.descriptionID}
             {...context.getFloatingProps(props)}
           >
             {props.children}
@@ -270,15 +270,15 @@ export const PopoverHeading = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLProps<HTMLHeadingElement>
 >(({ children, ...props }, ref) => {
-  const { setLabelId } = usePopoverContext();
+  const { setLabelID } = usePopoverContext();
   const id = useId();
 
   // Only sets `aria-labelledby` on the Popover root element
   // if this component is mounted inside it.
   React.useLayoutEffect(() => {
-    setLabelId(id);
-    return () => setLabelId(undefined);
-  }, [id, setLabelId]);
+    setLabelID(id);
+    return () => setLabelID(undefined);
+  }, [id, setLabelID]);
 
   return (
     <h2 {...props} ref={ref} id={id}>
@@ -291,15 +291,15 @@ export const PopoverBody = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLProps<HTMLParagraphElement>
 >(({ children, ...props }, ref) => {
-  const { setDescriptionId: setBodyId } = usePopoverContext();
+  const { setDescriptionID: setBodyID } = usePopoverContext();
   const id = useId();
 
   // Only sets `aria-describedby` on the Popover root element
   // if this component is mounted inside it.
   React.useLayoutEffect(() => {
-    setBodyId(id);
-    return () => setBodyId(undefined);
-  }, [id, setBodyId]);
+    setBodyID(id);
+    return () => setBodyID(undefined);
+  }, [id, setBodyID]);
 
   return (
     <p {...props} ref={ref} id={id}>

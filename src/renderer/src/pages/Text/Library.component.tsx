@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { TextDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { textPrevalidateMap } from '../../data/preValidateMaps';
-import { Tags2Id, TextsId, TextsValidator } from '../../data/validators';
+import { Tags2ID, TextsID, TextsValidator } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import {
@@ -19,6 +19,7 @@ import { SortableHeader } from '../../ui-kit/SortableHeader';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
+import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
 import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
 import { Text } from '../../utils/parseMySqlDump';
@@ -32,10 +33,10 @@ import { TextSorting, buildSortByValue, resetDirty } from '../Sorting';
 import { OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
-  test: (selectedValues: Set<TextsId>) => {
+  test: (selectedValues: Set<TextsID>) => {
     console.log('test');
   },
-  addtag: (selectedValues: Set<TextsId>) => {
+  addtag: (selectedValues: Set<TextsID>) => {
     const answer = window.prompt(
       `*** ${'addTag'} ***\n\n*** ${
         selectedValues.size
@@ -47,19 +48,19 @@ const TextMultiAction = {
 
     dataService.addTagToMultipleTexts(answer, [...selectedValues]);
   },
-  deltag: (selectedValues: Set<TextsId>) => {
+  deltag: (selectedValues: Set<TextsID>) => {
     console.log('deltag');
   },
-  rebuild: (selectedValues: Set<TextsId>) => {
+  rebuild: (selectedValues: Set<TextsID>) => {
     console.log('rebuild');
   },
-  setsent: (selectedValues: Set<TextsId>) => {
+  setsent: (selectedValues: Set<TextsID>) => {
     console.log('setsent');
   },
-  arch: (selectedValues: Set<TextsId>) => {
+  arch: (selectedValues: Set<TextsID>) => {
     console.log('arch');
   },
-  del: (selectedValues: Set<TextsId>) => {
+  del: (selectedValues: Set<TextsID>) => {
     if (confirmDelete()) {
       dataService.deleteMultipleTexts([...selectedValues]);
     }
@@ -71,7 +72,7 @@ export function TextMultiActions({
   onSelectNone,
   selectedValues,
 }: {
-  selectedValues: Set<TextsId>;
+  selectedValues: Set<TextsID>;
   onSelectAll: () => void;
   onSelectNone: () => void;
 }) {
@@ -127,7 +128,7 @@ export function TextMultiActions({
 
 function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
   console.log('TEST123-library-header', sorting);
-  const [{ activeLanguageId }] = useData(['activeLanguageId']);
+  const [{ activeLanguageID }] = useData(['activeLanguageID']);
   return (
     <thead>
       <tr>
@@ -138,7 +139,7 @@ function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
           &&nbsp;Test
         </th>
         <th className="th1 sorttable_nosort">Actions</th>
-        {!activeLanguageId && (
+        {!activeLanguageID && (
           <SortableHeader
             sorting={sorting}
             downSorting={TextSorting['Lang.']}
@@ -213,9 +214,9 @@ function LibraryRow({
   checked: boolean;
   onChange: () => void;
 }): JSX.Element {
-  const [{ languages, activeLanguageId }] = useData([
+  const [{ languages, activeLanguageID }] = useData([
     'languages',
-    'activeLanguageId',
+    'activeLanguageID',
   ]);
   const languageForLine = languages.find((lang) => lang.LgID === text.TxLgID);
   if (!languageForLine) {
@@ -275,7 +276,7 @@ function LibraryRow({
         &nbsp;
       </td>
 
-      {!activeLanguageId && (
+      {!activeLanguageID && (
         <td className="td1 center">{languageForLine.LgName}</td>
       )}
       <td className="td1 center">
@@ -311,8 +312,8 @@ export function Library({
 }: {
   currentPage: number;
   query: string | null;
-  tag2: Tags2Id | null;
-  tag1: Tags2Id | null;
+  tag2: Tags2ID | null;
+  tag1: Tags2ID | null;
   tag12: 0 | 1;
   sorting?: TextSorting;
 }) {
@@ -355,7 +356,7 @@ export function Library({
   return (
     <>
       <Header
-        title={activeLanguage ? `My ${activeLanguage.LgName} Texts` : ''}
+        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
       />
       <p>
         <A href={`/edit_texts?new=${1}`}>
@@ -505,13 +506,14 @@ export function EditTextPane({
   chgID,
   onCheckText,
 }: {
-  chgID: TextsId;
+  chgID: TextsID;
   onCheckText: OnCheckText;
 }) {
-  const [{ texts, tags2, languages }] = useData([
+  const [{ texts, tags2, languages, activeLanguage }] = useData([
     'texts',
     'tags2',
     'languages',
+    'activeLanguage',
   ]);
   const editingText = texts.find(({ TxID }) => TxID === chgID);
   if (!editingText) {
@@ -536,7 +538,9 @@ export function EditTextPane({
   const editTextPrevalidateMap = textPrevalidateMap;
   return (
     <>
-      <Header title="My Texts" />
+      <Header
+        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
+      />
       <h4>
         Edit Text{' '}
         <A target="_blank" href="/info#howtotext">
@@ -628,7 +632,7 @@ export function EditTextPane({
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              <TagDropDown tags={tags2} tagKey={'text'} defaultValue={null} />
+              <TextTagsSelectList />
             </td>
           </tr>
           <tr>
@@ -687,7 +691,7 @@ export function EditTextPane({
     </>
   );
 }
-export function EditText({ chgID }: { chgID: TextsId }) {
+export function EditText({ chgID }: { chgID: TextsID }) {
   const [checkingText, setCheckingText] = useState<null | Text>(null);
   return (
     <>

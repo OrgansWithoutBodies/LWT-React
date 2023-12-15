@@ -1,5 +1,5 @@
 import { dataService } from '../../data/data.service';
-import { LanguagesId } from '../../data/validators';
+import { LanguagesID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
@@ -9,19 +9,19 @@ import { confirmDelete } from '../../utils/utils';
 
 function LanguageLine({
   language,
-  activeLanguageId,
+  activeLanguageID,
   texts,
   terms,
   archivedtexts,
 }: {
   language: Language;
-  activeLanguageId: LanguagesId | null;
+  activeLanguageID: LanguagesID | null;
   texts: Text[];
   terms: Word[];
   archivedtexts: ArchivedText[];
 }): JSX.Element {
   const id = language.LgID;
-  const thisRowActive = activeLanguageId === id;
+  const thisRowActive = activeLanguageID === id;
   const numTextsThisLanguage = texts.filter(
     (text) => text.TxLgID === id
   ).length;
@@ -134,10 +134,10 @@ function LanguageLine({
 }
 
 export function LanguagesPage(): JSX.Element {
-  const [{ languages, activeLanguageId, texts, words, archivedtexts }] =
+  const [{ languages, activeLanguageID, texts, words, archivedtexts }] =
     useData([
       'languages',
-      'activeLanguageId',
+      'activeLanguageID',
       'texts',
       'words',
       'archivedtexts',
@@ -190,7 +190,7 @@ export function LanguagesPage(): JSX.Element {
             archivedtexts={archivedtexts}
             terms={words}
             language={lang}
-            activeLanguageId={activeLanguageId}
+            activeLanguageID={activeLanguageID}
           />
         ))}
       </table>

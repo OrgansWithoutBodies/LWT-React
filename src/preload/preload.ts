@@ -20,12 +20,12 @@ contextBridge.exposeInMainWorld('api', {
         });
       }
     },
-    delete: async (key, deleteId) => {
+    delete: async (key, deleteID) => {
       if (isValidKey(key)) {
-        console.log('TEST123-deleting', deleteId);
+        console.log('TEST123-deleting', deleteID);
         return await ipcRenderer.invoke('backend-plugin-delete', {
           key,
-          deleteId,
+          deleteID,
         });
       }
     },

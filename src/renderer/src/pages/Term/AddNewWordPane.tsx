@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { dataService } from '../../data/data.service';
-import { wordNoIdPrevalidateMap } from '../../data/preValidateMaps';
-import { LanguagesId, WordsId, WordsValidator } from '../../data/validators';
+import { wordNoIDPrevalidateMap } from '../../data/preValidateMaps';
+import { LanguagesID, WordsID, WordsValidator } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
-import { GetTagsList } from '../../ui-kit/GetTagsList';
 import { Icon } from '../../ui-kit/Icon';
 import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
+import { WordTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
 import {
   AddNewWordValidator,
   Sentence,
@@ -21,7 +21,7 @@ import { DictionaryLinks } from './DictionaryLinks';
  */
 export function AddNewWordPane({
   word,
-  langId,
+  langID,
   onClearActiveWord,
   existingTerm = undefined,
   setIFrameURL,
@@ -31,7 +31,7 @@ export function AddNewWordPane({
   // TODO
   // wordInSentence:string
   existingTerm?: Word;
-  langId: LanguagesId;
+  langID: LanguagesID;
   onClearActiveWord: () => void;
   setIFrameURL: (url: string | null) => void;
   setTranslateAPIParams: (
@@ -42,7 +42,7 @@ export function AddNewWordPane({
   const [{ languages }] = useData(['languages']);
 
   // TODO hashmap here avoid lookup
-  const lang = languages.find((lang) => lang.LgID === langId);
+  const lang = languages.find((lang) => lang.LgID === langID);
   const {
     Input: WoInput,
     refMap,
@@ -50,7 +50,7 @@ export function AddNewWordPane({
     onSubmit,
     TextArea,
   } = useFormInput({
-    entry: { WoText: word || '', WoLgID: langId },
+    entry: { WoText: word || '', WoLgID: langID },
     validator,
   });
 
@@ -124,30 +124,7 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <ul
-                  id="termtags"
-                  // TODO tagit
-                  className="tagit ui-widget ui-widget-content ui-corner-all"
-                >
-                  <GetTagsList
-                    EntryID={existingTerm?.WoID || null}
-                    tagKey="tags"
-                  />
-                  <li className="tagit-new">
-                    <span
-                      role="status"
-                      aria-live="polite"
-                      className="ui-helper-hidden-accessible"
-                    />
-                    <WoInput
-                      maxLength={20}
-                      size={20}
-                      className="ui-widget-content ui-autocomplete-input"
-                      autoComplete="off"
-                      entryKey={'WoTags'}
-                    />
-                  </li>
-                </ul>
+                <WordTagsSelectList />
               </td>
             </tr>
             <tr>
@@ -203,7 +180,7 @@ export function AddNewWordPane({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    onSubmit(wordNoIdPrevalidateMap, (value) => {
+                    onSubmit(wordNoIDPrevalidateMap, (value) => {
                       console.log('TEST123-saving word', value);
                       dataService.addTerm(value);
                       // navigator('/edit_words');
@@ -248,11 +225,11 @@ export function AddNewWordPane({
  * This is only called from inside the reader, rly more of a pane than a component
  */
 export function EditWordPane({
-  chgId,
+  chgID,
   setTranslateAPIParams,
   setIFrameURL,
 }: {
-  chgId: WordsId;
+  chgID: WordsID;
   setTranslateAPIParams: (
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
@@ -262,7 +239,7 @@ export function EditWordPane({
   // TODO verify dialog on change
   const validator = WordsValidator;
   const [{ languages, words }] = useData(['languages', 'words']);
-  const word = words.find((val) => val.WoID === chgId);
+  const word = words.find((val) => val.WoID === chgID);
   if (!word) {
     throw new Error('Invalid ChgID!');
   }
@@ -358,29 +335,7 @@ export function EditWordPane({
             )}
             <tr>
               <td className="td1 right">Tags:</td>
-              <td className="td1">
-                <ul
-                  id="termtags"
-                  // TODO tagit
-                  className="tagit ui-widget ui-widget-content ui-corner-all"
-                >
-                  <GetTagsList EntryID={chgId} tagKey="tags" />
-                  <li className="tagit-new">
-                    <span
-                      role="status"
-                      aria-live="polite"
-                      className="ui-helper-hidden-accessible"
-                    />
-                    <WoInput
-                      maxLength={20}
-                      size={20}
-                      className="ui-widget-content ui-autocomplete-input"
-                      autoComplete="off"
-                      entryKey={''}
-                    />
-                  </li>
-                </ul>
-              </td>
+              <WordTagsSelectList />
             </tr>
             <tr>
               <td className="td1 right">Romaniz.:</td>
@@ -432,7 +387,7 @@ export function EditWordPane({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    onSubmit(wordNoIdPrevalidateMap, (value) => {
+                    onSubmit(wordNoIDPrevalidateMap, (value) => {
                       dataService.addTerm(value);
                       // navigator('/edit_words');
                     });

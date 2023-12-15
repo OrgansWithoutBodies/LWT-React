@@ -1,7 +1,5 @@
 // TODO these are activated on class key
 import * as ss from 'superstruct';
-import { useTagIt } from '../../utils/TagIt';
-import { confirmDelete } from '../../utils/utils';
 
 function noShowAfter3Secs() {
   $('#hide3').slideUp();
@@ -28,7 +26,7 @@ function isInt(value: { length: number; charAt: (arg0: any) => number }) {
  *
  * @param s
  */
-function containsCharacterOutsideBasicMultilingualPlane(s: string) {
+export function containsCharacterOutsideBasicMultilingualPlane(s: string) {
   return /[\uD800-\uDFFF]/.test(s);
 }
 
@@ -93,12 +91,12 @@ function check() {
         $(this).val().trim().indexOf('*http://') !== 0 &&
         $(this).val().trim().indexOf('*https://') !== 0 &&
         // TODO api://
-        $(this).val().trim().indexOf('glosbe_api.php') !== 0
+        $(this).val().trim().indexOf('glosbe_api') !== 0
       ) {
         alert(
           'ERROR\n\nField "' +
             $(this).attr('data_info') +
-            '" must start with "http://" or "https://" or "*http://" or "*https://" or "glosbe_api.php" if not empty.'
+            '" must start with "http://" or "https://" or "*http://" or "*https://" or "glosbe_api" if not empty.'
         );
         count++;
       }
@@ -196,7 +194,7 @@ export function changeImprAnnRadio(this: any) {
   $(idwait).html('<img src="icn/waiting2.gif" />');
   const thedata = JSON.stringify($('form').serializeObject());
   $.post(
-    'ajax_save_impr_text.php',
+    'ajax_save_impr_text',
     { id: textid, elem, data: thedata },
     function (d: string) {
       $(idwait).html('<img src="icn/empty.gif" />');
@@ -214,7 +212,7 @@ export function changeImprAnnText(this: any) {
   $(idwait).html('<img src="icn/waiting2.gif" />');
   const thedata = JSON.stringify($('form').serializeObject());
   $.post(
-    'ajax_save_impr_text.php',
+    'ajax_save_impr_text',
     { id: textid, elem, data: thedata },
     function (d: string) {
       $(idwait).html('<img src="icn/empty.gif" />');
@@ -241,46 +239,46 @@ export function textareaKeydown(event: KeyboardEvent) {
   }
 }
 
-$(document).ready(function () {
-  $('.edit_area').editable('inline_edit.php', {
-    type: 'textarea',
-    indicator: '<img src="icn/indicator.gif">',
-    tooltip: 'Click to edit...',
-    submit: 'Save',
-    cancel: 'Cancel',
-    rows: 3,
-    cols: 35,
-  });
-  $('form.validate').submit(check);
-  $('.confirmdelete').click(confirmDelete);
-  $('textarea.textarea-noreturn').keydown(textareaKeydown);
-  const termTags = [] as string[];
-  const textTags = [] as string[];
-  const tagItTermTags = useTagIt({
-    availableTags: termTags,
-    fieldName: 'TermTags[TagList][]',
-    beforeTagAdded: (event, ui) =>
-      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
-  });
-  const tagItTextTags = useTagIt({
-    availableTags: textTags,
-    fieldName: 'TextTags[TagList][]',
-    beforeTagAdded: (event, ui) =>
-      !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
-  });
+// $(document).ready(function () {
+//   $('.edit_area').editable('inline_edit', {
+//     type: 'textarea',
+//     indicator: '<img src="icn/indicator.gif">',
+//     tooltip: 'Click to edit...',
+//     submit: 'Save',
+//     cancel: 'Cancel',
+//     rows: 3,
+//     cols: 35,
+//   });
+//   $('form.validate').submit(check);
+//   $('.confirmdelete').click(confirmDelete);
+//   $('textarea.textarea-noreturn').keydown(textareaKeydown);
+//   const termTags = [] as string[];
+//   const textTags = [] as string[];
+//   const tagItTermTags = useTagIt({
+//     availableTags: termTags.map((value) => ({ value })),
+//     fieldName: 'TermTags[TagList][]',
+//     beforeTagAdded: (event, ui) =>
+//       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
+//   });
+//   const tagItTextTags = useTagIt({
+//     availableTags: textTags.map((value) => ({ value })),
+//     fieldName: 'TextTags[TagList][]',
+//     beforeTagAdded: (event, ui) =>
+//       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
+//   });
 
-  markClick();
-  setTheFocus();
+//   markClick();
+//   setTheFocus();
 
-  window.setTimeout(noShowAfter3Secs, 3000);
-});
+//   window.setTimeout(noShowAfter3Secs, 3000);
+// });
 
 // TODO
 
 export function do_ajax_show_similar_terms() {
   $('#simwords').html('<img src="icn/waiting2.gif" />');
   $.post(
-    'ajax_show_similar_terms.php',
+    'ajax_show_similar_terms',
     { lang: $('#langfield').val(), word: $('#wordfield').val() },
     function (data: any) {
       $('#simwords').html(data);

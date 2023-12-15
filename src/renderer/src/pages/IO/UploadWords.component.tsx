@@ -32,8 +32,7 @@ export function UploadWords() {
   } = useFormInput({ validator });
   return (
     <>
-      {/* TODO */}
-      <Header title="" />
+      <Header title="Import Terms" />
       <form encType="multipart/form-data" className="validate">
         <UlInput entryKey="columns" type="hidden" />
         <table className="tab3" cellSpacing={0} cellPadding={5}>

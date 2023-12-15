@@ -1,7 +1,7 @@
 import { Persistable } from '../../../../shared/Persistable';
 import { dataService } from '../../data/data.service';
 import { languagePreValidateMap } from '../../data/preValidateMaps';
-import { LanguagesId, LanguagesValidator } from '../../data/validators';
+import { LanguagesID, LanguagesValidator } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
@@ -15,7 +15,7 @@ import { check_dupl_lang } from '../../utils/utils';
 import { resetDirty } from '../Sorting';
 import { TextSizeSelect } from './NewLanguage';
 
-export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
+export function EditLanguage({ chgID }: { chgID: LanguagesID }) {
   const [{ languages }] = useData(['languages']);
   const changingLang = languages.find(({ LgID }) => LgID === chgID);
   if (!changingLang) {
@@ -35,7 +35,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
 
   return (
     <>
-      <Header title="TODO" />
+      <Header title="My Languages" />
       <h4>
         Edit Language
         <A target="_blank" href="/info#howtolang">
@@ -235,6 +235,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesId }) {
                 type="button"
                 value="Change"
                 onClick={() => {
+                  // TODO
                   check_dupl_lang();
                   onSubmit(languagePreValidateMap, (value) => {
                     dataService.editLanguage(value);

@@ -1471,9 +1471,9 @@ $('#floatdiv').addFloating( {
                 <br />
                 <ul>
                   <li>
-                    The three Uniform Resource Identifiers (
+                    The three Uniform Resource IDentifiers (
                     <a
-                      href="http://en.wikipedia.org/wiki/Uniform_Resource_Identifier"
+                      href="http://en.wikipedia.org/wiki/Uniform_Resource_IDentifier"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -1496,7 +1496,7 @@ $('#floatdiv').addFloating( {
                     examples. The link to Google Translate is
                     "http://translate.google.com/?ie=UTF-8&sl=..&tl=..&text=###",
                     where the two-character codes after "sl=" andThe three
-                    Uniform Resource Identifiers "tl=" designate the
+                    Uniform Resource IDentifiers "tl=" designate the
                     <a
                       href="http://www.iana.org/assignments/language-subtag-registry"
                       target='_blank"'
@@ -2487,7 +2487,7 @@ $('#floatdiv').addFloating( {
                 <br />
                 <br />
                 Answer: The server is running, but the application is not found.
-                Maybe the Uniform Resource Identifier (URI) is wrong or
+                Maybe the Uniform Resource IDentifier (URI) is wrong or
                 misspelled. Please check/correct it. Or the URI is correct, and
                 the application is installed, but not in the correct directory{' '}
                 <i>lwt</i> below <i>htdocs</i>

@@ -3,7 +3,7 @@ import { Observable, combineLatest, count, map, tap } from 'rxjs';
 import type { ArchivedText, Tag, Tag2, Text } from '../utils/parseMySqlDump';
 import { DataState, DataStore, dataStore } from './data.storage';
 import type { Settings } from './settings';
-import type { LanguagesId } from './validators';
+import type { LanguagesID } from './validators';
 
 // const MINS_IN_SECONDS = 60;
 // const HOURS_IN_MINS = 60;
@@ -116,7 +116,7 @@ export class DataQuery extends Query<DataState> {
   // public wordsLen = this.words.pipe(count());
   // public wordtagsLen = this.wordtags.pipe(count());
 
-  public activeLanguageId = this.settings.pipe(
+  public activeLanguageID = this.settings.pipe(
     map((val) =>
       val.currentlanguage === undefined || val.currentlanguage === null
         ? // semantically null's more meaningful here because null is an explicit state we can set
@@ -127,38 +127,38 @@ export class DataQuery extends Query<DataState> {
 
   // derived observables
   public activeLanguage = combineLatest([
-    this.activeLanguageId,
+    this.activeLanguageID,
     this.languages,
   ]).pipe(
     map(
-      ([activeLanguageId, languages]) =>
+      ([activeLanguageID, languages]) =>
         languages.find((language) => {
           console.log('TATOEBAKEY', language.LgTatoebaKey);
-          return language.LgID === activeLanguageId;
+          return language.LgID === activeLanguageID;
         }) || null
     )
   );
 
-  public activeWords = combineLatest([this.activeLanguageId, this.words]).pipe(
-    map(([activeLanguageId, words]) =>
+  public activeWords = combineLatest([this.activeLanguageID, this.words]).pipe(
+    map(([activeLanguageID, words]) =>
       words.filter((word) => {
-        console.log(word.WoLgID, activeLanguageId);
-        return word.WoLgID === activeLanguageId;
+        console.log(word.WoLgID, activeLanguageID);
+        return word.WoLgID === activeLanguageID;
       })
     )
   );
 
   public textsForActiveLanguage = combineLatest([
     this.texts,
-    this.activeLanguageId,
+    this.activeLanguageID,
   ]).pipe(
-    map(([texts, activeLanguageId]) => {
+    map(([texts, activeLanguageID]) => {
       console.log('QUERY', { texts });
 
-      if (activeLanguageId === null) {
+      if (activeLanguageID === null) {
         return texts;
       }
-      return texts.filter((text) => text.TxLgID === activeLanguageId);
+      return texts.filter((text) => text.TxLgID === activeLanguageID);
     })
   );
 
@@ -226,7 +226,7 @@ export class DataQuery extends Query<DataState> {
           )
         );
         const statisticMap: Record<
-          LanguagesId,
+          LanguagesID,
           Record<1 | 2 | 3 | 4 | 5 | 15 | 14 | 99 | 599 | 98 | 'total', number>
         > = statisticMapEntries;
         return statisticMap;

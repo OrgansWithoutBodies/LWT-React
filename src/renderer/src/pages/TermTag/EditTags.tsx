@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { WordTagDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { tagPreValidateMap } from '../../data/preValidateMaps';
-import { TagsId, TagsValidator } from '../../data/validators';
+import { TagsID, TagsValidator } from '../../data/validators';
 import { RefMap } from '../../forms/Forms';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -46,7 +46,7 @@ export function DisplayTags({
   const navigate = useInternalNavigate();
   console.log('TEST123-sorting', sorting, tags);
   const recno = tags.length;
-  const countPerTag: Record<TagsId, number> = wordtags.reduce(
+  const countPerTag: Record<TagsID, number> = wordtags.reduce(
     (prev, curr) => ({ ...prev, [curr.WtTgID]: prev[curr.WtTgID] + 1 }),
     Object.fromEntries(tags.map((val) => [val.TgID, 0]))
   );
@@ -62,7 +62,7 @@ export function DisplayTags({
   const queryRef = useRef<HTMLInputElement>(null);
   return (
     <>
-      <Header title="Word Tags" />
+      <Header title="My Term Tags" />
       <p>
         <A href="/edit_tags?new=1">
           <Icon src="plus-button" title="New" /> New Term Tag ...
@@ -386,9 +386,9 @@ export function NewTag() {
   );
 }
 
-export function EditTag({ chgId }: { chgId: TagsId }) {
+export function EditTag({ chgID }: { chgID: TagsID }) {
   const [{ tags }] = useData(['tags']);
-  const changingTag = tags.find(({ TgID }) => TgID === chgId);
+  const changingTag = tags.find(({ TgID }) => TgID === chgID);
   if (!changingTag) {
     throw new Error('Invalid Tag ID');
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { LanguagesId } from '../data/validators';
+import { LanguagesID } from '../data/validators';
 import { useData } from '../hooks/useData';
 
 export function LanguageDropdown({
@@ -11,8 +11,8 @@ export function LanguageDropdown({
 }: {
   header?: string;
   name?: string;
-  defaultValue?: LanguagesId;
-  onChange?: (value: LanguagesId) => void;
+  defaultValue?: LanguagesID;
+  onChange?: (value: LanguagesID) => void;
   dropdownRef?: React.MutableRefObject<any>;
 }): JSX.Element {
   const [{ languages }] = useData(['languages']);

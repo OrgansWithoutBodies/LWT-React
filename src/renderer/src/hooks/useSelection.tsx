@@ -7,10 +7,10 @@ import { useState } from 'react';
  */
 export function useSelection<TData extends object, TKey extends keyof TData>(
   data: TData[],
-  key: TKey,
+  key: TKey
 ) {
   const [selectedValues, setSelectedValues] = useState<Set<TData[TKey]>>(
-    new Set(),
+    new Set()
   );
   const onSelect = (val: TData, selecting: boolean) => {
     if (selecting) {
@@ -26,7 +26,7 @@ export function useSelection<TData extends object, TKey extends keyof TData>(
       const isChecked = selectedValues.has(val[key]);
       return { onChange: () => onSelect(val, !isChecked), checked: isChecked };
     },
-    // onSelectId:(id:[TKey])=>{
+    // onSelectID:(id:[TKey])=>{
     //   const isSelected = selectedValues.has(id);
 
     // },

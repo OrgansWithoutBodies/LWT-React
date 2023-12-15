@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { dataService } from '../../data/data.service';
-import { textNoIdPrevalidateMap } from '../../data/preValidateMaps';
+import { textNoIDPrevalidateMap } from '../../data/preValidateMaps';
 import { ResetForm } from '../../forms/Forms';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -8,6 +8,7 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
+import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
 import { AddNewTextValidator } from '../../utils/parseMySqlDump';
 import { do_ajax_update_media_select } from '../SelectMediaPath';
 import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
@@ -44,7 +45,7 @@ export function ImportShortText({
   return (
     <>
       <Header
-        title={activeLanguage ? `My ${activeLanguage.LgName} Texts` : ''}
+        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
       />
 
       <p>&nbsp;</p>
@@ -124,27 +125,7 @@ export function ImportShortText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <ul
-                  id="texttags"
-                  // TODO tagit
-
-                  className="tagit ui-widget ui-widget-content ui-corner-all"
-                >
-                  <li className="tagit-new">
-                    <span
-                      role="status"
-                      aria-live="polite"
-                      className="ui-helper-hidden-accessible"
-                    />
-                    <input
-                      type="text"
-                      maxLength={20}
-                      size={20}
-                      className="ui-widget-content ui-autocomplete-input"
-                      autoComplete="off"
-                    />
-                  </li>
-                </ul>
+                <TextTagsSelectList />
               </td>
             </tr>
             <tr>
@@ -187,7 +168,7 @@ export function ImportShortText({
                   type="button"
                   value="Check"
                   onClick={() => {
-                    onSubmit(textNoIdPrevalidateMap, (value) => {
+                    onSubmit(textNoIDPrevalidateMap, (value) => {
                       onCheckText(value);
                     });
                   }}
@@ -196,10 +177,10 @@ export function ImportShortText({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    onSubmit(textNoIdPrevalidateMap, (value) => {
-                      const textId = dataService.addText(value);
-                      if (textId !== null) {
-                        dataService.reparseText(textId);
+                    onSubmit(textNoIDPrevalidateMap, (value) => {
+                      const textID = dataService.addText(value);
+                      if (textID !== null) {
+                        dataService.reparseText(textID);
                         navigator('/edit_texts');
                       }
                       // todo something if null?
@@ -211,11 +192,11 @@ export function ImportShortText({
                   name="op"
                   value="Save and Open"
                   onClick={() => {
-                    onSubmit(textNoIdPrevalidateMap, (value) => {
-                      const textId = dataService.addText(value);
-                      if (textId !== null) {
-                        dataService.reparseText(textId);
-                        navigator(`/do_text?start=${textId}`);
+                    onSubmit(textNoIDPrevalidateMap, (value) => {
+                      const textID = dataService.addText(value);
+                      if (textID !== null) {
+                        dataService.reparseText(textID);
+                        navigator(`/do_text?start=${textID}`);
                       }
                     });
                   }}

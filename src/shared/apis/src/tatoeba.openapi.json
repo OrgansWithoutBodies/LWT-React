@@ -25,7 +25,7 @@
         "tags": ["Audio"],
         "summary": "Get an audio file",
         "description": "Download an audio recording of a sentence.",
-        "operationId": "6aede2bb75cb021d1b2ca89c47817d48",
+        "operationID": "6aede2bb75cb021d1b2ca89c47817d48",
         "responses": {
           "200": {
             "description": "Success."
@@ -55,7 +55,7 @@
         "tags": ["Sentences"],
         "summary": "Get a sentence",
         "description": "Get sentence text as well as metadata about this sentence and related sentences.",
-        "operationId": "33a2db5ccb628358074a151063ca18b7",
+        "operationID": "33a2db5ccb628358074a151063ca18b7",
         "responses": {
           "200": {
             "description": "Success."
@@ -85,7 +85,7 @@
         "tags": ["Sentences"],
         "summary": "Search sentences",
         "description": "Search sentences in the Tatoeba corpus.",
-        "operationId": "f233954e6e3217239f65cee426ba9038",
+        "operationID": "f233954e6e3217239f65cee426ba9038",
         "responses": {
           "200": {
             "description": "Success."
@@ -156,7 +156,7 @@
         "tags": ["Users"],
         "summary": "Get a user",
         "description": "Get information about a member of Tatoeba.",
-        "operationId": "f7d9d4e39558b6de60724081b3a0253c",
+        "operationID": "f7d9d4e39558b6de60724081b3a0253c",
         "responses": {
           "200": {
             "description": "Success."

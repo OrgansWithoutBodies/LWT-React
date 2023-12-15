@@ -1,4 +1,4 @@
-import { Tags2Id, TagsId, TextsId, WordsId } from '../data/validators';
+import { Tags2ID, TagsID, TextsID, WordsID } from '../data/validators';
 import { TextTag, WordTag } from './parseMySqlDump';
 
 const isWordTag = (tag: WordTag[] | TextTag[]): tag is WordTag[] =>
@@ -16,14 +16,14 @@ const isWordTag = (tag: WordTag[] | TextTag[]): tag is WordTag[] =>
  * @param tag12
  */
 export function filterTags<
-  TTag extends TagsId | Tags2Id,
-  TRecord extends TTag extends TagsId
-    ? Record<WordsId, true | 'partial'>
-    : Record<TextsId, true | 'partial'> = TTag extends TagsId
-    ? Record<WordsId, true | 'partial'>
-    : Record<TextsId, true | 'partial'>
+  TTag extends TagsID | Tags2ID,
+  TRecord extends TTag extends TagsID
+    ? Record<WordsID, true | 'partial'>
+    : Record<TextsID, true | 'partial'> = TTag extends TagsID
+    ? Record<WordsID, true | 'partial'>
+    : Record<TextsID, true | 'partial'>
 >(
-  tagIDs: TTag extends TagsId ? WordTag[] : TextTag[],
+  tagIDs: TTag extends TagsID ? WordTag[] : TextTag[],
   tag1: TTag | null,
   tag2: TTag | null,
   tag12: 0 | 1

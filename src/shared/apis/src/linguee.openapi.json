@@ -10,7 +10,7 @@
       "get": {
         "summary": "Translations",
         "description": "Translate the query between src and dst language.\n\nThe response contains the list of lemma objects matching the query in the source\nlanguage. Each of these lemmas is annotated with one or multiple translations\nand optional examples.",
-        "operationId": "translations_api_v2_translations_get",
+        "operationID": "translations_api_v2_translations_get",
         "parameters": [
           {
             "required": true,
@@ -148,7 +148,7 @@
       "get": {
         "summary": "Examples",
         "description": "Provide translation examples.",
-        "operationId": "examples_api_v2_examples_get",
+        "operationID": "examples_api_v2_examples_get",
         "parameters": [
           {
             "required": true,
@@ -286,7 +286,7 @@
       "get": {
         "summary": "External Sources",
         "description": "Provide translation examples from external (unverified) sources.",
-        "operationId": "external_sources_api_v2_external_sources_get",
+        "operationID": "external_sources_api_v2_external_sources_get",
         "parameters": [
           {
             "required": true,
@@ -424,7 +424,7 @@
       "get": {
         "summary": "Autocompletions",
         "description": "Provide translation examples from external (unverified) sources.",
-        "operationId": "autocompletions_api_v2_autocompletions_get",
+        "operationID": "autocompletions_api_v2_autocompletions_get",
         "parameters": [
           {
             "required": true,

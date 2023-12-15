@@ -1,4 +1,4 @@
-import { TextsId } from '../../data/validators';
+import { TextsID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useUpdateParams } from '../../hooks/useInternalNav';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
@@ -19,7 +19,7 @@ export function PrintText({
   status,
   annplcmnt,
 }: {
-  textID: TextsId;
+  textID: TextsID;
   ann: number;
   status: number;
   annplcmnt: AnnPlcmnt;
@@ -159,7 +159,7 @@ export function PrintText({
   );
 }
 
-export function GetAnnotationLink({ textID }: { textID: TextsId }) {
+export function GetAnnotationLink({ textID }: { textID: TextsID }) {
   if (
     // TODO
     // get_first_value('select length(TxAnnotatedText) as value from ' . tbpref . 'texts where TxID=' . textID)
@@ -234,7 +234,7 @@ export function GetWordstatusSelectoptions({
 // function do_ajax_edit_impr_text(pagepos, word) {
 // 	if (word=='') $('#editimprtextdata').html('<img src="icn/waiting2.gif" />');
 // 	var textid = $('#editimprtextdata').attr('data_id');
-// 	$.post('ajax_edit_impr_text.php', { id: textid, word: word },
+// 	$.post('ajax_edit_impr_text', { id: textid, word: word },
 // 		function(data) {
 // 			// alert(data);
 // 			eval(data);
@@ -287,10 +287,10 @@ export function GetWordstatusSelectoptions({
 // 	$i++;
 // 	$vals = preg_split('/[\t]/u', $item);
 // 	if ($vals[0] > -1) {
-// 		if ($nontermbuffer != '') {
+// 		if ($nontermbuffer !== '') {
 // 			$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;">';
 // 			$r .= $nontermbuffer;
-// 			$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text.php?text=' . $textid . '\';" /></td></tr>';
+// 			$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . $textid . '\';" /></td></tr>';
 // 			$nontermbuffer = '';
 // 		}
 // 		$id = '';
@@ -310,14 +310,14 @@ export function GetWordstatusSelectoptions({
 // 		$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;"' .
 // 			($rtlScript ? ' dir="rtl"' : '') . '><span id="term' . $i . '">';
 // 		$r .= tohtml($vals[1]);
-// 		$mustredo = (trim($wordlc) == mb_strtolower(trim($vals[1]), 'UTF-8'));
+// 		$mustredo = (trim($wordlc) === mb_strtolower(trim($vals[1]), 'UTF-8'));
 // 		$r .= '</span></td><td class="td1 center" nowrap="nowrap">';
 // 		$r .= makeDictLinks($langid, prepare_textdata_js($vals[1]));
 // 		$r .= '</td><td class="td1 center"><span id="editlink' . $i . '">';
-// 		if ($id == '') {
+// 		if ($id === '') {
 // 			$plus = '&nbsp;';
 // 		} else {
-// 			$plus = '<a name="rec' . $i . '"></a><span class="click" onclick="oewin(\'edit_word.php?fromAnn=\' + $(document).scrollTop() + \'&amp;wid=' . $id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
+// 			$plus = '<a name="rec' . $i . '"></a><span class="click" onclick="oewin(\'edit_word?fromAnn=\' + $(document).scrollTop() + \'&amp;wid=' . $id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
 // 		}
 // 		if ($mustredo)
 // 			$rr .= "$('#editlink" . $i . "').html(" . prepare_textdata_js($plus) . ");";
@@ -329,15 +329,15 @@ export function GetWordstatusSelectoptions({
 // 		$r .= $plus;
 // 		$r .= '</span></td></tr>';
 // 	} else {
-// 		if (trim($vals[1]) != '') {
+// 		if (trim($vals[1]) !== '') {
 // 			$nontermbuffer .= str_replace("¶", '<img src="icn/new_line.png" title="New Line" alt="New Line" />', tohtml($vals[1]));
 // 		}
 // 	}
 // }
-// if ($nontermbuffer != '') {
+// if ($nontermbuffer !== '') {
 // 	$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;">';
 // 	$r .= $nontermbuffer;
-// 	$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text.php?text=' . $textid . '\';" /></td></tr>';
+// 	$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . $textid . '\';" /></td></tr>';
 // }
 // $r .= '<th class="th1 center">Text</th>';
 // $r .= '<th class="th1 center">Dict.</th>';
@@ -355,7 +355,7 @@ export function GetWordstatusSelectoptions({
 // $r .= '</script>' . "\n";
 // */
 
-// if ($wordlc == '')
+// if ($wordlc === '')
 // 	echo "$('#editimprtextdata').html(" . prepare_textdata_js($r) . ");";
 // else
 // 	echo $rr;
@@ -371,11 +371,11 @@ export function GetWordstatusSelectoptions({
 // 	$textlc = trim(prepare_textdata($_REQUEST["WoTextLC"]));
 // 	$text = trim(prepare_textdata($_REQUEST["WoText"]));
 
-// 	if (mb_strtolower($text, 'UTF-8') == $textlc) {
+// 	if (mb_strtolower($text, 'UTF-8') === $textlc) {
 
 // 		// INSERT
 
-// 		if ($_REQUEST['op'] == 'Save') {
+// 		if ($_REQUEST['op'] === 'Save') {
 
 // 			$titletext = "New Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
 // 			pagestart_nobody($titletext);
@@ -395,10 +395,10 @@ export function GetWordstatusSelectoptions({
 
 // 			$hex = strToClassName(prepare_textdata($_REQUEST["WoTextLC"]));
 
-// 		} // $_REQUEST['op'] == 'Save'
+// 		} // $_REQUEST['op'] === 'Save'
 
 // 		// UPDATE
-// 		else {  // $_REQUEST['op'] != 'Save'
+// 		else {  // $_REQUEST['op'] !== 'Save'
 
 // 			$titletext = "Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
 // 			pagestart_nobody($titletext);
@@ -407,7 +407,7 @@ export function GetWordstatusSelectoptions({
 // 			$oldstatus = $_REQUEST["WoOldStatus"];
 // 			$newstatus = $_REQUEST["WoStatus"];
 // 			$xx = '';
-// 			if ($oldstatus != $newstatus)
+// 			if ($oldstatus !== $newstatus)
 // 				$xx = ', WoStatus = ' . $newstatus . ', WoStatusChanged = NOW()';
 
 // 			$message = runsql('update ' . $tbpref . 'words set WoText = ' .
@@ -417,12 +417,12 @@ export function GetWordstatusSelectoptions({
 // 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
 // 			$wid = $_REQUEST["WoID"];
 
-// 		}  // $_REQUEST['op'] != 'Save'
+// 		}  // $_REQUEST['op'] !== 'Save'
 
 // 		saveWordTags($wid);
 
-// 	} // (mb_strtolower($text, 'UTF-8') == $textlc)
-// 	else { // (mb_strtolower($text, 'UTF-8') != $textlc)
+// 	} // (mb_strtolower($text, 'UTF-8') === $textlc)
+// 	else { // (mb_strtolower($text, 'UTF-8') !== $textlc)
 
 // 		$titletext = "New/Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
 // 		pagestart_nobody($titletext);
@@ -457,7 +457,7 @@ export function GetWordstatusSelectoptions({
 // 			var roman = <?php echo prepare_textdata_js($_REQUEST["WoRomanization"]); ?>;
 // 			var title = make_tooltip(<?php echo prepare_textdata_js($_REQUEST["WoText"]); ?>, trans, roman, status);
 // 			<?php
-// 			if ($_REQUEST['op'] == 'Save') {
+// 			if ($_REQUEST['op'] === 'Save') {
 // 				?>
 // 				$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('word' + woid + ' ' + 'status' + status).attr('data_trans', trans).attr('data_rom', roman).attr('data_status', status).attr('data_wid', woid).attr('title', title);
 // 				<?php

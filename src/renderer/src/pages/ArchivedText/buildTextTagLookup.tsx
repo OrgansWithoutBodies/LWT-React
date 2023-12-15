@@ -1,8 +1,8 @@
 import {
-  ArchivedTextId,
-  Tags2Id,
-  TextsId,
-  WordsId,
+  ArchivedTextID,
+  Tags2ID,
+  TextsID,
+  WordsID,
 } from '../../data/validators';
 import {
   ArchTextTag,
@@ -17,15 +17,15 @@ import {
 export function buildTextTagLookup(
   tags: Tag[],
   archtexttags: WordTag[]
-): Record<WordsId, string[]>;
+): Record<WordsID, string[]>;
 export function buildTextTagLookup(
   tags: Tag2[],
   archtexttags: TextTag[]
-): Record<TextsId, string[]>;
+): Record<TextsID, string[]>;
 export function buildTextTagLookup(
   tags: Tag2[],
   archtexttags: ArchTextTag[]
-): Record<ArchivedTextId, string[]>;
+): Record<ArchivedTextID, string[]>;
 /**
  *
  * @param tags
@@ -35,9 +35,9 @@ export function buildTextTagLookup(
   tags: (Tag2 | Tag)[],
   archtexttags: (ArchTextTag | TextTag | WordTag)[]
 ):
-  | Record<WordsId, string[]>
-  | Record<TextsId, string[]>
-  | Record<ArchivedTextId, string[]> {
+  | Record<WordsID, string[]>
+  | Record<TextsID, string[]>
+  | Record<ArchivedTextID, string[]> {
   if (!tags[0]) {
     return {};
   }
@@ -56,10 +56,10 @@ export function buildTextTagLookup(
       : 'TtT2ID' in archtexttags[0]
       ? 'TtTxID'
       : 'WtWoID';
-  const tagTitleLookup: Record<Tags2Id, string> = Object.fromEntries(
+  const tagTitleLookup: Record<Tags2ID, string> = Object.fromEntries(
     tags.map((tag) => [tag[tagIDKey], tag[tagTextKey]])
   );
-  const textTagLookup: Record<ArchivedTextId, string[]> = archtexttags.reduce(
+  const textTagLookup: Record<ArchivedTextID, string[]> = archtexttags.reduce(
     (prev, curr) => {
       const entryTextID = curr[intermediaryEntryID as keyof typeof curr];
       const tagTextID = curr[intermediaryTagID as keyof typeof curr];
@@ -70,7 +70,7 @@ export function buildTextTagLookup(
       prev[entryTextID] = [tagTitleLookup[tagTextID]];
       return prev;
     },
-    {} as Record<ArchivedTextId, string[]>
+    {} as Record<ArchivedTextID, string[]>
   );
   console.log({ textTagLookup });
   return textTagLookup;
