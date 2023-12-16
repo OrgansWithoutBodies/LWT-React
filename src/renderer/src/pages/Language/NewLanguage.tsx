@@ -50,7 +50,7 @@ export function NewLanguage() {
           <Icon src="question-frame" title="Help" />
         </a>
       </h4>
-      <form className="validate">
+      <form>
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>

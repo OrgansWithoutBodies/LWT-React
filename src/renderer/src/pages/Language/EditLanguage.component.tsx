@@ -42,7 +42,7 @@ export function EditLanguage({ chgID }: { chgID: LanguagesID }) {
           <Icon src="question-frame" title="Help" />
         </A>
       </h4>
-      <form className="validate">
+      <form>
         <LgInput type="hidden" entryKey="LgID" fixed />
         <table className="tab1" cellSpacing={0} cellPadding={5}>
           <tr>

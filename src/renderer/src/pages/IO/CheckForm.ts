@@ -1,17 +1,47 @@
 // TODO these are activated on class key
 import * as ss from 'superstruct';
+import { DictURLValidator, URLValidator } from '../../data/validators';
+import { byteSizeOfString, confirmDelete } from '../../utils/utils';
 
 function noShowAfter3Secs() {
   $('#hide3').slideUp();
 }
 
-/**
- *
- * @param s
- */
-function getUTF8Length(s: any) {
-  return new Blob([String(s)]).size;
-}
+const checkNotEmptyValidator = () =>
+  ss.refine(ss.string(), 'not-blank', (val) => val.trim() !== '');
+const checkPosIntNumberValidator = () =>
+  ss.refine(ss.number(), 'pos-int', (val) => val > 0 && Number.isInteger(val));
+const checkZeroPosIntNumberValidator = () =>
+  ss.refine(
+    ss.number(),
+    'zero-pos-int',
+    (val) => val >= 0 && Number.isInteger(val)
+  );
+const checkOutsideBMPValidator = () =>
+  ss.refine(ss.string(), 'is-inside-bmp', (val) =>
+    containsCharacterOutsideBasicMultilingualPlane(val)
+  );
+const checkBytesValidator = <TSize extends number>(size: TSize) =>
+  ss.refine(
+    ss.string(),
+    `string-size-within-${size}-bytes`,
+    (val) => byteSizeOfString(val) <= size
+  );
+const checkStringLengthValidator = <TSize extends number>(size: TSize) =>
+  ss.refine(
+    ss.string(),
+    `string-size-within-${size}-chars`,
+    (val) => val.length <= size
+  );
+const checkNoBlanksNoCommaValidator = () =>
+  ss.refine(ss.string(), 'no-blanks-no-commas', (val) => {
+    for (const char of val) {
+      if (char === '' || char === ',') {
+        return false;
+      }
+    }
+    return true;
+  });
 
 function isInt(value: { length: number; charAt: (arg0: any) => number }) {
   for (let i = 0; i < value.length; i++) {
@@ -56,130 +86,96 @@ function alertFirstCharacterOutsideBasicMultilingualPlane(
   }
 }
 
-function check() {
-  let count = 0;
-  $('.notempty').each(function (n: any) {
-    if ($(this).val().trim() === '') count++;
-  });
-  if (count > 0) {
-    alert(
-      'ERROR\n\n' + count + ' field(s) - marked with * - must not be empty!'
-    );
-    return false;
+/**
+ *
+ * @param event
+ */
+export const textareaKeydown = (
+  event: React.KeyboardEvent<HTMLTextAreaElement>,
+  onSubmit: () => void
+) => {
+  if (event.key && event.key === 'Enter') {
+    onSubmit();
   }
-  count = 0;
-  $('input.checkurl').each(function (n: any) {
-    if ($(this).val().trim().length > 0) {
-      if (
-        $(this).val().trim().indexOf('http://') !== 0 &&
-        $(this).val().trim().indexOf('https://') !== 0
-      ) {
-        alert(
-          'ERROR\n\nField "' +
-            $(this).attr('data_info') +
-            '" must start with "http://" or "https://" if not empty.'
-        );
-        count++;
-      }
-    }
-  });
-  $('input.checkdicturl').each(function (n: any) {
-    if ($(this).val().trim().length > 0) {
-      if (
-        $(this).val().trim().indexOf('http://') !== 0 &&
-        $(this).val().trim().indexOf('https://') !== 0 &&
-        $(this).val().trim().indexOf('*http://') !== 0 &&
-        $(this).val().trim().indexOf('*https://') !== 0 &&
-        // TODO api://
-        $(this).val().trim().indexOf('glosbe_api') !== 0
-      ) {
-        alert(
-          'ERROR\n\nField "' +
-            $(this).attr('data_info') +
-            '" must start with "http://" or "https://" or "*http://" or "*https://" or "glosbe_api" if not empty.'
-        );
-        count++;
-      }
-    }
-  });
-  // 'ERROR\n\nField "' +
-  //           $(this).attr('data_info') +
-  //           '" must be an integer number > 0.'
-  $('input.posintnumber').each(checkPosIntNumberValidator);
-  // 'ERROR\n\nField "' +
-  //   $(this).attr('data_info') +
-  //   '" must be an integer number >= 0.'
-  $('input.zeroposintnumber').each(checkZeroPosIntNumberValidator);
-  // count += alertFirstCharacterOutsideBasicMultilingualPlane(
-  //   $(this).val(),
-  //   $(this).attr('data_info')
-  // );
-  $('input.checkoutsidebmp').each(checkOutsideBMPValidator);
-  $('textarea.checklength').each(function (n: any) {
-    if ($(this).val().trim().length > 0 + $(this).attr('data_maxlength')) {
-      alert(
-        'ERROR\n\nText is too long in field "' +
-          $(this).attr('data_info') +
-          '", please make it shorter! (Maximum length: ' +
-          $(this).attr('data_maxlength') +
-          ' char.)'
-      );
-      count++;
-    }
-  });
-  // count += alertFirstCharacterOutsideBasicMultilingualPlane(
-  //   $(this).val(),
-  //   $(this).attr('data_info')
-  // );
-  $('textarea.checkoutsidebmp').each(checkOutsideBMPValidator);
-  $('textarea.checkbytes').each(function (n: any) {
-    if (
-      getUTF8Length($(this).val().trim()) >
-      0 + $(this).attr('data_maxlength')
-    ) {
-      alert(
-        'ERROR\n\nText is too long in field "' +
-          $(this).attr('data_info') +
-          '", please make it shorter! (Maximum length: ' +
-          $(this).attr('data_maxlength') +
-          ' bytes.)'
-      );
-      count++;
-    }
-  });
-  // 'ERROR\n\nNo spaces or commas allowed in field "' +
-  //   $(this).attr('data_info') +
-  //   '", please remove!'
-  $('input.noblanksnocomma').each(checkNoBlanksNoCommaValidator);
-  return count === 0;
-}
+};
+export const InputElementOnClick = {
+  '*': {
+    confirmdelete: confirmDelete,
+  },
+};
+export const InputElementOnKeyDown = {
+  textarea: {
+    'textarea-noreturn': textareaKeydown,
+  },
+};
+export const InputElementValidator = {
+  '*': {
+    // alert(
+    //   'ERROR\n\n' + count + ' field(s) - marked with * - must not be empty!'
+    // );
+    notempty: checkNotEmptyValidator,
+  },
+  input: {
+    // alert(
+    //   'ERROR\n\nField "' +
+    //     data_info +
+    //     '" must start with "http://" or "https://" if not empty.'
+    // );
+    checkurl: URLValidator,
+    // alert(
+    //   'ERROR\n\nField "' +
+    //     data_info +
+    //     '" must start with "http://" or "https://" or "*http://" or "*https://" or "glosbe_api" if not empty.'
+    // );
+    checkdicturl: DictURLValidator,
+    // 'ERROR\n\nField "' +
+    //           data_info +
+    //           '" must be an integer number > 0.'
+    posintnumber: checkPosIntNumberValidator,
+    // 'ERROR\n\nField "' +
+    //   data_info +
+    //   '" must be an integer number >= 0.'
+    zeroposintnumber: checkZeroPosIntNumberValidator,
+    // count += alertFirstCharacterOutsideBasicMultilingualPlane(
+    //   $(this).val(),
+    //   data_info
+    // );
+    checkoutsidebmp: checkOutsideBMPValidator,
 
-const checkNotEmptyValidator = () => {};
-const checkURLValidator = () => {};
-const checkDictURLValidator = () => {};
-const checkLengthValidator = () => {};
-const checkPosIntNumberValidator = () =>
-  ss.refine(ss.number(), 'pos-int', (val) => val > 0 && Number.isInteger(val));
-const checkZeroPosIntNumberValidator = () =>
-  ss.refine(
-    ss.number(),
-    'zero-pos-int',
-    (val) => val >= 0 && Number.isInteger(val)
-  );
-const checkOutsideBMPValidator = () =>
-  ss.refine(ss.string(), 'is-inside-bmp', (val) =>
-    containsCharacterOutsideBasicMultilingualPlane(val)
-  );
-const checkBytesValidator = () => {};
-const checkNoBlanksNoCommaValidator = () =>
-  ss.refine(ss.string(), 'no-blanks-no-commas', (val) => {
-    for (const char of val) {
-      if (char === '' || char === ',') {
-        return false;
-      }
-    }
-    return true;
-  });
+    // 'ERROR\n\nNo spaces or commas allowed in field "' +
+    //   data_info +
+    //   '", please remove!'
+    noblanksnocomma: checkNoBlanksNoCommaValidator,
+    // TODO
+    // markcheck: length,
+  },
+  textarea: {
+    // data_maxlength
+    // alert(
+    //   'ERROR\n\nText is too long in field "' +
+    //     data_info +
+    //     '", please make it shorter! (Maximum length: ' +
+    //     data_maxlength +
+    //     ' bytes.)'
+    // );
+    checklength: checkStringLengthValidator,
+    // count += alertFirstCharacterOutsideBasicMultilingualPlane(
+    //   $(this).val(),
+    //   data_info
+    // );
+    checkoutsidebmp: checkOutsideBMPValidator,
+
+    // data_maxlength
+    // alert(
+    //   'ERROR\n\nText is too long in field "' +
+    //     data_info +
+    //     '", please make it shorter! (Maximum length: ' +
+    //     data_maxlength +
+    //     ' bytes.)'
+    // );
+    checkbytes: checkBytesValidator,
+  },
+};
 
 // TODO
 
@@ -189,7 +185,7 @@ function setTheFocus() {
 
 export function changeImprAnnRadio(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
-  const elem = $(this).attr('name');
+  const elem = name;
   const idwait = '#wait' + elem.substring(2);
   $(idwait).html('<img src="icn/waiting2.gif" />');
   const thedata = JSON.stringify($('form').serializeObject());
@@ -207,7 +203,7 @@ export function changeImprAnnRadio(this: any) {
 export function changeImprAnnText(this: any) {
   const textid = $('#editimprtextdata').attr('data_id');
   $(this).prev('input:radio').attr('checked', 'checked');
-  const elem = $(this).attr('name');
+  const elem = name;
   const idwait = '#wait' + elem.substring(2);
   $(idwait).html('<img src="icn/waiting2.gif" />');
   const thedata = JSON.stringify($('form').serializeObject());
@@ -222,23 +218,6 @@ export function changeImprAnnText(this: any) {
   );
 }
 
-export function markClick() {
-  if ($('input.markcheck:checked').length > 0) {
-    $('#markaction').removeAttr('disabled');
-  } else {
-    $('#markaction').attr('disabled', 'disabled');
-  }
-}
-
-export function textareaKeydown(event: KeyboardEvent) {
-  if (event.key && event.key === 'Enter') {
-    if (check()) $('input:submit').last().click();
-    return false;
-  } else {
-    return true;
-  }
-}
-
 // $(document).ready(function () {
 //   $('.edit_area').editable('inline_edit', {
 //     type: 'textarea',
@@ -249,23 +228,7 @@ export function textareaKeydown(event: KeyboardEvent) {
 //     rows: 3,
 //     cols: 35,
 //   });
-//   $('form.validate').submit(check);
-//   $('.confirmdelete').click(confirmDelete);
-//   $('textarea.textarea-noreturn').keydown(textareaKeydown);
-//   const termTags = [] as string[];
-//   const textTags = [] as string[];
-//   const tagItTermTags = useTagIt({
-//     availableTags: termTags.map((value) => ({ value })),
-//     fieldName: 'TermTags[TagList][]',
-//     beforeTagAdded: (event, ui) =>
-//       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
-//   });
-//   const tagItTextTags = useTagIt({
-//     availableTags: textTags.map((value) => ({ value })),
-//     fieldName: 'TextTags[TagList][]',
-//     beforeTagAdded: (event, ui) =>
-//       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.text()),
-//   });
+// $('form.validate').submit(check);
 
 //   markClick();
 //   setTheFocus();
@@ -285,3 +248,22 @@ export function do_ajax_show_similar_terms() {
     }
   );
 }
+
+// TODO
+// function do_ajax_word_counts() {
+// 	$("span[id^='saved-']").each(
+// 		function(i) {
+// 			var textid = $(this).attr('data_id');
+// 			$(this).html('<img src="icn/waiting2.gif" />');
+// 			$.post('ajax_word_counts.php', { id: textid },
+// 				function(data) {
+// 					var res = eval('(' + data + ')');
+// 					$('#total-'+textid).html(res[0]);
+// 					$('#saved-'+textid).html(res[1]);
+// 					$('#todo-'+textid).html(res[2]);
+// 					$('#todop-'+textid).html(res[3]);
+// 				}
+// 			);
+// 		}
+// 	);
+// }

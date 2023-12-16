@@ -7,7 +7,7 @@ export function WordTagsSelectList() {
   const { TagList } = useTagIt({
     availableTags: tags.map((value) => ({ value: value.TgText })),
     fieldName: 'TermTags[TagList][]',
-    beforeTagAdded: (event, ui) =>
+    beforeTagAdded: (_event, ui) =>
       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.value),
   });
 
@@ -19,7 +19,7 @@ export function TextTagsSelectList() {
   const { TagList } = useTagIt({
     availableTags: tags2.map((value) => ({ value: value.T2Text })),
     fieldName: 'TextTags[TagList][]',
-    beforeTagAdded: (event, ui) =>
+    beforeTagAdded: (_event, ui) =>
       !containsCharacterOutsideBasicMultilingualPlane(ui.tag.value),
   });
 

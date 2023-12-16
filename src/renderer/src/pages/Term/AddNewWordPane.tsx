@@ -61,10 +61,17 @@ export function AddNewWordPane({
   if (!lang) {
     throw new Error('Incorrect Language Set!');
   }
-  const { LgName, LgGoogleTranslateURI, LgDict2URI, LgDict1URI } = lang;
+  const { LgName } = lang;
+  const submitForm = () =>
+    onSubmit(wordNoIDPrevalidateMap, (value) => {
+      console.log('TEST123-saving word', value);
+      dataService.addTerm(value);
+      // navigator('/edit_words');
+      onClearActiveWord();
+    });
   return (
     <>
-      <form name="newword" className="validate">
+      <form name="newword">
         <input type="hidden" name="fromAnn" value="" />
         <WoInput type="hidden" entryKey="WoLgID" id="langfield" />
         <WoInput type="hidden" entryKey="WoCreated" id="langfield" />
@@ -104,11 +111,11 @@ export function AddNewWordPane({
               <td className="td1 right">Translation:</td>
               <td className="td1">
                 <TextArea
-                  name="WoTranslation"
+                  entryKey="WoTranslation"
                   // value={FormState.WoTranslation}
                   className="setfocus checklength checkoutsidebmp"
                   maxLength={500}
-                  onKeyDown={textareaKeydown}
+                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
                   errorName="Translation"
                   cols={35}
                   rows={3}
@@ -147,9 +154,9 @@ export function AddNewWordPane({
               </td>
               <td className="td1">
                 <TextArea
-                  name="WoSentence"
+                  entryKey="WoSentence"
                   className="checklength checkoutsidebmp"
-                  onKeyDown={textareaKeydown}
+                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
                   maxLength={1000}
                   errorName="Sentence"
                   cols={35}
@@ -169,25 +176,14 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
-                  lang={lang}
+                  langDictData={lang}
                   sentenceString={refMap.WoSentence.current}
                   wordString={refMap.WoText.current}
                   setTranslateAPIParams={setTranslateAPIParams}
                   setIFrameURL={setIFrameURL}
                 />
                 &nbsp; &nbsp; &nbsp;
-                <input
-                  type="button"
-                  value="Save"
-                  onClick={() => {
-                    onSubmit(wordNoIDPrevalidateMap, (value) => {
-                      console.log('TEST123-saving word', value);
-                      dataService.addTerm(value);
-                      // navigator('/edit_words');
-                      onClearActiveWord();
-                    });
-                  }}
-                />
+                <input type="button" value="Save" onClick={submitForm} />
               </td>
             </tr>
           </tbody>
@@ -261,11 +257,16 @@ export function EditWordPane({
   });
   const [showingSentences, setShowingSentences] = useState<boolean>(false);
 
-  const { WoStatus, WoText } = word;
-  const { LgName, LgID, LgDict1URI, LgDict2URI, LgGoogleTranslateURI } = lang;
+  const { WoStatus } = word;
+  const { LgName, LgID } = lang;
+  const submitForm = () =>
+    onSubmit(wordNoIDPrevalidateMap, (value) => {
+      dataService.addTerm(value);
+      // navigator('/edit_words');
+    });
   return (
     <>
-      <form name="newword" className="validate">
+      <form name="newword">
         <input type="hidden" name="fromAnn" value="" />
         <WoInput type="hidden" entryKey="WoLgID" id="langfield" value={LgID} />
         <input
@@ -316,10 +317,10 @@ export function EditWordPane({
               <td className="td1 right">Translation:</td>
               <td className="td1">
                 <TextArea
-                  name="WoTranslation"
+                  entryKey="WoTranslation"
                   // value={FormState.WoTranslation}
                   className="setfocus checklength checkoutsidebmp"
-                  onKeyDown={textareaKeydown}
+                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
                   maxLength={500}
                   errorName="Translation"
                   cols={35}
@@ -357,9 +358,9 @@ export function EditWordPane({
               </td>
               <td className="td1">
                 <TextArea
-                  name="WoSentence"
+                  entryKey="WoSentence"
                   className="checklength checkoutsidebmp"
-                  onKeyDown={textareaKeydown}
+                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
                   maxLength={1000}
                   errorName="Sentence"
                   cols={35}
@@ -376,23 +377,14 @@ export function EditWordPane({
             <tr>
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
-                  lang={lang}
+                  langDictData={lang}
                   sentenceString={refMap.WoSentence.current}
                   wordString={refMap.WoText.current}
                   setTranslateAPIParams={setTranslateAPIParams}
                   setIFrameURL={setIFrameURL}
                 />
                 &nbsp; &nbsp; &nbsp;
-                <input
-                  type="button"
-                  value="Save"
-                  onClick={() => {
-                    onSubmit(wordNoIDPrevalidateMap, (value) => {
-                      dataService.addTerm(value);
-                      // navigator('/edit_words');
-                    });
-                  }}
-                />
+                <input type="button" value="Save" onClick={submitForm} />
               </td>
             </tr>
           </tbody>

@@ -20,18 +20,15 @@ export type LanguageDictionaryDataTempHack = LanguageDictionaryData &
     'LgTatoebaKey'
   >;
 
-/**
- *
- */
 export function DictionaryLinks({
-  lang,
+  langDictData: langDictData,
   sentenceString: sentenceString,
   wordString: wordString,
   setTranslateAPIParams,
   setIFrameURL,
   breakSent,
 }: {
-  lang: LanguageDictionaryDataTempHack;
+  langDictData: LanguageDictionaryDataTempHack;
   sentenceString: string;
   wordString: string;
   setTranslateAPIParams: (
@@ -46,7 +43,7 @@ export function DictionaryLinks({
     LgGoogleTranslateURI,
     // TODO get 'LgTatoebaKey' from api
     LgTatoebaKey: sourceKey,
-  } = lang;
+  } = langDictData;
 
   // TODO
   const targetKey = 'eng';
@@ -106,9 +103,7 @@ export function DictionaryLinks({
     </>
   );
 }
-/**
- *
- */
+
 export function MultiFunctionalURL({
   templateStr,
   word,

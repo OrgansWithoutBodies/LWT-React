@@ -1,4 +1,5 @@
 import { DictURITemplateType } from '../data/validators';
+import { createTheDictUrl } from './ReaderPage.component';
 
 /**
  *
@@ -11,17 +12,7 @@ export function owin(url: string | URL | undefined): void {
     'width=800, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no'
   );
 }
-/**
- *
- * @param u
- * @param w
- */
-export function createTheDictUrl(u: string, w: string) {
-  // const url = u.trim();
-  // const trm = w.trim();
-  const r = `trans?x=2&i=${escape(u)}&t=${w}`;
-  return r;
-}
+
 /**
  *
  * @param url

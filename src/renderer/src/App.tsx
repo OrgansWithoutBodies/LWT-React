@@ -76,18 +76,13 @@ function NoMatch() {
 //   return <Route path={path} {...args} />;
 // }
 
-/**
- *
- */
 function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
   const style = createColors(styleVariant);
   const StyleHeader = createGlobalStyle(style);
   return <StyleHeader />;
 }
-/**
- *
- */
+
 function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
   const [{ notificationMessage }] = useData(['notificationMessage']);
@@ -191,9 +186,6 @@ function App(): JSX.Element {
   );
 }
 
-/**
- *
- */
 function NotificationMessage({
   notificationMessage,
 }: {

@@ -33,7 +33,7 @@ export function UploadWords() {
   return (
     <>
       <Header title="Import Terms" />
-      <form encType="multipart/form-data" className="validate">
+      <form encType="multipart/form-data">
         <UlInput entryKey="columns" type="hidden" />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>

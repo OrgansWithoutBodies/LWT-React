@@ -55,7 +55,7 @@ export function ImportShortText({
           <Icon src="question-frame" title="Help" />
         </a>
       </h4>
-      <form className="validate">
+      <form>
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>

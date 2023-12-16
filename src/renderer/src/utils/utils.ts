@@ -1,6 +1,8 @@
+import { NumericalStrengthPotentiallyCompound } from '../data/data.query';
 import { DateDiff } from '../data/time';
 import { SentencesID, TextItemsID } from '../data/validators';
 import { NumericalStrength } from '../pages/StrengthMap';
+import { pluralize } from '../pages/TermTag/pluralize';
 import {
   Language,
   LanguageNoID,
@@ -690,35 +692,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function get_seconds_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 5;
-// 	r = '';
-// 	for (i = 1; i <= 10; i++) {
-// 		r += "<option value="" . i . """ . get_selected(v, i);
-// 		r += ">" . i . " sec</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_playbackrate_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = '10';
-// 	r = '';
-// 	for (i = 5; i <= 15; i++) {
-// 		text = (i < 10 ? (' 0.' . i . ' x ') : (' 1.' . (i - 10) . ' x '));
-// 		r += "<option value="" . i . """ . get_selected(v, i);
-// 		r += ">&nbsp;" . text . "&nbsp;</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function quickMenu()
 // {
 // 	?><select id="quickmenu" onchange="{const qm = document.getElementByID('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val !== '') { if (val === 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '';}}}">
@@ -827,14 +800,14 @@ export function remove_soft_hyphens(softHyphenString: string) {
 // }
 
 // // -------------------------------------------------------------
-
-// function prepare_textdata_js(s)
-// {
-// 	s = (s);
-// 	if (s === "NULL")
-// 		return "''";
-// 	return str_replace("''", "\\'", s);
-// }
+// TODO defunct?
+export function prepare_textdata_js(s) {
+  return s;
+  // s = (s);
+  // if (s === null)
+  // 	return "''";
+  // return str_replace("''", "\\'", s);
+}
 
 // // -------------------------------------------------------------
 
@@ -1008,23 +981,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 // 		return val;
 // 	} else
 // 		return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function getSettingWithDefault(key)
-// {
-// 	global tbpref;
-// 	dft = get_setting_data();
-// 	val = get_first_value('select StValue as value from ' . tbpref . 'settings where StKey = ' . (key));
-// 	if (isset(val) && val !== '')
-// 		return trim(val);
-// 	else {
-// 		if (array_key_exists(key, dft))
-// 			return dft[key]['dft'];
-// 		else
-// 			return '';
-// 	}
 // }
 
 // // -------------------------------------------------------------
@@ -1547,38 +1503,38 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function makeStatusClassFilter(status)
-// {
-// 	if (status === '')
-// 		return '';
-// 	liste = array(1, 2, 3, 4, 5, 98, 99);
-// 	if (status === 599) {
-// 		makeStatusClassFilterHelper(5, liste);
-// 		makeStatusClassFilterHelper(99, liste);
-// 	} elseif (status < 6 || status > 97) {
-// 		makeStatusClassFilterHelper(status, liste);
-// 	} else {
-// 		from = (int) (status / 10);
-// 		to = status - (from * 10);
-// 		for (i = from; i <= to; i++)
-// 			makeStatusClassFilterHelper(i, liste);
-// 	}
-// 	r = '';
-// 	foreach (liste as v) {
-// 		if (v !== -1)
-// 			r += ':not(.status' . v . ')';
-// 	}
-// 	return r;
-// }
+export function makeStatusClassFilter(
+  status: NumericalStrengthPotentiallyCompound | undefined
+) {
+  if (status === undefined) return '';
+  const liste = [1, 2, 3, 4, 5, 98, 99];
+  if (status === 599) {
+    makeStatusClassFilterHelper(5, liste);
+    makeStatusClassFilterHelper(99, liste);
+  } else if (status < 6 || status > 97) {
+    makeStatusClassFilterHelper(status, liste);
+  } else {
+    const from = status / 10;
+    const to = status - from * 10;
+    for (let i = from; i <= to; i++) makeStatusClassFilterHelper(i, liste);
+  }
+  let r = '';
+  liste.forEach((v) => {
+    if (v !== -1) {
+      r += ':not(.status' + v + ')';
+    }
+  });
+  return r;
+}
 
 // // -------------------------------------------------------------
 
-// function makeStatusClassFilterHelper(status, &array)
-// {
-// 	pos = array_search(status, array);
-// 	if (pos !== FALSE)
-// 		array[pos] = -1;
-// }
+function makeStatusClassFilterHelper(status, array) {
+  const pos = array_search(status, array);
+  if (pos !== false) {
+    array[pos] = -1;
+  }
+}
 
 // // -------------------------------------------------------------
 
@@ -1655,41 +1611,51 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function strToHex(string)
-// {
-// 	hex = '';
-// 	for (i = 0; i < strlen(string); i++) {
-// 		h = dechex(ord(string[i]));
-// 		if (strlen(h) === 1)
-// 			hex += "0" . h;
-// 		else
-// 			hex += h;
-// 	}
-// 	return strtoupper(hex);
-// }
+function ord(str: string) {
+  return str.charCodeAt(0);
+}
 
 // // -------------------------------------------------------------
 
-// function strToClassName(string)
-// {
-// 	// escapes everything to "¤xx" but not 0-9, a-z, A-Z, and unicode >= (hex 00A5, dec 165)
-// 	l = mb_strlen(string, 'UTF-8');
-// 	r = '';
-// 	for (i = 0; i < l; i++) {
-// 		c = mb_substr(string, i, 1, 'UTF-8');
-// 		o = ord(c);
-// 		if (
-// 			(o < 48) ||
-// 			(o > 57 && o < 65) ||
-// 			(o > 90 && o < 97) ||
-// 			(o > 122 && o < 165)
-// 		)
-// 			r += '¤' . strToHex(c);
-// 		else
-// 			r += c;
-// 	}
-// 	return r;
-// }
+// TODO
+function dechex(val: number) {
+  return Number.parseInt(`${val}`, 10);
+}
+
+// // -------------------------------------------------------------
+
+// TODO
+function strToHex(string: string) {
+  let hex = '';
+  for (let i = 0; i < string.length; i++) {
+    const h = dechex(ord(string[i]));
+    if (h.length === 1) {
+      hex += `0${h}`;
+    } else hex += h;
+  }
+  return hex.toUpperCase();
+}
+
+// -------------------------------------------------------------
+
+export function strToClassName(string: string) {
+  // escapes everything to "¤xx" but not 0-9, a-z, A-Z, and unicode >= (hex 00A5, dec 165)
+  const l = string.length;
+  let r = '';
+  for (let i = 0; i < l; i++) {
+    const c = string.substring(i, 1);
+    const o = ord(c);
+    if (
+      o < 48 ||
+      (o > 57 && o < 65) ||
+      (o > 90 && o < 97) ||
+      (o > 122 && o < 165)
+    )
+      r += '¤' + strToHex(c);
+    else r += c;
+  }
+  return r;
+}
 
 // // -------------------------------------------------------------
 
@@ -2531,208 +2497,11 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-// function makeAudioPlayer(audio)
-// {
-// 	if (audio !== '') {
-// 		playerskin = "jplayer.blue.monday.modified";
-// 		repeatMode = getSettingZeroOrOne('currentplayerrepeatmode', 0);
-// 		?>
-// 		<link type="text/css" href="css/jplayer_skin/<?php echo playerskin; ?>.css" rel="stylesheet" />
-// 		<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
-// 		<table align="center" style="margin-top:5px;" cellspacing="0" cellpadding="0">
-// 		<tr>
-// 		<td class="center borderleft" style="padding-left:10px;">
-// 		<span id="do-single" class="click<?php echo (repeatMode ? '' : ' hide'); ?>"><img src="icn/arrow-repeat.png" alt="Toggle Repeat (Now ON)" title="Toogle Repeat (Now ON)" style="width:24px;height:24px;" /></span><span id="do-repeat" class="click<?php echo (repeatMode ? ' hide' : ''); ?>"><img src="icn/arrow-norepeat.png" alt="Toggle Repeat (Now OFF)" title="Toggle Repeat (Now OFF)" style="width:24px;height:24px;" /></span>
-// 		</td>
-// 		<td class="center bordermiddle">&nbsp;</td>
-// 		<td class="bordermiddle">
-// 		<div id="jquery_jplayer_1" class="jp-jplayer">
-// 		</div>
-// 		<div id="jp_container_1" class="jp-audio">
-// 			<div class="jp-type-single">
-// 				<div class="jp-gui jp-interface">
-// 					<ul class="jp-controls">
-// 						<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-// 						<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-// 						<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-// 						<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-// 						<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-// 					</ul>
-// 					<div class="jp-progress">
-// 						<div class="jp-seek-bar">
-// 							<div class="jp-play-bar"></div>
-// 						</div>
-// 					</div>
-// 					<div class="jp-volume-bar">
-// 						<div class="jp-volume-bar-value"></div>
-// 					</div>
-// 					<div class="jp-time-holder">
-// 						<div class="jp-current-time"></div>
-// 						<div class="jp-duration"></div>
-// 					</div>
-// 				</div>
-// 			</div>
-// 		</div>
-// 		</td>
-// 		<td class="center bordermiddle">&nbsp;</td>
-// 		<td class="center bordermiddle">
-// 		<?php
-// 		currentplayerseconds = getSetting('currentplayerseconds');
-// 		if (currentplayerseconds === '')
-// 			currentplayerseconds = 5;
-// 		?>
-// 		<select id="backtime" name="backtime"><?php echo get_seconds_selectoptions(currentplayerseconds); ?></select><br />
-// 		<span id="backbutt" class="click"><img src="icn/arrow-circle-225-left.png" alt="Rewind n seconds" title="Rewind n seconds" /></span>&nbsp;&nbsp;<span id="forwbutt" class="click"><img src="icn/arrow-circle-315.png" alt="Forward n seconds" title="Forward n seconds" /></span>
-// 		<span id="playTime" class="hide"></span>
-// 		</td>
-// 		<td class="center bordermiddle">&nbsp;</td>
-// 		<td class="center borderright" style="padding-right:10px;">
-// 		<?php
-// 		currentplaybackrate = getSetting('currentplaybackrate');
-// 		if (currentplaybackrate === '')
-// 			currentplaybackrate = 10;
-// 		?>
-// 		<select id="playbackrate" name="playbackrate"><?php echo get_playbackrate_selectoptions(currentplaybackrate); ?></select><br />
-// 		<span id="slower" class="click"><img src="icn/minus.png" alt="Slower" title="Slower" style="margin-top:3px" /></span>&nbsp;<span id="stdspeed" class="click"><img src="icn/status-away.png" alt="Normal" title="Normal" style="margin-top:3px" /></span>&nbsp;<span id="faster" class="click"><img src="icn/plus.png" alt="Faster" title="Faster" style="margin-top:3px" /></span>
-// 		</td>
-// 		</tr>
-// 		<script type="text/javascript">
-// 		//<![CDATA[
-
-// 		function new_pos(p) {
-// 			$("#jquery_jplayer_1").jPlayer("playHead", p);
-// 		}
-
-// 		function set_new_playerseconds() {
-// 			const newval = ($("#backtime :selected").val());
-// 			do_ajax_save_setting('currentplayerseconds',newval);
-// 			// console.log("set_new_playerseconds="+newval);
-// 		}
-
-// 		function set_new_playbackrate() {
-// 			const newval = ($("#playbackrate :selected").val());
-// 			do_ajax_save_setting('currentplaybackrate',newval);
-// 			$("#jquery_jplayer_1").jPlayer("option","playbackRate", newval*0.1);
-// 			// console.log("set_new_playbackrate="+newval);
-// 		}
-
-// 		function set_current_playbackrate() {
-// 			const val = ($("#playbackrate :selected").val());
-// 			$("#jquery_jplayer_1").jPlayer("option","playbackRate", val*0.1);
-// 			// console.log("set_current_playbackrate="+val);
-// 		}
-
-// 		function click_single() {
-// 			$("#jquery_jplayer_1").unbind($.jPlayer.event.ended + ".jp-repeat");
-// 			$("#do-single").addClass('hide');
-// 			$("#do-repeat").removeClass('hide');
-// 			do_ajax_save_setting('currentplayerrepeatmode','0');
-// 			return false;
-// 		}
-
-// 		function click_repeat() {
-// 			$("#jquery_jplayer_1").bind($.jPlayer.event.ended + ".jp-repeat", function(event) {
-// 				$(this).jPlayer("play");
-// 			});
-// 			$("#do-repeat").addClass('hide');
-// 			$("#do-single").removeClass('hide');
-// 			do_ajax_save_setting('currentplayerrepeatmode','1');
-// 			return false;
-// 		}
-
-// 		function click_back() {
-// 			const t = parseInt($("#playTime").text(),10);
-// 			const b = parseInt($("#backtime").val(),10);
-// 			const nt = t - b;
-// 			if (nt < 0) nt = 0;
-// 			$("#jquery_jplayer_1").jPlayer("play", nt);
-// 		}
-
-// 		function click_forw() {
-// 			const t = parseInt($("#playTime").text(),10);
-// 			const b = parseInt($("#backtime").val(),10);
-// 			const nt = t + b;
-// 			$("#jquery_jplayer_1").jPlayer("play", nt);
-// 		}
-
-// 		function click_stdspeed() {
-// 			$("#playbackrate").val(10);
-// 			set_new_playbackrate();
-// 		}
-
-// 		function click_slower() {
-// 			const val = ($("#playbackrate :selected").val());
-// 			if (val > 5) {
-// 				val--;
-// 				$("#playbackrate").val(val);
-// 				set_new_playbackrate();
-// 			}
-// 		}
-
-// 		function click_faster() {
-// 			const val = ($("#playbackrate :selected").val());
-// 			if (val < 15) {
-// 				val++;
-// 				$("#playbackrate").val(val);
-// 				set_new_playbackrate();
-// 			}
-// 		}
-
-// 		$(document).ready(function(){
-// 			  $("#jquery_jplayer_1").jPlayer({
-// 			ready: function () {
-// 			  $(this).jPlayer("setMedia", { <?php
-// 			  audio = trim(audio);
-// 			  if (strcasecmp(substr(audio, -4), '.mp3') === 0) {
-// 				  echo 'mp3: ' . prepare_textdata_js(encodeURI(audio));
-// 			  } elseif (strcasecmp(substr(audio, -4), '.ogg') === 0) {
-// 				  echo 'oga: ' . prepare_textdata_js(encodeURI(audio)) . ", " .
-// 				  	'mp3: ' . prepare_textdata_js(encodeURI(audio));
-// 			  } elseif (strcasecmp(substr(audio, -4), '.wav') === 0) {
-// 				  echo 'wav: ' . prepare_textdata_js(encodeURI(audio)) . ", " .
-// 				  	'mp3: ' . prepare_textdata_js(encodeURI(audio));
-// 			  } else {
-// 				  echo 'mp3: ' . prepare_textdata_js(encodeURI(audio));
-// 			  }
-// 			  ?> });
-// 			},
-// 			swfPath: "js",
-// 			noVolume: {ipad: /^no$/, iphone: /^no$/, ipod: /^no$/, android_pad: /^no$/, android_phone: /^no$/, blackberry: /^no$/, windows_ce: /^no$/, iemobile: /^no$/, webos: /^no$/, playbook: /^no$/}
-// 		  });
-
-// 		  $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) {
-// 			  $("#playTime").text(Math.floor(event.jPlayer.status.currentTime));
-// 			});
-
-// 		  $("#jquery_jplayer_1").bind($.jPlayer.event.play, function(event) {
-// 			  set_current_playbackrate();
-// 			  // console.log("play");
-// 			});
-
-// 		  $("#slower").click(click_slower);
-// 		  $("#faster").click(click_faster);
-// 		  $("#stdspeed").click(click_stdspeed);
-// 		  $("#backbutt").click(click_back);
-// 		  $("#forwbutt").click(click_forw);
-// 		  $("#do-single").click(click_single);
-// 		  $("#do-repeat").click(click_repeat);
-// 		  $("#playbackrate").change(set_new_playbackrate);
-// 		  $("#backtime").change(set_new_playerseconds);
-
-//   		<?php echo (repeatMode ? "click_repeat();\n" : ''); ?>
-// 		});
-// 		//]]>
-// 		</script>
-// 	<?php
-// 	} // if (isset(audio))
-// }
-
-// // -------------------------------------------------------------
-
-export function make_score_random_insert_update(
-  word: Word
-): Pick<Word, 'WoTodayScore' | 'WoTomorrowScore' | 'WoRandom'> {
-  // type='iv'/'id'/'u'
+export function makeScoreRandomInsertUpdate({
+  word,
+}: {
+  word: Pick<Word, 'WoStatus' | 'WoStatusChanged'>;
+}): Pick<Word, 'WoTodayScore' | 'WoTomorrowScore' | 'WoRandom'> {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -3123,7 +2892,10 @@ export function allActionGo({
  * @param form
  * @param sel
  */
-export function multiActionGo(sel: undefined | HTMLSelectElement) {
+export function multiActionGo(
+  sel: undefined | HTMLSelectElement,
+  numChecked: number
+) {
   if (typeof sel !== 'undefined') {
     const v = sel.value;
     const t = sel.options[sel.selectedIndex].text;
@@ -3131,6 +2903,7 @@ export function multiActionGo(sel: undefined | HTMLSelectElement) {
       if (v === 'addtag' || v === 'deltag') {
         const answer: string | null = verifyAddTagWindow(t, sel.options.length);
         if (answer !== '') {
+          // onTagAnswer()
           return { tagChange: answer };
         }
       } else if (
@@ -3147,12 +2920,12 @@ export function multiActionGo(sel: undefined | HTMLSelectElement) {
         v === 'cap'
       ) {
         const answer = confirm(
-          `*** ${t} ***\n\n*** ${
-            // TODO
-            'input.markcheck:checked'.length
-          } Record(s) will be affected ***\n\nAre you sure?`
+          `*** ${t} ***\n\n*** ${numChecked} Record${pluralize(
+            numChecked
+          )} will be affected ***\n\nAre you sure?`
         );
         if (answer) {
+          // onSet()
           return true;
         }
       } else {
@@ -3458,7 +3231,10 @@ export function check_dupl_lang() {}
  *
  * @param method
  */
-export function getsqlscoreformula(checkingDate: Date, word: Word) {
+export function getsqlscoreformula(
+  checkingDate: Date,
+  word: Pick<Word, 'WoStatus' | 'WoStatusChanged'>
+) {
   // method = 2 (today)
   // method = 3 (tomorrow)
   // Formula: {{{2.4^{Status}+Status-Days-1} over Status -2.4} over 0.14325248}

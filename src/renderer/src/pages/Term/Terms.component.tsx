@@ -20,6 +20,7 @@ import {
 } from '../../hooks/useInternalNav';
 import { usePager } from '../../hooks/usePager';
 import { useSelection } from '../../hooks/useSelection';
+import { useSettingWithDefault } from '../../hooks/useSettingWithDefault';
 import { A } from '../../nav/InternalLink';
 import { EntryRow } from '../../ui-kit/EntryRow';
 import { GetTagsList } from '../../ui-kit/GetTagsList';
@@ -38,13 +39,10 @@ import { AddNewWordValidator, Word } from '../../utils/parseMySqlDump';
 import { allActionGo, confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
-import { markClick, textareaKeydown } from '../IO/CheckForm';
-import {
-  GetAllWordsActionsSelectOptions,
-  get_status_abbr,
-} from '../SelectOptions';
+import { textareaKeydown } from '../IO/CheckForm';
+import { GetAllWordsActionsSelectOptions } from '../SelectOptions';
 import { WordSorting, resetDirty, sortingMethod } from '../Sorting';
-import { getStatusName } from '../StrengthMap';
+import { getStatusName, get_status_abbr } from '../StrengthMap';
 import { prepare_textdata_js } from '../translateSentence2';
 import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
@@ -376,7 +374,8 @@ function TermRow({
           <input
             name="marked[]"
             type="checkbox"
-            onClick={markClick}
+            // TODO
+            // onClick={markClick}
             checked={isSelected}
             value={termID}
             onChange={({ target: { checked } }) => {
@@ -521,15 +520,16 @@ export function Terms({
   tag2: TagsID | null;
   sort?: WordSorting;
 }): JSX.Element {
-  const [{ words, activeLanguage, settings, tags, wordtags }] = useData([
+  const [{ words, activeLanguage, tags, wordtags }] = useData([
     'words',
     'tags',
     'activeLanguage',
-    'settings',
     'wordtags',
   ]);
-  console.log('TEST123-words', words, textFilter);
-  const pageSize = settings['set-terms-per-page'] || 10;
+
+  const { ['set-terms-per-page']: pageSize } = useSettingWithDefault([
+    'set-terms-per-page',
+  ]);
 
   const filteredWordTags = filterTags(wordtags, tag1, tag2, tag12);
 
@@ -676,7 +676,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
       />
 
       <h4>Edit Term</h4>
-      <form name="editword" className="validate">
+      <form name="editword">
         <WoInput type="hidden" entryKey="WoID" fixed />
         <WoInput type="hidden" entryKey="WoLgID" fixed id="langfield" />
         <WoInput type="hidden" entryKey="WoCreated" fixed />
@@ -776,7 +776,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
             <td className="td1 right" colSpan={2}>
               &nbsp;
               <DictionaryLinks
-                lang={termLanguage}
+                langDictData={termLanguage}
                 sentenceString={term.WoSentence}
                 wordString={term.WoText}
               />
@@ -852,7 +852,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
       <Header title={`My ${language.LgName} Terms (Words and Expressions)`} />
 
       <h4>New Term</h4>
-      <form name="newword" className="validate">
+      <form name="newword">
         <WoInput type="hidden" entryKey="WoLgID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <EntryRow headerText={'Language'}>
@@ -922,7 +922,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             <td className="td1 right" colSpan={2}>
               &nbsp;
               <DictionaryLinks
-                lang={language}
+                langDictData={language}
                 // TODO
                 // 'document.forms[\'editword\'].WoSentence'
                 sentenceString={undefined}
@@ -1163,7 +1163,7 @@ function PrintSimilarTerms({
             <Icon
               className="clickedit"
               src="tick-button-small"
-              title="Copy → Translation &amp; Romanization Field(s)"
+              title="Copy → Translation & Romanization Field(s)"
               onClick={() =>
                 onCopyTransRoman({
                   WoTranslation: prepare_textdata_js(tra),

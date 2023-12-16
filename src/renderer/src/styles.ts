@@ -715,5 +715,12 @@ export const createColors = (
       backgroundColor: 'inherit',
       outline: 'none',
     },
+
+    noshade: {
+      height: '1px',
+      border: 'none',
+      color: '#333',
+      backgroundColor: '#333',
+    },
   };
 };

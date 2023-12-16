@@ -20,7 +20,7 @@ import { TableFooter } from '../../ui-kit/TableFooter';
 import { Tag } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
-import { markClick, textareaKeydown } from '../IO/CheckForm';
+import { textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -225,7 +225,8 @@ export function DisplayTags({
                       name="marked[]"
                       type="checkbox"
                       {...checkboxPropsForEntry(tag)}
-                      onClick={markClick}
+                      // TODO consider
+                      // onClick={markClick}
                       value={tag['TgID']}
                     />
                   </A>
@@ -326,7 +327,7 @@ export function NewTag() {
     <>
       <Header title="My Term Tags" />
       <h4>New Tag</h4>
-      <form name="newtag" className="validate" method="post">
+      <form name="newtag" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
@@ -408,7 +409,7 @@ export function EditTag({ chgID }: { chgID: TagsID }) {
     <>
       <Header title="My Term Tags" />
       <h4>Edit Tag</h4>
-      <form name="newtag" className="validate">
+      <form name="newtag">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>

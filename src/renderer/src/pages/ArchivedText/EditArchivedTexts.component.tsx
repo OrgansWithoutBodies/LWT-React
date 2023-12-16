@@ -17,7 +17,6 @@ import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
 import { confirmDelete } from '../../utils/utils';
-import { markClick } from '../IO/CheckForm';
 import {
   GetMultipleArchivedTextActionsSelectOptions,
   GetTextsSortSelectoptions,
@@ -253,7 +252,7 @@ export function EditArchivedTexts({
                       <input
                         name="marked[]"
                         type="checkbox"
-                        onClick={markClick}
+                        // onClick={markClick}
                         {...checkboxPropsForEntry(text)}
                         value={text['AtID']}
                       />

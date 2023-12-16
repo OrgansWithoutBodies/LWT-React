@@ -26,7 +26,6 @@ import { Text } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
-import { markClick } from '../IO/CheckForm';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { GetTextsSortSelectoptions } from '../SelectOptions';
 import { TextSorting, buildSortByValue, resetDirty } from '../Sorting';
@@ -230,7 +229,8 @@ function LibraryRow({
           {/* name="rec2" */}
           <input
             name="marked[]"
-            onClick={markClick}
+            // TODO consider
+            // onClick={markClick}
             type="checkbox"
             checked={checked}
             onChange={() => onChange()}
@@ -547,7 +547,7 @@ export function EditTextPane({
           <Icon src="question-frame" title="Help" />
         </A>
       </h4>
-      <form className="validate">
+      <form>
         <TxInput type="hidden" entryKey="TxID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>

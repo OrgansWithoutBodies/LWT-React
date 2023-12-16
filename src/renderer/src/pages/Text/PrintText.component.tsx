@@ -317,7 +317,7 @@ export function GetWordstatusSelectoptions({
 // 		if ($id === '') {
 // 			$plus = '&nbsp;';
 // 		} else {
-// 			$plus = '<a name="rec' . $i . '"></a><span class="click" onclick="oewin(\'edit_word?fromAnn=\' + $(document).scrollTop() + \'&amp;wid=' . $id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
+// 			$plus = '<a name="rec' . $i . '"></a><span class="click" onclick="oewin(\'edit_word?fromAnn=\' + $(document).scrollTop() + \'&wid=' . $id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
 // 		}
 // 		if ($mustredo)
 // 			$rr .= "$('#editlink" . $i . "').html(" . prepare_textdata_js($plus) . ");";

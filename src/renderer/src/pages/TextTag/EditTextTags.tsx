@@ -13,7 +13,7 @@ import { SortableHeader } from '../../ui-kit/SortableHeader';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { confirmDelete } from '../../utils/utils';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
-import { markClick, textareaKeydown } from '../IO/CheckForm';
+import { textareaKeydown } from '../IO/CheckForm';
 import {
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
@@ -235,7 +235,8 @@ export function DisplayTextTags({
                       <input
                         name="marked[]"
                         type="checkbox"
-                        onClick={markClick}
+                        // TODO
+                        // onClick={markClick}
                         {...checkboxPropsForEntry(tag)}
                         value={tag['T2ID']}
                       />
@@ -308,7 +309,7 @@ export function NewTextTag() {
     <>
       <Header title="My Text Tags" />
       <h4>New Tag</h4>
-      <form name="newtag" className="validate" method="post">
+      <form name="newtag" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>
             <td className="td1 right">Tag:</td>
@@ -387,7 +388,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
     <>
       <Header title="My Text Tags" />
       <h4>Edit Tag</h4>
-      <form name="edittag" className="validate">
+      <form name="edittag">
         <TgInput type="hidden" entryKey="T2ID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tr>

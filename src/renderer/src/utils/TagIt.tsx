@@ -101,9 +101,6 @@ const defaultOptions: TagItOptions = {
   onTagLimitExceeded: undefined,
 };
 
-/**
- *
- */
 function TagInputImpl(
   {
     options: {
@@ -241,9 +238,7 @@ function TagInputImpl(
   );
 }
 const TagInput = React.forwardRef(TagInputImpl);
-/**
- *
- */
+
 function TagList({
   id,
   options,

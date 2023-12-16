@@ -1,3 +1,4 @@
+import { title } from 'process';
 import { useState } from 'react';
 import { TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
@@ -10,12 +11,15 @@ import {
 } from '../ui-kit/Tooltip';
 import { getDirTag } from '../ui-kit/getDirTag';
 import { Language, Text, TextItem, Word } from '../utils/parseMySqlDump';
-import {
-  MwordClickEventDoTextText,
-  word_dblclick_event_do_text_text,
-} from './ReaderPage.component';
+import { strToClassName } from '../utils/utils';
+import { EditWordParams } from './OverlibComponents';
 import { AddNewTermTooltip } from './Term/AddNewTermTooltip';
-import { word_click_event_do_text_text } from './word_click_event_do_text_text';
+import {
+  ArrV10,
+  MwordClickEventDoTextText,
+  WordClickEventDoTextText,
+  WordDblclickEventDoTextText,
+} from './readerTesterEventHandlers';
 
 // TODO map color from termstrength type
 // TODO frame
@@ -26,15 +30,13 @@ import { word_click_event_do_text_text } from './word_click_event_do_text_text';
 // TODO data order
 // TODO 'show all' for ambiguous terms
 
-/**
- *
- */
 export function Reader({
   activeID,
   setActiveWord,
   setIFrameURL,
   setTranslateAPIParams,
   activeWord,
+  showAll,
 }: {
   activeID: TextsID;
   setActiveWord: (
@@ -51,6 +53,7 @@ export function Reader({
   setTranslateAPIParams: (
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
+  showAll: boolean;
 }): JSX.Element {
   const [{ languages, texts, words, sentences, textitems }] = useData([
     'texts',
@@ -124,8 +127,17 @@ export function Reader({
               TiOrder,
               TiWordCount,
               TiSeID,
+              TiTxID,
             } = textItem;
             const foundWord = wordLookupKeyedByTextLC[TiTextLC];
+            const safeWord = foundWord
+              ? foundWord
+              : {
+                  WoText: TiText,
+                  WoTxID: TiTxID,
+                  WoTextLC: TiTextLC,
+                  WoStatus: 0,
+                };
             const spanID = 'ID-' + TiOrder + '-' + TiWordCount;
             const hidetag =
               hideUntil > 0 && TiOrder <= hideUntil ? 'hide' : undefined;
@@ -161,8 +173,8 @@ export function Reader({
                     {TiWordCount > 0 ? (
                       <MultiWord
                         textItem={textItem}
-                        word={undefined}
-                        showAll={false}
+                        word={safeWord}
+                        showAll={showAll}
                         hideuntil={hideUntil}
                         currcharcount={currcharcount}
                         setHideUntil={setHideUntil}
@@ -172,7 +184,7 @@ export function Reader({
                     ) : (
                       <SingleWord
                         textItem={textItem}
-                        word={foundWord}
+                        word={safeWord}
                         showAll={showAll}
                         hideuntil={hideUntil}
                         currcharcount={currcharcount}
@@ -215,12 +227,10 @@ export function Reader({
     </div>
   );
 }
-/**
- *
- */
+
 function SingleWord({
-  textItem: { TiText, TiOrder, TiTextLC },
-  word: { WoStatus, WoID, WoRomanization },
+  textItem,
+  word,
   TID,
   showAll,
   hideuntil,
@@ -229,6 +239,14 @@ function SingleWord({
   currcharcount,
   hidetag,
   language,
+  setTranslateAPIParams,
+  onSetNewWord,
+  onInsertIgnoreWord,
+  onSetWordStatus,
+  onSetEditingNewWord,
+  onSetEditingWord,
+  setIFrameURL,
+  onDeleteWord,
 }: {
   language: Language;
   word: Pick<Word, 'WoStatus' | 'WoRomanization'> & { WoID?: Word['WoID'] };
@@ -240,8 +258,34 @@ function SingleWord({
   spanID: string;
   hidetag: string | null;
   TID: Text['TxID'];
+  onDeleteWord: (args: Pick<Word, 'WoID'>) => void;
+  setTranslateAPIParams: (
+    vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
+  ) => void;
+  onSetNewWord: (
+    params: Pick<Text, 'TxID'> & Pick<TextItem, 'TiOrder'> & { txt: string }
+  ) => void;
+  onInsertIgnoreWord: (
+    args: Pick<Text, 'TxID'> & Pick<TextItem, 'TiOrder'>
+  ) => void;
+  onSetWordStatus: (params: EditWordParams & Pick<Word, 'WoStatus'>) => void;
+  onSetEditingNewWord: (
+    params: Pick<EditWordParams, 'TiOrder' | 'TxID'> & { txt: string }
+  ) => void;
+  onSetEditingWord: (
+    params: Pick<EditWordParams, 'TxID' | 'TiOrder'> &
+      Partial<Pick<EditWordParams, 'WoID'>>
+  ) => void;
+  setIFrameURL: (url: string | null) => void;
 }) {
-  const titext = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] as const;
+  const { WoID, WoStatus } = word;
+  const { TiTextLC, TiText } = textItem;
+  // TODO
+  const onSetAudioPosition = () => {};
+  // TODO currCharCount vs totalCharCount
+  const totalcharcount = 0;
+  // TODO
+  const titext: ArrV10 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   return (
     <span
       id={spanID}
@@ -249,53 +293,50 @@ function SingleWord({
         TiTextLC
       )}`}
       onClick={() =>
-        word_click_event_do_text_text({
-          TID,
+        WordClickEventDoTextText({
+          TxID: TID,
           language,
           mw: titext,
-          data_ann: 'TODO',
+          ann: 'TODO',
           textItem,
+          // TODO perhaps optional WoID
           word,
+          onSetEditingNewWord,
+          onSetNewWord,
+          setIFrameURL,
+          onDeleteWord,
+          setTranslateAPIParams,
+          title,
+          onInsertIgnoreWord,
+          onSetWordStatus,
+          onSetEditingWord,
         })
       }
       onDoubleClick={() =>
-        word_dblclick_event_do_text_text({
-          // TODO currCharCount vs totalCharCount
-          data_pos: currcharcount,
-          setPos: () => {},
+        WordDblclickEventDoTextText({
+          pos: currcharcount,
+          onSetAudioPosition,
           totalcharcount,
         })
       }
-      data_order={TiOrder}
-      data_wid={WoID}
-      data_trans="<?php echo tohtml(repl_tab_nl($record['WoTranslation']) . getWordTagList($record['WoID'], ' ', 1, 0)); ?>"
-      data_rom={WoRomanization}
-      data_status={WoStatus}
-      data_mw2={titext[2]}
-      data_mw3={titext[3]}
-      data_mw4={titext[4]}
-      data_mw5={titext[5]}
-      data_mw6={titext[6]}
-      data_mw7={titext[7]}
-      data_mw8={titext[8]}
-      data_mw9={titext[9]}
+      // TODO
+      // data_trans="<?php echo tohtml(repl_tab_nl($record['WoTranslation']) . getWordTagList($record['WoID'], ' ', 1, 0)); ?>"
     >
       {TiText}
     </span>
   );
 }
-/**
- *
- */
+
 function MultiWord({
-  textItem: { TiText, TiWordCount, TiOrder, TiTextLC },
+  textItem,
   showAll,
   hideuntil,
+  totalcharcount,
   setHideUntil,
   spanID,
   currcharcount,
   hidetag,
-  word: { WoStatus, WoID, WoRomanization },
+  word,
 }: {
   word: Pick<Word, 'WoStatus' | 'WoRomanization'> & { WoID?: Word['WoID'] };
   textItem: Pick<TextItem, 'TiText' | 'TiWordCount' | 'TiOrder' | 'TiTextLC'>;
@@ -305,8 +346,14 @@ function MultiWord({
   setHideUntil: (val: number) => void;
   spanID: string;
   hidetag: string | null;
+  totalcharcount: number;
 }) {
-  if (WoID) {
+  // TODO
+  const TxID = 0 as TextsID;
+  const { TiText, TiWordCount, TiOrder, TiTextLC } = textItem;
+
+  const { WoStatus, WoID } = word;
+  if (WoID !== undefined) {
     if (!showAll) {
       if (hideuntil === -1) {
         // TODO I'm sure we can do this without state
@@ -321,22 +368,31 @@ function MultiWord({
         } order${TiOrder} word${WoID} status${WoStatus} TERM${strToClassName(
           TiTextLC
         )}`}
-        onClick={() => MwordClickEventDoTextText({ word })}
-        onDoubleClick={() =>
-          word_dblclick_event_do_text_text({
-            totalcharcount,
-            data_pos: currcharcount,
-            setPos: () => {},
+        onClick={() =>
+          MwordClickEventDoTextText({
+            word: { WoID, WoStatus },
+            langDictData: language,
+            textItem,
+            title,
+            TxID,
+            mw: ['TODO'] as any,
           })
         }
-        data_pos={currcharcount}
-        data_order={TiOrder}
-        data_wid={WoID}
+        onDoubleClick={() =>
+          WordDblclickEventDoTextText({
+            totalcharcount,
+            pos: currcharcount,
+            onSetAudioPosition: () => {},
+          })
+        }
+        // data_pos={currcharcount}
+        // data_order={TiOrder}
+        // data_wid={WoID}
         // data_trans="<?php echo tohtml(repl_tab_nl($record['WoTranslation']) . getWordTagList($record['WoID'], ' ', 1, 0)); ?>"
-        data_rom={WoRomanization}
-        data_status={WoStatus}
-        data_code={TiWordCount}
-        data_text={TiText}
+        // data_rom={WoRomanization}
+        // data_status={WoStatus}
+        // data_code={TiWordCount}
+        // data_text={TiText}
       >
         ({showAll ? <>&nbsp; {TiWordCount} &nbsp;</> : TiText})
       </span>
@@ -348,43 +404,22 @@ function MultiWord({
     <span
       id={spanID}
       onDoubleClick={() =>
-        word_dblclick_event_do_text_text({
+        WordDblclickEventDoTextText({
           totalcharcount,
-          data_pos: currcharcount,
-          setPos: () => {},
+          pos: currcharcount,
+          onSetAudioPosition: () => {},
         })
       }
-      onClick={() => MwordClickEventDoTextText(word)}
+      onClick={() => MwordClickEventDoTextText({ word })}
       className={`click mword ${
         showAll ? 'mwsty' : 'wsty'
       } hide order${TiOrder} TERM${strToClassName(TiTextLC)}`}
-      data_pos={currcharcount}
-      data_order={TiOrder}
-      data_code={TiWordCount}
-      data_text={TiText}
+      // data_pos={currcharcount}
+      // data_order={TiOrder}
+      // data_code={TiWordCount}
+      // data_text={TiText}
     >
       {showAll ? <>&nbsp;{TiWordCount}&nbsp;</> : <>{TiText}</>}
     </span>
   );
 }
-
-// function strToClassName($string)
-// {
-// 	// escapes everything to "¤xx" but not 0-9, a-z, A-Z, and unicode >= (hex 00A5, dec 165)
-// 	$l = mb_strlen($string, 'UTF-8');
-// 	$r = '';
-// 	for ($i = 0; $i < $l; $i++) {
-// 		$c = mb_substr($string, $i, 1, 'UTF-8');
-// 		$o = ord($c);
-// 		if (
-// 			($o < 48) ||
-// 			($o > 57 && $o < 65) ||
-// 			($o > 90 && $o < 97) ||
-// 			($o > 122 && $o < 165)
-// 		)
-// 			$r .= '¤' . strToHex($c);
-// 		else
-// 			$r .= $c;
-// 	}
-// 	return $r;
-// }

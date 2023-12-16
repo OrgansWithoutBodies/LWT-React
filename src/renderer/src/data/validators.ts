@@ -4,6 +4,7 @@ import { EntryRowComponent } from '../Plugin';
 import { PLUGINS } from '../plugins';
 import { EntryRowType } from '../ui-kit/EntryRow';
 import { brandedNumber, brandedString, BrandedString } from './branding';
+import { NumericalSettingInRangeValidator } from './settings';
 
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
@@ -60,16 +61,16 @@ const isValidURLTemplate = (
   validationString.startsWith('*http://') ||
   validationString.startsWith('*https://');
 
-const URLValidator = () =>
+export const URLValidator = () =>
   ss.string() && ss.define<BrandedString<'URL'>>('url', isValidURL);
 // TODO
 const APIURLValidator = () =>
   ss.string() && ss.define<APIURLTemplate>('api-url', isValidAPIURL);
 const URLTemplateValidator = (): ss.Struct<any, any> =>
   ss.string() && ss.define('urlTemplate', isValidURLTemplate);
-const DictURLValidator: ss.Struct<
+export const DictURLValidator: () => ss.Struct<
   APIURLTemplate | URLTemplate | BrandedString<'URL'>
-> = ss.union([URLTemplateValidator(), APIURLValidator(), URLValidator()]);
+> = () => ss.union([URLTemplateValidator(), APIURLValidator(), URLValidator()]);
 export const NumberInListValidator = <TNum extends Readonly<number[]>>(
   numbers: TNum
 ) =>
@@ -190,11 +191,11 @@ export const LanguagesValidator = ss.object({
   // TODO no duplicates
   LgName: ss.size(ss.string(), 1, 40),
   // LgDict1URI: varchar(200) NOT NULL,
-  LgDict1URI: ss.nonempty(DictURLValidator),
+  LgDict1URI: ss.nonempty(DictURLValidator()),
   // LgDict2URI: varchar(200) DEFAULT NULL,
-  LgDict2URI: ss.optional(DictURLValidator),
+  LgDict2URI: ss.optional(DictURLValidator()),
   // LgGoogleTranslateURI: varchar(200) DEFAULT NULL,
-  LgGoogleTranslateURI: ss.optional(DictURLValidator),
+  LgGoogleTranslateURI: ss.optional(DictURLValidator()),
   // LgExportTemplate: varchar(1000) DEFAULT NULL,
   LgExportTemplate: ss.optional(ss.string()),
   // LgTextSize: int(5) unsigned NOT NULL DEFAULT '100',
@@ -404,33 +405,59 @@ export const WordTagsValidator = ss.object({
   // KEY (`WtWoID`,`WtTgID`),
   ...getValidatorPluginsFor(Persistable.wordtags),
 });
+
 export const SettingsObjValidator = ss.object({
   dbversion: ss.string(),
-  showallwords: NumberInListValidator([0, 1]),
+  showallwords: NumberInListValidator([0, 1] as const),
   currenttext: textID,
   currentlanguage: ss.optional(languagesID),
   lastscorecalc: ss.number(),
-  'set-text-h-frameheight-no-audio': ss.number(),
-  'set-text-h-frameheight-with-audio': ss.number(),
-  'set-text-l-framewidth-percent': ss.number(),
-  'set-text-r-frameheight-percent': ss.number(),
-  'set-test-h-frameheight': ss.number(),
-  'set-test-l-framewidth-percent': ss.number(),
-  'set-test-r-frameheight-percent': ss.number(),
-  'set-test-main-frame-waiting-time': ss.number(),
-  'set-test-edit-frame-waiting-time': ss.number(),
+  'set-text-h-frameheight-no-audio': NumericalSettingInRangeValidator(
+    'set-text-h-frameheight-no-audio'
+  ),
+  'set-text-h-frameheight-with-audio': NumericalSettingInRangeValidator(
+    'set-text-h-frameheight-with-audio'
+  ),
+  'set-text-l-framewidth-percent': NumericalSettingInRangeValidator(
+    'set-text-l-framewidth-percent'
+  ),
+  'set-text-r-frameheight-percent': NumericalSettingInRangeValidator(
+    'set-text-r-frameheight-percent'
+  ),
+  'set-test-h-frameheight': NumericalSettingInRangeValidator(
+    'set-test-h-frameheight'
+  ),
+  'set-test-l-framewidth-percent': NumericalSettingInRangeValidator(
+    'set-test-l-framewidth-percent'
+  ),
+  'set-test-r-frameheight-percent': NumericalSettingInRangeValidator(
+    'set-test-r-frameheight-percent'
+  ),
+  'set-test-main-frame-waiting-time': NumericalSettingInRangeValidator(
+    'set-test-main-frame-waiting-time'
+  ),
+  'set-test-edit-frame-waiting-time': NumericalSettingInRangeValidator(
+    'set-test-edit-frame-waiting-time'
+  ),
+  // TODO
   'set-test-sentence-count': ss.number(),
+  // TODO
   'set-term-sentence-count': ss.number(),
-  'set-archivedtexts-per-page': ss.number(),
-  'set-texts-per-page': ss.number(),
-  'set-terms-per-page': ss.number(),
-  'set-tags-per-page': ss.number(),
+  'set-archivedtexts-per-page': NumericalSettingInRangeValidator(
+    'set-archivedtexts-per-page'
+  ),
+  'set-texts-per-page': NumericalSettingInRangeValidator('set-texts-per-page'),
+  'set-terms-per-page': NumericalSettingInRangeValidator('set-terms-per-page'),
+  'set-tags-per-page': NumericalSettingInRangeValidator('set-tags-per-page'),
+  // TODO
   'set-show-text-word-counts': ss.number(),
-  'set-mobile-display-mode': NumberInListValidator([0, 1, 2]),
-  'set-similar-terms-count': ss.number(),
+  'set-mobile-display-mode': NumberInListValidator([0, 1, 2] as const),
+  'set-similar-terms-count': NumericalSettingInRangeValidator(
+    'set-similar-terms-count'
+  ),
   'set-text-visit-statuses-via-key': NumberInListValidator([
     1, 2, 3, 4, 5, 12, 13, 14, 15, 23, 24, 25, 34, 35, 45, 599,
-  ]),
+  ] as const),
   'set-term-translation-delimiters': ss.string(),
   // TODO differentiate from every entry
   ...getValidatorPluginsFor(Persistable.settings),

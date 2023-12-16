@@ -1,4 +1,8 @@
-import { NumericalStrength, StrengthMapNumericalKey } from './StrengthMap';
+import {
+  NumericalStrength,
+  get_status_abbr,
+  get_status_name,
+} from './StrengthMap';
 
 export function GetMultipleTagsActionsSelectOptions() {
   return (
@@ -77,20 +81,20 @@ export function GetTextsSortSelectoptions({
   );
 }
 
-const MarkedTagsSelectOptions = {
+export const MarkedTagsSelectOptions = {
   del: 'Delete Marked Tags',
 } as const;
-const AllTagsSelectOptions = {
+export const AllTagsSelectOptions = {
   delall: 'Delete ALL Tags',
 } as const;
-const MarkedArchiveTextSelectOptions = {
+export const MarkedArchiveTextSelectOptions = {
   addtag: 'Add Tag',
   deltag: 'Remove Tag',
   unarch: 'Unarchive Marked Texts',
   del: 'Delete Marked Texts',
   delall: 'Delete ALL Tags',
 } as const;
-const MarkedTextsSelectOption = {
+export const MarkedTextsSelectOption = {
   test: 'Test Marked Texts',
   addtag: 'Add Tag',
   deltag: 'Remove Tag',
@@ -178,20 +182,35 @@ function GetSetStatusOption({
   );
 }
 
-/**
- *
- * @param n
- */
-function get_status_name(n: NumericalStrength) {
-  return StrengthMapNumericalKey[n].name;
+export function GetSecondsSelectoptions({
+  selectedVal = 5,
+}: {
+  selectedVal?: number;
+}) {
+  return (
+    <>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+        <option value={i} selected={i === selectedVal}>
+          {i} sec
+        </option>
+      ))}
+    </>
+  );
 }
 
-// -------------------------------------------------------------
-
-/**
- *
- * @param n
- */
-export function get_status_abbr(n: NumericalStrength) {
-  return StrengthMapNumericalKey[n].abbr;
+export function GetPlaybackrateSelectoptions({
+  selectedVal: selectedVal = 10,
+}: {
+  selectedVal?: number;
+}) {
+  console.log('SELECTPLAYRATE', selectedVal);
+  return (
+    <>
+      {[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) => (
+        <option value={i} selected={i === selectedVal}>
+          &nbsp;{i < 10 ? ` 0.${i}x` : ` 1.${i - 10} x `}&nbsp;
+        </option>
+      ))}
+    </>
+  );
 }

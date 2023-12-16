@@ -46,7 +46,7 @@ export function CheckText({
       <Header title="Check Text" />
 
       <p>&nbsp;</p>
-      <form className="validate" action="/check_text" method="post">
+      <form action="/check_text" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>

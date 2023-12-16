@@ -50,7 +50,7 @@ function TranslateLines({
   return (
     <>
       <DictionaryLinks
-        lang={language}
+        langDictData={language}
         sentenceString={sentence.SeText}
         wordString={word}
         setTranslateAPIParams={setTranslateAPIParams}

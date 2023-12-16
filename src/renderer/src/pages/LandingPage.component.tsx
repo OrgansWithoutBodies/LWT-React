@@ -10,6 +10,9 @@ import { PLUGINS } from '../plugins';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
 
+/**
+ *
+ */
 export function LandingPage() {
   const {
     releaseDate,
@@ -21,17 +24,13 @@ export function LandingPage() {
     frontendVersion,
     frontendSource,
   } = useAppContext();
-  const [{ texts, languages, activeLanguageID, activeLanguage, settings }] =
-    useData([
-      'languages',
-      'activeLanguageID',
-      'activeLanguage',
-      'settings',
-      'texts',
-    ]);
-  const currentTextID = settings['currenttext'];
-  const currentText = texts.find((text) => text.TxID === currentTextID);
-  console.log('LANGS', languages);
+  const [{ languages, activeLanguageID }] = useData([
+    'languages',
+    'activeLanguageID',
+    'activeLanguage',
+    'settings',
+    'texts',
+  ]);
   const pluginLinks = PLUGINS.filter(
     ({ landingPageLinks }) => landingPageLinks !== undefined
   )
@@ -125,39 +124,7 @@ export function LandingPage() {
               }
             />
           </div>
-          {currentText && activeLanguage && (
-            <ul>
-              <li>
-                My last Text (in
-                {activeLanguage.LgName}):
-                <br /> <i>{currentText.TxTitle}</i>
-                <br />
-                <A href={`/do_text?start=${currentText.TxID}`}>
-                  <Icon src="book-open-bookmark" title="Read" />
-                  &nbsp;Read
-                </A>
-                &nbsp; &nbsp;
-                <A href={`/do_test?text=${currentText.TxID}`}>
-                  <Icon src="question-balloon" title="Test" />
-                  &nbsp;Test
-                </A>
-                &nbsp; &nbsp;
-                <A href={`/print_text?text=${currentText.TxID}`}>
-                  <Icon src="printer" title="Print" />
-                  &nbsp;Print
-                </A>
-                {currentText.TxAnnotatedText.length > 0 && (
-                  <>
-                    &nbsp; &nbsp;
-                    <A href={`/print_impr_text?text=${currentText.TxID}`}>
-                      <Icon src="tick" title="Improved Annotated Text" />
-                      &nbsp;Ann. Text
-                    </A>
-                  </>
-                )}
-              </li>
-            </ul>
-          )}
+          <CurrentText />
         </div>
 
         <ul>
@@ -310,4 +277,58 @@ if (! isset(mb)) mb = '0.0';
 export function DevModeGate({ children }: PropsWithChildren<object>) {
   const { devMode } = useAppContext();
   return <>{devMode ? { children } : <></>}</>;
+}
+/**
+ *
+ */
+export function CurrentText() {
+  const [{ settings, languages, texts }] = useData([
+    'settings',
+    'languages',
+    'texts',
+  ]);
+  const currentTextID = settings['currenttext'];
+  if (!currentTextID) {
+    return <></>;
+  }
+  const currentText = texts.find((val) => val.TxID === currentTextID);
+  if (!currentText) {
+    throw new Error('Invalid Active Text ID!');
+  }
+  const language = languages.find((val) => val.LgID === currentText.TxLgID);
+  if (!language) {
+    throw new Error('Invalid Language for Active Text!');
+  }
+  return (
+    <ul>
+      <li>
+        My last Text (in {language.LgName}):
+        <br /> <i>{currentText.TxTitle}</i>
+        <br />
+        <A href={`/do_text?start=${currentText.TxID}`}>
+          <Icon src="book-open-bookmark" title="Read" />
+          &nbsp;Read
+        </A>
+        &nbsp; &nbsp;
+        <A href={`/do_test?text=${currentText.TxID}`}>
+          <Icon src="question-balloon" title="Test" />
+          &nbsp;Test
+        </A>
+        &nbsp; &nbsp;
+        <A href={`/print_text?text=${currentText.TxID}`}>
+          <Icon src="printer" title="Print" />
+          &nbsp;Print
+        </A>
+        {currentText.TxAnnotatedText.length > 0 && (
+          <>
+            &nbsp; &nbsp;
+            <A href={`/print_impr_text?text=${currentText.TxID}`}>
+              <Icon src="tick" title="Improved Annotated Text" />
+              &nbsp;Ann. Text
+            </A>
+          </>
+        )}
+      </li>
+    </ul>
+  );
 }

@@ -1,9 +1,24 @@
 import { Query } from '@datorama/akita';
 import { Observable, combineLatest, count, map, tap } from 'rxjs';
+import { NumericalStrength } from '../pages/StrengthMap';
 import type { ArchivedText, Tag, Tag2, Text } from '../utils/parseMySqlDump';
 import { DataState, DataStore, dataStore } from './data.storage';
 import type { Settings } from './settings';
 import type { LanguagesID } from './validators';
+
+export type NumericalStrengthPotentiallyCompound =
+  | NumericalStrength
+  | 12
+  | 13
+  | 14
+  | 15
+  | 23
+  | 24
+  | 25
+  | 34
+  | 35
+  | 45
+  | 599;
 
 // const MINS_IN_SECONDS = 60;
 // const HOURS_IN_MINS = 60;
@@ -80,21 +95,23 @@ export class DataQuery extends Query<DataState> {
   public wordtags = this.select('wordtags');
 
   public settings: Observable<Settings> = this.select('settings').pipe(
-    map(
-      (settings) =>
-        Object.fromEntries(
-          settings.map(
-            ({ StKey, StValue }) =>
-              [
-                StKey,
-                Number.isNaN(Number.parseInt(StValue))
-                  ? StValue
-                  : Number.parseInt(StValue),
-              ] as [keyof Settings, Settings[keyof Settings]]
-          )
-        ) as Settings
-    )
+    map((settings) => {
+      return Object.fromEntries(
+        settings.map(
+          ({ StKey, StValue }) =>
+            [
+              StKey,
+              Number.isNaN(Number.parseInt(StValue))
+                ? StValue
+                : Number.parseInt(StValue),
+            ] as [keyof Settings, Settings[keyof Settings]]
+        )
+      ) as Settings;
+    }),
+    tap((settings) => console.log('TEST123-query', settings))
   );
+
+  public;
 
   public notificationMessage = this.select('notificationMessage');
 
@@ -122,6 +139,14 @@ export class DataQuery extends Query<DataState> {
         ? // semantically null's more meaningful here because null is an explicit state we can set
           null
         : val.currentlanguage
+    )
+  );
+  public activeTextID = this.settings.pipe(
+    map((val) =>
+      val.currenttext === undefined || val.currentlanguage === null
+        ? // semantically null's more meaningful here because null is an explicit state we can set
+          null
+        : val.currenttext
     )
   );
 
@@ -225,9 +250,10 @@ export class DataQuery extends Query<DataState> {
             ])
           )
         );
+
         const statisticMap: Record<
           LanguagesID,
-          Record<1 | 2 | 3 | 4 | 5 | 15 | 14 | 99 | 599 | 98 | 'total', number>
+          Record<NumericalStrengthPotentiallyCompound | 'total', number>
         > = statisticMapEntries;
         return statisticMap;
       }

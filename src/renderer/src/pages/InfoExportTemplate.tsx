@@ -132,7 +132,7 @@ export function InfoExportTemplate() {
           <th className="th1">
             HTML Text. HTML special characters are escaped:
             <br />
-            &lt; = &lt; / &gt; = &gt; / & = &amp; / &quot; = &quot;
+            &lt; = &lt; / &gt; = &gt; / & = & / &quot; = &quot;
           </th>
         </tr>
 

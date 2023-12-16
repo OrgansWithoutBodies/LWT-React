@@ -82,6 +82,7 @@ export class DataService {
       const { set: setter } = MyPersistanceHandles;
 
       const { [key]: value } = this.dataStore.getValue();
+      console.log('TEST123-SETTING', value, key);
       setter(key, value);
     }
   }
@@ -856,7 +857,9 @@ export class DataService {
       // TODO setting-specific message here?
       notificationMessage: { txt: 'Updated Settings' },
       settings: Object.entries({
-        ...oldSettings,
+        ...Object.fromEntries(
+          oldSettings.map((val) => [val.StKey, val.StValue])
+        ),
         ...settings,
       }).map(([key, val]) => ({
         StKey: key as SettingsID,

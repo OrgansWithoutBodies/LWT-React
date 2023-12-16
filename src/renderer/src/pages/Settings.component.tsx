@@ -193,7 +193,7 @@ export function SettingsComponent(): JSX.Element {
     <>
       <Header title="Settings/Preferences" />
       <p>&nbsp;</p>
-      <form className="validate" action="/settings" method="post">
+      <form action="/settings" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>

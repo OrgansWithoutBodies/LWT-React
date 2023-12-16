@@ -276,7 +276,10 @@ export function ReaderWrapper() {
   const start = searchParams.get('start');
   // TODO sanitize
   // TODO verify exists
-  return <ReaderPage textID={Number.parseInt(start!)} />;
+  if (!start) {
+    throw new Error('Invalid Start ID!');
+  }
+  return <ReaderPage textID={Number.parseInt(start)} />;
 }
 
 export function TestWrapper() {

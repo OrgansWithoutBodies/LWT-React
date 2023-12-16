@@ -191,7 +191,7 @@ export const PopoverTrigger = React.forwardRef<
     propRef
   ) => {
     const context = usePopoverContext();
-    console.log(context.refs);
+    // console.log(context.refs);
     const childrenRef = (children as any).ref;
 
     const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
