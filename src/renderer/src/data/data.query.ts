@@ -158,7 +158,7 @@ export class DataQuery extends Query<DataState> {
     map(
       ([activeLanguageID, languages]) =>
         languages.find((language) => {
-          console.log('TATOEBAKEY', language.LgTatoebaKey);
+          console.log('TATOEBAKEY', language.LgTatoebaSourceKey);
           return language.LgID === activeLanguageID;
         }) || null
     )

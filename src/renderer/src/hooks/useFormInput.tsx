@@ -44,7 +44,7 @@ export function useFormInput<
 }) {
   // TODO useFormContext? for shared without build
   // memo to avoid retriggering
-  const refMap = RefMap(validator);
+  const refMap = RefMap(validator, entry);
 
   const [formErrors, setFormErrors] = useState<{
     [key in keyof typeof validator.TYPE]?: string;

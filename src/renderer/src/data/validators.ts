@@ -60,6 +60,12 @@ const isValidURLTemplate = (
 ): validationString is URLTemplate =>
   validationString.startsWith('*http://') ||
   validationString.startsWith('*https://');
+const LowerCaseValidator = () =>
+  ss.refine(
+    ss.string(),
+    'lowercase-string',
+    (val) => val.toLowerCase() === val
+  );
 
 export const URLValidator = () =>
   ss.string() && ss.define<BrandedString<'URL'>>('url', isValidURL);
@@ -214,9 +220,11 @@ export const LanguagesValidator = ss.object({
   LgSplitEachChar: BooleanNumberValidator,
   // LgRightToLeft: int(1) unsigned NOT NULL DEFAULT '0',
   LgRightToLeft: BooleanNumberValidator,
-  ...getValidatorPluginsFor<Persistable.languages, 'LgTatoebaKey'>(
-    Persistable.languages
-  ),
+  ...getValidatorPluginsFor<
+    Persistable.languages,
+    // TODO dont specify
+    'LgTatoebaSourceKey' | 'LgTatoebaTargetKey'
+  >(Persistable.languages),
 });
 export type DictURITemplateType =
   (typeof LanguagesValidator.TYPE)['LgDict1URI'];
@@ -298,11 +306,12 @@ export const TextItemsValidator = ss.object({
   TiText: ss.nonempty(ss.string()),
   // TiTextLC: varchar(250) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   // KEY `TiTextLC` (`TiTextLC`),
-  // TODO check isLowerCase
-  TiTextLC: ss.nonempty(ss.string()),
+  TiTextLC: ss.nonempty(LowerCaseValidator()),
   // TiIsNotWord: tinyint(1) NOT NULL,
   // KEY `TiIsNotWord` (`TiIsNotWord`)
   TiIsNotWord: NumberInListValidator([0, 1] as const),
+  // TODO
+  // TiAudioSeconds: ss.optional(ss.number()),
   ...getValidatorPluginsFor(Persistable.textitems),
 });
 
@@ -355,7 +364,7 @@ export const WordsValidator = ss.object({
   WoText: ss.nonempty(ss.string()),
   // WoTextLC: varchar(250) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   // KEY `WoTextLC` (`WoTextLC`),
-  WoTextLC: ss.nonempty(ss.string()),
+  WoTextLC: ss.nonempty(LowerCaseValidator()),
   // WoStatus: tinyint(4) NOT NULL,
   // KEY `WoStatus` (`WoStatus`),
   WoStatus: NumberInListValidator([0, 1, 2, 3, 4, 5, 98, 99] as const),

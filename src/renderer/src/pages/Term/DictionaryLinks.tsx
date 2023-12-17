@@ -17,7 +17,7 @@ export type LanguageDictionaryDataTempHack = LanguageDictionaryData &
   Pick<
     Language,
     // TODO dont rely on tatoebakey here explicitly
-    'LgTatoebaKey'
+    'LgTatoebaSourceKey' | 'LgTatoebaTargetKey'
   >;
 
 export function DictionaryLinks({
@@ -41,12 +41,11 @@ export function DictionaryLinks({
     LgDict1URI,
     LgDict2URI,
     LgGoogleTranslateURI,
-    // TODO get 'LgTatoebaKey' from api
-    LgTatoebaKey: sourceKey,
+    // TODO get 'LgTatoebaSourceKey' from api
+    LgTatoebaSourceKey: sourceKey,
+    LgTatoebaTargetKey: targetKey,
   } = langDictData;
 
-  // TODO
-  const targetKey = 'eng';
   return (
     <>
       Lookup Term:
@@ -122,6 +121,7 @@ export function MultiFunctionalURL({
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
 }>) {
+  // TODO maybe pass params to templateStr?
   const apiStrPos = templateStr.indexOf('api://');
   if (apiStrPos === 0) {
     console.log('TEST123-API', word);

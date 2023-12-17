@@ -1,12 +1,144 @@
 import { useState } from 'react';
+import SplitPane from 'react-split-pane';
+import { LanguagesID, TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { useTick } from '../hooks/useTimer';
+import { useUpdateActiveText } from '../hooks/useUpdateActiveText';
+import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
+import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { Language, Word } from '../utils/parseMySqlDump';
+import { TranslationAPI } from './IO/APITranslation.component';
 import { RunTestForWord } from './OverlibComponents';
-import { Modality } from './ReaderPage.component';
+import { IFramePane, Modality } from './ReaderPage.component';
 import { NumericalStrength, get_status_abbr } from './StrengthMap';
+import { AddNewWordPane } from './Term/AddNewWordPane';
+//   const currenttag2 = validateTextTag(
+//     processSessParam('tag2', 'currenttexttag2', '', 0),
+//     currentlang
+//   );
+//   const currenttag12 = processSessParam('tag12', 'currenttexttag12', '', 0);
+//   if (currenttag1 === '' && currenttag2 === '') const wh_tag = '';
+//   else {
+//     if (currenttag1 !== '') {
+//       if (currenttag1 === -1) {
+//         const wh_tag1 = 'group_concat(TtT2ID) IS NULL';
+//       } else {
+//         const wh_tag1 =
+//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
+//         // . currenttag1 .
+//         ("/%'");
+//       }
+//     }
+//     if (currenttag2 !== '') {
+//       if (currenttag2 === -1) {
+//         const wh_tag2 = 'group_concat(TtT2ID) IS NULL';
+//       } else {
+//         const wh_tag2 =
+//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
+//         // . currenttag2 .
+//         ("/%'");
+//       }
+//     }
+//     if (currenttag1 !== '' && currenttag2 === '') {
+//       const wh_tag = ' having (';
+//       // . wh_tag1 .
+//       (') ');
+//     } else if (currenttag2 !== '' && currenttag1 === '') {
+//       const wh_tag = ' having (';
+//       // . wh_tag2 .
+//       (') ');
+//     } else {
+//       const wh_tag = ' having (('(
+//         //  . wh_tag1 .
+//         currenttag12 ? ') AND (' : ') OR ('
+//       );
+//       // . wh_tag2 .
+//       (')) ');
+//     }
+//   }
+//   const currentsort = processDBParam('sort', 'currenttextsort', '1', 1);
+//   const sorts = array('TxTitle', 'TxID desc', 'TxID');
+//   const lsorts = count(sorts);
+//   if (currentsort < 1) const currentsort = 1;
+//   if (currentsort > lsorts) const currentsort = lsorts;
+//   if (onlyann) {
+//     const sql =
+//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID AND LENGTH(TxAnnotatedText) > 0 ';
+//     //  . wh_lang . wh_query .
+//     // ' group by TxID '
+//     //  . wh_tag .
+//     // ' order by '
+//     //  . sorts[currentsort - 1];
+//   } else {
+//     const sql =
+//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID ';
+//     // . wh_lang . wh_query .
+//     // ' group by TxID '
+//     // . wh_tag .
+//     // ' order by '
+//     // . sorts[currentsort - 1];
+//   }
+//   const list = array(0);
+//   while ((record = mysqli_fetch_assoc(res))) {
+//     array_push(list, record['TxID'] + 0);
+//   }
+//   array_push(list, 0);
+//   const listlen = count(list);
+//   for (let i = 1; i < listlen - 1; i++) {
+//     if (list[i] === textid) {
+//       if (list[i - 1] !== 0) {
+//         const title = tohtml(getTextTitle(list[i - 1]));
+//         const prev = (
+//           <>
+//             <a href={`${url}${list[i - 1]}`} target="_top">
+//               <img
+//                 src="icn/navigation-180-button.png"
+//                 title="Previous Text: ' . title . '"
+//                 alt="Previous Text: ' . title . '"
+//               />
+//             </a>
+//           </>
+//         );
+//       } else
+//         const prev = (
+//           <>
+//             <img
+//               src="icn/navigation-180-button-light.png"
+//               title="No Previous Text"
+//               alt="No Previous Text"
+//             />
+//           </>
+//         );
+//       if (list[i + 1] !== 0) {
+//         const title = tohtml(getTextTitle(list[i + 1]));
+//         const next = (
+//           <>
+//             <a href={`${url}${list[i + 1]}`} target="_top">
+//               <img
+//                 src="icn/navigation-000-button.png"
+//                 title="Next Text: ' . title . '"
+//                 alt="Next Text: ' . title . '"
+//               />
+//             </a>
+//           </>
+//         );
+//       } else {
+//         const next = (
+//           <>
+//             <img
+//               src="icn/navigation-000-button-light.png"
+//               title="No Next Text"
+//               alt="No Next Text"
+//             />
+//           </>
+//         );
+//       } // return add . prev . ' ' . next;
+//     }
+//   }
+//   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
+// }
 
 // TODO deprecate?
 // function getPreviousAndNextTextLinks(textid, url, onlyann, add) {
@@ -390,6 +522,163 @@ export function Tester({
         </span>
       </div>
     </>
+  );
+}
+/**
+ *
+ */
+
+export function TesterPage({
+  langID: langID,
+  textID: textID,
+}: {
+  textID: TextsID | null;
+  langID: LanguagesID | null;
+}) {
+  const [{ texts, words, languages, textitems }] = useData([
+    'texts',
+    'words',
+    'languages',
+    'textitems',
+  ]);
+  useUpdateActiveText({ textID });
+
+  const [activeWord, setActiveWord] = useState<string | null>();
+  // TODO can be multiple texts?
+  const [translateAPIParams, setTranslateAPIParams] = useState<
+    (APITranslateTerm<string, string> & { apiKey: string }) | null
+  >(null);
+  const text =
+    textID !== null
+      ? texts.find((text) => text.TxID === textID)
+      : texts.find((text) => text.TxLgID === langID);
+  const [iFrameURL, setIFrameURL] = useState<string | null>(null);
+
+  const [testModality, setTestModality] = useState<Modality>(null);
+  const language = languages.find(
+    (val) => val.LgID === (langID ? langID : text.TxLgID)
+  );
+  // TODO might be no text & only specified language?
+  if (!text) {
+    return <></>;
+  }
+  if (!language) {
+    return <></>;
+  }
+  const wordLookupKeyedByTextLC = Object.fromEntries(
+    words
+      .filter((word) => word.WoLgID === language.LgID)
+      .map((val) => [val.WoTextLC, val])
+  );
+  const tableWords = textitems
+    .filter(
+      (ti) =>
+        ti.TiTxID === text.TxID &&
+        ti.TiLgID === language.LgID &&
+        ti.TiIsNotWord === 0 &&
+        wordLookupKeyedByTextLC[ti.TiTextLC]
+    )
+    .map((ti) => wordLookupKeyedByTextLC[ti.TiTextLC]);
+  console.log('TEST123-table', tableWords);
+
+  const availableAPIPlugins = Object.fromEntries(
+    PLUGINS.filter((val) => val.api !== undefined).map((plugin) => [
+      plugin.pluginName,
+      plugin.api!,
+    ])
+  );
+  const currentlyActiveAPI = translateAPIParams
+    ? availableAPIPlugins[translateAPIParams?.apiKey]
+    : null;
+  return (
+    <SplitPane split="vertical" minSize={50} defaultSize="55%">
+      <SplitPane
+        style={{ overflowWrap: 'break-word' }}
+        split="horizontal"
+        minSize={50}
+        defaultSize="20%"
+      >
+        <>
+          <Header title={`TEST ▶ ${text.TxTitle} (Due: TODO of TODO)`} />
+
+          <p style={{ marginBottom: 0 }}>
+            <input
+              type="button"
+              value="..[L2].."
+              // TODO difference between onClick & onClickCapture?
+              onClickCapture={() => setTestModality(1)}
+            />
+            <input
+              type="button"
+              value="..[L1].."
+              onClickCapture={() => setTestModality(2)}
+            />
+            <input
+              type="button"
+              value="..[••].."
+              onClickCapture={() => setTestModality(3)}
+            />{' '}
+            &nbsp; | &nbsp;
+            <input
+              type="button"
+              value="[L2]"
+              onClickCapture={() => setTestModality(4)}
+            />
+            <input
+              type="button"
+              value="[L1]"
+              onClickCapture={() => setTestModality(5)}
+            />{' '}
+            &nbsp; | &nbsp;
+            <input
+              type="button"
+              value="Table"
+              onClickCapture={() => setTestModality('table')}
+            />
+          </p>
+        </>
+        {testModality === null ? (
+          <></>
+        ) : testModality === 'table' ? (
+          <TesterTable language={language} words={tableWords} />
+        ) : (
+          <Tester
+            modality={testModality}
+            setTranslateAPIParams={setTranslateAPIParams}
+            setIFrameURL={setIFrameURL}
+          />
+        )}
+      </SplitPane>
+      <SplitPane split="horizontal" minSize={50} defaultSize="60%">
+        {activeWord ? (
+          <AddNewWordPane
+            word={activeWord}
+            existingTerm={words.find(
+              ({ WoTextLC }) => activeWord.toLowerCase() === WoTextLC
+            )}
+            langID={text.TxLgID}
+            onClearActiveWord={() => setActiveWord(null)}
+            setIFrameURL={setIFrameURL}
+            setTranslateAPIParams={setTranslateAPIParams}
+          />
+        ) : (
+          <></>
+        )}
+        {translateAPIParams && currentlyActiveAPI ? (
+          <TranslationAPI
+            onAcceptLine={(data) =>
+              console.log('TEST123-ACCEPTING TRANSLATION: ', data)
+            }
+            api={currentlyActiveAPI}
+            sourceKey={translateAPIParams.sourceKey}
+            targetKey={translateAPIParams.targetKey}
+            word={translateAPIParams.word}
+          />
+        ) : (
+          <IFramePane url={iFrameURL} />
+        )}{' '}
+      </SplitPane>
+    </SplitPane>
   );
 }
 // TODO

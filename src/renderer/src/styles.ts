@@ -31,7 +31,8 @@
  */
 
 import { CSSObject } from 'styled-components';
-
+import blueMonday from '../public/css/jplayer_skin/jplayer.blue.monday.jpg';
+import pbarAni from '../public/css/jplayer_skin/pbar-ani.gif';
 /**
  ************************************************************
  * Stylesheet
@@ -571,76 +572,49 @@ export const createColors = (
      **************************************************************
      */
     '.Resizer': {
-      position: 'relative',
-      background: 'darkGray',
+      background: Colors.lum2,
+      zIndex: 1,
       '-moz-box-sizing': 'border-box',
       '-webkit-box-sizing': 'border-box',
-      'box-sizing': 'border-box',
+      boxSizing: 'border-box',
       '-moz-background-clip': 'padding',
       '-webkit-background-clip': 'padding',
-      'background-clip': 'padding-box',
+      backgroundClip: 'padding-box',
     },
-
-    /*
-  .Resizer:hover,
-  .Resizer:active {
-	-webkit-transition: all 2s ease,
-	transition: all 2s ease,
-  } */
-
+    '.Resizer:hover': {
+      '-webkit-transition': 'all 2s ease',
+      transition: 'all 2s ease',
+    },
     '.Resizer.horizontal': {
-      height: '20px',
+      height: '11px',
       margin: '-5px 0',
-      'border-top': '5px solid rgba(255, 255, 255, 0)',
-      'border-bottom': '5px solid rgba(255, 255, 255, 0)',
+      borderTop: `5px solid ${Colors.lum2}`,
+      borderBottom: `5px solid ${Colors.lum2}`,
       cursor: 'row-resize',
+      display: 'flex',
+      justifyContent: 'center',
       width: '100%',
     },
-    /*
-  .Resizer.horizontal:hover,
-  .Resizer.Resizer.horizontal:active {
-	border-top: 5px solid rgba(0, 0, 0, 0.5),
-	border-bottom: 5px solid rgba(0, 0, 0, 0.5),
-  }
-   */
+    '.Resizer.horizontal:hover': {
+      borderTop: `5px solid ${Colors.lum2}`,
+      borderBottom: `5px solid ${Colors.lum2}`,
+    },
     '.Resizer.vertical': {
-      width: '20px',
+      width: '11px',
       margin: '0 -5px',
-      'border-left': '5px solid rgba(255, 255, 255, 0)',
-      'border-right': '5px solid rgba(255, 255, 255, 0)',
+      borderLeft: `5px solid ${Colors.lum2}`,
+      borderRight: `5px solid ${Colors.lum2}`,
       cursor: 'col-resize',
     },
-
-    /*
-  .Resizer.vertical:hover,
-  .Resizer.vertical:active {
-	border-left: 5px solid rgba(0, 0, 0, 0.5),
-	border-right: 5px solid rgba(0, 0, 0, 0.5),
-  }
-  */
-
+    '.Resizer.vertical:hover': {
+      borderLeft: `5px solid ${Colors.lum2}`,
+      borderRight: `5px solid ${Colors.lum2}`,
+    },
     '.Resizer.disabled': {
-      cursor: 'notAllowed',
+      cursor: 'not-allowed',
     },
-    // '.Resizer.disabled':hover,
-    '.Resizer.disabled:active': {
+    '.Resizer.disabled:hover': {
       borderColor: 'transparent',
-    },
-
-    // '.Resizer::after',
-    '.Resizer::before': {
-      content: '',
-      'border-left': '1px solid #333',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-100%)',
-      right: 0,
-      display: 'inline-block',
-      height: '20px',
-      margin: '0 2px',
-    },
-    ' .Resizer::before': {
-      left: 0,
     },
 
     /**
@@ -707,20 +681,262 @@ export const createColors = (
       '-moz-box-sizing': 'border-box',
       '-webkit-box-sizing': 'border-box',
       boxSizing: 'border-box',
-
       border: 'none',
       margin: 0,
       padding: 0,
       width: 'inherit',
-      backgroundColor: 'inherit',
       outline: 'none',
     },
+
+    '.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default':
+      {
+        border: `1px solid #d3d3d3`,
+        backgroundColor: `#e6e6e6`,
+        fontWeight: 'normal',
+        color: `${'#555'}`,
+      },
+
+    ///////
 
     noshade: {
       height: '1px',
       border: 'none',
       color: '#333',
       backgroundColor: '#333',
+    },
+
+    /**
+     ***********************************************************
+     * Tagger
+     **************************************************************
+     */
+
+    /*
+     * Skin for jPlayer Plugin (jQuery JavaScript Library)
+     * http://www.happyworm.com/jquery/jplayer
+     *
+     * Skin Name: Blue Monday (Modified for LWT)
+     *
+     * Copyright (c) 2010 Happyworm Ltd
+     * Dual licensed under the MIT and GPL licenses.
+     *  - http://www.opensource.org/licenses/mit-license.php
+     *  - http://www.gnu.org/copyleft/gpl.html
+     *
+     * Author: Silvia Benvenuti
+     * Skin Version: 3.0 (jPlayer 2.0.0)
+     * Date: 20th December 2010
+     * Modified for LWT
+     */
+
+    'div.jp-audio': {
+      fontSize: '1.25em',
+      FontFamily: 'Verdana, Arial, sans-serif',
+      LineHeight: 1.6,
+      color: '#666',
+    },
+    'div.jp-audio': {
+      width: '307px',
+    },
+    '12div.jp-interface': {
+      position: 'relative',
+      backgroundColor: '#eee',
+      width: '100%',
+      border: '1px solid #eee',
+    },
+    'div.jp-audio div.jp-type-single div.jp-interface': {
+      height: '50px',
+      BorderBottom: 'none',
+    },
+    'div.jp-audio div.jp-type-playlist div.jp-interface': {
+      height: '50px',
+    },
+    'div.jp-interface ul.jp-controls': {
+      listStyleType: 'none',
+      padding: 0,
+      margin: 0,
+    },
+    'div.jp-interface ul.jp-controls li': {
+      display: 'inline',
+    },
+    'div.jp-interface ul.jp-controls a': {
+      position: 'absolute',
+      overflow: 'hidden',
+      TextIndent: '-9999px',
+    },
+    'a.jp-play,a.jp-pause': {
+      width: '40px',
+      height: '40px',
+      ZIndex: 1,
+    },
+    'div.jp-audio div.jp-type-single a.jp-play, div.jp-audio div.jp-type-single a.jp-pause':
+      {
+        top: '5px',
+        left: '7px',
+      },
+    'div.jp-audio div.jp-type-playlist a.jp-play,div.jp-audio div.jp-type-playlist a.jp-pause':
+      {
+        top: '5px',
+        left: '10px',
+      },
+    'a.jp-play': {
+      background: `url(${blueMonday}) 0 0 no-repeat`,
+    },
+    'a.jp-play:hover': {
+      background: `url(${blueMonday}) -41px 0 no-repeat`,
+    },
+    'a.jp-pause': {
+      background: `url(${blueMonday}) 0 -42px no-repeat`,
+      display: 'none',
+    },
+    'a.jp-pause:hover': {
+      background: `url(${blueMonday}) -41px -42px no-repeat`,
+    },
+    'div.jp-audio div.jp-type-single a.jp-stop': {
+      top: '11px',
+      left: '52px',
+    },
+    'div.jp-audio div.jp-type-playlist a.jp-stop': {
+      top: '26px',
+      left: '88px',
+    },
+    'a.jp-stop': {
+      background: `url(${blueMonday}) 0 -83px no-repeat`,
+      width: '28px',
+      height: '28px',
+      ZIndex: 1,
+    },
+    'a.jp-stop:hover': {
+      background: `url(${blueMonday}) -29px -83px no-repeat`,
+    },
+    'div.jp-audio div.jp-type-playlist a.jp-previous': {
+      left: '20px',
+      top: '26px',
+    },
+    'a.jp-previous': {
+      background: `url(${blueMonday}) 0 -112px no-repeat`,
+      width: '28px',
+      height: '28px',
+    },
+    'a.jp-previous:hover': {
+      background: `url(${blueMonday}) -29px -112px no-repeat`,
+    },
+    'div.jp-audio div.jp-type-playlist a.jp-next': {
+      left: '88px',
+      top: '26px',
+    },
+    'a.jp-next': {
+      background: `url(${blueMonday}) 0 -141px no-repeat`,
+      width: '28px',
+      height: '28px',
+    },
+    'a.jp-next:hover': {
+      background: `url(${blueMonday}) -29px -141px no-repeat`,
+    },
+    'div.jp-progress': {
+      position: 'absolute',
+      overflow: 'hidden',
+      backgroundColor: '#ddd',
+    },
+    'div.jp-audio div.jp-type-single div.jp-progress': {
+      top: '17px',
+      left: '90px',
+      width: '122px',
+      height: '15px',
+    },
+    'div.jp-audio div.jp-type-playlist div.jp-progress': {
+      top: '17px',
+      left: '124px',
+      width: '122px',
+      height: '15px',
+    },
+    'div.jp-seek-bar': {
+      background: `url(${blueMonday}) 0 -202px repeat-x`,
+      width: '0px',
+      height: '100%',
+      cursor: 'pointer',
+    },
+    'div.jp-play-bar': {
+      background: `url(${blueMonday}) 0 -218px repeat-x `,
+      width: '0px',
+      height: '100%',
+    },
+    'div.jp-seeking-bg': {
+      background: `url(${pbarAni})`,
+    },
+    'a.jp-mute a.jp-unmute': {
+      width: '18px',
+      height: '15px',
+    },
+    'div.jp-audio div.jp-type-single a.jp-mute div.jp-audio div.jp-type-single a.jp-unmute':
+      {
+        top: '17px',
+        left: '224px',
+      },
+    'div.jp-audio div.jp-type-playlist a.jp-mute div.jp-audio div.jp-type-playlist a.jp-unmute':
+      {
+        top: '17px',
+        left: '246px',
+      },
+    'a.jp-mute': {
+      background: `url(${blueMonday}) 0 -186px no-repeat`,
+    },
+    'a.jp-mute:hover': {
+      background: `url(${blueMonday}) -19px -170px no-repeat`,
+    },
+    'a.jp-unmute': {
+      background: `url(${blueMonday}) 0 -170px no-repeat`,
+      display: 'none',
+    },
+    'a.jp-unmute:hover': {
+      background: `url(${blueMonday}) -19px -186px no-repeat`,
+    },
+    'div.jp-volume-bar': {
+      position: 'absolute',
+      overflow: 'hidden',
+      background: `url(${blueMonday}) 0 -202px repeat-x`,
+      width: '46px',
+      height: '10px',
+      cursor: 'pointer',
+    },
+    'div.jp-audio div.jp-type-single div.jp-volume-bar': {
+      top: '20px',
+      left: '252px',
+    },
+    'div.jp-audio div.jp-type-playlist div.jp-volume-bar': {
+      top: '20px',
+      left: '274px',
+    },
+    'div.jp-volume-bar-value': {
+      background: `url(${blueMonday}) 0 -218px repeat-x`,
+      width: '0px',
+      height: '10px',
+    },
+    'div.jp-current-time div.jp-duration': {
+      position: 'absolute',
+      fontSize: '.64em',
+      FontStyle: 'oblique',
+    },
+    'div.jp-duration': {
+      TextAlign: 'right',
+    },
+    'div.jp-audio div.jp-type-single div.jp-current-time, div.jp-audio div.jp-type-single div.jp-duration':
+      {
+        top: '29px',
+        left: '90px',
+        width: '122px',
+      },
+    'div.jp-audio div.jp-type-playlist div.jp-current-time, div.jp-audio div.jp-type-playlist div.jp-duration':
+      {
+        top: '29px',
+        left: '124px',
+        width: '122px',
+      },
+    'div.jp-jplayer': {
+      width: '0px',
+      height: '0px',
+    },
+    'div.jp-jplayer': {
+      backgroundColor: '#000000',
     },
   };
 };

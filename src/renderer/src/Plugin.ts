@@ -3,7 +3,7 @@ import { Persistable } from '../../shared/Persistable';
 import type { TRefMap } from './forms/Forms';
 import { FormInputComponent } from './hooks/useFormInput';
 import { InternalPaths } from './hooks/useInternalNav';
-import { GenericTranslationAPI } from './plugins/deepl.plugin';
+import { GenericRetrievalAPI } from './plugins/deepl.plugin';
 import type { EntryRowType } from './ui-kit/EntryRow';
 
 export type EntryRowComponent = (args: {
@@ -32,7 +32,7 @@ export type Plugin<
   };
   routes?: Record<TPaths, () => JSX.Element>;
   service?: Record<string, (...args: any[]) => Promise<unknown>>;
-  api?: GenericTranslationAPI<TSource, TTarget>;
+  api?: GenericRetrievalAPI<TSource, TTarget>;
   importMethods?: Record<string, (...args: any[]) => Promise<unknown>>;
 
   landingPageLinks?: Readonly<

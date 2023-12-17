@@ -6,14 +6,19 @@ import { TatoebaOpenAPIWrapper } from './TatoebaAPI';
 export const TatoebaPlugin: Plugin = {
   validators: {
     languages: {
-      LgTatoebaKey: ss.optional(ss.string()),
+      LgTatoebaSourceKey: ss.optional(ss.string()),
+      LgTatoebaTargetKey: ss.optional(ss.string()),
     },
   } as const,
   entryLines: {
     languages: {
       // TODO sourceKey vs targetKey
-      LgTatoebaKey: {
-        headerText: 'Tatoeba Key',
+      LgTatoebaSourceKey: {
+        headerText: 'Tatoeba Key (L2)',
+        child: TatoebaEntryLine,
+      },
+      LgTatoebaTargetKey: {
+        headerText: 'Tatoeba Key (L1)',
         child: TatoebaEntryLine,
       },
     },
@@ -22,7 +27,8 @@ export const TatoebaPlugin: Plugin = {
     // https://tatoeba.org/en/sentences/search?query=test standard page
     apiHomePage: 'https://tatoeba.org',
     apiName: 'Tatoeba Sentence Service',
-    getTranslations: async ({ sourceKey, word }) => {
+    whatsRetrievedFromAPISingular: 'sentence',
+    getFromAPI: async ({ sourceKey, word }) => {
       const TatoebaAPI = new TatoebaOpenAPIWrapper();
       const tatoebaData = await TatoebaAPI.getPath('/unstable/sentences', {
         lang: sourceKey,

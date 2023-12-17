@@ -57,6 +57,10 @@ CODE TODOs
 
 FEATURE IDEAS
 
+- generic "Language Dict" lookup to allow for N different dicts? schema of SourceLang, TargetLang, URL Template (with placeholders for source & target), and word/sentence?
+- - account for 'Google Translate a Sentence' - different behavior than tatoeba sentence lookup
+- default romanization schema for languages that aren't like chinese?
+- - generalize 'romanization' to 'transcription' for i18n?
 - copyright for api retrieved vals
 - encrypt api keys?
 - simplify dict vs gtr - have translations, sentence translations, example sentence lookups

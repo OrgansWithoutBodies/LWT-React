@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Route,
   BrowserRouter as Router,
@@ -6,8 +6,6 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import { AppVariables } from './meta';
-import { LandingPage } from './pages/LandingPage.component';
 
 import {
   AddNewWordWrapper,
@@ -23,14 +21,17 @@ import {
   TestWrapper,
   UploadWordsWrapper,
 } from './Wrappers';
+import useAnimation from './hooks/useAnimateTimer';
 import { AppContext, useAppContext } from './hooks/useContext';
 import { useData } from './hooks/useData';
 import { InternalPaths } from './hooks/useInternalNav';
 import { useCountdown } from './hooks/useTimer';
+import { AppVariables } from './meta';
 import { BackupScreen } from './pages/IO/Backups.component';
 import { InstallDemo } from './pages/IO/InstallDemo';
 import { InfoPage } from './pages/Info.component';
 import { InfoExportTemplate } from './pages/InfoExportTemplate';
+import { LandingPage } from './pages/LandingPage.component';
 import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { CheckTextPage } from './pages/Text/CheckText';
@@ -51,7 +52,7 @@ declare global {
 /**
  * 404 Page
  */
-function NoMatch() {
+export function NoMatch() {
   const location = useLocation();
 
   return (
@@ -76,16 +77,63 @@ function NoMatch() {
 //   return <Route path={path} {...args} />;
 // }
 
-function GlobalStyle(): JSX.Element {
+export function GlobalStyle(): JSX.Element {
   const { styleVariant } = useAppContext();
   const style = createColors(styleVariant);
   const StyleHeader = createGlobalStyle(style);
   return <StyleHeader />;
 }
 
-function App(): JSX.Element {
-  // TODO useTheme/'tailwind-esque'?
+export function NotificationMessage(): React.ReactNode {
   const [{ notificationMessage }] = useData(['notificationMessage']);
+
+  // const [notificationMessageDisplay, setNotificationMessageDisplay] = useState<
+  //   null | number
+  // >(null);
+
+  const hangOpenMS = 3000;
+  const slideMS = 1000;
+  const isOpen = useCountdown({
+    countdownInMs: hangOpenMS + slideMS,
+    intervalInMs: 500,
+    trigger: notificationMessage,
+  });
+  const interval = useAnimation({
+    duration: slideMS,
+    retrigger: isOpen,
+    easingName: 'elastic',
+  });
+  console.log('TEST123-notif', { interval });
+  // this is needed for initial hook pass
+  if (notificationMessage === null || notificationMessage === undefined) {
+    return <></>;
+  }
+  const messageSize = 50;
+  const calcSize = (isOpening: boolean, size: number) =>
+    isOpening ? size : 1 - size;
+  return (
+    <div
+      className="msgblue"
+      style={{
+        position: 'absolute',
+        width: '100%',
+        display: interval === 1 && !isOpen ? 'none' : 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // top        // maxHeight: 100,
+        height: messageSize,
+        // TODO some reason this doesnt completely hide the div
+        top: `${messageSize * calcSize(isOpen, interval) - messageSize}px`,
+      }}
+    >
+      <span>+++ {notificationMessage.txt} +++</span>
+    </div>
+  );
+}
+
+export default App;
+export function App(): JSX.Element {
+  // TODO useTheme/'tailwind-esque'?
   const pluginRoutes = PLUGINS.filter(
     (plugin) => plugin.routes !== undefined
   ).reduce<Record<Partial<InternalPaths>, () => JSX.Element>>(
@@ -94,8 +142,9 @@ function App(): JSX.Element {
   );
   //   const notifyMessage = `Success: Demo Database restored - 385 queries - 385 successful
   // (12/12 tables dropped/created, 355 records added), 0 failed.`;
-
-  const routes: { [path in InternalPaths | '*']: () => JSX.Element } = {
+  const routes: {
+    [path in InternalPaths | '*']: () => JSX.Element;
+  } = {
     '/': () => <LandingPage />,
     '/index': () => <LandingPage />,
     '/check_text': () => <CheckTextPage />,
@@ -144,7 +193,6 @@ function App(): JSX.Element {
     // simterms.inc
     // start
     // trans
-
     '/edit_word'(): JSX.Element {
       throw new Error('Function not implemented.');
     },
@@ -159,17 +207,13 @@ function App(): JSX.Element {
   return (
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
-      {notificationMessage === null || notificationMessage === undefined ? (
-        <></>
-      ) : (
-        <NotificationMessage notificationMessage={notificationMessage.txt} />
-      )}
+      <NotificationMessage />
       <Router basename="/lwt">
         {/*
          */}
 
         {/* A <Routes> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+                    renders the first one that matches the current URL. */}
         <Routes>
           {...Object.keys(routes).map((routeKey) => {
             const PathRouteElement = routes[routeKey];
@@ -177,48 +221,6 @@ function App(): JSX.Element {
           })}
         </Routes>
       </Router>
-      <>
-        {/*
-        <ImportShortText />
-        */}
-      </>
     </AppContext.Provider>
   );
 }
-
-function NotificationMessage({
-  notificationMessage,
-}: {
-  notificationMessage: string;
-}): React.ReactNode {
-  const [notificationMessageDisplay, setNotificationMessageDisplay] = useState<
-    null | number
-  >(null);
-  const isOpen = useCountdown({
-    countdownInMs: 3000,
-    intervalInMs: 100,
-    trigger: notificationMessage,
-  });
-
-  console.log('TEST123-notif', { notificationMessage, isOpen });
-  // this is needed for initial hook pass
-  if (notificationMessage === undefined) {
-    return <></>;
-  }
-  return (
-    <p
-      id="hide3"
-      className="msgblue"
-      style={{
-        display: isOpen ? undefined : 'none',
-        maxHeight: 100,
-
-        // height: `${notificationMessageDisplay}%`,
-      }}
-    >
-      +++ {notificationMessage} +++
-    </p>
-  );
-}
-
-export default App;

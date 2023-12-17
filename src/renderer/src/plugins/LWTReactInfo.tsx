@@ -1,7 +1,12 @@
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
-import { InfoLine } from '../pages/Info.component';
+import {
+  FloatingMenu,
+  InfoLine,
+  useSmoothScrollToHash,
+} from '../pages/Info.component';
+import { FooterInfo } from '../pages/LandingPage.component';
 import { PLUGINS } from '../plugins';
 
 // TODO formalize objs so these also act as docs?
@@ -17,63 +22,10 @@ const infoLines: Parameters<typeof InfoLine>[0][] = [
 
 export function LWTReactInfo() {
   const navigator = useInternalNavigate();
+  useSmoothScrollToHash();
   return (
-    <>
-      {/* <div
-        id="floatdiv"
-        style={{
-          position: 'absolute',
-          width: 'auto',
-          height: 'auto',
-          top: '44633.8px',
-          padding: '5px',
-          background: 'rgb(221, 221, 221)',
-          border: '1px solid rgb(136, 136, 136)',
-          zIndex: 100,
-          fontSize: '10pt',
-          textAlign: 'center',
-          left: '421px',
-        }}
-      >
-        <a href="#">↑ TOP ↑</a>
-        <br />
-        <br />
-        <a href="#preface">Preface</a>
-        <br />
-        <a href="#current">Curr. Version </a>
-        <br />
-        <a href="#links">Links</a>
-        <br />
-        <a href="#abstract">Abstract</a>
-        <br />
-        <a href="#features">Features</a>
-        <br />
-        <a href="#restrictions">Restrictions</a>
-        <br />
-        <a href="#license">(Un-) License</a>
-        <br />
-        <a href="#disclaimer">Disclaimer</a>
-        <br />
-        <br />
-        <a href="#install">Installation</a>
-        <br />
-        <a href="#learn">How to learn</a>
-        <br />
-        <a href="#howto">How to use</a>
-        <br />
-        <a href="#faq">Q & A</a>
-        <br />
-        <br />
-        <a href="#ipad">Setup Tablets</a>
-        <br />
-        <a href="#ipad">Lang. Setup</a>
-        <br />
-        <a href="#termscores">Term Scores</a>
-        <br />
-        <a href="#keybind">Key Bindings</a>
-        <br />
-        <a href="#history">Changelog</a>
-      </div> */}
+    <body>
+      <FloatingMenu menuOptions={infoLines} />
 
       <div style={{ marginRight: '100px' }}>
         <h4>
@@ -104,7 +56,7 @@ export function LWTReactInfo() {
             onChange={({ target: { value } }) => {
               if (value !== '-1') {
                 // TODO no any, make option values typed & plugin route work
-                navigator(('/lwt_react_info#' + value) as any, true);
+                navigator(('#' + value) as any, true);
               }
             }}
           >
@@ -327,41 +279,8 @@ export function LWTReactInfo() {
 
           {/* <!-- ================================================================ --> */}
         </dl>
-        <p className="smallgray graydotted">&nbsp;</p>
-        <table>
-          <tbody>
-            <tr>
-              <td className="width50px">
-                <a
-                  target="_blank"
-                  href="http://en.wikipedia.org/wiki/Public_domain_software"
-                  rel="noreferrer"
-                >
-                  <img src="img/public_domain.png" alt="Public Domain" />
-                </a>
-              </td>
-              <td>
-                <p className="smallgray">
-                  <a
-                    href="http://sourceforge.net/projects/learning-with-texts/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    "Learning with Texts" (LWT)
-                  </a>
-                  is released into the Public Domain. This applies worldwide.
-                  <br />
-                  In case this is not legally possible, any entity is granted
-                  the right to use this work for any purpose,
-                  <br />
-                  without any conditions, unless such conditions are required by
-                  law.
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <FooterInfo />
       </div>
-    </>
+    </body>
   );
 }

@@ -19,13 +19,15 @@ export interface APITranslateTerm<
   targetKey: TTarget;
   word: string;
 }
-export interface GenericTranslationAPI<
+export interface GenericRetrievalAPI<
   TSource extends string,
   TTarget extends string
 > {
   apiName: string;
   apiHomePage: string;
-  getTranslations: (
+  whatsRetrievedFromAPISingular: string;
+
+  getFromAPI: (
     args: APITranslateTerm<TSource, TTarget> & { apiKey?: string }
   ) => Promise<string[]>;
   // TODO?
@@ -62,7 +64,7 @@ export const DeeplPlugin: Plugin<string, DeeplSourceKeys, DeeplTargetKeys> = {
   api: {
     apiName: 'DeepL',
     apiHomePage: 'https://deepl.com',
-    getTranslations: async ({ targetKey, sourceKey, word, apiKey }) => {
+    getFromAPI: async ({ targetKey, sourceKey, word, apiKey }) => {
       // TODO auth
       if (!apiKey) {
         throw new Error('DeepL API Needs an API Key!');

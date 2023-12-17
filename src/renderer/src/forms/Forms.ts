@@ -74,14 +74,22 @@ export type TRefMap<TForm> = Record<
  * @param validator
  */
 export function RefMap<TForm>(
-  validator: ss.Struct<{ [key in keyof TForm]: any }>
+  validator: ss.Struct<{ [key in keyof TForm]: any }>,
+  defaultValues?: { [key in keyof TForm]: any }
 ): TRefMap<TForm> {
   const values = Object.keys(validator.schema);
+  const buildInitialValue = (key: keyof typeof values) => {
+    if (defaultValues && defaultValues[key]) {
+      return { value: defaultValues[key] };
+      // return null;
+    }
+    return null;
+  };
   const individualRefs = Object.fromEntries(
     values.map((key) => [
       key,
       useRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null>(
-        null
+        buildInitialValue(key)
       ),
     ])
   ) as TRefMap<TForm>;

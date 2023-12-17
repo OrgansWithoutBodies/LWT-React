@@ -9,11 +9,12 @@ import { UploadWords } from './pages/IO/UploadWords.component';
 import { EditLanguage } from './pages/Language/EditLanguage.component';
 import { LanguagesPage } from './pages/Language/Languages.component';
 import { NewLanguage } from './pages/Language/NewLanguage';
-import { ReaderPage, TesterPage } from './pages/ReaderPage.component';
+import { ReaderPage } from './pages/ReaderPage.component';
 import { WordSorting } from './pages/Sorting';
 import { AddNewWordPane } from './pages/Term/AddNewWordPane';
 import { AddTerm, EditTerm, Terms } from './pages/Term/Terms.component';
 import { DisplayTags, EditTag, NewTag } from './pages/TermTag/EditTags';
+import { TesterPage } from './pages/Tester';
 import { AnnotateText } from './pages/Text/AnnotateText';
 import { EditText, Library } from './pages/Text/Library.component';
 import { PrintText } from './pages/Text/PrintText.component';
@@ -279,6 +280,7 @@ export function ReaderWrapper() {
   if (!start) {
     throw new Error('Invalid Start ID!');
   }
+  console.log('WRAPPER');
   return <ReaderPage textID={Number.parseInt(start)} />;
 }
 

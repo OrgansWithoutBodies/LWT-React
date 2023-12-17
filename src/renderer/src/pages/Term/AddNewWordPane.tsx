@@ -26,11 +26,13 @@ export function AddNewWordPane({
   existingTerm = undefined,
   setIFrameURL,
   setTranslateAPIParams,
+  sentenceString,
 }: {
   word: string;
   // TODO
   // wordInSentence:string
   existingTerm?: Word;
+  sentenceString?: string;
   langID: LanguagesID;
   onClearActiveWord: () => void;
   setIFrameURL: (url: string | null) => void;
@@ -50,7 +52,11 @@ export function AddNewWordPane({
     onSubmit,
     TextArea,
   } = useFormInput({
-    entry: { WoText: word || '', WoLgID: langID },
+    entry: {
+      WoText: word || '',
+      WoLgID: langID,
+      WoSentence: sentenceString || '',
+    },
     validator,
   });
 
@@ -64,11 +70,10 @@ export function AddNewWordPane({
   const { LgName } = lang;
   const submitForm = () =>
     onSubmit(wordNoIDPrevalidateMap, (value) => {
-      console.log('TEST123-saving word', value);
       dataService.addTerm(value);
-      // navigator('/edit_words');
       onClearActiveWord();
     });
+  console.log('TEST123-refmap', refMap['WoSentence']);
   return (
     <>
       <form name="newword">
@@ -77,7 +82,9 @@ export function AddNewWordPane({
         <WoInput type="hidden" entryKey="WoCreated" id="langfield" />
         <WoInput type="hidden" entryKey="WoTextLC" />
         {/* TODO what are these */}
+        {/* TxID? */}
         <input type="hidden" name="tid" value="11" />
+        {/* TiOrder? */}
         <input type="hidden" name="ord" value="7" />
 
         <table className="tab2" cellSpacing={0} cellPadding={5}>
@@ -112,7 +119,6 @@ export function AddNewWordPane({
               <td className="td1">
                 <TextArea
                   entryKey="WoTranslation"
-                  // value={FormState.WoTranslation}
                   className="setfocus checklength checkoutsidebmp"
                   maxLength={500}
                   onKeyDown={(e) => textareaKeydown(e, submitForm)}
@@ -161,6 +167,7 @@ export function AddNewWordPane({
                   errorName="Sentence"
                   cols={35}
                   rows={3}
+                  default
                 />
               </td>
             </tr>
@@ -177,8 +184,9 @@ export function AddNewWordPane({
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
                   langDictData={lang}
-                  sentenceString={refMap.WoSentence.current}
-                  wordString={refMap.WoText.current}
+                  // TODO this should actually just retrieve the current value on click
+                  sentenceString={refMap.WoSentence.current?.value}
+                  wordString={refMap.WoText.current?.value}
                   setTranslateAPIParams={setTranslateAPIParams}
                   setIFrameURL={setIFrameURL}
                 />
@@ -378,8 +386,8 @@ export function EditWordPane({
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
                   langDictData={lang}
-                  sentenceString={refMap.WoSentence.current}
-                  wordString={refMap.WoText.current}
+                  sentenceString={refMap.WoSentence.current.value}
+                  wordString={refMap.WoText.current.value}
                   setTranslateAPIParams={setTranslateAPIParams}
                   setIFrameURL={setIFrameURL}
                 />

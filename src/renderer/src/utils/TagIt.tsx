@@ -1,6 +1,7 @@
 // TODO Integrate
 
 import React, { useRef, useState } from 'react';
+import { useThemeColors } from '../hooks/useThemeColors';
 
 /*
  * jQuery UI Tag-it!
@@ -33,6 +34,14 @@ import React, { useRef, useState } from 'react';
  *   INSERTED: maxlength="20" size="20"
  *
  */
+
+const tagsThatStartWith = (tags: TagType[], searchString: string) => {
+  if (searchString === '') {
+    return [];
+  }
+  return tags.filter((val) => val.value.startsWith(searchString));
+};
+
 type TagItOptions = {
   caseSensitive?: boolean;
   fieldName?: string;
@@ -120,6 +129,7 @@ function TagInputImpl(
       createTag,
       _cleanedInput,
       _lastTag,
+      _tags,
     },
   }: {
     options: TagItOptions;
@@ -153,88 +163,117 @@ function TagInputImpl(
   //         ...autocomplete,
   //       }
   //     : undefined;
-  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
-  // TODO
-  setAutocompleteOpen;
+  const [autocompleteOptions, setAutocompleteOptions] = useState<TagType[]>([]);
+  const themeColors = useThemeColors();
   return (
-    <input
-      ref={tagInputRef}
-      // autoComplete={autoCompleteOptions}
-      // onAutoCompleteOpen={() => {
-      //   setAutocompleteOpen(true);
-      // }}
-      // onAutoCompleteClose={() => {
-      //   setAutocompleteOpen(false);
-      // }}
-      onKeyDown={(event) => {
-        // Backspace is not detected within a keypress, so it must use keydown.
-        if (event.key === 'Backspace' && tagInputRef.value() === '') {
-          const tag = _lastTag();
-          if (tag) {
-            if (!removeConfirmation || tag.removed) {
-              // When backspace is pressed, the last tag is deleted.
-              removeTag(tag);
-            } else if (removeConfirmation) {
-              removeTag(tag);
-              // TODO
-              // setTagHighlight(tag,true)
-              // tag.addClass('remove ui-state-highlight');
+    <>
+      <input
+        ref={tagInputRef}
+        // autoComplete="search"
+
+        // options
+        onChange={() => {
+          setAutocompleteOptions(
+            tagsThatStartWith(_tags(), tagInputRef.current.value)
+          );
+        }}
+        // autoComplete={autoCompleteOptions}
+        // onAutoCompleteOpen={() => {
+        //   setAutocompleteOpen(true);
+        // }}
+        // onAutoCompleteClose={() => {
+        //   setAutocompleteOpen(false);
+        // }}
+        onKeyDown={(event) => {
+          // Backspace is not detected within a keypress, so it must use keydown.
+          if (event.key === 'Backspace' && tagInputRef.current.value === '') {
+            const tag = _lastTag();
+            if (tag) {
+              if (!removeConfirmation || tag.removed) {
+                // When backspace is pressed, the last tag is deleted.
+                removeTag(tag);
+
+                tagInputRef.current.focus();
+                console.log(tagInputRef.current);
+              } else if (removeConfirmation) {
+                removeTag(tag);
+                // TODO
+                // setTagHighlight(tag,true)
+                // tag.addClass('remove ui-state-highlight');
+              }
+            }
+          } else if (removeConfirmation) {
+            const lastTag = _lastTag();
+            // TODO this should just delete onkeydown? doesnt seem right
+            if (lastTag) {
+              // setTagHighlight(tag,false)
+              // unsetRemove(tag)
+              //  lastTag.removeClass('remove ui-state-highlight');
             }
           }
-        } else if (removeConfirmation) {
-          const lastTag = _lastTag();
-          if (lastTag) {
-            // setTagHighlight(tag,false)
-            // unsetRemove(tag)
-            //  lastTag.removeClass('remove ui-state-highlight');
-          }
-        }
 
-        // Comma/Space/Enter are all valid delimiters for new tags,
-        // except when there is an open quote or if setting allowSpaces = true.
-        // Tab will also create a tag, unless the tag input is empty,
-        // in which case it isn't caught.
-        const inputValClean = tagInputRef.value().trim();
-        if (
-          event.key === 'Comma' ||
-          event.key === 'Enter' ||
-          (event.key === 'Tab' && tagInputRef.value() !== '') ||
-          (event.key === 'Space' &&
-            allowSpaces !== true &&
-            (inputValClean.replace(/^s*/, '').charAt(0) !== '"' ||
-              (inputValClean.charAt(0) === '"' &&
-                inputValClean.charAt(inputValClean.length - 1) === '"' &&
-                inputValClean.length - 1 !== 0)))
-        ) {
-          // Enter submits the form if there's no text in the input.
-          if (!(event.key === 'Enter' && tagInputRef.value() === '')) {
-            event.preventDefault();
-          }
+          // Comma/Space/Enter are all valid delimiters for new tags,
+          // except when there is an open quote or if setting allowSpaces = true.
+          // Tab will also create a tag, unless the tag input is empty,
+          // in which case it isn't caught.
+          const inputValClean = tagInputRef.current.value.trim();
+          console.log('TEST123-tagit-new', inputValClean);
+          if (
+            event.key === 'Comma' ||
+            event.key === 'Enter' ||
+            (event.key === 'Tab' && tagInputRef.value() !== '') ||
+            (event.key === 'Space' &&
+              allowSpaces !== true &&
+              (inputValClean.replace(/^s*/, '').charAt(0) !== '"' ||
+                (inputValClean.charAt(0) === '"' &&
+                  inputValClean.charAt(inputValClean.length - 1) === '"' &&
+                  inputValClean.length - 1 !== 0)))
+          ) {
+            // Enter submits the form if there's no text in the input.
+            if (!(event.key === 'Enter' && tagInputRef.value() === '')) {
+              event.preventDefault();
+            }
 
-          createTag(_cleanedInput());
-          // The autocomplete doesn't close automatically when TAB is pressed.
-          // So let's ensure that it closes.
-          setAutocompleteOpen(false);
-        }
-      }}
-      type="text"
-      onBlur={() => {
-        // Create a tag when the element loses focus.
-        // If autocomplete is enabled and suggestion was clicked, don't add it.
-        if (autocompleteOpen) {
-          createTag(_cleanedInput());
-        }
-      }}
-      onFocus={() => {
-        _showAutoComplete();
-      }}
-      maxLength={20}
-      size={20}
-      disabled={readOnly ? true : undefined}
-      tabIndex={tabIndex ? tabIndex : undefined}
-      placeholder={placeholderText ? placeholderText : undefined}
-      // className="ui-widget-content"
-    />
+            createTag(_cleanedInput());
+            // The autocomplete doesn't close automatically when TAB is pressed.
+            // So let's ensure that it closes.
+            setAutocompleteOptions([]);
+          }
+        }}
+        type="text"
+        onBlur={() => {
+          // Create a tag when the element loses focus.
+          // If autocomplete is enabled and suggestion was clicked, don't add it.
+          if (autocompleteOptions) {
+            createTag(_cleanedInput());
+          }
+        }}
+        onFocus={() => {
+          _showAutoComplete();
+        }}
+        maxLength={20}
+        size={20}
+        disabled={readOnly ? true : undefined}
+        tabIndex={tabIndex ? tabIndex : undefined}
+        placeholder={placeholderText ? placeholderText : undefined}
+        // className="ui-widget-content"
+      />
+
+      <div
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          flexDirection: 'column',
+          bottom: '0%',
+        }}
+      >
+        {autocompleteOptions.map((tag) => (
+          <div style={{ backgroundColor: themeColors.lum4, marginTop: '3px' }}>
+            {tag.value}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 const TagInput = React.forwardRef(TagInputImpl);
@@ -553,7 +592,7 @@ export function useTagIt(options: TagItOptions = defaultOptions): TaggerOutput {
       // });
 
       // tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
-      // setTagItTags(tagItTags.filter((val) => val !== {...tag,remobetag}));
+      setTagItTags(tagItTags.filter((val) => val !== { ...tag, remobetag }));
     } else {
       setTagItTags(tagItTags.filter((val) => val !== tag));
     }

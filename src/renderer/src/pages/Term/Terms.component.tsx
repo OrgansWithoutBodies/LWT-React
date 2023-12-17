@@ -43,7 +43,7 @@ import { textareaKeydown } from '../IO/CheckForm';
 import { GetAllWordsActionsSelectOptions } from '../SelectOptions';
 import { WordSorting, resetDirty, sortingMethod } from '../Sorting';
 import { getStatusName, get_status_abbr } from '../StrengthMap';
-import { prepare_textdata_js } from '../translateSentence2';
+import { prepare_textdata_js } from '../windowFunctions';
 import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
 
@@ -707,8 +707,8 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           </tr>
           <PrintSimilarTermsTabrow
             onCopyTransRoman={onCopyTransRoman}
-            word={refMap.WoText.current}
-            lang={refMap.WoLgID.current}
+            word={refMap.WoText.current.value}
+            lang={refMap.WoLgID.current.value}
           />
           <tr>
             <td className="td1 right">Translation:</td>
@@ -876,8 +876,8 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             />
           </EntryRow>
           <PrintSimilarTermsTabrow
-            word={refMap.WoText.current}
-            lang={refMap.WoLgID.current}
+            word={refMap.WoText.current.value}
+            lang={refMap.WoLgID.current.value}
             onCopyTransRoman={onCopyTransRoman}
           />
           <EntryRow headerText={'Translation'}>
@@ -1130,6 +1130,7 @@ function PrintSimilarTerms({
   if (max_count <= 0) {
     return <></>;
   }
+  console.log({ compared_term });
   if (compared_term.trim() === '') {
     return <>&nbsp;</>;
   }

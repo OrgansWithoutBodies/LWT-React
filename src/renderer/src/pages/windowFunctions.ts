@@ -1,5 +1,4 @@
-import { DictURITemplateType } from '../data/validators';
-import { createTheDictUrl } from './ReaderPage.component';
+// TODO this is sorta a mismash
 
 /**
  *
@@ -11,23 +10,6 @@ export function owin(url: string | URL | undefined): void {
     'dictwin',
     'width=800, height=400, scrollbars=yes, menubar=no, resizable=yes, status=no'
   );
-}
-
-/**
- *
- * @param url
- * @param sentctl
- */
-export function translateSentence2(
-  url: DictURITemplateType,
-  sentctl: { value: string } | undefined
-) {
-  if (sentctl !== undefined && url !== '') {
-    const text = sentctl.value;
-    if (typeof text === 'string') {
-      owin(createTheDictUrl(url, text.replace(/[{}]/g, '')));
-    }
-  }
 }
 
 /**

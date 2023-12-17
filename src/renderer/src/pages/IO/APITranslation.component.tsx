@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   APITranslateTerm,
-  GenericTranslationAPI,
+  GenericRetrievalAPI,
 } from '../../plugins/deepl.plugin';
 import { Icon } from '../../ui-kit/Icon';
 import { pluralize } from '../TermTag/pluralize';
@@ -15,15 +15,16 @@ export function TranslationAPI<TSource extends string, TTarget extends string>({
   targetKey,
   word,
   api: api,
+
   onAcceptLine,
 }: APITranslateTerm<TSource, TTarget> & {
-  api: GenericTranslationAPI<TSource, TTarget>;
+  api: GenericRetrievalAPI<TSource, TTarget>;
   onAcceptLine: (data: string) => void;
 }) {
   const [data, setData] = useState<null | string[]>(null);
   useEffect(() => {
     const setDataFromAPI = async () => {
-      const APIData = await api.getTranslations({ sourceKey, targetKey, word });
+      const APIData = await api.getFromAPI({ sourceKey, targetKey, word });
       // TODO handle error cases better
       setData(APIData);
     };
@@ -46,8 +47,9 @@ export function TranslationAPI<TSource extends string, TTarget extends string>({
     );
   }
   const i = data === null ? 0 : data.length;
+  console.log('TEST123-TRANS', word);
   return (
-    <>
+    <div>
       <h3>
         <a href={api.apiHomePage}>
           {api.apiName} API ({sourceKey}-{targetKey}
@@ -81,7 +83,8 @@ export function TranslationAPI<TSource extends string, TTarget extends string>({
             ))}
           &nbsp;
           <br />
-          {i} translation{pluralize(i)} retrieved via{' '}
+          {i} {api.whatsRetrievedFromAPISingular}
+          {pluralize(i)} retrieved via{' '}
           <a href={api.apiHomePage} target="_blank">
             {api.apiName} API
           </a>
@@ -103,7 +106,7 @@ export function TranslationAPI<TSource extends string, TTarget extends string>({
           <input type="button" value={`Translate via ${api.apiName} API`} />
         </form>
       </>
-    </>
+    </div>
   );
 }
 // TODO

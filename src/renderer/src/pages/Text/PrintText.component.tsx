@@ -27,7 +27,7 @@ export function PrintText({
   // TODO
   const statusRange = 1;
   const [{ texts, languages }] = useData(['texts', 'languages']);
-  useUpdateActiveText(textID);
+  useUpdateActiveText({ textID });
 
   const paramUpdater = useUpdateParams();
   const showingText = texts.find(({ TxID }) => TxID === textID);

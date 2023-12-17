@@ -5,7 +5,7 @@ export function TatoebaEntryLine({
   console.log('TEST123-ENTRY-LINE', Component);
   return (
     <>
-      <Component entryKey={'LgTatoebaKey'} />
+      <Component entryKey={'LgTatoebaSourceKey'} />
     </>
   );
 }

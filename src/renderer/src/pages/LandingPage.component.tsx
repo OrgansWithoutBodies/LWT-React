@@ -14,16 +14,6 @@ import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
  *
  */
 export function LandingPage() {
-  const {
-    releaseDate,
-    dbBackend,
-    dbVersion,
-    server,
-    serverVersion,
-    frontend,
-    frontendVersion,
-    frontendSource,
-  } = useAppContext();
   const [{ languages, activeLanguageID }] = useData([
     'languages',
     'activeLanguageID',
@@ -143,6 +133,25 @@ export function LandingPage() {
         </ul>
       </div>
 
+      <FooterInfo />
+      <DevModeGate></DevModeGate>
+    </>
+  );
+}
+
+export function FooterInfo() {
+  const {
+    releaseDate,
+    dbBackend,
+    dbVersion,
+    server,
+    serverVersion,
+    frontend,
+    frontendVersion,
+    frontendSource,
+  } = useAppContext();
+  return (
+    <>
       <p className="smallgray graydotted">&nbsp;</p>
       <table>
         <tbody>
@@ -266,11 +275,9 @@ if (! isset(mb)) mb = '0.0';
           </tr>
         </tbody>
       </table>
-      <DevModeGate></DevModeGate>
     </>
   );
 }
-
 /**
  * Only render children when in devMode otherwise render nothing
  */

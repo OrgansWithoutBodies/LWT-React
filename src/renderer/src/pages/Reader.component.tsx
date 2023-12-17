@@ -2,6 +2,7 @@ import { title } from 'process';
 import { useState } from 'react';
 import { TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
+import { useThemeColors } from '../hooks/useThemeColors';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import {
   Popover,
@@ -38,6 +39,7 @@ export function Reader({
   activeWord,
   showAll,
 }: {
+  // could just pass text down here instead of having to find it again? or be more uniform
   activeID: TextsID;
   setActiveWord: (
     word:
@@ -62,9 +64,10 @@ export function Reader({
     'textitems',
     'languages',
   ]);
-  console.log('TEST123-READER-words', words);
+  console.log('TEST123-READER-words', activeWord);
   const [tooltipOpen, setTooltipOpen] = useState<null | number>(null);
   const [hideUntil, setHideUntil] = useState<null | number>(-1);
+  const themeColors = useThemeColors();
   const activeText = texts.find((text) => text.TxID === activeID);
   if (!activeText) {
     return <></>;
@@ -85,12 +88,19 @@ export function Reader({
   const currcharcount = 0;
   // TODO key by order?
   return (
-    <div id="thetext" {...getDirTag(language)}>
+    <div
+      id="thetext"
+      style={{
+        backgroundColor: themeColors.lum6,
+        padding: '2px',
+        wordBreak: 'break-all',
+      }}
+      {...getDirTag(language)}
+    >
       <p
         onClick={() => setTooltipOpen(null)}
         style={{
           // TODO
-          // wordBreak: 'break-all',
           // whiteSpace: 'nowrap',
           fontSize: '200%',
           lineHeight: 1.4,

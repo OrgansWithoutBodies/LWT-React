@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import useAnimation from '../hooks/useAnimateTimer';
 import { useInternalNavigate } from '../hooks/useInternalNav';
 import { A } from '../nav/InternalLink';
+import { FooterInfo } from './LandingPage.component';
 
 const infoLines: Parameters<typeof InfoLine>[0][] = [
   { title: 'Preface', href: 'preface' },
@@ -23,77 +27,10 @@ const infoLines: Parameters<typeof InfoLine>[0][] = [
 
 export function InfoPage() {
   const navigator = useInternalNavigate();
+  useSmoothScrollToHash();
   return (
     <body>
-      <div
-        id="floatdiv"
-        style={{
-          position: 'absolute',
-          width: 'auto',
-          height: 'auto',
-          top: '44633.8px',
-          padding: '5px',
-          background: 'rgb(221, 221, 221)',
-          border: '1px solid rgb(136, 136, 136)',
-          zIndex: 100,
-          fontSize: '10pt',
-          textAlign: 'center',
-          left: '421px',
-        }}
-      >
-        <a href="#">↑ TOP ↑</a>
-        <br />
-        <br />
-        <a href="#preface">Preface</a>
-        <br />
-        <a href="#current">Curr. Version </a>
-        <br />
-        <a href="#links">Links</a>
-        <br />
-        <a href="#abstract">Abstract</a>
-        <br />
-        <a href="#features">Features</a>
-        <br />
-        <a href="#restrictions">Restrictions</a>
-        <br />
-        <a href="#license">(Un-) License</a>
-        <br />
-        <a href="#disclaimer">Disclaimer</a>
-        <br />
-        <br />
-        <a href="#install">Installation</a>
-        <br />
-        <a href="#learn">How to learn</a>
-        <br />
-        <a href="#howto">How to use</a>
-        <br />
-        <a href="#faq">Q & A</a>
-        <br />
-        <br />
-        <a href="#ipad">Setup Tablets</a>
-        <br />
-        <a href="#ipad">Lang. Setup</a>
-        <br />
-        <a href="#termscores">Term Scores</a>
-        <br />
-        <a href="#keybind">Key Bindings</a>
-        <br />
-        <a href="#history">Changelog</a>
-      </div>
-
-      <script type="text/javascript">
-        {/* //<![CDATA[
-          // TODO
-$(document).ready( function() {
-$('#floatdiv').addFloating( {
-    targetRight: 10,
-    targetTop: 10,
-    snap: true
-} );
-});
-//]]> */}
-      </script>
-
+      <FloatingMenu menuOptions={infoLines} />
       <div style={{ marginRight: '100px' }}>
         <h4>
           <A href="/" target="_top">
@@ -113,10 +50,15 @@ $('#floatdiv').addFloating( {
           Jump to topic:
           <select
             id="topicjump"
-            onChange={({ target: { value } }) => {
+            onChange={({ target: { value, blur } }) => {
               if (value !== '-1') {
                 navigator('#' + value, true);
+                // To avoid up/down changing this value after change
+                // TODO not working
+                blur();
+                return;
               }
+              navigator('', true);
             }}
           >
             <option value="-1" selected>
@@ -3169,45 +3111,27 @@ $('#floatdiv').addFloating( {
             </ul>
           </dd>
         </dl>
-
-        <p className="smallgray graydotted">&nbsp;</p>
-
-        <table>
-          <tbody>
-            <tr>
-              <td className="width50px">
-                <a
-                  target="_blank"
-                  href="http://en.wikipedia.org/wiki/Public_domain_software"
-                  rel="noreferrer"
-                >
-                  <img src="img/public_domain.png" alt="Public Domain" />
-                </a>
-              </td>
-              <td>
-                <p className="smallgray">
-                  <a
-                    href="http://sourceforge.net/projects/learning-with-texts/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    "Learning with Texts" (LWT)
-                  </a>
-                  is released into the Public Domain. This applies worldwide.
-                  <br />
-                  In case this is not legally possible, any entity is granted
-                  the right to use this work for any purpose,
-                  <br />
-                  without any conditions, unless such conditions are required by
-                  law.
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <FooterInfo />
       </div>
     </body>
   );
+}
+
+export function useSmoothScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    // would be cool to be stop default jump to # if we go directly to this page with a hash
+    // window.history.replaceState('', document.title, window.location.pathname);
+    const foundElement = document.getElementById(location.hash.slice(1));
+    if (foundElement) {
+      foundElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location.hash]);
 }
 
 export function InfoLine({ href, title }: { href: string; title: string }) {
@@ -3219,5 +3143,70 @@ export function InfoLine({ href, title }: { href: string; title: string }) {
       </b>
       - <a href={'#'}>[↑]</a>
     </dt>
+  );
+}
+
+// TODO maybe this should be passed via children to be more generic?
+// {/* TODO - maybe use floating-ui for this? */}
+export function FloatingMenu({
+  menuOptions,
+  positioning = { right: 5, top: 5 },
+}: {
+  menuOptions: { href: string; title: string }[];
+  positioning?: { right: number; top: number };
+}) {
+  const [menuPixSourcePos, setMenuPixSourcePos] = useState<number>(0);
+  const [menuPixTargetPos, setMenuPixTargetPos] = useState<number>(0);
+  useEffect(() => {
+    const onScroll = () => {
+      // TODO this not updating - causing menu to rocket from the beginning at every point
+      // source is current position ie last it was set to
+      setMenuPixSourcePos(menuPixTargetPos);
+      setMenuPixTargetPos(window.scrollY);
+    };
+    window.addEventListener('scroll', onScroll);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+  const duration = 2000;
+  const interpolate = useAnimation({
+    duration,
+    retrigger: menuPixTargetPos,
+    easingName: 'elastic',
+  });
+  const menuPixPosInterpolated =
+    menuPixSourcePos + (menuPixTargetPos - menuPixSourcePos) * interpolate;
+  console.log('TEST123-POS', {
+    menuPixSourcePos,
+    menuPixTargetPos,
+  });
+  return (
+    <div
+      id="floatdiv"
+      style={{
+        position: 'absolute',
+        width: 'auto',
+        height: 'auto',
+        top: `${menuPixPosInterpolated + positioning.top}px`,
+        padding: '5px',
+        background: 'rgb(221, 221, 221)',
+        border: '1px solid rgb(136, 136, 136)',
+        zIndex: 100,
+        fontSize: '10pt',
+        right: `${positioning.right}px`,
+        textAlign: 'center',
+      }}
+    >
+      <a href="#">↑ TOP ↑</a>
+      <br />
+      {menuOptions.map((option) => (
+        <>
+          <br />
+          <A href={`#${option.href}`}>{option.title}</A>
+        </>
+      ))}
+    </div>
   );
 }

@@ -26,7 +26,7 @@ import {
   LanguageDictionaryData,
   WordKnownTermLines,
 } from './Term/limitedTypes';
-import { prepare_textdata_js } from './translateSentence2';
+import { prepare_textdata_js } from './windowFunctions';
 
 const CAPTION = 'TODO';
 type ArrV8<T> = [T, T, T, T, T, T, T, T];

@@ -13,7 +13,7 @@ export function AnnotateText({
   annplcmnt: number;
   editmode: boolean;
 }) {
-  useUpdateActiveText(textID);
+  useUpdateActiveText({ textID });
   const [{ texts }] = useData(['texts']);
   const text = texts.find((val) => val.TxID === textID);
   if (!text) {

@@ -154,6 +154,7 @@ export function AddNewTermTooltip({
         .map((val) => tagsLookup[val.WtTgID]);
   const expressions: TextItem[] = [];
 
+  console.log('TEST123-tooltip-word', word);
   const wordStr = isNewTerm ? word : word.WoText;
   // TODO on click on term, change other panes
   return (
@@ -163,6 +164,7 @@ export function AddNewTermTooltip({
       cellPadding={1}
       border={0}
       style={{
+        zIndex: 999,
         // TODO theme color
         backgroundColor: '#333399',
       }}

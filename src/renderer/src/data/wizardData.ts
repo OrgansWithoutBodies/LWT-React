@@ -117,6 +117,8 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
   },
   'Chinese (Simplified)': {
     LgGlosbeKey: 'zh',
+    // TODO
+    // LgTatoebaKey: 'cmn',
     LgGTransKey: 'zh-CN',
     LgTextSize: 200,
     LgRegexpSplitSentences: '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}',

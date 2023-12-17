@@ -1,81 +1,124 @@
-import { useEffect, useState } from 'react';
+import React, { ForwardedRef, Ref, useEffect, useState } from 'react';
 import {
   GetPlaybackrateSelectoptions,
   GetSecondsSelectoptions,
 } from '../pages/SelectOptions';
+import { Icon } from './Icon';
 
+// TODO timemarkers that sync up words to points of time in audio
+// TODO plays
 /**
  *
- * @param $audio
+ * @param audio
  */
-export function MakeAudioPlayer({ $audio }: { $audio: string }) {
+function AudioPlayerImpl(
+  { audioURL: audioURL }: { audioURL: string },
+  ref: ForwardedRef<HTMLAudioElement>
+) {
+  const [headPos, setHeadPos] = useState<number>(0);
+
   const {
+    getCurrentHead,
     playing,
     toggle,
     setVolume,
     playbackRate,
     playerRepeatMode,
     seekStep,
+    setPlaybackRate,
     setSeekStep,
-    click_single,
-    click_repeat,
-    click_back,
-    click_forw,
-    click_stdspeed,
-    click_slower,
-    click_faster,
-  } = useAudio($audio);
+    setPlayerRepeatMode,
+    setHead,
+    volume,
+    duration,
+    setPlaying,
+    // audio,
+  } = useAudio(audioURL, ref, (val) => setHeadPos(val));
+  //   TODO
+  //   ref = audio;
+  console.log('ref', ref);
+
+  const headPerc = (headPos / duration) * 100;
   /**
    *
-   * @param p
    */
-  //   function new_pos(p) {
+  function click_slower() {
+    const newPlaybackRate = Math.max(5, playbackRate - 1);
+    setPlaybackRate(newPlaybackRate);
+  }
 
-  //     $('#jquery_jplayer_1').jPlayer('playHead', p);
-  //   }
+  /**
+   *
+   */
+  function click_faster() {
+    const newPlaybackRate = Math.min(15, playbackRate + 1);
+    setPlaybackRate(newPlaybackRate);
+  }
 
-  //   /**
-  //    *
-  //    */
-  //   function set_new_playerseconds() {
-  //     // setPlayHead()
-  //     const newval = $('#backtime :selected').val();
-  //     do_ajax_save_setting('currentplayerseconds', newval);
-  //     // console.log("set_new_playerseconds="+newval);
-  //   }
+  /**
+   *
+   */
+  function click_single() {
+    // $('#jquery_jplayer_1').unbind($.jPlayer.event.ended + '.jp-repeat');
+    // $('#do-single').addClass('hide');
+    // $('#do-repeat').removeClass('hide');
+    setPlayerRepeatMode(0);
+    // do_ajax_save_setting('currentplayerrepeatmode', '0');
+    return false;
+  }
 
-  //   /**
-  //    *
-  //    */
-  //   function set_new_playbackrate() {
-  //     const newval = $('#playbackrate :selected').val();
-  //     do_ajax_save_setting('currentplaybackrate', newval);
-  //     $('#jquery_jplayer_1').jPlayer('option', 'playbackRate', newval * 0.1);
-  //     // console.log("set_new_playbackrate="+newval);
-  //   }
+  /**
+   *
+   */
+  function click_repeat() {
+    setPlayerRepeatMode(1);
+    return false;
+  }
 
-  //   /**
-  //    *
-  //    */
-  //   function set_current_playbackrate() {
-  //     const val = $('#playbackrate :selected').val();
-  //     $('#jquery_jplayer_1').jPlayer('option', 'playbackRate', val * 0.1);
-  //     // console.log("set_current_playbackrate="+val);
-  //   }
+  /**
+   *
+   */
+  function click_stdspeed() {
+    setPlaybackRate(10);
+  }
+
+  /**
+   *
+   */
+  function click_back() {
+    const t = getCurrentHead();
+    const b = seekStep;
+    const nt = t - b;
+    setHead(Math.max(0, nt));
+  }
+
+  /**
+   *
+   */
+  function click_forw() {
+    const t = getCurrentHead();
+    const b = seekStep;
+    const nt = t + b;
+    setHead(nt);
+  }
+
+  function onStop() {
+    setPlaying(false);
+    setHead(0);
+  }
 
   // const [{ settings }] = useData(['settings']);
-  //   TODO save setting?
   //   const { currentplayerrepeatmode, currentplayerseconds, currentplaybackrate } =
 
-  const $playerskin = 'jplayer.blue.monday.modified';
+  //   const $playerskin = 'jplayer.blue.monday.modified';
   return (
     <>
-      <link
+      {/* <link
         type="text/css"
         href={`css/jplayer_skin/${$playerskin}.css`}
         rel="stylesheet"
-      />
-      {/* <script type="text/javascript" src="js/jquery.jplayer.min.js"></script> */}
+      /> */}
+
       <table
         align="center"
         style={{ marginTop: '5px' }}
@@ -86,24 +129,22 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
           <td className="center borderleft" style={{ paddingLeft: '10px' }}>
             <span
               id="do-single"
-              onClick={() => click_single()}
+              onClick={click_single}
               className={`click${playerRepeatMode ? '' : ' hide'}`}
             >
-              <img
-                src="icn/arrow-repeat.png"
-                alt="Toggle Repeat (Now ON)"
-                title="Toogle Repeat (Now ON)"
+              <Icon
+                src="arrow-repeat"
+                title="Toggle Repeat (Now ON)"
                 style={{ width: '24px', height: '24px' }}
               />
             </span>
             <span
               id="do-repeat"
-              onClick={() => click_repeat()}
+              onClick={click_repeat}
               className={`click${playerRepeatMode ? ' hide' : ''}`}
             >
-              <img
-                src="icn/arrow-norepeat.png"
-                alt="Toggle Repeat (Now OFF)"
+              <Icon
+                src="arrow-norepeat"
                 title="Toggle Repeat (Now OFF)"
                 style={{ width: '24px', height: '24px' }}
               />
@@ -112,7 +153,7 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
           <td className="center bordermiddle">&nbsp;</td>
           <td className="bordermiddle">
             <div id="jquery_jplayer_1" className="jp-jplayer">
-              {/* <audio id="jp_audio_0" preload="metadata" src={$audio}></audio> */}
+              {/* <audio id="jp_audio_0" preload="metadata" src={audio}></audio> */}
             </div>
             <div id="jp_container_1" className="jp-audio">
               <div className="jp-type-single">
@@ -124,7 +165,7 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
                           href="javascript:;"
                           className="jp-play"
                           tabIndex={1}
-                          onClick={() => toggle()}
+                          onClick={toggle}
                         >
                           play
                         </a>
@@ -135,51 +176,65 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
                           href="javascript:;"
                           className="jp-pause"
                           tabIndex={1}
-                          onClick={() => toggle()}
+                          onClick={toggle}
                         >
                           pause
                         </a>
                       </li>
                     )}
                     <li>
-                      <a href="javascript:;" className="jp-stop" tabIndex={1}>
+                      <a
+                        href="javascript:;"
+                        className="jp-stop"
+                        tabIndex={1}
+                        onClick={onStop}
+                      >
                         stop
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="jp-mute"
-                        tabIndex={1}
-                        title="mute"
-                        onClick={() => setVolume(0)}
-                      >
-                        mute
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="jp-unmute"
-                        onClick={() => setVolume(1)}
-                        tabIndex={1}
-                        title="unmute"
-                      >
-                        unmute
-                      </a>
-                    </li>
+                    {volume !== 0 ? (
+                      <li>
+                        <a
+                          href="javascript:;"
+                          className="jp-mute"
+                          tabIndex={1}
+                          title="mute"
+                          onClick={() => setVolume(0)}
+                        >
+                          mute
+                        </a>
+                      </li>
+                    ) : (
+                      <li>
+                        <a
+                          href="javascript:;"
+                          className="jp-unmute"
+                          onClick={() => setVolume(1)}
+                          tabIndex={1}
+                          title="unmute"
+                        >
+                          unmute
+                        </a>
+                      </li>
+                    )}
                   </ul>
-                  <div className="jp-progress">
+                  <div
+                    className="jp-progress"
+                    onClick={(event) => console.log(event)}
+                  >
                     <div className="jp-seek-bar">
-                      <div className="jp-play-bar"></div>
+                      <div
+                        className="jp-play-bar"
+                        style={{ width: `${headPerc}%` }}
+                      ></div>
                     </div>
                   </div>
                   <div className="jp-volume-bar">
                     <div className="jp-volume-bar-value"></div>
                   </div>
                   <div className="jp-time-holder">
-                    <div className="jp-current-time"></div>
-                    <div className="jp-duration"></div>
+                    <div className="jp-current-time">{formatTime(headPos)}</div>
+                    <div className="jp-duration">{formatTime(duration)}</div>
                   </div>
                 </div>
               </div>
@@ -198,35 +253,28 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
             </select>
             <br />
             <span id="backbutt" className="click" onClick={() => click_back()}>
-              <img
-                src="icn/arrow-circle-225-left.png"
-                alt="Rewind n seconds"
-                title="Rewind n seconds"
-              />
+              <Icon src="arrow-circle-225-left" title="Rewind n seconds" />
             </span>
             &nbsp;&nbsp;
             <span id="forwbutt" className="click" onClick={() => click_forw()}>
-              <img
-                src="icn/arrow-circle-315.png"
-                alt="Forward n seconds"
-                title="Forward n seconds"
-              />
+              <Icon src="arrow-circle-315" title="Forward n seconds" />
             </span>
             <span id="playTime" className="hide"></span>
           </td>
           <td className="center bordermiddle">&nbsp;</td>
           <td className="center borderright" style={{ paddingRight: '10px' }}>
-            <select id="playbackrate" name="playbackrate">
+            <select
+              id="playbackrate"
+              name="playbackrate"
+              onChange={({ target: { value } }) =>
+                setPlaybackRate(Number.parseInt(value))
+              }
+            >
               <GetPlaybackrateSelectoptions selectedVal={playbackRate} />
             </select>
             <br />
             <span id="slower" className="click" onClick={() => click_slower()}>
-              <img
-                src="icn/minus.png"
-                alt="Slower"
-                title="Slower"
-                style={{ marginTop: '3px' }}
-              />
+              <Icon src="minus" title="Slower" style={{ marginTop: '3px' }} />
             </span>
             &nbsp;
             <span
@@ -234,9 +282,8 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
               className="click"
               onClick={() => click_stdspeed()}
             >
-              <img
-                src="icn/status-away.png"
-                alt="Normal"
+              <Icon
+                src="status-away"
                 title="Normal"
                 style={{ marginTop: '3px' }}
               />
@@ -258,7 +305,6 @@ export function MakeAudioPlayer({ $audio }: { $audio: string }) {
   );
 }
 {
-  /* // export function useAudioPlayer() */
 }
 {
   /* <?php echo ($repeatMode ? "click_repeat();\n" : ''); ?> */
@@ -271,17 +317,17 @@ $(document).ready(function(){
       $("#jquery_jplayer_1").jPlayer({
     ready: function () {
       $(this).jPlayer("setMedia", { <?php
-      $audio = trim($audio);
-      if (strcasecmp(substr($audio, -4), '.mp3') == 0) {
-          echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
-      } elseif (strcasecmp(substr($audio, -4), '.ogg') == 0) {
-          echo 'oga: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
-              'mp3: ' . prepare_textdata_js(encodeURI($audio));
-      } elseif (strcasecmp(substr($audio, -4), '.wav') == 0) {
-          echo 'wav: ' . prepare_textdata_js(encodeURI($audio)) . ", " .
-              'mp3: ' . prepare_textdata_js(encodeURI($audio));
+      audio = trim(audio);
+      if (strcasecmp(substr(audio, -4), '.mp3') == 0) {
+          echo 'mp3: ' . prepare_textdata_js(encodeURI(audio));
+      } elseif (strcasecmp(substr(audio, -4), '.ogg') == 0) {
+          echo 'oga: ' . prepare_textdata_js(encodeURI(audio)) . ", " .
+              'mp3: ' . prepare_textdata_js(encodeURI(audio));
+      } elseif (strcasecmp(substr(audio, -4), '.wav') == 0) {
+          echo 'wav: ' . prepare_textdata_js(encodeURI(audio)) . ", " .
+              'mp3: ' . prepare_textdata_js(encodeURI(audio));
       } else {
-          echo 'mp3: ' . prepare_textdata_js(encodeURI($audio));
+          echo 'mp3: ' . prepare_textdata_js(encodeURI(audio));
       }
       ?> });
     },
@@ -303,102 +349,56 @@ $(document).ready(function(){
   */
 }
 
-const useAudio = (url: string) => {
-  const [audio] = useState(new Audio(url));
+const useAudio = (
+  url: string,
+  ref: Ref<HTMLAudioElement>,
+  onTimeUpdate: (val: number) => void = () => {}
+) => {
+  const [audio] = useState(() => {
+    const a = new Audio(url);
+    a.preload = 'metadata';
+    console.log('audio', { a });
+    return a;
+  });
+  //   TODO none of this working
+  //   const audioRef = useRef<HTMLAudioElement>(audio);
+  //   ref = audioRef;
+  //   audio.preload = 'metadata';
+  //   console.log('TEST123-AUDIOREF', ref);
   const [playing, setPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(10);
   const [seekStep, setSeekStep] = useState(1);
+  const [head, setHead] = useState(0);
+  const [volume, setVolume] = useState(1);
   const [playerRepeatMode, setPlayerRepeatMode] = useState(1);
+  const handleSetPlayHead = (settingHead: number) => {
+    setHead(settingHead);
+    audio.currentTime = settingHead;
+  };
 
-  /**
-   *
-   */
-  function click_single() {
-    // $('#jquery_jplayer_1').unbind($.jPlayer.event.ended + '.jp-repeat');
-    // $('#do-single').addClass('hide');
-    // $('#do-repeat').removeClass('hide');
-    setPlayerRepeatMode(0);
-    // do_ajax_save_setting('currentplayerrepeatmode', '0');
-    return false;
-  }
-
-  /**
-   *
-   */
-  function click_repeat() {
-    // TODO
-    // $('#jquery_jplayer_1').bind(
-    //   $.jPlayer.event.ended + '.jp-repeat',
-    //   function (event) {
-    //     $(this).jPlayer('play');
-    //   }
-    // );
-    setPlayerRepeatMode(1);
-    return false;
-  }
-
-  /**
-   *
-   */
-  function click_back() {
-    const t = playHead;
-    const b = seekStep;
-    const nt = t - b;
-    setPlayHead(Math.max(0, nt));
-    // $('#jquery_jplayer_1').jPlayer('play', nt);
-  }
-
-  /**
-   *
-   */
-  function click_forw() {
-    const t = playHead;
-    const b = seekStep;
-    const nt = t + b;
-    setPlayHead(nt);
-    // $('#jquery_jplayer_1').jPlayer('play', nt);
-  }
-
-  /**
-   *
-   */
-  function click_stdspeed() {
-    setPlaybackRate(10);
-  }
-
-  /**
-   *
-   */
-  function click_slower() {
-    console.log('CLICK', playbackRate);
-    const newPlaybackRate = Math.max(5, playbackRate - 1);
-    setPlaybackRate(newPlaybackRate);
-  }
-
-  /**
-   *
-   */
-  function click_faster() {
-    const newPlaybackRate = Math.min(15, playbackRate + 1);
-    setPlaybackRate(newPlaybackRate);
-  }
-
-  //   const [playHead, setPlayHead] = useState(0);
   const toggle = () => {
-    console.log(audio);
     setPlaying(!playing);
   };
-  const setVolume = (vol: number) =>
-    (audio.volume = Math.max(0, Math.min(vol, 1)));
+  const handleSetVolume = (vol: number) => {
+    setVolume(Math.max(0, Math.min(vol, 1)));
+  };
   const handleSetPlaybackRate = (rate: number) => {
-    console.log('SETTING RATE', rate);
     setPlaybackRate(rate);
   };
   const setPlayerHead = (headPos: number) => (audio.currentTime = headPos);
+
   useEffect(() => {
     playing ? audio.play() : audio.pause();
+  }, [playing]);
+  useEffect(() => {
+    audio.volume = volume;
+  }, [volume]);
+  useEffect(() => {
+    audio.currentTime = head;
+  }, [head]);
+  useEffect(() => {
     audio.playbackRate = playbackRate * 0.1;
-  }, [playing, playbackRate, playerRepeatMode]);
+  }, [playbackRate]);
 
   useEffect(() => {
     const stopPlayingOrRepeat = () => {
@@ -409,28 +409,50 @@ const useAudio = (url: string) => {
       }
       setPlaying(false);
     };
+    const timeUpdate = (val: Event): void =>
+      // TODO why cast necessary?
+      onTimeUpdate((val.target as any as { currentTime: number }).currentTime);
+    audio.addEventListener('timeupdate', timeUpdate);
     audio.addEventListener('ended', stopPlayingOrRepeat);
     return () => {
+      console.log('TEST123-TEARDOWN');
+      setPlaying(false);
+      audio.removeEventListener('timeupdate', timeUpdate);
       audio.removeEventListener('ended', stopPlayingOrRepeat);
     };
   }, [playerRepeatMode]);
-
   return {
     playing,
     toggle,
-    setVolume,
+    setPlaying,
+    setVolume: handleSetVolume,
+    volume,
     setPlaybackRate: handleSetPlaybackRate,
     playbackRate,
     playerRepeatMode,
     setPlayerRepeatMode,
     seekStep,
     setSeekStep,
-    click_single,
-    click_repeat,
-    click_back,
-    click_forw,
-    click_stdspeed,
-    click_slower,
-    click_faster,
+    audio,
+    setHead: handleSetPlayHead,
+    getCurrentHead: () => audio.currentTime,
+    duration: audio.duration,
   };
 };
+export const AudioPlayer = React.forwardRef(AudioPlayerImpl);
+function onClickSeekBar2(c) {
+  c.preventDefault(),
+    d[b](c),
+    d.options.autoBlur ? a(this).blur() : a(this).focus();
+}
+function onClickSeekBar1(a) {
+  return 'undefined' == typeof n || (a && n.event.triggered === a.type)
+    ? void 0
+    : n.event.dispatch.apply(k.elem, arguments);
+}
+export function formatTime(timeSec: number) {
+  const numSecs = Math.round(timeSec % 60);
+  const numMins = Math.floor(timeSec / 60);
+  const formatTimeDigit = (val: number) => (val < 10 ? `0${val}` : `${val}`);
+  return `${formatTimeDigit(numMins)}:${formatTimeDigit(numSecs)}`;
+}
