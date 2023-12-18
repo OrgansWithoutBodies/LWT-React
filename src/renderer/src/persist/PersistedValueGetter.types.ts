@@ -1,13 +1,4 @@
 import type { DataState } from '../data/data.storage';
-import { PersistanceStrategy } from './PersistedValueGetter';
-import {
-  PersistedValueDeleter,
-  PersistedValueEmptyer,
-  PersistedValueGetter,
-  PersistedValueGetterAsync,
-  PersistedValueInserterAsync,
-  PersistedValueSetter,
-} from './PersistedValueGetter.types';
 
 export type PersistedValueGetter<
   TKey extends keyof DataState = keyof DataState
@@ -47,4 +38,11 @@ export interface PersistenceHandles {
   delete?: PersistedValueDeleter;
   empty?: PersistedValueEmptyer;
 }
-export type StrategyLookup = Record<PersistanceStrategy, PersistenceHandles>;
+export type StrategyLookup = Record<PersistanceStrategy, PersistenceHandles>; // ================== //
+
+export enum PersistanceStrategy {
+  LocalStorage,
+  RestAPI,
+  // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
+  ElectronSqlite,
+}

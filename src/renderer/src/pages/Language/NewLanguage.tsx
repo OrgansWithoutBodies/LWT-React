@@ -15,7 +15,7 @@ import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { SelectBoolean } from '../../ui-kit/SelectBoolean';
 import { check_dupl_lang } from '../../utils/utils';
-import { resetDirty } from '../Sorting';
+import { GetLanguagessizeSelectoptions } from '../SelectOptions';
 import NewLanguageWizard from './Wizard.component';
 
 export function NewLanguage() {
@@ -253,7 +253,6 @@ export function NewLanguage() {
                   type="button"
                   value="Cancel"
                   onClick={() => {
-                    resetDirty();
                     navigator('/edit_languages');
                   }}
                 />
@@ -366,10 +365,7 @@ export function TextSizeSelect<
       ref={refMap[entryKey]}
       defaultValue={defaultValue}
     >
-      <option value="100">100 %</option>
-      <option value="150">150 %</option>
-      <option value="200">200 %</option>
-      <option value="250">250 %</option>
+      <GetLanguagessizeSelectoptions selected={defaultValue} />
     </select>
   );
 }

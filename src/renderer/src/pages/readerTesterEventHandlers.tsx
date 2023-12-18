@@ -10,6 +10,7 @@ import {
   TextItem,
   Word,
 } from '../utils/parseMySqlDump';
+import { prepare_textdata_js } from '../utils/windowFunctions';
 import {
   EditWordParams,
   RunOverlibMultiword,
@@ -26,7 +27,6 @@ import {
   LanguageDictionaryData,
   WordKnownTermLines,
 } from './Term/limitedTypes';
-import { prepare_textdata_js } from './windowFunctions';
 
 const CAPTION = 'TODO';
 type ArrV8<T> = [T, T, T, T, T, T, T, T];

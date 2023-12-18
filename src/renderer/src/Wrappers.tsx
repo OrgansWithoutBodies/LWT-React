@@ -16,8 +16,13 @@ import { AddTerm, EditTerm, Terms } from './pages/Term/Terms.component';
 import { DisplayTags, EditTag, NewTag } from './pages/TermTag/EditTags';
 import { TesterPage } from './pages/Tester';
 import { AnnotateText } from './pages/Text/AnnotateText';
+import { DisplayImprText } from './pages/Text/DisplayImprText';
 import { EditText, Library } from './pages/Text/Library.component';
-import { PrintText } from './pages/Text/PrintText.component';
+import {
+  AnnPlcmnt,
+  AnnType,
+  PrintText,
+} from './pages/Text/PrintText.component';
 import { ImportShortTextPage } from './pages/Text/TextImport';
 import {
   DisplayTextTags,
@@ -95,20 +100,32 @@ export function AnnotatedTextsWrapper() {
     />
   );
 }
+export function DisplayImprTextWrapper() {
+  const { text, annplcmnt, ann, status } =
+    useInternalParams('display_impr_text');
+  if (text === null) {
+    throw new Error('Need To Specify Text ID');
+  }
+  return <DisplayImprText textID={Number.parseInt(text)} />;
+}
 
 export function UploadWordsWrapper() {
   return <UploadWords />;
 }
 
 export function PrintTextWrapper() {
-  const { text, annplcmnt } = useInternalParams('print_text');
+  const { status, ann, text, annplcmnt } = useInternalParams('print_text');
   if (text === null) {
     throw new Error('Need To Specify Text ID');
   }
   return (
     <PrintText
+      ann={ann === null ? AnnType['Nothing'] : Number.parseInt(ann)}
       textID={Number.parseInt(text)}
-      annplcmnt={annplcmnt === null ? 0 : Number.parseInt(annplcmnt)}
+      annplcmnt={
+        annplcmnt === null ? AnnPlcmnt['behind'] : Number.parseInt(annplcmnt)
+      }
+      status={status === null ? 14 : Number.parseInt(status)}
     />
   );
 }

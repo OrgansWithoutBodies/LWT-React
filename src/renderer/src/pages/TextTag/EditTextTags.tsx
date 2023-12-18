@@ -19,7 +19,7 @@ import {
   GetMultipleTagsActionsSelectOptions,
   GetTagSortSelectoptions,
 } from '../SelectOptions';
-import { TagSorting, resetDirty } from '../Sorting';
+import { TagSorting } from '../Sorting';
 
 export function DisplayTextTags({
   query,
@@ -344,7 +344,6 @@ export function NewTextTag() {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator('/edit_texttags');
                 }}
               />
@@ -427,7 +426,6 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator(`/edit_texttags#rec${chgID}`);
                 }}
               />

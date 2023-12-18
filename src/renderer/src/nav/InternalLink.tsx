@@ -10,6 +10,7 @@ export function A({
 }: React.PropsWithChildren<
   Omit<JSX.IntrinsicElements['a'], 'href'> & { href?: InternalPaths }
 >) {
+  // TODO add dirty check here
   const nav = useInternalNavigate();
   const onClick = href === undefined ? undefined : () => nav(href);
   return (

@@ -17,6 +17,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import React, { useRef } from 'react';
+import { SetBoolHandler } from '../pages/IO/CheckForm';
 
 export type Dimension2D<T = number> = { x: T; y: T };
 
@@ -78,7 +79,7 @@ interface PopoverOptions {
   placement?: Placement;
   modal?: boolean;
   open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  onOpenChange?: SetBoolHandler;
 }
 
 function usePopover({

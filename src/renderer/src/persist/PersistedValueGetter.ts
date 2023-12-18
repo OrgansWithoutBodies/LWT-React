@@ -1,6 +1,7 @@
 import type { DataState } from '../data/data.storage';
 import { BackendPlugin } from '../plugins/electron-sqlite.backend-plugin.renderer';
 import {
+  PersistanceStrategy,
   PersistedValueGetter,
   PersistedValueSetter,
   StrategyLookup,
@@ -36,18 +37,6 @@ export const getPersistedValueRESTAPI: PersistedValueGetter = (key) =>
   key as any;
 export const setPersistedValueRESTAPI: PersistedValueGetter = (key) =>
   key as any;
-
-// ================== //
-
-export enum PersistanceStrategy {
-  LocalStorage,
-  RestAPI,
-  // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
-  ElectronSqlite,
-  // TODO Authorized RestAPI
-  // TODO MySql compatibility
-  // TODO shared details for sqlite implementation for IPC & REST-express
-}
 
 export const PersistenceStrategies: StrategyLookup = {
   [PersistanceStrategy.LocalStorage]: {

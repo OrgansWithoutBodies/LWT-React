@@ -8,7 +8,7 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { Icon, RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
+import { TextTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import { AddNewTextValidator } from '../../utils/parseMySqlDump';
 import { do_ajax_update_media_select } from '../SelectMediaPath';
 import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
@@ -125,7 +125,7 @@ export function ImportShortText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <TextTagsSelectList />
+                <TextTagsAutocomplete />
               </td>
             </tr>
             <tr>

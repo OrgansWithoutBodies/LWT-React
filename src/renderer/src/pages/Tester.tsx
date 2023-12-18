@@ -8,8 +8,8 @@ import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
-import { Language, Word } from '../utils/parseMySqlDump';
-import { TranslationAPI } from './IO/APITranslation.component';
+import { Language, TextItem, Word } from '../utils/parseMySqlDump';
+import { TranslationAPI } from './API/APITranslation.component';
 import { RunTestForWord } from './OverlibComponents';
 import { IFramePane, Modality } from './ReaderPage.component';
 import { NumericalStrength, get_status_abbr } from './StrengthMap';
@@ -565,20 +565,12 @@ export function TesterPage({
   if (!language) {
     return <></>;
   }
-  const wordLookupKeyedByTextLC = Object.fromEntries(
-    words
-      .filter((word) => word.WoLgID === language.LgID)
-      .map((val) => [val.WoTextLC, val])
-  );
-  const tableWords = textitems
-    .filter(
-      (ti) =>
-        ti.TiTxID === text.TxID &&
-        ti.TiLgID === language.LgID &&
-        ti.TiIsNotWord === 0 &&
-        wordLookupKeyedByTextLC[ti.TiTextLC]
-    )
-    .map((ti) => wordLookupKeyedByTextLC[ti.TiTextLC]);
+  const tableWords = getWordsForTextItems({
+    words,
+    textitems,
+    languageID: language.LgID,
+    textID: text.TxID,
+  });
   console.log('TEST123-table', tableWords);
 
   const availableAPIPlugins = Object.fromEntries(
@@ -680,6 +672,34 @@ export function TesterPage({
       </SplitPane>
     </SplitPane>
   );
+}
+
+export function getWordsForTextItems({
+  words,
+  textitems,
+  languageID,
+  textID,
+}: {
+  words: Word[];
+  textitems: TextItem[];
+  languageID: LanguagesID;
+  textID: TextsID;
+}) {
+  const wordLookupKeyedByTextLC = Object.fromEntries(
+    words
+      .filter((word) => word.WoLgID === languageID)
+      .map((val) => [val.WoTextLC, val])
+  );
+  const tableWords = textitems
+    .filter(
+      (ti) =>
+        ti.TiTxID === textID &&
+        ti.TiLgID === languageID &&
+        ti.TiIsNotWord === 0 &&
+        wordLookupKeyedByTextLC[ti.TiTextLC]
+    )
+    .map((ti) => wordLookupKeyedByTextLC[ti.TiTextLC]);
+  return tableWords;
 }
 // TODO
 // $p = '';

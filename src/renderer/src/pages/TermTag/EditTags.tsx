@@ -26,7 +26,7 @@ import {
   GetMultipleTagsActionsSelectOptions,
   GetTagSortSelectoptions,
 } from '../SelectOptions';
-import { TagSorting, resetDirty } from '../Sorting';
+import { TagSorting } from '../Sorting';
 import { NavigateButton } from '../Statistics.component';
 
 export function DisplayTags({
@@ -360,7 +360,6 @@ export function NewTag() {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator('/edit_tags');
                 }}
               />
@@ -443,7 +442,6 @@ export function EditTag({ chgID }: { chgID: TagsID }) {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator('/edit_tags');
                 }}
               />

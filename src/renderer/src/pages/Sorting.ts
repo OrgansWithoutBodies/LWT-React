@@ -1,12 +1,5 @@
 import { Word } from '../utils/parseMySqlDump';
 
-// TODO - maybe save in context? handle in form?
-export const resetDirty = () => {
-  // TODO
-  // ** You have unsaved changes! **
-};
-export const setDirty = () => {};
-
 // TODO these enums are different per select
 export const enum WordSorting {
   'Term A-Z' = 1,

@@ -3,20 +3,17 @@ import demoDB from '../demo_db.json';
 
 import { Persistable } from '../../../shared/Persistable';
 import type { NumericalStrength } from '../pages/StrengthMap';
-import { downloadTextFile } from '../utils/downloadTxtFile';
-import { splitCheckText } from '../utils/utils';
+import { downloadBackupFile } from '../utils/downloadTxtFile';
+import { makeScoreRandomInsertUpdate, splitCheckText } from '../utils/utils';
 import {
   DataState,
-  dataStore,
   DataStore,
   MyPersistanceHandles,
+  dataStore,
 } from './data.storage';
 
-// import { createReadStream, createWriteStream } from 'original-fs';
-import {
-  TatoebaOpenAPIWrapper,
-  ThreeLetterString,
-} from '../plugins/TatoebaAPI';
+import { TatoebaOpenAPIWrapper } from '../plugins/TatoebaAPI';
+import { serializeJsonToSQL } from '../utils/exports/serializeJsonToSQL';
 import type {
   AddNewTextType,
   AddNewWordType,
@@ -27,7 +24,6 @@ import type {
   Tag2NoID,
   Word,
 } from '../utils/parseMySqlDump';
-import { serializeJsonToSQL } from '../utils/serializeJsonToSQL';
 import { getCurrentTimeAsString } from './preValidateMaps';
 import type { Settings } from './settings';
 import {
@@ -349,7 +345,6 @@ export class DataService {
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
       const maxID = (Math.max(...ids) + 1) as WordsID;
-      console.log('TEST123-addterm', maxID, ids);
       if (IDIsUnique(maxID, ids)) {
         return {
           ...state,
@@ -360,9 +355,7 @@ export class DataService {
               ...word,
               WoTextLC: word.WoText.toLowerCase(),
               WoID: maxID,
-              WoTodayScore: 0,
-              WoTomorrowScore: 0,
-              WoRandom: 0,
+              ...makeScoreRandomInsertUpdate({ word }),
             },
           ],
         };
@@ -531,17 +524,14 @@ export class DataService {
     });
   }
 
-  public addMultipleTerms(terms: Word[]) {
+  public addMultipleTerms(terms: AddNewWordType[]) {
     const mappedTerms = terms.map((word) => ({
       ...word,
       // TODO move these to prevalidate?
       WoStatusChanged: getCurrentTimeAsString(),
       // TODO make sure to do this on edit
       WoTextLC: word.WoText.toLowerCase(),
-      WoTodayScore: 0,
-      WoTomorrowScore: 0,
-      // TODO ? whats this
-      WoRandom: 0,
+      ...makeScoreRandomInsertUpdate({ word }),
     }));
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
@@ -672,11 +662,11 @@ export class DataService {
 
   public downloadBackup(backupType: 'JSON' | 'SQL') {
     const serializedData = this.serialize(backupType);
-    console.log(backupType);
 
+    // TODO
     // Gzip();
     // deflate((serializedData as string))
-    downloadTextFile(serializedData, backupType);
+    downloadBackupFile(serializedData, backupType);
   }
 
   public emptyDatabase() {
@@ -852,10 +842,18 @@ export class DataService {
 
   public setSettings(settings: Partial<Settings>) {
     console.log('TEST123-settings', settings);
+    const changingKeys = Object.keys(settings);
+    // sorta hacky work around to make more verbose
+    const isSingleSetting = changingKeys.length === 1;
     this.dataStore.update(({ settings: oldSettings, ...state }) => ({
       ...state,
-      // TODO setting-specific message here?
-      notificationMessage: { txt: 'Updated Settings' },
+      notificationMessage: {
+        txt: isSingleSetting
+          ? `Updated Setting ${changingKeys[0]}`
+          : // TODO pretty name
+            // : ${settings[changingKeys[0]]}`
+            'Updated Settings',
+      },
       settings: Object.entries({
         ...Object.fromEntries(
           oldSettings.map((val) => [val.StKey, val.StValue])

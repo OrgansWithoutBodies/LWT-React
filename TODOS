@@ -1,22 +1,20 @@
 PORT:
 
-- filter component
-- parser
-- Audio
-- - sync up text to audio
+- title (context provider w useeffect hook?) - pagestart_nobody
+- filter table component
+- filter by query
 - export backup
 - import terms
 - annotate
 - error handling/boundaries
-- message dropdown (timed observable?)
 - "Show All" for multiword terms
 - Long Text Import
-- licensing for sentences (tatoeba)
 
 ---
 
 TODO BEFORE RELEASE:
 
+- finish sortings
 - better pattern for parser, sentences, and terms
 - export backup & restore (sql.gz)
 - figure out licensing (unlicense not great?)
@@ -57,6 +55,8 @@ CODE TODOs
 
 FEATURE IDEAS
 
+- anki export theme
+- licensing for sentences (tatoeba)
 - generic "Language Dict" lookup to allow for N different dicts? schema of SourceLang, TargetLang, URL Template (with placeholders for source & target), and word/sentence?
 - - account for 'Google Translate a Sentence' - different behavior than tatoeba sentence lookup
 - default romanization schema for languages that aren't like chinese?
@@ -100,4 +100,4 @@ FEATURE IDEAS
 - routerbar?
 - dynamic customizable styles saved in settings
 - tests that compare to original php?
-- ***
+- configurable parser (mecab, jieba, etc)

@@ -8,10 +8,9 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
-import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
+import { TextTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import { AddNewTextType } from '../../utils/parseMySqlDump';
 import { buildSentences } from '../../utils/utils';
-import { resetDirty } from '../Sorting';
 import { LongTextVerify } from './LongTextImportVerify.component';
 
 export default function ImportLongText({
@@ -169,7 +168,7 @@ export default function ImportLongText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <TextTagsSelectList />
+                <TextTagsAutocomplete />
               </td>
             </tr>
             <tr>
@@ -178,7 +177,6 @@ export default function ImportLongText({
                   type="button"
                   value="Cancel"
                   onClick={() => {
-                    resetDirty();
                     navigate('/');
                   }}
                 />

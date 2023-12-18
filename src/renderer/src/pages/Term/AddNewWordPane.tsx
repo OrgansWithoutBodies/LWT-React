@@ -7,7 +7,7 @@ import { useFormInput } from '../../hooks/useFormInput';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { Icon } from '../../ui-kit/Icon';
 import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
-import { WordTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
+import { WordTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import {
   AddNewWordValidator,
   Sentence,
@@ -50,6 +50,7 @@ export function AddNewWordPane({
     refMap,
     formErrors,
     onSubmit,
+    setDirty,
     TextArea,
   } = useFormInput({
     entry: {
@@ -103,7 +104,7 @@ export function AddNewWordPane({
                   errorName="New Term"
                   entryKey="WoText"
                   // TODO
-                  // onBlur={do_ajax_show_similar_terms}
+                  // onBlur={()=>}
                   id="wordfield"
                   // value={word}
                   default
@@ -137,7 +138,7 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <WordTagsSelectList />
+                <WordTagsAutocomplete ref={refMap.taglist} />
               </td>
             </tr>
             <tr>
@@ -176,6 +177,7 @@ export function AddNewWordPane({
               <td className="td1">
                 <StatusRadioButtons
                   defaultStatus={termStatus}
+                  onChange={setDirty}
                   refMap={refMap}
                 />
               </td>
@@ -258,6 +260,7 @@ export function EditWordPane({
     refMap,
     formErrors,
     onSubmit,
+    setDirty,
     TextArea,
   } = useFormInput({
     entry: { WoText: word || '', WoLgID: word.WoLgID },
@@ -344,8 +347,11 @@ export function EditWordPane({
             )}
             <tr>
               <td className="td1 right">Tags:</td>
-              <WordTagsSelectList />
+              <WordTagsAutocomplete />
+              {/* TODO */}
+              {/* <WordTagsAutocomplete ref={refMap.taglist} /> */}
             </tr>
+
             <tr>
               <td className="td1 right">Romaniz.:</td>
               <td className="td1">
@@ -379,15 +385,19 @@ export function EditWordPane({
             <tr>
               <td className="td1 right">Status:</td>
               <td className="td1">
-                <StatusRadioButtons defaultStatus={WoStatus} refMap={refMap} />
+                <StatusRadioButtons
+                  onChange={setDirty}
+                  defaultStatus={WoStatus}
+                  refMap={refMap}
+                />
               </td>
             </tr>
             <tr>
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
                   langDictData={lang}
-                  sentenceString={refMap.WoSentence.current.value}
-                  wordString={refMap.WoText.current.value}
+                  sentenceString={refMap.WoSentence.current?.value}
+                  wordString={refMap.WoText.current?.value}
                   setTranslateAPIParams={setTranslateAPIParams}
                   setIFrameURL={setIFrameURL}
                 />

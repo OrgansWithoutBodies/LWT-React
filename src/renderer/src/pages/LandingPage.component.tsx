@@ -5,7 +5,7 @@ import { useData } from '../hooks/useData';
 import { InternalPaths } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
-import { PersistanceStrategy } from '../persist/PersistedValueGetter';
+import { PersistanceStrategy } from '../persist/PersistedValueGetter.types';
 import { PLUGINS } from '../plugins';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';

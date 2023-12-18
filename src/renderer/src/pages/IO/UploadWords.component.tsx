@@ -1,4 +1,3 @@
-import { parse } from 'papaparse';
 import { UploadTermsValidator } from '../../data/UploadTermsValidator';
 import { dataService } from '../../data/data.service';
 import { parseNumMap } from '../../forms/Forms';
@@ -8,16 +7,9 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
 import { SelectBoolean } from '../../ui-kit/SelectBoolean';
-import { Word } from '../../utils/parseMySqlDump';
+import { parseTermsFromCSV } from '../../utils/parsers/parseCsvTerms';
 import { StrengthMap } from '../StrengthMap';
 import { GetWordstatusSelectoptions } from '../Text/PrintText.component';
-import {
-  ColumnImportMode,
-  ColumnImportModeTermParam,
-  ItemsFromWord,
-  RelevantTermName,
-  TermName,
-} from '../columnImportMode';
 
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
@@ -160,13 +152,15 @@ export function UploadWords() {
               <UlInput entryKey="file" type="file" />
               <br />
               <br />
+              {/* TODO use this */}
               <b>Or</b> type in or paste from clipboard (do <b>NOT</b> specify
+              {/* TODO use validator to specify not both */}
               file):
               <br />
               <TextArea
                 className="checkoutsidebmp"
                 errorName="Upload"
-                entryKey="Upload"
+                entryKey="TextField"
                 cols={60}
                 rows={25}
               />
@@ -280,61 +274,4 @@ export function UploadWords() {
       </p>
     </>
   );
-}
-const delimiterMap = { c: ',', t: '\t', h: '#' };
-/**
- *
- * @param refMap
- */
-async function parseTermsFromCSV<
-  TData extends ReturnType<typeof UploadTermsValidator>['TYPE'] = ReturnType<
-    typeof UploadTermsValidator
-  >['TYPE']
->(value: TData) {
-  const fileBlob = value.file.file;
-  console.log('blob', fileBlob);
-  const stringdata = await fileBlob?.text();
-  const delimiterVal = delimiterMap[value.delimiter];
-  const data = parse<string[]>(stringdata!, { delimiter: delimiterVal });
-  const colVals = value.columns;
-  const colIndsToCareAbout = colVals.reduce(
-    (prev, curr, currInd) =>
-      curr !== 'x'
-        ? [...prev, [currInd, curr] as [number, Exclude<TermName, 'x'>]]
-        : prev,
-    [] as [number, Exclude<TermName, 'x'>][]
-  );
-  const parsedTerms = data.data
-    .filter(
-      (row) =>
-        !(
-          (row[0] === undefined || row[0] === '') &&
-          (row[1] === undefined || row[1] === '') &&
-          (row[2] === undefined || row[2] === '') &&
-          (row[3] === undefined || row[3] === '') &&
-          (row[4] === undefined || row[4] === '')
-        )
-    )
-    .map((row) => {
-      type TaggableWord = Pick<Word, ItemsFromWord> & {
-        // TODO do something with this
-        TagList: string[];
-      };
-
-      const term = Object.fromEntries(
-        colIndsToCareAbout.map(
-          ([ind, colKey]) =>
-            [ColumnImportMode[colKey]['termParam'], row[ind]] as [
-              (typeof ColumnImportMode)[RelevantTermName]['termParam'],
-              TaggableWord[ColumnImportModeTermParam]
-            ]
-        )
-      );
-      return {
-        ...term,
-        WoLgID: value.WoLgID,
-        WoStatus: value.WoStatus,
-      };
-    });
-  return parsedTerms;
 }

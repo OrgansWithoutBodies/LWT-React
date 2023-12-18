@@ -3,6 +3,7 @@ import { dataService } from '../../data/data.service';
 import { TermStrengths } from '../../data/type';
 import { A } from '../../nav/InternalLink';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { replaceTemplate } from '../../utils/linkHelpers';
 import { Language } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
 import {
@@ -132,6 +133,7 @@ export function MultiFunctionalURL({
           setTranslateAPIParams({
             sourceKey,
             targetKey,
+            // TODO able to get word here? or just update entire component?
             word,
             apiKey: templateStr.slice(6),
           })
@@ -152,13 +154,22 @@ export function MultiFunctionalURL({
       </span>
     );
   }
+  const isTemplate = templateStr.includes('###');
+  if (isTemplate) {
+    return (
+      // TODO target specific new frame?
+      <a target="_blank" href={replaceTemplate(templateStr, word)}>
+        {children}
+      </a>
+    );
+  }
   return (
-    // TODO target specific new frame?
-    <a target="_blank" href={replaceTemplate(templateStr, word)}>
+    <a target="_blank" href={`${templateStr}${word}`}>
       {children}
     </a>
   );
 }
+
 export function KnownTermLines({
   word,
   tags,
@@ -253,20 +264,5 @@ export function UnknownTermLines({ word }: { word: string }): JSX.Element {
         Ignore this term
       </A>
     </>
-  );
-}
-/**
- *
- * @param templateStr
- * @param word
- */
-
-export function replaceTemplate(templateStr: string, word: string): string {
-  console.log('TEST123-replaceTemplate', templateStr, word);
-  // TODO template vs url branded type
-  const startsWithStar = templateStr.startsWith('*');
-  return (startsWithStar ? templateStr.slice(1) : templateStr).replace(
-    '###',
-    word
   );
 }

@@ -1,4 +1,4 @@
-import { PersistanceStrategy } from './persist/PersistedValueGetter';
+import { PersistanceStrategy } from './persist/PersistedValueGetter.types';
 import { StyleVariant } from './styles';
 
 type VersionNumber =

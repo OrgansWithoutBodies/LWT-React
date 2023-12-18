@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import useAnimation from '../hooks/useAnimateTimer';
 import { useInternalNavigate } from '../hooks/useInternalNav';
@@ -90,9 +90,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="preface">Preface</a>
+              {' '}
+              <a id="preface">Preface</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -145,9 +146,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="current">Current Version</a>
+              {' '}
+              <a id="current">Current Version</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -157,7 +159,8 @@ export function InfoPage() {
               </li>
 
               <li>
-                <a href="#history">View the Changelog.</a>
+                {' '}
+                <a href="#history">View the Changelog.</a>{' '}
               </li>
             </ul>
           </dd>
@@ -167,44 +170,48 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="links">Important Links</a>
+              {' '}
+              <a id="links">Important Links</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
             <ul>
               <li>
+                {' '}
                 <a
                   href="http://sourceforge.net/projects/learning-with-texts/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <b>Project Page</b> @ Sourceforge
-                </a>
+                </a>{' '}
               </li>
 
               <li>
+                {' '}
                 <a
                   href="http://sourceforge.net/projects/learning-with-texts/files/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <b>Download Page</b> @ Sourceforge
-                </a>
+                </a>{' '}
                 <br />
                 <br />
               </li>
 
               {/* <!-- */}
               <li>
+                {' '}
                 <a
                   href="http://sourceforge.net/projects/lwt/forums/forum/1813497"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <b>Help Forum</b> @ Sourceforge
-                </a>
+                </a>{' '}
                 <br />
                 <br />
               </li>
@@ -230,13 +237,14 @@ export function InfoPage() {
                     </ul>
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://learning-with-texts.sourceforge.io/testdb/index"
                       target="_blank"
                       rel="noreferrer"
                     >
                       <b>START ONLINE DEMO</b>
-                    </a>
+                    </a>{' '}
                   </li>
                 </ul>
                 <br />
@@ -246,6 +254,7 @@ export function InfoPage() {
                 <b>LWT Reviews and Blog Posts</b>
                 <ul>
                   <li>
+                    {' '}
                     <a
                       href="https://www.mezzoguild.com/how-to-install-learning-with-texts-lwt/"
                       target="_blank"
@@ -253,72 +262,75 @@ export function InfoPage() {
                     >
                       The Mezzofanti Guild: How To Install Learning With Texts
                       On Your Own Computer
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
                     Street-Smart Language Learning™: Using Learning with Texts
                     with Anki 2 (in five parts):
                     <br />
-                    Part
+                    Part{' '}
                     <a
                       href="http://www.streetsmartlanguagelearning.com/2012/12/using-learning-with-texts-with-anki-2.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       1
-                    </a>
-                    /
+                    </a>{' '}
+                    /{' '}
                     <a
                       href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       2
-                    </a>
-                    /
+                    </a>{' '}
+                    /{' '}
                     <a
                       href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_8.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       3
-                    </a>
-                    /
+                    </a>{' '}
+                    /{' '}
                     <a
                       href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_15.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       4
-                    </a>
-                    /
+                    </a>{' '}
+                    /{' '}
                     <a
                       href="http://www.streetsmartlanguagelearning.com/2013/01/using-learning-with-texts-with-anki-2_21.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       5
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://diyclassics.com/2014/04/11/learning-with-texts-for-classical-languages/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Learning with Texts for classical languages
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://chicagoseoul.wordpress.com/2011/07/19/learning-with-texts/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Chicagoseoul's Blog: Learning with Texts
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://mikotoneko.wordpress.com/2012/03/09/lwtp1/"
                       target="_blank"
@@ -326,9 +338,10 @@ export function InfoPage() {
                     >
                       Mikoto's Adventures in Japanese: LWT - Learning With Text
                       Introduction
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://mikotoneko.wordpress.com/2012/03/13/lwt-a-guide-to-setting-up-for-japanese-learning/"
                       target="_blank"
@@ -336,18 +349,20 @@ export function InfoPage() {
                     >
                       Mikoto's Adventures in Japanese: LWT - A Guide to Setting
                       up for Japanese Learning
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://mikotoneko.wordpress.com/2012/04/06/lwt-tricks-of-the-trade/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Mikoto's Adventures in Japanese: LWT - Tricks of the Trade
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://mikotoneko.wordpress.com/2012/04/17/lwt-daniels-guide-for-japanese-useage/"
                       target="_blank"
@@ -355,9 +370,10 @@ export function InfoPage() {
                     >
                       Mikoto's Adventures in Japanese: LWT - Daniel’s Guide for
                       Japanese Usage
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       target="_blank"
                       href="http://www.youtube.com/watch?v=QSLPOATWAU4"
@@ -365,16 +381,17 @@ export function InfoPage() {
                     >
                       Video about Learning With Texts from Language Vlogger
                       FluentCzech
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://www.fluentin3months.com/learning-with-texts/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Fluent In 3 Months: Introducing LWT
-                    </a>
+                    </a>{' '}
                     <br />
                   </li>
                 </ul>
@@ -385,40 +402,44 @@ export function InfoPage() {
                 <b>LWT Forum Threads</b>
                 <ul>
                   <li>
+                    {' '}
                     <a
                       href="http://how-to-learn-any-language.com/forum/forum_posts.asp?TID=28312&PN=1&TPN=1"
                       target="_blank"
                       rel="noreferrer"
                     >
                       How-To-Learn-Any-Language Forum Thread about LWT
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://forum.language-learners.org/viewtopic?f=19&t=1993"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Sites/Apps like Readlang, Lingq, Lingua.ly, etc.
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://forum.language-learners.org/viewtopic?f=19&t=5648"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Best dictionaries for use with LWT?
-                    </a>
+                    </a>{' '}
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://forum.language-learners.org/viewtopic?f=19&t=7156"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Getting the most out of LWT
-                    </a>
+                    </a>{' '}
                   </li>
                   <br />
                 </ul>
@@ -430,45 +451,49 @@ export function InfoPage() {
                     Similar software or services
                     <ul>
                       <li>
+                        {' '}
                         <a
                           href="https://sourceforge.net/projects/foreign-language-text-reader/"
                           target="_blank"
                           rel="noreferrer"
                         >
                           FLTR - Foreign Language Text Reader
-                        </a>
+                        </a>{' '}
                         (Open Source Java Desktop Application).
                       </li>
                       <li>
+                        {' '}
                         <a
                           href="http://lingq.com"
                           target="_blank"
                           rel="noreferrer"
                         >
                           LingQ.com
-                        </a>
+                        </a>{' '}
                         (Web based service with tutoring. An account costs US$
                         10 per month).
                       </li>
                       <li>
+                        {' '}
                         <a
                           href="http://lingro.com/"
                           target="_blank"
                           rel="noreferrer"
                         >
                           lingro.com
-                        </a>
+                        </a>{' '}
                         (An on-line environment that allows anyone learning a
                         language to quickly look up and learn the vocabulary).
                       </li>
                       <li>
+                        {' '}
                         <a
                           href="http://readlang.com/"
                           target="_blank"
                           rel="noreferrer"
                         >
                           readlang.com
-                        </a>
+                        </a>{' '}
                         (An on-line service where you can import articles, read
                         and translate them, and learn new words. Price: US$ 5
                         per month or US$ 48 per year).
@@ -479,13 +504,14 @@ export function InfoPage() {
                     Resources for various languages
                     <ul>
                       <li>
+                        {' '}
                         <a
                           href="http://tinyurl.com/cbpndlt"
                           target="_blank"
                           rel="noreferrer"
                         >
                           GoogleDocs Spreadsheet
-                        </a>
+                        </a>{' '}
                         with recommendations for LWT Language Settings
                         ("Templates")
                         <br />
@@ -498,6 +524,7 @@ export function InfoPage() {
                     For learners of Japanese
                     <ul>
                       <li>
+                        {' '}
                         <a
                           href="http://taku910.github.io/mecab/"
                           target="_blank"
@@ -505,7 +532,7 @@ export function InfoPage() {
                         >
                           MeCab - Yet Another Part-of-Speech and Morphological
                           Analyzer
-                        </a>
+                        </a>{' '}
                       </li>
                     </ul>
                   </li>
@@ -513,13 +540,14 @@ export function InfoPage() {
                     For learners of Chinese
                     <ul>
                       <li>
+                        {' '}
                         <a
                           href="https://github.com/fxsjy/jieba"
                           target="_blank"
                           rel="noreferrer"
                         >
                           "Jieba" Chinese text segmentation
-                        </a>
+                        </a>{' '}
                         (
                         <a
                           href="https://www.python.org/"
@@ -527,7 +555,7 @@ export function InfoPage() {
                           rel="noreferrer"
                         >
                           Python
-                        </a>
+                        </a>{' '}
                         needed). Usage: Download, unzip, run:
                         <i>
                           python -m jieba -d '&nbsp;' input.txt &gt;output.txt
@@ -545,44 +573,47 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="abstract">Abstract</a>
+              {' '}
+              <a id="abstract">Abstract</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
             <ul>
               <li>
+                {' '}
                 <a
                   href="http://sourceforge.net/projects/learning-with-texts/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <i>Learning with Texts</i> (LWT)
-                </a>
+                </a>{' '}
                 is a tool for Language Learning, inspired by:
                 <ul>
                   <li>
+                    {' '}
                     <a
                       href="http://sdkrashen.com"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Stephen Krashen's
-                    </a>
+                    </a>{' '}
                     principles in Second Language Acquisition,
                   </li>
 
                   <li>
-                    Steve Kaufmann's
+                    Steve Kaufmann's{' '}
                     <a href="http://lingq.com" target="_blank" rel="noreferrer">
                       LingQ
-                    </a>
+                    </a>{' '}
                     System and
                   </li>
 
                   <li>
-                    ideas from Khatzumoto, published at
+                    ideas from Khatzumoto, published at{' '}
                     <a
                       href="http://www.alljapaneseallthetime.com"
                       target="_blank"
@@ -616,10 +647,10 @@ export function InfoPage() {
 
               <li>
                 Import of terms in TSV/CSV format, export in TSV format, and
-                export to
+                export to{' '}
                 <a href="http://ankisrs.net" target="_blank" rel="noreferrer">
                   Anki
-                </a>
+                </a>{' '}
                 (prepared for cloze tests), are also possible.
                 <br />
                 <br />
@@ -637,6 +668,7 @@ export function InfoPage() {
                 <br />I recommend (in this order)
                 <ul>
                   <li>
+                    {' '}
                     <a
                       href="http://www.google.com/chrome/"
                       target="_blank"
@@ -647,6 +679,7 @@ export function InfoPage() {
                     ,
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://www.mozilla.org/firefox/"
                       target="_blank"
@@ -657,6 +690,7 @@ export function InfoPage() {
                     ,
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://www.apple.com/safari/"
                       target="_blank"
@@ -667,6 +701,7 @@ export function InfoPage() {
                     , or
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="https://www.microsoft.com/en-us/windows/microsoft-edge"
                       target="_blank"
@@ -684,49 +719,51 @@ export function InfoPage() {
                 packages like
                 <ul>
                   <li>
+                    {' '}
                     <a
                       href="http://www.easyphp.org/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       EasyPHP
-                    </a>
-                    or
+                    </a>{' '}
+                    or{' '}
                     <a
                       href="https://www.apachefriends.org/download.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       XAMPP
-                    </a>
+                    </a>{' '}
                     (Windows), or
                   </li>
                   <li>
+                    {' '}
                     <a
                       href="http://mamp.info/en/index.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       MAMP
-                    </a>
+                    </a>{' '}
                     (macOS), or
                   </li>
                   <li>
-                    a
+                    a{' '}
                     <a
                       href="http://en.wikipedia.org/wiki/LAMP_%28software_bundle%29"
                       target="_blank"
                       rel="noreferrer"
                     >
                       LAMP (Linux-Apache-MySQL-PHP) server
-                    </a>
+                    </a>{' '}
                     (Linux).
                   </li>
                 </ul>
                 <br />
                 <b>(3) The LWT Application.</b>
                 <br />
-                The ZIP Archive <i>lwt_v_x_y.zip</i> can be downloaded
+                The ZIP Archive <i>lwt_v_x_y.zip</i> can be downloaded{' '}
                 <a
                   href="http://sourceforge.net/projects/learning-with-texts/files/"
                   target="_blank"
@@ -736,8 +773,7 @@ export function InfoPage() {
                 </a>
                 .
                 <br />
-                The installation is explained <a href="#install">here</a>
-                .
+                The installation is explained <a href="#install">here</a> .
                 <br />
               </li>
             </ul>
@@ -748,9 +784,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="features">Features</a>
+              {' '}
+              <a id="features">Features</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -818,24 +855,24 @@ export function InfoPage() {
 
               <li>
                 <b>New since Version 1.5.0:</b> Create and edit an improved
-                annotated text version (a
+                annotated text version (a{' '}
                 <a
                   target="_blank"
                   href="http://learnanylanguage.wikia.com/wiki/Hyperliteral_translations"
                   rel="noreferrer"
                 >
                   hyperliteral translation
-                </a>
-                as
+                </a>{' '}
+                as{' '}
                 <a
                   target="_blank"
                   href="http://en.wikipedia.org/wiki/Interlinear_gloss"
                   rel="noreferrer"
                 >
                   interlinear text
-                </a>
-                ) for online or offline learning. Read more
-                <a href="#il">here</a>.
+                </a>{' '}
+                ) for online or offline learning. Read more{' '}
+                <a href="#il">here</a> .
               </li>
 
               <li>
@@ -858,22 +895,23 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="restrictions">Restrictions</a>
+              {' '}
+              <a id="restrictions">Restrictions</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
             <ul>
               <li>
-                Texts and vocabulary terms with Unicode characters outside the
+                Texts and vocabulary terms with Unicode characters outside the{' '}
                 <a
                   href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane"
                   target="_blank"
                   rel="noreferrer"
                 >
                   Basic Multilingual Plane
-                </a>
+                </a>{' '}
                 (BMP; U+0000 to U+FFFF), i.e. with Unicode characters U+10000
                 and higher, are not supported. Therefore, characters for almost
                 all modern languages, and a large number of symbols, are
@@ -888,21 +926,23 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="license">(Un-) License</a>
+              {' '}
+              <a id="license">(Un-) License</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
             <ul>
               <li>
+                {' '}
                 <a
                   href="http://sourceforge.net/projects/learning-with-texts/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <i>"Learning with Texts"</i> (LWT)
-                </a>
+                </a>{' '}
                 is free and unencumbered software released into the PUBLIC
                 DOMAIN.
                 <br />
@@ -919,10 +959,9 @@ export function InfoPage() {
                 overt act of relinquishment in perpetuity of all present and
                 future rights to this software under copyright law.
                 <br />
-                Please read also the <a href="#disclaimer">disclaimer</a>
-                .
+                Please read also the <a href="#disclaimer">disclaimer</a> .
                 <br />
-                For more information, please refer to
+                For more information, please refer to{' '}
                 <a
                   href="http://unlicense.org/"
                   target="_blank"
@@ -940,136 +979,136 @@ export function InfoPage() {
                 software, have different licenses:
                 <ul>
                   <li>
-                    jQuery, jQueryUI - Copyright © John Resig et.al.,
+                    jQuery, jQueryUI - Copyright © John Resig et.al.,{' '}
                     <a
                       href="http://jquery.org/license"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://jquery.org/license
-                    </a>
+                    </a>{' '}
                     (js/jquery.js, js/jquery-ui.min.js)
                   </li>
 
                   <li>
-                    jQuery.ScrollTo - Copyright © Ariel Flesler,
+                    jQuery.ScrollTo - Copyright © Ariel Flesler,{' '}
                     <a
                       href="http://flesler.blogspot.com"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://flesler.blogspot.com
-                    </a>
+                    </a>{' '}
                     (js/jquery.scrollTo.min.js)
                   </li>
 
                   <li>
                     Jeditable - jQuery in-place edit plugin - Copyright © Mika
-                    Tuupola, Dylan Verheul,
+                    Tuupola, Dylan Verheul,{' '}
                     <a
                       href="http://www.appelsiini.net/projects/jeditable"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.appelsiini.net/projects/jeditable
-                    </a>
+                    </a>{' '}
                     (js/jquery.jeditable.mini.js)
                   </li>
 
                   <li>
-                    jQueryUI Tag-it! - Copyright © Levy Carneiro Jr.,
+                    jQueryUI Tag-it! - Copyright © Levy Carneiro Jr.,{' '}
                     <a
                       href="http://aehlke.github.com/tag-it/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://aehlke.github.com/tag-it/
-                    </a>
+                    </a>{' '}
                     (js/tag-it.js)
                   </li>
 
                   <li>
-                    оverLIB 4.22 - Copyright © Erik Bоsrup,
+                    оverLIB 4.22 - Copyright © Erik Bоsrup,{' '}
                     <a
                       href="http://www.bosrup.com/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.bosrup.com/
-                    </a>
+                    </a>{' '}
                     (js/overlib/...)
                   </li>
 
                   <li>
-                    sorttable - Copyright © Stuart Langridge,
+                    sorttable - Copyright © Stuart Langridge,{' '}
                     <a
                       href="http://www.kryogenix.org/code/browser/sorttable/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.kryogenix.org/code/browser/sorttable/
-                    </a>
+                    </a>{' '}
                     (js/sorttable/...)
                   </li>
 
                   <li>
-                    CountUp - Copyright © Praveen Lobo,
+                    CountUp - Copyright © Praveen Lobo,{' '}
                     <a
                       href="http://PraveenLobo.com/techblog/javascript-countup-timer/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://PraveenLobo.com/techblog/javascript-countup-timer/
-                    </a>
+                    </a>{' '}
                     (js/countuptimer.js)
                   </li>
 
                   <li>
-                    jPlayer - Copyright © Happyworm Ltd,
+                    jPlayer - Copyright © Happyworm Ltd,{' '}
                     <a
                       href="http://www.jplayer.org/about/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.jplayer.org/about/
-                    </a>
+                    </a>{' '}
                     (js/jquery.jplayer.min.js, js/Jplayer.swf,
                     css/jplayer_skin/...)
                   </li>
 
                   <li>
-                    Floating Menu - Copyright © JTricks.com,
+                    Floating Menu - Copyright © JTricks.com,{' '}
                     <a
                       href="http://www.jtricks.com/licensing.html"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.jtricks.com/licensing.html
-                    </a>
+                    </a>{' '}
                     (js/floating.js)
                   </li>
 
                   <li>
-                    mobiledetect - Copyright © Șerban Ghiță & Victor Stanciu,
+                    mobiledetect - Copyright © Șerban Ghiță & Victor Stanciu,{' '}
                     <a
                       href="http://mobiledetect.net/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://mobiledetect.net
-                    </a>
+                    </a>{' '}
                     (php-mobile-detect/Mobile_Detect)
                   </li>
 
                   <li>
-                    iUI - Copyright © iUI,
+                    iUI - Copyright © iUI,{' '}
                     <a
                       href="http://www.iui-js.org/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       http://www.iui-js.org/
-                    </a>
+                    </a>{' '}
                     (iui)
                   </li>
                 </ul>
@@ -1077,7 +1116,7 @@ export function InfoPage() {
               </li>
 
               <li>
-                The icons in the "icn" subdirectory are Copyright ©
+                The icons in the "icn" subdirectory are Copyright ©{' '}
                 <a
                   href="http://p.yusukekamiyamane.com/"
                   target="_blank"
@@ -1085,7 +1124,7 @@ export function InfoPage() {
                 >
                   Yusuke Kamiyamane
                 </a>
-                . All rights reserved. Licensed under a
+                . All rights reserved. Licensed under a{' '}
                 <a
                   href="http://creativecommons.org/licenses/by/3.0/"
                   target="_blank"
@@ -1094,22 +1133,22 @@ export function InfoPage() {
                   Creative Commons Attribution 3.0 license
                 </a>
                 . The wizard icon "wizard.png" is the "Free Wizard Icon", free
-                for commercial use, from
+                for commercial use, from{' '}
                 <a
                   href="http://www.icojam.com/blog/?p=159"
                   target="_blank"
                   rel="noreferrer"
                 >
                   icojam.com
-                </a>
-                (Author:
+                </a>{' '}
+                (Author:{' '}
                 <a
                   href="http://www.icojam.com"
                   target="_blank"
                   rel="noreferrer"
                 >
                   IcoJam / Andrew Zhebrakov
-                </a>
+                </a>{' '}
                 ).
                 <br />
                 <br />
@@ -1121,7 +1160,7 @@ export function InfoPage() {
                 <ul>
                   <li>
                     Chinese: The Man and the Dog - Copyright © Praxis Language
-                    LLC, now ChinesePod Ltd.,
+                    LLC, now ChinesePod Ltd.,{' '}
                     <a
                       href="http://chinesepod.com/lessons/the-man-and-the-dog"
                       target="_blank"
@@ -1129,7 +1168,7 @@ export function InfoPage() {
                     >
                       Source
                     </a>
-                    , MP3 licensed under a
+                    , MP3 licensed under a{' '}
                     <a
                       href="http://creativecommons.org/licenses/by/3.0/"
                       target="_blank"
@@ -1142,7 +1181,7 @@ export function InfoPage() {
 
                   <li>
                     German: Die Leiden des jungen Werther by Johann Wolfgang von
-                    Goethe - in the
+                    Goethe - in the{' '}
                     <a
                       href="http://www.gutenberg.org/wiki/Gutenberg:The_Project_Gutenberg_License"
                       target="_blank"
@@ -1150,7 +1189,7 @@ export function InfoPage() {
                     >
                       Public Domain
                     </a>
-                    , Source:
+                    , Source:{' '}
                     <a
                       href="http://www.gutenberg.org/ebooks/2407"
                       target="_blank"
@@ -1158,7 +1197,7 @@ export function InfoPage() {
                     >
                       Text
                     </a>
-                    ,
+                    ,{' '}
                     <a
                       href="http://www.gutenberg.org/ebooks/19794"
                       target="_blank"
@@ -1171,7 +1210,7 @@ export function InfoPage() {
 
                   <li>
                     French: Mon premier don du sang - Copyright © France
-                    Bienvenue,
+                    Bienvenue,{' '}
                     <a
                       href="http://francebienvenue1.wordpress.com/2011/06/18/generosite/"
                       target="_blank"
@@ -1196,9 +1235,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="disclaimer">Disclaimer</a>
+              {' '}
+              <a id="disclaimer">Disclaimer</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -1221,14 +1261,16 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="install">Installation on MS Windows, macOS, Linux</a>
+              {' '}
+              <a id="install">Installation on MS Windows, macOS, Linux</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
             <ul>
               <li>
+                {' '}
                 <a
                   target="_blank"
                   href="http://learning-with-texts.sourceforge.io/LWT_INSTALLATION.txt"
@@ -1241,7 +1283,7 @@ export function InfoPage() {
                     </u>
                   </b>
                   (you must be online!).
-                </a>
+                </a>{' '}
                 <br />
               </li>
             </ul>
@@ -1252,9 +1294,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="learn">How to learn with LWT</a>
+              {' '}
+              <a id="learn">How to learn with LWT</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -1265,18 +1308,18 @@ export function InfoPage() {
                 for beginner courses or podcasts in the Internet.
               </li>
               <li>
-                You don't know where to find texts with audio? The
+                You don't know where to find texts with audio? The{' '}
                 <a href="http://lingq.com" target="_blank" rel="noreferrer">
                   LingQ Library
-                </a>
-                has many (only a free registration is needed). Or look into
+                </a>{' '}
+                has many (only a free registration is needed). Or look into{' '}
                 <a
                   href="https://www.lingq.com/en/forum/updates-tips-and-known-issues/where-to-find-good-content-to-import/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   this thread
-                </a>
+                </a>{' '}
                 in the LingQ Forum, you will find there lots of great links to
                 resources. Or click (within the LingQ library) on "My Imports" -
                 you will find a list of links of "Suggested resources".
@@ -1313,7 +1356,7 @@ export function InfoPage() {
               </li>
               <li>That's it. It's that simple. </li>
               <li>
-                If you want to know more, watch
+                If you want to know more, watch{' '}
                 <a
                   href="http://www.youtube.com/user/lingosteve"
                   target="_blank"
@@ -1332,9 +1375,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="howto">How to use</a>
+              {' '}
+              <a id="howto">How to use</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -1388,10 +1432,10 @@ export function InfoPage() {
               </li>
               <li>
                 <b>
-                  <a id="howtolang">New/Edit Language</a>
-                </b>
-                <a id="go1">&nbsp;</a>
-                <br />
+                  {' '}
+                  <a id="howtolang">New/Edit Language</a>{' '}
+                </b>{' '}
+                <a id="go1">&nbsp;</a> <br />
                 <br />
                 This is the place to define or edit a language you want to
                 study.
@@ -1406,9 +1450,8 @@ export function InfoPage() {
                 yellow. You can always adjust the settings afterwards.
                 <br />
                 <br />
-                <b>Explainations of the input fields</b> - please read also
-                <a href="#langsetup">this section</a>
-                :
+                <b>Explainations of the input fields</b> - please read also{' '}
+                <a href="#langsetup">this section</a> :
                 <br />
                 <br />
                 <ul>
@@ -1420,7 +1463,7 @@ export function InfoPage() {
                       rel="noreferrer"
                     >
                       URIs
-                    </a>
+                    </a>{' '}
                     ) are URIs to three web dictionaries (the second and third
                     is optional). Use ### as a placeholder for the searchword in
                     the URIs. If ### is missing, the searchword will be
@@ -1438,13 +1481,13 @@ export function InfoPage() {
                     examples. The link to Google Translate is
                     "http://translate.google.com/?ie=UTF-8&sl=..&tl=..&text=###",
                     where the two-character codes after "sl=" andThe three
-                    Uniform Resource IDentifiers "tl=" designate the
+                    Uniform Resource IDentifiers "tl=" designate the{' '}
                     <a
                       href="http://www.iana.org/assignments/language-subtag-registry"
                       target='_blank"'
                     >
                       language codes (or "subtags")
-                    </a>
+                    </a>{' '}
                     for the source and the target language. But a different
                     third web dictionary is of course possible, but sentence
                     translations may not work.
@@ -1457,7 +1500,7 @@ export function InfoPage() {
                     Example: Linguee expects the searchword in ISO-8859-15, not
                     in UTF-8, so you define it this way:
                     "http://www.linguee.de/search?direction=auto&query=###ISO-8859-15###".
-                    A list of encodings can be found
+                    A list of encodings can be found{' '}
                     <a
                       href="http://php.net/manual/en/mbstring.supported-encodings"
                       target='_blank"'
@@ -1483,21 +1526,21 @@ export function InfoPage() {
                       rel="noreferrer"
                     >
                       Glosbe
-                    </a>
+                    </a>{' '}
                     ) has been closely integrated into LWT via the Glosbe API.
                     To use this dictionary, input the "special" dictionary link
                     "<i>glosbe_api?from=...&dest=...&phrase=###</i>" (NO
                     "http://" at the beginning!!) with <i>from</i>: "L2 language
                     code" (the language of your texts) and
                     <i>dest</i>: "L1 language code" (e.g. mother tongue). To
-                    find the language codes, open
+                    find the language codes, open{' '}
                     <a
                       href="http://glosbe.com/all-languages"
                       target="_blank"
                       rel="noreferrer"
                     >
                       this page
-                    </a>
+                    </a>{' '}
                     to select the "from" (L2) language. On the next page, select
                     the "L2 - L1" language pair. The URL of the next page shows
                     the two language codes, here as an example "French -
@@ -1517,22 +1560,24 @@ export function InfoPage() {
                     Try these dictionary directories:
                     <ul>
                       <li>
+                        {' '}
                         <a
                           href="http://www.alphadictionary.com/langdir.html"
                           target="_blank"
                           rel="noreferrer"
                         >
                           http://www.alphadictionary.com/langdir.html
-                        </a>
+                        </a>{' '}
                       </li>
                       <li>
+                        {' '}
                         <a
                           href="http://www.lexicool.com/"
                           target="_blank"
                           rel="noreferrer"
                         >
                           http://www.lexicool.com/
-                        </a>
+                        </a>{' '}
                       </li>
                     </ul>
                     If you have found a suitable web dictionary, try to
@@ -1562,28 +1607,27 @@ export function InfoPage() {
                     space or newline!). The space can be omitted (and it is
                     normally), if you set "Make each character a word" to Yes
                     (see below). Whether you include here ":" and ";" - that's
-                    your decision. See also
-                    <a href="#langsetup">this table</a>. Characters can be also
-                    defined in
+                    your decision. See also <a href="#langsetup">this table</a>.
+                    Characters can be also defined in{' '}
                     <a
                       href="http://en.wikipedia.org/wiki/Unicode"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Unicode
-                    </a>
+                    </a>{' '}
                     form: "\x .... "; the Chinese/Japanese full stop "。" is
                     then "\x
                     {3002}" (always without "). Please inform yourself about
-                    Unicode
+                    Unicode{' '}
                     <a
                       href="http://en.wikipedia.org/wiki/Unicode"
                       target="_blank"
                       rel="noreferrer"
                     >
                       here (general information)
-                    </a>
-                    and
+                    </a>{' '}
+                    and{' '}
                     <a
                       href="http://unicode.coeurlumiere.com/"
                       target="_blank"
@@ -1610,16 +1654,15 @@ export function InfoPage() {
                     "RegExp Word Characters" is a list of characters OR
                     character ranges "x-y" that defines all characters in a
                     word, e.g. English: "a-zA-Z", German: "a-zA-ZaöüÄÖÜß",
-                    Chinese: 一-龥. See also
-                    <a href="#langsetup">this table</a>. Characters can be also
-                    defined in
+                    Chinese: 一-龥. See also <a href="#langsetup">this table</a>
+                    . Characters can be also defined in{' '}
                     <a
                       href="http://en.wikipedia.org/wiki/Unicode"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Unicode
-                    </a>
+                    </a>{' '}
                     form: "\x .... "; the Chinese/Japanese character "one" "一"
                     is then "\x
                     {4}" (always without "). So the above specification for the
@@ -1633,16 +1676,14 @@ export function InfoPage() {
                   "Make each character a word" is a special option for Chinese,
                   etc. This makes EVERY character a single word (normally words
                   are split by any non-word character or a space). See also{' '}
-                  <a href="#langsetup">this table</a>
-                  .
+                  <a href="#langsetup">this table</a> .
                   <br />
                   <br />
                 </li>
                 <li>
                   "Remove spaces" is another option for Chinese, etc. It removes
                   all spaces from the text (and the example sentences). See also{' '}
-                  <a href="#langsetup">this table</a>
-                  .
+                  <a href="#langsetup">this table</a> .
                   <br /> <br />
                 </li>
                 <li>
@@ -1651,6 +1692,7 @@ export function InfoPage() {
                   Hebrew, Farsi, Urdu, etc. <br /> <br />
                 </li>
                 <li>
+                  {' '}
                   <a id="extmpl" />
                   "Export Template". The export template controls "Flexible"
                   Term Exports for the terms of that language. It consists of a
@@ -1667,10 +1709,9 @@ export function InfoPage() {
                 </li>
               </li>
               <br />
-              To understand all these options, please study also
-              <a href="#langsetup">this</a>
-              , look at the examples and play around with different settings and
-              different texts.
+              To understand all these options, please study also{' '}
+              <a href="#langsetup">this</a> , look at the examples and play
+              around with different settings and different texts.
               <br />
               <br />
               <img className="grayborder" src="img/03.jpg" alt="Image" />
@@ -1731,7 +1772,8 @@ export function InfoPage() {
 
             <li>
               <b>
-                <a id="howtotext">New/Edit Text (with Check)</a>
+                {' '}
+                <a id="howtotext">New/Edit Text (with Check)</a>{' '}
               </b>
               <br />
               <br />
@@ -1789,12 +1831,11 @@ export function InfoPage() {
               see "Exp: 2..xx 3..yy 4..zz ...". Just click on the number of
               words (2..9) of the desired expression you want to save. The
               dictionary links for multi word expressions are always in the edit
-              frame! You can also use the Keyboard in the text frame, see
-              <a href="#keybind">Key Bindings</a>
-              . Double clicking on a word sets the audio position approximately
-              to the text position, if an audio was defined. The other audio
-              controls are self-explanatory: automatic repeat, rewind and move
-              forward n seconds, etc.).
+              frame! You can also use the Keyboard in the text frame, see{' '}
+              <a href="#keybind">Key Bindings</a> . Double clicking on a word
+              sets the audio position approximately to the text position, if an
+              audio was defined. The other audio controls are self-explanatory:
+              automatic repeat, rewind and move forward n seconds, etc.).
               <br />
               <br />
               <img className="grayborder" src="img/06.jpg" alt="Image" />
@@ -1838,10 +1879,9 @@ export function InfoPage() {
               status "Ignored" and "Well Known" are never tested, and terms with
               a positive or zero score are not tested today. In summary, the
               term score must fall below zero to trigger the test. See also{' '}
-              <a href="#termscores">Term scores</a>
-              . Terms that are due today are marked with a red bullet in the
-              term table. Terms that are due tomorrow are marked with a yellow
-              bullet in the term table.
+              <a href="#termscores">Term scores</a> . Terms that are due today
+              are marked with a red bullet in the term table. Terms that are due
+              tomorrow are marked with a yellow bullet in the term table.
               <br />
               <br />
               During a test, a status display (at the bottom of the test frame)
@@ -1863,9 +1903,8 @@ export function InfoPage() {
               This is Test #1 or #4: L2 -&gt; L1 (recognition) - to train your
               ability to recognize a L2 term. You may test within sentence
               context (Button "..[L2].."), or just the term (Button "[L2]"). You
-              can also use the Keyboard in the test frame, see
-              <a href="#keybind">Key Bindings</a>
-              .
+              can also use the Keyboard in the test frame, see{' '}
+              <a href="#keybind">Key Bindings</a> .
               <br />
               <br />
               <img className="grayborder" src="img/07.jpg" alt="Image" />
@@ -1880,9 +1919,8 @@ export function InfoPage() {
               This is Test #2 or #5: L1 -&gt; L2 (recall) - to train your
               ability to produce a term from L1. You may test within sentence
               context (Button "..[L1].."), or just the term (Button "[L1]"). You
-              can also use the Keyboard in the test frame, see
-              <a href="#keybind">Key Bindings</a>
-              .
+              can also use the Keyboard in the test frame, see{' '}
+              <a href="#keybind">Key Bindings</a> .
               <br />
               <br />
               <img className="grayborder" src="img/11.jpg" alt="Image" />
@@ -1898,8 +1936,7 @@ export function InfoPage() {
               produce a term only from the sentence context (Button "..[••]..").
               If you hover over "[•••]", a tooltip displays the translation of
               the term. You can also use the Keyboard in the test frame, see{' '}
-              <a href="#keybind">Key Bindings</a>
-              .
+              <a href="#keybind">Key Bindings</a> .
               <br />
               <br />
               <img className="grayborder" src="img/12.jpg" alt="Image" />
@@ -1952,45 +1989,44 @@ export function InfoPage() {
               <br />
               <img className="grayborder" src="img/21.jpg" alt="Image" />
               <br />
-              <br />
-              <a id="il" />
+              <br /> <a id="il" />
               <b>
                 How to create, edit, and use an <i>Improved Annotated Text</i>:
               </b>
               <br />
               <br />
-              <b>Motivation:</b> Annotated texts (as
+              <b>Motivation:</b> Annotated texts (as{' '}
               <a
                 target="_blank"
                 href="http://en.wikipedia.org/wiki/Interlinear_gloss"
                 rel="noreferrer"
               >
                 interlinear text
-              </a>
+              </a>{' '}
               ) have been used for language learning for a long time. One
-              example are the word-by-word translations in
+              example are the word-by-word translations in{' '}
               <a target="_blank" href="http://en.assimil.com/" rel="noreferrer">
                 Assimil
-              </a>
-              courses. The German
+              </a>{' '}
+              courses. The German{' '}
               <a
                 target="_blank"
                 href="http://web.archive.org/web/20070223080453/http://195.149.74.241/BIRKENBIHL/PDF/MethodEnglish.pdf"
                 rel="noreferrer"
               >
                 V. F. Birkenbihl
-              </a>
-              proposes the creation of interlinear word-by-word or
+              </a>{' '}
+              proposes the creation of interlinear word-by-word or{' '}
               <a
                 target="_blank"
                 href="http://learnanylanguage.wikia.com/wiki/Hyperliteral_translations"
                 rel="noreferrer"
               >
                 hyperliteral
-              </a>
+              </a>{' '}
               translations (calling this creation "decoding") in foreign
               language learning. Learning Latin or Ancient Greek via interlinear
-              texts is quite old as you can see in
+              texts is quite old as you can see in{' '}
               <a
                 target="_blank"
                 href="http://www.youtube.com/watch?v=XnEKnezLXJg"
@@ -2089,9 +2125,8 @@ export function InfoPage() {
               exists. "Stat/Days" displays the status and the number of days
               since the last status change. The score of a term is a rough
               measure (in percent) how well you know a term. Read more about
-              term scores <a href="#termscores">here</a>
-              . Terms with zero score are displayed red and should be tested
-              today.
+              term scores <a href="#termscores">here</a> . Terms with zero score
+              are displayed red and should be tested today.
               <br />
               <br />
               <img className="grayborder" src="img/08.jpg" alt="Image" />
@@ -2319,6 +2354,7 @@ export function InfoPage() {
 
             <li>
               <b>
+                {' '}
                 <a id="mue" />
                 Multiple LWT table sets
               </b>
@@ -2401,9 +2437,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="faq">Questions and Answers</a>
+              {' '}
+              <a id="faq">Questions and Answers</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -2489,7 +2526,7 @@ export function InfoPage() {
                 <br />
                 <br />
                 Answer 2: The PHP "mbstring" extension is not installed. Please
-                install it;
+                install it;{' '}
                 <a
                   href="https://askubuntu.com/questions/491629/how-to-install-php-mbstring-extension-in-ubuntu"
                   target="_blank"
@@ -2509,9 +2546,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="ipad">Setup for Tablets</a>
+              {' '}
+              <a id="ipad">Setup for Tablets</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -2546,9 +2584,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="langsetup">Language Setup</a>
+              {' '}
+              <a id="langsetup">Language Setup</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -2558,8 +2597,7 @@ export function InfoPage() {
                 Sentences", "RegExp Word Characters", "Make each character a
                 word", "Remove spaces") for different languages. They are only
                 recommendations, and you may change them according to your needs
-                (and texts). See also <a href="#go1">here</a>
-                .
+                (and texts). See also <a href="#go1">here</a> .
                 <br />
                 <br />
               </li>
@@ -2572,22 +2610,22 @@ export function InfoPage() {
               </li>
 
               <li>
-                Please inform yourself about Unicode
+                Please inform yourself about Unicode{' '}
                 <a
                   href="http://en.wikipedia.org/wiki/Unicode"
                   target="_blank"
                   rel="noreferrer"
                 >
                   here (general information)
-                </a>
-                and
+                </a>{' '}
+                and{' '}
                 <a
                   href="http://unicode.coeurlumiere.com/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   here (Table of Unicode characters)
-                </a>
+                </a>{' '}
                 and about the characters that occur in the language you learn!
                 <br />
                 <br />
@@ -2748,9 +2786,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="termscores">Term Scores</a>
+              {' '}
+              <a id="termscores">Term Scores</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -2813,9 +2852,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="keybind">Key Bindings</a>
+              {' '}
+              <a id="keybind">Key Bindings</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -2969,9 +3009,10 @@ export function InfoPage() {
           <dt>
             ▶
             <b>
-              <a id="history">Changelog</a>
+              {' '}
+              <a id="history">Changelog</a>{' '}
             </b>
-            - <a href="#">[↑]</a>
+            - <a href="#">[↑]</a>{' '}
           </dt>
 
           <dd>
@@ -3013,22 +3054,22 @@ export function InfoPage() {
                 The old links [lwt.sf.net], [lwt.sourceforge.net] or
                 [sourceforge.net/projects/lwt] are no longer valid!
                 <br />
-                The new links are now
+                The new links are now{' '}
                 <a
                   href="https://learning-with-texts.sourceforge.io"
                   target="_blank"
                   rel="noreferrer"
                 >
                   learning-with-texts.sourceforge.io
-                </a>
-                (documentation and demo database) and
+                </a>{' '}
+                (documentation and demo database) and{' '}
                 <a
                   href="https://sourceforge.net/projects/learning-with-texts"
                   target="_blank"
                   rel="noreferrer"
                 >
                   sourceforge.net/projects/learning-with-texts
-                </a>
+                </a>{' '}
                 (project home and downloads).
                 <br />
                 <br />
@@ -3086,10 +3127,9 @@ export function InfoPage() {
                 The jQuery and jPlayer libraries have been updated to v1.12.0
                 and v2.9.2, respectively. The jQuery.ScrollTo package has been
                 updated to v2.1.2.
-                <br />
-                <a href="#links">Link</a> to Chinese text segmentation "Jieba"
-                added in documentation (Important Links - Additional Resources -
-                For learners of Chinese).
+                <br /> <a href="#links">Link</a> to Chinese text segmentation
+                "Jieba" added in documentation (Important Links - Additional
+                Resources - For learners of Chinese).
                 <br />
                 <br />
               </li>
@@ -3139,9 +3179,10 @@ export function InfoLine({ href, title }: { href: string; title: string }) {
     <dt>
       ▶
       <b>
-        <a id={href}>{title}</a>
+        {' '}
+        <a id={href}>{title}</a>{' '}
       </b>
-      - <a href={'#'}>[↑]</a>
+      - <a href={'#'}>[↑]</a>{' '}
     </dt>
   );
 }
@@ -3155,13 +3196,19 @@ export function FloatingMenu({
   menuOptions: { href: string; title: string }[];
   positioning?: { right: number; top: number };
 }) {
+  const menuRef = useRef<HTMLDivElement>();
   const [menuPixSourcePos, setMenuPixSourcePos] = useState<number>(0);
   const [menuPixTargetPos, setMenuPixTargetPos] = useState<number>(0);
   useEffect(() => {
     const onScroll = () => {
-      // TODO this not updating - causing menu to rocket from the beginning at every point
       // source is current position ie last it was set to
-      setMenuPixSourcePos(menuPixTargetPos);
+      const bodyRect = document.body.getBoundingClientRect();
+      const elemRect = menuRef.current.getBoundingClientRect();
+      const offset = elemRect.top - bodyRect.top;
+
+      console.log('TEST123-pos-ref', bodyRect.top, elemRect.top);
+
+      setMenuPixSourcePos(offset);
       setMenuPixTargetPos(window.scrollY);
     };
     window.addEventListener('scroll', onScroll);
@@ -3184,6 +3231,7 @@ export function FloatingMenu({
   });
   return (
     <div
+      ref={menuRef}
       id="floatdiv"
       style={{
         position: 'absolute',
@@ -3199,8 +3247,8 @@ export function FloatingMenu({
         textAlign: 'center',
       }}
     >
-      <a href="#">↑ TOP ↑</a>
-      <br />
+      {' '}
+      <a href="#">↑ TOP ↑</a> <br />
       {menuOptions.map((option) => (
         <>
           <br />

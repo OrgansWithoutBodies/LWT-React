@@ -17,6 +17,7 @@ import {
   TextTagsValidator,
   WordsValidator,
   WordsValidatorNoID,
+  WordsWithTagsValidator,
   WordTagsValidator,
 } from '../data/validators';
 
@@ -42,14 +43,14 @@ export type Word = typeof WordsValidator.TYPE;
 export type WordNoID = typeof WordsValidatorNoID.TYPE;
 
 export type WordTag = typeof WordTagsValidator.TYPE;
-
-export const AddNewWordValidator = ss.omit(WordsValidator, [
+export const AddNewWordValidator = ss.omit(WordsWithTagsValidator, [
   'WoID',
   'WoTodayScore',
   'WoTomorrowScore',
   'WoRandom',
   'WoTextLC',
 ]);
+
 export type AddNewWordType = typeof AddNewWordValidator.TYPE;
 
 export const AddNewTextValidator = ss.omit(TextsValidatorNoID, [

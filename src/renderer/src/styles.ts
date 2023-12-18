@@ -137,6 +137,11 @@ export const createColors = (
       backgroundColor: `${Colors.lum6}`,
       color: `${Colors.lum0}`,
     },
+    '.input': {
+      backgroundColor: `${Colors.lum6}`,
+      color: `${Colors.lum0}`,
+      outline: `9px ${Colors.lum0}`,
+    },
     select: {
       backgroundColor: `${Colors.lum6}`,
       color: `${Colors.lum0}`,
@@ -153,6 +158,12 @@ export const createColors = (
       padding: '0px',
     },
     'input[type=text]': {
+      font: '85% "Lucida Grande",Arial,sans-serif,STHeiti,"Arial Unicode MS",MingLiu',
+      border: `1px solid ${Colors.lum0}`,
+      padding: '3px',
+    },
+    '.inputText': {
+      cursor: 'text',
       font: '85% "Lucida Grande",Arial,sans-serif,STHeiti,"Arial Unicode MS",MingLiu',
       border: `1px solid ${Colors.lum0}`,
       padding: '3px',
@@ -532,20 +543,20 @@ export const createColors = (
       marginLeft: '20pt',
     },
     '.borderleft': {
-      borderLeft: `1px solid ${Colors.lum6}`,
-      borderTop: `1px solid ${Colors.lum6}`,
-      borderBottom: `1px solid ${Colors.lum6}`,
+      borderLeft: `1px solid ${Colors.lum0}`,
+      borderTop: `1px solid ${Colors.lum0}`,
+      borderBottom: `1px solid ${Colors.lum0}`,
       backgroundColor: Colors.lum4,
     },
     '.bordermiddle': {
-      borderTop: `1px solid ${Colors.lum6}`,
-      borderBottom: `1px solid ${Colors.lum6}`,
+      borderTop: `1px solid ${Colors.lum0}`,
+      borderBottom: `1px solid ${Colors.lum0}`,
       backgroundColor: Colors.lum4,
     },
     '.borderright': {
-      borderRight: `1px solid ${Colors.lum6}`,
-      borderTop: `1px solid ${Colors.lum6}`,
-      borderBottom: `1px solid ${Colors.lum6}`,
+      borderRight: `1px solid ${Colors.lum0}`,
+      borderTop: `1px solid ${Colors.lum0}`,
+      borderBottom: `1px solid ${Colors.lum0}`,
       backgroundColor: Colors.lum4,
     },
     '.wizard': {
@@ -667,9 +678,9 @@ export const createColors = (
 
     /* used for some custom themes that don't need image icons */
 
-    'ul.tagit li.tagit-choice .tagit-close .text-icon': {
-      display: 'none',
-    },
+    // 'ul.tagit li.tagit-choice .tagit-close .text-icon': {
+    //   display: 'none',
+    // },
 
     'ul.tagit li.tagit-choice input': {
       display: 'block',
@@ -688,12 +699,12 @@ export const createColors = (
       outline: 'none',
     },
 
-    '.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default':
+    '.ui-state-default .ui-widget-content .ui-state-default .ui-widget-header .ui-state-default':
       {
-        border: `1px solid #d3d3d3`,
+        border: `1px solid #${Colors.lum3}`,
         backgroundColor: `#e6e6e6`,
         fontWeight: 'normal',
-        color: `${'#555'}`,
+        color: `#${Colors.lum5}`,
       },
 
     ///////
@@ -730,22 +741,20 @@ export const createColors = (
 
     'div.jp-audio': {
       fontSize: '1.25em',
-      FontFamily: 'Verdana, Arial, sans-serif',
-      LineHeight: 1.6,
-      color: '#666',
-    },
-    'div.jp-audio': {
+      fontFamily: 'Verdana, Arial, sans-serif',
+      lineHeight: 1.6,
+      color: Colors.lum1,
       width: '307px',
     },
-    '12div.jp-interface': {
+    'div.jp-interface': {
       position: 'relative',
-      backgroundColor: '#eee',
+      backgroundColor: `${Colors.lum4}`,
       width: '100%',
-      border: '1px solid #eee',
+      border: `1px solid ${Colors.lum4}`,
     },
     'div.jp-audio div.jp-type-single div.jp-interface': {
       height: '50px',
-      BorderBottom: 'none',
+      borderBottom: 'none',
     },
     'div.jp-audio div.jp-type-playlist div.jp-interface': {
       height: '50px',
@@ -761,19 +770,19 @@ export const createColors = (
     'div.jp-interface ul.jp-controls a': {
       position: 'absolute',
       overflow: 'hidden',
-      TextIndent: '-9999px',
+      textIndent: '-9999px',
     },
-    'a.jp-play,a.jp-pause': {
+    'a.jp-play, a.jp-pause': {
       width: '40px',
       height: '40px',
-      ZIndex: 1,
+      zIndex: 1,
     },
     'div.jp-audio div.jp-type-single a.jp-play, div.jp-audio div.jp-type-single a.jp-pause':
       {
         top: '5px',
         left: '7px',
       },
-    'div.jp-audio div.jp-type-playlist a.jp-play,div.jp-audio div.jp-type-playlist a.jp-pause':
+    'div.jp-audio div.jp-type-playlist a.jp-play, div.jp-audio div.jp-type-playlist a.jp-pause':
       {
         top: '5px',
         left: '10px',
@@ -786,7 +795,6 @@ export const createColors = (
     },
     'a.jp-pause': {
       background: `url(${blueMonday}) 0 -42px no-repeat`,
-      display: 'none',
     },
     'a.jp-pause:hover': {
       background: `url(${blueMonday}) -41px -42px no-repeat`,
@@ -803,7 +811,7 @@ export const createColors = (
       background: `url(${blueMonday}) 0 -83px no-repeat`,
       width: '28px',
       height: '28px',
-      ZIndex: 1,
+      zIndex: 1,
     },
     'a.jp-stop:hover': {
       background: `url(${blueMonday}) -29px -83px no-repeat`,
@@ -835,7 +843,7 @@ export const createColors = (
     'div.jp-progress': {
       position: 'absolute',
       overflow: 'hidden',
-      backgroundColor: '#ddd',
+      backgroundColor: Colors.lum3,
     },
     'div.jp-audio div.jp-type-single div.jp-progress': {
       top: '17px',
@@ -851,28 +859,28 @@ export const createColors = (
     },
     'div.jp-seek-bar': {
       background: `url(${blueMonday}) 0 -202px repeat-x`,
-      width: '0px',
+      // width: '0px',
+      width: '100%',
       height: '100%',
       cursor: 'pointer',
     },
     'div.jp-play-bar': {
       background: `url(${blueMonday}) 0 -218px repeat-x `,
-      width: '0px',
       height: '100%',
     },
     'div.jp-seeking-bg': {
       background: `url(${pbarAni})`,
     },
-    'a.jp-mute a.jp-unmute': {
+    'a.jp-mute, a.jp-unmute': {
       width: '18px',
       height: '15px',
     },
-    'div.jp-audio div.jp-type-single a.jp-mute div.jp-audio div.jp-type-single a.jp-unmute':
+    'div.jp-audio div.jp-type-single a.jp-mute, div.jp-audio div.jp-type-single a.jp-unmute':
       {
         top: '17px',
         left: '224px',
       },
-    'div.jp-audio div.jp-type-playlist a.jp-mute div.jp-audio div.jp-type-playlist a.jp-unmute':
+    'div.jp-audio div.jp-type-playlist a.jp-mute, div.jp-audio div.jp-type-playlist a.jp-unmute':
       {
         top: '17px',
         left: '246px',
@@ -885,7 +893,6 @@ export const createColors = (
     },
     'a.jp-unmute': {
       background: `url(${blueMonday}) 0 -170px no-repeat`,
-      display: 'none',
     },
     'a.jp-unmute:hover': {
       background: `url(${blueMonday}) -19px -186px no-repeat`,
@@ -911,13 +918,13 @@ export const createColors = (
       width: '0px',
       height: '10px',
     },
-    'div.jp-current-time div.jp-duration': {
+    'div.jp-current-time, div.jp-duration': {
       position: 'absolute',
       fontSize: '.64em',
-      FontStyle: 'oblique',
+      fontStyle: 'oblique',
     },
     'div.jp-duration': {
-      TextAlign: 'right',
+      textAlign: 'right',
     },
     'div.jp-audio div.jp-type-single div.jp-current-time, div.jp-audio div.jp-type-single div.jp-duration':
       {
@@ -934,9 +941,7 @@ export const createColors = (
     'div.jp-jplayer': {
       width: '0px',
       height: '0px',
-    },
-    'div.jp-jplayer': {
-      backgroundColor: '#000000',
+      backgroundColor: Colors.lum0,
     },
   };
 };

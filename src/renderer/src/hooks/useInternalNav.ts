@@ -33,9 +33,10 @@ export const useInternalNavigate: () => (
   return (url, addToCurrentURL = false) => {
     // if (urlIsInternalPathGuard(url)) {
     if (addToCurrentURL) {
-      return nav(location.pathname + url);
+      nav(location.pathname + url);
+    } else {
+      nav(url);
     }
-    return nav(url);
 
     // }
     // return;

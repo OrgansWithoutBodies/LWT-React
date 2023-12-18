@@ -1,18 +1,34 @@
+import { NumericalStrengthPotentiallyCompound } from '../../data/data.query';
 import { TextsID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
-import { useUpdateParams } from '../../hooks/useInternalNav';
+import {
+  useInternalNavigate,
+  useUpdateParams,
+} from '../../hooks/useInternalNav';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { getDirTag } from '../../ui-kit/getDirTag';
+import { Word } from '../../utils/parseMySqlDump';
 import { StrengthMapNumericalKey } from '../StrengthMap';
-enum AnnPlcmnt {
+export enum AnnPlcmnt {
   'behind' = 0,
   'in front of' = 1,
   'above (ruby)' = 2,
 }
+export enum AnnType {
+  'Nothing' = 0,
+  'Translation' = 1,
+  'Translation & Tags' = 5,
+  'Romanization' = 2,
+  'Romanization & Translation' = 3,
+  'Romanization, Translation & Tags' = 7,
+}
 
+/**
+ *
+ */
 export function PrintText({
   textID,
   ann,
@@ -20,41 +36,72 @@ export function PrintText({
   annplcmnt,
 }: {
   textID: TextsID;
-  ann: number;
-  status: number;
+  ann: AnnType;
+  status: NumericalStrengthPotentiallyCompound;
   annplcmnt: AnnPlcmnt;
 }) {
   // TODO
   const statusRange = 1;
-  const [{ texts, languages }] = useData(['texts', 'languages']);
+  const [{ texts, languages, textitems, words }] = useData([
+    'texts',
+    'languages',
+    'textitems',
+    'words',
+  ]);
   useUpdateActiveText({ textID });
 
   const paramUpdater = useUpdateParams();
+  const navigator = useInternalNavigate();
   const showingText = texts.find(({ TxID }) => TxID === textID);
   if (!showingText) {
     throw new Error('invalid Text ID!');
   }
+  const textItemsForThisText = textitems
+    .filter((val) => val.TiTxID === textID)
+    .sort((a, b) => (a.TiOrder > b.TiOrder ? 1 : -1));
+  console.log('test123-PRINT', textitems, textItemsForThisText);
   const language = languages.find(({ LgID }) => LgID === showingText.TxLgID);
   if (!language) {
     throw new Error('invalid Text Language ID!');
   }
+
+  const wordLookupKeyedByTextLC = Object.fromEntries(
+    words
+      .filter(
+        (word) => word.WoLgID === language.LgID && isValidStatus(word, status)
+      )
+      .map((val) => [val.WoTextLC, val])
+  );
+
+  const $show_trans =
+    ann === AnnType['Romanization & Translation'] ||
+    ann === AnnType['Translation'] ||
+    ann === AnnType['Translation & Tags'] ||
+    ann === AnnType['Romanization, Translation & Tags'];
+  const $show_rom =
+    ann === AnnType['Romanization & Translation'] ||
+    ann === AnnType['Romanization'] ||
+    ann === AnnType['Romanization, Translation & Tags'];
   return (
     <>
       <div className="noprint">
         <Header
-          title={`PRINT&nbsp▶${showingText.TxTitle} ${
-            showingText.TxSourceURI ? (
-              <a
-                href={showingText.TxSourceURI}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Icon src="chain" title="Text Source" />
-              </a>
-            ) : (
-              <></>
-            )
-          }) . '}`}
+          TitleDecoration={() => (
+            <>
+              {showingText.TxSourceURI ? (
+                <a
+                  href={showingText.TxSourceURI}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon src="chain" title="Text Source" />
+                </a>
+              ) : (
+                <></>
+              )}{' '}
+            </>
+          )}
+          title={`PRINT ▶ ${showingText.TxTitle} `}
         />
 
         <p id="printoptions">
@@ -115,23 +162,23 @@ export function PrintText({
           }
           {0 > 0 ? (
             <>
-              &nbsp | &nbsp Or{' '}
+              &nbsp; | &nbsp; Or{' '}
               <input
                 type="button"
                 value="Print/Edit/Delete"
-                onClick={() => `location.href='print_impr_text?text=${textID}`}
+                onClick={() => navigator(`/print_impr_text?&text=${textID}`)}
               />{' '}
               your <b>Improved Annotated Text</b>
               {<GetAnnotationLink textID={textID} />}
             </>
           ) : (
             <>
-              &nbsp | &nbsp{' '}
+              &nbsp; | &nbsp;{' '}
               <input
                 type="button"
                 value="Create"
                 onClick={() =>
-                  `location.href='print_impr_text?edit=1&text=${textID}`
+                  navigator(`/print_impr_text?edit=1&text=${textID}`)
                 }
               />{' '}
               an <b>Improved Annotated Text</b> [
@@ -144,7 +191,7 @@ export function PrintText({
       <div id="print" {...getDirTag(language)}>
         <p
           style={{
-            fontSize: language.LgTextSize,
+            fontSize: `${language.LgTextSize}%`,
             lineHeight: '1.35',
             marginBottom: '10px',
           }}
@@ -152,13 +199,118 @@ export function PrintText({
           {showingText.TxTitle}
           <br />
           <br />
-          {showingText.TxText}
+          {textItemsForThisText.map((textItem) => {
+            const wordForThisTextItem =
+              wordLookupKeyedByTextLC[textItem.TiTextLC];
+            const splitItems = textItem.TiText.split('¶');
+            return (
+              <>
+                {annplcmnt === AnnPlcmnt['above (ruby)'] ? (
+                  <>
+                    <ruby>
+                      <rb>
+                        <span className="anntermruby">{textItem.TiText}</span>
+                      </rb>
+                      {wordForThisTextItem && (
+                        <rt>
+                          {' '}
+                          {$show_trans && (
+                            <span className="anntransruby">
+                              {wordForThisTextItem.WoTranslation}
+                            </span>
+                          )}{' '}
+                          {$show_rom && !$show_trans && (
+                            <span className="annromrubysolo">
+                              {wordForThisTextItem.WoRomanization}
+                            </span>
+                          )}{' '}
+                          {$show_rom && $show_trans && (
+                            <span className="annromruby" dir="ltr">
+                              [ {wordForThisTextItem.WoTranslation}]
+                            </span>
+                          )}{' '}
+                        </rt>
+                      )}
+                    </ruby>{' '}
+                  </>
+                ) : (
+                  <>
+                    {wordForThisTextItem &&
+                      annplcmnt === AnnPlcmnt['in front of'] && (
+                        <InlineAnnotation
+                          word={wordForThisTextItem}
+                          $show_rom={$show_rom}
+                          $show_trans={$show_trans}
+                        />
+                      )}
+                    {/* TODO not always this class? unclear think only if known word */}
+                    <span className="annterm">
+                      {splitItems.length === 1 ? (
+                        <>{splitItems[0]}</>
+                      ) : (
+                        // TODO dont like this split pattern, figure out if necessary
+                        splitItems.map((splitItem) => (
+                          <p
+                            style={{
+                              fontSize: `${language.LgTextSize}%`,
+                              lineHeight: 1.3,
+                              marginBottom: '10px',
+                            }}
+                          >
+                            {splitItem}
+                          </p>
+                        ))
+                      )}
+                    </span>
+                    {wordForThisTextItem &&
+                      annplcmnt === AnnPlcmnt['behind'] && (
+                        <InlineAnnotation
+                          word={wordForThisTextItem}
+                          $show_rom={$show_rom}
+                          $show_trans={$show_trans}
+                        />
+                      )}{' '}
+                  </>
+                )}
+              </>
+            );
+          })}
+          {/* {showingText.TxText} */}
         </p>
       </div>
     </>
   );
 }
+/**
+ *
+ */
+export function InlineAnnotation({
+  word: { WoRomanization, WoTranslation },
+  $show_rom,
+  $show_trans,
+}: {
+  word: Pick<Word, 'WoRomanization' | 'WoTranslation'>;
+  $show_rom: boolean;
+  $show_trans: boolean;
+}) {
+  return (
+    <>
+      {$show_trans && <span className="anntrans">{WoTranslation}</span>}
+      {$show_rom && !$show_trans && (
+        <span className="annrom">{WoRomanization}</span>
+      )}
+      {$show_rom && $show_trans && (
+        <span className="annrom" dir="ltr">
+          [{WoRomanization}]
+        </span>
+      )}
+    </>
+  );
+}
 
+/**
+ *
+ */
 export function GetAnnotationLink({ textID }: { textID: TextsID }) {
   if (
     // TODO
@@ -176,6 +328,9 @@ export function GetAnnotationLink({ textID }: { textID: TextsID }) {
   else return <></>;
 }
 
+/**
+ *
+ */
 export function GetWordstatusSelectoptions({
   // defaultval
   v = 1,
@@ -479,3 +634,73 @@ export function GetWordstatusSelectoptions({
 // 	<?php
 
 // } // if (isset($_REQUEST['op']))
+/**
+ *
+ * @param word
+ * @param status
+ */
+export function isValidStatus(
+  word: Word,
+  status: NumericalStrengthPotentiallyCompound
+) {
+  // TODO more elegant than this
+  switch (word.WoStatus) {
+    case 0:
+      return status === 0;
+    case 1:
+      return (
+        status === 12 ||
+        status === 13 ||
+        status === 14 ||
+        status === 15 ||
+        status === 1
+      );
+    case 2:
+      return (
+        status === 12 ||
+        status === 13 ||
+        status === 14 ||
+        status === 15 ||
+        status === 23 ||
+        status === 24 ||
+        status === 25 ||
+        status === 2
+      );
+    case 3:
+      return (
+        status === 13 ||
+        status === 14 ||
+        status === 15 ||
+        status === 23 ||
+        status === 24 ||
+        status === 25 ||
+        status === 34 ||
+        status === 35 ||
+        status === 3
+      );
+    case 4:
+      return (
+        status === 14 ||
+        status === 15 ||
+        status === 24 ||
+        status === 25 ||
+        status === 34 ||
+        status === 35 ||
+        status === 45 ||
+        status === 4
+      );
+    case 5:
+      return (
+        status === 15 ||
+        status === 25 ||
+        status === 35 ||
+        status === 45 ||
+        status === 599 ||
+        status === 5
+      );
+    case 98:
+      return status === 599 || status === 98;
+    case 99:
+      return status === 599 || status === 99;
+  }
+}

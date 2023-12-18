@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as ss from 'superstruct';
 import { CheckAndSubmit, RefMap, TRefMap } from '../forms/Forms';
 import { FormInput, FormLineError, FormTextArea } from '../pages/IO/FormInput';
@@ -23,6 +23,7 @@ export type FormTextAreaComponentParams = Omit<
 export type FormInputComponent = (
   args: FormInputComponentParams
 ) => JSX.Element;
+
 /**
  *
  * @param refMap
@@ -42,6 +43,23 @@ export function useFormInput<
   //   [key in TKey]?: string;
   // };
 }) {
+  // TODO https://v5.reactrouter.com/web/example/preventing-transitions
+  function askConfirmIfDirty(event: Event) {
+    if (dirty) {
+      event.preventDefault();
+      return '** You have unsaved changes! **';
+    }
+  }
+
+  const [dirty, setDirtyState] = useState(false);
+  const setDirty = () => setDirtyState(true);
+  useEffect(() => {
+    window.addEventListener('beforeunload', askConfirmIfDirty);
+    return () => {
+      window.removeEventListener('beforeunload', askConfirmIfDirty);
+    };
+  }, [dirty]);
+
   // TODO useFormContext? for shared without build
   // memo to avoid retriggering
   const refMap = RefMap(validator, entry);
@@ -56,6 +74,7 @@ export function useFormInput<
         return (
           <FormTextArea
             {...args}
+            onChange={() => setDirty()}
             type={args.type === undefined ? 'text' : args.type}
             refMap={refMap}
             formErrors={formErrors}
@@ -81,6 +100,7 @@ export function useFormInput<
         return (
           <FormInput
             {...args}
+            onChange={() => setDirty()}
             type={args.type === undefined ? 'text' : args.type}
             refMap={refMap}
             formErrors={formErrors}
@@ -133,7 +153,10 @@ export function useFormInput<
       }) =>
         (
           <>
-            <LanguageDropdown dropdownRef={refMap[entryKey]} />
+            <LanguageDropdown
+              onChange={() => setDirty()}
+              dropdownRef={refMap[entryKey]}
+            />
             {isRequired && <RequiredLineButton />}
             <br />
             {formErrors && formErrors[entryKey] && (
@@ -154,7 +177,7 @@ export function useFormInput<
     onSubmit,
     refMap,
     formErrors,
-
+    setDirty,
     LanguageSelectInput,
   };
 }

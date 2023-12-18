@@ -20,13 +20,6 @@ export type NumericalStrengthPotentiallyCompound =
   | 45
   | 599;
 
-// const MINS_IN_SECONDS = 60;
-// const HOURS_IN_MINS = 60;
-// const DAYS_IN_HOURS = 24;
-// const DAYS_IN_SECONDS = DAYS_IN_HOURS * HOURS_IN_MINS * MINS_IN_SECONDS;
-// const TICKER_INTERVAL = 50;
-// const TICKER_MAX_STEPS = 20;
-
 // /**
 //  *
 //  * @param startValue
@@ -143,11 +136,12 @@ export class DataQuery extends Query<DataState> {
   );
   public activeTextID = this.settings.pipe(
     map((val) =>
-      val.currenttext === undefined || val.currentlanguage === null
+      val.currenttext === undefined || val.currenttext === null
         ? // semantically null's more meaningful here because null is an explicit state we can set
           null
         : val.currenttext
-    )
+    ),
+    tap((val) => console.log('TEST123-query-text', val))
   );
 
   // derived observables

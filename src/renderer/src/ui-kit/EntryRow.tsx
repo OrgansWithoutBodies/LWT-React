@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { openInNewWindow } from '../utils/openInNewWindow';
+import { openInNewWindow } from '../utils/linkHelpers';
 import { Icon } from './Icon';
 
 export interface EntryRowType {

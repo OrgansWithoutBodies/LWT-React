@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   AxiosOpenAPIWrapper,
   BaseOpenAPIWrapper,
-} from '../pages/IO/BaseOpenAPIWrapper';
+} from '../pages/API/BaseOpenAPIWrapper';
 import { GlosbeKeys } from './GlosbeKeys';
 export type GlosbeLangKeyShortString = keyof typeof GlosbeKeys;
 

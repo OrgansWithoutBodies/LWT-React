@@ -6,7 +6,7 @@ import {
 import {
   AxiosOpenAPIWrapper,
   BaseOpenAPIWrapper,
-} from '../pages/IO/BaseOpenAPIWrapper';
+} from '../pages/API/BaseOpenAPIWrapper';
 
 type DeeplOpenAPI = DeeplPaths;
 type DeeplTranslatePath = DeeplOpenAPI['/translate']['post'];

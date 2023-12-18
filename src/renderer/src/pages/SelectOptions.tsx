@@ -4,6 +4,113 @@ import {
   get_status_name,
 } from './StrengthMap';
 
+// function getMultipletextactionsSelectoptions()
+// {
+// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="test">Test Marked Texts</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="addtag">Add Tag</option>";
+// 	r += "<option value="deltag">Remove Tag</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="rebuild">Reparse Texts</option>";
+// 	r += "<option value="setsent">Set Term Sentences</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="arch">Archive Marked Texts</option>";
+// 	r += "<option disabled="disabled">------------</option>";
+// 	r += "<option value="del">Delete Marked Texts</option>";
+// 	return r;
+// }
+
+function GetGenericSelectOptions<TVal extends string | number>({
+  selectOptions,
+  selected,
+}: {
+  selectOptions: { title: string; value: TVal; disabled?: boolean }[];
+  selected: TVal | null;
+}) {
+  return (
+    <>
+      {selectOptions.map(({ title, value, disabled }) => (
+        <option
+          value={value}
+          disabled={disabled === true}
+          selected={selected === value}
+        >
+          {title}
+        </option>
+      ))}
+    </>
+  );
+}
+export function GetTagSortSelectoptions({
+  selected,
+}: {
+  selected: number | null;
+}) {
+  return (
+    <GetGenericSelectOptions
+      selectOptions={[
+        { value: 1, title: 'Tag Text A-Z' },
+        { value: 2, title: 'Tag Comment A-Z' },
+        { value: 3, title: 'Newest first' },
+        { value: 4, title: 'Oldest first' },
+      ]}
+      selected={selected}
+    />
+  );
+}
+
+export function GetSentenceCountSelectoptions({
+  selected,
+}: {
+  selected: number | null;
+}) {
+  return (
+    <GetGenericSelectOptions
+      selectOptions={[
+        { value: 1, title: 'Just ONE' },
+        { value: 2, title: 'TWO (+previous)' },
+        { value: 3, title: 'THREE (+previous,+next)' },
+      ]}
+      selected={selected}
+    />
+  );
+}
+export function GetTextsSortSelectoptions({
+  selected,
+}: {
+  selected: number | null;
+}) {
+  return (
+    <GetGenericSelectOptions
+      selectOptions={[
+        { value: 1, title: 'Title A-Z' },
+        { value: 2, title: 'Newest first' },
+        { value: 3, title: 'Oldest first' },
+      ]}
+      selected={selected}
+    />
+  );
+}
+export function GetLanguagessizeSelectoptions({
+  selected,
+}: {
+  selected: number | null;
+}) {
+  return (
+    <GetGenericSelectOptions
+      selectOptions={[
+        { value: 100, title: '100 %' },
+        { value: 150, title: '150 %' },
+        { value: 200, title: '200 %' },
+        { value: 250, title: '250 %' },
+      ]}
+      selected={selected}
+    />
+  );
+}
+
 export function GetMultipleTagsActionsSelectOptions() {
   return (
     <>
@@ -26,57 +133,14 @@ export function GetMultipleArchivedTextActionsSelectOptions() {
   return (
     <>
       <option value="">[Choose...]</option>
-      <option disabled>------------</option>
+      <DisabledLine />
       <option value="addtag">Add Tag</option>
       <option value="deltag">Remove Tag</option>
-      <option disabled>------------</option>
+      <DisabledLine />
       <option value="unarch">Unarchive Marked Texts</option>
-      <option disabled>------------</option>
+      <DisabledLine />
       <option value="del">Delete Marked Texts</option>
       <option value="delall">Delete ALL Tags</option>
-    </>
-  );
-}
-
-export function GetTagSortSelectoptions({
-  selected,
-}: {
-  selected: number | null;
-}) {
-  return (
-    <>
-      <option value="1" selected={selected === 1}>
-        Tag Text A-Z
-      </option>
-      <option value="2" selected={selected === 2}>
-        Tag Comment A-Z
-      </option>
-      <option value="3" selected={selected === 3}>
-        Newest first
-      </option>
-      <option value="4" selected={selected === 4}>
-        Oldest first
-      </option>
-    </>
-  );
-}
-
-export function GetTextsSortSelectoptions({
-  selected,
-}: {
-  selected: number | null;
-}) {
-  return (
-    <>
-      <option value="1" selected={selected === 1}>
-        Title A-Z
-      </option>
-      <option value="2" selected={selected === 2}>
-        Newest first
-      </option>
-      <option value="3" selected={selected === 3}>
-        Oldest first
-      </option>
     </>
   );
 }
@@ -127,6 +191,8 @@ function ActionsSelectOptionComponent({
   return <option value={option}>{AllWordsSelectOption[option]}</option>;
 }
 
+// TODO use new genericselectoptions pattern
+
 export function GetAllWordsActionsSelectOptions() {
   return (
     <>
@@ -137,7 +203,6 @@ export function GetAllWordsActionsSelectOptions() {
       // TODO actions
       <ActionsSelectOptionComponent option="testall" />
       <DisabledLine />
-      <ActionsSelectOptionComponent option="testall" />
       <ActionsSelectOptionComponent option={'spl1all'} />
       <ActionsSelectOptionComponent option={'smi1all'} />
       <DisabledLine />
@@ -160,6 +225,41 @@ export function GetAllWordsActionsSelectOptions() {
       <ActionsSelectOptionComponent option={'expall3'} />
       <DisabledLine />
       <ActionsSelectOptionComponent option={'delall'} />
+    </>
+  );
+}
+export function GetMultipleWordsSctionsSelectoptions() {
+  return (
+    <>
+      <option value="\" selected>
+        [Choose...]
+      </option>
+      <option disabled>------------</option>
+      <option value="test">Test Marked Terms</option>
+      <option disabled>------------</option>
+      <option value="spl1">Increase Status by 1 [+1]</option>
+      <option value="smi1">Reduce Status by 1 [-1]</option>
+      <option disabled>------------</option>
+      {/* TODO */}
+      {/* get_set_status_option(1)
+get_set_status_option(5)
+get_set_status_option(99)
+get_set_status_option(98) */}
+      <option disabled>------------</option>
+      <option value="today">Set Status Date to Today</option>
+      <option disabled>------------</option>
+      <option value="lower">Set Marked Terms to Lowercase</option>
+      <option value="cap">Capitalize Marked Terms</option>
+      <option value="delsent">Delete Sentences of Marked Terms</option>
+      <option disabled>------------</option>
+      <option value="addtag">Add Tag</option>
+      <option value="deltag">Remove Tag</option>
+      <option disabled>------------</option>
+      <option value="exp">Export Marked Terms (Anki)</option>
+      <option value="exp2">Export Marked Terms (TSV)</option>
+      <option value="exp3">Export Marked Terms (Flexible)</option>
+      <option disabled>------------</option>
+      <option value="del">Delete Marked Terms</option>
     </>
   );
 }

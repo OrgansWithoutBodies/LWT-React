@@ -4,20 +4,30 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
+import { getDirTag } from '../../ui-kit/getDirTag';
+import { AnnPlcmnt } from './PrintText.component';
+/**
+ *
+ */
 export function AnnotateText({
   textID: textID,
   editmode: editmode,
   annplcmnt,
 }: {
   textID: TextsID;
-  annplcmnt: number;
+  annplcmnt: AnnPlcmnt;
   editmode: boolean;
 }) {
   useUpdateActiveText({ textID });
-  const [{ texts }] = useData(['texts']);
+  const [{ texts, languages }] = useData(['texts', 'languages']);
+  const $ann = '';
   const text = texts.find((val) => val.TxID === textID);
   if (!text) {
     throw new Error('Invalid Text ID');
+  }
+  const language = languages.find((val) => val.LgID === text.TxLgID);
+  if (!language) {
+    throw new Error('Invalid Lang ID for given text');
   }
   // const delmode = getreq('del');
   // const delmode = (delmode === '' ? 0 : (delmode+0));
@@ -64,9 +74,11 @@ export function AnnotateText({
 
   // pagestart_nobody('Annotated Text');
   const navigator = useInternalNavigate();
+  const $items = $ann.split('/[\n]/u');
+
   return (
-    <div className="noprint">
-      <h4>
+    <>
+      <div className="noprint">
         <Header
           title={`ANN.TEXT ▶ ${text.TxTitle}`}
           TitleDecoration={
@@ -79,154 +91,119 @@ export function AnnotateText({
               : undefined
           }
         />
-        <a href="edit_texts" target="_top">
-          LWT
-        </a>
-        &nbsp; | &nbsp; quickMenu(); echo getPreviousAndNextTextLinks(textid,
-        'print_impr_text?text=', TRUE, '&nbsp; | &nbsp;'); &nbsp; | &nbsp;
-        <a href="do_text?start=' . textid . '" target="_top">
-          <Icon src="book-open-bookmark" title="Read" />
-        </a>{' '}
-        &nbsp;
-        <a href="do_test?text=' . textid . '" target="_top">
-          <Icon src="question-balloon" title="Test" />
-        </a>{' '}
-        &nbsp;
-        <a href="print_text?text=' . textid . '" target="_top">
-          <Icon src="printer" title="Print" />{' '}
-        </a>
-        &nbsp;
-        <a target="_top" href="edit_texts?chg=' . textid . '">
-          <Icon src="document--pencil" title="Edit Text" />
-        </a>
-      </h4>
-      <h3>
-        ANN.TEXT&nbsp;▶ ' . tohtml(title) . (isset(sourceURI) ? '{' '}
-        <a href="' . sourceURI . '" target="_blank">
-          <Icon src="chain" title="Text Source" />
-        </a>
-        ' : '') . '
-      </h3>
 
-      <p id="printoptions">
-        <b>Improved Annotated Text</b>
+        <p id="printoptions">
+          <b>Improved Annotated Text</b>{' '}
+          {editmode ? (
+            <>
+              <b>(Edit Mode)</b>
+              <Icon
+                src="question-frame"
+                title="Help"
+                className="click"
+                onClick={() => navigator('/info#il')}
+              />
+              <br />
+              <input
+                type="button"
+                value="Display/Print Mode"
+                onClick={() => navigator('/print_impr_text?text=')}
+              />
+            </>
+          ) : (
+            <>
+              <b>(Display/Print Mode)</b>
+              <br />
+              <input
+                type="button"
+                value="Edit"
+                onClick={() =>
+                  navigator(`/print_impr_text?edit=1&text=${textID}`)
+                }
+              ></input>
+            </>
+          )}
+          &nbsp; | &nbsp;
+          <input
+            type="button"
+            value="Delete"
+            onClick={() => {
+              if (window.confirm('Are you sure?')) {
+                navigator(`/print_impr_text?del=1&text=${textID}`);
+              }
+            }}
+          />
+          &nbsp; | &nbsp;
+          <input type="button" value="Print" onClick={() => window.print()} />
+          &nbsp; | &nbsp;
+          <input
+            type="button"
+            value={`Display${
+              // TODO make sure this empty string doesnt happen & is always converted to undefined
+              text.TxAudioURI !== '' && text.TxAudioURI !== undefined
+                ? ' with Audio Player'
+                : ''
+            } in new Window`}
+            onClick={() => navigator(`/display_impr_text?text=${textID}`)}
+          />
+        </p>
+      </div>
+      <>
         {editmode ? (
-          <>
-            <b>(Edit Mode)</b>
-            <Icon
-              src="question-frame"
-              title="Help"
-              className="click"
-              onClick={() => navigator('/info#il')}
-            />
-            <br />
-            <input
-              type="button"
-              value="Display/Print Mode"
-              onClick={() => navigator('/print_impr_text?text=')}
-            />
-          </>
+          <></>
         ) : (
           <>
-            <b>(Display/Print Mode)</b>
-            <br />
-            <input
-              type="button"
-              value="Edit"
-              onClick={() =>
-                navigator(`/print_impr_text?edit=1&text=${textID}`)
-              }
-            ></input>
+            {/* TODO dedupe with print if possible */}
+            {
+              <div id="print" {...getDirTag(language)}>
+                <p
+                  style={{
+                    fontSize: `${language.LgTextSize}%`,
+                    lineHeight: 1.35,
+                    marginBottom: '10px',
+                  }}
+                >
+                  {text.TxTitle}
+                  <br />
+                  <br />
+                  {$items.map(($item) => {
+                    const $vals = $item.split('/[\t]/u');
+                    return (
+                      <>
+                        {$vals[0] > -1 ? (
+                          <>
+                            {/* $trans = '';
+			if (count($vals) > 3) $trans = $vals[3];
+			if ($trans == '*') $trans = $vals[1] . " "; // <- U+200A HAIR SPACE
+			echo ' <ruby><rb><span class="anntermruby">' . tohtml($vals[1]) . '</span></rb><rt><span class="anntransruby2">' . tohtml($trans) . '</span></rt></ruby> '; */}
+                          </>
+                        ) : (
+                          <>
+                            {$vals.length >= 2 &&
+                              $vals[1].split('¶').map((val) => (
+                                <p
+                                  style={{
+                                    fontSize: `${language.LgTextSize}%`,
+                                    lineHeight: 1.3,
+                                    marginBottom: '10px',
+                                  }}
+                                >
+                                  {val}
+                                </p>
+                              ))}
+                          </>
+                        )}
+                      </>
+                    );
+                  })}
+                </p>
+                {/* TODO */}
+                {/* <!-- noprint --> */}
+              </div>
+            }
           </>
         )}
-        &nbsp; | &nbsp;
-        <input
-          type="button"
-          value="Delete"
-          onClick={() => {
-            if (window.confirm('Are you sure?')) {
-              navigator(`/print_impr_text?del=1&text=${textID}`);
-            }
-          }}
-        />
-        &nbsp; | &nbsp;
-        <input type="button" value="Print" onClick={() => window.print()} />
-        &nbsp; | &nbsp;
-        <input
-          type="button"
-          value="Display"
-          // TODO
-          //  . ((audio !== '') ? ' with Audio Player' : '') . " in new Window"
-          onClick={() => navigator(`/display_impr_text?text=${textID}`)}
-        />
-      </p>
-    </div>
+      </>
+    </>
   );
-}
-{
-  /* <!-- noprint --> */
-}
-{
-  /* 
-  export function DisplayAnnotatedText(){}
-  if ( editmode ) {  // Edit Mode
-
-    if ( ! ann_exists ) {  // No Ann., Create...
-      const ann = create_save_ann(textid);
-      const ann_exists = (strlen(ann) > 0);
-    }
-    
-    if ( ! ann_exists ) {  // No Ann., not possible
-      <p>No annotated text found, and creation seems not possible.</p>
-    } else { // Ann. exists, set up for editing.
-      \n
-  ?>
-  <?php
-      <div const data_id="' . textid . '" const id="editimprtextdata"></div>
-      \n
-  ?>
-    <script type="text/javascript">
-    //<![CDATA[
-    $(document).ready( function() {
-    do_ajax_edit_impr_text(0,'');
-    } ); 
-    //]]>
-    </script>
-  <?php
-    }
-    <div className="noprint"><input type="button" value="Display/Print Mode" onClick="location.href=\'print_impr_text?text=' . textid . '\';" /></div>
-
-  }
-
-  else {  // Print Mode
-
-    <div id="print"" . (rtlScript ? ' dir="rtl"' : '') . ">
-    
-    <p style="font-size:' . textsize . '%;line-height: 1.35; margin-bottom: 10px; ">' . tohtml(title) . '<br /><br />
-    
-    items = preg_split('/[\n]/u', ann);
-    
-    foreach (items as item) {
-      vals = preg_split('/[\t]/u', item);
-      if (vals[0] > -1) {
-        trans = '';
-        if (count(vals) > 3) trans = vals[3];
-        if (trans === '*') trans = vals[1] . " "; // <- U+200A HAIR SPACE
-        <ruby><rb><span className="anntermruby">' . tohtml(vals[1]) . '</span></rb><rt><span className="anntransruby2">' . tohtml(trans) . '</span></rt></ruby> 
-      } else {
-        if (count(vals) >= 2) 
-          echo str_replace(
-          "¶",
-          '</p><p style="font-size:' . textsize . '%;line-height: 1.3; margin-bottom: 10px;">',
-          " " . tohtml(vals[1]) . " ");
-      }
-    }
-    
-    </p></div>
-
-  }
-
-  pageend();
-
-  ?> */
 }

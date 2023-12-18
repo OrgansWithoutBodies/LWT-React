@@ -4,7 +4,6 @@ import {
   wordNoIDPrevalidateMap,
   wordPrevalidateMap,
 } from '../../data/preValidateMaps';
-import { DateDiff } from '../../data/time';
 import {
   EditWordsValidator,
   LanguagesID,
@@ -23,7 +22,6 @@ import { useSelection } from '../../hooks/useSelection';
 import { useSettingWithDefault } from '../../hooks/useSettingWithDefault';
 import { A } from '../../nav/InternalLink';
 import { EntryRow } from '../../ui-kit/EntryRow';
-import { GetTagsList } from '../../ui-kit/GetTagsList';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { LanguageDropdown } from '../../ui-kit/LanguageDropdown';
@@ -32,18 +30,22 @@ import { StatusRadioButtons } from '../../ui-kit/StatusRadioButtons';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
-import { WordTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
+import { WordTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
 import { AddNewWordValidator, Word } from '../../utils/parseMySqlDump';
+import { DateDiff } from '../../utils/time';
 import { allActionGo, confirmDelete } from '../../utils/utils';
+import { prepare_textdata_js } from '../../utils/windowFunctions';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { textareaKeydown } from '../IO/CheckForm';
-import { GetAllWordsActionsSelectOptions } from '../SelectOptions';
-import { WordSorting, resetDirty, sortingMethod } from '../Sorting';
+import {
+  GetAllWordsActionsSelectOptions,
+  GetMultipleWordsSctionsSelectoptions,
+} from '../SelectOptions';
+import { WordSorting, sortingMethod } from '../Sorting';
 import { getStatusName, get_status_abbr } from '../StrengthMap';
-import { prepare_textdata_js } from '../windowFunctions';
 import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
 
@@ -652,6 +654,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
     onSubmit,
     refMap,
     TextArea,
+    setDirty,
   } = useFormInput({ validator, entry: term });
 
   if (!term) {
@@ -694,7 +697,16 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 {...getDirTag(termLanguage)}
                 className="notempty setfocus checkoutsidebmp"
                 // TODO
-                // onBlur={do_ajax_show_similar_terms}
+                onBlur={
+                  () => {} // do_ajax_show_similar_terms(
+                  //   {
+                  //     lang: chgID,
+                  //     word: refMap.WoText.current.value,
+                  //   },
+                  //   () => {},
+                  //   setShowingSentences()
+                  // )
+                }
                 id="wordfield"
                 errorName="Term"
                 entryKey="WoText"
@@ -707,8 +719,8 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           </tr>
           <PrintSimilarTermsTabrow
             onCopyTransRoman={onCopyTransRoman}
-            word={refMap.WoText.current.value}
-            lang={refMap.WoLgID.current.value}
+            word={refMap.WoText.current?.value}
+            lang={refMap.WoLgID.current?.value}
           />
           <tr>
             <td className="td1 right">Translation:</td>
@@ -728,7 +740,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              <WordTagsSelectList />
+              <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
             </td>
           </tr>
           <tr>
@@ -767,6 +779,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
             <td className="td1 right">Status:</td>
             <td className="td1">
               <StatusRadioButtons
+                onChange={setDirty}
                 defaultStatus={term.WoStatus}
                 refMap={refMap}
               />
@@ -785,7 +798,6 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator(`/edit_words#rec${chgID}`);
                 }}
               />
@@ -842,6 +854,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
     refMap,
     onSubmit,
     TextArea,
+    setDirty,
   } = useFormInput({
     entry: { WoLgID: langID },
     validator,
@@ -876,8 +889,8 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             />
           </EntryRow>
           <PrintSimilarTermsTabrow
-            word={refMap.WoText.current.value}
-            lang={refMap.WoLgID.current.value}
+            word={refMap.WoText.current?.value}
+            lang={refMap.WoLgID.current?.value}
             onCopyTransRoman={onCopyTransRoman}
           />
           <EntryRow headerText={'Translation'}>
@@ -892,7 +905,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             />
           </EntryRow>
           <EntryRow headerText={'Tags'}>
-            <GetTagsList EntryID={null} tagKey={'tags'} />
+            <WordTagsAutocomplete ref={refMap.taglist} />
           </EntryRow>
           <EntryRow headerText={'Romaniz.'}>
             <WoInput
@@ -916,7 +929,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             />
           </EntryRow>
           <EntryRow headerText="Status">
-            <StatusRadioButtons refMap={refMap} />
+            <StatusRadioButtons onChange={setDirty} refMap={refMap} />
           </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
@@ -934,7 +947,6 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator('/edit_words');
                 }}
               />
@@ -1048,7 +1060,7 @@ export function TermMultiActions({
                 onChange={() => {}}
                 disabled={selectedTerms.size === 0}
               >
-                <GetAllWordsActionsSelectOptions />
+                <GetMultipleWordsSctionsSelectoptions />
               </select>
             </td>
           </tr>
@@ -1199,7 +1211,7 @@ function setTransRoman(tra: string, rom: string) {
     $('textarea[name="WoTranslation"]').val(tra);
   if ($('input[name="WoRomanization"]').length === 1)
     $('input[name="WoRomanization"]').val(rom);
-  makeDirty();
+  setDirty();
 }
 
 /**

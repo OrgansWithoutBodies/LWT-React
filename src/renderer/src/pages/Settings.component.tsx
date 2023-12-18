@@ -10,7 +10,6 @@ import { PluginEntries } from '../plugins/PluginEntries';
 import { Header } from '../ui-kit/Header';
 import { RequiredLineButton } from '../ui-kit/Icon';
 import { SelectBoolean } from '../ui-kit/SelectBoolean';
-import { resetDirty } from './Sorting';
 // TODO abstract this out into a nested settings component
 
 const validator = ss.omit(SettingsObjValidator, [
@@ -512,13 +511,7 @@ export function SettingsComponent(): JSX.Element {
                   name="set-term-sentence-count"
                   ref={refMap['set-term-sentence-count']}
                   className="notempty"
-                >
-                  <option value="1" selected>
-                    Just ONE
-                  </option>
-                  <option value="2">TWO (+previous)</option>
-                  <option value="3">THREE (+previous,+next)</option>
-                </select>
+                ></select>
               </td>
               <td className="td1 center">
                 <RequiredLineButton />
@@ -683,7 +676,6 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="<< Back"
                   onClick={() => {
-                    resetDirty();
                     navigate('/');
                   }}
                 />
@@ -692,7 +684,6 @@ export function SettingsComponent(): JSX.Element {
                   type="button"
                   value="Reset all settings to default"
                   onClick={() => {
-                    resetDirty();
                     // TODO verify window
                     dataService.installDefaultSettings();
                     navigate('/');

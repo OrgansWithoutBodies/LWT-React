@@ -10,6 +10,7 @@ import { createGlobalStyle } from 'styled-components';
 import {
   AddNewWordWrapper,
   AnnotatedTextsWrapper,
+  DisplayImprTextWrapper,
   EditArchivedTextsWrapper,
   EditTagsWrapper,
   EditTextTagsWrapper,
@@ -103,7 +104,6 @@ export function NotificationMessage(): React.ReactNode {
     retrigger: isOpen,
     easingName: 'elastic',
   });
-  console.log('TEST123-notif', { interval });
   // this is needed for initial hook pass
   if (notificationMessage === null || notificationMessage === undefined) {
     return <></>;
@@ -115,10 +115,11 @@ export function NotificationMessage(): React.ReactNode {
     <div
       className="msgblue"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         width: '100%',
         display: interval === 1 && !isOpen ? 'none' : 'flex',
         justifyContent: 'center',
+        zIndex: 999,
         alignItems: 'center',
         // top        // maxHeight: 100,
         height: messageSize,
@@ -164,18 +165,16 @@ export function App(): JSX.Element {
     '/do_test': () => <TestWrapper />,
     '/print_text': () => <PrintTextWrapper />,
     '/print_impr_text': () => <AnnotatedTextsWrapper />,
+    '/display_impr_text': () => <DisplayImprTextWrapper />,
     '/upload_words': () => <UploadWordsWrapper />,
     '/install_demo': () => <InstallDemo />,
     '/info_export_template': () => <InfoExportTemplate />,
     // TODO
-    '/display_impr_text': () => <InfoExportTemplate />,
     // TODO
     '/edit_tword': () => <InfoExportTemplate />,
     // all_words_wellknown
     // delete_mword
     // delete_word
-    // display_impr_text_header
-    // display_impr_text_text
     // // TODO
     // edit_mword
     // edit_tword

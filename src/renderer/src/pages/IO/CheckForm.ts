@@ -1,6 +1,11 @@
 // TODO these are activated on class key
 import * as ss from 'superstruct';
-import { DictURLValidator, URLValidator } from '../../data/validators';
+import {
+  DictURLValidator,
+  LanguagesID,
+  TextsID,
+  URLValidator,
+} from '../../data/validators';
 import { byteSizeOfString, confirmDelete } from '../../utils/utils';
 
 function noShowAfter3Secs() {
@@ -183,40 +188,36 @@ function setTheFocus() {
   $('.setfocus').focus().select();
 }
 
-export function changeImprAnnRadio(this: any) {
-  const textid = $('#editimprtextdata').attr('data_id');
-  const elem = name;
-  const idwait = '#wait' + elem.substring(2);
-  $(idwait).html('<img src="icn/waiting2.gif" />');
-  const thedata = JSON.stringify($('form').serializeObject());
-  $.post(
-    'ajax_save_impr_text',
-    { id: textid, elem, data: thedata },
-    function (d: string) {
-      $(idwait).html('<img src="icn/empty.gif" />');
-      if (d !== 'OK')
-        alert('Saving your changes failed, please reload page and try again!');
-    }
-  );
+export type SetBoolHandler = SetBoolHandler;
+
+// also changeImprAnnText - only difference is 	$(this).prev('input:radio').attr('checked', 'checked');
+export async function changeImprAnnRadio(
+  textid: TextsID,
+  // TODO maybe?
+  // thedata: {serialize:()=>string},
+  thedata: string,
+  // TODO whats this is it needed
+  elem: string,
+  onSetWaiting: SetBoolHandler,
+  // TODO functionality from ajax_save_impr_text
+  onSaveData: (args: {
+    id: typeof textid;
+    data: typeof thedata;
+    elem: typeof elem;
+  }) => Promise<boolean>
+) {
+  onSetWaiting(true);
+  const success = await onSaveData({ id: textid, elem, data: thedata });
+  onSetWaiting(false);
+  if (!success) {
+    alert('Saving your changes failed, please reload page and try again!');
+  }
 }
 
-export function changeImprAnnText(this: any) {
-  const textid = $('#editimprtextdata').attr('data_id');
-  $(this).prev('input:radio').attr('checked', 'checked');
-  const elem = name;
-  const idwait = '#wait' + elem.substring(2);
-  $(idwait).html('<img src="icn/waiting2.gif" />');
-  const thedata = JSON.stringify($('form').serializeObject());
-  $.post(
-    'ajax_save_impr_text',
-    { id: textid, elem, data: thedata },
-    function (d: string) {
-      $(idwait).html('<img src="icn/empty.gif" />');
-      if (d !== 'OK')
-        alert('Saving your changes failed, please reload page and try again!');
-    }
-  );
-}
+type ShowSimilarTermsArgs = {
+  lang: LanguagesID;
+  word: string;
+};
 
 // $(document).ready(function () {
 //   $('.edit_area').editable('inline_edit', {
@@ -235,19 +236,6 @@ export function changeImprAnnText(this: any) {
 
 //   window.setTimeout(noShowAfter3Secs, 3000);
 // });
-
-// TODO
-
-export function do_ajax_show_similar_terms() {
-  $('#simwords').html('<img src="icn/waiting2.gif" />');
-  $.post(
-    'ajax_show_similar_terms',
-    { lang: $('#langfield').val(), word: $('#wordfield').val() },
-    function (data: any) {
-      $('#simwords').html(data);
-    }
-  );
-}
 
 // TODO
 // function do_ajax_word_counts() {

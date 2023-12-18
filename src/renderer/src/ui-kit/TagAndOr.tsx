@@ -1,3 +1,5 @@
+// TODO dedupe with SelectOptions.tsx
+
 export function TagAndOr({
   onChange,
   defaultValue,

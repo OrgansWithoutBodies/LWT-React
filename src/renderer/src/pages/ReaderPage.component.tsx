@@ -8,15 +8,11 @@ import { useUpdateActiveText } from '../hooks/useUpdateActiveText';
 import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { AudioPlayer } from '../ui-kit/AudioPlayer';
+import { FourFramePage } from '../ui-kit/FourFrames';
 import { Header } from '../ui-kit/Header';
-import { Text, TextItem, Word } from '../utils/parseMySqlDump';
-import {
-  makeScoreRandomInsertUpdate,
-  prepare_textdata_js,
-  strToClassName,
-} from '../utils/utils';
-import { FourFramePage } from './FourFrames';
-import { TranslationAPI } from './IO/APITranslation.component';
+import { AddNewWordType, Text, TextItem, Word } from '../utils/parseMySqlDump';
+import { prepare_textdata_js, strToClassName } from '../utils/utils';
+import { TranslationAPI } from './API/APITranslation.component';
 import { Loader } from './Loader';
 import { Reader } from './Reader.component';
 import { AddNewWordPane } from './Term/AddNewWordPane';
@@ -359,7 +355,7 @@ export function ReaderHeader({
   audioPlayerRef,
 }: {
   text: Text;
-  setShowAll: (showAll: boolean) => void;
+  setShowAll: SetBoolHandler;
   audioPlayerRef: MutableRefObject<HTMLAudioElement>;
 }) {
   console.log('TEST123-AUDIOREF', audioPlayerRef.current, audioPlayerRef);
@@ -480,19 +476,7 @@ const onWellKnownTerm = ({
   onSetToDoCount2,
 }: Pick<TextItem, 'TiOrder' | 'TiTxID'> & {
   onSetToDoCount2: (args: Pick<TextItem, 'TiTxID'>) => void;
-  onInsertNewTerm: (
-    args: Pick<
-      Word,
-      | 'WoLgID'
-      | 'WoText'
-      | 'WoStatus'
-      | 'WoTextLC'
-      | 'WoStatusChanged'
-      | 'WoTodayScore'
-      | 'WoTomorrowScore'
-      | 'WoRandom'
-    >
-  ) => WordsID;
+  onInsertNewTerm: (args: AddNewWordType) => WordsID;
 }) => {
   const [{ words, textitems, texts }] = useData([
     'words',
@@ -522,10 +506,10 @@ const onWellKnownTerm = ({
     // TODO consider
     // WoText: convert_string_to_sqlsyntax(word),
     WoText: word,
-    WoTextLC: $wordlc,
     WoStatus: 99,
     WoStatusChanged: getCurrentTimeAsString(),
-    ...makeScoreRandomInsertUpdate(word),
+    WoTranslation: 'TODO',
+    WoCreated: 'TODO',
   });
 
   // TODO this line is the onlyy difference between 99 & 98

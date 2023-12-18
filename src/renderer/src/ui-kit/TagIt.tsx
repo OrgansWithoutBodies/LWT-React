@@ -1,6 +1,6 @@
 // TODO Integrate
 
-import React, { useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useThemeColors } from '../hooks/useThemeColors';
 
 /*
@@ -35,14 +35,7 @@ import { useThemeColors } from '../hooks/useThemeColors';
  *
  */
 
-const tagsThatStartWith = (tags: TagType[], searchString: string) => {
-  if (searchString === '') {
-    return [];
-  }
-  return tags.filter((val) => val.value.startsWith(searchString));
-};
-
-type TagItOptions = {
+export type TagItOptions = {
   caseSensitive?: boolean;
   fieldName?: string;
   placeholderText?: null | string; // Sets `placeholder` attr on input field.
@@ -79,7 +72,7 @@ type TagItOptions = {
 
   // Event callbacks.
   onTagClicked?: TagEventHandler;
-  change?: TagEventHandler;
+  onChange?: TagEventHandler<React.MouseEvent, object, void>;
   onTagExists?: TagEventHandler;
   onTagLimitExceeded?: TagEventHandler<
     null,
@@ -94,7 +87,6 @@ const defaultOptions: TagItOptions = {
   caseSensitive: true,
   fieldName: 'tags',
   placeholderText: null, // Sets `placeholder` attr on input field.
-  readOnly: false, // Disables editing.
   removeConfirmation: false, // Require confirmation to remove tags.
   tagLimit: null, // Max number of tags allowed (null for unlimited).
   availableTags: [],
@@ -128,6 +120,7 @@ function TagInputImpl(
       _showAutoComplete,
       createTag,
       _cleanedInput,
+      _availableTagsThatStartWith,
       _lastTag,
       _tags,
     },
@@ -164,7 +157,6 @@ function TagInputImpl(
   //       }
   //     : undefined;
   const [autocompleteOptions, setAutocompleteOptions] = useState<TagType[]>([]);
-  const themeColors = useThemeColors();
   return (
     <>
       <input
@@ -174,7 +166,7 @@ function TagInputImpl(
         // options
         onChange={() => {
           setAutocompleteOptions(
-            tagsThatStartWith(_tags(), tagInputRef.current.value)
+            _availableTagsThatStartWith(tagInputRef.current.value)
           );
         }}
         // autoComplete={autoCompleteOptions}
@@ -186,15 +178,21 @@ function TagInputImpl(
         // }}
         onKeyDown={(event) => {
           // Backspace is not detected within a keypress, so it must use keydown.
+          if (event.key === 'Escape') {
+            setAutocompleteOptions([]);
+            return;
+          }
           if (event.key === 'Backspace' && tagInputRef.current.value === '') {
             const tag = _lastTag();
             if (tag) {
               if (!removeConfirmation || tag.removed) {
                 // When backspace is pressed, the last tag is deleted.
+                console.log('TEST123-TAGINPUT1', event.currentTarget);
                 removeTag(tag);
 
-                tagInputRef.current.focus();
-                console.log(tagInputRef.current);
+                // tagInputRef.current.focus();
+                event.currentTarget.focus();
+                // console.log('TEST123-TAGINPUT2', tagInputRef.current);
               } else if (removeConfirmation) {
                 removeTag(tag);
                 // TODO
@@ -221,7 +219,7 @@ function TagInputImpl(
           if (
             event.key === 'Comma' ||
             event.key === 'Enter' ||
-            (event.key === 'Tab' && tagInputRef.value() !== '') ||
+            (event.key === 'Tab' && tagInputRef.current.value !== '') ||
             (event.key === 'Space' &&
               allowSpaces !== true &&
               (inputValClean.replace(/^s*/, '').charAt(0) !== '"' ||
@@ -229,15 +227,21 @@ function TagInputImpl(
                   inputValClean.charAt(inputValClean.length - 1) === '"' &&
                   inputValClean.length - 1 !== 0)))
           ) {
+            // TODO
             // Enter submits the form if there's no text in the input.
-            if (!(event.key === 'Enter' && tagInputRef.value() === '')) {
+            if (
+              false
+              // !(event.key === 'Enter' && tagInputRef.current.value === '')
+            ) {
               event.preventDefault();
             }
 
-            createTag(_cleanedInput());
+            if (autocompleteOptions.length === 0) {
+              createTag(_cleanedInput());
+              setAutocompleteOptions([]);
+            }
             // The autocomplete doesn't close automatically when TAB is pressed.
             // So let's ensure that it closes.
-            setAutocompleteOptions([]);
           }
         }}
         type="text"
@@ -247,36 +251,107 @@ function TagInputImpl(
           if (autocompleteOptions) {
             createTag(_cleanedInput());
           }
+          setAutocompleteOptions([]);
         }}
         onFocus={() => {
           _showAutoComplete();
         }}
         maxLength={20}
         size={20}
-        disabled={readOnly ? true : undefined}
+        // disabled={readOnly ? true : undefined}
         tabIndex={tabIndex ? tabIndex : undefined}
         placeholder={placeholderText ? placeholderText : undefined}
         // className="ui-widget-content"
       />
 
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          bottom: '0%',
-        }}
-      >
-        {autocompleteOptions.map((tag) => (
-          <div style={{ backgroundColor: themeColors.lum4, marginTop: '3px' }}>
-            {tag.value}
-          </div>
-        ))}
-      </div>
+      {autocompleteOptions.length !== 0 && (
+        <Autocomplete
+          autocompleteOptions={autocompleteOptions}
+          onSelectTag={(tagVal) => {
+            createTag(tagVal);
+            setAutocompleteOptions([]);
+          }}
+        />
+      )}
     </>
   );
 }
 const TagInput = React.forwardRef(TagInputImpl);
+
+function Autocomplete({
+  autocompleteOptions,
+  onSelectTag,
+}: {
+  autocompleteOptions: TagType[];
+  // TODO maybe pass back id here?
+  onSelectTag: (val: string) => void;
+}) {
+  const themeColors = useThemeColors();
+  const [highlightedTagIndex, setHighlightedTagIndex] = useState<number | null>(
+    null
+  );
+  useEffect(() => {
+    const TODO = (e: KeyboardEvent) => {
+      console.log('TEST123-ARROW', e.key, autocompleteOptions.length);
+      // Down increases bc the options are reversed
+      if (e.key === 'ArrowDown') {
+        setHighlightedTagIndex(
+          Math.min(
+            autocompleteOptions.length - 1,
+            (highlightedTagIndex || 0) + 1
+          )
+        );
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowUp') {
+        setHighlightedTagIndex(
+          Math.max(
+            0,
+            (highlightedTagIndex || autocompleteOptions.length - 1) - 1
+          )
+        );
+        e.preventDefault();
+      }
+      if (e.key === 'Enter' && highlightedTagIndex !== null) {
+        onSelectTag(autocompleteOptions[highlightedTagIndex].value);
+        e.preventDefault();
+      }
+      // TODO on escape
+    };
+    window.addEventListener('keydown', TODO);
+
+    return () => {
+      window.removeEventListener('keydown', TODO);
+    };
+  }, [highlightedTagIndex]);
+  console.log('TEST123-highlight', highlightedTagIndex);
+
+  return (
+    <div
+      style={{
+        backgroundColor: `${themeColors.lum6}`,
+        outline: `1px ${themeColors.lum0}`,
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'column',
+        bottom: '0%',
+      }}
+    >
+      {autocompleteOptions.map((tag, ii) => (
+        <div
+          style={{
+            backgroundColor:
+              highlightedTagIndex === ii ? themeColors.lum3 : themeColors.lum4,
+            margin: '2px',
+          }}
+          onMouseOver={() => setHighlightedTagIndex(ii)}
+        >
+          {tag.value}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function TagList({
   id,
@@ -289,6 +364,7 @@ function TagList({
   options: TagItOptions;
   tagger: PrivateTagger;
   tagList: TagType[];
+  // TODO ref passed in should just return a value of tag elements
   tagInputRef: React.MutableRefObject<HTMLInputElement | null>;
 }) {
   // TODO
@@ -308,8 +384,9 @@ function TagList({
   return (
     <ul
       id={id}
-      className={`${'tagit'} ${'ui-widget ui-widget-content ui-corner-all'}`}
+      className={`${'tagit'} ${'ui-widget ui-widget-content ui-corner-all'} inputText input`}
       onClick={(e) => {
+        tagInputRef.current?.focus();
         // TODO
         // if (target.hasClass('tagit-label')) {
         //   const tag = target.closest('.tagit-choice');
@@ -331,18 +408,14 @@ function TagList({
         <li
           className={`tagit-choice ui-widget-content ui-state-default ui-corner-all ${
             tag.additionalClass
-          } ${
-            options.readOnly
-              ? 'tagit-choice-read-only'
-              : 'tagit-choice-editable'
-          }`}
+          } ${'tagit-choice-editable'}`}
         >
           {options.onTagClicked ? (
             <a className="tagit-label">{tag.value}</a>
           ) : (
             <span className="tagit-label">{tag.value}</span>
           )}
-          {!options.readOnly && (
+          {
             <a
               className="tagit-close"
               onClick={() => {
@@ -356,7 +429,7 @@ function TagList({
                 <span className="ui-icon ui-icon-close"></span>{' '}
               </span>
             </a>
-          )}
+          }
           <input
             type="hidden"
             style={{ display: 'none' }}
@@ -378,8 +451,9 @@ type TagEventHandler<
     tag: TagType;
     tagLabel?: string;
     duringInitialization?: boolean;
-  }
-> = (e: EventOptions, ui: TagOptions) => boolean;
+  },
+  TReturn = boolean
+> = (e: EventOptions, ui: TagOptions) => TReturn;
 
 type PublicTagger = {
   assignedTags: () => TagType[];
@@ -419,6 +493,7 @@ type PrivateTagger = PublicTagger & {
   _cleanedInput: () => string;
   _lastTag: () => TagType | null;
   _tags: () => TagType[];
+  _availableTagsThatStartWith: (val: string) => TagType[];
   _subtractArray: (a1: TagType[], a2: TagType[]) => TagType[];
   _showAutoComplete: () => void;
   _findTagByLabel: (name: string) => TagType | undefined;
@@ -433,12 +508,22 @@ type TaggerOutput = PublicTagger & {
  *
  * @param options
  */
-export function useTagIt(options: TagItOptions = defaultOptions): TaggerOutput {
-  // TODO simplify options to what we use
+export function useTagIt(
+  options: TagItOptions = defaultOptions,
+  tagListRef: MutableRefObject<{ value: string[] } | null>
+): TaggerOutput {
   const tagInputRef = useRef<HTMLInputElement | null>(null);
-  const [tagItTags, setTagItTags] = useState<TagType[]>(
-    options.availableTags || []
-  );
+
+  // TODO simplify options to what we use
+  const [tagItTags, setTagItTags] = useState<TagType[]>([]);
+  useEffect(() => {
+    tagListRef.current = { value: tagItTags.map((tag) => tag.value) };
+    if (options.onChange) {
+      console.log('TEST123-CHANGE');
+      options.onChange();
+    }
+  }, [tagItTags]);
+  // TODO
   const [showingAutocomplete, setShowingAutocomplete] = useState(false);
 
   const assignedTags: PublicTagger['assignedTags'] = () =>
@@ -604,6 +689,17 @@ export function useTagIt(options: TagItOptions = defaultOptions): TaggerOutput {
       });
     }
   };
+
+  const _availableTagsThatStartWith = (searchString: string) => {
+    if (searchString === '') {
+      return [];
+    }
+    const tags = options.availableTags.filter(
+      (val) => tagItTags.find((tag) => tag.value === val.value) === undefined
+    );
+    return tags.filter((val) => val.value.startsWith(searchString));
+  };
+
   const publicTagger = {
     assignedTags,
     tagLabel,
@@ -621,6 +717,7 @@ export function useTagIt(options: TagItOptions = defaultOptions): TaggerOutput {
     _findTagByLabel,
     _isNew,
     _formatStr,
+    _availableTagsThatStartWith,
   };
   return {
     ...publicTagger,

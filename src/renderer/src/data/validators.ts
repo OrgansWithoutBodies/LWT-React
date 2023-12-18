@@ -314,8 +314,11 @@ export const TextItemsValidator = ss.object({
   // TiAudioSeconds: ss.optional(ss.number()),
   ...getValidatorPluginsFor(Persistable.textitems),
 });
+export const Tag2ListValidator = ss.array(ss.string());
+// TODO
+// export const Tag2ListValidator = ss.array(TagsValidator);
 
-export const TextsValidator = ss.object({
+export const TextsWithTagsValidator = ss.object({
   // TxID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`TxID`),
   TxID: textID,
@@ -333,8 +336,10 @@ export const TextsValidator = ss.object({
   TxAudioURI: ss.optional(URLValidator()),
   // TxSourceURI: varchar(1000) DEFAULT NULL,
   TxSourceURI: ss.optional(URLValidator()),
+  taglist: Tag2ListValidator,
   ...getValidatorPluginsFor(Persistable.texts),
 });
+export const TextsValidator = ss.omit(TextsWithTagsValidator, ['taglist']);
 export const Tags2NoIDValidator = ss.omit(Tags2Validator, ['T2ID']);
 export const TextsValidatorNoID = ss.omit(TextsValidator, ['TxID']);
 export const CheckTextsValidator = ss.pick(TextsValidator, [
@@ -353,7 +358,10 @@ export const TextTagsValidator = ss.object({
   ...getValidatorPluginsFor(Persistable.texttags),
 });
 
-export const WordsValidator = ss.object({
+export const TagListValidator = ss.array(ss.string());
+// export const TagListValidator = ss.array(TagsValidator);
+
+export const WordsWithTagsValidator = ss.object({
   // WoID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`WoID`),
   WoID: wordID,
@@ -392,11 +400,16 @@ export const WordsValidator = ss.object({
   // WoRandom: double NOT NULL DEFAULT '0',
   // KEY `WoRandom` (`WoRandom`)
   WoRandom: ss.number(),
+  taglist: TagListValidator,
   // UNIQUE KEY `WoLgIDTextLC` (`WoLgID`,`WoTextLC`),
   ...getValidatorPluginsFor(Persistable.words),
 });
+
+// TODO should be reversed & should be able to add to object, union/intersection dont seem to do what i expect
+export const WordsValidator = ss.omit(WordsWithTagsValidator, ['taglist']);
+
 // TODO maybe these should be validated?
-export const EditWordsValidator = ss.omit(WordsValidator, [
+export const EditWordsValidator = ss.omit(WordsWithTagsValidator, [
   'WoCreated',
   'WoTodayScore',
   'WoTomorrowScore',

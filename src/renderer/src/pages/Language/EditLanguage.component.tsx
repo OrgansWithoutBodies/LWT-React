@@ -10,9 +10,8 @@ import { PluginEntries } from '../../plugins/PluginEntries';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { SelectBoolean } from '../../ui-kit/SelectBoolean';
-import { openInNewWindow } from '../../utils/openInNewWindow';
+import { openInNewWindow } from '../../utils/linkHelpers';
 import { check_dupl_lang } from '../../utils/utils';
-import { resetDirty } from '../Sorting';
 import { TextSizeSelect } from './NewLanguage';
 
 export function EditLanguage({ chgID }: { chgID: LanguagesID }) {
@@ -227,7 +226,6 @@ export function EditLanguage({ chgID }: { chgID: LanguagesID }) {
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator('/edit_languages');
                 }}
               />

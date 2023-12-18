@@ -3,7 +3,7 @@ import { paths as TatoebaPaths } from '../../../shared/apis/out/tatoeba.openapi'
 import {
   AxiosOpenAPIWrapper,
   BaseOpenAPIWrapper,
-} from '../pages/IO/BaseOpenAPIWrapper';
+} from '../pages/API/BaseOpenAPIWrapper';
 
 // type TatoebaOpenAPI = TatoebaPaths;
 // type TatoebaGetSentencePath =

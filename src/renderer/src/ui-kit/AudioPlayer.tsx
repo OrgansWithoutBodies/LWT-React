@@ -3,6 +3,7 @@ import {
   GetPlaybackrateSelectoptions,
   GetSecondsSelectoptions,
 } from '../pages/SelectOptions';
+import { formatTime } from '../utils/time';
 import { Icon } from './Icon';
 
 // TODO timemarkers that sync up words to points of time in audio
@@ -29,6 +30,7 @@ function AudioPlayerImpl(
     setSeekStep,
     setPlayerRepeatMode,
     setHead,
+    setHeadPerc,
     volume,
     duration,
     setPlaying,
@@ -125,187 +127,220 @@ function AudioPlayerImpl(
         cellSpacing={0}
         cellPadding={0}
       >
-        <tr>
-          <td className="center borderleft" style={{ paddingLeft: '10px' }}>
-            <span
-              id="do-single"
-              onClick={click_single}
-              className={`click${playerRepeatMode ? '' : ' hide'}`}
-            >
-              <Icon
-                src="arrow-repeat"
-                title="Toggle Repeat (Now ON)"
-                style={{ width: '24px', height: '24px' }}
-              />
-            </span>
-            <span
-              id="do-repeat"
-              onClick={click_repeat}
-              className={`click${playerRepeatMode ? ' hide' : ''}`}
-            >
-              <Icon
-                src="arrow-norepeat"
-                title="Toggle Repeat (Now OFF)"
-                style={{ width: '24px', height: '24px' }}
-              />
-            </span>
-          </td>
-          <td className="center bordermiddle">&nbsp;</td>
-          <td className="bordermiddle">
-            <div id="jquery_jplayer_1" className="jp-jplayer">
-              {/* <audio id="jp_audio_0" preload="metadata" src={audio}></audio> */}
-            </div>
-            <div id="jp_container_1" className="jp-audio">
-              <div className="jp-type-single">
-                <div className="jp-gui jp-interface">
-                  <ul className="jp-controls">
-                    {!playing ? (
+        <tbody>
+          <tr>
+            <td className="center borderleft" style={{ paddingLeft: '10px' }}>
+              <span
+                id="do-single"
+                onClick={click_single}
+                className={`click${playerRepeatMode ? '' : ' hide'}`}
+              >
+                <Icon
+                  src="arrow-repeat"
+                  title="Toggle Repeat (Now ON)"
+                  style={{ width: '24px', height: '24px' }}
+                />
+              </span>
+              <span
+                id="do-repeat"
+                onClick={click_repeat}
+                className={`click${playerRepeatMode ? ' hide' : ''}`}
+              >
+                <Icon
+                  src="arrow-norepeat"
+                  title="Toggle Repeat (Now OFF)"
+                  style={{ width: '24px', height: '24px' }}
+                />
+              </span>
+            </td>
+            <td className="center bordermiddle">&nbsp;</td>
+            <td className="bordermiddle">
+              <div id="jquery_jplayer_1" className="jp-jplayer">
+                {/* <audio id="jp_audio_0" preload="metadata" src={audio}></audio> */}
+              </div>
+              <div id="jp_container_1" className="jp-audio">
+                <div className="jp-type-single">
+                  <div className="jp-gui jp-interface">
+                    <ul className="jp-controls">
+                      {!playing ? (
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="jp-play"
+                            tabIndex={1}
+                            onClick={toggle}
+                          >
+                            play
+                          </a>
+                        </li>
+                      ) : (
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="jp-pause"
+                            tabIndex={1}
+                            onClick={toggle}
+                          >
+                            pause
+                          </a>
+                        </li>
+                      )}
                       <li>
                         <a
                           href="javascript:;"
-                          className="jp-play"
+                          className="jp-stop"
                           tabIndex={1}
-                          onClick={toggle}
+                          onClick={onStop}
                         >
-                          play
+                          stop
                         </a>
                       </li>
-                    ) : (
-                      <li>
-                        <a
-                          href="javascript:;"
-                          className="jp-pause"
-                          tabIndex={1}
-                          onClick={toggle}
-                        >
-                          pause
-                        </a>
-                      </li>
-                    )}
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="jp-stop"
-                        tabIndex={1}
-                        onClick={onStop}
-                      >
-                        stop
-                      </a>
-                    </li>
-                    {volume !== 0 ? (
-                      <li>
-                        <a
-                          href="javascript:;"
-                          className="jp-mute"
-                          tabIndex={1}
-                          title="mute"
-                          onClick={() => setVolume(0)}
-                        >
-                          mute
-                        </a>
-                      </li>
-                    ) : (
-                      <li>
-                        <a
-                          href="javascript:;"
-                          className="jp-unmute"
-                          onClick={() => setVolume(1)}
-                          tabIndex={1}
-                          title="unmute"
-                        >
-                          unmute
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                  <div
-                    className="jp-progress"
-                    onClick={(event) => console.log(event)}
-                  >
-                    <div className="jp-seek-bar">
+                      {volume !== 0 ? (
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="jp-mute"
+                            tabIndex={1}
+                            title="mute"
+                            onClick={() => setVolume(0)}
+                          >
+                            mute
+                          </a>
+                        </li>
+                      ) : (
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="jp-unmute"
+                            onClick={() => setVolume(1)}
+                            tabIndex={1}
+                            title="unmute"
+                          >
+                            unmute
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                    <div
+                      className="jp-progress"
+                      onClick={(event) => console.log(event)}
+                    >
                       <div
-                        className="jp-play-bar"
-                        style={{ width: `${headPerc}%` }}
+                        className="jp-seek-bar"
+                        // TODO mouse drag events
+                        onClick={(event) =>
+                          getPercentClickedAlongElementWidth(event, setHeadPerc)
+                        }
+                      >
+                        <div
+                          className="jp-play-bar"
+                          style={{ width: `${headPerc}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div
+                      onClick={(event) =>
+                        getPercentClickedAlongElementWidth(event, setVolume)
+                      }
+                      className="jp-volume-bar"
+                    >
+                      <div
+                        className="jp-volume-bar-value"
+                        style={{ width: `${volume * 100}%` }}
                       ></div>
                     </div>
-                  </div>
-                  <div className="jp-volume-bar">
-                    <div className="jp-volume-bar-value"></div>
-                  </div>
-                  <div className="jp-time-holder">
-                    <div className="jp-current-time">{formatTime(headPos)}</div>
-                    <div className="jp-duration">{formatTime(duration)}</div>
+                    <div className="jp-time-holder">
+                      <div className="jp-current-time">
+                        {formatTime(headPos)}
+                      </div>
+                      <div className="jp-duration">{formatTime(duration)}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </td>
-          <td className="center bordermiddle">&nbsp;</td>
-          <td className="center bordermiddle">
-            <select
-              id="backtime"
-              name="backtime"
-              onChange={({ target: { value } }) =>
-                setSeekStep(Number.parseInt(value))
-              }
-            >
-              <GetSecondsSelectoptions selectedVal={seekStep} />
-            </select>
-            <br />
-            <span id="backbutt" className="click" onClick={() => click_back()}>
-              <Icon src="arrow-circle-225-left" title="Rewind n seconds" />
-            </span>
-            &nbsp;&nbsp;
-            <span id="forwbutt" className="click" onClick={() => click_forw()}>
-              <Icon src="arrow-circle-315" title="Forward n seconds" />
-            </span>
-            <span id="playTime" className="hide"></span>
-          </td>
-          <td className="center bordermiddle">&nbsp;</td>
-          <td className="center borderright" style={{ paddingRight: '10px' }}>
-            <select
-              id="playbackrate"
-              name="playbackrate"
-              onChange={({ target: { value } }) =>
-                setPlaybackRate(Number.parseInt(value))
-              }
-            >
-              <GetPlaybackrateSelectoptions selectedVal={playbackRate} />
-            </select>
-            <br />
-            <span id="slower" className="click" onClick={() => click_slower()}>
-              <Icon src="minus" title="Slower" style={{ marginTop: '3px' }} />
-            </span>
-            &nbsp;
-            <span
-              id="stdspeed"
-              className="click"
-              onClick={() => click_stdspeed()}
-            >
-              <Icon
-                src="status-away"
-                title="Normal"
-                style={{ marginTop: '3px' }}
-              />
-            </span>
-            &nbsp;
-            <span id="faster" className="click" onClick={() => click_faster()}>
-              <img
+            </td>
+            <td className="center bordermiddle">&nbsp;</td>
+            <td className="center bordermiddle">
+              <select
+                id="backtime"
+                name="backtime"
+                onChange={({ target: { value } }) =>
+                  setSeekStep(Number.parseInt(value))
+                }
+              >
+                <GetSecondsSelectoptions selectedVal={seekStep} />
+              </select>
+              <br />
+              <span
+                id="backbutt"
+                className="click"
+                onClick={() => click_back()}
+              >
+                <Icon src="arrow-circle-225-left" title="Rewind n seconds" />
+              </span>
+              &nbsp;&nbsp;
+              <span
+                id="forwbutt"
+                className="click"
+                onClick={() => click_forw()}
+              >
+                <Icon src="arrow-circle-315" title="Forward n seconds" />
+              </span>
+              <span id="playTime" className="hide"></span>
+            </td>
+            <td className="center bordermiddle">&nbsp;</td>
+            <td className="center borderright" style={{ paddingRight: '10px' }}>
+              <select
+                id="playbackrate"
+                name="playbackrate"
+                onChange={({ target: { value } }) =>
+                  setPlaybackRate(Number.parseInt(value))
+                }
+              >
+                <GetPlaybackrateSelectoptions selectedVal={playbackRate} />
+              </select>
+              <br />
+              <span
+                id="slower"
+                className="click"
+                onClick={() => click_slower()}
+              >
+                <Icon src="minus" title="Slower" style={{ marginTop: '3px' }} />
+              </span>
+              &nbsp;
+              <span
+                id="stdspeed"
+                className="click"
+                onClick={() => click_stdspeed()}
+              >
+                <Icon
+                  src="status-away"
+                  title="Normal"
+                  style={{ marginTop: '3px' }}
+                />
+              </span>
+              &nbsp;
+              <span
+                id="faster"
+                className="click"
                 onClick={() => click_faster()}
-                src="icn/plus.png"
-                alt="Faster"
-                title="Faster"
-                style={{ marginTop: '3px' }}
-              />
-            </span>
-          </td>
-        </tr>
+              >
+                <img
+                  onClick={() => click_faster()}
+                  src="icn/plus.png"
+                  alt="Faster"
+                  title="Faster"
+                  style={{ marginTop: '3px' }}
+                />
+              </span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </>
   );
 }
-{
-}
+
 {
   /* <?php echo ($repeatMode ? "click_repeat();\n" : ''); ?> */
 }
@@ -435,24 +470,16 @@ const useAudio = (
     setSeekStep,
     audio,
     setHead: handleSetPlayHead,
+    setHeadPerc: (perc: number) => handleSetPlayHead(perc * audio.duration),
     getCurrentHead: () => audio.currentTime,
     duration: audio.duration,
   };
 };
 export const AudioPlayer = React.forwardRef(AudioPlayerImpl);
-function onClickSeekBar2(c) {
-  c.preventDefault(),
-    d[b](c),
-    d.options.autoBlur ? a(this).blur() : a(this).focus();
-}
-function onClickSeekBar1(a) {
-  return 'undefined' == typeof n || (a && n.event.triggered === a.type)
-    ? void 0
-    : n.event.dispatch.apply(k.elem, arguments);
-}
-export function formatTime(timeSec: number) {
-  const numSecs = Math.round(timeSec % 60);
-  const numMins = Math.floor(timeSec / 60);
-  const formatTimeDigit = (val: number) => (val < 10 ? `0${val}` : `${val}`);
-  return `${formatTimeDigit(numMins)}:${formatTimeDigit(numSecs)}`;
-}
+const getPercentClickedAlongElementWidth = (
+  { pageX, currentTarget }: React.MouseEvent,
+  setPerc: (vol: number) => void
+) => {
+  const { left, width } = currentTarget.getBoundingClientRect();
+  setPerc((pageX - left) / width);
+};

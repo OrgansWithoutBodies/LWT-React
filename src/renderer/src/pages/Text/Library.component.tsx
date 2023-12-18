@@ -19,7 +19,7 @@ import { SortableHeader } from '../../ui-kit/SortableHeader';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
-import { TextTagsSelectList } from '../../ui-kit/WordTagsSelectDropdown';
+import { TextTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
 import { Text } from '../../utils/parseMySqlDump';
@@ -28,7 +28,7 @@ import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { GetTextsSortSelectoptions } from '../SelectOptions';
-import { TextSorting, buildSortByValue, resetDirty } from '../Sorting';
+import { TextSorting, buildSortByValue } from '../Sorting';
 import { OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
@@ -632,7 +632,7 @@ export function EditTextPane({
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              <TextTagsSelectList />
+              <TextTagsAutocomplete />
             </td>
           </tr>
           <tr>
@@ -657,7 +657,6 @@ export function EditTextPane({
                 type="button"
                 value="Cancel"
                 onClick={() => {
-                  resetDirty();
                   navigator(`/edit_texts#rec${chgID}`);
                 }}
               />

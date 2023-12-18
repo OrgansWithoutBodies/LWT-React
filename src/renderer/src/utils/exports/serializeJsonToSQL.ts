@@ -1,4 +1,4 @@
-import { DataState } from '../data/data.storage';
+import { DataState } from '../../data/data.storage';
 
 /**
  *

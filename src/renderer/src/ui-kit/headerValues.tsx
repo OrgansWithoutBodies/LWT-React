@@ -45,6 +45,7 @@ export const headerValuesTemp = {
   info: { params: [] },
   print_text: { params: ['text', 'annplcmnt', 'ann', 'status'] },
   print_impr_text: { params: ['text', 'annplcmnt', 'ann', 'status'] },
+  display_impr_text: { params: ['text', 'annplcmnt', 'ann', 'status'] },
 } as const;
 // TODO merge into prev obj
 

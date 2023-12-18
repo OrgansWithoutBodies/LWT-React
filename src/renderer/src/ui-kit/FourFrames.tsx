@@ -1,8 +1,5 @@
-// TODO abstract common themes
-
 import SplitPane from 'react-split-pane';
 import { Settings, settingSpec } from '../data/settings';
-import { TextsID } from '../data/validators';
 import { useSettingWithDefault } from '../hooks/useSettingWithDefault';
 type FrameSizeKeys<
   THFrameKey extends keyof Settings,
@@ -27,7 +24,6 @@ export function FourFramePage<
   TLFrameKey extends keyof Settings,
   TRFrameKey extends keyof Settings
 >({
-  textID: textID,
   frameSizes: { lFrameWidthPercKey, rFrameHeightPercKey, hFrameHeightKey },
   ULFrame,
   BLFrame,
@@ -38,15 +34,8 @@ export function FourFramePage<
   BLFrame: () => JSX.Element;
   URFrame: () => JSX.Element;
   BRFrame: () => JSX.Element;
-  textID: TextsID;
   frameSizes: FrameSizeKeys<THFrameKey, TLFrameKey, TRFrameKey>;
 }) {
-  console.log(
-    'SETTINGSPEC',
-    settingSpec[lFrameWidthPercKey],
-    settingSpec[rFrameHeightPercKey],
-    settingSpec[hFrameHeightKey]
-  );
   //   maybe this in individual pane?
   //   useUpdateActiveText({ textID });
 
@@ -78,10 +67,10 @@ export function FourFramePage<
         split="horizontal"
         defaultSize={`${hFrameHeight}`}
       >
-        <div style={{ overflowY: 'auto' }}>
+        <div style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
           <ULFrame />
         </div>
-        <div style={{ overflowY: 'auto' }}>
+        <div style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
           <BLFrame />
         </div>
       </SplitPane>
@@ -90,10 +79,10 @@ export function FourFramePage<
         minSize={50}
         defaultSize={`${rFrameHeightPerc}%`}
       >
-        <div style={{ overflowY: 'auto' }}>
+        <div style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
           <URFrame />
         </div>
-        <div style={{ overflowY: 'auto' }}>
+        <div style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
           <BRFrame />
         </div>
       </SplitPane>

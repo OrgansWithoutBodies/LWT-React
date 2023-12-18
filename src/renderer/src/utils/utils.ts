@@ -1,6 +1,6 @@
 import { NumericalStrengthPotentiallyCompound } from '../data/data.query';
-import { DateDiff } from '../data/time';
 import { SentencesID, TextItemsID } from '../data/validators';
+import { SetBoolHandler } from '../pages/IO/CheckForm';
 import { NumericalStrength } from '../pages/StrengthMap';
 import { pluralize } from '../pages/TermTag/pluralize';
 import {
@@ -11,6 +11,7 @@ import {
   TextItem,
   Word,
 } from './parseMySqlDump';
+import { DateDiff } from './time';
 
 /**
  *
@@ -1000,21 +1001,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function get_sentence_count_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 1;
-// 	r = "<option value="1"" . get_selected(v, 1);
-// 	r += ">Just ONE</option>";
-// 	r += "<option value="2"" . get_selected(v, 2);
-// 	r += ">TWO (+previous)</option>";
-// 	r += "<option value="3"" . get_selected(v, 3);
-// 	r += ">THREE (+previous,+next)</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function saveSetting(k, v)
 // {
 // 	global tbpref;
@@ -1221,23 +1207,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function get_languagessize_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 100;
-// 	r = "<option value="100"" . get_selected(v, 100);
-// 	r += ">100 %</option>";
-// 	r += "<option value="150"" . get_selected(v, 150);
-// 	r += ">150 %</option>";
-// 	r += "<option value="200"" . get_selected(v, 200);
-// 	r += ">200 %</option>";
-// 	r += "<option value="250"" . get_selected(v, 250);
-// 	r += ">250 %</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function get_wordstatus_radiooptions(v)
 // {
 // 	if (!isset(v))
@@ -1263,19 +1232,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 // 		r += "<option value="" . i . """ . get_selected(i, currentpage);
 // 		r += ">i</option>";
 // 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_andor_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 0;
-// 	r = "<option value="0"" . get_selected(v, 0);
-// 	r += ">... OR ...</option>";
-// 	r += "<option value="1"" . get_selected(v, 1);
-// 	r += ">... AND ...</option>";
 // 	return r;
 // }
 
@@ -1313,92 +1269,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 
 // // -------------------------------------------------------------
 
-// function get_multiplewordsactions_selectoptions()
-// {
-// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="test">Test Marked Terms</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="spl1">Increase Status by 1 [+1]</option>";
-// 	r += "<option value="smi1">Reduce Status by 1 [-1]</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += get_set_status_option(1);
-// 	r += get_set_status_option(5);
-// 	r += get_set_status_option(99);
-// 	r += get_set_status_option(98);
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="today">Set Status Date to Today</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="lower">Set Marked Terms to Lowercase</option>";
-// 	r += "<option value="cap">Capitalize Marked Terms</option>";
-// 	r += "<option value="delsent">Delete Sentences of Marked Terms</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="addtag">Add Tag</option>";
-// 	r += "<option value="deltag">Remove Tag</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="exp">Export Marked Terms (Anki)</option>";
-// 	r += "<option value="exp2">Export Marked Terms (TSV)</option>";
-// 	r += "<option value="exp3">Export Marked Terms (Flexible)</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="del">Delete Marked Terms</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_allwordsactions_selectoptions()
-// {
-// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="testall">Test ALL Terms</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="spl1all">Increase Status by 1 [+1]</option>";
-// 	r += "<option value="smi1all">Reduce Status by 1 [-1]</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += get_set_status_option(1, "all");
-// 	r += get_set_status_option(5, "all");
-// 	r += get_set_status_option(99, "all");
-// 	r += get_set_status_option(98, "all");
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="todayall">Set Status Date to Today</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="lowerall">Set ALL Terms to Lowercase</option>";
-// 	r += "<option value="capall">Capitalize ALL Terms</option>";
-// 	r += "<option value="delsentall">Delete Sentences of ALL Terms</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="addtagall">Add Tag</option>";
-// 	r += "<option value="deltagall">Remove Tag</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="expall">Export ALL Terms (Anki)</option>";
-// 	r += "<option value="expall2">Export ALL Terms (TSV)</option>";
-// 	r += "<option value="expall3">Export ALL Terms (Flexible)</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="delall">Delete ALL Terms</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_multipletextactions_selectoptions()
-// {
-// 	r = "<option value="\" selected=\"selected">[Choose...]</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="test">Test Marked Texts</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="addtag">Add Tag</option>";
-// 	r += "<option value="deltag">Remove Tag</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="rebuild">Reparse Texts</option>";
-// 	r += "<option value="setsent">Set Term Sentences</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="arch">Archive Marked Texts</option>";
-// 	r += "<option disabled="disabled">------------</option>";
-// 	r += "<option value="del">Delete Marked Texts</option>";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // function get_texts_selectoptions(lang, v)
 // {
 // 	global tbpref;
@@ -1422,45 +1292,6 @@ export function remove_spaces(s: string, remove: Language['LgRemoveSpaces']) {
 // 	}
 // 	mysqli_free_result(res);
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function makePager(currentpage, pages, script, formname, inst)
-// {
-// 	if (currentpage > 1) {
-// 		?>
-// 		&nbsp; &nbsp;<a href="<?php echo script; ?>?page=1"><img src="icn/control-stop-180.png" title="First Page" alt="First Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage - 1; ?>"><img  src="icn/control-180.png" title="Previous Page" alt="Previous Page" /></a>&nbsp;
-// 	<?php
-// 	} else {
-// 		?>
-// 		&nbsp; &nbsp;<img src="icn/placeholder.png" alt="-" />&nbsp;
-// 		<img src="icn/placeholder.png" alt="-" />&nbsp;
-// 	<?php
-// 	}
-// 	?>
-// 	Page
-// 	<?php
-// 	if (pages === 1)
-// 		echo '1';
-// 	else {
-// 		?>
-// 		<select name="page<?php echo inst; ?>" onchange="{val=document.<?php echo formname; ?>.page<?php echo inst; ?>.options[document.<?php echo formname; ?>.page<?php echo inst; ?>.selectedIndex].value; location.href='<?php echo script; ?>?page=' + val;}"><?php echo get_paging_selectoptions(currentpage, pages); ?></select>
-// 	<?php
-// 	}
-// 	echo ' of ' . pages . '&nbsp; ';
-// 	if (currentpage < pages) {
-// 		?>
-// 		<a href="<?php echo script; ?>?page=<?php echo currentpage + 1; ?>"><img src="icn/control.png" title="Next Page" alt="Next Page" /></a>&nbsp;
-// 		<a href="<?php echo script; ?>?page=<?php echo pages; ?>"><img src="icn/control-stop.png" title="Last Page" alt="Last Page" /></a>&nbsp; &nbsp;
-// 	<?php
-// 	} else {
-// 		?>
-// 		<img src="icn/placeholder.png" alt="-" />&nbsp;
-// 		<img src="icn/placeholder.png" alt="-" />&nbsp; &nbsp;
-// 	<?php
-// 	}
 // }
 
 // // -------------------------------------------------------------
@@ -1583,34 +1414,6 @@ function makeStatusClassFilterHelper(status, array) {
 
 // // -------------------------------------------------------------
 
-// function makeDictLinks(lang, wordctljs)
-// {
-// 	global tbpref;
-// 	sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . tbpref . 'languages where LgID = ' . lang;
-// 	res = do_mysqli_query(sql);
-// 	record = mysqli_fetch_assoc(res);
-// 	wb1 = isset(record['LgDict1URI']) ? record['LgDict1URI'] : "";
-// 	if (substr(wb1, 0, 1) === '*')
-// 		wb1 = substr(wb1, 1);
-// 	wb2 = isset(record['LgDict2URI']) ? record['LgDict2URI'] : "";
-// 	if (substr(wb2, 0, 1) === '*')
-// 		wb2 = substr(wb2, 1);
-// 	wb3 = isset(record['LgGoogleTranslateURI']) ? record['LgGoogleTranslateURI'] : "";
-// 	if (substr(wb3, 0, 1) === '*')
-// 		wb3 = substr(wb3, 1);
-// 	mysqli_free_result(res);
-// 	r = '<span class="smaller">';
-// 	r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb1) . ',' . wordctljs . ');">[1]</span> ';
-// 	if (wb2 !== "")
-// 		r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb2) . ',' . wordctljs . ');">[2]</span> ';
-// 	if (wb3 !== "")
-// 		r += '<span class="click" onClick="translateWord3(' . prepare_textdata_js(wb3) . ',' . wordctljs . ');">[G]</span>';
-// 	r += '</span>';
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 function ord(str: string) {
   return str.charCodeAt(0);
 }
@@ -1657,157 +1460,6 @@ export function strToClassName(string: string) {
   return r;
 }
 
-// // -------------------------------------------------------------
-
-// function anki_export(sql)
-// {
-// 	// WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, WoSentence, taglist
-// 	res = do_mysqli_query(sql);
-// 	x = '';
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		rtlScript = record['LgRightToLeft'];
-// 		span1 = (rtlScript ? '<span dir="rtl">' : '');
-// 		span2 = (rtlScript ? '</span>' : '');
-// 		lpar = (rtlScript ? ']' : '[');
-// 		rpar = (rtlScript ? '[' : ']');
-// 		sent = tohtml(replaceTabsWithNewLine(record["WoSentence"]));
-// 		sent1 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">' . lpar, str_replace(
-// 			"}", rpar . '</span>',
-// 			mask_term_in_sentence(sent, record["LgRegexpWordCharacters"])
-// 		)
-// 		);
-// 		sent2 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">', str_replace("}", '</span>', sent));
-// 		x += span1 . tohtml(replaceTabsWithNewLine(record["WoText"])) . span2 . "\t" .
-// 			tohtml(replaceTabsWithNewLine(record["WoTranslation"])) . "\t" .
-// 			tohtml(replaceTabsWithNewLine(record["WoRomanization"])) . "\t" .
-// 			span1 . sent1 . span2 . "\t" .
-// 			span1 . sent2 . span2 . "\t" .
-// 			tohtml(replaceTabsWithNewLine(record["LgName"])) . "\t" .
-// 			tohtml(record["WoID"]) . "\t" .
-// 			tohtml(record["taglist"]) .
-// 			"\r\n";
-// 	}
-// 	mysqli_free_result(res);
-// 	header('Content-type: text/plain; charset=utf-8');
-// 	header("Content-disposition: attachment; filename=lwt_anki_export_" . date('Y-m-d-H-i-s') . ".txt");
-// 	echo x;
-// 	exit();
-// }
-
-// // -------------------------------------------------------------
-
-// function tsv_export(sql)
-// {
-// 	// WoID, LgName, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, taglist
-// 	res = do_mysqli_query(sql);
-// 	x = '';
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		x += replaceTabsWithNewLine(record["WoText"]) . "\t" .
-// 			replaceTabsWithNewLine(record["WoTranslation"]) . "\t" .
-// 			replaceTabsWithNewLine(record["WoSentence"]) . "\t" .
-// 			replaceTabsWithNewLine(record["WoRomanization"]) . "\t" .
-// 			record["WoStatus"] . "\t" .
-// 			replaceTabsWithNewLine(record["LgName"]) . "\t" .
-// 			record["WoID"] . "\t" .
-// 			record["taglist"] . "\r\n";
-// 	}
-// 	mysqli_free_result(res);
-// 	header('Content-type: text/plain; charset=utf-8');
-// 	header("Content-disposition: attachment; filename=lwt_tsv_export_" . date('Y-m-d-H-i-s') . ".txt");
-// 	echo x;
-// 	exit();
-// }
-
-// // -------------------------------------------------------------
-
-// function flexible_export(sql)
-// {
-// 	// WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTextLC, WoTranslation, WoRomanization, WoSentence, WoStatus, taglist
-// 	res = do_mysqli_query(sql);
-// 	x = '';
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		if (isset(record['LgExportTemplate'])) {
-// 			woid = record['WoID'] + 0;
-// 			langname = replaceTabsWithNewLine(record['LgName']);
-// 			rtlScript = record['LgRightToLeft'];
-// 			span1 = (rtlScript ? '<span dir="rtl">' : '');
-// 			span2 = (rtlScript ? '</span>' : '');
-// 			term = replaceTabsWithNewLine(record['WoText']);
-// 			term_lc = replaceTabsWithNewLine(record['WoTextLC']);
-// 			transl = replaceTabsWithNewLine(record['WoTranslation']);
-// 			rom = replaceTabsWithNewLine(record['WoRomanization']);
-// 			sent_raw = replaceTabsWithNewLine(record['WoSentence']);
-// 			sent = str_replace('{', '', str_replace('}', '', sent_raw));
-// 			sent_c = mask_term_in_sentence_v2(sent_raw);
-// 			sent_d = str_replace('{', '[', str_replace('}', ']', sent_raw));
-// 			sent_x = str_replace('{', '{{c1::', str_replace('}', '}}', sent_raw));
-// 			sent_y = str_replace('{', '{{c1::', str_replace('}', '::' . transl . '}}', sent_raw));
-// 			status = record['WoStatus'] + 0;
-// 			taglist = trim(record['taglist']);
-// 			xx = replaceTabsWithNewLine(record['LgExportTemplate']);
-// 			xx = str_replace('%w', term, xx);
-// 			xx = str_replace('%t', transl, xx);
-// 			xx = str_replace('%s', sent, xx);
-// 			xx = str_replace('%c', sent_c, xx);
-// 			xx = str_replace('%d', sent_d, xx);
-// 			xx = str_replace('%r', rom, xx);
-// 			xx = str_replace('%a', status, xx);
-// 			xx = str_replace('%k', term_lc, xx);
-// 			xx = str_replace('%z', taglist, xx);
-// 			xx = str_replace('%l', langname, xx);
-// 			xx = str_replace('%n', woid, xx);
-// 			xx = str_replace('%%', '%', xx);
-// 			xx = str_replace('w', span1 . tohtml(term) . span2, xx);
-// 			xx = str_replace('t', tohtml(transl), xx);
-// 			xx = str_replace('s', span1 . tohtml(sent) . span2, xx);
-// 			xx = str_replace('c', span1 . tohtml(sent_c) . span2, xx);
-// 			xx = str_replace('d', span1 . tohtml(sent_d) . span2, xx);
-// 			xx = str_replace('x', span1 . tohtml(sent_x) . span2, xx);
-// 			xx = str_replace('y', span1 . tohtml(sent_y) . span2, xx);
-// 			xx = str_replace('r', tohtml(rom), xx);
-// 			xx = str_replace('k', span1 . tohtml(term_lc) . span2, xx);
-// 			xx = str_replace('z', tohtml(taglist), xx);
-// 			xx = str_replace('l', tohtml(langname), xx);
-// 			xx = str_replace('$$', '$', xx);
-// 			xx = str_replace('\\t', "\t", xx);
-// 			xx = str_replace('\\n', "\n", xx);
-// 			xx = str_replace('\\r', "\r", xx);
-// 			xx = str_replace('\\\\', '\\', xx);
-// 			x += xx;
-// 		}
-// 	}
-// 	mysqli_free_result(res);
-// 	header('Content-type: text/plain; charset=utf-8');
-// 	header("Content-disposition: attachment; filename=lwt_flexible_export_" . date('Y-m-d-H-i-s') . ".txt");
-// 	echo x;
-// 	exit();
-// }
-
-// // -------------------------------------------------------------
-
-// function mask_term_in_sentence_v2(s)
-// {
-// 	l = mb_strlen(s, 'utf-8');
-// 	r = '';
-// 	on = 0;
-// 	for (i = 0; i < l; i++) {
-// 		c = mb_substr(s, i, 1, 'UTF-8');
-// 		if (c === '}') {
-// 			on = 0;
-// 			continue;
-// 		}
-// 		if (c === '{') {
-// 			on = 1;
-// 			r += '[...]';
-// 			continue;
-// 		}
-// 		if (on === 0) {
-// 			r += c;
-// 		}
-// 	}
-// 	return r;
-// }
-
 // -------------------------------------------------------------
 
 export function replaceTabsWithNewLine(s: string) {
@@ -1815,32 +1467,6 @@ export function replaceTabsWithNewLine(s: string) {
     .reduce((prev, curr) => prev.replace(curr, ' '), s)
     .trim();
 }
-
-// // -------------------------------------------------------------
-
-// function mask_term_in_sentence(s, regexword)
-// {
-// 	l = mb_strlen(s, 'utf-8');
-// 	r = '';
-// 	on = 0;
-// 	for (i = 0; i < l; i++) {
-// 		c = mb_substr(s, i, 1, 'UTF-8');
-// 		if (c === '}')
-// 			on = 0;
-// 		if (on) {
-// 			if (preg_match('/[' . regexword . ']/u', c)) {
-// 				r += '•';
-// 			} else {
-// 				r += c;
-// 			}
-// 		} else {
-// 			r += c;
-// 		}
-// 		if (c === '{')
-// 			on = 1;
-// 	}
-// 	return r;
-// }
 
 // // -------------------------------------------------------------
 
@@ -1958,39 +1584,6 @@ export function replaceTabsWithNewLine(s: string) {
 // 	mysqli_free_result(res);
 // 	r += '</p>';
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function AreUnknownWordsInSentence(sentno)
-// {
-// 	global tbpref;
-// 	x = get_first_value("SELECT distinct ifnull(WoTextLC,'') as value FROM (" . tbpref . "textitems left join " . tbpref . "words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiSeID = " . sentno . " AND TiWordCount = 1 AND TiIsNotWord = 0 order by WoTextLC asc limit 1");
-// 	// echo sentno . '/' . isset(x) . '/' . x . '/';
-// 	if (isset(x)) {
-// 		if (x === '')
-// 			return true;
-// 	}
-// 	return false;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_statuses()
-// {
-// 	static statuses;
-// 	if (!statuses) {
-// 		statuses = array(
-// 			1 => array("abbr" => "1", "name" => "Learning"),
-// 			2 => array("abbr" => "2", "name" => "Learning"),
-// 			3 => array("abbr" => "3", "name" => "Learning"),
-// 			4 => array("abbr" => "4", "name" => "Learning"),
-// 			5 => array("abbr" => "5", "name" => "Learned"),
-// 			99 => array("abbr" => "WKn", "name" => "Well Known"),
-// 			98 => array("abbr" => "Ign", "name" => "Ignored"),
-// 		);
-// 	}
-// 	return statuses;
 // }
 
 // // -------------------------------------------------------------
@@ -2831,7 +2424,7 @@ export function allActionGo({
   onExport: () => void;
   onClear: () => void;
   onAddTag: (tagStr: string) => void;
-  onSetCapitalization: (upperCase: boolean) => void;
+  onSetCapitalization: SetBoolHandler;
   onSetStrength: (strength: NumericalStrength) => void;
 }) {
   if (sel !== undefined) {
@@ -3251,4 +2844,18 @@ export function getsqlscoreformula(
       2.4) /
     0.14325248;
   return score;
+}
+export function AreUnknownWordsInSentence(
+  sentno: SentencesID,
+  textItems: TextItem[],
+  words: Word[]
+) {
+  const numTextItemsForThisSentence = textItems.filter(
+    (item) =>
+      item.TiSeID === sentno &&
+      item.TiWordCount === 1 &&
+      item.TiIsNotWord === 0 &&
+      words.find((word) => word.WoTextLC === item.TiTextLC) === undefined
+  ).length;
+  return numTextItemsForThisSentence === 0;
 }

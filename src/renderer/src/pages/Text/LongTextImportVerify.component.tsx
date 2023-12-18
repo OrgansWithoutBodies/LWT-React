@@ -3,7 +3,6 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { AddNewTextType } from '../../utils/parseMySqlDump';
 import { byteSizeOfString } from '../../utils/utils';
-import { resetDirty } from '../Sorting';
 
 export function LongTextVerify({
   verifying,
@@ -13,9 +12,7 @@ export function LongTextVerify({
   onCancelVerify: () => void;
 }): JSX.Element {
   const navigate = useInternalNavigate();
-  // TODO
-  // useDirtyForm()
-  console.log('TEST123-longtext', verifying);
+
   return (
     <>
       <Header title="Long Text Import" />
@@ -47,7 +44,6 @@ export function LongTextVerify({
                   type="button"
                   value="Cancel"
                   onClick={() => {
-                    resetDirty();
                     navigate('/');
                   }}
                 />
@@ -56,7 +52,6 @@ export function LongTextVerify({
                   type="button"
                   value="Go Back"
                   onClick={() => {
-                    resetDirty();
                     onCancelVerify();
                   }}
                 />

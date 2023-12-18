@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import * as ss from 'superstruct';
 import { ObjectSchema } from 'superstruct/dist/utils';
+import { SetBoolHandler } from '../pages/IO/CheckForm';
 
 export function Form<TSchema extends ObjectSchema>({
   validator,
@@ -52,7 +53,7 @@ export const binaryMap = (val: '0' | '1') => val === '0';
 function CheckErrors<TForm extends {}>(
   keyChanged: keyof TForm,
   refMap: TRefMap<TForm>,
-  setFieldError: (val: boolean) => void,
+  setFieldError: SetBoolHandler,
   validator: ss.Struct<Record<keyof TForm, any>>
 ) {
   const error = ss
@@ -142,7 +143,7 @@ export function CheckAndSubmit<TForm>(
         ),
       ])
   );
-  console.log(values);
+  console.log('TEST123-CHECKSUBMIT', values);
 
   const [validationErrors, postValidationObj] = ss
     .omit(validator, [omit])
