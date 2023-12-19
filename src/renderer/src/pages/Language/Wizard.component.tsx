@@ -1,6 +1,12 @@
 import React, { useRef } from 'react';
-import { LANGS } from '../../data/wizardData';
+import {
+  AvailableLangs,
+  LangKey,
+  WizardData,
+} from '../../../../../data/wizard/wizard.data';
+import { LangDef } from '../../data/wizardData';
 import { Icon } from '../../ui-kit/Icon';
+import { Language } from '../../utils/parseMySqlDump';
 
 /**
  *
@@ -12,7 +18,7 @@ function wizard_go(
   // TODO these can be moved to a validator
   refL1: React.MutableRefObject<HTMLSelectElement | undefined>,
   refL2: React.MutableRefObject<HTMLSelectElement | undefined>,
-  onSuccess: (l1: string, l2: string) => void
+  onSuccess: (l1: LangKey, l2: LangKey) => void
 ) {
   const l1 = refL1.current?.value;
   const l2 = refL2.current?.value;
@@ -40,7 +46,10 @@ export default function NewLanguageWizard({
   onSuccess,
   onExit,
 }: {
-  onSuccess: (l1: string, l2: string) => void;
+  onSuccess: (
+    l1: LangDef & Pick<Language, 'LgName'>,
+    l2: LangDef & Pick<Language, 'LgName'>
+  ) => void;
   onExit: () => void;
 }): JSX.Element {
   const refL1 =
@@ -61,7 +70,7 @@ export default function NewLanguageWizard({
         L1:
         <select ref={refL1} name="l1" id="l1">
           <option value="">[Choose...]</option>
-          {LANGS.map((lang) => (
+          {AvailableLangs.map((lang) => (
             <option value={lang}>{lang}</option>
           ))}
         </select>
@@ -75,7 +84,7 @@ export default function NewLanguageWizard({
           <option value="" selected>
             [Choose...]
           </option>
-          {LANGS.map((lang) => (
+          {AvailableLangs.map((lang) => (
             <option value={lang}>{lang}</option>
           ))}
         </select>
@@ -86,7 +95,14 @@ export default function NewLanguageWizard({
           type="button"
           style={{ fontSize: '1.1em' }}
           value="Set Language Settings"
-          onClick={() => wizard_go(refL1, refL2, onSuccess)}
+          onClick={() =>
+            wizard_go(refL1, refL2, (l1, l2) =>
+              onSuccess(
+                { LgName: l1, ...WizardData[l1] },
+                { LgName: l2, ...WizardData[l2] }
+              )
+            )
+          }
         />
       </p>
 

@@ -38,20 +38,20 @@ export function DisplayTags({
   sorting?: TagSorting;
   currentPage: number;
 }): JSX.Element {
-  const [{ tags, settings, wordtags }] = useData([
-    'wordtags',
+  const [{ tags, settings, wordTagHashmapByTag }] = useData([
     'tags',
     'settings',
+    'wordTagHashmapByTag',
   ]);
   const navigate = useInternalNavigate();
   console.log('TEST123-sorting', sorting, tags);
   const recno = tags.length;
-  const countPerTag: Record<TagsID, number> = wordtags.reduce(
-    (prev, curr) => ({ ...prev, [curr.WtTgID]: prev[curr.WtTgID] + 1 }),
-    Object.fromEntries(tags.map((val) => [val.TgID, 0]))
-  );
+
   const sortedTags = tags
-    .map((tag) => ({ ...tag, termCount: countPerTag[tag.TgID] }))
+    .map((tag) => ({
+      ...tag,
+      termCount: (wordTagHashmapByTag || {})[tag.TgID],
+    }))
     .sort(sortValues(sorting));
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
@@ -210,8 +210,8 @@ export function DisplayTags({
               </SortableHeader>
               <SortableHeader
                 sorting={sorting}
-                downSorting={TagSorting['Term Count']}
-                upSorting={TagSorting['Term Count (desc)']}
+                upSorting={TagSorting['Term Count']}
+                downSorting={TagSorting['Term Count (desc)']}
               >
                 Terms With Tag{' '}
               </SortableHeader>
@@ -295,16 +295,16 @@ function sortValues(value: TagSorting) {
         a.TgID < b.TgID ? 1 : -1;
     case TagSorting['Tag Text A-Z']:
       return (a: WordTagDetailRow, b: WordTagDetailRow) =>
-        a.TgText < b.TgText ? 1 : -1;
+        a.TgText < b.TgText ? -1 : 1;
     case TagSorting['Tag Comment A-Z']:
       return (a: WordTagDetailRow, b: WordTagDetailRow) =>
-        (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
+        (a.TgComment || '') < (b.TgComment || '') ? -1 : 1;
     case TagSorting['Tag Text Z-A']:
       return (a: WordTagDetailRow, b: WordTagDetailRow) =>
-        a.TgText < b.TgText ? -1 : 1;
+        a.TgText < b.TgText ? 1 : -1;
     case TagSorting['Tag Comment Z-A']:
       return (a: WordTagDetailRow, b: WordTagDetailRow) =>
-        (a.TgComment || '') < (b.TgComment || '') ? -1 : 1;
+        (a.TgComment || '') < (b.TgComment || '') ? 1 : -1;
     case TagSorting['Term Count (desc)']:
       return (a: WordTagDetailRow, b: WordTagDetailRow) =>
         a.termCount < b.termCount ? 1 : -1;

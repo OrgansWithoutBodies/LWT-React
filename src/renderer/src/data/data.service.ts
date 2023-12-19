@@ -12,6 +12,7 @@ import {
   dataStore,
 } from './data.storage';
 
+import { SuppportedI18NLanguages } from '../../../i18n/strings';
 import { TatoebaOpenAPIWrapper } from '../plugins/TatoebaAPI';
 import { serializeJsonToSQL } from '../utils/exports/serializeJsonToSQL';
 import type {
@@ -1008,6 +1009,11 @@ export class DataService {
   public setActiveText(textID: TextsID | null) {
     this.setSettings({
       currenttext: textID === null ? undefined : textID,
+    });
+  }
+  public setUILanguage(uiLanguage: SuppportedI18NLanguages) {
+    this.setSettings({
+      uilanguage: uiLanguage,
     });
   }
 

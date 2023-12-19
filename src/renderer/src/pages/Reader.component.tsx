@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../ui-kit/Tooltip';
-import { getDirTag } from '../ui-kit/getDirTag';
+import { getDirTag } from '../utils/getDirTag';
 import { Language, Text, TextItem, Word } from '../utils/parseMySqlDump';
 import { strToClassName } from '../utils/utils';
 import { EditWordParams } from './OverlibComponents';

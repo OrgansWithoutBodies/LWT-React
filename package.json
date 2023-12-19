@@ -27,7 +27,8 @@
     "deps": "npx depcruise src --include-only '^src' --output-type dot | dot -T svg > dependency-graph.svg",
     "start": "webpack-dev-server --mode development",
     "generateTypeSchemas": "npx openapi-typescript src/shared/apis/src/** --output src/shared/apis/out/",
-    "mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js"
+    "mapIcons": "rm src/icons/index.ts && npx tsc cli/createIconMap.ts && node cli/createIconMap.js",
+    "getWizardData": "npx tsc cli/createWizardData.ts && node cli/createWizardData.js"
   },
   "author": "v",
   "license": "ISC",

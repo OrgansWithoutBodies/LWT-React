@@ -53,6 +53,16 @@ export const enum TagSorting {
   'Term Count' = 13,
   'Term Count (desc)' = 14,
 } // sorts = array('WoTextLC', 'lower(WoTranslation)', 'WoID desc', 'WoStatus, WoTextLC', 'WoTodayScore', 'textswordcount desc, WoTextLC asc', 'WoID');
+export const enum LanguageSorting {
+  'Language A-Z' = 1,
+  'Language Z-A' = 2,
+  'Num Texts' = 3,
+  'Num Texts (desc)' = 4,
+  'Num Terms' = 5,
+  'Num Terms (desc)' = 6,
+  'Num Archived Texts' = 7,
+  'Num Archived Texts (desc)' = 8,
+}
 
 export const sortingMethod = (
   sort: WordSorting
@@ -120,7 +130,7 @@ export function buildSortByOldest<
     Date.parse(a) > Date.parse(b) ? 1 : Date.parse(a) < Date.parse(b) ? -1 : 0;
 }
 /**
- *
+ * TODO ugly
  * @param key
  * @param asc
  */

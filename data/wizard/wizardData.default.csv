@@ -1,0 +1,40 @@
+LgName,LgGlosbeKey,LgGTransKey,LgTextSize,LgRegexpWordCharacters,LgRegexpSplitSentences,LgSplitEachChar,LgRemoveSpaces,LgRightToLeft
+Afrikaans,af,af,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Arabic,ar,ar,200,\x{0600}-\x{061A}\x{0620}-\x{06FF}\x{0750}-\x{077F}\x{FB50}-\x{FDFF}\x{FE70}-\x{FEFF},.!?:;\x{061B}\x{061F},FALSE,FALSE,TRUE
+Belarusian,be,be,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Bulgarian,bg,bg,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Catalan,ca,ca,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Chinese (Simplified),zh,zh-CN,200,\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF},.!?:;。！？：；,TRUE,TRUE,FALSE
+Chinese (Traditional),zh,zh-TW,200,\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{3100}-\x{312F},.!?:;。！？：；,TRUE,TRUE,FALSE
+Croatian,hr,hr,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Czech,cs,cs,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Danish,da,da,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Dutch,nl,nl,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+English,en,en,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Esperanto,eo,eo,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Estonian,et,et,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Finnish,fi,fi,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+French,fr,fr,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+German,de,de,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Greek (Modern),el,el,150,\x{0370}-\x{03FF}\x{1F00}-\x{1FFF},.!?:;,FALSE,FALSE,FALSE
+Hebrew,he,iw,200,\x{0590}-\x{05FF},.!?:;,FALSE,FALSE,TRUE
+Hungarian,hu,hu,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Italian,it,it,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Japanese,ja,ja,200,\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{3040}-\x{30FF}\x{31F0}-\x{31FF},.!?:;。！？：；,TRUE,TRUE,FALSE
+Korean,ko,ko,200,\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{1100}-\x{11FF}\x{3130}-\x{318F}\x{AC00}-\x{D7A0},.!?:;。！？：；,FALSE,FALSE,FALSE
+Latin,la,la,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Latvian,lv,lv,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Lithuanian,lt,lt,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Macedonian,mk,mk,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Norwegian Bokmål,nb,no,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Polish,pl,pl,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Portuguese,pt,pt,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Romanian,ro,ro,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Russian,ru,ru,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Serbian,sr,sr,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Slovak,sk,sk,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Spanish,es,es,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Swedish,sv,sv,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Thai,th,th,200,\x{0E00}-\x{0E7F},.!?:;,FALSE,FALSE,FALSE
+Turkish,tr,tr,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE
+Ukrainian,uk,uk,150,a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ,.!?:;,FALSE,FALSE,FALSE

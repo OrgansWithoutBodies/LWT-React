@@ -4,7 +4,7 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
-import { getDirTag } from '../../ui-kit/getDirTag';
+import { getDirTag } from '../../utils/getDirTag';
 import { AnnPlcmnt } from './PrintText.component';
 /**
  *

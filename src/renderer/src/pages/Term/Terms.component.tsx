@@ -31,8 +31,8 @@ import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
 import { WordTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
-import { getDirTag } from '../../ui-kit/getDirTag';
 import { filterTags } from '../../utils/filterTags';
+import { getDirTag } from '../../utils/getDirTag';
 import { AddNewWordValidator, Word } from '../../utils/parseMySqlDump';
 import { DateDiff } from '../../utils/time';
 import { allActionGo, confirmDelete } from '../../utils/utils';
@@ -407,13 +407,13 @@ function TermRow({
         <td className="td1 center">{foundLanguage?.LgName}</td>
       )}
       <td className="td1">
-        <span>{word.WoText}</span> /
+        <span>{word.WoText}</span> /{' '}
         <span
           id={`roman${termID}`}
           className="edit_area clickedit"
-          // TODO RTL somewhere here
           title="Click to edit..."
         >
+          {/* TODO click to edit */}
           {word.WoRomanization}
         </span>
       </td>
@@ -423,6 +423,7 @@ function TermRow({
           className="edit_area clickedit"
           title="Click to edit..."
         >
+          {/* TODO click to edit */}
           {word.WoTranslation}
         </span>{' '}
         {tags.length > 0 && (

@@ -5,7 +5,6 @@ import { dataService } from '../../data/data.service';
 import { languageNoIDPreValidateMap } from '../../data/preValidateMaps';
 import { TextSize } from '../../data/type';
 import { LanguageValidatorNoID } from '../../data/validators';
-import { LANGDEFS } from '../../data/wizardData';
 import { TRefMap } from '../../forms/Forms';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useInternalNavigate } from '../../hooks/useInternalNav';
@@ -312,12 +311,10 @@ export function NewLanguage() {
         className="center"
       >
         <NewLanguageWizard
-          onSuccess={(l1, l2) => {
-            const originSpec = LANGDEFS[l1 as keyof typeof LANGDEFS];
-            const targetSpec = LANGDEFS[l2 as keyof typeof LANGDEFS];
-            console.log('TEST123', { refMap });
+          onSuccess={(originSpec, targetSpec) => {
+            const l2 = targetSpec.LgName;
             refMap.LgName.current.value = l2;
-            console.log(refMap.LgName.current.value, l1, l2);
+            // TODO handle if not given glosbekey
             refMap.LgDict1URI.current.value = `*https://de.glosbe.com/${targetSpec.LgGlosbeKey}/${originSpec.LgGlosbeKey}/###`;
             refMap.LgGoogleTranslateURI.current.value = `*http://translate.google.com/?ie=UTF-8&sl=${targetSpec.LgGTransKey}&tl=${originSpec.LgGTransKey}&text=###`;
             refMap.LgTextSize.current.value = targetSpec.LgTextSize;

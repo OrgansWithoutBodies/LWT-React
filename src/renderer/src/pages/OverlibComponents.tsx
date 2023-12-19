@@ -2,7 +2,7 @@ import { WordsID } from '../data/validators';
 import { A } from '../nav/InternalLink';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { Icon } from '../ui-kit/Icon';
-import { getDirTag } from '../ui-kit/getDirTag';
+import { getDirTag } from '../utils/getDirTag';
 import { Language, Text, TextItem, Word } from '../utils/parseMySqlDump';
 import { confirmDelete } from '../utils/utils';
 import { NumericalStrength, getStatusAbbr, getStatusName } from './StrengthMap';

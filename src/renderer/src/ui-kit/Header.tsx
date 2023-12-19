@@ -1,5 +1,9 @@
 import { useLocation } from 'react-router-dom';
+import { I18N, useI18N } from '../../../i18n/I18N';
+import { I18NLanguages, UIString } from '../../../i18n/strings';
+import { dataService } from '../data/data.service';
 import { LanguagesID, TextsID } from '../data/validators';
+import { useData } from '../hooks/useData';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
@@ -14,7 +18,7 @@ export function Header({
   TitleDecoration: TitleDecoration,
   readerProps = undefined,
 }: {
-  title: string;
+  title: UIString;
   TitleDecoration?: () => JSX.Element;
   link?: InternalPaths;
   readerProps?: {
@@ -31,6 +35,9 @@ export function Header({
   const logoSize = 48;
   const navigate = useInternalNavigate();
   const location = useLocation();
+  const t = useI18N();
+
+  const [{ settings }] = useData(['settings']);
   return (
     <>
       <h4>
@@ -63,7 +70,7 @@ export function Header({
               value={headerValues[key]}
               selected={location.pathname === `/${headerValues[key]}`}
             >
-              {key}
+              {t(key)}
             </option>
           ))}
         </select>
@@ -108,7 +115,7 @@ export function Header({
         <tbody>
           <tr>
             <h3>
-              {title}
+              {t(title)}
               {AppVariables.devMode && (
                 <>
                   {' '}
@@ -120,6 +127,16 @@ export function Header({
           </tr>
         </tbody>
       </table>
+      <I18N i="UI Language" />:{' '}
+      <select
+        onChange={({ target: { value } }) => dataService.setUILanguage(value)}
+      >
+        {I18NLanguages.map((lang) => (
+          <option value={lang} selected={settings.uilanguage === lang}>
+            {lang}
+          </option>
+        ))}
+      </select>
       {/* <h3>READ&nbsp;▶</h3></td><td className="width99pc"><h3>一中三宪 <A href="https://zh.wikipedia.org/wiki/%E4%B8%80%E4%B8%AD%E4%B8%89%E6%86%B2" target="_blank"><Icon iconName="chain" title="Text Source" /></A></h3> */}
     </>
   );

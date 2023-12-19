@@ -453,6 +453,10 @@ export function EditTextTag({ chgID }: { chgID: number }) {
   );
 }
 
+export const sortAZ = (a: string, b: string) => (a < b ? 1 : -1);
+export const sortZA = (a: string, b: string) => sortAZ(a, b) * -1;
+export const sortSmallBig = (a: number, b: number) => (a < b ? 1 : -1);
+export const sortBigSmall = (a: number, b: number) => sortSmallBig(a, b) * -1;
 /**
  *
  * @param value
@@ -467,24 +471,30 @@ function sortValues(value: TagSorting) {
         a.T2ID < b.T2ID ? 1 : -1;
     case TagSorting['Tag Text A-Z']:
       return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        a.T2Text < b.T2Text ? 1 : -1;
+        sortAZ(a.T2Text, b.T2Text);
     case TagSorting['Tag Text Z-A']:
       return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        a.T2Text < b.T2Text ? -1 : 1;
+        sortZA(a.T2Text, b.T2Text);
     case TagSorting['Tag Comment A-Z']:
       return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        (a.T2Comment || '') < (b.T2Comment || '') ? 1 : -1;
+        sortAZ(a.T2Comment || '', b.T2Comment || '');
+
     case TagSorting['Tag Comment Z-A']:
-      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        (a.T2Comment || '') < (b.T2Comment || '') ? -1 : 1;
+      return (
+        { T2Comment: a }: TextTagDetailRow,
+        { T2Comment: b }: TextTagDetailRow
+      ) => sortZA(a || '', b || '');
 
     case TagSorting['Texts With Tag']:
-      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        a.textCount > b.textCount ? 1 : -1;
+      return (
+        { textCount: a }: TextTagDetailRow,
+        { textCount: b }: TextTagDetailRow
+      ) => sortSmallBig(a, b);
     case TagSorting['Texts With Tag (desc)']:
-      return (a: TextTagDetailRow, b: TextTagDetailRow) =>
-        a.textCount > b.textCount ? -1 : 1;
-
+      return (
+        { textCount: a }: TextTagDetailRow,
+        { textCount: b }: TextTagDetailRow
+      ) => sortBigSmall(a, b);
     case TagSorting['Arch. Texts With Tag']:
       return (a: TextTagDetailRow, b: TextTagDetailRow) =>
         a.archTextCount > b.archTextCount ? 1 : -1;

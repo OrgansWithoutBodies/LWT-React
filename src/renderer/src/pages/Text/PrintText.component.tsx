@@ -10,7 +10,7 @@ import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
-import { getDirTag } from '../../ui-kit/getDirTag';
+import { getDirTag } from '../../utils/getDirTag';
 import { Language, Text, TextItem, Word } from '../../utils/parseMySqlDump';
 import { StrengthMapNumericalKey } from '../StrengthMap';
 export enum AnnPlcmnt {

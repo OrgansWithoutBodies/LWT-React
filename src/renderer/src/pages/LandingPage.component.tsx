@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+import { useI18N } from '../../../i18n/I18N';
 import { dataService } from '../data/data.service';
 import { useAppContext } from '../hooks/useContext';
 import { useData } from '../hooks/useData';
@@ -9,6 +10,7 @@ import { PersistanceStrategy } from '../persist/PersistedValueGetter.types';
 import { PLUGINS } from '../plugins';
 import { Icon } from '../ui-kit/Icon';
 import { LanguageDropdown } from '../ui-kit/LanguageDropdown';
+import { getGoogleSheets } from '../utils/parsers/getGoogleSheets';
 
 /**
  *
@@ -21,6 +23,7 @@ export function LandingPage() {
     'settings',
     'texts',
   ]);
+  const t = useI18N();
   const pluginLinks = PLUGINS.filter(
     ({ landingPageLinks }) => landingPageLinks !== undefined
   )
@@ -103,7 +106,7 @@ export function LandingPage() {
       <div>
         <div>
           <div>
-            Language:
+            {t('Language')}:{' '}
             <LanguageDropdown
               onChange={(val) => {
                 console.log(val);
@@ -134,7 +137,18 @@ export function LandingPage() {
       </div>
 
       <FooterInfo />
-      <DevModeGate></DevModeGate>
+      <DevModeGate>
+        <input
+          type="button"
+          onClick={() =>
+            getGoogleSheets({
+              spreadsheetID: '1Eh_lrLXFD5a2ePktWG1mI6B7mBGJLGTv7VlAfsn3PGo',
+              sheetID: '0',
+            })
+          }
+          value="Google Sheet"
+        />
+      </DevModeGate>
     </>
   );
 }
@@ -283,7 +297,7 @@ if (! isset(mb)) mb = '0.0';
  */
 export function DevModeGate({ children }: PropsWithChildren<object>) {
   const { devMode } = useAppContext();
-  return <>{devMode ? { children } : <></>}</>;
+  return <>{devMode ? children : <></>}</>;
 }
 /**
  *

@@ -235,7 +235,6 @@ export function EditArchivedTextsWrapper() {
     dataService.unarchiveText(Number.parseInt(unarch));
     paramUpdater(null);
   }
-  console.log('TEST123-chgid', Number.parseInt(chgID));
   return (
     <Switch on={chgID !== null}>
       <DisplayArchivedTexts

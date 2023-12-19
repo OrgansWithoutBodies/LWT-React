@@ -1,4 +1,6 @@
 import { ImgHTMLAttributes } from 'react';
+import { useI18N } from '../../../i18n/I18N';
+import { UIString } from '../../../i18n/strings';
 import { IconNameMap } from '../icons';
 
 export function Icon({
@@ -8,16 +10,17 @@ export function Icon({
   ...rest
 }: {
   src: (typeof IconNameMap)[number];
-  title?: string;
-  alt?: string;
+  title?: UIString;
+  alt?: UIString;
 } & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
   const iconURI = `icn/${iconName}.png`;
+  const t = useI18N();
   return (
     <img
       {...rest}
       src={iconURI}
       // automatically add alt text if title is specified but no alt
-      alt={alt === undefined ? title : alt}
+      alt={alt === undefined ? (title ? t(title) : '') : t(alt)}
     />
   );
 }

@@ -55,9 +55,11 @@ CODE TODOs
 
 FEATURE IDEAS
 
+- give plugins access to ui-kit
 - anki export theme
 - licensing for sentences (tatoeba)
 - generic "Language Dict" lookup to allow for N different dicts? schema of SourceLang, TargetLang, URL Template (with placeholders for source & target), and word/sentence?
+- - Make "Dictionary" into its own first class object? Then have DictionaryLanguage intermediate tables to see what languages are available for that dictionary & set values
 - - account for 'Google Translate a Sentence' - different behavior than tatoeba sentence lookup
 - default romanization schema for languages that aren't like chinese?
 - - generalize 'romanization' to 'transcription' for i18n?

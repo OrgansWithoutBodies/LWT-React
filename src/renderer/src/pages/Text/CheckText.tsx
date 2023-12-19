@@ -5,7 +5,7 @@ import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
-import { getDirTag } from '../../ui-kit/getDirTag';
+import { getDirTag } from '../../utils/getDirTag';
 import { Language } from '../../utils/parseMySqlDump';
 import {
   cleanText,

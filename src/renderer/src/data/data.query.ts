@@ -1,5 +1,6 @@
 import { Query } from '@datorama/akita';
 import { Observable, combineLatest, count, map, tap } from 'rxjs';
+import { SuppportedI18NLanguages } from '../../../i18n/strings';
 import { NumericalStrength } from '../pages/StrengthMap';
 import type { ArchivedText, Tag, Tag2, Text } from '../utils/parseMySqlDump';
 import { DataState, DataStore, dataStore } from './data.storage';
@@ -64,6 +65,10 @@ export class DataQuery extends Query<DataState> {
   }
 
   public archivedtexts = this.select('archivedtexts');
+  public archivedTextsHashmapByLanguage = DataQuery.makeCountHash(
+    this.archivedtexts,
+    'AtLgID'
+  );
 
   public archtexttags = this.select('archtexttags');
 
@@ -85,14 +90,21 @@ export class DataQuery extends Query<DataState> {
   public textitems = this.select('textitems');
 
   public texts = this.select('texts');
+  public textsHashmapByLanguage = DataQuery.makeCountHash(this.texts, 'TxLgID');
 
   public texttags = this.select('texttags');
 
   public words = this.select('words');
   public wordHashmapByID = DataQuery.makeHash(this.words, 'WoID');
   public wordHashmapByLC = DataQuery.makeHash(this.words, 'WoTextLC');
+  public wordHashmapByLanguage = DataQuery.makeCountHash(this.words, 'WoLgID');
 
   public wordtags = this.select('wordtags');
+  public wordTagHashmapByWord = DataQuery.makeCountHash(
+    this.wordtags,
+    'WtWoID'
+  );
+  public wordTagHashmapByTag = DataQuery.makeCountHash(this.wordtags, 'WtTgID');
   // TODO
   // public wordTagsHashmapByWord = DataQuery.makeHash(this.worta, 'WoTextLC');
 
@@ -149,8 +161,10 @@ export class DataQuery extends Query<DataState> {
         ? // semantically null's more meaningful here because null is an explicit state we can set
           null
         : val.currenttext
-    ),
-    tap((val) => console.log('TEST123-query-text', val))
+    )
+  );
+  public uiLanguage: Observable<SuppportedI18NLanguages> = this.settings.pipe(
+    map((val) => (val.uilanguage === undefined ? 'English' : val.uilanguage))
   );
 
   // derived observables
@@ -160,10 +174,7 @@ export class DataQuery extends Query<DataState> {
   ]).pipe(
     map(
       ([activeLanguageID, languages]) =>
-        languages.find((language) => {
-          console.log('TATOEBAKEY', language.LgTatoebaSourceKey);
-          return language.LgID === activeLanguageID;
-        }) || null
+        languages.find((language) => language.LgID === activeLanguageID) || null
     )
   );
 
@@ -318,6 +329,41 @@ export class DataQuery extends Query<DataState> {
       map((vals) =>
         Object.fromEntries(vals.map((val) => [val[key], val] as [TBrand, TObj]))
       )
+    );
+  }
+  private static makeCountHash<
+    TKey extends string,
+    TBrand extends number | string,
+    TObj extends { [key in TKey]: TBrand }
+  >(
+    observable: Observable<TObj[]>,
+    key: TKey
+  ): Observable<Record<TBrand, number>> {
+    return observable.pipe(
+      map((vals) => {
+        const hashKeys = vals.reduce((prev, curr) => {
+          const mutablePrev = prev;
+          if (!mutablePrev.has(curr[key])) {
+            mutablePrev.add(curr[key]);
+            return mutablePrev;
+          }
+          return prev;
+        }, new Set<TKey>());
+
+        console.log('TEST123-HASHTEST');
+        const hashmap = vals.reduce((prev, curr) => {
+          const mutablePrev = prev;
+          console.log('TEST123-HASHCOUNT', {
+            prev,
+            entry: curr[key],
+            curr,
+            key,
+          });
+          mutablePrev[curr[key]] = mutablePrev[curr[key]] + 1;
+          return mutablePrev;
+        }, Object.fromEntries([...hashKeys].map((key) => [key, 0])));
+        return hashmap;
+      })
     );
   }
 }

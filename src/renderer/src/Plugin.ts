@@ -33,6 +33,7 @@ export type Plugin<
   routes?: Record<TPaths, () => JSX.Element>;
   service?: Record<string, (...args: any[]) => Promise<unknown>>;
   api?: GenericRetrievalAPI<TSource, TTarget>;
+  icons?: string[];
   importMethods?: Record<string, (...args: any[]) => Promise<unknown>>;
 
   landingPageLinks?: Readonly<

@@ -1,36 +1,37 @@
+import { I18N } from '../../../../i18n/I18N';
 import { dataService } from '../../data/data.service';
 import { LanguagesID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
-import { ArchivedText, Language, Text, Word } from '../../utils/parseMySqlDump';
+import { SortableHeader } from '../../ui-kit/SortableHeader';
+import { Language } from '../../utils/parseMySqlDump';
 import { confirmDelete } from '../../utils/utils';
+import { Loader } from '../Loader';
+import { LanguageSorting } from '../Sorting';
+import {
+  sortAZ,
+  sortBigSmall,
+  sortSmallBig,
+  sortZA,
+} from '../TextTag/EditTextTags';
 
 function LanguageLine({
   language,
   activeLanguageID,
-  texts,
-  terms,
-  archivedtexts,
 }: {
-  language: Language;
+  language: TLanguageLine;
   activeLanguageID: LanguagesID | null;
-  texts: Text[];
-  terms: Word[];
-  archivedtexts: ArchivedText[];
 }): JSX.Element {
-  const id = language.LgID;
+  const {
+    LgID: id,
+
+    numTerms: numTermsThisLanguage,
+    numArchivedTexts: numArchivedThisLanguage,
+    numTexts: numTextsThisLanguage,
+  } = language;
   const thisRowActive = activeLanguageID === id;
-  const numTextsThisLanguage = texts.filter(
-    (text) => text.TxLgID === id
-  ).length;
-  const numTermsThisLanguage = terms.filter(
-    (term) => term.WoLgID === id
-  ).length;
-  const numArchivedThisLanguage = archivedtexts.filter(
-    (text) => text.AtLgID === id
-  ).length;
   /**
    *
    */
@@ -133,65 +134,140 @@ function LanguageLine({
   );
 }
 
-export function LanguagesPage(): JSX.Element {
-  const [{ languages, activeLanguageID, texts, words, archivedtexts }] =
-    useData([
-      'languages',
-      'activeLanguageID',
-      'texts',
-      'words',
-      'archivedtexts',
-    ]);
+type TLanguageLine = Pick<Language, 'LgName' | 'LgID' | 'LgExportTemplate'> & {
+  numTexts: number;
+  numTerms: number;
+  numArchivedTexts: number;
+};
+/**
+ *
+ * @param value
+ */
+function sortValues(value: LanguageSorting) {
+  switch (value) {
+    case LanguageSorting['Language A-Z']:
+      return ({ LgName: a }: TLanguageLine, { LgName: b }: TLanguageLine) =>
+        sortAZ(a, b);
+    case LanguageSorting['Language Z-A']:
+      return ({ LgName: a }: TLanguageLine, { LgName: b }: TLanguageLine) =>
+        sortZA(a, b);
+    case LanguageSorting['Num Texts']:
+      return ({ numTexts: a }: TLanguageLine, { numTexts: b }: TLanguageLine) =>
+        sortSmallBig(a, b);
+    case LanguageSorting['Num Texts (desc)']:
+      return ({ numTexts: a }: TLanguageLine, { numTexts: b }: TLanguageLine) =>
+        sortBigSmall(a, b);
+    case LanguageSorting['Num Terms']:
+      return ({ numTerms: a }: TLanguageLine, { numTerms: b }: TLanguageLine) =>
+        sortSmallBig(a, b);
+    case LanguageSorting['Num Terms (desc)']:
+      return ({ numTerms: a }: TLanguageLine, { numTerms: b }: TLanguageLine) =>
+        sortBigSmall(a, b);
+    case LanguageSorting['Num Archived Texts']:
+      return (
+        { numArchivedTexts: a }: TLanguageLine,
+        { numArchivedTexts: b }: TLanguageLine
+      ) => sortSmallBig(a, b);
+    case LanguageSorting['Num Archived Texts (desc)']:
+      return (
+        { numArchivedTexts: a }: TLanguageLine,
+        { numArchivedTexts: b }: TLanguageLine
+      ) => sortBigSmall(a, b);
+  }
+}
 
+export function LanguagesPage({
+  sorting,
+}: {
+  sorting: LanguageSorting;
+}): JSX.Element {
+  const [
+    {
+      languages,
+      activeLanguageID,
+      archivedTextsHashmapByLanguage,
+      textsHashmapByLanguage,
+      wordHashmapByLanguage,
+    },
+  ] = useData([
+    'languages',
+    'activeLanguageID',
+    'archivedTextsHashmapByLanguage',
+    'textsHashmapByLanguage',
+    'wordHashmapByLanguage',
+  ]);
+  if (
+    archivedTextsHashmapByLanguage === undefined ||
+    textsHashmapByLanguage === undefined ||
+    wordHashmapByLanguage === undefined
+  ) {
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  }
+  const languageLines: TLanguageLine[] = languages.map((val) => ({
+    ...val,
+    numArchivedTexts: archivedTextsHashmapByLanguage[val.LgID] || 0,
+    numTerms: wordHashmapByLanguage[val.LgID] || 0,
+    numTexts: textsHashmapByLanguage[val.LgID] || 0,
+  }));
+  const sortedLanguages = languageLines.sort(sortValues(sorting));
   return (
     <>
-      <Header title="My Languages" />
+      <Header title={'My Languages'} />
       <p>
         <A href={`/edit_languages?new=${1}`}>
-          <Icon src="plus-button" title="New" /> New Language ...
+          <Icon src="plus-button" title="New" /> <I18N i="New Language ..." />
         </A>
       </p>
       <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
         <thead>
           <tr>
             <th className="th1 sorttable_nosort">
-              Curr.
-              <br />
-              Lang.
+              <I18N i={'Curr.\nLang.'} />
             </th>
             <th className="th1 sorttable_nosort">
-              Test
+              <I18N i={'Test'} />
               <br />
               ↓↓↓
             </th>
-            <th className="th1 sorttable_nosort">Actions</th>
-            <th className="th1 clickable">Language</th>
-            <th className="th1 sorttable_numeric clickable">
-              Texts,
-              <br />
-              Reparse
-            </th>
-            <th className="th1 sorttable_numeric clickable">
-              Arch.
-              <br />
-              Texts
-            </th>
-            <th className="th1 sorttable_numeric clickable">Terms</th>
             <th className="th1 sorttable_nosort">
-              Export
-              <br />
-              Template?
+              <I18N i="Actions" />
+            </th>
+            <th className="th1 clickable">
+              <I18N i="Language" />
+            </th>
+            <SortableHeader
+              sorting={sorting}
+              downSorting={LanguageSorting['Num Texts (desc)']}
+              upSorting={LanguageSorting['Num Texts']}
+            >
+              <I18N i={'Texts,\nReparse'} />
+            </SortableHeader>
+            <SortableHeader
+              sorting={sorting}
+              downSorting={LanguageSorting['Num Archived Texts (desc)']}
+              upSorting={LanguageSorting['Num Archived Texts']}
+            >
+              {' '}
+              <I18N i={'Arch.\nTexts'} />
+            </SortableHeader>
+            <SortableHeader
+              sorting={sorting}
+              downSorting={LanguageSorting['Num Terms (desc)']}
+              upSorting={LanguageSorting['Num Terms']}
+            >
+              <I18N i="Terms" />
+            </SortableHeader>
+            <th className="th1 sorttable_nosort">
+              <I18N i={'Export\nTemplate?'} />
             </th>
           </tr>
         </thead>
-        {languages.map((lang) => (
-          <LanguageLine
-            texts={texts}
-            archivedtexts={archivedtexts}
-            terms={words}
-            language={lang}
-            activeLanguageID={activeLanguageID}
-          />
+        {sortedLanguages.map((lang) => (
+          <LanguageLine language={lang} activeLanguageID={activeLanguageID} />
         ))}
       </table>
     </>

@@ -1,3 +1,5 @@
+import { unparse } from 'papaparse';
+import { downloadCsvFile } from '../utils/downloadTxtFile';
 import { Language } from '../utils/parseMySqlDump';
 
 // TODO get more details from wikidata?
@@ -10,7 +12,7 @@ import { Language } from '../utils/parseMySqlDump';
 
 export type LangDef = Pick<
   Language,
-  'LgTextSize' | 'LgRegexpSplitSentences' | 'LgRegexpWordCharacters'
+  'LgTextSize' | 'LgRegexpWordCharacters' | 'LgRegexpSplitSentences'
 > & {
   LgGTransKey: string;
   LgGlosbeKey: string;
@@ -59,14 +61,15 @@ export const LANGS = [
   'Turkish',
   'Ukrainian',
 ] as const;
+export type LangKey = (typeof LANGS)[number];
 export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
   Afrikaans: {
     LgGlosbeKey: 'af',
     LgGTransKey: 'af',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -75,9 +78,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ar',
     LgGTransKey: 'ar',
     LgTextSize: 200,
-    LgRegexpSplitSentences:
+    LgRegexpWordCharacters:
       '\\x{0600}-\\x{061A}\\x{0620}-\\x{06FF}\\x{0750}-\\x{077F}\\x{FB50}-\\x{FDFF}\\x{FE70}-\\x{FEFF}',
-    LgRegexpWordCharacters: '.!?:;\\x{061B}\\x{061F}',
+    LgRegexpSplitSentences: '.!?:;\\x{061B}\\x{061F}',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: true,
@@ -86,9 +89,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'be',
     LgGTransKey: 'be',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -97,9 +100,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'bg',
     LgGTransKey: 'bg',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -108,9 +111,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ca',
     LgGTransKey: 'ca',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -121,8 +124,8 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     // LgTatoebaKey: 'cmn',
     LgGTransKey: 'zh-CN',
     LgTextSize: 200,
-    LgRegexpSplitSentences: '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}',
-    LgRegexpWordCharacters: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
+    LgRegexpWordCharacters: '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}',
+    LgRegexpSplitSentences: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
     LgSplitEachChar: true,
     LgRemoveSpaces: true,
     LgRightToLeft: false,
@@ -131,9 +134,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'zh',
     LgGTransKey: 'zh-TW',
     LgTextSize: 200,
-    LgRegexpSplitSentences:
+    LgRegexpWordCharacters:
       '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3100}-\\x{312F}',
-    LgRegexpWordCharacters: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
+    LgRegexpSplitSentences: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
     LgSplitEachChar: true,
     LgRemoveSpaces: true,
     LgRightToLeft: false,
@@ -142,9 +145,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'hr',
     LgGTransKey: 'hr',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -153,9 +156,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'cs',
     LgGTransKey: 'cs',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -164,9 +167,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'da',
     LgGTransKey: 'da',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -175,9 +178,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'nl',
     LgGTransKey: 'nl',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -186,9 +189,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'en',
     LgGTransKey: 'en',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -197,9 +200,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'eo',
     LgGTransKey: 'eo',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -208,9 +211,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'et',
     LgGTransKey: 'et',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -219,9 +222,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'fi',
     LgGTransKey: 'fi',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -230,9 +233,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'fr',
     LgGTransKey: 'fr',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -241,9 +244,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'de',
     LgGTransKey: 'de',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -252,8 +255,8 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'el',
     LgGTransKey: 'el',
     LgTextSize: 150,
-    LgRegexpSplitSentences: '\\x{0370}-\\x{03FF}\\x{1F00}-\\x{1FFF}',
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters: '\\x{0370}-\\x{03FF}\\x{1F00}-\\x{1FFF}',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -262,8 +265,8 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'he',
     LgGTransKey: 'iw',
     LgTextSize: 200,
-    LgRegexpSplitSentences: '\\x{0590}-\\x{05FF}',
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters: '\\x{0590}-\\x{05FF}',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: true,
@@ -272,9 +275,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'hu',
     LgGTransKey: 'hu',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -283,9 +286,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'it',
     LgGTransKey: 'it',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -294,9 +297,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ja',
     LgGTransKey: 'ja',
     LgTextSize: 200,
-    LgRegexpSplitSentences:
+    LgRegexpWordCharacters:
       '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{3040}-\\x{30FF}\\x{31F0}-\\x{31FF}',
-    LgRegexpWordCharacters: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
+    LgRegexpSplitSentences: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
     LgSplitEachChar: true,
     LgRemoveSpaces: true,
     LgRightToLeft: false,
@@ -305,9 +308,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ko',
     LgGTransKey: 'ko',
     LgTextSize: 200,
-    LgRegexpSplitSentences:
+    LgRegexpWordCharacters:
       '\\x{4E00}-\\x{9FFF}\\x{F900}-\\x{FAFF}\\x{1100}-\\x{11FF}\\x{3130}-\\x{318F}\\x{AC00}-\\x{D7A0}',
-    LgRegexpWordCharacters: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
+    LgRegexpSplitSentences: '.!?:;\u3002\uff01\uff1f\uff1a\uff1b',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -316,9 +319,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'la',
     LgGTransKey: 'la',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -327,9 +330,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'lv',
     LgGTransKey: 'lv',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -338,9 +341,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'lt',
     LgGTransKey: 'lt',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -349,9 +352,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'mk',
     LgGTransKey: 'mk',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -360,9 +363,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'nb',
     LgGTransKey: 'no',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -371,9 +374,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'pl',
     LgGTransKey: 'pl',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -382,9 +385,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'pt',
     LgGTransKey: 'pt',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -393,9 +396,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ro',
     LgGTransKey: 'ro',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -404,9 +407,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'ru',
     LgGTransKey: 'ru',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -415,9 +418,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'sr',
     LgGTransKey: 'sr',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -426,9 +429,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'sk',
     LgGTransKey: 'sk',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -437,9 +440,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'es',
     LgGTransKey: 'es',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -448,9 +451,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'sv',
     LgGTransKey: 'sv',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -459,8 +462,8 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'th',
     LgGTransKey: 'th',
     LgTextSize: 200,
-    LgRegexpSplitSentences: '\\x{0E00}-\\x{0E7F}',
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters: '\\x{0E00}-\\x{0E7F}',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -469,9 +472,9 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'tr',
     LgGTransKey: 'tr',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
@@ -480,11 +483,31 @@ export const LANGDEFS: Record<(typeof LANGS)[number], LangDef> = {
     LgGlosbeKey: 'uk',
     LgGTransKey: 'uk',
     LgTextSize: 150,
-    LgRegexpSplitSentences:
-      "\\-\\'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9",
-    LgRegexpWordCharacters: '.!?:;',
+    LgRegexpWordCharacters:
+      'a-zA-Z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u0233\u0400-\u04f9',
+    LgRegexpSplitSentences: '.!?:;',
     LgSplitEachChar: false,
     LgRemoveSpaces: false,
     LgRightToLeft: false,
   },
 };
+function downloadWizardAsCSV() {
+  const langNames = Object.keys(LANGDEFS);
+  const keys = Object.keys(LANGDEFS[langNames[0]]);
+  downloadCsvFile(
+    unparse([
+      ['LgName', ...keys],
+      ...Object.keys(LANGDEFS).map((langName) => [
+        langName,
+        ...Object.keys(LANGDEFS[langName]).map((langDef, ii) =>
+          LANGDEFS[langName][keys[ii]] === true
+            ? 'TRUE'
+            : LANGDEFS[langName][keys[ii]] === false
+            ? 'FALSE'
+            : LANGDEFS[langName][keys[ii]]
+        ),
+      ]),
+    ]),
+    'wizardData.csv'
+  );
+}

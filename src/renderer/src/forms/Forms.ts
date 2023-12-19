@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import * as ss from 'superstruct';
 import { ObjectSchema } from 'superstruct/dist/utils';
-import { SetBoolHandler } from '../pages/IO/CheckForm';
+import type { SetBoolHandler } from '../pages/IO/CheckForm';
 
 export function Form<TSchema extends ObjectSchema>({
   validator,
