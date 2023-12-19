@@ -19,7 +19,7 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
   const [currentStatus, setcurrentStatus] = useState(defaultStatus);
   const setRef = (event: React.ChangeEvent<HTMLInputElement>) => {
     refMap.WoStatus.current = event.target;
-    setcurrentStatus(refMap.WoStatus.current.value);
+    setcurrentStatus(Number.parseInt(refMap.WoStatus.current.value));
   };
   useEffect(() => {
     if (onChange) {
@@ -39,7 +39,7 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, 'WoStatus'>>({
             style={{ cursor: 'pointer' }}
             title={StrengthMapNumericalKey[status].name}
             // TODO hacky
-            onClick={() => setRef({ target: { value: status } })}
+            onClick={() => setRef({ target: { value: `${status}` } })}
           >
             <input
               style={{ cursor: 'pointer' }}

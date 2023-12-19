@@ -56,14 +56,14 @@ export function FourFramePage<
   return (
     <SplitPane
       split="vertical"
-      minSize={settingSpec['set-test-l-framewidth-percent']['min']}
-      maxSize={settingSpec['set-test-l-framewidth-percent']['max']}
+      minSize={`${settingSpec['set-test-l-framewidth-percent']['min']}%`}
+      maxSize={`${settingSpec['set-test-l-framewidth-percent']['max']}%`}
       defaultSize={`${lFrameWidthPerc}%`}
     >
       <SplitPane
         style={{ overflowWrap: 'break-word' }}
-        minSize={`${settingSpec['set-test-r-frameheight-percent']['min']}%`}
-        maxSize={`${settingSpec['set-test-r-frameheight-percent']['max']}%`}
+        minSize={`${settingSpec['set-test-h-frameheight']['min']}`}
+        maxSize={`${settingSpec['set-test-h-frameheight']['max']}`}
         split="horizontal"
         defaultSize={`${hFrameHeight}`}
       >
@@ -75,8 +75,9 @@ export function FourFramePage<
         </div>
       </SplitPane>
       <SplitPane
+        minSize={`${settingSpec['set-test-r-frameheight-percent']['min']}%`}
+        maxSize={`${settingSpec['set-test-r-frameheight-percent']['max']}%`}
         split="horizontal"
-        minSize={50}
         defaultSize={`${rFrameHeightPerc}%`}
       >
         <div style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>

@@ -155,8 +155,10 @@ export type TextsID = typeof textID.TYPE;
 export type TextTagsID = typeof texttagID.TYPE;
 export type WordsID = typeof wordID.TYPE;
 export type WordTagsID = typeof wordtagID.TYPE;
+export const Tag2ListValidator = ss.array(ss.string());
+
 // TODO nullable, max lengths, unsigned vs signed
-export const ArchivedTextsValidator = ss.object({
+export const ArchivedTextsWithTagsValidator = ss.object({
   // AtID: int(11) unsigned NOT NULL AUTO_INCREMENT,
   // PRIMARY KEY (`AtID`),
   AtID: archivedtextsID,
@@ -173,8 +175,13 @@ export const ArchivedTextsValidator = ss.object({
   AtAudioURI: ss.optional(URLValidator()),
   // AtSourceURI: varchar(1000) DEFAULT NULL,
   AtSourceURI: ss.optional(URLValidator()),
+  taglist: Tag2ListValidator,
   ...getValidatorPluginsFor(Persistable.archivedtexts),
 });
+
+export const ArchivedTextsValidator = ss.omit(ArchivedTextsWithTagsValidator, [
+  'taglist',
+]);
 
 export const ArchTextTagsValidator = ss.object({
   // AgAtID: int(11) unsigned NOT NULL,
@@ -314,7 +321,6 @@ export const TextItemsValidator = ss.object({
   // TiAudioSeconds: ss.optional(ss.number()),
   ...getValidatorPluginsFor(Persistable.textitems),
 });
-export const Tag2ListValidator = ss.array(ss.string());
 // TODO
 // export const Tag2ListValidator = ss.array(TagsValidator);
 

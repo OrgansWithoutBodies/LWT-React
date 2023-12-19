@@ -303,6 +303,7 @@ export function makeTooltipTitleObj({
  * @param ann
  */
 export function EscapeHtmlChars2(title: string, ann: string) {
+  // This is if one translation is marked as selected in annotation
   if (ann !== '') {
     const ann2 = escapeHtmlChars(ann);
     return escapeHtmlChars(title).replace(

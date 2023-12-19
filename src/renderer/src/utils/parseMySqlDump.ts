@@ -14,6 +14,7 @@ import {
   TextItemsValidator,
   TextsValidator,
   TextsValidatorNoID,
+  TextsWithTagsValidator,
   TextTagsValidator,
   WordsValidator,
   WordsValidatorNoID,
@@ -55,6 +56,10 @@ export type AddNewWordType = typeof AddNewWordValidator.TYPE;
 
 export const AddNewTextValidator = ss.omit(TextsValidatorNoID, [
   'TxAnnotatedText',
+]);
+export const AddNewTextWithTagsValidator = ss.omit(TextsWithTagsValidator, [
+  'TxAnnotatedText',
+  'TxID',
 ]);
 export type AddNewTextType = typeof AddNewTextValidator.TYPE;
 

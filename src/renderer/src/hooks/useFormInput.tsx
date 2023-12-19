@@ -154,6 +154,7 @@ export function useFormInput<
         (
           <>
             <LanguageDropdown
+              defaultValue={entry ? entry[entryKey] : undefined}
               onChange={() => setDirty()}
               dropdownRef={refMap[entryKey]}
             />
@@ -170,7 +171,7 @@ export function useFormInput<
         ),
     [...Object.values(entry || {}), formErrors]
   );
-  console.log(formErrors);
+  // TODO return a standardized SubmitButton
   return {
     Input: ReturnedComponent,
     TextArea,

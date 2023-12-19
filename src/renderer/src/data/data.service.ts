@@ -17,6 +17,7 @@ import { serializeJsonToSQL } from '../utils/exports/serializeJsonToSQL';
 import type {
   AddNewTextType,
   AddNewWordType,
+  ArchivedText,
   Language,
   LanguageNoID,
   Sentence,
@@ -238,6 +239,21 @@ export class DataService {
     });
     this.persistSet('tags');
     this.persistUpdate('tags', tag);
+  }
+  public editArchivedText(text: ArchivedText) {
+    this.dataStore.update((state) => {
+      const editedTextIndex = state.archivedtexts.findIndex(
+        (val) => val.AtID === text.AtID
+      );
+      const mutableArchivedTexts = state.archivedtexts;
+      mutableArchivedTexts[editedTextIndex] = text;
+      return {
+        ...state,
+        notificationMessage: { txt: `Edited Archived Text ${text.AtTitle}` },
+        archivedtexts: mutableArchivedTexts,
+      };
+    });
+    this.persistSet('words');
   }
   public editTerm(term: Word) {
     this.dataStore.update((state) => {
@@ -524,7 +540,31 @@ export class DataService {
     });
   }
 
+  public addMultipleTags(tagList: string[]) {
+    const uniqueTags = [...new Set(tagList)];
+    const ids = this.dataStore.getValue().tags.map((tag) => tag.TgID);
+    const maxID = (Math.max(...ids) + 1) as TagsID;
+    if (IDIsUnique(maxID, ids)) {
+      const newTagList = uniqueTags.map((tagText, ii) => ({
+        TgID: (maxID + ii) as TagsID,
+        TgText: tagText,
+      }));
+      this.dataStore.update((state) => ({
+        ...state,
+        notificationMessage: { txt: `Added ${uniqueTags.length} Tags` },
+        tags: [...state.tags, ...newTagList],
+      }));
+      this.persistSet('tags');
+      console.log('TEST123-addedtags', newTagList, uniqueTags);
+      return newTagList;
+    }
+    return null;
+  }
+
   public addMultipleTerms(terms: AddNewWordType[]) {
+    const termsHashMapKeyedByText = this.dataStore
+      .getValue()
+      .tags.map((val) => [val.TgText, val] as [string, Tag]);
     const mappedTerms = terms.map((word) => ({
       ...word,
       // TODO move these to prevalidate?
@@ -533,13 +573,38 @@ export class DataService {
       WoTextLC: word.WoText.toLowerCase(),
       ...makeScoreRandomInsertUpdate({ word }),
     }));
+    console.log(
+      'TEST123-tags',
+      terms.map((val) => val.taglist)
+    );
+    const newTags = terms
+      .map((val) =>
+        val.taglist.filter((tag) => termsHashMapKeyedByText[tag] === undefined)
+      )
+      .flat();
+    this.addMultipleTags(newTags);
     this.dataStore.update((state) => {
       const ids = state.words.map((word) => word.WoID);
+      const tagIDHashmapByText: Record<string, TagsID> = Object.fromEntries(
+        state.tags.map((tag) => [tag.TgText, tag.TgID])
+      );
+      console.log('TEST123-tagIDHashmapByText', tagIDHashmapByText);
       const maxID = (Math.max(...ids) + 1) as WordsID;
       if (IDIsUnique(maxID, ids)) {
         return {
           ...state,
           notificationMessage: { txt: `Added ${terms.length} Terms` },
+          wordtags: [
+            ...state.wordtags,
+            ...mappedTerms
+              .map((val, ii) => {
+                return val.taglist.map((tag) => ({
+                  WtTgID: tagIDHashmapByText[tag]!,
+                  WtWoID: (maxID + ii) as WordsID,
+                }));
+              })
+              .flat(),
+          ],
           // TODO mapping twice not ideal here
           words: [
             ...state.words,
@@ -548,12 +613,14 @@ export class DataService {
               WoID: (maxID + ii) as WordsID,
             })),
           ],
+          // tags:
         };
       }
     });
 
     // TODO multiple insert
     this.persistSet('words');
+    this.persistSet('wordtags');
     mappedTerms.forEach((term) => this.persistInsert('words', term));
   }
 
@@ -767,7 +834,7 @@ export class DataService {
       return {
         ...state,
         texts: poppedTexts,
-        notificationMessage: { txt: 'Archived Text' },
+        notificationMessage: { txt: `Archived Text ${toArchive.TxTitle}` },
         archivedtexts: [
           ...archivedtexts,
           {
@@ -782,6 +849,18 @@ export class DataService {
         ],
       };
     });
+
+    if (
+      this.dataStore
+        .getValue()
+        .settings.find(
+          (val) =>
+            val.StKey === 'currenttext' &&
+            (val.StValue as any as TextsID) === archID
+        ) !== undefined
+    ) {
+      this.setActiveText(null);
+    }
     this.persistSet('archivedtexts');
     this.persistSet('texts');
   }
@@ -813,7 +892,7 @@ export class DataService {
       return {
         ...state,
         archivedtexts: poppedTexts,
-        notificationMessage: { txt: 'Archived Text' },
+        notificationMessage: { txt: `Unarchived Text ${toArchive.AtTitle}` },
         texts: [
           ...texts,
           {
@@ -924,6 +1003,11 @@ export class DataService {
     this.setSettings({
       currentlanguage:
         langID === undefined || langID === null ? undefined : langID,
+    });
+  }
+  public setActiveText(textID: TextsID | null) {
+    this.setSettings({
+      currenttext: textID === null ? undefined : textID,
     });
   }
 

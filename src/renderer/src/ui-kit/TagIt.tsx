@@ -298,18 +298,13 @@ function Autocomplete({
         setHighlightedTagIndex(
           Math.min(
             autocompleteOptions.length - 1,
-            (highlightedTagIndex || 0) + 1
+            (highlightedTagIndex || autocompleteOptions.length - 1) - 1
           )
         );
         e.preventDefault();
       }
       if (e.key === 'ArrowUp') {
-        setHighlightedTagIndex(
-          Math.max(
-            0,
-            (highlightedTagIndex || autocompleteOptions.length - 1) - 1
-          )
-        );
+        setHighlightedTagIndex(Math.max(0, (highlightedTagIndex || 0) + 1));
         e.preventDefault();
       }
       if (e.key === 'Enter' && highlightedTagIndex !== null) {

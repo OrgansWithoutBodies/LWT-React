@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { dataService } from '../../data/data.service';
-import { wordNoIDPrevalidateMap } from '../../data/preValidateMaps';
-import { LanguagesID, WordsID, WordsValidator } from '../../data/validators';
+import {
+  wordNoIDPrevalidateMap,
+  wordPrevalidateMap,
+} from '../../data/preValidateMaps';
+import {
+  LanguagesID,
+  WordsID,
+  WordsWithTagsValidator,
+} from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
@@ -16,6 +23,8 @@ import {
 import { textareaKeydown } from '../IO/CheckForm';
 import { DictionaryLinks } from './DictionaryLinks';
 
+const editGuard = (existingTerm: undefined | Word): existingTerm is Word =>
+  existingTerm !== undefined;
 /**
  * This is only called from inside the reader, rly more of a pane than a component
  */
@@ -40,7 +49,10 @@ export function AddNewWordPane({
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
 }): JSX.Element {
-  const validator = AddNewWordValidator;
+  const isEdit = editGuard(existingTerm);
+  // TODO
+  const validator = isEdit ? WordsWithTagsValidator : AddNewWordValidator;
+  // const validator = AddNewWordValidator;
   const [{ languages }] = useData(['languages']);
 
   // TODO hashmap here avoid lookup
@@ -62,24 +74,31 @@ export function AddNewWordPane({
   });
 
   const [showingSentences, setShowingSentences] = useState<boolean>(false);
-  const isEdit = existingTerm !== undefined;
-  const termStatus = isEdit ? existingTerm.WoStatus : 1;
+  // const termStatus = isEdit ? existingTerm.WoStatus : 1;
 
   if (!lang) {
     throw new Error('Incorrect Language Set!');
   }
   const { LgName } = lang;
-  const submitForm = () =>
-    onSubmit(wordNoIDPrevalidateMap, (value) => {
+  const submitForm = () => {
+    if (isEdit) {
+      return onSubmit(wordPrevalidateMap, (value) => {
+        dataService.editTerm(value);
+        onClearActiveWord();
+      });
+    }
+
+    return onSubmit(wordNoIDPrevalidateMap, (value) => {
       dataService.addTerm(value);
       onClearActiveWord();
     });
+  };
   console.log('TEST123-refmap', refMap['WoSentence']);
   return (
     <>
       <form name="newword">
         <input type="hidden" name="fromAnn" value="" />
-        <WoInput type="hidden" entryKey="WoLgID" id="langfield" />
+        <WoInput type="hidden" entryKey="WoLgID" id="langfield" fixed />
         <WoInput type="hidden" entryKey="WoCreated" id="langfield" />
         <WoInput type="hidden" entryKey="WoTextLC" />
         {/* TODO what are these */}
@@ -138,7 +157,10 @@ export function AddNewWordPane({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <WordTagsAutocomplete ref={refMap.taglist} />
+                <WordTagsAutocomplete
+                  ref={refMap.taglist}
+                  onChange={setDirty}
+                />
               </td>
             </tr>
             <tr>
@@ -243,7 +265,7 @@ export function EditWordPane({
 }): JSX.Element {
   // TODO reset form on new word
   // TODO verify dialog on change
-  const validator = WordsValidator;
+  const validator = WordsWithTagsValidator;
   const [{ languages, words }] = useData(['languages', 'words']);
   const word = words.find((val) => val.WoID === chgID);
   if (!word) {
@@ -266,6 +288,7 @@ export function EditWordPane({
     entry: { WoText: word || '', WoLgID: word.WoLgID },
     validator,
   });
+  console.log('TEST123-newword', word.WoLgID);
   const [showingSentences, setShowingSentences] = useState<boolean>(false);
 
   const { WoStatus } = word;
@@ -279,7 +302,7 @@ export function EditWordPane({
     <>
       <form name="newword">
         <input type="hidden" name="fromAnn" value="" />
-        <WoInput type="hidden" entryKey="WoLgID" id="langfield" value={LgID} />
+        <WoInput type="hidden" entryKey="WoLgID" id="langfield" fixed />
         <input
           type="hidden"
           name="WoCreated"
@@ -347,9 +370,7 @@ export function EditWordPane({
             )}
             <tr>
               <td className="td1 right">Tags:</td>
-              <WordTagsAutocomplete />
-              {/* TODO */}
-              {/* <WordTagsAutocomplete ref={refMap.taglist} /> */}
+              <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
             </tr>
 
             <tr>

@@ -12,7 +12,7 @@ export const ColumnImportMode: Record<
       | 'WoTranslation'
       | 'WoRomanization'
       | 'WoSentence'
-      | 'TagList'
+      | 'taglist'
       | null;
   }
 > = {
@@ -20,7 +20,7 @@ export const ColumnImportMode: Record<
   t: { termParam: 'WoTranslation', txt: 'Translation' },
   r: { termParam: 'WoRomanization', txt: 'Romanization' },
   s: { termParam: 'WoSentence', txt: 'Sentence' },
-  g: { termParam: 'TagList', txt: 'Tag List' },
+  g: { termParam: 'taglist', txt: 'Tag List' },
   x: { termParam: null, txt: "Don't Import" },
 };
 export type ColumnImportModeTermParam = Exclude<

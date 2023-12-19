@@ -37,6 +37,7 @@ export function ImportShortText({
   const {
     Input: TxInput,
     refMap,
+    setDirty,
     onSubmit,
     TextArea,
   } = useFormInput({ validator });
@@ -125,7 +126,7 @@ export function ImportShortText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <TextTagsAutocomplete />
+                <TextTagsAutocomplete onChange={setDirty} ref={refMap} />
               </td>
             </tr>
             <tr>

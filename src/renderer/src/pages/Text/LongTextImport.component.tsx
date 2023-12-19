@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import * as ss from 'superstruct';
 import { dataService } from '../../data/data.service';
+import { TagListValidator } from '../../data/validators';
 import { parseNumMap } from '../../forms/Forms';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
@@ -29,10 +30,12 @@ export default function ImportLongText({
     TxLgID: ss.number(),
     TxTitle: ss.string(),
     maxSent: ss.number(),
+    taglist: TagListValidator,
   });
   const {
     Input: TxInput,
     refMap,
+    setDirty,
     onSubmit,
     TextArea,
   } = useFormInput({ validator });
@@ -168,7 +171,10 @@ export default function ImportLongText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <TextTagsAutocomplete />
+                <TextTagsAutocomplete
+                  ref={refMap.taglist}
+                  onChange={setDirty}
+                />
               </td>
             </tr>
             <tr>

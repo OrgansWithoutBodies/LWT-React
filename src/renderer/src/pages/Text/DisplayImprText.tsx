@@ -1,16 +1,25 @@
 import { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { SettingSpec, settingSpec } from '../../data/settings';
-import { TextsID } from '../../data/validators';
+import { TextItemsID, TextsID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useSettingWithDefault } from '../../hooks/useSettingWithDefault';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { AudioPlayer } from '../../ui-kit/AudioPlayer';
 import { Icon } from '../../ui-kit/Icon';
 import { Text } from '../../utils/parseMySqlDump';
+import { AnnPlcmnt, DisplayAnnotatedText } from './PrintText.component';
 
 export function DisplayImprText({ textID }: { textID: TextsID }) {
-  const [{ texts }] = useData(['texts']);
+  const [{ wordHashmapByLC, texts, languageHashmap, textitems }] = useData([
+    'texts',
+    'languageHashmap',
+    'textitems',
+    'wordHashmapByLC',
+  ]);
+
+  const [hiddenTexts, setHiddenTexts] = useState<Record<TextItemsID, true>>({});
+  const [hiddenAnns, setHiddenAnns] = useState<Record<TextItemsID, true>>({});
   const text = texts.find((val) => val.TxID === textID);
   if (!text) {
     throw new Error('Invalid Text ID!');
@@ -22,6 +31,19 @@ export function DisplayImprText({ textID }: { textID: TextsID }) {
   const { [frameHeightKey]: frameHeight } = useSettingWithDefault([
     frameHeightKey,
   ]);
+  // TODO shouldnt need
+  if (!languageHashmap) {
+    return <></>;
+  }
+  const language = languageHashmap[text.TxLgID];
+  if (!language) {
+    throw new Error('Invalid Text Language ID!');
+  }
+
+  const textItemsForThisText = textitems
+    .filter((val) => val.TiTxID === textID)
+    .sort((a, b) => (a.TiOrder > b.TiOrder ? 1 : -1));
+
   return (
     <>
       <SplitPane
@@ -34,7 +56,37 @@ export function DisplayImprText({ textID }: { textID: TextsID }) {
           <DisplayImprTextHeader text={text} />
         </div>
         <div style={{ overflowY: 'auto' }}>
-          <DisplayImprTextText text={text} />
+          <DisplayAnnotatedText
+            transClassName="anntransruby2"
+            language={language}
+            showingText={text}
+            textItemsForThisText={textItemsForThisText}
+            wordLookupKeyedByTextLC={wordHashmapByLC}
+            annplcmnt={AnnPlcmnt['above (ruby)']}
+            show_rom={false}
+            show_trans
+            hiddenAnns={hiddenAnns}
+            hiddenTrans={hiddenTexts}
+            onClickTerm={(id) => {
+              const mutableTexts = hiddenTexts;
+              console.log('TEST123-clickterm', { mutableTexts, id });
+              if (hiddenTexts[id]) {
+                delete mutableTexts[id];
+                return setHiddenTexts(mutableTexts);
+              }
+              mutableTexts[id] = true;
+              return setHiddenTexts(mutableTexts);
+            }}
+            onClickAnn={(id) => {
+              const mutableAnns = hiddenAnns;
+              if (hiddenAnns[id]) {
+                delete mutableAnns[id];
+                return setHiddenAnns(mutableAnns);
+              }
+              mutableAnns[id] = true;
+              return setHiddenAnns(mutableAnns);
+            }}
+          />
         </div>
       </SplitPane>
     </>

@@ -39,7 +39,7 @@ import pbarAni from '../public/css/jplayer_skin/pbar-ani.gif';
  **************************************************************
  */
 export type StyleVariant = 'light' | 'dark';
-type HexString = `#${Uppercase<string>}`;
+type HexString = `${Uppercase<string>}`;
 type ColorSchema = { [key in ColorKeys]: HexString };
 const DefaultColors = {
   // nonsaturated
@@ -67,6 +67,9 @@ const DefaultColors = {
   off0: '#FFFFD0',
   off1: '#FFFFE0',
   off2: '#FFFACD',
+  // TODO
+  // off3: '#C8DCF0',
+  // off4: '#E5E4E2',
 
   // highlight
   highlightColor0: '#0000FF',
@@ -634,6 +637,15 @@ export const createColors = (
      **************************************************************
      */
 
+    '.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default':
+      {
+        border: `1px solid ${Colors.lum1}`,
+        backgroundColor: `${Colors.lum6}`,
+        // 'background':'#e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x',
+        fontWeight: 'normal',
+        color: `${Colors.lum2}`,
+        borderRadius: '6px',
+      },
     'ul.tagit': {
       padding: '1px 5px',
       overflow: 'auto',
@@ -701,10 +713,10 @@ export const createColors = (
 
     '.ui-state-default .ui-widget-content .ui-state-default .ui-widget-header .ui-state-default':
       {
-        border: `1px solid #${Colors.lum3}`,
-        backgroundColor: `#e6e6e6`,
+        border: `1px solid ${Colors.lum3}`,
+        backgroundColor: `${Colors.lum4}`,
         fontWeight: 'normal',
-        color: `#${Colors.lum5}`,
+        color: `${Colors.lum5}`,
       },
 
     ///////
@@ -915,7 +927,7 @@ export const createColors = (
     },
     'div.jp-volume-bar-value': {
       background: `url(${blueMonday}) 0 -218px repeat-x`,
-      width: '0px',
+      // width: '0px',
       height: '10px',
     },
     'div.jp-current-time, div.jp-duration': {
@@ -943,5 +955,5 @@ export const createColors = (
       height: '0px',
       backgroundColor: Colors.lum0,
     },
-  };
+  } as const;
 };

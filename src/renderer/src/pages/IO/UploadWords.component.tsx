@@ -7,10 +7,16 @@ import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { Header } from '../../ui-kit/Header';
 import { RequiredLineButton } from '../../ui-kit/Icon';
 import { SelectBoolean } from '../../ui-kit/SelectBoolean';
-import { parseTermsFromCSV } from '../../utils/parsers/parseCsvTerms';
+import {
+  TermParsedFromCSV,
+  parseTermsFromCSV,
+} from '../../utils/parsers/parseCsvTerms';
 import { StrengthMap } from '../StrengthMap';
 import { GetWordstatusSelectoptions } from '../Text/PrintText.component';
 
+/**
+ *
+ */
 export function UploadWords() {
   const [{ languages }] = useData(['languages']);
   const navigator = useInternalNavigate();
@@ -246,6 +252,7 @@ export function UploadWords() {
                         fileType: file.current.files[0]?.type,
                       }),
                     },
+                    // TODO maybe have a nested checkValidate so that we also validate that the terms that get parsed end up being valid?
                     async (value) => {
                       const parsedTerms = await parseTermsFromCSV(value);
                       dataService.addMultipleTerms(parsedTerms);
@@ -273,5 +280,81 @@ export function UploadWords() {
         screen.
       </p>
     </>
+  );
+}
+// TODO
+/**
+ *
+ */
+export function ImportedWordsReport({
+  importedTerms,
+}: {
+  importedTerms: TermParsedFromCSV[];
+}) {
+  return (
+    <>
+      <h4>
+        Import Report (Language: {getLanguage($lang)}, Status: {status})
+      </h4>
+      <table className="tab1" cellSpacing="0" cellPadding="5">
+        <tr>
+          <th className="th1">Line</th>
+          <th className="th1">Term</th>
+          <th className="th1">Translation</th>
+          <th className="th1">Romanization</th>
+          <th className="th1">Sentence</th>
+          <th className="th1">Tag List</th>
+          <th className="th1">Message</th>
+        </tr>
+        {importedTerms.map((term, ii) => (
+          <tr>
+            <td className="td1 right">{ii + 1}</td>
+            <td className="td1">{term.WoText}</td>
+            <td className="td1">{term.WoTranslation}</td>
+            <td className="td1">{term.WoRomanization}</td>
+            <td className="td1">{term.WoSentence}</td>
+            <td className="td1">{term.taglist.join(', ')}</td>
+            {working ? (
+              exists ? (
+                overwrite ? (
+                  <td className="td1">
+                    ' . tohtml($msg1 . ' / ' . $msg2) . ' (' . $sqlct . ')
+                  </td>
+                ) : (
+                  <td className="td1">
+                    <span className="red2">EXISTS, NOT IMPORTED</span>
+                  </td>
+                )
+              ) : (
+                <td className="td1">
+                  ' . tohtml($msg1) . ' (' . $sqlct . ')' . '
+                </td>
+              )
+            ) : (
+              <td className="td1">
+                <span className="red2">
+                  NOT IMPORTED (term and/or translation missing)
+                </span>
+              </td>
+            )}
+          </tr>
+        ))}
+        <p className="red">
+          *** Imported terms: ' . $sqlct . ' of ' . $l . ' *** ' .
+          errorbutton('Error') . '
+        </p>
+      </table>
+    </>
+  );
+}
+/**
+ *
+ * @param isError
+ */
+function BackOnError(isError: boolean) {
+  return isError ? (
+    <input type="button" value="&lt;&lt; Back" onClick={() => history.back()} />
+  ) : (
+    <></>
   );
 }

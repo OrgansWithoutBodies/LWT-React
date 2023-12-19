@@ -1,16 +1,17 @@
 import { NumericalStrengthPotentiallyCompound } from '../../data/data.query';
-import { TextsID } from '../../data/validators';
+import { TextItemsID, TextsID } from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import {
   useInternalNavigate,
   useUpdateParams,
 } from '../../hooks/useInternalNav';
+import { useThemeColors } from '../../hooks/useThemeColors';
 import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { A } from '../../nav/InternalLink';
 import { Header } from '../../ui-kit/Header';
 import { Icon } from '../../ui-kit/Icon';
 import { getDirTag } from '../../ui-kit/getDirTag';
-import { Word } from '../../utils/parseMySqlDump';
+import { Language, Text, TextItem, Word } from '../../utils/parseMySqlDump';
 import { StrengthMapNumericalKey } from '../StrengthMap';
 export enum AnnPlcmnt {
   'behind' = 0,
@@ -42,11 +43,12 @@ export function PrintText({
 }) {
   // TODO
   const statusRange = 1;
-  const [{ texts, languages, textitems, words }] = useData([
+  const [{ texts, languages, textitems, words, wordHashmapByLC }] = useData([
     'texts',
     'languages',
     'textitems',
     'words',
+    'wordHashmapByLC',
   ]);
   useUpdateActiveText({ textID });
 
@@ -64,21 +66,17 @@ export function PrintText({
   if (!language) {
     throw new Error('invalid Text Language ID!');
   }
+  if (!wordHashmapByLC) {
+    return <></>;
+  }
+  const wordLookupKeyedByTextLC = wordHashmapByLC;
 
-  const wordLookupKeyedByTextLC = Object.fromEntries(
-    words
-      .filter(
-        (word) => word.WoLgID === language.LgID && isValidStatus(word, status)
-      )
-      .map((val) => [val.WoTextLC, val])
-  );
-
-  const $show_trans =
+  const show_trans =
     ann === AnnType['Romanization & Translation'] ||
     ann === AnnType['Translation'] ||
     ann === AnnType['Translation & Tags'] ||
     ann === AnnType['Romanization, Translation & Tags'];
-  const $show_rom =
+  const show_rom =
     ann === AnnType['Romanization & Translation'] ||
     ann === AnnType['Romanization'] ||
     ann === AnnType['Romanization, Translation & Tags'];
@@ -189,117 +187,192 @@ export function PrintText({
         </p>
       </div>
       <div id="print" {...getDirTag(language)}>
-        <p
-          style={{
-            fontSize: `${language.LgTextSize}%`,
-            lineHeight: '1.35',
-            marginBottom: '10px',
-          }}
-        >
-          {showingText.TxTitle}
-          <br />
-          <br />
-          {textItemsForThisText.map((textItem) => {
-            const wordForThisTextItem =
-              wordLookupKeyedByTextLC[textItem.TiTextLC];
-            const splitItems = textItem.TiText.split('¶');
-            return (
-              <>
-                {annplcmnt === AnnPlcmnt['above (ruby)'] ? (
-                  <>
-                    <ruby>
-                      <rb>
-                        <span className="anntermruby">{textItem.TiText}</span>
-                      </rb>
-                      {wordForThisTextItem && (
-                        <rt>
-                          {' '}
-                          {$show_trans && (
-                            <span className="anntransruby">
-                              {wordForThisTextItem.WoTranslation}
-                            </span>
-                          )}{' '}
-                          {$show_rom && !$show_trans && (
-                            <span className="annromrubysolo">
-                              {wordForThisTextItem.WoRomanization}
-                            </span>
-                          )}{' '}
-                          {$show_rom && $show_trans && (
-                            <span className="annromruby" dir="ltr">
-                              [ {wordForThisTextItem.WoTranslation}]
-                            </span>
-                          )}{' '}
-                        </rt>
-                      )}
-                    </ruby>{' '}
-                  </>
-                ) : (
-                  <>
-                    {wordForThisTextItem &&
-                      annplcmnt === AnnPlcmnt['in front of'] && (
-                        <InlineAnnotation
-                          word={wordForThisTextItem}
-                          $show_rom={$show_rom}
-                          $show_trans={$show_trans}
-                        />
-                      )}
-                    {/* TODO not always this class? unclear think only if known word */}
-                    <span className="annterm">
-                      {splitItems.length === 1 ? (
-                        <>{splitItems[0]}</>
-                      ) : (
-                        // TODO dont like this split pattern, figure out if necessary
-                        splitItems.map((splitItem) => (
-                          <p
-                            style={{
-                              fontSize: `${language.LgTextSize}%`,
-                              lineHeight: 1.3,
-                              marginBottom: '10px',
-                            }}
-                          >
-                            {splitItem}
-                          </p>
-                        ))
-                      )}
-                    </span>
-                    {wordForThisTextItem &&
-                      annplcmnt === AnnPlcmnt['behind'] && (
-                        <InlineAnnotation
-                          word={wordForThisTextItem}
-                          $show_rom={$show_rom}
-                          $show_trans={$show_trans}
-                        />
-                      )}{' '}
-                  </>
-                )}
-              </>
-            );
-          })}
-          {/* {showingText.TxText} */}
-        </p>
+        {
+          <DisplayAnnotatedText
+            language={language}
+            showingText={showingText}
+            textItemsForThisText={textItemsForThisText}
+            wordLookupKeyedByTextLC={wordLookupKeyedByTextLC}
+            annplcmnt={annplcmnt}
+            show_trans={show_trans}
+            show_rom={show_rom}
+          />
+        }
       </div>
     </>
   );
 }
+export function DisplayAnnotatedText({
+  language,
+  showingText,
+  textItemsForThisText,
+  wordLookupKeyedByTextLC,
+  annplcmnt,
+  show_trans,
+  show_rom,
+  onClickTerm,
+  onClickAnn,
+  transClassName = 'anntransruby',
+  hiddenTrans = {},
+  hiddenAnns = {},
+}: {
+  language: Language;
+  showingText: Text;
+  textItemsForThisText: TextItem[];
+  wordLookupKeyedByTextLC: Record<string, Word>;
+  annplcmnt: AnnPlcmnt;
+  show_trans: boolean;
+  show_rom: boolean;
+  onClickTerm?: (val: TextItemsID) => void;
+  onClickAnn?: (val: TextItemsID) => void;
+  // transClassName:keyof ReturnType<typeof createColors>
+  transClassName?: 'anntransruby' | 'anntransruby2';
+  hiddenAnns?: Record<TextItemsID, true>;
+  hiddenTrans?: Record<TextItemsID, true>;
+}) {
+  const themeColors = useThemeColors();
+  return (
+    <p
+      style={{
+        fontSize: `${language.LgTextSize}%`,
+        lineHeight: '1.35',
+        marginBottom: '10px',
+      }}
+    >
+      {showingText.TxTitle}
+      <br />
+      <br />
+      {textItemsForThisText.map((textItem) => {
+        const isTermHidden = hiddenTrans[textItem.TiID];
+        const isAnnHidden = hiddenAnns[textItem.TiID];
+        console.log('TEST123-hidden', isTermHidden, isAnnHidden);
+        const wordForThisTextItem = wordLookupKeyedByTextLC[textItem.TiTextLC];
+        const splitItems = textItem.TiText.split('¶');
+        return (
+          <>
+            {annplcmnt === AnnPlcmnt['above (ruby)'] ? (
+              <>
+                <ruby>
+                  {/* TODO React says these dont exist but they work :shrug: */}
+                  <rb>
+                    <span
+                      onClick={() => onClickTerm && onClickTerm(textItem.TiID)}
+                      style={{
+                        cursor: onClickTerm ? 'pointer' : undefined,
+                        color: isTermHidden
+                          ? themeColors.lum4
+                          : themeColors.lum0,
+                        backgroundColor: isTermHidden
+                          ? themeColors.lum4
+                          : themeColors.lum6,
+                      }}
+                      className="anntermruby"
+                    >
+                      {textItem.TiText}
+                    </span>
+                  </rb>
+                  {wordForThisTextItem && (
+                    <rt>
+                      {' '}
+                      {show_trans && (
+                        <span
+                          className={transClassName}
+                          style={{
+                            cursor: onClickAnn ? 'pointer' : undefined,
+
+                            color: isAnnHidden
+                              ? themeColors.lum3
+                              : themeColors.test7,
+                            backgroundColor: isAnnHidden
+                              ? themeColors.lum3
+                              : themeColors.lum0,
+                          }}
+                          onClick={() =>
+                            onClickAnn && onClickAnn(textItem.TiID)
+                          }
+                        >
+                          {wordForThisTextItem.WoTranslation}
+                        </span>
+                      )}{' '}
+                      {show_rom && !show_trans && (
+                        <span className="annromrubysolo">
+                          {wordForThisTextItem.WoRomanization}
+                        </span>
+                      )}{' '}
+                      {show_rom && show_trans && (
+                        <span className="annromruby" dir="ltr">
+                          [ {wordForThisTextItem.WoTranslation}]
+                        </span>
+                      )}{' '}
+                    </rt>
+                  )}
+                </ruby>{' '}
+              </>
+            ) : (
+              <>
+                {wordForThisTextItem &&
+                  annplcmnt === AnnPlcmnt['in front of'] && (
+                    <InlineAnnotation
+                      word={wordForThisTextItem}
+                      show_rom={show_rom}
+                      show_trans={show_trans}
+                    />
+                  )}
+                {/* TODO not always this class? unclear think only if known word */}
+                <span className="annterm">
+                  {splitItems.length === 1 ? (
+                    <>{splitItems[0]}</>
+                  ) : (
+                    // TODO dont like this split pattern, figure out if necessary
+                    splitItems.map((splitItem) => (
+                      <p
+                        style={{
+                          fontSize: `${language.LgTextSize}%`,
+                          lineHeight: 1.3,
+                          marginBottom: '10px',
+                        }}
+                      >
+                        {splitItem}
+                      </p>
+                    ))
+                  )}
+                </span>
+                {wordForThisTextItem && annplcmnt === AnnPlcmnt['behind'] && (
+                  <InlineAnnotation
+                    word={wordForThisTextItem}
+                    show_rom={show_rom}
+                    show_trans={show_trans}
+                  />
+                )}{' '}
+              </>
+            )}
+          </>
+        );
+      })}
+      {/* {showingText.TxText} */}
+    </p>
+  );
+}
+
 /**
  *
  */
 export function InlineAnnotation({
   word: { WoRomanization, WoTranslation },
-  $show_rom,
-  $show_trans,
+  show_rom,
+  show_trans,
 }: {
   word: Pick<Word, 'WoRomanization' | 'WoTranslation'>;
-  $show_rom: boolean;
-  $show_trans: boolean;
+  show_rom: boolean;
+  show_trans: boolean;
 }) {
   return (
     <>
-      {$show_trans && <span className="anntrans">{WoTranslation}</span>}
-      {$show_rom && !$show_trans && (
+      {show_trans && <span className="anntrans">{WoTranslation}</span>}
+      {show_rom && !show_trans && (
         <span className="annrom">{WoRomanization}</span>
       )}
-      {$show_rom && $show_trans && (
+      {show_rom && show_trans && (
         <span className="annrom" dir="ltr">
           [{WoRomanization}]
         </span>
@@ -400,190 +473,190 @@ export function GetWordstatusSelectoptions({
 // 	);
 // }
 
-// $textid = $_POST["id"] + 0;
-// $wordlc = stripTheSlashesIfNeeded($_POST['word']);
+// textid = $_POST["id"] + 0;
+// wordlc = stripTheSlashesIfNeeded($_POST['word']);
 
-// $sql = 'select TxLgID, TxTitle from ' . $tbpref . 'texts where TxID = ' . $textid;
-// $res = do_mysqli_query($sql);
-// $record = mysqli_fetch_assoc($res);
-// $title = $record['TxTitle'];
-// $langid = $record['TxLgID'];
-// mysqli_free_result($res);
+// sql = 'select TxLgID, TxTitle from ' . tbpref . 'texts where TxID = ' . textid;
+// res = do_mysqli_query(sql);
+// record = mysqli_fetch_assoc(res);
+// title = record['TxTitle'];
+// langid = record['TxLgID'];
+// mysqli_free_result(res);
 
-// $sql = 'select LgTextSize, LgRightToLeft from ' . $tbpref . 'languages where LgID = ' . $langid;
-// $res = do_mysqli_query($sql);
-// $record = mysqli_fetch_assoc($res);
-// $textsize = $record['LgTextSize'] + 0;
-// if ($textsize > 100)
-// 	$textsize = intval($textsize * 0.8);
-// $rtlScript = $record['LgRightToLeft'];
-// mysqli_free_result($res);
+// sql = 'select LgTextSize, LgRightToLeft from ' . tbpref . 'languages where LgID = ' . langid;
+// res = do_mysqli_query(sql);
+// record = mysqli_fetch_assoc(res);
+// textsize = record['LgTextSize'] + 0;
+// if (textsize > 100)
+// 	textsize = intval(textsize * 0.8);
+// rtlScript = record['LgRightToLeft'];
+// mysqli_free_result(res);
 
-// $ann = get_first_value("select TxAnnotatedText as value from " . $tbpref . "texts where TxID = " . $textid);
-// $ann_exists = (strlen($ann) > 0);
-// if ($ann_exists) {
-// 	$ann = recreate_save_ann($textid, $ann);
-// 	$ann_exists = (strlen($ann) > 0);
+// ann = get_first_value("select TxAnnotatedText as value from " . tbpref . "texts where TxID = " . textid);
+// ann_exists = (strlen(ann) > 0);
+// if (ann_exists) {
+// 	ann = recreate_save_ann(textid, ann);
+// 	ann_exists = (strlen(ann) > 0);
 // }
 
-// $rr = "";
-// $r = "";
-// $r .= '<form action="" method="post"><table class="tab1" cellspacing="0" cellpadding="5"><tr>';
-// $r .= '<th class="th1 center">Text</th>';
-// $r .= '<th class="th1 center">Dict.</th>';
-// $r .= '<th class="th1 center">Edit<br />Term</th>';
-// $r .= '<th class="th1 center">Term Translations (Delim.: ' . tohtml(getSettingWithDefault('set-term-translation-delimiters')) . ')<br /><input type="button" value="Reload" onclick="do_ajax_edit_impr_text(0,\'\');" /></th>';
-// $r .= '</tr>';
-// $nonterms = "";
-// $items = preg_split('/[\n]/u', $ann);
-// $i = 0;
-// $nontermbuffer = '';
-// foreach ($items as $item) {
-// 	$i++;
-// 	$vals = preg_split('/[\t]/u', $item);
-// 	if ($vals[0] > -1) {
-// 		if ($nontermbuffer !== '') {
-// 			$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;">';
-// 			$r .= $nontermbuffer;
-// 			$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . $textid . '\';" /></td></tr>';
-// 			$nontermbuffer = '';
+// rr = "";
+// r = "";
+// r .= '<form action="" method="post"><table class="tab1" cellspacing="0" cellpadding="5"><tr>';
+// r .= '<th class="th1 center">Text</th>';
+// r .= '<th class="th1 center">Dict.</th>';
+// r .= '<th class="th1 center">Edit<br />Term</th>';
+// r .= '<th class="th1 center">Term Translations (Delim.: ' . tohtml(getSettingWithDefault('set-term-translation-delimiters')) . ')<br /><input type="button" value="Reload" onclick="do_ajax_edit_impr_text(0,\'\');" /></th>';
+// r .= '</tr>';
+// nonterms = "";
+// items = preg_split('/[\n]/u', ann);
+// i = 0;
+// nontermbuffer = '';
+// foreach (items as item) {
+// 	i++;
+// 	vals = preg_split('/[\t]/u', item);
+// 	if (vals[0] > -1) {
+// 		if (nontermbuffer !== '') {
+// 			r .= '<tr><td class="td1 center" style="font-size:' . textsize . '%;">';
+// 			r .= nontermbuffer;
+// 			r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . textid . '\';" /></td></tr>';
+// 			nontermbuffer = '';
 // 		}
-// 		$id = '';
-// 		$trans = '';
-// 		if (count($vals) > 2) {
-// 			$id = $vals[2];
-// 			if (is_numeric($id)) {
+// 		id = '';
+// 		trans = '';
+// 		if (count(vals) > 2) {
+// 			id = vals[2];
+// 			if (is_numeric(id)) {
 // 				if (
-// 					get_first_value("select count(WoID) as value from " . $tbpref . "words where WoID = "
-// 						. $id) < 1
+// 					get_first_value("select count(WoID) as value from " . tbpref . "words where WoID = "
+// 						. id) < 1
 // 				)
-// 					$id = '';
+// 					id = '';
 // 			}
 // 		}
-// 		if (count($vals) > 3)
-// 			$trans = $vals[3];
-// 		$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;"' .
-// 			($rtlScript ? ' dir="rtl"' : '') . '><span id="term' . $i . '">';
-// 		$r .= tohtml($vals[1]);
-// 		$mustredo = (trim($wordlc) === mb_strtolower(trim($vals[1]), 'UTF-8'));
-// 		$r .= '</span></td><td class="td1 center" nowrap="nowrap">';
-// 		$r .= makeDictLinks($langid, prepare_textdata_js($vals[1]));
-// 		$r .= '</td><td class="td1 center"><span id="editlink' . $i . '">';
-// 		if ($id === '') {
-// 			$plus = '&nbsp;';
+// 		if (count(vals) > 3)
+// 			trans = vals[3];
+// 		r .= '<tr><td class="td1 center" style="font-size:' . textsize . '%;"' .
+// 			(rtlScript ? ' dir="rtl"' : '') . '><span id="term' . i . '">';
+// 		r .= tohtml(vals[1]);
+// 		mustredo = (trim(wordlc) === mb_strtolower(trim(vals[1]), 'UTF-8'));
+// 		r .= '</span></td><td class="td1 center" nowrap="nowrap">';
+// 		r .= makeDictLinks(langid, prepare_textdata_js(vals[1]));
+// 		r .= '</td><td class="td1 center"><span id="editlink' . i . '">';
+// 		if (id === '') {
+// 			plus = '&nbsp;';
 // 		} else {
-// 			$plus = '<a name="rec' . $i . '"></a><span class="click" onclick="oewin(\'edit_word?fromAnn=\' + $(document).scrollTop() + \'&wid=' . $id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
+// 			plus = '<a name="rec' . i . '"></a><span class="click" onclick="oewin(\'edit_word?fromAnn=\' + $(document).scrollTop() + \'&wid=' . id . '\');"><img src="icn/sticky-note--pencil.png" title="Edit Term" alt="Edit Term" /></span>';
 // 		}
-// 		if ($mustredo)
-// 			$rr .= "$('#editlink" . $i . "').html(" . prepare_textdata_js($plus) . ");";
-// 		$r .= $plus;
-// 		$r .= '</span></td><td class="td1" style="font-size:90%;"><span id="transsel' . $i . '">';
-// 		$plus = make_trans($i, $id, $trans, $vals[1], $langid);
-// 		if ($mustredo)
-// 			$rr .= "$('#transsel" . $i . "').html(" . prepare_textdata_js($plus) . ");";
-// 		$r .= $plus;
-// 		$r .= '</span></td></tr>';
+// 		if (mustredo)
+// 			rr .= "$('#editlink" . i . "').html(" . prepare_textdata_js(plus) . ");";
+// 		r .= plus;
+// 		r .= '</span></td><td class="td1" style="font-size:90%;"><span id="transsel' . i . '">';
+// 		plus = make_trans(i, id, trans, vals[1], langid);
+// 		if (mustredo)
+// 			rr .= "$('#transsel" . i . "').html(" . prepare_textdata_js(plus) . ");";
+// 		r .= plus;
+// 		r .= '</span></td></tr>';
 // 	} else {
-// 		if (trim($vals[1]) !== '') {
-// 			$nontermbuffer .= str_replace("¶", '<img src="icn/new_line.png" title="New Line" alt="New Line" />', tohtml($vals[1]));
+// 		if (trim(vals[1]) !== '') {
+// 			nontermbuffer .= str_replace("¶", '<img src="icn/new_line.png" title="New Line" alt="New Line" />', tohtml(vals[1]));
 // 		}
 // 	}
 // }
-// if ($nontermbuffer !== '') {
-// 	$r .= '<tr><td class="td1 center" style="font-size:' . $textsize . '%;">';
-// 	$r .= $nontermbuffer;
-// 	$r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . $textid . '\';" /></td></tr>';
+// if (nontermbuffer !== '') {
+// 	r .= '<tr><td class="td1 center" style="font-size:' . textsize . '%;">';
+// 	r .= nontermbuffer;
+// 	r .= '</td><td class="td1 right" colspan="3"><img class="click" src="icn/tick.png" title="Back to \'Display/Print Mode\'" alt="Back to \'Display/Print Mode\'" onclick="location.href=\'print_impr_text?text=' . textid . '\';" /></td></tr>';
 // }
-// $r .= '<th class="th1 center">Text</th>';
-// $r .= '<th class="th1 center">Dict.</th>';
-// $r .= '<th class="th1 center">Edit<br />Term</th>';
-// $r .= '<th class="th1 center">Term Translations (Delim.: ' . tohtml(getSettingWithDefault('set-term-translation-delimiters')) . ')<br /><input type="button" value="Reload" onclick="do_ajax_edit_impr_text(1e6,\'\');" /><a name="bottom"></a></th>';
-// $r .= '</tr></table></form>' . "\n";
+// r .= '<th class="th1 center">Text</th>';
+// r .= '<th class="th1 center">Dict.</th>';
+// r .= '<th class="th1 center">Edit<br />Term</th>';
+// r .= '<th class="th1 center">Term Translations (Delim.: ' . tohtml(getSettingWithDefault('set-term-translation-delimiters')) . ')<br /><input type="button" value="Reload" onclick="do_ajax_edit_impr_text(1e6,\'\');" /><a name="bottom"></a></th>';
+// r .= '</tr></table></form>' . "\n";
 // /*
-// $r .= '<script type="text/javascript">' . "\n";
-// $r .= '//<![CDATA[' . "\n";
-// $r .= '$(document).ready( function() {' . "\n";
-// $r .= "$('input.impr-ann-text').change(changeImprAnnText);\n";
-// $r .= "$('input.impr-ann-radio').change(changeImprAnnRadio);\n";
-// $r .= '} );' . "\n";
-// $r .= '//]]>' . "\n";
-// $r .= '</script>' . "\n";
+// r .= '<script type="text/javascript">' . "\n";
+// r .= '//<![CDATA[' . "\n";
+// r .= '$(document).ready( function() {' . "\n";
+// r .= "$('input.impr-ann-text').change(changeImprAnnText);\n";
+// r .= "$('input.impr-ann-radio').change(changeImprAnnRadio);\n";
+// r .= '} );' . "\n";
+// r .= '//]]>' . "\n";
+// r .= '</script>' . "\n";
 // */
 
-// if ($wordlc === '')
-// 	echo "$('#editimprtextdata').html(" . prepare_textdata_js($r) . ");";
+// if (wordlc === '')
+// 	echo "$('#editimprtextdata').html(" . prepare_textdata_js(r) . ");";
 // else
-// 	echo $rr;
+// 	echo rr;
 
 // ?>
 
-// $fromAnn = getreq("fromAnn"); // from-recno or empty
+// fromAnn = getreq("fromAnn"); // from-recno or empty
 
 // // INS/UPD
 
 // if (isset($_REQUEST['op'])) {
 
-// 	$textlc = trim(prepare_textdata($_REQUEST["WoTextLC"]));
-// 	$text = trim(prepare_textdata($_REQUEST["WoText"]));
+// 	textlc = trim(prepare_textdata($_REQUEST["WoTextLC"]));
+// 	text = trim(prepare_textdata($_REQUEST["WoText"]));
 
-// 	if (mb_strtolower($text, 'UTF-8') === $textlc) {
+// 	if (mb_strtolower(text, 'UTF-8') === textlc) {
 
 // 		// INSERT
 
 // 		if ($_REQUEST['op'] === 'Save') {
 
-// 			$titletext = "New Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
-// 			pagestart_nobody($titletext);
-// 			echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
+// 			titletext = "New Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
+// 			pagestart_nobody(titletext);
+// 			echo '<h4><span class="bigger">' . titletext . '</span></h4>';
 
-// 			$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, ' .
+// 			message = runsql('insert into ' . tbpref . 'words (WoLgID, WoTextLC, WoText, ' .
 // 				'WoStatus, WoTranslation, WoSentence, WoRomanization, WoStatusChanged,' . make_score_random_insert_update('iv') . ') values( ' .
 // 				$_REQUEST["WoLgID"] . ', ' .
 // 				convert_string_to_sqlsyntax($_REQUEST["WoTextLC"]) . ', ' .
 // 				convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', ' .
 // 				$_REQUEST["WoStatus"] . ', ' .
-// 				convert_string_to_sqlsyntax($translation) . ', ' .
+// 				convert_string_to_sqlsyntax(translation) . ', ' .
 // 				convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', ' .
 // 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .
 // 				make_score_random_insert_update('id') . ')', "Term saved");
-// 			$wid = get_last_key();
+// 			wid = get_last_key();
 
-// 			$hex = strToClassName(prepare_textdata($_REQUEST["WoTextLC"]));
+// 			hex = strToClassName(prepare_textdata($_REQUEST["WoTextLC"]));
 
 // 		} // $_REQUEST['op'] === 'Save'
 
 // 		// UPDATE
 // 		else {  // $_REQUEST['op'] !== 'Save'
 
-// 			$titletext = "Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
-// 			pagestart_nobody($titletext);
-// 			echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
+// 			titletext = "Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
+// 			pagestart_nobody(titletext);
+// 			echo '<h4><span class="bigger">' . titletext . '</span></h4>';
 
-// 			$oldstatus = $_REQUEST["WoOldStatus"];
-// 			$newstatus = $_REQUEST["WoStatus"];
-// 			$xx = '';
-// 			if ($oldstatus !== $newstatus)
-// 				$xx = ', WoStatus = ' . $newstatus . ', WoStatusChanged = NOW()';
+// 			oldstatus = $_REQUEST["WoOldStatus"];
+// 			newstatus = $_REQUEST["WoStatus"];
+// 			xx = '';
+// 			if (oldstatus !== newstatus)
+// 				xx = ', WoStatus = ' . newstatus . ', WoStatusChanged = NOW()';
 
-// 			$message = runsql('update ' . $tbpref . 'words set WoText = ' .
+// 			message = runsql('update ' . tbpref . 'words set WoText = ' .
 // 				convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', WoTranslation = ' .
-// 				convert_string_to_sqlsyntax($translation) . ', WoSentence = ' .
+// 				convert_string_to_sqlsyntax(translation) . ', WoSentence = ' .
 // 				convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', WoRomanization = ' .
-// 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
-// 			$wid = $_REQUEST["WoID"];
+// 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
+// 			wid = $_REQUEST["WoID"];
 
 // 		}  // $_REQUEST['op'] !== 'Save'
 
-// 		saveWordTags($wid);
+// 		saveWordTags(wid);
 
-// 	} // (mb_strtolower($text, 'UTF-8') === $textlc)
-// 	else { // (mb_strtolower($text, 'UTF-8') !== $textlc)
+// 	} // (mb_strtolower(text, 'UTF-8') === textlc)
+// 	else { // (mb_strtolower(text, 'UTF-8') !== textlc)
 
-// 		$titletext = "New/Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
-// 		pagestart_nobody($titletext);
-// 		echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
-// 		$message = 'Error: Term in lowercase must be exactly = "' . $textlc . '", please go back and correct this!';
-// 		echo error_message_with_hide($message, 0);
+// 		titletext = "New/Edit Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
+// 		pagestart_nobody(titletext);
+// 		echo '<h4><span class="bigger">' . titletext . '</span></h4>';
+// 		message = 'Error: Term in lowercase must be exactly = "' . textlc . '", please go back and correct this!';
+// 		echo error_message_with_hide(message, 0);
 // 		pageend();
 // 		exit();
 
@@ -592,29 +665,29 @@ export function GetWordstatusSelectoptions({
 // 	?>
 
 // 	<p>OK:
-// 		<?php echo tohtml($message); ?>
+// 		<?php echo tohtml(message); ?>
 // 	</p>
 
 // 	<script type="text/javascript">
 // 		//<![CDATA[
 // 		<?php
-// 		if ($fromAnn !== '') {
+// 		if (fromAnn !== '') {
 // 			?>
-// 			window.opener.do_ajax_edit_impr_text(<?php echo $fromAnn; ?>, <?php echo prepare_textdata_js($textlc); ?>);
+// 			window.opener.do_ajax_edit_impr_text(<?php echo fromAnn; ?>, <?php echo prepare_textdata_js(textlc); ?>);
 // 			<?php
 // 		} else {
 // 			?>
 // 			var context = window.parent.frames['l'].document;
 // 			var contexth = window.parent.frames['h'].document;
-// 			var woid = <?php echo prepare_textdata_js($wid); ?>;
+// 			var woid = <?php echo prepare_textdata_js(wid); ?>;
 // 			var status = <?php echo prepare_textdata_js($_REQUEST["WoStatus"]); ?>;
-// 			var trans = <?php echo prepare_textdata_js($translation . getWordTagList($wid, ' ', 1, 0)); ?>;
+// 			var trans = <?php echo prepare_textdata_js(translation . getWordTagList(wid, ' ', 1, 0)); ?>;
 // 			var roman = <?php echo prepare_textdata_js($_REQUEST["WoRomanization"]); ?>;
 // 			var title = make_tooltip(<?php echo prepare_textdata_js($_REQUEST["WoText"]); ?>, trans, roman, status);
 // 			<?php
 // 			if ($_REQUEST['op'] === 'Save') {
 // 				?>
-// 				$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('word' + woid + ' ' + 'status' + status).attr('data_trans', trans).attr('data_rom', roman).attr('data_status', status).attr('data_wid', woid).attr('title', title);
+// 				$('.TERM<?php echo hex; ?>', context).removeClass('status0').addClass('word' + woid + ' ' + 'status' + status).attr('data_trans', trans).attr('data_rom', roman).attr('data_status', status).attr('data_wid', woid).attr('title', title);
 // 				<?php
 // 			} else {
 // 				?>
@@ -626,7 +699,7 @@ export function GetWordstatusSelectoptions({
 // 			window.parent.frames['l'].focus();
 // 			window.parent.frames['l'].setTimeout('cClick()', 100);
 // 			<?php
-// 		}  // $fromAnn !== ''
+// 		}  // fromAnn !== ''
 // 		?>
 // 		//]]>
 // 	</script>

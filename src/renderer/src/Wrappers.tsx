@@ -4,7 +4,10 @@ import { LanguagesID, Tags2ID, TagsID, TextsID } from './data/validators';
 import { useData } from './hooks/useData';
 import { useUpdateParams } from './hooks/useInternalNav';
 import { useInternalParams } from './hooks/useInternalParams';
-import { EditArchivedTexts } from './pages/ArchivedText/EditArchivedTexts.component';
+import {
+  DisplayArchivedTexts,
+  EditArchivedText,
+} from './pages/ArchivedText/EditArchivedTexts.component';
 import { UploadWords } from './pages/IO/UploadWords.component';
 import { EditLanguage } from './pages/Language/EditLanguage.component';
 import { LanguagesPage } from './pages/Language/Languages.component';
@@ -223,6 +226,7 @@ export function EditArchivedTextsWrapper() {
   const tag12 = searchParams.get('tag12');
   const tag1 = searchParams.get('tag1');
   const tag2 = searchParams.get('tag2');
+  const chgID = searchParams.get('chg');
   const unarch = searchParams.get('unarch');
 
   const paramUpdater = useUpdateParams();
@@ -231,15 +235,23 @@ export function EditArchivedTextsWrapper() {
     dataService.unarchiveText(Number.parseInt(unarch));
     paramUpdater(null);
   }
+  console.log('TEST123-chgid', Number.parseInt(chgID));
   return (
-    <EditArchivedTexts
-      query={query || ''}
-      currentPage={page !== null ? Number.parseInt(page) : 1}
-      tag12={tag12 && ['1', '0'].includes(tag12) ? Number.parseInt(tag12) : 0}
-      tag1={tag1 !== null || tag1 === '' ? Number.parseInt<TagsID>(tag1) : null}
-      tag2={tag2 !== null || tag2 === '' ? Number.parseInt<TagsID>(tag2) : null}
-      sorting={sort !== null ? Number.parseInt(sort) : undefined}
-    />
+    <Switch on={chgID !== null}>
+      <DisplayArchivedTexts
+        query={query || ''}
+        currentPage={page !== null ? Number.parseInt(page) : 1}
+        tag12={tag12 && ['1', '0'].includes(tag12) ? Number.parseInt(tag12) : 0}
+        tag1={
+          tag1 !== null || tag1 === '' ? Number.parseInt<TagsID>(tag1) : null
+        }
+        tag2={
+          tag2 !== null || tag2 === '' ? Number.parseInt<TagsID>(tag2) : null
+        }
+        sorting={sort !== null ? Number.parseInt(sort) : undefined}
+      />
+      <EditArchivedText chgID={Number.parseInt(chgID!)} />
+    </Switch>
   );
 }
 

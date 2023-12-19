@@ -905,7 +905,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             />
           </EntryRow>
           <EntryRow headerText={'Tags'}>
-            <WordTagsAutocomplete ref={refMap.taglist} />
+            <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
           </EntryRow>
           <EntryRow headerText={'Romaniz.'}>
             <WoInput

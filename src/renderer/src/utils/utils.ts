@@ -732,30 +732,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 
 // // -------------------------------------------------------------
 
-// function errorbutton(msg)
-// {
-// 	if (substr(msg, 0, 5) === "Error")
-// 		return '<input type="button" value="&lt;&lt; Back" onClick="history.back();" />';
-// 	else
-// 		return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function optimizedb()
-// {
-// 	global tbpref;
-// 	adjust_autoincr('archivedtexts', 'AtID');
-// 	adjust_autoincr('languages', 'LgID');
-// 	adjust_autoincr('sentences', 'SeID');
-// 	adjust_autoincr('textitems', 'TiID');
-// 	adjust_autoincr('texts', 'TxID');
-// 	adjust_autoincr('words', 'WoID');
-// 	adjust_autoincr('tags', 'TgID');
-// 	adjust_autoincr('tags2', 'T2ID');
-// 	dummy = runsql('OPTIMIZE TABLE ' . tbpref . 'archivedtexts,' . tbpref . 'languages,' . tbpref . 'sentences,' . tbpref . 'textitems,' . tbpref . 'texts,' . tbpref . 'words,' . tbpref . 'settings,' . tbpref . 'tags,' . tbpref . 'wordtags,' . tbpref . 'tags2,' . tbpref . 'texttags,' . tbpref . 'archtexttags, _lwtgeneral', '');
-// }
-
 /**
  *
  * @param softHyphenString
@@ -1603,58 +1579,6 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-// function get_setting_data()
-// {
-// 	static setting_data;
-// 	if (!setting_data) {
-// 		setting_data = array(
-// 			'set-text-h-frameheight-no-audio' =>
-// 			array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
-// 			'set-text-h-frameheight-with-audio' =>
-// 			array("dft" => '200', "num" => 1, "min" => 10, "max" => 999),
-// 			'set-text-l-framewidth-percent' =>
-// 			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-// 			'set-text-r-frameheight-percent' =>
-// 			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-// 			'set-test-h-frameheight' =>
-// 			array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
-// 			'set-test-l-framewidth-percent' =>
-// 			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-// 			'set-test-r-frameheight-percent' =>
-// 			array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-// 			'set-test-main-frame-waiting-time' =>
-// 			array("dft" => '0', "num" => 1, "min" => 0, "max" => 9999),
-// 			'set-test-edit-frame-waiting-time' =>
-// 			array("dft" => '500', "num" => 1, "min" => 0, "max" => 99999999),
-// 			'set-test-sentence-count' =>
-// 			array("dft" => '1', "num" => 0),
-// 			'set-term-sentence-count' =>
-// 			array("dft" => '1', "num" => 0),
-// 			'set-archivedtexts-per-page' =>
-// 			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
-// 			'set-texts-per-page' =>
-// 			array("dft" => '10', "num" => 1, "min" => 1, "max" => 9999),
-// 			'set-terms-per-page' =>
-// 			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
-// 			'set-tags-per-page' =>
-// 			array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
-// 			'set-show-text-word-counts' =>
-// 			array("dft" => '1', "num" => 0),
-// 			'set-text-visit-statuses-via-key' =>
-// 			array("dft" => '', "num" => 0),
-// 			'set-term-translation-delimiters' =>
-// 			array("dft" => '/;|', "num" => 0),
-// 			'set-mobile-display-mode' =>
-// 			array("dft" => '0', "num" => 0),
-// 			'set-similar-terms-count' =>
-// 			array("dft" => '0', "num" => 1, "min" => 0, "max" => 9)
-// 		);
-// 	}
-// 	return setting_data;
-// }
-
-// // -------------------------------------------------------------
-
 // function reparse_all_texts()
 // {
 // 	global tbpref;
@@ -1688,25 +1612,6 @@ export function replaceTabsWithNewLine(s: string) {
 // 	r = get_first_value("select LgName as value from " . tbpref . "languages where LgID='" . lid . "'");
 // 	if (isset(r))
 // 		return r;
-// 	return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function getScriptDirectionTag(lid)
-// {
-// 	global tbpref;
-// 	if (!isset(lid))
-// 		return '';
-// 	if (trim(lid) === '')
-// 		return '';
-// 	if (!is_numeric(lid))
-// 		return '';
-// 	r = get_first_value("select LgRightToLeft as value from " . tbpref . "languages where LgID='" . lid . "'");
-// 	if (isset(r)) {
-// 		if (r)
-// 			return ' dir="rtl" ';
-// 	}
 // 	return '';
 // }
 
@@ -2671,7 +2576,7 @@ export function splitCheckText(
           TiTextLC: term.trim().toLowerCase(),
           TiOrder: ii + ss,
           // TODO
-          TiWordCount: 0,
+          TiWordCount: 1,
           TiLgID: language.LgID,
           TiTxID: text.TxID,
           TiSeID: SeID,
@@ -2804,13 +2709,15 @@ export function cleanText(
   LgSplitEachChar: LanguageNoID['LgSplitEachChar']
 ) {
   let s = text
-    .replace(new RegExp('\\r\\n'), '\n')
+    .replace(new RegExp('\\r\\n', 'g'), '\n')
     .replace(new RegExp('\\n', 'g'), ' ¶ ')
-    .replace(new RegExp('\\t'), ' ')
+    .replace(new RegExp('\\t', 'g'), ' ')
     .trim();
   if (LgSplitEachChar) {
     // add space after anything not a space
-    s = s.replace(/([^\s])/u, '$1 ');
+    console.log('TEST123-spliteachchar', s);
+    s = s.replace(new RegExp(/([^\s])/u, 'g'), '$1 ');
+    console.log('TEST123-spliteachchar', s);
   }
   // replace any multiple spaces with single space
   s = s.replace(/\s{2,}/u, ' ');

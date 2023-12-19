@@ -1,7 +1,12 @@
 import { useRef } from 'react';
 import { dataService } from '../../data/data.service';
-import { ArchivedTextID, TagsID } from '../../data/validators';
+import {
+  ArchivedTextID,
+  ArchivedTextsWithTagsValidator,
+  TagsID,
+} from '../../data/validators';
 import { useData } from '../../hooks/useData';
+import { useFormInput } from '../../hooks/useFormInput';
 import {
   useInternalNavigate,
   useUpdateParams,
@@ -16,7 +21,9 @@ import { SortableHeader } from '../../ui-kit/SortableHeader';
 import { TableFooter } from '../../ui-kit/TableFooter';
 import { TagAndOr } from '../../ui-kit/TagAndOr';
 import { TagDropDown } from '../../ui-kit/TagDropDown';
+import { TextTagsAutocomplete } from '../../ui-kit/TagsAutocomplete';
 import { confirmDelete } from '../../utils/utils';
+import { SelectMediaPath } from '../SelectMediaPath';
 import {
   GetMultipleArchivedTextActionsSelectOptions,
   GetTextsSortSelectoptions,
@@ -25,7 +32,10 @@ import { TextSorting } from '../Sorting';
 import { FilterSortPager } from './FilterSortPager';
 import { buildTextTagLookup } from './buildTextTagLookup';
 
-export function EditArchivedTexts({
+/**
+ *
+ */
+export function DisplayArchivedTexts({
   query,
   currentPage,
   tag12,
@@ -345,4 +355,173 @@ export function EditArchivedTexts({
  */
 export function resetAll(refMap: string): void {
   window.alert('TODO Function not implemented.');
+}
+/**
+ *
+ */
+export function EditArchivedText({ chgID }: { chgID: ArchivedTextID }) {
+  const [{ archivedtexts }] = useData(['archivedtexts']);
+  const text = archivedtexts.find((val) => val.AtID === chgID);
+  console.log('TEST123-AT', { chgID, archivedtexts });
+  // $sql = 'select AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI, length(AtAnnotatedText) as annotlen from ' . $tbpref . 'archivedtexts where AtID = ' . $_REQUEST['chg'];
+  // $res = do_mysqli_query($sql);
+  // if ($record = mysqli_fetch_assoc($res)) {
+  const {
+    Input: AtInput,
+    onSubmit,
+    refMap,
+    setDirty,
+    TextArea: AtTextArea,
+    LanguageSelectInput,
+  } = useFormInput({ validator: ArchivedTextsWithTagsValidator, entry: text });
+
+  if (!text) {
+    return <></>;
+    // throw new Error('Invalid ChgID!');
+  }
+  const {
+    AtAudioURI,
+    AtAnnotatedText,
+    AtID,
+    AtLgID,
+    AtText,
+    AtTitle,
+    AtSourceURI,
+  } = text;
+  const annotlen = AtAnnotatedText.length;
+  return (
+    <>
+      <h4>Edit Archived Text</h4>
+      <form className="validate">
+        <AtInput type="hidden" entryKey="AtID" />
+        <table className="tab3" cellSpacing={0} cellPadding={5}>
+          <tr>
+            <td className="td1 right">Language:</td>
+            <td className="td1">
+              <LanguageSelectInput entryKey={'AtLgID'} isRequired />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Title:</td>
+            <td className="td1">
+              <AtInput
+                type="text"
+                className="notempty checkoutsidebmp"
+                errorName="Title"
+                entryKey="AtTitle"
+                default
+                maxLength={200}
+                size={60}
+              />{' '}
+              <img
+                src="icn/status-busy.png"
+                title="Field must not be empty"
+                alt="Field must not be empty"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Text:</td>
+            <td className="td1">
+              <AtTextArea
+                isRequired
+                entryKey="AtText"
+                className="notempty checkbytes checkoutsidebmp"
+                // data_maxlength={65000}
+                errorName="Text"
+                cols={60}
+                rows={20}
+                default
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Ann.Text:</td>
+            <td className="td1">
+              {annotlen ? (
+                <>
+                  <img
+                    src="icn/tick.png"
+                    title="With Annotation"
+                    alt="With Annotation"
+                  />{' '}
+                  Exists - May be partially or fully lost if you change the
+                  text!
+                </>
+              ) : (
+                <>
+                  <img
+                    src="icn/cross.png"
+                    title="No Annotation"
+                    alt="No Annotation"
+                  />{' '}
+                  - None
+                </>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Source URI:</td>
+            <td className="td1">
+              <AtInput
+                type="text"
+                className="checkurl checkoutsidebmp"
+                errorName="Source URI"
+                entryKey="AtSourceURI"
+                default
+                maxLength={1000}
+                size={60}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Tags:</td>
+            <td className="td1">
+              <TextTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right">Audio-URI:</td>
+            <td className="td1">
+              <AtInput
+                type="text"
+                default
+                className="checkoutsidebmp"
+                errorName="Audio-URI"
+                entryKey="AtAudioURI"
+                maxLength={200}
+                size={60}
+              />
+              <span id="mediaselect">
+                <SelectMediaPath f={AtAudioURI} />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td className="td1 right" colSpan={2}>
+              <input
+                type="button"
+                value="Cancel"
+                // onClick={() =>
+                //   onSubmit({}, (data) => {
+                //     dataService.editArchivedText(data);
+                //   })
+                // }
+                // onClick="{resetDirty(); location.href='edit_archivedtexts.php#rec<?php echo $_REQUEST['chg']; ?>';}"
+              />
+              <input
+                type="button"
+                value="Change"
+                onClick={() =>
+                  onSubmit({}, (data) => {
+                    dataService.editArchivedText(data);
+                  })
+                }
+              />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </>
+  );
 }

@@ -31,6 +31,10 @@ type ColumnAssignment = {
 export function parseCsvTerms(filePath: string) {
   return {};
 }
+export type TermParsedFromCSV = Word & {
+  taglist: string[];
+};
+
 /**
  *
  * @param refMap
@@ -39,7 +43,7 @@ export async function parseTermsFromCSV<
   TData extends ReturnType<typeof UploadTermsValidator>['TYPE'] = ReturnType<
     typeof UploadTermsValidator
   >['TYPE']
->(value: TData) {
+>(value: TData): TermParsedFromCSV[] {
   const fileBlob = value.file.file;
   console.log('blob', fileBlob);
   const stringdata = await fileBlob?.text();
@@ -67,13 +71,25 @@ export async function parseTermsFromCSV<
     .map((row) => {
       type TaggableWord = Pick<Word, ItemsFromWord> & {
         // TODO do something with this
-        TagList: string[];
+        TagList?: string[];
       };
 
+      const mapColumn: {
+        [key in Exclude<TermName, 'x'>]: (val: string) => any;
+      } = {
+        g: (val) => val.replace(' ', ',').split(','),
+        r: (val) => val,
+        s: (val) => val,
+        t: (val) => val,
+        w: (val) => val,
+      };
       const term = Object.fromEntries(
         colIndsToCareAbout.map(
           ([ind, colKey]) =>
-            [ColumnImportMode[colKey]['termParam'], row[ind]] as [
+            [
+              ColumnImportMode[colKey]['termParam'],
+              mapColumn[colKey](row[ind]),
+            ] as [
               (typeof ColumnImportMode)[RelevantTermName]['termParam'],
               TaggableWord[ColumnImportModeTermParam]
             ]

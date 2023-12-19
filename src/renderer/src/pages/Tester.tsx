@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import SplitPane from 'react-split-pane';
 import { LanguagesID, TextsID } from '../data/validators';
 import { useData } from '../hooks/useData';
 import { useTick } from '../hooks/useTimer';
 import { useUpdateActiveText } from '../hooks/useUpdateActiveText';
 import { PLUGINS } from '../plugins';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
+import { FourFramePage } from '../ui-kit/FourFrames';
 import { Header } from '../ui-kit/Header';
 import { Icon } from '../ui-kit/Icon';
 import { Language, TextItem, Word } from '../utils/parseMySqlDump';
@@ -290,15 +290,61 @@ export function TesterTable({
 }) {
   // TODO;
   // BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\'
+  const [showEdit, setShowEdit] = useState(true);
+  const [showStatus, setShowStatus] = useState(true);
+  const [showTerm, setShowTerm] = useState(true);
+  const [showTranslation, setShowTranslation] = useState(true);
+  const [showRomanization, setShowRomanization] = useState(true);
+  const [showSentence, setShowSentence] = useState(true);
   return (
     <>
       <p>
-        <input type="checkbox" id="cbEdit" /> Edit
-        <input type="checkbox" id="cbStatus" /> Status
-        <input type="checkbox" id="cbTerm" /> Term
-        <input type="checkbox" id="cbTrans" /> Translation
-        <input type="checkbox" id="cbRom" /> Romanization
-        <input type="checkbox" id="cbSentence" /> Sentence
+        <input
+          checked={showEdit}
+          onChange={({ target: { checked: value } }) => setShowEdit(value)}
+          type="checkbox"
+          id="cbEdit"
+        />{' '}
+        Edit
+        <input
+          checked={showStatus}
+          onChange={({ target: { checked: value } }) => setShowStatus(value)}
+          type="checkbox"
+          id="cbStatus"
+        />{' '}
+        Status
+        <input
+          checked={showTerm}
+          onChange={({ target: { checked: value } }) => setShowTerm(value)}
+          type="checkbox"
+          id="cbTerm"
+        />{' '}
+        Term
+        <input
+          checked={showTranslation}
+          onChange={({ target: { checked: value } }) =>
+            setShowTranslation(value)
+          }
+          type="checkbox"
+          id="cbTrans"
+        />{' '}
+        Translation
+        <input
+          checked={showRomanization}
+          onChange={({ target: { checked: value } }) =>
+            setShowRomanization(value)
+          }
+          type="checkbox"
+          id="cbRom"
+        />{' '}
+        Romanization
+        <input
+          checked={showSentence}
+          onChange={({ target: { checked: value } }) => setShowSentence(value)}
+          type="checkbox"
+          id="cbSentence"
+        />{' '}
+        Sentence
       </p>
 
       <table
@@ -308,12 +354,12 @@ export function TesterTable({
         cellPadding={5}
       >
         <tr>
-          <th className="th1">Ed</th>
-          <th className="th1 clickable">Status</th>
-          <th className="th1 clickable">Term</th>
-          <th className="th1 clickable">Translation</th>
-          <th className="th1 clickable">Romanization</th>
-          <th className="th1 clickable">Sentence</th>
+          {showEdit && <th className="th1">Ed</th>}
+          {showStatus && <th className="th1 clickable">Status</th>}
+          {showTerm && <th className="th1 clickable">Term</th>}
+          {showTranslation && <th className="th1 clickable">Translation</th>}
+          {showRomanization && <th className="th1 clickable">Romanization</th>}
+          {showSentence && <th className="th1 clickable">Sentence</th>}
         </tr>
         {/* <?php
     
@@ -332,45 +378,59 @@ export function TesterTable({
             ?> */}
         {words.map((word) => (
           <tr>
-            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-              <a
-                href="edit_tword?wid=<?php echo record['WoID']; ?>"
-                target="ro"
+            {showEdit && (
+              <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                <a
+                  href="edit_tword?wid=<?php echo record['WoID']; ?>"
+                  target="ro"
+                >
+                  <Icon src="sticky-note--pencil" title="Edit Term" />
+                </a>
+              </td>
+            )}
+            {showStatus && (
+              <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+                <span id="STAT<?php echo record['WoID']; ?>">
+                  {/* <?php echo make_status_controls_test_table(record['Score'], record['WoStatus'], record['WoID']); ?> */}
+                </span>
+              </td>
+            )}
+            {showTerm && (
+              <td
+                className="td1 center"
+                style={{ fontSize: language.LgTextSize }}
               >
-                <Icon src="sticky-note--pencil" title="Edit Term" />
-              </a>
-            </td>
-            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-              <span id="STAT<?php echo record['WoID']; ?>">
-                {/* <?php echo make_status_controls_test_table(record['Score'], record['WoStatus'], record['WoID']); ?> */}
-              </span>
-            </td>
-            <td
-              className="td1 center"
-              style={{ fontSize: language.LgTextSize }}
-            >
-              {/* <?php echo span1; ?> */}
-              <span id="TERM<?php echo record['WoID']; ?>">{word.WoText}</span>
-              {/* <?php echo span2; ?> */}
-            </td>
-            <td className="td1 center">
-              <span id="TRAN<?php echo record['WoID']; ?>">
-                {word.WoTranslation}
-              </span>
-            </td>
-            <td className="td1 center">
-              <span id="ROMA<?php echo record['WoID']; ?>">
-                {/* <?php echo tohtml(record['WoRomanization']); ?> */}
-              </span>
-            </td>
-            <td className="td1 center">
-              {/* <?php echo span1; ?> */}
-              <span id="SENT<?php echo record['WoID']; ?>">
-                {word.WoSentence}
-                {/* <?php echo sent1; ?> */}
-              </span>
-              {/* <?php echo span2; ?> */}
-            </td>
+                {/* <?php echo span1; ?> */}
+                <span id="TERM<?php echo record['WoID']; ?>">
+                  {word.WoText}
+                </span>
+                {/* <?php echo span2; ?> */}
+              </td>
+            )}
+            {showTranslation && (
+              <td className="td1 center">
+                <span id="TRAN<?php echo record['WoID']; ?>">
+                  {word.WoTranslation}
+                </span>
+              </td>
+            )}
+            {showRomanization && (
+              <td className="td1 center">
+                <span id="ROMA<?php echo record['WoID']; ?>">
+                  {/* <?php echo tohtml(record['WoRomanization']); ?> */}
+                </span>
+              </td>
+            )}
+            {showSentence && (
+              <td className="td1 center">
+                {/* <?php echo span1; ?> */}
+                <span id="SENT<?php echo record['WoID']; ?>">
+                  {word.WoSentence}
+                  {/* <?php echo sent1; ?> */}
+                </span>
+                {/* <?php echo span2; ?> */}
+              </td>
+            )}
           </tr>
         ))}
       </table>
@@ -583,13 +643,42 @@ export function TesterPage({
     ? availableAPIPlugins[translateAPIParams?.apiKey]
     : null;
   return (
-    <SplitPane split="vertical" minSize={50} defaultSize="55%">
-      <SplitPane
-        style={{ overflowWrap: 'break-word' }}
-        split="horizontal"
-        minSize={50}
-        defaultSize="20%"
-      >
+    <FourFramePage
+      frameSizes={{
+        lFrameWidthPercKey: 'set-test-l-framewidth-percent',
+        hFrameHeightKey: 'set-test-h-frameheight',
+        rFrameHeightPercKey: 'set-test-r-frameheight-percent',
+      }}
+      URFrame={() =>
+        activeWord ? (
+          <AddNewWordPane
+            word={activeWord}
+            existingTerm={words.find(
+              ({ WoTextLC }) => activeWord.toLowerCase() === WoTextLC
+            )}
+            langID={text.TxLgID}
+            onClearActiveWord={() => setActiveWord(null)}
+            setIFrameURL={setIFrameURL}
+            setTranslateAPIParams={setTranslateAPIParams}
+          />
+        ) : (
+          <></>
+        )
+      }
+      BLFrame={() =>
+        testModality === null ? (
+          <></>
+        ) : testModality === 'table' ? (
+          <TesterTable language={language} words={tableWords} />
+        ) : (
+          <Tester
+            modality={testModality}
+            setTranslateAPIParams={setTranslateAPIParams}
+            setIFrameURL={setIFrameURL}
+          />
+        )
+      }
+      ULFrame={() => (
         <>
           <Header title={`TEST ▶ ${text.TxTitle} (Due: TODO of TODO)`} />
 
@@ -629,34 +718,9 @@ export function TesterPage({
             />
           </p>
         </>
-        {testModality === null ? (
-          <></>
-        ) : testModality === 'table' ? (
-          <TesterTable language={language} words={tableWords} />
-        ) : (
-          <Tester
-            modality={testModality}
-            setTranslateAPIParams={setTranslateAPIParams}
-            setIFrameURL={setIFrameURL}
-          />
-        )}
-      </SplitPane>
-      <SplitPane split="horizontal" minSize={50} defaultSize="60%">
-        {activeWord ? (
-          <AddNewWordPane
-            word={activeWord}
-            existingTerm={words.find(
-              ({ WoTextLC }) => activeWord.toLowerCase() === WoTextLC
-            )}
-            langID={text.TxLgID}
-            onClearActiveWord={() => setActiveWord(null)}
-            setIFrameURL={setIFrameURL}
-            setTranslateAPIParams={setTranslateAPIParams}
-          />
-        ) : (
-          <></>
-        )}
-        {translateAPIParams && currentlyActiveAPI ? (
+      )}
+      BRFrame={() =>
+        translateAPIParams && currentlyActiveAPI ? (
           <TranslationAPI
             onAcceptLine={(data) =>
               console.log('TEST123-ACCEPTING TRANSLATION: ', data)
@@ -668,9 +732,9 @@ export function TesterPage({
           />
         ) : (
           <IFramePane url={iFrameURL} />
-        )}{' '}
-      </SplitPane>
-    </SplitPane>
+        )
+      }
+    />
   );
 }
 

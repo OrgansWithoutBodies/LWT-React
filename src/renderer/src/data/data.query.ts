@@ -68,12 +68,19 @@ export class DataQuery extends Query<DataState> {
   public archtexttags = this.select('archtexttags');
 
   public languages = this.select('languages');
+  // TODO use these
+  public languageHashmap = DataQuery.makeHash(this.languages, 'LgID');
 
   public sentences = this.select('sentences');
+  public sentenceHashmap = DataQuery.makeHash(this.sentences, 'SeID');
 
   public tags = this.select('tags');
+  public tagsHashmapByText = DataQuery.makeHash(this.tags, 'TgText');
+  public tagsHashmapByID = DataQuery.makeHash(this.tags, 'TgID');
 
   public tags2 = this.select('tags2');
+  public tags2HashmapByText = DataQuery.makeHash(this.tags2, 'T2Text');
+  public tags2HashmapByID = DataQuery.makeHash(this.tags2, 'T2ID');
 
   public textitems = this.select('textitems');
 
@@ -81,11 +88,13 @@ export class DataQuery extends Query<DataState> {
 
   public texttags = this.select('texttags');
 
-  public words = this.select('words').pipe(
-    tap((val) => console.log('QUERY WORDS', val))
-  );
+  public words = this.select('words');
+  public wordHashmapByID = DataQuery.makeHash(this.words, 'WoID');
+  public wordHashmapByLC = DataQuery.makeHash(this.words, 'WoTextLC');
 
   public wordtags = this.select('wordtags');
+  // TODO
+  // public wordTagsHashmapByWord = DataQuery.makeHash(this.worta, 'WoTextLC');
 
   public settings: Observable<Settings> = this.select('settings').pipe(
     map((settings) => {
@@ -295,6 +304,22 @@ export class DataQuery extends Query<DataState> {
       }))
     )
   );
+
+  // TODO types not right
+  private static makeHash<
+    TKey extends string,
+    TBrand extends number | string,
+    TObj extends { [key in TKey]: TBrand }
+  >(
+    observable: Observable<TObj[]>,
+    key: TKey
+  ): Observable<Record<TBrand, TObj>> {
+    return observable.pipe(
+      map((vals) =>
+        Object.fromEntries(vals.map((val) => [val[key], val] as [TBrand, TObj]))
+      )
+    );
+  }
 }
 export const dataQuery = new DataQuery(dataStore);
 

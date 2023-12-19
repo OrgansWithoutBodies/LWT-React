@@ -2,7 +2,11 @@ import { useRef, useState } from 'react';
 import { TextDetailRow } from '../../data/data.query';
 import { dataService } from '../../data/data.service';
 import { textPrevalidateMap } from '../../data/preValidateMaps';
-import { Tags2ID, TextsID, TextsValidator } from '../../data/validators';
+import {
+  Tags2ID,
+  TextsID,
+  TextsWithTagsValidator,
+} from '../../data/validators';
 import { useData } from '../../hooks/useData';
 import { useFormInput } from '../../hooks/useFormInput';
 import {
@@ -523,7 +527,7 @@ export function EditTextPane({
   if (!language) {
     throw new Error('Invalid text language ID');
   }
-  const validator = TextsValidator;
+  const validator = TextsWithTagsValidator;
   const navigator = useInternalNavigate();
 
   const {
@@ -531,6 +535,8 @@ export function EditTextPane({
     Input: TxInput,
     TextArea,
     LanguageSelectInput,
+    refMap,
+    setDirty,
   } = useFormInput({
     entry: editingText,
     validator,
@@ -632,7 +638,7 @@ export function EditTextPane({
           <tr>
             <td className="td1 right">Tags:</td>
             <td className="td1">
-              <TextTagsAutocomplete />
+              <TextTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
             </td>
           </tr>
           <tr>
