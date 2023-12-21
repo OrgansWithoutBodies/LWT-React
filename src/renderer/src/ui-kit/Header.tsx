@@ -7,6 +7,7 @@ import { useData } from '../hooks/useData';
 import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
 import { AppVariables } from '../meta';
 import { A } from '../nav/InternalLink';
+import { DevModeGate } from '../pages/LandingPage.component';
 import { Icon } from './Icon';
 import { headerValues } from './headerValues';
 
@@ -127,16 +128,18 @@ export function Header({
           </tr>
         </tbody>
       </table>
-      <I18N i="UI Language" />:{' '}
-      <select
-        onChange={({ target: { value } }) => dataService.setUILanguage(value)}
-      >
-        {I18NLanguages.map((lang) => (
-          <option value={lang} selected={settings.uilanguage === lang}>
-            {lang}
-          </option>
-        ))}
-      </select>
+      <DevModeGate>
+        <I18N i="UI Language" />:{' '}
+        <select
+          onChange={({ target: { value } }) => dataService.setUILanguage(value)}
+        >
+          {I18NLanguages.map((lang) => (
+            <option value={lang} selected={settings.uilanguage === lang}>
+              {lang}
+            </option>
+          ))}
+        </select>
+      </DevModeGate>
       {/* <h3>READ&nbsp;▶</h3></td><td className="width99pc"><h3>一中三宪 <A href="https://zh.wikipedia.org/wiki/%E4%B8%80%E4%B8%AD%E4%B8%89%E6%86%B2" target="_blank"><Icon iconName="chain" title="Text Source" /></A></h3> */}
     </>
   );

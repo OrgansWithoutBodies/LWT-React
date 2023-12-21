@@ -17,7 +17,7 @@ import {
   WordTag,
 } from '../utils/parseMySqlDump';
 
-export interface DataState {
+export interface LWTData {
   archivedtexts: ArchivedText[];
   archtexttags: ArchTextTag[];
   languages: Language[];
@@ -31,7 +31,8 @@ export interface DataState {
   texttags: TextTag[];
   words: Word[];
   wordtags: WordTag[];
-
+}
+export interface DataState extends LWTData {
   notificationMessage: null | { txt: string };
 }
 

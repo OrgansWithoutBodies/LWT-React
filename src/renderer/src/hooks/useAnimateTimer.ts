@@ -51,7 +51,6 @@ export function useAnimationTimer({
     },
     [duration, delay, retrigger] // Only re-run effect if duration or delay changes
   );
-  console.log('TEST123-elapsed', { elapsed });
   return elapsed;
 }
 

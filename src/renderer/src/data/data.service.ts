@@ -3,7 +3,7 @@ import demoDB from '../demo_db.json';
 
 import { Persistable } from '../../../shared/Persistable';
 import type { NumericalStrength } from '../pages/StrengthMap';
-import { downloadBackupFile } from '../utils/downloadTxtFile';
+import { downloadBlob } from '../utils/downloadTxtFile';
 import { makeScoreRandomInsertUpdate, splitCheckText } from '../utils/utils';
 import {
   DataState,
@@ -12,6 +12,7 @@ import {
   dataStore,
 } from './data.storage';
 
+import pako from 'pako';
 import { SuppportedI18NLanguages } from '../../../i18n/strings';
 import { TatoebaOpenAPIWrapper } from '../plugins/TatoebaAPI';
 import { serializeJsonToSQL } from '../utils/exports/serializeJsonToSQL';
@@ -81,7 +82,15 @@ export class DataService {
 
       const { [key]: value } = this.dataStore.getValue();
       console.log('TEST123-SETTING', value, key);
-      setter(key, value);
+      try {
+        setter(key, value);
+      } catch {
+        this.dataStore.update((state) => ({
+          ...state,
+          notificationMessage: { txt: `Error in persisting setting ${key}` },
+        }));
+      }
+      console.log('TEST123-SET', key);
     }
   }
 
@@ -625,58 +634,58 @@ export class DataService {
     mappedTerms.forEach((term) => this.persistInsert('words', term));
   }
 
+  public exportTerms(terms: WordsID[], mode: ExportTermType) {}
   public restoreFromBackup(file: File) {
-    // window.alert('TODO RESTORING FROM BACKUP ' + file.name);
-    // const reader = new FileReader();
-    // const buffer: string[] = [];
-    // reader.onload = async (e) => {
-    //   const text = e.target.result;
-    //   Gunzip.ungzip(text, function (err, dezipped) {
-    //     console.log('gunzip',dezipped.toString());
-    //   });
-    // };
-    // const text = reader.readAsText(file);
-    const reader = new FileReader();
-    const fileExt = file.name.split('.')[file.name.split('.').length - 1];
-    reader.onload = (ev) => {
-      const readData = ev.target?.result as string;
+    const archExt = file.name.split('.')[file.name.split('.').length - 1];
+    const fileExt = file.name.split('.')[file.name.split('.').length - 2];
+    // deflateGZip(reader);
+    console.log({ archExt, fileExt });
+    if (archExt !== 'gz') {
+      return;
+    }
+    ungz(file, (readData) => {
+      let parsedData = null;
+      console.log('READ');
       if (!readData) {
         return;
       }
-      if (fileExt === 'json') {
-        const jsonData = JSON.parse(readData);
 
-        console.log(jsonData);
+      if (fileExt === 'json') {
+        parsedData = JSON.parse(readData);
+
         return;
       }
       if (fileExt === 'sql') {
-        // TODO
-        // const parsedData = {};
-        // TODO count how many columns in this table?
-        const splitTablesRegex = new RegExp(' *CREATE TABLE `', 'g');
-        const tableStrings = readData.split(splitTablesRegex).slice(1);
-        tableStrings.forEach((tableVal) => {
-          const tableKey = tableVal.slice(0, tableVal.indexOf('` '));
-          // valid tableKey
-          if (Object.keys(Persistable).includes(tableKey)) {
-            const entryVals = tableVal.split('INSERT INTO').slice(1);
-            if (entryVals.length > 0) {
-              const entryValRegex = new RegExp(
-                ` ${tableKey} VALUES\\((.*)\\);\n`
-              );
-              const entryVal = entryVals[0].match(entryValRegex);
-              if (entryVal && entryVal?.length > 1) {
-                // TODO
-                // const entryColRegex = new RegExp('(.*),');
-                // entryVal[1].split();
-              }
-            }
-          }
-        });
-        // const tableName=
+        parsedData = parseSQL(readData);
       }
-    };
-    reader.readAsText(file);
+
+      this.dataStore.update(() => ({
+        ...parsedData,
+        notificationMessage: { txt: 'Installed Backup DB!' },
+      }));
+      // TODO persist this better
+
+      // TODO drop db
+      // TODO installDemo handler?
+      this.persistSet('settings');
+      this.persistSet('archivedtexts');
+      this.persistSet('archtexttags');
+      this.persistSet('languages');
+      this.persistSet('sentences');
+      this.persistSet('tags2');
+      this.persistSet('tags');
+      this.persistSet('textitems');
+      this.persistSet('texts');
+      this.persistSet('texttags');
+      this.persistSet('words');
+      this.persistSet('wordtags');
+
+      Object.keys(demoDB).forEach((fieldName) => {
+        // TODO
+        this.persistDelete(fieldName);
+        this.persistInsert(fieldName, demoDB[fieldName]);
+      });
+    });
   }
 
   private serialize(backupType: 'JSON' | 'SQL') {
@@ -731,10 +740,10 @@ export class DataService {
   public downloadBackup(backupType: 'JSON' | 'SQL') {
     const serializedData = this.serialize(backupType);
 
-    // TODO
-    // Gzip();
-    // deflate((serializedData as string))
-    downloadBackupFile(serializedData, backupType);
+    const utf8Data = unescape(encodeURIComponent(serializedData)); //3
+    const geoJsonGz = pako.gzip(utf8Data); //4
+    const gzippedBlob = new Blob([geoJsonGz]); //5
+    downloadBlob(gzippedBlob, `LWT-Backup.${backupType}.gz`);
   }
 
   public emptyDatabase() {
@@ -957,6 +966,7 @@ export class DataService {
     const filteredSentences = sentences.filter((val) => val.SeTxID !== textID);
     const filteredTextItems = textitems.filter((val) => val.TiTxID !== textID);
     const parsingText = texts.find(({ TxID }) => TxID === textID);
+    console.log('TEST123', parsingText, textID, texts);
     if (!parsingText) {
       return;
     }
@@ -996,6 +1006,7 @@ export class DataService {
     texts
       .filter((text) => text.TxLgID === langID)
       .forEach((text) => {
+        console.log('reparsing', text);
         this.reparseText(text.TxID);
       });
   }
@@ -1067,6 +1078,127 @@ export class DataService {
 
 export const dataService = new DataService(dataStore);
 
+function parseSQL(readData: string) {
+  const splitTablesRegex = new RegExp(';?\\n\\n', 'gu');
+  // const splitTablesRegex = new RegExp(' *CREATE TABLE ()`', 'g');
+  // const splitLineRegex = new RegExp(';(?:\\n)(?:\\n)?`', 'g');
+  const splitLineRegex = new RegExp(';(?:\\n)', 'gu');
+  const splitEntryRegex = new RegExp(
+    // grab everything in between non-escaped quote chars
+    "(?<!\\\\)'(?!')(.*?)(?<!\\\\)'(?!')|(NULL)|('')",
+    'gu'
+  );
+  const keysFromInsertRegex = new RegExp(
+    ' {3}(?<!:(?:KEY)|(?:PRIMARY KEY \\())`([A-Za-z0-9]*?)`',
+    'gu'
+  );
+
+  // TODO really not happy with this but unsure of better way to handle solely in-browser
+
+  const parsedData = Object.fromEntries(
+    readData
+      .split(splitTablesRegex)
+      .slice(1)
+      .map((tableString) => {
+        let headerStr = '';
+        let keysForThisTableInOrder = [];
+        let arrayForThisTable = [];
+        tableString
+          .split(splitLineRegex)
+          .filter((line) => line !== '')
+          .forEach((line, ii) => {
+            if (ii === 0) {
+              const dropTableRegex = new RegExp(
+                'DROP TABLE IF EXISTS ([a-zA-Z0-9]*)',
+                'gu'
+              );
+
+              // console.log('TEST123', {
+              //   line,
+              //   ii,
+              //   dropTableRegex,
+              // });
+              headerStr = dropTableRegex.exec(line)[1];
+              // console.log('TEST123-header', headerStr);
+            } else if (ii === 1) {
+              const createTableRegex = new RegExp(
+                `CREATE TABLE \`${headerStr}\` \\((.*)\\)[^\\(\\)]*?$`,
+                'gu'
+              );
+              // console.log('TEST123-key', { headerStr, line, createTableRegex });
+              const keysStr = createTableRegex.exec(line)[1];
+              keysForThisTableInOrder = keysStr
+                .match(keysFromInsertRegex)
+                ?.map((val) => {
+                  const regex = new RegExp(
+                    ' {3}(?<!:(?:KEY)|(?:PRIMARY KEY \\())`([A-Za-z0-9]*?)`',
+                    'gu'
+                  );
+                  return regex.exec(val)[1];
+                });
+            } else {
+              // TODO
+              // startsWith("INSERT INTO")
+              // const testCells=splitEntryRegex.exec(line)
+              const cells = line
+                .match(splitEntryRegex)
+                ?.map((val) =>
+                  val.startsWith("'") && val.endsWith("'")
+                    ? val.slice(1, val.length - 1)
+                    : val
+                );
+              // console.log({ cells, line });
+              const rowObject = Object.fromEntries(
+                cells?.map((cell, ii) => {
+                  return [
+                    keysForThisTableInOrder[ii],
+                    cell === ''
+                      ? ''
+                      : cell === 'NULL'
+                      ? undefined
+                      : isNaN(cell)
+                      ? cell
+                      : Number.isInteger(cell)
+                      ? Number.parseInt(cell)
+                      : Number.parseFloat(cell),
+                  ];
+                })
+              );
+              // console.log({ rowObject, line });
+              arrayForThisTable.push(rowObject);
+            }
+          });
+        return [headerStr, arrayForThisTable];
+      })
+  );
+  console.log(parsedData);
+  return parsedData;
+
+  // tableStrings.forEach((tableVal) => {
+  //   if (tableVal === '') {
+  //     return;
+  //   }
+  //   const tableKey = tableVal.slice(0, tableVal.indexOf('` '));
+  //   // valid tableKey
+  //   if (Object.keys(Persistable).includes(tableKey)) {
+  //     const splitRowHeaderFromValues = new RegExp(
+  //       `INSERT INTO [a-zA-Z] VALUES\\((.*)\\)\\n;`
+  //     );
+  //     const entryVals = tableVal.split('INSERT INTO').slice(1);
+  //     if (entryVals.length > 0) {
+  //       const entryValRegex = new RegExp(` ${tableKey} VALUES\\((.*)\\);\n`);
+  //       const entryVal = entryVals[0].match(entryValRegex);
+  //       if (entryVal && entryVal?.length > 1) {
+  //         // TODO
+  //         const entryColRegex = new RegExp("['(.*),']{2,}", 'g');
+  //         const cells = entryVal[1].split(entryColRegex);
+  //         // console.log({ cells, tableVal, readData });
+  //       }
+  //     }
+  //   }
+  // });
+}
+
 // /**
 //  *
 //  * @param input
@@ -1078,3 +1210,63 @@ export const dataService = new DataService(dataStore);
 //   const destination = createWriteStream(output);
 //   await pipe(source, gzip, destination);
 // }
+
+function ungz(file: string, onRead: (data: string | null) => void) {
+  const reader = new FileReader();
+  // const fileExt = file.name.split('.')[file.name.split('.').length - 1];
+  // deflateGZip(reader);
+  reader.onload = (ev) => {
+    const readData = ev.target?.result;
+    if (!readData) {
+      return;
+    }
+    const pakoVal = pako.inflate(new Uint8Array(readData), { to: 'string' });
+    if (pakoVal) {
+      return onRead(pakoVal);
+    }
+    onRead(null);
+    // const blob = new Blob([readData]);
+    // blob.text().then((val) => {
+    // });
+    console.log({ pakoVal, readData });
+    //... fill input data here
+    // const output = pako.deflate(input)
+    // console.log('TEST123-readdata', readData);
+    // if (!readData) {
+    //   return;
+    // }
+    // if (fileExt === 'json') {
+    //   const jsonData = JSON.parse(readData);
+
+    //   console.log(jsonData);
+    //   return;
+    // }
+    // if (fileExt === 'sql') {
+    //   // TODO
+    //   // const parsedData = {};
+    //   // TODO count how many columns in this table?
+    //   const splitTablesRegex = new RegExp(' *CREATE TABLE `', 'g');
+    //   const tableStrings = readData.split(splitTablesRegex).slice(1);
+    //   tableStrings.forEach((tableVal) => {
+    //     const tableKey = tableVal.slice(0, tableVal.indexOf('` '));
+    //     // valid tableKey
+    //     if (Object.keys(Persistable).includes(tableKey)) {
+    //       const entryVals = tableVal.split('INSERT INTO').slice(1);
+    //       if (entryVals.length > 0) {
+    //         const entryValRegex = new RegExp(
+    //           ` ${tableKey} VALUES\\((.*)\\);\n`
+    //         );
+    //         const entryVal = entryVals[0].match(entryValRegex);
+    //         if (entryVal && entryVal?.length > 1) {
+    //           // TODO
+    //           // const entryColRegex = new RegExp('(.*),');
+    //           // entryVal[1].split();
+    //         }
+    //       }
+    //     }
+    //   });
+    //   // const tableName=
+    // }
+  };
+  reader.readAsArrayBuffer(file);
+}

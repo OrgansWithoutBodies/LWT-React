@@ -1,4 +1,6 @@
 import { PropsWithChildren } from 'react';
+import { I18N } from '../../../i18n/I18N';
+import { UIString } from '../../../i18n/strings';
 import { openInNewWindow } from '../utils/linkHelpers';
 import { Icon } from './Icon';
 
@@ -7,7 +9,7 @@ export interface EntryRowType {
   // TODO hacky
   PreMapComponent?: () => JSX.Element;
   entryTitle?: string;
-  headerText: string;
+  headerText: UIString;
   headerInfoLink?: string;
   headerDir?: 'left' | 'right' | 'center';
 }
@@ -25,25 +27,19 @@ export function EntryRow({
     <tr title={entryTitle}>
       {PreMapComponent && <PreMapComponent />}
       <td className={`td1 ${headerDir} ${headerClasses.join(' ')}`}>
-        {headerText.split('\n').map((val) => (
-          <>
-            {val}
-            {headerInfoLink ? (
-              <Icon
-                className="click"
-                src="question-frame"
-                title="Help"
-                onClick={() => {
-                  openInNewWindow(headerInfoLink);
-                }}
-              />
-            ) : (
-              <></>
-            )}
-            :
-            <br />
-          </>
-        ))}
+        <I18N i={headerText} />
+        {headerInfoLink ? (
+          <Icon
+            className="click"
+            src="question-frame"
+            title="Help"
+            onClick={() => {
+              openInNewWindow(headerInfoLink);
+            }}
+          />
+        ) : (
+          <></>
+        )}
       </td>
       <td className="td1">{children}</td>
     </tr>

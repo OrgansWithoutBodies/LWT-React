@@ -2326,7 +2326,7 @@ export function allActionGo({
 }: {
   sel: { value: string; text: string } | undefined;
   numRecords: number;
-  onExport: () => void;
+  onExport: (exportMode: 'anki' | 'tsv' | 'flexible') => void;
   onClear: () => void;
   onAddTag: (tagStr: string) => void;
   onSetCapitalization: SetBoolHandler;
@@ -2378,7 +2378,15 @@ export function allActionGo({
           }
         }
       } else if (v === 'expall' || v === 'expall2' || v === 'expall3') {
-        return onExport();
+        if (v === 'expall') {
+          return onExport('anki');
+        }
+        if (v === 'expall2') {
+          return onExport('tsv');
+        }
+        if (v === 'expall3') {
+          return onExport('flexible');
+        }
       }
     }
     onClear();

@@ -42,6 +42,7 @@ export type StrategyLookup = Record<PersistanceStrategy, PersistenceHandles>; //
 
 export enum PersistanceStrategy {
   LocalStorage,
+  IndexedDB,
   RestAPI,
   // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
   ElectronSqlite,

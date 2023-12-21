@@ -43,7 +43,7 @@ export async function parseTermsFromCSV<
   TData extends ReturnType<typeof UploadTermsValidator>['TYPE'] = ReturnType<
     typeof UploadTermsValidator
   >['TYPE']
->(value: TData): TermParsedFromCSV[] {
+>(value: TData): Promise<TermParsedFromCSV[]> {
   const fileBlob = value.file.file;
   console.log('blob', fileBlob);
   const stringdata = await fileBlob?.text();

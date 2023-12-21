@@ -140,7 +140,9 @@ export function LanguagesWrapper() {
   const refreshID = searchParams.get('refresh');
   const updateParams = useUpdateParams();
   if (refreshID !== null) {
-    dataService.reparseText(Number.parseInt(refreshID) as TextsID);
+    dataService.reparseAllTextsForLanguage(
+      Number.parseInt(refreshID) as TextsID
+    );
     updateParams(null);
   }
   return (

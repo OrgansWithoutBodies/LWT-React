@@ -294,6 +294,7 @@ if (! isset(mb)) mb = '0.0';
 }
 /**
  * Only render children when in devMode otherwise render nothing
+ * for testing experimental features
  */
 export function DevModeGate({ children }: PropsWithChildren<object>) {
   const { devMode } = useAppContext();
@@ -314,7 +315,8 @@ export function CurrentText() {
   }
   const currentText = texts.find((val) => val.TxID === currentTextID);
   if (!currentText) {
-    throw new Error('Invalid Active Text ID!');
+    return <></>;
+    // throw new Error('Invalid Active Text ID!');
   }
   const language = languages.find((val) => val.LgID === currentText.TxLgID);
   if (!language) {

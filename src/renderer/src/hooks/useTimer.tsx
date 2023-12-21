@@ -38,13 +38,6 @@ export function useCountdown({
   const { tick, stopTimer } = useTick(intervalInMs || 1000, trigger);
   const [stillRunning, setStillRunning] = useState<boolean>(true);
   useEffect(() => {
-    console.log('TEST123 COUNTDOWN TICK', {
-      trigger,
-      tick,
-      countdownInMs,
-      // greater: tick !== null && tick > countdownInMs,
-      stillRunning,
-    });
     if (tick !== null) {
       if (tick > countdownInMs) {
         setStillRunning(false);

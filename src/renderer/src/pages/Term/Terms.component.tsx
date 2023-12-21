@@ -1033,7 +1033,10 @@ export function TermMultiActions({
                       );
                     },
                     onClear: () => {},
-                    onExport: () => {},
+                    onExport: (mode) => {
+                      console.log('TEST123', mode);
+                      dataService.exportTerms(allTermIDs, mode);
+                    },
                     onSetStrength: (newStrength) => {
                       // TODO shouldn't need to map
                       allTermIDs.map((val) => {

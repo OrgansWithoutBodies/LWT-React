@@ -15,9 +15,10 @@ export function A({
   const nav = useInternalNavigate();
   const t = useI18N();
   const onClick = href === undefined ? undefined : () => nav(href);
+  const childIsString = typeof children === 'string';
   return (
     <a {...rest} className="a" onClick={onClick}>
-      {t(children)}
+      {childIsString ? t(children) : children}
     </a>
   );
 }

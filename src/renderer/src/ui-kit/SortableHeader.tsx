@@ -1,5 +1,9 @@
+import { useI18N } from '../../../i18n/I18N';
+import { UIString } from '../../../i18n/strings';
 import { useUpdateParams } from '../hooks/useInternalNav';
-
+/**
+ * Two signatures here - if there's children then use those as the header text otherwise just translatable text
+ */
 export function SortableHeader({
   sorting,
   downSorting,
@@ -7,12 +11,13 @@ export function SortableHeader({
   title,
   children,
 }: React.PropsWithChildren<
-  Parameters<typeof SortingArrow>[0] & { title?: string }
+  Parameters<typeof SortingArrow>[0] & { title?: UIString }
 >) {
   const paramUpdater = useUpdateParams();
+  const t = useI18N();
   return (
     <th
-      title={title}
+      title={title ? t(title) : undefined}
       className="th1 clickable"
       onClick={() =>
         paramUpdater({

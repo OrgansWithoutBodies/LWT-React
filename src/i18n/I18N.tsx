@@ -7,6 +7,9 @@ export function I18N({ i: stringToTranslate }: { i: UIString }) {
     return <></>;
   }
   console.log('TEST123-i18n', uiLanguage, i18NLanguageLookups);
+  const stringExists =
+    i18NLanguageLookups[uiLanguage][stringToTranslate] !== undefined &&
+    i18NLanguageLookups[uiLanguage][stringToTranslate] !== '';
   const str =
     i18NLanguageLookups[uiLanguage][stringToTranslate] || stringToTranslate;
   return (
@@ -14,7 +17,7 @@ export function I18N({ i: stringToTranslate }: { i: UIString }) {
       {str.split('\n').map((val, index) => (
         <>
           {index > 0 && <br />}
-          {val}
+          <span style={{ color: stringExists ? undefined : 'red' }}>{val}</span>
         </>
       ))}
     </>
@@ -27,5 +30,5 @@ export function useI18N() {
     return (val) => val;
   }
   const lookup = i18NLanguageLookups[uiLanguage];
-  return (val: UIString) => lookup[val] || val;
+  return (val: UIString) => lookup[val] || `!!${val}`;
 }
