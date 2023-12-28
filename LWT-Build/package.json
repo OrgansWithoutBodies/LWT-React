@@ -1,0 +1,22 @@
+{
+  "name": "lwt-build",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/pako": "^2.0.3",
+    "lwt-style": "0.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "pako": "^2.1.0",
+    "lwt-persist": "0.0.0",
+    "superstruct": "^1.0.3",
+    "tsyringe": "^4.8.0"
+  }
+}

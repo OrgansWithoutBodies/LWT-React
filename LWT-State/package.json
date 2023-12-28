@@ -1,0 +1,22 @@
+{
+  "name": "lwt-state",
+  "private": true,
+  "version": "0.0.0",
+  "exports": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "lwt-common": "0.0.0",
+    "lwt-persist": "0.0.0",
+    "lwt-i18n": "0.0.0",
+    "lwt-schemas": "0.0.0"
+  },
+  "dependencies": {
+    "@datorama/akita": "^8.0.1",
+    "tsyringe": "^4.8.0",
+    "rxjs": "^7.8.1"
+  }
+}

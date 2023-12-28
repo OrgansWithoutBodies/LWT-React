@@ -1,0 +1,19 @@
+{
+  "name": "lwt-common",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/pako": "^2.0.3",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "pako": "^2.1.0",
+    "superstruct": "^1.0.3",
+    "lwt-schemas": "0.0.0"
+  }
+}
