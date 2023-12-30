@@ -1,7 +1,9 @@
+import { get_sepas } from 'lwt-common';
+import { TextsID, WordsID } from 'lwt-schemas';
 import { useData } from 'lwt-state';
 import { Icon } from 'lwt-ui-kit';
-import { WordsID } from '../data/validators';
 import { changeImprAnnRadio, changeImprAnnText } from './IO/CheckForm';
+import { do_ajax_edit_impr_text } from './PrintAnnotate/PrintText.component';
 
 /**
  *
@@ -20,16 +22,15 @@ export function MakeTrans(
 ) {
   const [{ words }] = useData(['words']);
   const alltrans = words.find((val) => val.WoID === wid)?.WoTranslation;
+  if (!alltrans) {
+    // TODO ?
+    return <></>;
+  }
   const r = '';
   const set = false;
-  const transarr = preg_split(
-    '/[',
-    //  . get_sepas() .
-    // ']/u'
-    alltrans
-  );
+  const transarr = alltrans.split(`/[${get_sepas()}]\\u`);
 
-  return transarr.map((t: any) => {
+  return transarr.map((t) => {
     const tt = t.trim();
     return (
       <span>
@@ -40,7 +41,7 @@ export function MakeTrans(
           <>
             <span className="nowrap">
               <input
-                onChange={changeImprAnnRadio}
+                onChange={() => changeImprAnnRadio()}
                 checked
                 type="radio"
                 name={`rg${i}`}
@@ -161,4 +162,33 @@ export function MakeTrans(
       </span>
     );
   });
+}
+
+/**
+ *
+ * @param wordid
+ * @param txid
+ * @param word
+ * @param lang
+ */
+function onAddTermTranslation(wordid: WordsID, txid: TextsID, word, lang) {
+  const thedata = $(txid).val().trim();
+  const pagepos = $(document).scrollTop();
+  if (thedata == '' || thedata == '*') {
+    alert("Text Field is empty or = '*'!");
+    return;
+  }
+  $.post(
+    'ajax_add_term_transl.php',
+    { id: wordid, data: thedata, text: word, lang },
+    function (d) {
+      if (d == '') {
+        alert(
+          'Adding translation to term OR term creation failed, please reload page and try again!'
+        );
+      } else {
+        do_ajax_edit_impr_text(pagepos, d);
+      }
+    }
+  );
 }

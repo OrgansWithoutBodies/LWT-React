@@ -8,7 +8,6 @@ export const getPersistedValueLocalStorage = <TKey extends keyof LWTData>(
   key: TKey,
   nullFallback = null
 ): LWTData[TKey] => {
-  console.log("TEST123-getting");
   const localVal = localStorage.getItem(key);
   // TODO val parser/validator
   return (

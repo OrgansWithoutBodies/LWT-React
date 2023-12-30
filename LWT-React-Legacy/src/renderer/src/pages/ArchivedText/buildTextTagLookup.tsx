@@ -1,10 +1,14 @@
-import { ArchTextTag, Tag, Tag2, TextTag, WordTag } from 'lwt-schemas';
 import {
+  ArchTextTag,
   ArchivedTextID,
+  Tag,
+  Tag2,
   Tags2ID,
+  TextTag,
   TextsID,
+  WordTag,
   WordsID,
-} from '../../data/validators';
+} from 'lwt-schemas';
 
 // TODO This is a mess
 
@@ -51,7 +55,10 @@ export function buildTextTagLookup(
       ? 'TtTxID'
       : 'WtWoID';
   const tagTitleLookup: Record<Tags2ID, string> = Object.fromEntries(
-    tags.map((tag) => [tag[tagIDKey], tag[tagTextKey]])
+    tags.map((tag) => [
+      tag[tagIDKey as keyof typeof tag],
+      tag[tagTextKey as keyof typeof tag],
+    ])
   );
   const textTagLookup: Record<ArchivedTextID, string[]> = archtexttags.reduce(
     (prev, curr) => {

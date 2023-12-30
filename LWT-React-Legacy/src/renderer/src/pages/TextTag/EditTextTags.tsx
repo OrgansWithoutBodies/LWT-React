@@ -1,7 +1,10 @@
 import { confirmDelete } from 'lwt-common';
-import { dataService, useData } from 'lwt-state';
+import { Tag2, Tags2ID, Tags2Validator } from 'lwt-schemas';
+import { TextTagDetailRow, dataService, useData } from 'lwt-state';
 import {
   A,
+  EntryRow,
+  GenericMultiActions,
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
   GetTagSortSelectoptions,
@@ -9,16 +12,19 @@ import {
   Icon,
   SortableHeader,
   TableFooter,
+  useFormInput,
+  useI18N,
+  useInternalNavigate,
+  usePager,
 } from 'lwt-ui-kit';
-import { TextTagDetailRow } from '../../data/data.query';
-import { Tags2ID, Tags2Validator } from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
-import { usePager } from '../../hooks/usePager';
 import { useSelection } from '../../hooks/useSelection';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { textareaKeydown } from '../IO/CheckForm';
 import { TagSorting } from '../Sorting';
+import {
+  FilterHeaderWidget,
+  QueryFilterWidget,
+} from '../Term/LanguageBoxFilterWidget';
 
 export function DisplayTextTags({
   query,
@@ -35,7 +41,6 @@ export function DisplayTextTags({
     'texttags',
     'settings',
   ]);
-  const navigate = useInternalNavigate();
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(tags2, 'T2ID');
   const pageSize = settings['set-tags-per-page'] || 1;
@@ -47,7 +52,7 @@ export function DisplayTextTags({
     (prev, curr) => ({ ...prev, [curr.AgT2ID]: prev[curr.AgT2ID] + 1 }),
     Object.fromEntries(tags2.map((val) => [val.T2ID, 0]))
   );
-
+  const t = useI18N();
   const sortedTags = tags2
     .map((tag) => ({
       ...tag,
@@ -62,53 +67,19 @@ export function DisplayTextTags({
       <Header title="My Text Tags" />
       <p>
         <A href="/edit_texttags?new=1">
-          <Icon src="plus-button" title="New" alt="New" /> New Text Tag ...
+          <Icon src="plus-button" title="New" /> New Text Tag ...
         </A>
       </p>
 
       <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <FilterHeaderWidget />
           <tr>
-            <th className="th1" colSpan={4}>
-              Filter <Icon src="funnel" title="Filter" />
-              &nbsp;
-              <input
-                type="button"
-                value="Reset All"
-                onClick={() => {
-                  navigate(`/edit_texttags`);
-                }}
-              />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={4}>
-              Tag Text or Comment:
-              <input
-                type="text"
-                name="query"
-                defaultValue={query}
-                maxLength={50}
-                size={15}
-              />
-              &nbsp;
-              <input
-                type="button"
-                name="querybutton"
-                value="Filter"
-                onClick={() => {
-                  navigate(`/edit_texttags?page=${1}&query=${query}`);
-                }}
-              />
-              &nbsp;
-              <input
-                type="button"
-                value="Clear"
-                onClick={() => {
-                  navigate(`/edit_texttags?page=${1}&query=`);
-                }}
-              />
-            </td>
+            <QueryFilterWidget
+              query={query}
+              colSpan={6}
+              filterString="Tag Text or Comment"
+            />
           </tr>
           <FilterSortPager
             currentPage={currentPage}
@@ -121,107 +92,28 @@ export function DisplayTextTags({
         </table>
       </form>
       {recno === 0 ? (
-        <p>No tags found.</p>
+        <p>{t('No tags found')}.</p>
       ) : (
         <form name="form2" method="post">
           <input type="hidden" name="data" value="" />
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1 center" colSpan={2}>
-                Multi Actions <Icon src="lightning" title="Multi Actions" />
-              </th>
-            </tr>
-            <tr>
-              <td className="td1 center" colSpan={2}>
-                <b>ALL</b> {recno} {recno === 1 ? 'Tag' : 'Tags'}
-                <select
-                  name="allaction"
-                  onChange={({ target: { value } }) => {
-                    // TODO other cases
-                    if (value === 'delall') {
-                      if (
-                        window.confirm(
-                          `THIS IS AN ACTION ON ALL RECORDS\nON ALL PAGES OF THE CURRENT QUERY!\n\n*** ' + t + ' ***\n\n*** ${recno} Record(s) will be affected ***\n\nARE YOU SURE?`
-                        )
-                      ) {
-                        dataService.deleteMultipleTextTags(
-                          tags2.map((val) => val.T2ID)
-                        );
-                      }
-                    }
-                  }}
-                >
-                  <GetAllTagsActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 center">
-                <input type="button" value="Mark All" onClick={onSelectAll} />
-                <input type="button" value="Mark None" onClick={onSelectNone} />
-              </td>
-              <td className="td1 center">
-                Marked Tags:&nbsp;
-                <select
-                  name="markaction"
-                  id="markaction"
-                  disabled={selectedValues.size === 0}
-                  onChange={({ target: { value } }) => {
-                    if (value === 'del') {
-                      if (
-                        window.confirm(
-                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
-                        )
-                      ) {
-                        dataService.deleteMultipleTextTags([...selectedValues]);
-                      }
-                    }
-                  }}
-                >
-                  <GetMultipleTagsActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-          </table>
+          <GenericMultiActions
+            AllActions={GetAllTagsActionsSelectOptions}
+            SelectedOptions={GetMultipleTagsActionsSelectOptions}
+            onChangeAll={({ target: { value } }) => {
+              onChangeAllTextTags(value, recno, tags2);
+            }}
+            onChangeSelected={({ target: { value } }) => {
+              onChangeSelectedTextTags(value, dataOnPage, selectedValues);
+            }}
+            countAllTerms={recno}
+            countSelectedTerms={selectedValues.size}
+            onSelectAll={onSelectAll}
+            onSelectNone={onSelectNone}
+            nounSingular={'Tag'}
+          />
 
           <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1 sorttable_nosort">Mark</th>
-              <th className="th1 sorttable_nosort">Actions</th>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Tag Text Z-A']}
-                upSorting={TagSorting['Tag Text A-Z']}
-              >
-                Tag Text
-              </SortableHeader>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Tag Comment Z-A']}
-                upSorting={TagSorting['Tag Comment A-Z']}
-              >
-                Tag Comment
-              </SortableHeader>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Texts With Tag']}
-                upSorting={TagSorting['Texts With Tag (desc)']}
-              >
-                Texts
-                <br />
-                With Tag
-              </SortableHeader>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Arch. Texts With Tag']}
-                upSorting={TagSorting['Arch. Texts With Tag (desc)']}
-              >
-                Arch.Texts
-                <br />
-                With Tag
-              </SortableHeader>
-            </tr>
-
+            {<TextTagHeader sorting={sorting} />}
             {sortedTags.map((tag) => {
               const { textCount } = tag;
               const { archTextCount } = tag;
@@ -234,8 +126,6 @@ export function DisplayTextTags({
                       <input
                         name="marked[]"
                         type="checkbox"
-                        // TODO
-                        // onClick={markClick}
                         {...checkboxPropsForEntry(tag)}
                         value={tag['T2ID']}
                       />
@@ -300,43 +190,119 @@ export function DisplayTextTags({
   );
 }
 
+function TextTagHeader({ sorting }: { sorting: TagSorting }) {
+  return (
+    <tr>
+      <th className="th1 sorttable_nosort">Mark</th>
+      <th className="th1 sorttable_nosort">Actions</th>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Tag Text Z-A']}
+        upSorting={TagSorting['Tag Text A-Z']}
+      >
+        Tag Text
+      </SortableHeader>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Tag Comment Z-A']}
+        upSorting={TagSorting['Tag Comment A-Z']}
+      >
+        Tag Comment
+      </SortableHeader>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Texts With Tag']}
+        upSorting={TagSorting['Texts With Tag (desc)']}
+      >
+        Texts
+        <br />
+        With Tag
+      </SortableHeader>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Arch. Texts With Tag']}
+        upSorting={TagSorting['Arch. Texts With Tag (desc)']}
+      >
+        Arch.Texts
+        <br />
+        With Tag
+      </SortableHeader>
+    </tr>
+  );
+}
+
+function onChangeSelectedTextTags(
+  value: string,
+  dataOnPage: TextTagDetailRow[],
+  selectedValues: Set<Tags2ID>
+) {
+  if (value === 'del') {
+    if (
+      window.confirm(
+        `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+      )
+    ) {
+      dataService.deleteMultipleTextTags([...selectedValues]);
+    }
+  }
+}
+
+function onChangeAllTextTags(value: string, recno: number, tags2: Tag2[]) {
+  // TODO other cases
+
+  if (value === 'delall') {
+    if (
+      window.confirm(
+        `THIS IS AN ACTION ON ALL RECORDS\nON ALL PAGES OF THE CURRENT QUERY!\n\n*** ' + t + ' ***\n\n*** ${recno} Record(s) will be affected ***\n\nARE YOU SURE?`
+      )
+    ) {
+      dataService.deleteMultipleTextTags(tags2.map((val) => val.T2ID));
+    }
+  }
+}
+
 export function NewTextTag() {
   const validator = Tags2Validator;
   const navigator = useInternalNavigate();
+  const t = useI18N();
   const { onSubmit, Input: TtInput, TextArea } = useFormInput({ validator });
+  const submitForm = () => {
+    onSubmit(
+      {},
+      (value) => {
+        dataService.addTextTag(value);
+        navigator('/edit_texttags');
+      },
+      'T2ID'
+    );
+  };
   return (
     <>
       <Header title="My Text Tags" />
-      <h4>New Tag</h4>
+      <h4>{t('New Tag')}</h4>
       <form name="newtag" method="post">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Tag:</td>
-            <td className="td1">
-              <TtInput
-                className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                entryKey="T2Text"
-                errorName="Tag"
-                maxLength={20}
-                size={20}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Comment:</td>
-            <td className="td1">
-              <TextArea
-                className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
-                maxLength={200}
-                errorName="Comment"
-                entryKey="T2Comment"
-                cols={40}
-                rows={3}
-              />
-            </td>
-          </tr>
+          <EntryRow headerText="Tag">
+            <TtInput
+              className="notempty setfocus noblanksnocomma checkoutsidebmp"
+              entryKey="T2Text"
+              errorName="Tag"
+              maxLength={20}
+              size={20}
+              isRequired
+            />
+          </EntryRow>
+          <EntryRow headerText="Comment">
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={200}
+              errorName="Comment"
+              entryKey="T2Comment"
+              cols={40}
+              rows={3}
+            />
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               <input
@@ -350,16 +316,7 @@ export function NewTextTag() {
                 type="button"
                 name="op"
                 value="Save"
-                onClick={() => {
-                  onSubmit(
-                    {},
-                    (value) => {
-                      dataService.addTextTag(value);
-                      navigator('/edit_texttags');
-                    },
-                    'T2ID'
-                  );
-                }}
+                onClick={submitForm}
               />
             </td>
           </tr>
@@ -382,6 +339,17 @@ export function EditTextTag({ chgID }: { chgID: number }) {
     onSubmit,
     TextArea,
   } = useFormInput({ validator, entry: changingTag });
+  const submitForm = () => {
+    onSubmit(
+      {},
+      (value) => {
+        if (dataService.addTextTag(value) !== -1) {
+          navigator('/edit_texttags');
+        }
+      },
+      'T2ID'
+    );
+  };
   return (
     <>
       <Header title="My Text Tags" />
@@ -389,36 +357,30 @@ export function EditTextTag({ chgID }: { chgID: number }) {
       <form name="edittag">
         <TgInput type="hidden" entryKey="T2ID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Tag:</td>
-            <td className="td1">
-              <TgInput
-                errorName="Tag"
-                className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                type="text"
-                entryKey="T2Text"
-                default
-                maxLength={20}
-                size={20}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Comment:</td>
-            <td className="td1">
-              <TextArea
-                className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
-                maxLength={200}
-                errorName="Comment"
-                entryKey="T2Comment"
-                cols={40}
-                rows={3}
-                defaultValue={changingTag.T2Comment}
-              />
-            </td>
-          </tr>
+          <EntryRow headerText="Tag">
+            <TgInput
+              errorName="Tag"
+              className="notempty setfocus noblanksnocomma checkoutsidebmp"
+              type="text"
+              entryKey="T2Text"
+              default
+              maxLength={20}
+              size={20}
+              isRequired
+            />
+          </EntryRow>
+          <EntryRow headerText="Comment">
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={200}
+              errorName="Comment"
+              entryKey="T2Comment"
+              cols={40}
+              rows={3}
+              default
+            />
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               <input
@@ -432,17 +394,7 @@ export function EditTextTag({ chgID }: { chgID: number }) {
                 type="button"
                 name="op"
                 value="Change"
-                onClick={() => {
-                  onSubmit(
-                    {},
-                    (value) => {
-                      if (dataService.addTextTag(value) !== -1) {
-                        navigator('/edit_texttags');
-                      }
-                    },
-                    'T2ID'
-                  );
-                }}
+                onClick={submitForm}
               />
             </td>
           </tr>

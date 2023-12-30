@@ -1,8 +1,15 @@
-import { Language, Sentence, Text, TextItem, Word } from 'lwt-schemas';
+import {
+  Language,
+  Sentence,
+  Text,
+  TextItem,
+  TextsID,
+  Word,
+  getStatusAbbr,
+  getStatusName,
+} from 'lwt-schemas';
 import { useData } from 'lwt-state';
-import { over } from 'rambdax';
-import { TextsID, WordsID } from '../data/validators';
-import { useSettingWithDefault } from '../hooks/useSettingWithDefault';
+import { useSettingWithDefault } from 'lwt-ui-kit';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { prepare_textdata_js } from '../utils/windowFunctions';
 import {
@@ -14,15 +21,10 @@ import {
   RunOverlibStatusUnknown,
   RunTestForWord,
 } from './OverlibComponents';
-import { get_position_from_id } from './ReaderPage.component';
-import { getStatusAbbr, getStatusName } from './StrengthMap';
+import { get_position_from_id } from './Reader/ReaderPage.component';
 import { LanguageDictionaryDataTempHack } from './Term/DictionaryLinks';
-import {
-  LanguageDictionaryData,
-  WordKnownTermLines,
-} from './Term/limitedTypes';
+import { WordKnownTermLines } from './limitedTypes';
 
-const CAPTION = 'TODO';
 type ArrV8<T> = [T, T, T, T, T, T, T, T];
 export type ArrV10<T = number> = [T, T, T, T, T, T, T, T, T, T];
 export type MW29 = ArrV8<string | undefined>;
@@ -34,17 +36,20 @@ export type MW29 = ArrV8<string | undefined>;
  * @param setTranslateAPIParams
  * @param setIFrameURL
  */
-function onTestWordClick(
+export function onTestWordClick(
   word: Word,
   language: Language,
-  onEditWord: (woID: WordsID) => void,
+  onEditWord: WordIDHandler,
+  onShowWord: WordIDHandler,
   setTranslateAPIParams: (
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void,
   setIFrameURL: (url: string | null) => void,
   onSetTodoText: (val: string) => void,
-  onSetTestStatus: (val: string) => void,
-  sentence: Pick<Sentence, 'SeID'>
+  onSetTestStatus: SetTestStatus,
+  onNudgeTestStatus: NudgeTestStatus,
+  sentence: Pick<Sentence, 'SeID'>,
+  modality?: Modalities
 ) {
   // TODO
   // SOLUTION = <?php echo prepare_textdata_js ( testtype==1 ? ( nosent ? (traLgDict1URIns) : (' [' . trans . '] ')) : save ); ?>;
@@ -60,21 +65,40 @@ function onTestWordClick(
       sentence,
       setTranslateAPIParams,
       setIFrameURL,
-      modality: testType,
+      modality,
       onSetTestStatus,
     });
   const onKeyDown: React.EventHandler<React.KeyboardEvent> = (e) =>
-    onTestKeydown(e, OPENED, word, onEditWord);
+    onTestKeydown(
+      e,
+      OPENED,
+      word,
+      onEditWord,
+      onNudgeTestStatus,
+      onSetTestStatus,
+      onShowWord
+    );
   return { onClickWord, onKeyDown };
 }
 
+// TODO does this do anything
 export function cClick() {
-  if (olLoaded) {
-    runHook('hideObject', FREPLACE, over);
-    o3_showingsticky = 0;
-  }
-  return false;
+  // if (olLoaded) {
+  //   runHook('hideObject', FREPLACE, over);
+  //   o3_showingsticky = 0;
+  // }
+  // return false;
 }
+type SetTestStatus = (
+  args: Pick<Word, 'WoID' | 'WoStatus'>
+  //  & { plusminus: 'plus' | 'minus' }
+) => void;
+type NudgeTestStatus = (
+  args: Pick<Word, 'WoID'> & { plusminus: 'plus' | 'minus' }
+) => void;
+
+type WordIDHandler = (args: Pick<Word, 'WoID'>) => void;
+
 /**
  *
  * @param e
@@ -88,13 +112,10 @@ function onTestKeydown(
   e: React.KeyboardEvent,
   OPENED: 0 | 1,
   { WoID }: Word,
-  onEditWord: (args: Pick<Word, 'WoID'>) => void,
-  onNudgeTestStatus: (args: {
-    WoID: WordsID;
-    plusminus: 'plus' | 'minus';
-  }) => void,
-  onSetTestStatus: (args: Pick<Word, 'WoID' | 'WoStatus'>) => void,
-  onShowWord: (args: Pick<Word, 'WoID'>) => void
+  onEditWord: WordIDHandler,
+  onNudgeTestStatus: NudgeTestStatus,
+  onSetTestStatus: SetTestStatus,
+  onShowWord: WordIDHandler
 ) {
   if (e.key === ' ' && OPENED === 0) {
     // space : show sol.
@@ -187,10 +208,7 @@ function WordClickEventDoTestTest({
   ) => void;
   onSetTodoText: (todo: string) => void;
   setIFrameURL: (url: string | null) => void;
-  onSetTestStatus: (args: {
-    WoID: WordsID;
-    plusminus: 'plus' | 'minus';
-  }) => void;
+  onSetTestStatus: SetTestStatus;
 }) {
   const { ['set-test-sentence-count']: testSentenceCount } =
     useSettingWithDefault(['set-test-sentence-count']);
@@ -355,7 +373,7 @@ export function onTextKeydown(
     $('span.uwordmarked').removeClass('uwordmarked');
     const unknownwordlist = $('span.status0.word:not(.hide):first');
     if (unknownwordlist.size() === 0) return false;
-    $(window).scrollTo(unknownwordlist, { axis: 'y', offset: -150 });
+    window.scrollTo({ axis: 'y', offset: -150 });
     unknownwordlist.addClass('uwordmarked').click();
     cClick();
     return false;
@@ -380,7 +398,7 @@ export function onTextKeydown(
     TEXTPOS = 0;
     curr = knownwordlist.eq(TEXTPOS);
     curr.addClass('kwordmarked');
-    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
     return false;
   }
@@ -390,7 +408,7 @@ export function onTextKeydown(
     TEXTPOS = l_knownwordlist - 1;
     curr = knownwordlist.eq(TEXTPOS);
     curr.addClass('kwordmarked');
-    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    window.scrollTo(curr, { axis: 'y', offset: -150 });
     let ann = '';
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
 
@@ -417,7 +435,7 @@ export function onTextKeydown(
     curr = knownwordlist.eq(TEXTPOS);
     curr.addClass('kwordmarked');
     // TODO scrollTo
-    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
     return false;
   }
@@ -441,7 +459,7 @@ export function onTextKeydown(
     // if (TEXTPOS >= l_knownwordlist) TEXTPOS = 0;
     curr = knownwordlist.eq(TEXTPOS);
     curr.addClass('kwordmarked');
-    $(window).scrollTo(curr, { axis: 'y', offset: -150 });
+    window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
 
     return false;
@@ -506,13 +524,13 @@ export function MwordClickEventDoTextText({
   word: { WoStatus: status, WoID: wid },
   langDictData: langDictData,
   textItem: { TiOrder: TiOrder, TiText: text, TiWordCount: code },
-  ann,
+  ann = '',
   mw,
   TxID,
   title,
 }: {
   word: Pick<Word, 'WoStatus' | 'WoID'>;
-  langDictData: LanguageDictionaryData;
+  langDictData: LanguageDictionaryDataTempHack;
   textItem: Pick<TextItem, 'TiOrder' | 'TiText' | 'TiWordCount'>;
   TxID: TextsID;
   ann?: string;
@@ -531,7 +549,6 @@ export function MwordClickEventDoTextText({
   title: string;
 }) {
   if (status !== undefined) {
-    const ann = ann !== undefined ? ann : '';
     <RunOverlibMultiword
       langDictData={langDictData}
       TxID={TxID}
@@ -789,11 +806,7 @@ export function WordDblclickEventDoTextText({
   const p = Math.max(0, (100 * (pos - 5)) / t);
   onSetAudioPosition(p);
 }
-function getSentence(
-  SeID: Sentence['SeID'],
-  wordlc: Word['WoTextLC'],
-  mode
-): string {
+function getSentence(SeID: Sentence['SeID'], wordlc: Word['WoTextLC'], mode) {
   // global tbpref;
   const [{ sentences, textitems }] = useData(['sentences', 'textitems']);
   const sentence = sentences.find((val) => val.SeID === SeID);

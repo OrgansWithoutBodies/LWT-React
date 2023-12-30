@@ -1,8 +1,6 @@
-import { byteSizeOfString } from 'lwt-common';
 import { AddNewTextType } from 'lwt-schemas';
 import { dataService } from 'lwt-state';
-import { Header } from 'lwt-ui-kit';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
+import { Header, useI18N, useInternalNavigate } from 'lwt-ui-kit';
 
 export function LongTextVerify({
   verifying,
@@ -12,17 +10,17 @@ export function LongTextVerify({
   onCancelVerify: () => void;
 }): JSX.Element {
   const navigate = useInternalNavigate();
-
+  const t = useI18N();
   return (
     <>
       <Header title="Long Text Import" />
 
       <p>&nbsp;</p>
       <form
+        // TODO
         encType="multipart/form-data"
-        action="/long_text_import"
-        method="post"
       >
+        {/* TODO */}
         <input type="hidden" name="LgID" value="2" />
         <input type="hidden" name="TxTitle" value="TODO" />
         <input type="hidden" name="TxSourceURI" value="" />
@@ -33,9 +31,11 @@ export function LongTextVerify({
             <tr>
               <td className="td1" colSpan={2}>
                 {verifying.length > 1
-                  ? `This long text will be split into ${verifying.length} shorter
-                texts - as follows:`
-                  : 'This text can fit as a single text'}
+                  ? t(
+                      `This long text will be split into ${verifying.length} shorter
+                texts - as follows:` as any
+                    )
+                  : t('This text can fit as a single text')}
               </td>
             </tr>
             <tr>
@@ -73,11 +73,7 @@ export function LongTextVerify({
                   <br />
                   <br />
                   <br />
-                  Length:
-                  <br />
-                  {byteSizeOfString(TxText)}
-                  <br />
-                  Bytes
+                  {t('Length:\n{byteSizeOfString(TxText)}\nBytes')}
                 </td>
                 <td className="td1">
                   <textarea

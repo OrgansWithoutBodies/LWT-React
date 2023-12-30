@@ -1,6 +1,5 @@
-import { Pager } from 'lwt-ui-kit';
-import { useUpdateParams } from '../../hooks/useInternalNav';
-import { pluralize } from '../TermTag/pluralize';
+import { pluralize } from 'lwt-common';
+import { Pager, useUpdateParams } from 'lwt-ui-kit';
 
 // TODO better name
 

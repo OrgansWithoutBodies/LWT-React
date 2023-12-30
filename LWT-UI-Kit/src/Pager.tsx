@@ -27,9 +27,9 @@ export function Pager({
       ) : (
         <>
           &nbsp; &nbsp;
-          <Icon src="placeholder" alt="-" />
+          <Icon src="placeholder" title="-" />
           &nbsp;
-          <Icon src="placeholder" alt="-" />
+          <Icon src="placeholder" title="-" />
           &nbsp;
         </>
       )}
@@ -72,9 +72,9 @@ export function Pager({
         </>
       ) : (
         <>
-          <Icon src="placeholder" alt="-" />
+          <Icon src="placeholder" title="-" />
           &nbsp;
-          <Icon src="placeholder" alt="-" />
+          <Icon src="placeholder" title="-" />
           &nbsp; &nbsp;
         </>
       )}

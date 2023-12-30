@@ -14,5 +14,6 @@ export function useInternalParams<
     headerValuesTemp[pageKey].params.map(
       (val) => [val, searchParams.get(val)] as [TPageParams, string | null]
     )
-  );
+    // TODO no cast
+  ) as Record<TPageParams, string | null>;
 }

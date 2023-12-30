@@ -1,10 +1,10 @@
+import { pluralize } from 'lwt-common';
 import { Icon } from 'lwt-ui-kit';
 import { useEffect, useState } from 'react';
 import {
   APITranslateTerm,
   GenericRetrievalAPI,
 } from '../../plugins/deepl.plugin';
-import { pluralize } from '../TermTag/pluralize';
 
 /**
  * Call a given Translation API, analyze and present JSON results

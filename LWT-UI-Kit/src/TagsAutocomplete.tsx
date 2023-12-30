@@ -1,11 +1,11 @@
 import { containsCharacterOutsideBasicMultilingualPlane } from "lwt-schemas";
 import { useData } from "lwt-state";
-import React from "react";
+import React, { ForwardedRef } from "react";
 import { TagItOptions, useTagIt } from "./TagIt";
 
 function WordTagsAutocompleteImpl(
   extraArgs: Partial<TagItOptions>,
-  tagInputRef
+  tagInputRef: ForwardedRef<{ value: string[] } | null>
 ) {
   const [{ tags }] = useData(["tags"]);
   console.log({ tagInputRef });
@@ -25,7 +25,7 @@ function WordTagsAutocompleteImpl(
 }
 function TextTagsAutocompleteImpl(
   extraArgs: Partial<TagItOptions>,
-  tagInputRef
+  tagInputRef: ForwardedRef<{ value: string[] } | null>
 ) {
   const [{ tags2 }] = useData(["tags2"]);
   const { TagList } = useTagIt(

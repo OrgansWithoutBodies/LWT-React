@@ -1,11 +1,12 @@
 import { BrowserWindow, Menu, app, ipcMain, nativeImage } from 'electron';
 import { AppVariables } from 'lwt-build';
-import { BackendPlugin } from 'lwt-persist';
+import { BackendPlugin } from 'lwt-persist/electron-sqlite';
+import { IDValOf, LWTData, Persistable } from 'lwt-schemas';
 import path from 'path';
 import icon from '../renderer/public/img/lwt_icon.png';
 import { createColors } from '../renderer/src/styles';
 
-let mainWindow;
+let mainWindow: BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -139,21 +140,50 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
-
+const backendHandlers = {
+  'backend-plugin-get': (_: any, { key }: { key: Persistable }) =>
+    BackendPlugin.get(key),
+  'backend-plugin-insert': (
+    _: any,
+    { key, dataEntry }: { key: Persistable; dataEntry: LWTData[typeof key] }
+  ) =>
+    // TODO no !'s
+    BackendPlugin.insert!(key, dataEntry),
+  'backend-plugin-update': (
+    _: any,
+    { key, dataEntry }: { key: Persistable; dataEntry: LWTData[typeof key] }
+  ) =>
+    // TODO no !'s
+    BackendPlugin.update!(key, dataEntry),
+  'backend-plugin-delete': (
+    _: any,
+    { key, deleteID }: { key: Persistable; deleteID: IDValOf<typeof key> }
+  ) => BackendPlugin.delete!(key, deleteID),
+  'backend-plugin-empty': () => BackendPlugin.empty!(),
+} as const;
+type IPCKeys = keyof typeof backendHandlers;
+type ArgParams<TKey extends keyof typeof backendHandlers> = Parameters<
+  (typeof backendHandlers)[TKey]
+> extends undefined
+  ? never
+  : Parameters<(typeof backendHandlers)[TKey]>[1];
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Electron {
+    interface IpcRenderer {
+      invoke<TKey extends IPCKeys>(
+        channel: TKey,
+        args: ArgParams<TKey>
+      ): Promise<ReturnType<(typeof backendHandlers)[TKey]>>;
+    }
+  }
+}
 app.whenReady().then(() => {
-  ipcMain.handle('backend-plugin-get', (_, { key }) => BackendPlugin.get(key));
-  ipcMain.handle('backend-plugin-insert', (_, { key, dataEntry }) =>
-    BackendPlugin!.insert(key, dataEntry)
+  Object.keys(backendHandlers).forEach((key) =>
+    ipcMain.handle(key, backendHandlers[key])
   );
-  ipcMain.handle('backend-plugin-update', (_, { key, dataEntry }) =>
-    BackendPlugin!.update(key, dataEntry)
-  );
-  ipcMain.handle('backend-plugin-delete', (_, { key, deleteID }) =>
-    BackendPlugin!.delete(key, deleteID)
-  );
-  ipcMain.handle('backend-plugin-empty', () => BackendPlugin!.empty());
 
-  BackendPlugin.init();
+  BackendPlugin.init!();
   createWindow();
 });
 

@@ -1,11 +1,9 @@
-import type { EntryRowType } from 'lwt-ui-kit';
+import type { TRefMap } from 'lwt-forms';
+import type { EntryRowType } from 'lwt-schemas';
+import { DataQuery, LiteralQueryState } from 'lwt-state';
+import { FormInputComponent, InternalPaths } from 'lwt-ui-kit';
 import { Struct } from 'superstruct';
-import type { TRefMap } from '../../../../LWT-Forms/src/Forms';
 import { Persistable } from '../../shared/Persistable';
-import { DataQuery } from './data/data.query';
-import { LiteralQueryState } from './hooks/useAkita';
-import { FormInputComponent } from './hooks/useFormInput';
-import { InternalPaths } from './hooks/useInternalNav';
 import { GenericRetrievalAPI } from './plugins/deepl.plugin';
 
 export type EntryRowComponent = (args: {
@@ -22,7 +20,7 @@ export type Plugin<
   TTarget extends string = string,
   TPaths extends string = string
 > = {
-  pluginHandlers: Record<
+  pluginHandlers?: Record<
     PluginHandler,
     (
       val: any,

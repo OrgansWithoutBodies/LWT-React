@@ -4,7 +4,7 @@ import {
   dbLoc,
   tableIDLookup,
   tbpref,
-} from "./electron-sqlite-backend.plugin.main";
+} from "./electron-sqlite/electron-sqlite-backend.plugin.main";
 const { Database } = require("sqlite3");
 
 /**
@@ -97,7 +97,6 @@ export async function updateEntry(
   tableName: keyof typeof tableIDLookup,
   updateVal: Record<string, string>
 ) {
-  console.log("TEST123-update", tableName, updateVal);
   const tableID = tableIDLookup[tableName];
   return await sql
     .open({

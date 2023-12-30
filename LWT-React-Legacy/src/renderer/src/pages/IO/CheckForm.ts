@@ -2,7 +2,6 @@
 import { byteSizeOfString, confirmDelete } from 'lwt-common';
 import {
   DictURLValidator,
-  LanguagesID,
   TextsID,
   URLValidator,
   containsCharacterOutsideBasicMultilingualPlane,
@@ -44,21 +43,12 @@ const checkNoBlanksNoCommaValidator = () =>
     return true;
   });
 
-function isInt(value: { length: number; charAt: (arg0: any) => number }) {
-  for (let i = 0; i < value.length; i++) {
-    if (value.charAt(i) < 0 || value.charAt(i) > 9) {
-      return false;
-    }
-  }
-  return true;
-}
-
 /**
  *
  * @param s
  * @param info
  */
-function alertFirstCharacterOutsideBasicMultilingualPlane(
+export function alertFirstCharacterOutsideBasicMultilingualPlane(
   s: string,
   info: string
 ) {
@@ -82,6 +72,7 @@ function alertFirstCharacterOutsideBasicMultilingualPlane(
 /**
  *
  * @param event
+ * @param onSubmit
  */
 export const textareaKeydown = (
   event: React.KeyboardEvent<HTMLTextAreaElement>,
@@ -101,6 +92,7 @@ export const InputElementOnKeyDown = {
     'textarea-noreturn': textareaKeydown,
   },
 };
+// export const InputElementAlertVal={}
 export const InputElementValidator = {
   '*': {
     // alert(
@@ -178,6 +170,14 @@ export const InputElementValidator = {
 export type SetBoolHandler = (val: boolean) => void;
 
 // also changeImprAnnText - only difference is 	$(this).prev('input:radio').attr('checked', 'checked');
+/**
+ *
+ * @param textid
+ * @param thedata
+ * @param elem
+ * @param onSetWaiting
+ * @param onSaveData
+ */
 export async function changeImprAnnRadio(
   textid: TextsID,
   // TODO maybe?
@@ -201,10 +201,35 @@ export async function changeImprAnnRadio(
   }
 }
 
-type ShowSimilarTermsArgs = {
-  lang: LanguagesID;
-  word: string;
-};
+/**
+ *
+ */
+export async function changeImprAnnText(
+  textID: TextsID,
+  elem: string,
+  formData: object,
+  onSaveImprText: (val: {
+    id: TextsID;
+    elem: string;
+    data: string;
+  }) => Promise<'OK' | false>,
+  setLoading: (val: boolean) => void,
+  onCheckPrev: () => void
+) {
+  // const textid = $('#editimprtextdata').attr('data_id');
+
+  onCheckPrev();
+  const thedata = JSON.stringify(formData);
+  setLoading(true);
+  const d = await onSaveImprText({ id: textID, elem, data: thedata });
+  if (d != 'OK')
+    alert('Saving your changes failed, please reload page and try again!');
+}
+// TODO
+// type ShowSimilarTermsArgs = {
+//   lang: LanguagesID;
+//   word: string;
+// };
 
 // $(document).ready(function () {
 //   $('.edit_area').editable('inline_edit', {

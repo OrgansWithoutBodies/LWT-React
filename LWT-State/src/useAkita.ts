@@ -1,13 +1,13 @@
-import { Query } from '@datorama/akita';
-import { pick } from 'rambdax';
-import { Observable, ObservedValueOf } from 'rxjs';
+import { Query } from "@datorama/akita";
+import { pick } from "rambdax";
+import { Observable, ObservedValueOf } from "rxjs";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 type StateShapeDefault = object;
 export type SubscribedQueryKeys<TQuery extends Query<StateShapeDefault>> =
   (keyof TQuery)[];
-type LiteralQueryState<
+export type LiteralQueryState<
   TQuery extends Query<StateShapeDefault>,
   Keys extends SubscribedQueryKeys<TQuery>
 > = { readonly [key in Keys[number]]: ObservedValueOf<TQuery[key]> };

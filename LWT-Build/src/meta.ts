@@ -134,6 +134,7 @@ switch (AppVariables.persistMethod) {
     LWTContainer.register(PersistanceStrategyToken, {
       useValue: electronSqlitePersistanceStrategy,
     });
+    break;
   case PersistanceStrategy.LocalStorage:
     const { localStoragePersistanceStrategy } = await import("lwt-persist");
     console.log(
@@ -144,5 +145,8 @@ switch (AppVariables.persistMethod) {
     LWTContainer.register(PersistanceStrategyToken, {
       useValue: localStoragePersistanceStrategy,
     });
+    break;
+  case PersistanceStrategy.RestAPI:
+    throw new Error("Unimplemented Persistance Strategy!");
 }
 // Server requirements: persist data, REST-compliant w openapi schema, backup/restore from backup, tableSize endpoint,parse sentences?

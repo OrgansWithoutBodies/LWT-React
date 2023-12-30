@@ -1,8 +1,6 @@
-import { Word } from 'lwt-schemas';
+import { LanguagesID, Word } from 'lwt-schemas';
 import { useData } from 'lwt-state';
-import { A, Header } from 'lwt-ui-kit';
-import { LanguagesID } from '../data/validators';
-import { InternalPaths, useInternalNavigate } from '../hooks/useInternalNav';
+import { A, Header, InternalPaths, useInternalNavigate } from 'lwt-ui-kit';
 
 // const CAKSlices = [
 //   'Today',

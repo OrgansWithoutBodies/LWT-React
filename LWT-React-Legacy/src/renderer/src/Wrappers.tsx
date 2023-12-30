@@ -1,9 +1,7 @@
+import { LanguagesID, Tags2ID, TagsID, TextsID } from 'lwt-schemas';
 import { dataService, useData } from 'lwt-state';
-import { Switch } from 'lwt-ui-kit';
+import { Switch, useInternalParams, useUpdateParams } from 'lwt-ui-kit';
 import { useSearchParams } from 'react-router-dom';
-import { LanguagesID, Tags2ID, TagsID, TextsID } from './data/validators';
-import { useUpdateParams } from './hooks/useInternalNav';
-import { useInternalParams } from './hooks/useInternalParams';
 import {
   DisplayArchivedTexts,
   EditArchivedText,
@@ -12,20 +10,16 @@ import { UploadWords } from './pages/IO/UploadWords.component';
 import { EditLanguage } from './pages/Language/EditLanguage.component';
 import { LanguagesPage } from './pages/Language/Languages.component';
 import { NewLanguage } from './pages/Language/NewLanguage';
-import { ReaderPage } from './pages/ReaderPage.component';
-import { WordSorting } from './pages/Sorting';
-import { AddNewWordPane } from './pages/Term/AddNewWordPane';
+import { AnnotateText } from './pages/PrintAnnotate/AnnotateText';
+import { AnnPlcmnt, AnnType } from './pages/PrintAnnotate/Annotation.types';
+import { DisplayImprText } from './pages/PrintAnnotate/DisplayImprText';
+import { PrintText } from './pages/PrintAnnotate/PrintText.component';
+import { ReaderPage } from './pages/Reader/ReaderPage.component';
+import { LanguageSorting, WordSorting } from './pages/Sorting';
 import { AddTerm, EditTerm, Terms } from './pages/Term/Terms.component';
 import { DisplayTags, EditTag, NewTag } from './pages/TermTag/EditTags';
-import { TesterPage } from './pages/Tester';
-import { AnnotateText } from './pages/Text/AnnotateText';
-import { DisplayImprText } from './pages/Text/DisplayImprText';
+import { TesterPage } from './pages/Tester/Tester';
 import { EditText, Library } from './pages/Text/Library.component';
-import {
-  AnnPlcmnt,
-  AnnType,
-  PrintText,
-} from './pages/Text/PrintText.component';
 import { ImportShortTextPage } from './pages/Text/TextImport';
 import {
   DisplayTextTags,
@@ -45,6 +39,7 @@ export function TermsWrapper() {
     tag12,
     tag2,
     text,
+    query,
     lang,
   } = useInternalParams('edit_words');
   const [{ activeLanguageID }] = useData(['activeLanguageID']);
@@ -82,6 +77,7 @@ export function TermsWrapper() {
           tag2={
             tag2 === null || tag2 === '' ? null : Number.parseInt<TagsID>(tag2)
           }
+          query={query}
         />
         <EditTerm chgID={Number.parseInt(chg!)} />
       </Switch>
@@ -99,6 +95,7 @@ export function AnnotatedTextsWrapper() {
     <AnnotateText
       textID={Number.parseInt(text)}
       annplcmnt={annplcmnt === null ? 0 : Number.parseInt(annplcmnt)}
+      editmode={false}
     />
   );
 }
@@ -139,33 +136,18 @@ export function LanguagesWrapper() {
   const refreshID = searchParams.get('refresh');
   const updateParams = useUpdateParams();
   if (refreshID !== null) {
-    dataService.reparseAllTextsForLanguage(
-      Number.parseInt(refreshID) as TextsID
-    );
+    dataService.reparseAllTextsForLanguage(Number.parseInt(refreshID));
     updateParams(null);
   }
   return (
     <Switch on={isNew}>
       <Switch on={chgID !== null}>
-        <LanguagesPage />
+        <LanguagesPage sorting={LanguageSorting['Language A-Z']} />
         <EditLanguage chgID={Number.parseInt(chgID!)} />
       </Switch>
       <NewLanguage />
     </Switch>
   );
-}
-{
-  /* TODO this only accessed from inside reader, doesnt fit pattern to have own route  */
-}
-
-export function AddNewWordWrapper() {
-  const [searchParams] = useSearchParams();
-  // const textID = searchParams.get('text');
-  const langID = searchParams.get('lang');
-  if (langID === null) {
-    throw new Error('Need To Specify Language ID');
-  }
-  return <AddNewWordPane langID={Number.parseInt(langID)} />;
 }
 
 export function LibraryWrapper() {
@@ -183,7 +165,6 @@ export function LibraryWrapper() {
   const isNew = newVal === '1';
   const paramUpdater = useUpdateParams();
   if (arch !== null) {
-    console.log('TEST123-ARCH', arch);
     dataService.archiveText(Number.parseInt(arch));
     paramUpdater(null);
   }
@@ -192,7 +173,7 @@ export function LibraryWrapper() {
   // if (refreshID !== null) {
   //   dataService.reparseText(Number.parseInt(refreshID) as TextsID);
   // }
-  console.log('new', isNew);
+
   return (
     <Switch on={isNew}>
       <Switch on={chg !== null}>

@@ -1,8 +1,15 @@
 import { confirmDelete } from 'lwt-common';
-import { Tag } from 'lwt-schemas';
-import { dataService, tagPreValidateMap, useData } from 'lwt-state';
+import { Tag, TagsID, TagsValidator } from 'lwt-schemas';
+import {
+  WordTagDetailRow,
+  dataService,
+  tagPreValidateMap,
+  useData,
+} from 'lwt-state';
 import {
   A,
+  EntryRow,
+  GenericMultiActions,
   GetAllTagsActionsSelectOptions,
   GetMultipleTagsActionsSelectOptions,
   GetTagSortSelectoptions,
@@ -10,22 +17,19 @@ import {
   Icon,
   SortableHeader,
   TableFooter,
-} from 'lwt-ui-kit';
-import { useRef } from 'react';
-import { RefMap } from '../../../../../../LWT-Forms/src/Forms';
-import { WordTagDetailRow } from '../../data/data.query';
-import { TagsID, TagsValidator } from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import {
+  useFormInput,
+  useI18N,
   useInternalNavigate,
-  useUpdateParams,
-} from '../../hooks/useInternalNav';
-import { usePager } from '../../hooks/usePager';
+  usePager,
+} from 'lwt-ui-kit';
 import { useSelection } from '../../hooks/useSelection';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { textareaKeydown } from '../IO/CheckForm';
 import { TagSorting } from '../Sorting';
-import { NavigateButton } from '../Statistics.component';
+import {
+  FilterHeaderWidget,
+  QueryFilterWidget,
+} from '../Term/LanguageBoxFilterWidget';
 
 export function DisplayTags({
   query,
@@ -36,78 +40,42 @@ export function DisplayTags({
   sorting?: TagSorting;
   currentPage: number;
 }): JSX.Element {
-  const [{ tags, settings, wordTagHashmapByTag }] = useData([
+  const [{ tags, settings, wordTagCountmapByTag }] = useData([
     'tags',
     'settings',
-    'wordTagHashmapByTag',
+    'wordTagCountmapByTag',
   ]);
-  const navigate = useInternalNavigate();
-  console.log('TEST123-sorting', sorting, tags);
   const recno = tags.length;
 
   const sortedTags = tags
     .map((tag) => ({
       ...tag,
-      termCount: (wordTagHashmapByTag || {})[tag.TgID],
+      termCount: (wordTagCountmapByTag || {})[tag.TgID],
     }))
     .sort(sortValues(sorting));
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
-  const paramUpdater = useUpdateParams();
   const { checkboxPropsForEntry, onSelectAll, onSelectNone, selectedValues } =
     useSelection(tags, 'TgID');
-
-  const queryRef = useRef<HTMLInputElement>(null);
+  const t = useI18N();
   return (
     <>
       <Header title="My Term Tags" />
       <p>
         <A href="/edit_tags?new=1">
-          <Icon src="plus-button" title="New" /> New Term Tag ...
+          <Icon src="plus-button" title="New" /> {t('New Term Tag')} ...
         </A>
       </p>
 
       <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <FilterHeaderWidget />
           <tr>
-            <th className="th1" colSpan={4}>
-              Filter <Icon src="funnel" title="Filter" />
-              &nbsp;
-              <NavigateButton
-                value="Reset All"
-                navigateTo={`/edit_tags?page=${1}`}
-              />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={4}>
-              Tag Text or Comment:
-              <input
-                type="text"
-                name="query"
-                ref={queryRef}
-                value={query}
-                maxLength={50}
-                size={15}
-              />
-              &nbsp;
-              <input
-                type="button"
-                name="querybutton"
-                value="Filter"
-                onClick={() => {
-                  paramUpdater({ query: queryRef.current?.value || '' });
-                }}
-              />
-              &nbsp;
-              <input
-                type="button"
-                value="Clear"
-                onClick={() => {
-                  navigate(`/edit_tags?page=${1}&query=`);
-                }}
-              />
-            </td>
+            <QueryFilterWidget
+              query={query}
+              colSpan={6}
+              filterString="Tag Text or Comment"
+            />
           </tr>
           {recno > 0 && (
             <FilterSortPager
@@ -123,148 +91,42 @@ export function DisplayTags({
       </form>
 
       {recno === 0 ? (
-        <p>No tags found.</p>
+        <p>{t('No tags found')}.</p>
       ) : (
-        <form name="form2">
-          <input type="hidden" name="data" value="" />
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1 center" colSpan={2}>
-                Multi Actions <Icon src="lightning" title="Multi Actions" />
-              </th>
-            </tr>
-            <tr>
-              <td className="td1 center" colSpan={2}>
-                <b>ALL</b> {dataOnPage.length}{' '}
-                {dataOnPage.length === 1 ? 'Tag' : 'Tags'}
-                <select
-                  name="allaction"
-                  disabled={false}
-                  onChange={({ target: { value } }) => {
-                    // TODO rest
-                    if (value === 'delall') {
-                      if (
-                        window.confirm(
-                          `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
-                        )
-                      ) {
-                        dataService.deleteMultipleTermTags(
-                          tags.map(({ TgID }) => TgID)
-                        );
-                      }
-                    }
-                  }}
-                >
-                  <GetAllTagsActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 center">
-                <input type="button" value="Mark All" onClick={onSelectAll} />
-                <input type="button" value="Mark None" onClick={onSelectNone} />
-              </td>
-              <td className="td1 center">
-                Marked Tags:&nbsp;
-                <select
-                  name="markaction"
-                  id="markaction"
-                  disabled={selectedValues.size === 0}
-                  onChange={({ target: { value } }) => {
-                    if (value === 'del') {
-                      if (
-                        window.confirm(
-                          `${selectedValues.size} Record(s) will be affected ***\n\nARE YOU SURE?`
-                        )
-                      ) {
-                        dataService.deleteMultipleTermTags([...selectedValues]);
-                      }
-                    }
-                  }}
-                >
-                  <GetMultipleTagsActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-          </table>
+        <>
+          <form name="form2">
+            <input type="hidden" name="data" value="" />
+            <GenericMultiActions
+              AllActions={GetAllTagsActionsSelectOptions}
+              SelectedOptions={GetMultipleTagsActionsSelectOptions}
+              onChangeAll={({ target: { value } }) => {
+                onChangeAllTags(value, dataOnPage, tags);
+              }}
+              onChangeSelected={({ target: { value } }) => {
+                onChangeSelectedTags(value, selectedValues);
+              }}
+              countAllTerms={sortedTags.length}
+              countSelectedTerms={selectedValues.size}
+              onSelectAll={onSelectAll}
+              onSelectNone={onSelectNone}
+              nounSingular={'Tag'}
+            />
 
-          <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1 sorttable_nosort">Mark</th>
-              <th className="th1 sorttable_nosort">Actions</th>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Tag Text A-Z']}
-                upSorting={TagSorting['Tag Text Z-A']}
-              >
-                Tag Text{' '}
-              </SortableHeader>
-              <SortableHeader
-                sorting={sorting}
-                downSorting={TagSorting['Tag Comment A-Z']}
-                upSorting={TagSorting['Tag Comment Z-A']}
-              >
-                Tag Comment{' '}
-              </SortableHeader>
-              <SortableHeader
-                sorting={sorting}
-                upSorting={TagSorting['Term Count']}
-                downSorting={TagSorting['Term Count (desc)']}
-              >
-                Terms With Tag{' '}
-              </SortableHeader>
-            </tr>
-            {dataOnPage.map((tag) => (
-              <tr>
-                {/* ' . checkTest(record['TgID'], 'marked') . ' */}
-                <td className="td1 center">
-                  <A id={`rec${tag['TgID']}`}>
-                    <input
-                      name="marked[]"
-                      type="checkbox"
-                      {...checkboxPropsForEntry(tag)}
-                      // TODO consider
-                      // onClick={markClick}
-                      value={tag['TgID']}
-                    />
-                  </A>
-                </td>
-                <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-                  &nbsp;
-                  <A href={`/edit_tags?chg=${tag.TgID}`}>
-                    <Icon src="document--pencil" title="Edit" />
-                  </A>
-                  &nbsp;
-                  <Icon
-                    onClick={() => {
-                      // TODO delete in wrapper
-                      if (confirmDelete()) {
-                        // TODO Maybe call these from wrapper?
-                        dataService.deleteTermTag(tag.TgID);
-                      }
-                    }}
-                    src="minus-button"
-                    title="Delete"
-                  />
-                  &nbsp;
-                </td>
-                <td className="td1 center">{tag.TgText}</td>
-                <td className="td1 center">{tag.TgComment}</td>
-                <td className="td1 center">
-                  {tag.termCount > 0 ? (
-                    <A href={`/edit_words?tag1=${tag.TgID}`}>{tag.termCount}</A>
-                  ) : (
-                    '0'
-                  )}
-                </td>
-              </tr>
-            ))}
-          </table>
-        </form>
+            <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
+              <TagHeader sorting={sorting} />
+              {dataOnPage.map((tag) => (
+                <TagRow
+                  tag={tag}
+                  checkboxPropsForEntry={checkboxPropsForEntry}
+                />
+              ))}
+            </table>
+          </form>
+        </>
       )}
 
       {numPages > 1 && (
-        <form name="form3" action="#">
+        <form name="form3">
           <TableFooter
             recno={recno}
             currentPage={currentPage}
@@ -276,6 +138,121 @@ export function DisplayTags({
         </form>
       )}
     </>
+  );
+}
+
+function onChangeSelectedTags(value: string, selectedValues: Set<TagsID>) {
+  if (value === 'del') {
+    if (
+      window.confirm(
+        `${selectedValues.size} Record(s) will be affected ***\n\nARE YOU SURE?`
+      )
+    ) {
+      dataService.deleteMultipleTermTags([...selectedValues]);
+    }
+  }
+}
+
+function onChangeAllTags(
+  value: string,
+  dataOnPage: WordTagDetailRow[],
+  tags: Tag[]
+) {
+  // TODO rest
+
+  if (value === 'delall') {
+    if (
+      window.confirm(
+        `${dataOnPage.length} Record(s) will be affected ***\n\nARE YOU SURE?`
+      )
+    ) {
+      dataService.deleteMultipleTermTags(tags.map(({ TgID }) => TgID));
+    }
+  }
+}
+
+function TagHeader({ sorting }: { sorting: TagSorting }) {
+  return (
+    <tr>
+      <th className="th1 sorttable_nosort">Mark</th>
+      <th className="th1 sorttable_nosort">Actions</th>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Tag Text A-Z']}
+        upSorting={TagSorting['Tag Text Z-A']}
+      >
+        Tag Text{' '}
+      </SortableHeader>
+      <SortableHeader
+        sorting={sorting}
+        downSorting={TagSorting['Tag Comment A-Z']}
+        upSorting={TagSorting['Tag Comment Z-A']}
+      >
+        Tag Comment{' '}
+      </SortableHeader>
+      <SortableHeader
+        sorting={sorting}
+        upSorting={TagSorting['Term Count']}
+        downSorting={TagSorting['Term Count (desc)']}
+      >
+        Terms With Tag{' '}
+      </SortableHeader>
+    </tr>
+  );
+}
+
+function TagRow({
+  tag,
+  checkboxPropsForEntry,
+}: {
+  tag: WordTagDetailRow;
+  checkboxPropsForEntry: (val: Tag) => {
+    onChange: () => void;
+    checked: boolean;
+  };
+}) {
+  return (
+    <tr>
+      {/* ' . checkTest(record['TgID'], 'marked') . ' */}
+      <td className="td1 center">
+        <A id={`rec${tag['TgID']}`}>
+          <input
+            name="marked[]"
+            type="checkbox"
+            {...checkboxPropsForEntry(tag)}
+            value={tag['TgID']}
+          />
+        </A>
+      </td>
+      <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
+        &nbsp;
+        <A href={`/edit_tags?chg=${tag.TgID}`}>
+          <Icon src="document--pencil" title="Edit" />
+        </A>
+        &nbsp;
+        <Icon
+          onClick={() => {
+            // TODO delete in wrapper
+            if (confirmDelete()) {
+              // TODO Maybe call these from wrapper?
+              dataService.deleteTermTag(tag.TgID);
+            }
+          }}
+          src="minus-button"
+          title="Delete"
+        />
+        &nbsp;
+      </td>
+      <td className="td1 center">{tag.TgText}</td>
+      <td className="td1 center">{tag.TgComment}</td>
+      <td className="td1 center">
+        {tag.termCount > 0 ? (
+          <A href={`/edit_words?tag1=${tag.TgID}`}>{tag.termCount}</A>
+        ) : (
+          '0'
+        )}
+      </td>
+    </tr>
   );
 }
 
@@ -316,11 +293,20 @@ function sortValues(value: TagSorting) {
 
 export function NewTag() {
   const validator = TagsValidator;
-  const refMap = RefMap<Tag>(validator);
 
   const navigator = useInternalNavigate();
 
   const { Input: TgInput, onSubmit, TextArea } = useFormInput({ validator });
+  const submitForm = () => {
+    onSubmit(
+      tagPreValidateMap,
+      (value) => {
+        dataService.addTag(value);
+        navigator('/edit_tags');
+      },
+      'TgID'
+    );
+  };
   return (
     <>
       <Header title="My Term Tags" />
@@ -344,7 +330,7 @@ export function NewTag() {
             <td className="td1">
               <TextArea
                 className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
+                onKeyDown={(e) => textareaKeydown(e, submitForm)}
                 maxLength={200}
                 entryKey="TgComment"
                 cols={40}
@@ -365,16 +351,7 @@ export function NewTag() {
                 type="button"
                 name="op"
                 value="Save"
-                onClick={() => {
-                  onSubmit(
-                    tagPreValidateMap,
-                    (value) => {
-                      dataService.addTag(value);
-                      navigator('/edit_tags');
-                    },
-                    'TgID'
-                  );
-                }}
+                onClick={submitForm}
               />
             </td>
           </tr>
@@ -391,8 +368,6 @@ export function EditTag({ chgID }: { chgID: TagsID }) {
     throw new Error('Invalid Tag ID');
   }
   const validator = TagsValidator;
-  const refMap = RefMap<Tag>(validator);
-
   const {
     onSubmit,
     Input: TgInput,
@@ -402,38 +377,43 @@ export function EditTag({ chgID }: { chgID: TagsID }) {
     entry: changingTag,
   });
   const navigator = useInternalNavigate();
+  const submitForm = () => {
+    onSubmit(
+      tagPreValidateMap,
+      (value) => {
+        dataService.editTag(value);
+        navigator('/edit_tags');
+      },
+      'TgID'
+    );
+  };
+  const t = useI18N();
   return (
     <>
       <Header title="My Term Tags" />
-      <h4>Edit Tag</h4>
+      <h4>{t('Edit Tag')}</h4>
       <form name="newtag">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Tag:</td>
-            <td className="td1">
-              <TgInput
-                className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                entryKey="TgText"
-                maxLength={20}
-                size={20}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Comment:</td>
-            <td className="td1">
-              <TextArea
-                className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
-                maxLength={200}
-                entryKey="TgComment"
-                cols={40}
-                defaultValue={changingTag.TgComment}
-                rows={3}
-              />
-            </td>
-          </tr>
+          <EntryRow headerText="Tag">
+            <TgInput
+              className="notempty setfocus noblanksnocomma checkoutsidebmp"
+              entryKey="TgText"
+              maxLength={20}
+              size={20}
+              isRequired
+            />
+          </EntryRow>
+          <EntryRow headerText="Comment">
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={200}
+              entryKey="TgComment"
+              cols={40}
+              default
+              rows={3}
+            />
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               <input
@@ -447,16 +427,7 @@ export function EditTag({ chgID }: { chgID: TagsID }) {
                 type="button"
                 name="op"
                 value="Save"
-                onClick={() => {
-                  onSubmit(
-                    tagPreValidateMap,
-                    (value) => {
-                      dataService.editTag(changingTag.TgID, value);
-                      navigator('/edit_tags');
-                    },
-                    'TgID'
-                  );
-                }}
+                onClick={submitForm}
               />
             </td>
           </tr>

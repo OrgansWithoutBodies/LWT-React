@@ -6,10 +6,7 @@ export type PersistedValueGetter<TKey extends keyof LWTData = keyof LWTData> = (
   nullFallback?: LWTData[TKey]
 ) => TKey extends keyof LWTData ? LWTData[TKey] : never;
 export type PersistedValueInitter<TKey extends keyof LWTData = keyof LWTData> =
-  (
-    key: TKey,
-    nullFallback?: LWTData[TKey]
-  ) => TKey extends keyof LWTData ? Promise<boolean> : never;
+  () => TKey extends keyof LWTData ? Promise<boolean> : never;
 export type PersistedValueGetterAsync<
   TKey extends keyof LWTData = keyof LWTData
 > = (key: TKey, nullFallback?: LWTData[TKey]) => Promise<LWTData[TKey]>;

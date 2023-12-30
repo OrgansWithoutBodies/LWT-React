@@ -1,6 +1,5 @@
-import { Tags2ID } from '../../renderer/src/data/validators';
+import { Tags2ID, TextTag } from 'lwt-schemas';
 import { filterTags } from '../../renderer/src/utils/filterTags';
-import { TextTag } from '../../renderer/src/utils/parseMySqlDump';
 
 describe('filterTags', () => {
   // TODO use data from demo db

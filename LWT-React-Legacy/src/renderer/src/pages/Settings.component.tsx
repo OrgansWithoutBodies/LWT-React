@@ -1,14 +1,19 @@
+import { SettingsObjValidator } from 'lwt-schemas';
 import { dataService, settingsPrevalidateMap, useData } from 'lwt-state';
-import { Header, RequiredLineButton, SelectBoolean } from 'lwt-ui-kit';
+import {
+  Header,
+  RequiredLineButton,
+  SelectBoolean,
+  useFormInput,
+  useInternalNavigate,
+} from 'lwt-ui-kit';
 import * as ss from 'superstruct';
 import { Persistable } from '../../../shared/Persistable';
-import { SettingsObjValidator } from '../data/validators';
-import { useFormInput } from '../hooks/useFormInput';
-import { useInternalNavigate } from '../hooks/useInternalNav';
 import { PluginEntries } from '../plugins/PluginEntries';
 // TODO abstract this out into a nested settings component
 
 const validator = ss.omit(SettingsObjValidator, [
+  'uilanguage',
   'currentlanguage',
   'currenttext',
   'dbversion',
@@ -150,7 +155,11 @@ const SettingsLayout: Record<
     suffix: '',
     inputType: 'dropdown',
   },
-  // ...PLUGINS.settings:
+  // uilanguage: {
+  //   category: 'Counts',
+  //   inputType: 'number',
+  //   dropdownOptions: undefined
+  // }
 };
 const DEFAULT_SETTINGS = {
   'set-text-h-frameheight-no-audio': 140,

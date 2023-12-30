@@ -1,6 +1,5 @@
 import { AppVariables } from 'lwt-build';
-import { A } from 'lwt-ui-kit';
-import { useInternalNavigate } from '../hooks/useInternalNav';
+import { A, useInternalNavigate } from 'lwt-ui-kit';
 import {
   FloatingMenu,
   InfoLine,

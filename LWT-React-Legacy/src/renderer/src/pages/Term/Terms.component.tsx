@@ -1,5 +1,21 @@
-import { allActionGo, confirmDelete, getDirTag } from 'lwt-common';
-import { AddNewWordValidator, Word } from 'lwt-schemas';
+import {
+  DateDiff,
+  allActionGo,
+  confirmDelete,
+  getDirTag,
+  multiActionGo,
+} from 'lwt-common';
+import {
+  AddNewWordValidator,
+  EditWordsValidator,
+  LanguagesID,
+  TagsID,
+  TextsID,
+  Word,
+  WordsID,
+  getStatusName,
+  get_status_abbr,
+} from 'lwt-schemas';
 import {
   dataService,
   useData,
@@ -9,44 +25,40 @@ import {
 import {
   A,
   EntryRow,
+  GenericMultiActions,
   GetAllWordsActionsSelectOptions,
-  GetMultipleWordsSctionsSelectoptions,
+  GetMultipleWordsSelectoptions,
   Header,
   Icon,
-  LanguageDropdown,
   SortableHeader,
   StatusRadioButtons,
   TableFooter,
   TagAndOr,
   TagDropDown,
   WordTagsAutocomplete,
+  useFormInput,
+  useI18N,
+  useInternalNavigate,
+  usePager,
+  useSettingWithDefault,
+  useUpdateParams,
 } from 'lwt-ui-kit';
 import { useEffect, useState } from 'react';
-import {
-  EditWordsValidator,
-  LanguagesID,
-  TagsID,
-  TextsID,
-  WordsID,
-} from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import {
-  useInternalNavigate,
-  useUpdateParams,
-} from '../../hooks/useInternalNav';
-import { usePager } from '../../hooks/usePager';
 import { useSelection } from '../../hooks/useSelection';
-import { useSettingWithDefault } from '../../hooks/useSettingWithDefault';
 import { filterTags } from '../../utils/filterTags';
-import { DateDiff } from '../../utils/time';
 import { prepare_textdata_js } from '../../utils/windowFunctions';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { textareaKeydown } from '../IO/CheckForm';
 import { WordSorting, sortingMethod } from '../Sorting';
-import { getStatusName, get_status_abbr } from '../StrengthMap';
 import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
+import {
+  FilterHeaderWidget,
+  LanguageBoxFilterWidget,
+  QueryFilterWidget,
+  StatusSelectFilterWidget,
+} from './LanguageBoxFilterWidget';
 
 function TermsHeader({ sorting }: { sorting: WordSorting }): JSX.Element {
   const [{ activeLanguageID }] = useData(['activeLanguageID']);
@@ -137,6 +149,7 @@ export function TermsFilterBox({
   tag2,
   sorting,
   status,
+  query,
   textFilter,
 }: {
   textFilter: TextsID | null;
@@ -146,6 +159,7 @@ export function TermsFilterBox({
   numPages: number;
   currentPage: number;
   status: number | null;
+  query: string | null;
   tag1: TagsID | null;
   tag2: TagsID | null;
   tag12: 0 | 1;
@@ -155,40 +169,16 @@ export function TermsFilterBox({
   // TODO usePager available here - contextprovider?
   // TODO why would need pager in filter box?
   const updateParams = useUpdateParams();
+  const t = useI18N();
   return (
     <table className="tab1" cellSpacing={0} cellPadding={5}>
       <tbody>
+        <FilterHeaderWidget />
+
         <tr>
-          <th className="th1" colSpan={4}>
-            Filter
-            <Icon src="funnel" title="Filter" />
-            &nbsp;
-            <input
-              type="button"
-              value="Reset All"
-              onClick={() => updateParams(null)}
-            />
-          </th>
-        </tr>
-        <tr>
+          <LanguageBoxFilterWidget activeLanguageID={activeLanguageID} />
           <td className="td1 center" colSpan={2}>
-            Language:
-            <LanguageDropdown
-              onChange={(val) => {
-                if (val === -1) {
-                  dataService.setActiveLanguage(null);
-                } else {
-                  dataService.setActiveLanguage(val);
-                }
-              }}
-              defaultValue={
-                activeLanguageID !== null ? activeLanguageID : undefined
-              }
-              header="Filter off"
-            />
-          </td>
-          <td className="td1 center" colSpan={2}>
-            Text:
+            {t('Text')}:
             <select
               name="text"
               defaultValue={textFilter === null ? undefined : textFilter}
@@ -200,7 +190,7 @@ export function TermsFilterBox({
               }}
             >
               <option value={-1} selected>
-                [Filter off]
+                [{t('Filter off')}]
               </option>
               {(activeLanguageID !== null
                 ? texts.filter(({ TxLgID }) => TxLgID === activeLanguageID)
@@ -212,81 +202,11 @@ export function TermsFilterBox({
           </td>
         </tr>
         <tr>
-          <td
-            style={{ whiteSpace: 'nowrap' }}
-            className="td1 center"
-            colSpan={2}
-          >
-            Status:
-            <select
-              name="status"
-              defaultValue={status === null ? undefined : status}
-              onChange={({ target: { value: selectedValue } }) => {
-                updateParams({ status: selectedValue, page: null });
-              }}
-            >
-              <option value="" selected>
-                [Filter off]
-              </option>
-              {new Array(5).fill(0).map((_, ii) => {
-                const val = ii + 1;
-                return (
-                  <option value={val}>
-                    {val === 5 ? 'Learned' : 'Learning'} [{val}]
-                  </option>
-                );
-              })}
-              <option value="99">Well Known [WKn]</option>
-              <option value="98">Ignored [Ign]</option>
-              {/* TODO reuse GetWordstatusSelectoptions */}
-              {new Array(4).fill(0).map((_, ii) => {
-                const val = ii + 1;
-                return (
-                  <>
-                    <option disabled>--------</option>
-                    {new Array(5 - val).fill(0).map((__, jj) => {
-                      const jVal = jj + 1;
-                      return (
-                        <option value={`${val}${jVal}`}>
-                          {val + jVal === 5 ? 'Learning/-ed' : 'Learning'} [
-                          {val}
-                          ..
-                          {val + jVal}]
-                        </option>
-                      );
-                    })}
-                  </>
-                );
-              })}
-              <option disabled>--------</option>
-              <option value="599">All known [5+WKn]</option>
-            </select>
-          </td>
-          <td
-            style={{ whiteSpace: 'nowrap' }}
-            className="td1 center"
-            colSpan={2}
-          >
-            Term, Rom., Transl. (Wildc.=*):
-            <input type="text" name="query" value="" maxLength={50} size={15} />
-            &nbsp;
-            <input
-              type="button"
-              name="querybutton"
-              value="Filter"
-              onChange={({ target: { value: selectedValue } }) => {
-                updateParams({ query: selectedValue, page: null });
-              }}
-            />
-            &nbsp;
-            <input
-              type="button"
-              value="Clear"
-              onChange={() => {
-                updateParams(null);
-              }}
-            />
-          </td>
+          <StatusSelectFilterWidget />
+          <QueryFilterWidget
+            filterString="Term, Rom., Transl. (Wildc.=*)"
+            query={query}
+          />
         </tr>
         <tr>
           <td
@@ -294,7 +214,7 @@ export function TermsFilterBox({
             className="td1 center"
             colSpan={2}
           >
-            Tag #1:
+            {t('Tag #1')}:
             <TagDropDown tags={tags} tagKey="tag1" defaultValue={tag1} />
           </td>
           <TagAndOr
@@ -304,7 +224,7 @@ export function TermsFilterBox({
             }}
           />
           <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
-            Tag #2:
+            {t('Tag #2')}:
             <TagDropDown tags={tags} tagKey="tag2" defaultValue={tag2} />
           </td>
         </tr>
@@ -317,25 +237,25 @@ export function TermsFilterBox({
           {/* TODO keep these up to date w wordSort enum */}
           {/* TODO move to sortings */}
           <option value="1" selected={sorting === 1}>
-            Term A-Z
+            {t('Term A-Z')}
           </option>
           <option value="2" selected={sorting === 2}>
-            Translation A-Z
+            {t('Translation A-Z')}
           </option>
           <option value="3" selected={sorting === 3}>
-            Newest first
+            {t('Newest first')}
           </option>
           <option value="7" selected={sorting === 7}>
-            Oldest first
+            {t('Oldest first')}
           </option>
           <option value="4" selected={sorting === 4}>
-            Status
+            {t('Status')}
           </option>
           <option value="5" selected={sorting === 5}>
-            Score Value (%)
+            {t('Score Value (%)')}
           </option>
           <option value="6" selected={sorting === 6}>
-            Word Count Active Texts
+            {t('Word Count Active Texts')}
           </option>{' '}
         </FilterSortPager>
       </tbody>
@@ -432,7 +352,13 @@ function TermRow({
       <td className="td1 center">
         <b>
           {sentence !== undefined ? (
-            <Icon src="status" title={`${sentence}`} alt="Yes" />
+            // TODO this shouldnt be translated
+            <Icon
+              src="status"
+              title={`${sentence}` as any}
+              translateTitle={false}
+              alt="Yes"
+            />
           ) : (
             <Icon src="status-busy" title="(No valid sentence)" alt="No" />
           )}
@@ -512,11 +438,13 @@ export function Terms({
   tag1,
   tag12 = 0,
   tag2,
+  query,
 }: {
   textFilter: TextsID | null;
   pageNum: number | null;
   // filterlang: LanguagesID | null;
   status: number | null;
+  query: string | null;
   tag1: TagsID | null;
   tag12: 0 | 1;
   tag2: TagsID | null;
@@ -576,9 +504,11 @@ export function Terms({
   return (
     <>
       <Header
-        title={`My ${
-          activeLanguage?.LgName || ''
-        } Terms (Words and Expressions)`}
+        title={
+          `My ${
+            activeLanguage?.LgName || ''
+          } Terms (Words and Expressions)` as any
+        }
       />
       {activeLanguage ? (
         <p>
@@ -597,6 +527,7 @@ export function Terms({
       {sortedWords && (
         <>
           <TermsFilterBox
+            query={query}
             sorting={sort}
             status={status}
             tag12={tag12}
@@ -609,7 +540,7 @@ export function Terms({
             textFilter={textFilter}
           />
           <TermMultiActions
-            selectedTerms={selectedValues}
+            selectedTermIDs={selectedValues}
             onSelectAll={onSelectAll}
             onSelectNone={onSelectNone}
             allTermIDs={filteredWords.map((val) => val.WoID)}
@@ -657,6 +588,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
     setDirty,
   } = useFormInput({ validator, entry: term });
 
+  const t = useI18N();
   if (!term) {
     return <></>;
   }
@@ -672,13 +604,20 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
     throw new Error(`Invalid Change ID! ${chgID}`);
   }
   const onCopyTransRoman: CopyTransRomanHandler = () => {};
+  const submitForm = () => {
+    onSubmit(wordPrevalidateMap, (val) => {
+      // TODO
+      dataService.editTerm(val);
+      navigator('/edit_words');
+    });
+  };
   return (
     <>
       <Header
-        title={`My ${termLanguage.LgName} Terms (Words and Expressions)`}
+        title={`My ${termLanguage.LgName} Terms (Words and Expressions)` as any}
       />
 
-      <h4>Edit Term</h4>
+      <h4>{t('Edit Term')}</h4>
       <form name="editword">
         <WoInput type="hidden" entryKey="WoID" fixed />
         <WoInput type="hidden" entryKey="WoLgID" fixed id="langfield" />
@@ -686,97 +625,77 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
         {/* TODO */}
         <input type="hidden" name="WoOldStatus" value={term.WoStatus} />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Language:</td>
-            <td className="td1">{termLanguage.LgName}</td>
-          </tr>
-          <tr title="Normally only change uppercase/lowercase here!">
-            <td className="td1 right">Term:</td>
-            <td className="td1">
-              <WoInput
-                {...getDirTag(termLanguage)}
-                className="notempty setfocus checkoutsidebmp"
-                // TODO
-                onBlur={
-                  () => {} // do_ajax_show_similar_terms(
-                  //   {
-                  //     lang: chgID,
-                  //     word: refMap.WoText.current.value,
-                  //   },
-                  //   () => {},
-                  //   setShowingSentences()
-                  // )
-                }
-                id="wordfield"
-                errorName="Term"
-                entryKey="WoText"
-                maxLength={250}
-                size={40}
-                isRequired
-                default
-              />
-            </td>
-          </tr>
+          <EntryRow headerText="Language">{termLanguage.LgName}</EntryRow>
+          <EntryRow
+            entryTitle="Normally only change uppercase/lowercase here!"
+            headerText="Term"
+          >
+            <WoInput
+              {...getDirTag(termLanguage)}
+              className="notempty setfocus checkoutsidebmp"
+              // TODO
+              onBlur={
+                () => {} // do_ajax_show_similar_terms(
+                //   {
+                //     lang: chgID,
+                //     word: refMap.WoText.current.value,
+                //   },
+                //   () => {},
+                //   setShowingSentences()
+                // )
+              }
+              id="wordfield"
+              errorName="Term"
+              entryKey="WoText"
+              maxLength={250}
+              size={40}
+              isRequired
+              default
+            />
+          </EntryRow>
           <PrintSimilarTermsTabrow
             onCopyTransRoman={onCopyTransRoman}
             word={refMap.WoText.current?.value}
             lang={refMap.WoLgID.current?.value}
           />
-          <tr>
-            <td className="td1 right">Translation:</td>
-            <td className="td1">
-              <TextArea
-                className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
-                maxLength={500}
-                errorName="Translation"
-                name="WoTranslation"
-                cols={40}
-                rows={3}
-                default
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Tags:</td>
-            <td className="td1">
-              <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Romaniz.:</td>
-            <td className="td1">
-              <WoInput
-                className="checkoutsidebmp"
-                maxLength={100}
-                size={40}
-                entryKey="WoRomanization"
-                default
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">
-              Sentence
-              <br />
-              Term in {'{...}'}:
-            </td>
-            <td className="td1">
-              <TextArea
-                {...getDirTag(termLanguage)}
-                className="checklength checkoutsidebmp"
-                onKeyDown={textareaKeydown}
-                maxLength={1000}
-                errorName="Sentence"
-                name="WoSentence"
-                cols={40}
-                rows={3}
-                defaultValue={term.WoSentence}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Status:</td>
+          <EntryRow headerText="Translation">
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={500}
+              errorName="Translation"
+              entryKey="WoTranslation"
+              cols={40}
+              rows={3}
+              default
+            />
+          </EntryRow>
+          <EntryRow headerText="Tags">
+            <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
+          </EntryRow>
+          <EntryRow headerText="Romaniz.">
+            <WoInput
+              className="checkoutsidebmp"
+              maxLength={100}
+              size={40}
+              entryKey="WoRomanization"
+              default
+            />
+          </EntryRow>
+          <EntryRow headerText="Sentence\nTerm in {'{...}'}">
+            <TextArea
+              {...getDirTag(termLanguage)}
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={1000}
+              errorName="Sentence"
+              entryKey="WoSentence"
+              cols={40}
+              rows={3}
+              default
+            />
+          </EntryRow>
+          <EntryRow headerText="Status">
             <td className="td1">
               <StatusRadioButtons
                 onChange={setDirty}
@@ -784,7 +703,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                 refMap={refMap}
               />
             </td>
-          </tr>
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               &nbsp;
@@ -801,17 +720,7 @@ export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
                   navigator(`/edit_words#rec${chgID}`);
                 }}
               />
-              <input
-                type="button"
-                value="Change"
-                onClick={() => {
-                  onSubmit(wordPrevalidateMap, (val) => {
-                    // TODO
-                    dataService.editTerm(val);
-                    navigator('/edit_words');
-                  });
-                }}
-              />
+              <input type="button" value="Change" onClick={submitForm} />
             </td>
           </tr>
         </table>
@@ -860,9 +769,18 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
     validator,
   });
   const onCopyTransRoman: CopyTransRomanHandler = () => {};
+  const submitForm = () => {
+    onSubmit(wordNoIDPrevalidateMap, (val) => {
+      console.log('ADDING TERM', val);
+      dataService.addTerm(val);
+      navigator('/edit_words');
+    });
+  };
   return (
     <>
-      <Header title={`My ${language.LgName} Terms (Words and Expressions)`} />
+      <Header
+        title={`My ${language.LgName} Terms (Words and Expressions)` as any}
+      />
 
       <h4>New Term</h4>
       <form name="newword">
@@ -896,10 +814,10 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
           <EntryRow headerText={'Translation'}>
             <TextArea
               className="checklength checkoutsidebmp"
-              onKeyDown={textareaKeydown}
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
               maxLength={500}
               errorName="Translation"
-              name="WoTranslation"
+              entryKey="WoTranslation"
               cols={40}
               rows={3}
             />
@@ -919,13 +837,12 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
             <TextArea
               {...getDirTag(language)}
               className="checklength checkoutsidebmp"
-              onKeyDown={textareaKeydown}
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
               maxLength={1000}
               errorName="Sentence"
-              name="WoSentence"
+              entryKey="WoSentence"
               cols={40}
               rows={3}
-              rezf={refMap.WoSentence}
             />
           </EntryRow>
           <EntryRow headerText="Status">
@@ -950,17 +867,7 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
                   navigator('/edit_words');
                 }}
               />
-              <input
-                type="button"
-                value="Save"
-                onClick={() => {
-                  onSubmit(wordNoIDPrevalidateMap, (val) => {
-                    console.log('ADDING TERM', val);
-                    dataService.addTerm(val);
-                    navigator('/edit_words');
-                  });
-                }}
-              />
+              <input type="button" value="Save" onClick={submitForm} />
             </td>
           </tr>
         </table>
@@ -989,12 +896,12 @@ export function AddTerm({ langID }: { langID: LanguagesID }): JSX.Element {
 }
 
 export function TermMultiActions({
-  selectedTerms,
+  selectedTermIDs,
   onSelectAll,
   onSelectNone,
   allTermIDs,
 }: {
-  selectedTerms: Set<WordsID>;
+  selectedTermIDs: Set<WordsID>;
   onSelectAll: () => void;
   onSelectNone: () => void;
   allTermIDs: WordsID[];
@@ -1002,84 +909,54 @@ export function TermMultiActions({
   const recno = allTermIDs.length;
   return (
     <form name="form1">
-      <table className="tab1" cellSpacing={0} cellPadding={5}>
-        <tbody>
-          <tr>
-            <th className="th1" colSpan={2}>
-              Multi Actions
-              <Icon src="lightning" title="Multi Actions" />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={2}>
-              <b>ALL</b> {recno === 1 ? '1 Term' : `${recno} Terms`}&nbsp;
-              <select
-                name="allaction"
-                onChange={({ target: { value, innerText } }) => {
-                  allActionGo({
-                    numRecords: recno,
-                    sel: { value, text: innerText },
-                    onSetCapitalization: (upperCase) => {
-                      if (upperCase) {
-                        return dataService.setTermTextUppercase(allTermIDs);
-                      }
-                      return dataService.setTermTextUppercase(allTermIDs);
-                    },
-                    onAddTag: (tagStr) => {
-                      dataService.addPotentiallyNewTagToTerms(
-                        tagStr,
-                        allTermIDs
-                      );
-                    },
-                    onClear: () => {},
-                    onExport: (mode) => {
-                      console.log('TEST123', mode);
-                      switch (mode) {
-                        case 'anki':
-                          dataService.exportTermsAnki(allTermIDs);
-                        case 'flexible':
-                          dataService.exportTermsTSV(allTermIDs);
-                        case 'tsv':
-                          dataService.exportTermsTSV(allTermIDs);
-                      }
-                    },
-                    onSetStrength: (newStrength) => {
-                      // TODO shouldn't need to map
-                      allTermIDs.map((val) => {
-                        dataService.updateTermStrength(val, newStrength);
-                      });
-                    },
-                  });
-                }}
-              >
-                <GetAllWordsActionsSelectOptions />
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 center">
-              <input type="button" value="Mark All" onClick={onSelectAll} />
-              <input type="button" value="Mark None" onClick={onSelectNone} />
-            </td>
-            <td className="td1 center">
-              Marked Terms:
-              <select
-                name="markaction"
-                id="markaction"
-                // TODO
-                onChange={() => {}}
-                disabled={selectedTerms.size === 0}
-              >
-                <GetMultipleWordsSctionsSelectoptions />
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <GenericMultiActions
+        AllActions={GetAllWordsActionsSelectOptions}
+        SelectedOptions={GetMultipleWordsSelectoptions}
+        onChangeAll={({ target: { value, innerText } }) => {
+          allActionGo({
+            numRecords: recno,
+            sel: { value, text: innerText },
+            onSetCapitalization: (upperCase) => {
+              if (upperCase) {
+                return dataService.setTermTextUppercase(allTermIDs);
+              }
+              return dataService.setTermTextUppercase(allTermIDs);
+            },
+            onAddTag: (tagStr) => {
+              dataService.addPotentiallyNewTagToTerms(tagStr, allTermIDs);
+            },
+            onClear: () => {},
+            onExport: (mode) => {
+              switch (mode) {
+                case 'anki':
+                  dataService.exportTermsAnki(allTermIDs);
+                  break;
+                case 'flexible':
+                  dataService.exportTermsTSV(allTermIDs);
+                  break;
+                case 'tsv':
+                  dataService.exportTermsTSV(allTermIDs);
+                  break;
+              }
+            },
+            onSetStrength: (newStrength) => {
+              // TODO shouldn't need to map
+              allTermIDs.map((val) => {
+                dataService.updateTermStrength(val, newStrength);
+              });
+            },
+          });
+        }}
+        onChangeSelected={multiActionGo}
+        countAllTerms={recno}
+        countSelectedTerms={selectedTermIDs.size}
+        onSelectAll={onSelectAll}
+        onSelectNone={onSelectNone}
+        nounSingular={'Term'}
+      />
     </form>
   );
 }
-
 function PrintSimilarTermsTabrow({
   word,
   lang,
@@ -1094,6 +971,7 @@ function PrintSimilarTermsTabrow({
   // TODO trigger onBlur
   const [showingSimilar, setShowingSimilar] = useState(false);
 
+  const t = useI18N();
   useEffect(() => {
     if (word && lang) {
       setShowingSimilar(true);
@@ -1105,11 +983,7 @@ function PrintSimilarTermsTabrow({
     <>
       {settings['set-similar-terms-count'] > 0 && (
         <tr>
-          <td className="td1 right">
-            Similar
-            <br />
-            Terms:
-          </td>
+          <td className="td1 right">{t('Similar\nTerms')}:</td>
           <td className="td1">
             <span id="simwords" className="smaller">
               &nbsp;
@@ -1152,7 +1026,6 @@ function PrintSimilarTerms({
   if (max_count <= 0) {
     return <></>;
   }
-  console.log({ compared_term });
   if (compared_term.trim() === '') {
     return <>&nbsp;</>;
   }
@@ -1316,7 +1189,7 @@ function letterPairs(str: string) {
   const numPairs = str.length - 1;
   const pairs = [];
   for (let i = 0; i < numPairs; i++) {
-    pairs[i] = mb_substr(str, i, 2);
+    pairs[i] = str.substring(i, i + 2);
   }
   return pairs;
 }

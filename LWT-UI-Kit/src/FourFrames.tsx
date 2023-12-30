@@ -1,6 +1,6 @@
-import { SettingsObject, settingSpec } from "lwt-schemas";
+import { SettingSpec, SettingsObject, settingSpec } from "lwt-schemas";
+import { useSettingWithDefault } from "lwt-ui-kit";
 import SplitPane from "react-split-pane";
-import { useSettingWithDefault } from "./hooks/useSettingWithDefault";
 type FrameSizeKeys<
   THFrameKey extends keyof SettingsObject,
   TLFrameKey extends keyof SettingsObject,
@@ -20,9 +20,9 @@ type FrameSizeKeys<
  *
  */
 export function FourFramePage<
-  THFrameKey extends keyof SettingsObject,
-  TLFrameKey extends keyof SettingsObject,
-  TRFrameKey extends keyof SettingsObject
+  THFrameKey extends keyof SettingSpec,
+  TLFrameKey extends keyof SettingSpec,
+  TRFrameKey extends keyof SettingSpec
 >({
   frameSizes: { lFrameWidthPercKey, rFrameHeightPercKey, hFrameHeightKey },
   ULFrame,

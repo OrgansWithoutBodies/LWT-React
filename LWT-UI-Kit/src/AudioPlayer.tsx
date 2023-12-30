@@ -1,5 +1,5 @@
 import { formatTime } from "lwt-common";
-import React, { ForwardedRef, Ref, useEffect, useState } from "react";
+import React, { ForwardedRef, useEffect, useState } from "react";
 import { Icon } from "./Icon";
 import {
   GetPlaybackrateSelectoptions,
@@ -35,7 +35,11 @@ function AudioPlayerImpl(
     duration,
     setPlaying,
     // audio,
-  } = useAudio(audioURL, ref, (val) => setHeadPos(val));
+  } = useAudio(
+    audioURL,
+    // ref,
+    (val) => setHeadPos(val)
+  );
   //   TODO
   //   ref = audio;
   console.log("ref", ref);
@@ -385,7 +389,7 @@ $(document).ready(function(){
 
 const useAudio = (
   url: string,
-  ref: Ref<HTMLAudioElement>,
+  // ref: Ref<HTMLAudioElement>,
   onTimeUpdate: (val: number) => void = () => {}
 ) => {
   const [audio] = useState(() => {

@@ -1,8 +1,3 @@
-// import { BackendPlugin } from "../plugins/electron-sqlite.backend-plugin.renderer";
-// import * as Reflect from "reflect-metadata";
-
-// Reflect;
-
 import { PersistenceHandles } from "./PersistedValueGetter.types";
 import {
   getPersistedValueLocalStorage,
@@ -10,6 +5,7 @@ import {
 } from "./getPersistedValueLocalStorage";
 // ================== //
 export const localStoragePersistanceStrategy: PersistenceHandles = {
-  get: getPersistedValueLocalStorage,
+  // TODO no any
+  get: getPersistedValueLocalStorage as any,
   set: setPersistedValueLocalStorage,
 };

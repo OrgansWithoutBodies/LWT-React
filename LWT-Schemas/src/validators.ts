@@ -1,51 +1,12 @@
-import { I18NLanguages } from "lwt-i18n";
+import { I18NLanguages, UIString } from "lwt-i18n";
 import * as ss from "superstruct";
-import { brandedNumber, brandedString, BrandedString } from "./branding";
+import { BrandedString, brandedNumber, brandedString } from "./branding";
 import { NumericalSettingInRangeValidator } from "./settings";
 
 type URL = `http://${string}` | `https://${string}`;
 type URLTemplate = `http://${string}` | `https://${string}`;
 type APIURLTemplate = `api://${string}`;
 
-// todo why cant use straight string for persistable here
-// const getValidatorPluginsFor = <
-//   TKey extends Persistable,
-//   TTableKeys extends string = string
-// >(
-//   key: TKey
-// ): { [k in TTableKeys]: ss.Struct<any, unknown> } => {
-//   const val = Object.fromEntries(
-//     PLUGINS.filter(
-//       ({ validators }) => validators && validators[key] !== undefined
-//     )
-//       .map(({ validators }) => {
-//         const safeKeyValidator = validators![key]!;
-
-//         return Object.entries(safeKeyValidator);
-//       })
-//       .flat()
-//     // TODO no cast if possible
-//   ) as { [k in TTableKeys]: ss.Struct<any, unknown> };
-//   console.log("TEST123-validator", val);
-//   return val;
-// };
-// export const getEntryLinePluginsFor = <
-//   TKey extends Persistable,
-//   TTableKeys extends string = string
-// >(
-//   key: TKey
-// ): { [k in TTableKeys]: EntryRowType & { child: EntryRowComponent } } =>
-//   Object.fromEntries(
-//     PLUGINS.filter(
-//       ({ entryLines }) => entryLines && entryLines[key] !== undefined
-//     )
-//       .map(({ entryLines }) => {
-//         const safeKeyEntryLines = entryLines![key]!;
-//         console.log("TEST123-entry", Object.entries(safeKeyEntryLines));
-//         return Object.entries(safeKeyEntryLines);
-//       })
-//       .flat()
-//   );
 const isValidAPIURL = (
   validationString: string
 ): validationString is APIURLTemplate => validationString.startsWith("api://");
@@ -509,4 +470,14 @@ export const csvFileValidator = ss.object({
 
 export function containsCharacterOutsideBasicMultilingualPlane(s: string) {
   return /[\uD800-\uDFFF]/.test(s);
+}
+
+export interface EntryRowType {
+  headerClasses?: string[];
+  // TODO hacky
+  PreMapComponent?: () => JSX.Element;
+  entryTitle?: string;
+  headerText: UIString;
+  headerInfoLink?: string;
+  headerDir?: "left" | "right" | "center";
 }

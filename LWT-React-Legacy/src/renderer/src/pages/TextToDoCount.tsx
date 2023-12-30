@@ -1,6 +1,5 @@
-import { Text } from 'lwt-schemas';
+import { Text, TextsID } from 'lwt-schemas';
 import { useData } from 'lwt-state';
-import { TextsID } from '../data/validators';
 
 /**
  *

@@ -29,14 +29,14 @@ export function TableFooter({
           </th>
           <th style={{ whiteSpace: "nowrap" }} className="th1">
             &nbsp; &nbsp;
-            <Icon src="placeholder" alt="-" />
-            <Icon src="placeholder" alt="-" />
+            <Icon src="placeholder" title="-" />
+            <Icon src="placeholder" title="-" />
             <Pager currentPage={currentPage} numPages={numPages} />
           </th>
           <th style={{ whiteSpace: "nowrap" }} className="th1">
             &nbsp; &nbsp;
-            <Icon src="placeholder" alt="-" />
-            <Icon src="placeholder" alt="-" />
+            <Icon src="placeholder" title="-" />
+            <Icon src="placeholder" title="-" />
             <ResizePage
               pageSize={pageSize}
               onPageResize={function (newSize: number): void {

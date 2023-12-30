@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useAnimationTimer({
   duration = 1000,
@@ -54,8 +54,8 @@ export function useAnimationTimer({
   return elapsed;
 }
 
-export default function useAnimation({
-  easingName = 'linear',
+export function useAnimation({
+  easingName = "linear",
   duration = 500,
   delay = 0,
   retrigger,
@@ -78,10 +78,10 @@ export default function useAnimation({
 // Some easing functions copied from:
 // https://github.com/streamich/ts-easing/blob/master/src/index.ts
 // Hardcode here or pull in a dependency
-const elasticFactors = [15, 67, 126, 106, 33];
+// const elasticFactors = [15, 67, 126, 106, 33];
 const easing = {
   linear: (n: number) => n,
-  outQuad: (t) => t * (2 - t),
+  outQuad: (t: number) => t * (2 - t),
   elastic: (n: number) =>
     n * (33 * n ** 4 - 106 * n ** 3 + 126 * n ** 2 - 67 * n + 15),
   inExpo: (n: number) => Math.pow(2, 10 * (n - 1)),

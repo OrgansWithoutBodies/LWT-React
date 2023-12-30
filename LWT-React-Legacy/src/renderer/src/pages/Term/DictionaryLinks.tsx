@@ -1,17 +1,17 @@
-import { confirmDelete } from 'lwt-common';
-import { Language, TermStrengths } from 'lwt-schemas';
-import { dataService } from 'lwt-state';
-import { A } from 'lwt-ui-kit';
-import React from 'react';
-import { replaceTemplate } from '../../../../../../LWT-Common/src/utils/linkHelpers';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { confirmDelete, replaceTemplate } from 'lwt-common';
 import {
+  Language,
   ReverseStrengthMap,
   StrengthMap,
   StrengthMapNumericalKey,
+  TermStrengths,
   getStatusName,
-} from '../StrengthMap';
-import { LanguageDictionaryData, WordKnownTermLines } from './limitedTypes';
+} from 'lwt-schemas';
+import { dataService } from 'lwt-state';
+import { A, useI18N } from 'lwt-ui-kit';
+import React from 'react';
+import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { LanguageDictionaryData, WordKnownTermLines } from '../limitedTypes';
 
 export type LanguageDictionaryDataTempHack = LanguageDictionaryData &
   Pick<
@@ -45,7 +45,7 @@ export function DictionaryLinks({
     LgTatoebaSourceKey: sourceKey,
     LgTatoebaTargetKey: targetKey,
   } = langDictData;
-
+  const t = useI18N();
   return (
     <>
       Lookup Term:
@@ -86,7 +86,7 @@ export function DictionaryLinks({
       {breakSent && <br />}
       {LgGoogleTranslateURI && (
         <>
-          {breakSent ? '| Sent.' : 'Lookup Sentence'}:
+          {breakSent ? `| ${t('Sent.')}` : t('Lookup Sentence')}:
           <MultiFunctionalURL
             templateStr={LgGoogleTranslateURI}
             word={sentenceString}
@@ -124,7 +124,6 @@ export function MultiFunctionalURL({
   // TODO maybe pass params to templateStr?
   const apiStrPos = templateStr.indexOf('api://');
   if (apiStrPos === 0) {
-    console.log('TEST123-API', word);
     return (
       <span
         className="a"
@@ -176,6 +175,7 @@ export function KnownTermLines({
   word: WordKnownTermLines;
   tags: string[];
 }): JSX.Element {
+  const t = useI18N();
   return (
     <>
       <b>
@@ -191,7 +191,7 @@ export function KnownTermLines({
         {ReverseStrengthMap[word.WoStatus]}]
       </b>
       <br />
-      St:
+      {t('St')}:
       {TermStrengths.map((strength) => {
         if (StrengthMapNumericalKey[word.WoStatus].abbr === strength) {
           return (
@@ -227,7 +227,6 @@ export function KnownTermLines({
       </A>
       <A
         onClick={() => {
-          // TODO update text
           if (confirmDelete()) {
             dataService.deleteTerm(word.WoID);
           }
@@ -240,11 +239,12 @@ export function KnownTermLines({
   );
 }
 export function UnknownTermLines({ word }: { word: string }): JSX.Element {
+  const t = useI18N();
   return (
     <>
       <b>
         {word}
-        <br />▶ Unknown [?]
+        <br />▶ {t('Unknown')} [?]
       </b>
       <br />
       <A

@@ -1,10 +1,16 @@
 import { TermParsedFromCSV, parseTermsFromCSV } from 'lwt-common';
 import { StrengthMap, UploadTermsValidator } from 'lwt-schemas';
 import { dataService, parseNumMap, useData } from 'lwt-state';
-import { Header, RequiredLineButton, SelectBoolean } from 'lwt-ui-kit';
-import { useFormInput } from '../../hooks/useFormInput';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
-import { GetWordstatusSelectoptions } from '../Text/PrintText.component';
+import {
+  Header,
+  RequiredLineButton,
+  SelectBoolean,
+  useFormInput,
+  useI18N,
+  useInternalNavigate,
+} from 'lwt-ui-kit';
+import { GoBackButton } from '../../GoBackButton';
+import { GetWordstatusSelectoptions } from '../PrintAnnotate/PrintText.component';
 
 /**
  *
@@ -20,6 +26,7 @@ export function UploadWords() {
     onSubmit,
     LanguageSelectInput,
   } = useFormInput({ validator });
+  const t = useI18N();
   return (
     <>
       <Header title="Import Terms" />
@@ -36,7 +43,7 @@ export function UploadWords() {
           </tr>
           <tr>
             <td className="td1 center">
-              <b>Import Data:</b>
+              <b>{t('Import Data')}:</b>
               <br />
               <br />
               Format per line:
@@ -59,64 +66,28 @@ export function UploadWords() {
               <br />
               "C1":{' '}
               <select ref={refMap.c1} name="Col1">
-                <option value="w" selected>
-                  Term
-                </option>
-                <option value="t">Translation</option>
-                <option value="r">Romanization</option>
-                <option value="s">Sentence</option>
-                <option value="g">Tag List</option>
-                <option value="x">Don't import</option>
+                {ImportColumnAssignmentSelectOptions({ selected: 'w' })}
               </select>
               <br />
               "C2":{' '}
               <select ref={refMap.c2} name="Col2">
-                <option value="w">Term</option>
-                <option value="t" selected>
-                  Translation
-                </option>
-                <option value="r">Romanization</option>
-                <option value="s">Sentence</option>
-                <option value="g">Tag List</option>
-                <option value="x">Don't import</option>
+                {ImportColumnAssignmentSelectOptions({ selected: 't' })}
               </select>
               <br />
               "C3":{' '}
               <select ref={refMap.c3} name="Col3">
-                <option value="w">Term</option>
-                <option value="t">Translation</option>
-                <option value="r">Romanization</option>
-                <option value="s">Sentence</option>
-                <option value="g">Tag List</option>
-                <option value="x" selected>
-                  Don't import
-                </option>
+                {ImportColumnAssignmentSelectOptions({ selected: 'x' })}
               </select>
               <br />
               "C4":{' '}
               <select ref={refMap.c4} name="Col4">
-                <option value="w">Term</option>
-                <option value="t">Translation</option>
-                <option value="r">Romanization</option>
-                <option value="s">Sentence</option>
-                <option value="g">Tag List</option>
-                <option value="x" selected>
-                  Don't import
-                </option>
+                {ImportColumnAssignmentSelectOptions({ selected: 'x' })}
               </select>
               <br />
               "C5":{' '}
-              <select ref={refMap.c5} name="Col5">
-                <option value="w">Term</option>
-                <option value="t">Translation</option>
-                <option value="r">Romanization</option>
-                <option value="s">Sentence</option>
-                <option value="g">Tag List</option>
-                <option value="x" selected>
-                  Don't import
-                </option>
+              <select ref={refMap.c5} name="Col4">
+                {ImportColumnAssignmentSelectOptions({ selected: 'x' })}
               </select>
-              <br />
               <br />
               <b>
                 overwrite existent
@@ -200,7 +171,7 @@ export function UploadWords() {
                 <input
                   type="button"
                   value="BACKUP"
-                  onClickCapture={() => navigator('/backup_restore')}
+                  onClick={() => navigator('/backup_restore')}
                 />{' '}
                 MAY BE ADVISABLE!
                 <br />
@@ -210,7 +181,7 @@ export function UploadWords() {
               <input
                 type="button"
                 value="&lt;&lt; Back"
-                onClickCapture={() => navigator('/')}
+                onClick={() => navigator('/')}
               />{' '}
               &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp;{' '}
               <input
@@ -274,19 +245,64 @@ export function UploadWords() {
     </>
   );
 }
+function ImportColumnAssignmentSelectOptions({
+  selected,
+}: {
+  selected: 'w' | 't' | 'r' | 's' | 'g' | 'x';
+}) {
+  return (
+    <>
+      <option value="w" selected={selected === 'w'}>
+        Term
+      </option>
+      <option value="t" selected={selected === 't'}>
+        Translation
+      </option>
+      <option value="r" selected={selected === 'r'}>
+        Romanization
+      </option>
+      <option value="s" selected={selected === 's'}>
+        Sentence
+      </option>
+      <option value="g" selected={selected === 'g'}>
+        Tag List
+      </option>
+      <option value="x" selected={selected === 'x'}>
+        Don't import
+      </option>
+    </>
+  );
+}
+
 // TODO
 /**
  *
  */
 export function ImportedWordsReport({
   importedTerms,
+  overwrite,
 }: {
   importedTerms: TermParsedFromCSV[];
+  overwrite: boolean;
 }) {
+  const [{ languageHashmap }] = useData(['languageHashmap']);
+  const t = useI18N();
+  const lang = languageHashmap[importedTerms[0].WoLgID];
+  // const excnt= 				   get_first_value('select count(*) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl));
+  // TODO
+  const excnt = 0;
+  // TODO
+  const working = false;
+  const exists = excnt > 0;
+  // const 	 					$msg1 = runsql('delete from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl), "Exists, deleted");
+  const $msg1 = '';
+  // const 	 					$msg2 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
+  const $msg2 = '';
+  let $sqlct = 0;
   return (
     <>
       <h4>
-        Import Report (Language: {getLanguage($lang)}, Status: {status})
+        Import Report (Language: {lang.LgName}, Status: {status})
       </h4>
       <table className="tab1" cellSpacing="0" cellPadding="5">
         <tr>
@@ -298,55 +314,50 @@ export function ImportedWordsReport({
           <th className="th1">Tag List</th>
           <th className="th1">Message</th>
         </tr>
-        {importedTerms.map((term, ii) => (
-          <tr>
-            <td className="td1 right">{ii + 1}</td>
-            <td className="td1">{term.WoText}</td>
-            <td className="td1">{term.WoTranslation}</td>
-            <td className="td1">{term.WoRomanization}</td>
-            <td className="td1">{term.WoSentence}</td>
-            <td className="td1">{term.taglist.join(', ')}</td>
-            {working ? (
-              exists ? (
-                overwrite ? (
-                  <td className="td1">
-                    ' . tohtml($msg1 . ' / ' . $msg2) . ' (' . $sqlct . ')
-                  </td>
+        {importedTerms.map((term, ii) => {
+          if (working) {
+            // TODO
+            $sqlct = $sqlct + 1;
+          }
+          return (
+            <tr>
+              <td className="td1 right">{ii + 1}</td>
+              <td className="td1">{term.WoText}</td>
+              <td className="td1">{term.WoTranslation}</td>
+              <td className="td1">{term.WoRomanization}</td>
+              <td className="td1">{term.WoSentence}</td>
+              <td className="td1">{term.taglist.join(', ')}</td>
+              {working ? (
+                exists ? (
+                  overwrite ? (
+                    <td className="td1">{`${$msg1} / ${$msg2} (${$sqlct})`}</td>
+                  ) : (
+                    <td className="td1">
+                      <span className="red2">{t('EXISTS, NOT IMPORTED')}</span>
+                    </td>
+                  )
                 ) : (
-                  <td className="td1">
-                    <span className="red2">EXISTS, NOT IMPORTED</span>
-                  </td>
+                  <td className="td1">{`${$msg1} (${$sqlct})`}</td>
                 )
               ) : (
                 <td className="td1">
-                  ' . tohtml($msg1) . ' (' . $sqlct . ')' . '
+                  <span className="red2">
+                    {t('NOT IMPORTED (term and/or translation missing)')}
+                  </span>
                 </td>
-              )
-            ) : (
-              <td className="td1">
-                <span className="red2">
-                  NOT IMPORTED (term and/or translation missing)
-                </span>
-              </td>
-            )}
-          </tr>
-        ))}
+              )}
+            </tr>
+          );
+        })}
         <p className="red">
-          *** Imported terms: ' . $sqlct . ' of ' . $l . ' *** ' .
-          errorbutton('Error') . '
+          <>
+            <>
+              *** Imported terms: {$sqlct} of {importedTerms.length} ***
+            </>
+            <GoBackButton />
+          </>
         </p>
       </table>
     </>
-  );
-}
-/**
- *
- * @param isError
- */
-function BackOnError(isError: boolean) {
-  return isError ? (
-    <input type="button" value="&lt;&lt; Back" onClick={() => history.back()} />
-  ) : (
-    <></>
   );
 }

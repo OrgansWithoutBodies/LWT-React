@@ -84,7 +84,8 @@ export interface LWTData {
 }
 export type LWTDataKeys = keyof LWTData;
 export type LWTDataVal = LWTData[keyof LWTData][number];
-type IDMap = {
+// TODO dedupe with tableIDLookup
+export type IDMap = {
   archivedtexts: "AtID";
   archtexttags: null;
   languages: "LgID";

@@ -1,33 +1,37 @@
 import { confirmDelete } from 'lwt-common';
+import {
+  ArchivedText,
+  ArchivedTextID,
+  ArchivedTextsWithTagsValidator,
+  Language,
+  TagsID,
+} from 'lwt-schemas';
 import { dataService, useData } from 'lwt-state';
 import {
   A,
+  GenericMultiActions,
   GetMultipleArchivedTextActionsSelectOptions,
   GetTextsSortSelectoptions,
   Header,
   Icon,
-  LanguageDropdown,
+  MultipleTextActionSelectOption,
   SortableHeader,
   TableFooter,
   TagAndOr,
   TagDropDown,
   TextTagsAutocomplete,
-} from 'lwt-ui-kit';
-import { useRef } from 'react';
-import {
-  ArchivedTextID,
-  ArchivedTextsWithTagsValidator,
-  TagsID,
-} from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import {
+  useFormInput,
   useInternalNavigate,
+  usePager,
   useUpdateParams,
-} from '../../hooks/useInternalNav';
-import { usePager } from '../../hooks/usePager';
+} from 'lwt-ui-kit';
 import { useSelection } from '../../hooks/useSelection';
-import { SelectMediaPath } from '../SelectMediaPath';
 import { TextSorting } from '../Sorting';
+import {
+  FilterHeaderWidget,
+  LanguageBoxFilterWidget,
+  QueryFilterWidget,
+} from '../Term/LanguageBoxFilterWidget';
 import { FilterSortPager } from './FilterSortPager';
 import { buildTextTagLookup } from './buildTextTagLookup';
 
@@ -77,75 +81,26 @@ export function DisplayArchivedTexts({
   const paramUpdater = useUpdateParams();
   const { onSelectAll, onSelectNone, checkboxPropsForEntry, selectedValues } =
     useSelection(archivedtexts, 'AtID');
-  const queryRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
       <Header
-        title={`My ${
-          activeLanguage ? `${activeLanguage.LgName} ` : ''
-        }Text Archive`}
+        title={
+          `My ${
+            activeLanguage ? `${activeLanguage.LgName} ` : ''
+          }Text Archive` as any
+        }
       />
       <p>&nbsp;</p>
       <form name="form1">
         <table className="tab1" cellSpacing={0} cellPadding={5}>
+          <FilterHeaderWidget />
           <tr>
-            <th className="th1" colSpan={4}>
-              Filter <Icon src="funnel" title="Filter" />
-              &nbsp;
-              <input
-                type="button"
-                value="Reset All"
-                onClick={() => resetAll('edit_archivedtexts')}
-              />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={2}>
-              Language:
-              <LanguageDropdown
-                defaultValue={activeLanguage?.LgID}
-                header="Filter off"
-                onChange={(val) => {
-                  if (val === -1) {
-                    dataService.setActiveLanguage(null);
-                  } else {
-                    dataService.setActiveLanguage(val);
-                  }
-                }}
-              />
-            </td>
-
-            <td className="td1 center" colSpan={2}>
-              Text Title (Wildc.=*):
-              <input
-                type="text"
-                name="query"
-                ref={queryRef}
-                value={query}
-                maxLength={50}
-                size={15}
-              />
-              &nbsp;
-              <input
-                type="button"
-                name="querybutton"
-                value="Filter"
-                onClick={() =>
-                  navigate(
-                    `/edit_archivedtexts?page=1&query=${
-                      queryRef.current?.value || ''
-                    }`
-                  )
-                }
-              />
-              &nbsp;
-              <input
-                type="button"
-                value="Clear"
-                onClick={() => navigate('/edit_archivedtexts')}
-              />
-            </td>
+            <LanguageBoxFilterWidget activeLanguageID={activeLanguage?.LgID} />
+            <QueryFilterWidget
+              query={query}
+              filterString="Text Title (Wildc.=*)"
+            />
           </tr>
           <tr>
             <td
@@ -186,66 +141,62 @@ export function DisplayArchivedTexts({
       ) : (
         <form name="form2">
           <input type="hidden" name="data" value="" />
-          <table className="tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1" colSpan={2}>
-                Multi Actions <Icon src="lightning" title="Multi Actions" />
-              </th>
-            </tr>
-            <tr>
-              <td className="td1 center">
-                <input type="button" value="Mark All" onClick={onSelectAll} />
-                <input type="button" value="Mark None" onClick={onSelectNone} />
-              </td>
-              <td className="td1 center">
-                Marked Texts:&nbsp;
-                <select
-                  name="markaction"
-                  id="markaction"
-                  disabled={selectedValues.size === 0}
-                  onChange={({ target: { value } }) => {
-                    // TODO rest
-                    if (value === 'del') {
-                      if (confirmDelete()) {
-                        dataService.deleteMultipleArchivedTexts([
-                          ...selectedValues,
-                        ]);
-                      }
-                    }
-                  }}
-                >
-                  <GetMultipleArchivedTextActionsSelectOptions />
-                </select>
-              </td>
-            </tr>
-          </table>
+
+          <GenericMultiActions
+            AllActions={null}
+            onChangeAll={null}
+            countAllTerms={null}
+            SelectedOptions={GetMultipleArchivedTextActionsSelectOptions}
+            onChangeSelected={({ target: { value } }) => {
+              // TODO rest
+              switch (value as MultipleTextActionSelectOption) {
+                case MultipleTextActionSelectOption.del:
+                  if (confirmDelete()) {
+                    dataService.deleteMultipleArchivedTexts([
+                      ...selectedValues,
+                    ]);
+                  }
+                  break;
+                case MultipleTextActionSelectOption.addtag: {
+                  const answer = window.prompt(
+                    `*** ${'addTag'} ***\n\n*** ${
+                      selectedValues.size
+                    } Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`
+                  );
+                  if (answer === null) {
+                    break;
+                  }
+
+                  dataService.addTagToMultipleArchivedTexts(answer, [
+                    ...selectedValues,
+                  ]);
+
+                  break;
+                }
+                case MultipleTextActionSelectOption.deltag:
+                  console.log('TODO');
+                  break;
+                case MultipleTextActionSelectOption.unarch:
+                  dataService.unarchiveMultipleTexts([...selectedValues]);
+                  break;
+                case MultipleTextActionSelectOption.delall:
+                  console.log('TODO');
+                  break;
+              }
+            }}
+            countSelectedTerms={selectedValues.size}
+            onSelectAll={onSelectAll}
+            onSelectNone={onSelectNone}
+            nounSingular={'Text'}
+          />
 
           <table className="sortable tab1" cellSpacing={0} cellPadding={5}>
-            <tr>
-              <th className="th1 sorttable_nosort">Mark</th>
-              <th className="th1 sorttable_nosort">Actions</th>
-              {!activeLanguage && (
-                <SortableHeader
-                  sorting={sorting}
-                  upSorting={TextSorting['Lang.']}
-                  downSorting={TextSorting['Lang. (desc)']}
-                >
-                  Lang.
-                </SortableHeader>
-              )}
-              <SortableHeader
+            {
+              <ArchivedTextTableHeader
+                activeLanguage={activeLanguage}
                 sorting={sorting}
-                upSorting={TextSorting['Title A-Z']}
-                downSorting={TextSorting['Title Z-A']}
-              >
-                Title [Tags] / Audio:&nbsp;
-                <Icon src="speaker-volume" title="With Audio" />
-                , Src.Link:&nbsp;
-                <Icon src="chain" title="Source Link available" />
-                , Ann.Text:&nbsp;
-                <Icon src="tick" title="Annotated Text available" />
-              </SortableHeader>
-            </tr>
+              />
+            }
             {dataOnPage.map((text) => {
               const languageForLine = languages.find(
                 (lang) => lang.LgID === text.AtLgID
@@ -255,70 +206,14 @@ export function DisplayArchivedTexts({
               }
 
               return (
-                <tr>
-                  <td className="td1 center">
-                    <a id={`rec${text['AtID']}`}>
-                      <input
-                        name="marked[]"
-                        type="checkbox"
-                        // onClick={markClick}
-                        {...checkboxPropsForEntry(text)}
-                        value={text['AtID']}
-                      />
-                    </a>
-                  </td>
-                  {/* ' . checkTest(record['AtID'], 'marked') . '  */}
-                  <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
-                    &nbsp;
-                    <A href={`/edit_archivedtexts?unarch=${text.AtID}`}>
-                      <Icon src="inbox-upload" title="Unarchive" />
-                    </A>
-                    &nbsp;
-                    <A href={`/edit_archivedtexts?chg=${text.AtID}`}>
-                      <Icon src="document--pencil" title="Edit" />
-                    </A>
-                    &nbsp;
-                    <span
-                      className="click"
-                      onClick={() => {
-                        if (confirmDelete()) {
-                          // TODO del url pattern uniformly?
-                          dataService.deleteArchivedText(text.AtID);
-                        }
-                      }}
-                    >
-                      <Icon src="minus-button" title="Delete" />
-                    </span>
-                    &nbsp;
-                  </td>
-                  {!activeLanguage && (
-                    <td className="td1 center">{languageForLine.LgName}</td>
-                  )}
-                  <td className="td1 center">
-                    {text.AtTitle}
-                    <span className="smallgray2">
-                      {' '}
-                      {textTagLookup[text.AtID] && (
-                        <>
-                          {'['}
-                          {textTagLookup[text.AtID].join(', ')}
-                          {']'}
-                        </>
-                      )}
-                    </span>
-                    {text.AtAudioURI && (
-                      <Icon src="speaker-volume" title="With Audio" />
-                    )}
-                    {text.AtSourceURI && (
-                      <a href={text.AtSourceURI} target="_blank">
-                        <Icon src="chain" title="Link to Text Source" />
-                      </a>
-                    )}
-                    {text.AtAnnotatedText && (
-                      <Icon src="tick" title="Annotated Text available" />
-                    )}
-                  </td>
-                </tr>
+                <ArchivedTextRow
+                  textRowProps={{
+                    ...text,
+                    tagList: textTagLookup[text.AtID],
+                    AtLgName: languageForLine.LgName,
+                  }}
+                  checkboxProps={checkboxPropsForEntry(text)}
+                />
               );
             })}
           </table>
@@ -348,13 +243,122 @@ export function DisplayArchivedTexts({
   );
 }
 
-/**
- *
- * @param refMap
- */
-export function resetAll(refMap: string): void {
-  window.alert('TODO Function not implemented.');
+function ArchivedTextTableHeader({
+  activeLanguage,
+  sorting,
+}: {
+  activeLanguage: Language | null;
+  sorting: TextSorting;
+}) {
+  return (
+    <tr>
+      <th className="th1 sorttable_nosort">Mark</th>
+      <th className="th1 sorttable_nosort">Actions</th>
+      {!activeLanguage && (
+        <SortableHeader
+          sorting={sorting}
+          upSorting={TextSorting['Lang.']}
+          downSorting={TextSorting['Lang. (desc)']}
+        >
+          Lang.
+        </SortableHeader>
+      )}
+      <SortableHeader
+        sorting={sorting}
+        upSorting={TextSorting['Title A-Z']}
+        downSorting={TextSorting['Title Z-A']}
+      >
+        Title [Tags] / Audio:&nbsp;
+        <Icon src="speaker-volume" title="With Audio" />
+        , Src.Link:&nbsp;
+        <Icon src="chain" title="Source Link available" />
+        , Ann.Text:&nbsp;
+        <Icon src="tick" title="Annotated Text available" />
+      </SortableHeader>
+    </tr>
+  );
 }
+
+function ArchivedTextRow({
+  textRowProps,
+  checkboxProps,
+}: {
+  textRowProps: Pick<
+    ArchivedText,
+    'AtID' | 'AtTitle' | 'AtAudioURI' | 'AtSourceURI' | 'AtAnnotatedText'
+  > & { AtLgName: string | null; tagList: string[] | null };
+  checkboxProps: {
+    onChange: () => void;
+    checked: boolean;
+  };
+}) {
+  return (
+    <tr>
+      <td className="td1 center">
+        <a id={`rec${textRowProps['AtID']}`}>
+          <input
+            name="marked[]"
+            type="checkbox"
+            {...checkboxProps}
+            value={textRowProps['AtID']}
+          />
+        </a>
+      </td>
+      {/* ' . checkTest(record['AtID'], 'marked') . '  */}
+      <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
+        &nbsp;
+        <A href={`/edit_archivedtexts?unarch=${textRowProps.AtID}`}>
+          <Icon src="inbox-upload" title="Unarchive" />
+        </A>
+        &nbsp;
+        <A href={`/edit_archivedtexts?chg=${textRowProps.AtID}`}>
+          <Icon src="document--pencil" title="Edit" />
+        </A>
+        &nbsp;
+        <span
+          className="click"
+          onClick={() => {
+            if (confirmDelete()) {
+              // TODO del url pattern uniformly?
+              dataService.deleteArchivedText(textRowProps.AtID);
+            }
+          }}
+        >
+          <Icon src="minus-button" title="Delete" />
+        </span>
+        &nbsp;
+      </td>
+      {!textRowProps.AtLgName && (
+        <td className="td1 center">{textRowProps.AtLgName}</td>
+      )}
+      <td className="td1 center">
+        {textRowProps.AtTitle}
+        <span className="smallgray2">
+          {' '}
+          {textRowProps.tagList && (
+            <>
+              {'['}
+              {textRowProps.tagList.join(', ')}
+              {']'}
+            </>
+          )}
+        </span>
+        {textRowProps.AtAudioURI && (
+          <Icon src="speaker-volume" title="With Audio" />
+        )}
+        {textRowProps.AtSourceURI && (
+          <a href={textRowProps.AtSourceURI} target="_blank">
+            <Icon src="chain" title="Link to Text Source" />
+          </a>
+        )}
+        {textRowProps.AtAnnotatedText && (
+          <Icon src="tick" title="Annotated Text available" />
+        )}
+      </td>
+    </tr>
+  );
+}
+
 /**
  *
  */
@@ -378,15 +382,7 @@ export function EditArchivedText({ chgID }: { chgID: ArchivedTextID }) {
     return <></>;
     // throw new Error('Invalid ChgID!');
   }
-  const {
-    AtAudioURI,
-    AtAnnotatedText,
-    AtID,
-    AtLgID,
-    AtText,
-    AtTitle,
-    AtSourceURI,
-  } = text;
+  const { AtAnnotatedText } = text;
   const annotlen = AtAnnotatedText.length;
   return (
     <>
@@ -491,9 +487,10 @@ export function EditArchivedText({ chgID }: { chgID: ArchivedTextID }) {
                 maxLength={200}
                 size={60}
               />
-              <span id="mediaselect">
+              {/* TODO */}
+              {/* <span id="mediaselect">
                 <SelectMediaPath f={AtAudioURI} />
-              </span>
+              </span> */}
             </td>
           </tr>
           <tr>

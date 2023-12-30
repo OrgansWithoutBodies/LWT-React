@@ -1,43 +1,46 @@
 import { confirmDelete, getDirTag } from 'lwt-common';
-import { Text } from 'lwt-schemas';
-import { dataService, textPrevalidateMap, useData } from 'lwt-state';
+import { Tags2ID, Text, TextsID, TextsWithTagsValidator } from 'lwt-schemas';
+import {
+  TextDetailRow,
+  dataService,
+  textPrevalidateMap,
+  useData,
+} from 'lwt-state';
 import {
   A,
+  EntryRow,
+  GenericMultiActions,
   GetTextsSortSelectoptions,
   Header,
   Icon,
-  LanguageDropdown,
+  MarkedTextsSelectOptions,
   RequiredLineButton,
   SortableHeader,
   TableFooter,
-  TagAndOr,
-  TagDropDown,
   TextTagsAutocomplete,
-} from 'lwt-ui-kit';
-import { useRef, useState } from 'react';
-import { TextDetailRow } from '../../data/data.query';
-import {
-  Tags2ID,
-  TextsID,
-  TextsWithTagsValidator,
-} from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import {
+  useFormInput,
+  useI18N,
   useInternalNavigate,
+  usePager,
   useUpdateParams,
-} from '../../hooks/useInternalNav';
-import { usePager } from '../../hooks/usePager';
+} from 'lwt-ui-kit';
+import { useState } from 'react';
 import { useSelection } from '../../hooks/useSelection';
 import { filterTags } from '../../utils/filterTags';
-import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { TextSorting, buildSortByValue } from '../Sorting';
+import {
+  CompoundTagFilterWidget,
+  FilterBox,
+  LanguageBoxFilterWidget,
+  QueryFilterWidget,
+} from '../Term/LanguageBoxFilterWidget';
 import { OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
   test: (selectedValues: Set<TextsID>) => {
-    console.log('test');
+    console.log('TODO test');
   },
   addtag: (selectedValues: Set<TextsID>) => {
     const answer = window.prompt(
@@ -52,16 +55,27 @@ const TextMultiAction = {
     dataService.addTagToMultipleTexts(answer, [...selectedValues]);
   },
   deltag: (selectedValues: Set<TextsID>) => {
-    console.log('deltag');
+    // TODO think this is getting duped, pass in as arg
+    const answer = window.prompt(
+      `*** ${'addTag'} ***\n\n*** ${
+        selectedValues.size
+      } Record(s) will be affected ***\n\nPlease enter one tag (20 char. max., no spaces, no commas -- or leave empty to cancel:`
+    );
+    if (answer === null) {
+      return;
+    }
+
+    dataService.removeTagFromMultipleTexts(answer, [...selectedValues]);
+    console.log('TODO deltag');
   },
   rebuild: (selectedValues: Set<TextsID>) => {
-    console.log('rebuild');
+    dataService.reparseMultipleTexts([...selectedValues]);
   },
   setsent: (selectedValues: Set<TextsID>) => {
-    console.log('setsent');
+    dataService.setSent([...selectedValues]);
   },
   arch: (selectedValues: Set<TextsID>) => {
-    console.log('arch');
+    dataService.archiveMultipleTexts([...selectedValues]);
   },
   del: (selectedValues: Set<TextsID>) => {
     if (confirmDelete()) {
@@ -70,6 +84,9 @@ const TextMultiAction = {
   },
 };
 
+/**
+ *
+ */
 export function TextMultiActions({
   onSelectAll,
   onSelectNone,
@@ -81,54 +98,29 @@ export function TextMultiActions({
 }) {
   return (
     <form name="form1" action="#">
-      <table className="tab1" cellSpacing={0} cellPadding={5}>
-        <tbody>
-          <tr>
-            <th className="th1" colSpan={2}>
-              Multi Actions
-              <Icon src="lightning" title="Multi Actions" />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center">
-              <input type="button" value="Mark All" onClick={onSelectAll} />
-              <input type="button" value="Mark None" onClick={onSelectNone} />
-            </td>
-            <td className="td1 center">
-              Marked Texts
-              <select
-                name="markaction"
-                id="markaction"
-                disabled={selectedValues.size === 0}
-                onChange={({ target: { value } }) => {
-                  /* TODO */
-                  TextMultiAction[value as keyof typeof TextMultiAction](
-                    selectedValues
-                  );
-                }}
-              >
-                <option value="" />
-                <option disabled>------------</option>
-                <option value="test">Test Marked Texts</option>
-                <option disabled>------------</option>
-                <option value="addtag">Add Tag</option>
-                <option value="deltag">Remove Tag</option>
-                <option disabled>------------</option>
-                <option value="rebuild">Reparse Texts</option>
-                <option value="setsent">Set Term Sentences</option>
-                <option disabled>------------</option>
-                <option value="arch">Archive Marked Texts</option>
-                <option disabled>------------</option>
-                <option value="del">Delete Marked Texts</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <GenericMultiActions
+        AllActions={null}
+        onChangeAll={null}
+        SelectedOptions={MarkedTextsSelectOptions}
+        onChangeSelected={({ target: { value } }) => {
+          /* TODO */
+          TextMultiAction[value as keyof typeof TextMultiAction](
+            selectedValues
+          );
+        }}
+        countAllTerms={null}
+        countSelectedTerms={selectedValues.size}
+        onSelectAll={onSelectAll}
+        onSelectNone={onSelectNone}
+        nounSingular={'Text'}
+      />
     </form>
   );
 }
 
+/**
+ *
+ */
 function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
   console.log('TEST123-library-header', sorting);
   const [{ activeLanguageID }] = useData(['activeLanguageID']);
@@ -206,6 +198,9 @@ function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
   );
 }
 
+/**
+ *
+ */
 function LibraryRow({
   text,
   checked,
@@ -306,6 +301,9 @@ function LibraryRow({
   );
 }
 
+/**
+ *
+ */
 export function Library({
   currentPage,
   query = null,
@@ -349,9 +347,7 @@ export function Library({
     pageSize
   );
   const paramUpdater = useUpdateParams();
-  const navigator = useInternalNavigate();
-  const queryRef = useRef<HTMLInputElement | null>(null);
-  // TODO
+  const t = useI18N();
   const { selectedValues, onSelectAll, onSelectNone, checkboxPropsForEntry } =
     useSelection(textDetails || [], 'TxID');
   const textTagLookup = buildTextTagLookup(tags2, texttags);
@@ -360,7 +356,9 @@ export function Library({
   return (
     <>
       <Header
-        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
+        title={
+          `My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts` as any
+        }
       />
       <p>
         <A href={`/edit_texts?new=${1}`}>
@@ -368,110 +366,37 @@ export function Library({
         </A>
         &nbsp; | &nbsp;
         <A href="/long_text_import">
-          <Icon src="plus-button" title="Long Text Import" /> Long Text Import
+          <Icon src="plus-button" title="Long Text Import" />{' '}
+          {t('Long Text Import')}
           ...
         </A>
       </p>
 
       <form name="form1">
-        <table className="tab1" cellSpacing={0} cellPadding={5}>
+        <FilterBox
+          recno={recno}
+          footerProps={{
+            children: <GetTextsSortSelectoptions selected={sorting} />,
+            currentPage,
+            numPages,
+            recno,
+            elementName: 'Text',
+          }}
+        >
           <tr>
-            <th className="th1" colSpan={4}>
-              Filter <Icon src="funnel" title="Filter" />
-              &nbsp;
-              <input
-                type="button"
-                value="Reset All"
-                onClick={() => {
-                  // resetAll('edit_texts');
-                  paramUpdater(null);
-                }}
-              />
-            </th>
-          </tr>
-          <tr>
-            <td className="td1 center" colSpan={2}>
-              Language:
-              <LanguageDropdown
-                name="filterlang"
-                header="Filter off"
-                onChange={(val) => {
-                  if (val === -1) {
-                    dataService.setActiveLanguage(null);
-                  } else {
-                    dataService.setActiveLanguage(val);
-                  }
-                }}
-                defaultValue={activeLanguage?.LgID}
-              />
-            </td>
-            <td className="td1 center" colSpan={2}>
-              Text Title (Wildc.=*):
-              <input
-                type="text"
-                name="query"
-                ref={queryRef}
-                defaultValue={query || ''}
-                maxLength={50}
-                size={15}
-              />
-              &nbsp;
-              <input
-                type="button"
-                name="querybutton"
-                value="Filter"
-                onClick={() =>
-                  paramUpdater({
-                    query: queryRef.current?.value || '',
-                    page: null,
-                  })
-                }
-              />
-              &nbsp;
-              <input
-                type="button"
-                value="Clear"
-                onClick={() => {
-                  navigator('/edit_texts?page=1&query=');
-                  if (queryRef.current) {
-                    queryRef.current.value = '';
-                  }
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td
-              className="td1 center"
-              colSpan={2}
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              Tag #1:
-              <TagDropDown tags={tags2} tagKey="tag1" defaultValue={tag1} />
-            </td>
-            <TagAndOr
-              defaultValue={tag12}
-              onChange={({ target: { value } }) => {
-                paramUpdater({ tag12: value, page: null });
-              }}
+            <LanguageBoxFilterWidget activeLanguageID={activeLanguage?.LgID} />
+            <QueryFilterWidget
+              query={query}
+              filterString="Text Title (Wildc.=*)"
             />
-            <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
-              Tag #2:
-              <TagDropDown tags={tags2} tagKey="tag2" defaultValue={tag2} />
-            </td>
           </tr>
-
-          {recno > 0 && (
-            <FilterSortPager
-              currentPage={currentPage}
-              numPages={numPages}
-              recno={recno}
-              elementName={'Text'}
-            >
-              <GetTextsSortSelectoptions selected={sorting} />
-            </FilterSortPager>
-          )}
-        </table>
+          <CompoundTagFilterWidget
+            availableTags={tags2}
+            tag1={tag1}
+            tag12={tag12}
+            tag2={tag2}
+          />
+        </FilterBox>
       </form>
 
       <TextMultiActions
@@ -506,6 +431,9 @@ export function Library({
   );
 }
 
+/**
+ *
+ */
 export function EditTextPane({
   chgID,
   onCheckText,
@@ -513,9 +441,8 @@ export function EditTextPane({
   chgID: TextsID;
   onCheckText: OnCheckText;
 }) {
-  const [{ texts, tags2, languages, activeLanguage }] = useData([
+  const [{ texts, languages, activeLanguage }] = useData([
     'texts',
-    'tags2',
     'languages',
     'activeLanguage',
   ]);
@@ -545,7 +472,9 @@ export function EditTextPane({
   return (
     <>
       <Header
-        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
+        title={
+          `My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts` as any
+        }
       />
       <h4>
         Edit Text{' '}
@@ -556,94 +485,66 @@ export function EditTextPane({
       <form>
         <TxInput type="hidden" entryKey="TxID" fixed />
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Language:</td>
-            <td className="td1">
-              {/* TODO this one shouldnt change active language id */}
-              <LanguageSelectInput entryKey={'TxLgID'} isRequired />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Title:</td>
-            <td className="td1">
-              <TxInput
-                className="notempty checkoutsidebmp"
-                errorName="Title"
-                entryKey="TxTitle"
-                default
-                maxLength={200}
-                size={60}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">
-              Text:
-              <br />
-              <br />
-              (max.
-              <br />
-              65,000
-              <br />
-              bytes)
-            </td>
-            <td className="td1">
-              <TextArea
-                {...getDirTag(language)}
-                entryKey="TxText"
-                className="notempty checkbytes checkoutsidebmp"
-                maxLength={65000}
-                errorName="Text"
-                cols={60}
-                rows={20}
-                default
-              />
-              <RequiredLineButton />
-            </td>
-          </tr>
+          <EntryRow headerText="Language">
+            {/* TODO this one shouldnt change active language id */}
+            <LanguageSelectInput entryKey={'TxLgID'} isRequired />
+          </EntryRow>
+          <EntryRow headerText={'Title'}>
+            <TxInput
+              className="notempty checkoutsidebmp"
+              errorName="Title"
+              entryKey="TxTitle"
+              default
+              maxLength={200}
+              size={60}
+              isRequired
+            />
+          </EntryRow>
+          <EntryRow headerText={'Text:\n\n(max.\n65,000\nbytes)'}>
+            <TextArea
+              {...getDirTag(language)}
+              entryKey="TxText"
+              className="notempty checkbytes checkoutsidebmp"
+              maxLength={65000}
+              errorName="Text"
+              cols={60}
+              rows={20}
+              default
+            />
+            <RequiredLineButton />
+          </EntryRow>
           <TxInput type="hidden" entryKey="TxAnnotatedText" fixed />
-          <tr>
-            <td className="td1 right">Ann.Text:</td>
-            <td className="td1">
-              {editingText.TxAnnotatedText.length ? (
-                <>
-                  <Icon src="tick" title="With Improved Annotation" /> Exists -
-                  May be partially or fully lost if you change the text!
-                  <br />
-                  <input
-                    type="button"
-                    value="Print/Edit..."
-                    onClick={() => navigator(`/print_impr_text?text=${chgID}`)}
-                  />
-                </>
-              ) : (
-                <Icon src="cross" title="No Improved Annotation" />
-              )}
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Source URI:</td>
-            <td className="td1">
-              <TxInput
-                className="checkurl checkoutsidebmp"
-                errorName="Source URI"
-                entryKey="TxSourceURI"
-                default
-                maxLength={1000}
-                size={60}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Tags:</td>
-            <td className="td1">
-              <TextTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Audio-URI:</td>
-            <td className="td1">
+          <EntryRow headerText={'Ann.Text'}>
+            {editingText.TxAnnotatedText.length ? (
+              <>
+                <Icon src="tick" title="With Improved Annotation" /> Exists -
+                May be partially or fully lost if you change the text!
+                <br />
+                <input
+                  type="button"
+                  value="Print/Edit..."
+                  onClick={() => navigator(`/print_impr_text?text=${chgID}`)}
+                />
+              </>
+            ) : (
+              <Icon src="cross" title="No Improved Annotation" />
+            )}
+          </EntryRow>
+          <EntryRow headerText={'Source URI'}>
+            <TxInput
+              className="checkurl checkoutsidebmp"
+              errorName="Source URI"
+              entryKey="TxSourceURI"
+              default
+              maxLength={1000}
+              size={60}
+            />
+          </EntryRow>
+          <EntryRow headerText={'Tags'}>
+            <TextTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
+          </EntryRow>
+          <EntryRow headerText={'Audio-URI'}>
+            <>
               <TxInput
                 className="checkoutsidebmp"
                 errorName="Audio-URI"
@@ -655,8 +556,8 @@ export function EditTextPane({
               <span id="mediaselect">
                 <SelectMediaPath f="TxAudioURI" />
               </span>
-            </td>
-          </tr>
+            </>
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               <input
@@ -696,6 +597,9 @@ export function EditTextPane({
     </>
   );
 }
+/**
+ *
+ */
 export function EditText({ chgID }: { chgID: TextsID }) {
   const [checkingText, setCheckingText] = useState<null | Text>(null);
   return (
@@ -717,12 +621,33 @@ const sortingMethod = (
       return () => -1;
     // return buildSortByOldest('title');
     case TextSorting['Newest first']:
-      // TODO these wrong
       return buildSortByValue('totalWords');
     // return () => 1;;
     // return buildSortByNewest('title');
     // TODO
     case TextSorting['Title A-Z']:
-      return buildSortByValue('title');
+      return buildSortByValue('TxTitle');
+    case TextSorting['Title Z-A']:
+      return buildSortByValue('TxTitle', false);
+    case TextSorting['Lang.']:
+      return buildSortByValue('TxLgName');
+    case TextSorting['Lang. (desc)']:
+      return buildSortByValue('TxLgName', false);
+    case TextSorting['Saved Wo+Ex']:
+      return buildSortByValue('saved');
+    case TextSorting['Saved Wo+Ex (desc)']:
+      return buildSortByValue('saved', false);
+    case TextSorting['Unkn. %']:
+      return buildSortByValue('unkPerc');
+    case TextSorting['Unkn. % (desc)']:
+      return buildSortByValue('unkPerc', false);
+    case TextSorting['Unkn. Words']:
+      return buildSortByValue('unk');
+    case TextSorting['Unkn. Words (desc)']:
+      return buildSortByValue('unk', false);
+    case TextSorting['Total Words']:
+      return buildSortByValue('totalWords');
+    case TextSorting['Total Words (desc)']:
+      return buildSortByValue('totalWords', false);
   }
 };

@@ -5,12 +5,10 @@ import {
   replaceTabsWithNewLine,
   splitCheckText,
 } from 'lwt-common';
-import { Language } from 'lwt-schemas';
+import { CheckTextsValidator, Language, TextsID } from 'lwt-schemas';
 import { parseNumMap, useData } from 'lwt-state';
-import { Header, RequiredLineButton } from 'lwt-ui-kit';
+import { Header, RequiredLineButton, useFormInput } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { CheckTextsValidator, TextsID } from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
 import { NavigateButton } from '../Statistics.component';
 
 export function CheckTextPage() {

@@ -1,6 +1,5 @@
 import { dataService, useData } from 'lwt-state';
-import { Header } from 'lwt-ui-kit';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
+import { Header, useInternalNavigate } from 'lwt-ui-kit';
 
 export function InstallDemo() {
   //   if (Set(Request['install'])) {

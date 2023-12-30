@@ -1,6 +1,6 @@
 // TODO Integrate
 
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { ForwardedRef, useEffect, useRef, useState } from "react";
 import { useThemeColors } from "./hooks/useThemeColors";
 
 /*
@@ -44,7 +44,7 @@ export type TagItOptions = {
   tagLimit?: number | null; // Max number of tags allowed (null for unlimited).
 
   // Used for autocomplete, unless you override `autocomplete.source`.
-  availableTags?: TagType[];
+  availableTags: TagType[];
 
   // Use to override or add any options to the autocomplete widget.
   //
@@ -72,7 +72,7 @@ export type TagItOptions = {
 
   // Event callbacks.
   onTagClicked?: TagEventHandler;
-  onChange?: TagEventHandler<React.MouseEvent, object, void>;
+  onChange?: TagEventHandler<null, object, void>;
   onTagExists?: TagEventHandler;
   onTagLimitExceeded?: TagEventHandler<
     null,
@@ -105,25 +105,25 @@ const defaultOptions: TagItOptions = {
 function TagInputImpl(
   {
     options: {
-      readOnly,
+      // readOnly,
       tabIndex,
       placeholderText,
-      autocomplete,
-      availableTags,
+      // autocomplete,
+      // availableTags,
       removeConfirmation,
       allowSpaces,
     },
     tagger: {
       removeTag,
-      _subtractArray,
+      // _subtractArray,
       showingAutocomplete,
-      assignedTags,
+      // assignedTags,
       _showAutoComplete,
       createTag,
       _cleanedInput,
       _availableTagsThatStartWith,
       _lastTag,
-      _tags,
+      // _tags,
     },
   }: {
     options: TagItOptions;
@@ -167,7 +167,8 @@ function TagInputImpl(
         // options
         onChange={() => {
           setAutocompleteOptions(
-            _availableTagsThatStartWith(tagInputRef.current.value)
+            // TODO
+            _availableTagsThatStartWith((tagInputRef as any).current.value)
           );
         }}
         // autoComplete={autoCompleteOptions}
@@ -183,8 +184,12 @@ function TagInputImpl(
             setAutocompleteOptions([]);
             return;
           }
-          if (event.key === "Backspace" && tagInputRef.current.value === "") {
+          if (
+            event.key === "Backspace" &&
+            (tagInputRef as any).current.value === ""
+          ) {
             const tag = _lastTag();
+            console.log("TEST123-deleting", tag);
             if (tag) {
               if (!removeConfirmation || tag.removed) {
                 // When backspace is pressed, the last tag is deleted.
@@ -215,12 +220,13 @@ function TagInputImpl(
           // except when there is an open quote or if setting allowSpaces = true.
           // Tab will also create a tag, unless the tag input is empty,
           // in which case it isn't caught.
-          const inputValClean = tagInputRef.current.value.trim();
+          const inputValClean = (tagInputRef as any).current.value.trim();
           console.log("TEST123-tagit-new", inputValClean);
           if (
             event.key === "Comma" ||
             event.key === "Enter" ||
-            (event.key === "Tab" && tagInputRef.current.value !== "") ||
+            (event.key === "Tab" &&
+              (tagInputRef as any).current.value !== "") ||
             (event.key === "Space" &&
               allowSpaces !== true &&
               (inputValClean.replace(/^s*/, "").charAt(0) !== '"' ||
@@ -383,6 +389,7 @@ function TagList({
       className={`${"tagit"} ${"ui-widget ui-widget-content ui-corner-all"} inputText input`}
       onClick={(e) => {
         tagInputRef.current?.focus();
+        console.log("TODO", e);
         // TODO
         // if (target.hasClass('tagit-label')) {
         //   const tag = target.closest('.tagit-choice');
@@ -449,7 +456,10 @@ type TagEventHandler<
     duringInitialization?: boolean;
   },
   TReturn = boolean
-> = (e: EventOptions, ui: TagOptions) => TReturn;
+> =
+  // EventOptions extends null
+  //   ? () => void  :
+  (e: EventOptions, ui: TagOptions) => TReturn;
 
 type PublicTagger = {
   assignedTags: () => TagType[];
@@ -507,17 +517,19 @@ type TaggerOutput = PublicTagger & {
  */
 export function useTagIt(
   options: TagItOptions = defaultOptions,
-  tagListRef: MutableRefObject<{ value: string[] } | null>
+  tagListRef: ForwardedRef<{ value: string[] } | null>
 ): TaggerOutput {
   const tagInputRef = useRef<HTMLInputElement | null>(null);
-
+  if (!tagListRef || !("current" in tagListRef)) {
+    throw new Error("immutable ref");
+  }
   // TODO simplify options to what we use
   const [tagItTags, setTagItTags] = useState<TagType[]>([]);
   useEffect(() => {
     tagListRef.current = { value: tagItTags.map((tag) => tag.value) };
     if (options.onChange) {
       console.log("TEST123-CHANGE");
-      options.onChange();
+      options.onChange(null, {});
     }
   }, [tagItTags]);
   // TODO
@@ -544,12 +556,13 @@ export function useTagIt(
     tagInputRef.current!.value.replace(/^"(.*)"$/, "$1").trim();
   // immediately stop when found one not removed
   const _lastTag = () => {
+    console.log(tagItTags);
     let i = tagItTags.length - 1;
-    while (i > 0) {
+    while (i > -1) {
       if (!tagItTags[i].removed) {
         return tagItTags[i];
       }
-      i++;
+      i--;
     }
     return null;
   };
@@ -674,7 +687,7 @@ export function useTagIt(
       // });
 
       // tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
-      setTagItTags(tagItTags.filter((val) => val !== { ...tag, remobetag }));
+      setTagItTags(tagItTags.filter((val) => val.value !== tag.value));
     } else {
       setTagItTags(tagItTags.filter((val) => val !== tag));
     }

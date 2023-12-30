@@ -11,6 +11,7 @@ import {
   parseSQL,
   serializeJsonToSQL,
   splitCheckText,
+  unGzString,
 } from "lwt-common";
 import { SuppportedI18NLanguages } from "lwt-i18n";
 import {
@@ -37,7 +38,6 @@ import {
   type Word,
   type WordsID,
 } from "lwt-schemas";
-import pako from "pako";
 
 const TypeCastDemoDB = demoDB as any as LWTData;
 export enum CRUD {
@@ -80,7 +80,6 @@ export class DataService {
       const { set: setter } = this.dataStore.persistanceHandles;
 
       const { [key]: value } = this.dataStore.getValue();
-      console.log("TEST123-SETTING", value, key);
       try {
         setter(key, value);
       } catch {
@@ -89,7 +88,6 @@ export class DataService {
           notificationMessage: { txt: `Error in persisting setting ${key}` },
         }));
       }
-      console.log("TEST123-SET", key);
     }
   }
 
@@ -97,7 +95,6 @@ export class DataService {
     if (this.dataStore.persistanceHandles.insert) {
       const { insert: inserter } = this.dataStore.persistanceHandles;
       const insertedVal = await inserter(key, insertVal);
-      console.log("INSERT", insertedVal);
       return insertedVal;
     }
   }
@@ -126,7 +123,19 @@ export class DataService {
     }
   }
   // =================
+  public setSent(selectedTexts: TextsID[]) {
+    let $count: any = 0;
+    $count = "TODO";
+    const $message = "Term Sentences set from Text(s): " + $count;
+    console.log("TODO setsent", $message, selectedTexts);
 
+    // $sql = "select WoID, WoTextLC, min(TiSeID) as SeID from " . $tbpref . "words, " . $tbpref . "textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and TiTxID in " . $list . " and ifnull(WoSentence,'') not like concat('%{',WoText,'}%') group by WoID order by WoID, min(TiSeID)";
+    // $res = do_mysqli_query($sql);
+    // while ($record = mysqli_fetch_assoc($res)) {
+    //   $sent = getSentence($record['SeID'], $record['WoTextLC'], (int) getSettingWithDefault('set-term-sentence-count'));
+    //   $count += runsql('update ' . $tbpref . 'words set WoSentence = ' . convert_string_to_sqlsyntax(repl_tab_nl($sent[1])) . ' where WoID = ' . $record['WoID'], '');
+    // }
+  }
   public addLanguage(language: LanguageNoID) {
     this.dataStore.update((state) => {
       const ids = state.languages.map((lang) => lang.LgID);
@@ -395,7 +404,6 @@ export class DataService {
     });
     this.persistSet("words");
     this.persistInsert("words", word);
-    console.log("TEST123-added word", word, this.dataStore.getValue().words);
   }
 
   public deleteTerm(termID: WordsID) {
@@ -499,6 +507,49 @@ export class DataService {
     });
     this.persistSet("texttags");
   }
+  public removeTagFromMultipleTexts(tagString: string, textIDs: TextsID[]) {
+    this.dataStore.update((state) => {
+      const foundTag = state.tags2.find(
+        (tag) => tag.T2Text === tagString.trim()
+      );
+      if (!foundTag) {
+        return;
+      }
+      const tagID = foundTag.T2ID;
+      return {
+        ...state,
+        notificationMessage: { txt: "Added Tag to Text" },
+        texttags: state.texttags.filter(
+          // remove all that are both included in our list and match tag
+          (val) => !(textIDs.includes(val.TtTxID) && val.TtT2ID === tagID)
+        ),
+      };
+    });
+    this.persistSet("texttags");
+  }
+  public addTagToMultipleArchivedTexts(
+    tagString: string,
+    textIDs: ArchivedTextID[]
+  ) {
+    this.dataStore.update((state) => {
+      const foundTag = state.tags2.find(
+        (tag) => tag.T2Text === tagString.trim()
+      );
+      const tagID =
+        foundTag === undefined
+          ? this.addTextTag({ T2Text: tagString })
+          : foundTag.T2ID;
+      return {
+        ...state,
+        notificationMessage: { txt: "Added Tag to Archived Texts" },
+        archtexttags: [
+          ...state.archtexttags,
+          ...textIDs.map((AgAtID) => ({ AgT2ID: tagID, AgAtID })),
+        ],
+      };
+    });
+    this.persistSet("texttags");
+  }
 
   public deleteTextTag(tagID: Tags2ID) {
     this.dataStore.update(({ texttags, archtexttags, tags2, ...rest }) => ({
@@ -571,7 +622,6 @@ export class DataService {
         tags: [...state.tags, ...newTagList],
       }));
       this.persistSet("tags");
-      console.log("TEST123-addedtags", newTagList, uniqueTags);
       return newTagList;
     }
     return null;
@@ -591,10 +641,6 @@ export class DataService {
       WoTextLC: word.WoText.toLowerCase(),
       ...makeScoreRandomInsertUpdate({ word }),
     }));
-    console.log(
-      "TEST123-tags",
-      terms.map((val) => val.taglist)
-    );
     const newTags = terms
       .map((val) =>
         val.taglist.filter((tag) => termsHashMapKeyedByText[tag] === undefined)
@@ -606,7 +652,6 @@ export class DataService {
       const tagIDHashmapByText: Record<string, TagsID> = Object.fromEntries(
         state.tags.map((tag) => [tag.TgText, tag.TgID])
       );
-      console.log("TEST123-tagIDHashmapByText", tagIDHashmapByText);
       const maxID = (Math.max(...ids) + 1) as WordsID;
       if (IDIsUnique(maxID, ids)) {
         return {
@@ -854,7 +899,6 @@ export class DataService {
      */
     this.dataStore.update(({ texts, archivedtexts, ...state }) => {
       const archIndex = texts.findIndex((text) => text.TxID === archID);
-      console.log("TEST123-arch", archIndex);
       const toArchive = texts[archIndex];
       const poppedTexts = [
         ...texts.slice(0, archIndex),
@@ -949,7 +993,6 @@ export class DataService {
   }
 
   public setSettings(settings: Partial<SettingsObject>) {
-    console.log("TEST123-settings", settings);
     const changingKeys = Object.keys(settings);
     // sorta hacky work around to make more verbose
     const isSingleSetting = changingKeys.length === 1;
@@ -985,7 +1028,6 @@ export class DataService {
     const filteredSentences = sentences.filter((val) => val.SeTxID !== textID);
     const filteredTextItems = textitems.filter((val) => val.TiTxID !== textID);
     const parsingText = texts.find(({ TxID }) => TxID === textID);
-    console.log("TEST123", parsingText, textID, texts);
     if (!parsingText) {
       return;
     }
@@ -1020,6 +1062,26 @@ export class DataService {
     this.persistSet("textitems");
   }
 
+  // // -------------------------------------------------------------
+
+  // function reparse_all_texts()
+  // {
+  // 	global tbpref;
+  // 	runsql('TRUNCATE ' . tbpref . 'sentences', '');
+  // 	runsql('TRUNCATE ' . tbpref . 'textitems', '');
+  // 	adjust_autoincr('sentences', 'SeID');
+  // 	adjust_autoincr('textitems', 'TiID');
+  // 	sql = "select TxID, TxLgID from " . tbpref . "texts";
+  // 	res = do_mysqli_query(sql);
+  // 	while (record = mysqli_fetch_assoc(res)) {
+  // 		id = record['TxID'];
+  // 		splitCheckText(
+  // 			get_first_value('select TxText as value from ' . tbpref . 'texts where TxID = ' . id), record['TxLgID'],
+  // 			id
+  // 		);
+  // 	}
+  // 	mysqli_free_result(res);
+  // }
   public reparseAllTextsForLanguage(langID: LanguagesID) {
     const { texts } = this.dataStore.getValue();
     texts
@@ -1028,6 +1090,11 @@ export class DataService {
         console.log("reparsing", text);
         this.reparseText(text.TxID);
       });
+  }
+  public reparseMultipleTexts(texts: TextsID[]) {
+    texts.forEach((TxID) => {
+      this.reparseText(TxID);
+    });
   }
 
   public setActiveLanguage(langID: LanguagesID | undefined | null) {
@@ -1120,9 +1187,7 @@ function ungz(file: File, onRead: (data: string | null) => void) {
       return;
     }
     // TODO no cast
-    const pakoVal = pako.inflate(new Uint8Array(readData as ArrayBuffer), {
-      to: "string",
-    });
+    const pakoVal = unGzString(new Uint8Array(readData as ArrayBuffer));
     if (pakoVal) {
       return onRead(pakoVal);
     }
@@ -1133,7 +1198,6 @@ function ungz(file: File, onRead: (data: string | null) => void) {
     console.log({ pakoVal, readData });
     //... fill input data here
     // const output = pako.deflate(input)
-    // console.log('TEST123-readdata', readData);
     // if (!readData) {
     //   return;
     // }

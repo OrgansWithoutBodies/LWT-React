@@ -1,4 +1,4 @@
-import { useAppContext } from '../../../../../LWT-Build/src/useContext';
+import { useAppContext } from 'lwt-build';
 import { VariantMap } from '../styles';
 
 export function useThemeColors() {

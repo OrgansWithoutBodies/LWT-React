@@ -7,12 +7,12 @@ export function useSettingWithDefault(
   keys: (keyof SettingSpec)[]
 ): Pick<SettingsObject, (typeof keys)[number]> {
   const [{ settings }] = useData(["settings"]);
-  const settingsWithDefaul = Object.fromEntries(
+  const settingsWithDefault = Object.fromEntries(
     keys.map((key) =>
       settings[key] !== undefined
         ? [key, settings[key]]
         : [key, settingSpec[key]["default"]]
     )
   );
-  return settingsWithDefaul;
+  return settingsWithDefault as Pick<SettingsObject, (typeof keys)[number]>;
 }

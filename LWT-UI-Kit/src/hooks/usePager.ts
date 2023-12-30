@@ -14,12 +14,5 @@ export function usePager<TDate>(
   const dataOnPage = data.slice(pageSize * (page - 1), pageSize * page);
   const numPages = Math.ceil(data.length / pageSize);
   //   return { page, setPage, dataOnPage };
-  console.log('PAGER', {
-    data,
-    page,
-    numPages,
-    pageSize,
-    dataOnPage,
-  });
   return { dataOnPage, numPages };
 }

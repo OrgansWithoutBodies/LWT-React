@@ -28,8 +28,8 @@ export type TRefMap<TForm> = Record<
  * @param validator
  */
 export function RefMap<TForm>(
-  validator: ss.Struct<{ [key in keyof TForm]: any }>,
-  defaultValues?: { [key in keyof TForm]: any }
+  validator: ss.Struct<{ [key in keyof TForm]: TForm[key] }>,
+  defaultValues?: Partial<TForm>
 ): TRefMap<TForm> {
   // TODO no any
   const values = Object.keys(
@@ -85,7 +85,10 @@ export function CheckAndSubmit<TForm>(
     ) => any | null;
   },
   validator: ss.Struct<{ [key in keyof TForm]: any }>,
-  takeValidatedObject: (value: { [key in keyof TForm]: any }) => void,
+  takeValidatedObject: (
+    value: { [key in keyof TForm]: any },
+    refMap: TRefMap<TForm>
+  ) => void,
   omit: keyof TForm | null = null,
   onFormErrors: (errors: { [key in keyof TForm]?: string }) => void = () => {}
 ) {
@@ -101,7 +104,6 @@ export function CheckAndSubmit<TForm>(
         ),
       ])
   );
-  console.log("TEST123-CHECKSUBMIT", values);
 
   const [validationErrors, postValidationObj] = ss
     // TODO no any
@@ -111,7 +113,7 @@ export function CheckAndSubmit<TForm>(
   if (!validationErrors && postValidationObj) {
     // TODO ifTakeValidated returns then we take that as a success otherwise a failure & dont reset
     // TODO no any
-    takeValidatedObject(postValidationObj as any);
+    takeValidatedObject(postValidationObj as any, refMap);
     // TODO reset to default values
     ResetForm(refMap);
   } else if (validationErrors) {

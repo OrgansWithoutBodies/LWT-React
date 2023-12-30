@@ -8,8 +8,8 @@ import {
   BaseOpenAPIWrapper,
 } from '../pages/API/BaseOpenAPIWrapper';
 
-type DeeplOpenAPI = DeeplPaths;
-type DeeplTranslatePath = DeeplOpenAPI['/translate']['post'];
+// type DeeplOpenAPI = DeeplPaths;
+// type DeeplTranslatePath = DeeplOpenAPI['/translate']['post'];
 export type DeeplSourceKeys = DeeplComponents['schemas']['SourceLanguage'];
 export type DeeplTargetKeys = DeeplComponents['schemas']['TargetLanguage'];
 type PostObject = {

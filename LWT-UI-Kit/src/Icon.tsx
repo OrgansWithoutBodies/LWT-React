@@ -2,25 +2,38 @@ import { UIString } from "lwt-i18n";
 import { ImgHTMLAttributes } from "react";
 import { useI18N } from "./I18N";
 import { IconNameMap } from "./icons";
-
+const NonTranslatedStrings = ["-", "+", "->", "<-"] as const;
 export function Icon({
   src: iconName,
   title,
   alt,
+  translateTitle = true,
   ...rest
 }: {
+  translateTitle?: boolean;
   src: (typeof IconNameMap)[number];
-  title?: UIString;
+  title?: UIString | (typeof NonTranslatedStrings)[number];
   alt?: UIString;
 } & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
   const iconURI = `icn/${iconName}.png`;
-  const t = useI18N();
+  const t = translateTitle
+    ? useI18N()
+    : (val: UIString) => {
+        return val;
+      };
+  const titleString = title
+    ? // TODO why cast necessary? types overlap
+      NonTranslatedStrings.includes(title as any)
+      ? title
+      : t(title as UIString)
+    : "";
   return (
     <img
       {...rest}
       src={iconURI}
       // automatically add alt text if title is specified but no alt
-      alt={alt === undefined ? (title ? t(title) : "") : t(alt)}
+      alt={alt === undefined ? titleString : t(alt)}
+      title={titleString}
     />
   );
 }

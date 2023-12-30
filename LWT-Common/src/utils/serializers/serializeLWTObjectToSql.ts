@@ -21,7 +21,6 @@ export function serializeJsonToSQL(data: LWTData) {
       ),
     ])
   );
-  console.log(serializedData);
   const sqlFileString = `-- lwt-backup--- /ensures that this can be imported via Restore/ 
   -- 
   -- --------------------------------------------------------------

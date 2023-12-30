@@ -25,6 +25,7 @@ export type TextDetailRow = Pick<
   saved: string;
   unk: number;
   unkPerc: number;
+  TxLgName: string;
 };
 
 export type ArchivedTextDetailRow = Pick<

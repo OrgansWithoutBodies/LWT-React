@@ -4,7 +4,7 @@ import { Plugin } from './Plugin';
 import { LWTReactInfo } from './plugins/LWTReactInfo';
 import { TatoebaPlugin } from './plugins/tatoeba.plugin';
 
-const plugins = [
+const plugins: readonly Plugin[] = [
   //
   // ChineseMeasureWordColumnPlugin,
   // Term conjugation
@@ -37,7 +37,7 @@ const plugins = [
       null,
       { link: '/lorem_ipsum', label: 'Demo Plugin Route' },
     ],
-    routes: { '/lorem_ipsum': () => LoremIpsum(100) },
+    routes: { '/lorem_ipsum': () => LoremIpsum({ len: 100 }) },
   },
 ] as const;
 

@@ -1,8 +1,6 @@
-import { A } from 'lwt-ui-kit';
+import { A, useAnimation, useInternalNavigate } from 'lwt-ui-kit';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import useAnimation from '../hooks/useAnimateTimer';
-import { useInternalNavigate } from '../hooks/useInternalNav';
 import { FooterInfo } from './LandingPage.component';
 
 const infoLines: Parameters<typeof InfoLine>[0][] = [
@@ -3196,17 +3194,15 @@ export function FloatingMenu({
   menuOptions: { href: string; title: string }[];
   positioning?: { right: number; top: number };
 }) {
-  const menuRef = useRef<HTMLDivElement>();
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [menuPixSourcePos, setMenuPixSourcePos] = useState<number>(0);
   const [menuPixTargetPos, setMenuPixTargetPos] = useState<number>(0);
   useEffect(() => {
     const onScroll = () => {
       // source is current position ie last it was set to
       const bodyRect = document.body.getBoundingClientRect();
-      const elemRect = menuRef.current.getBoundingClientRect();
+      const elemRect = menuRef.current!.getBoundingClientRect();
       const offset = elemRect.top - bodyRect.top;
-
-      console.log('TEST123-pos-ref', bodyRect.top, elemRect.top);
 
       setMenuPixSourcePos(offset);
       setMenuPixTargetPos(window.scrollY);
@@ -3252,7 +3248,8 @@ export function FloatingMenu({
       {menuOptions.map((option) => (
         <>
           <br />
-          <A href={`#${option.href}`}>{option.title}</A>
+          {/* TODO no any */}
+          <A href={`#${option.href}` as any}>{option.title}</A>
         </>
       ))}
     </div>

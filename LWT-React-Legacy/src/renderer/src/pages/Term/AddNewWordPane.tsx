@@ -1,24 +1,24 @@
-import { AddNewWordValidator, Sentence, Word } from 'lwt-schemas';
 import {
-  dataService,
-  useData,
-  wordNoIDPrevalidateMap,
-  wordPrevalidateMap,
-} from 'lwt-state';
-import { Icon, StatusRadioButtons, WordTagsAutocomplete } from 'lwt-ui-kit';
-import { useState } from 'react';
-import {
+  AddNewWordValidator,
   LanguagesID,
+  Sentence,
+  Word,
   WordsID,
   WordsWithTagsValidator,
-} from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
+} from 'lwt-schemas';
+import { dataService, useData, wordNoIDPrevalidateMap } from 'lwt-state';
+import {
+  EntryRow,
+  Icon,
+  StatusRadioButtons,
+  WordTagsAutocomplete,
+  useFormInput,
+} from 'lwt-ui-kit';
+import { useState } from 'react';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { textareaKeydown } from '../IO/CheckForm';
 import { DictionaryLinks } from './DictionaryLinks';
 
-const editGuard = (existingTerm: undefined | Word): existingTerm is Word =>
-  existingTerm !== undefined;
 /**
  * This is only called from inside the reader, rly more of a pane than a component
  */
@@ -26,7 +26,6 @@ export function AddNewWordPane({
   word,
   langID,
   onClearActiveWord,
-  existingTerm = undefined,
   setIFrameURL,
   setTranslateAPIParams,
   sentenceString,
@@ -34,7 +33,6 @@ export function AddNewWordPane({
   word: string;
   // TODO
   // wordInSentence:string
-  existingTerm?: Word;
   sentenceString?: string;
   langID: LanguagesID;
   onClearActiveWord: () => void;
@@ -43,9 +41,8 @@ export function AddNewWordPane({
     vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
   ) => void;
 }): JSX.Element {
-  const isEdit = editGuard(existingTerm);
   // TODO
-  const validator = isEdit ? WordsWithTagsValidator : AddNewWordValidator;
+  const validator = AddNewWordValidator;
   // const validator = AddNewWordValidator;
   const [{ languages }] = useData(['languages']);
 
@@ -60,33 +57,25 @@ export function AddNewWordPane({
     TextArea,
   } = useFormInput({
     entry: {
-      WoText: word || '',
+      WoText: word,
       WoLgID: langID,
-      WoSentence: sentenceString || '',
+      WoSentence: sentenceString,
     },
     validator,
   });
 
-  const [showingSentences, setShowingSentences] = useState<boolean>(false);
+  // const [showingSentences, setShowingSentences] = useState<boolean>(false);
   // const termStatus = isEdit ? existingTerm.WoStatus : 1;
 
   if (!lang) {
     throw new Error('Incorrect Language Set!');
   }
   const { LgName } = lang;
-  const submitForm = () => {
-    if (isEdit) {
-      return onSubmit(wordPrevalidateMap, (value) => {
-        dataService.editTerm(value);
-        onClearActiveWord();
-      });
-    }
-
-    return onSubmit(wordNoIDPrevalidateMap, (value) => {
+  const submitForm = () =>
+    onSubmit(wordNoIDPrevalidateMap, (value) => {
       dataService.addTerm(value);
       onClearActiveWord();
     });
-  };
   console.log('TEST123-refmap', refMap['WoSentence']);
   return (
     <>
@@ -103,101 +92,74 @@ export function AddNewWordPane({
 
         <table className="tab2" cellSpacing={0} cellPadding={5}>
           <tbody>
-            <tr>
-              <td className="td1 right">Language:</td>
-              <td className="td1">{LgName}</td>
-            </tr>
-            <tr title="Only change uppercase/lowercase!">
-              <td className="td1 right">
-                <b>{isEdit ? 'Edit' : 'New'} Term:</b>
-              </td>
-              <td className="td1">
-                <WoInput
-                  className="notempty checkoutsidebmp"
-                  errorName="New Term"
-                  entryKey="WoText"
-                  // TODO
-                  // onBlur={()=>}
-                  id="wordfield"
-                  // value={word}
-                  default
-                  // defaultEntry={FormState}
-                  size={35}
-                  isRequired
-                />
-              </td>
-            </tr>
+            <EntryRow headerText={'Study Language "L2"'}>{LgName}</EntryRow>
+            <EntryRow
+              entryTitle="Only change uppercase/lowercase!"
+              headerText={`New Term`}
+            >
+              <WoInput
+                className="notempty checkoutsidebmp"
+                errorName="New Term"
+                entryKey="WoText"
+                // TODO
+                // onBlur={()=>}
+                id="wordfield"
+                // value={word}
+                default
+                // defaultEntry={FormState}
+                size={35}
+                isRequired
+              />
+            </EntryRow>
 
-            <tr>
-              <td className="td1 right">Translation:</td>
-              <td className="td1">
-                <TextArea
-                  entryKey="WoTranslation"
-                  className="setfocus checklength checkoutsidebmp"
-                  maxLength={500}
-                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
-                  errorName="Translation"
-                  cols={35}
-                  rows={3}
-                />
-              </td>
-            </tr>
+            <EntryRow headerText={'Translation'}>
+              <TextArea
+                entryKey="WoTranslation"
+                className="setfocus checklength checkoutsidebmp"
+                maxLength={500}
+                onKeyDown={(e) => textareaKeydown(e, submitForm)}
+                errorName="Translation"
+                cols={35}
+                rows={3}
+              />
+            </EntryRow>
             {formErrors.WoTranslation && (
               <tr title="Only change uppercase/lowercase!">
                 <td style={{ color: 'red' }}>ERROR</td>
                 <td />
               </tr>
             )}
-            <tr>
-              <td className="td1 right">Tags:</td>
-              <td className="td1">
-                <WordTagsAutocomplete
-                  ref={refMap.taglist}
-                  onChange={setDirty}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">Romaniz.:</td>
-              <td className="td1">
-                <WoInput
-                  className="checkoutsidebmp"
-                  errorName="Romanization"
-                  entryKey="WoRomanization"
-                  maxLength={100}
-                  size={35}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">
-                Sentence
-                <br />
-                Term in :
-              </td>
-              <td className="td1">
-                <TextArea
-                  entryKey="WoSentence"
-                  className="checklength checkoutsidebmp"
-                  onKeyDown={(e) => textareaKeydown(e, submitForm)}
-                  maxLength={1000}
-                  errorName="Sentence"
-                  cols={35}
-                  rows={3}
-                  default
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="td1 right">Status:</td>
-              <td className="td1">
-                <StatusRadioButtons
-                  defaultStatus={termStatus}
-                  onChange={setDirty}
-                  refMap={refMap}
-                />
-              </td>
-            </tr>
+            <EntryRow headerText={'Tags'}>
+              <WordTagsAutocomplete ref={refMap.taglist} onChange={setDirty} />
+            </EntryRow>
+            <EntryRow headerText={'Romaniz.'}>
+              <WoInput
+                className="checkoutsidebmp"
+                errorName="Romanization"
+                entryKey="WoRomanization"
+                maxLength={100}
+                size={35}
+              />
+            </EntryRow>
+            <EntryRow headerText={'Sentence\nTerm in '}>
+              <TextArea
+                entryKey="WoSentence"
+                className="checklength checkoutsidebmp"
+                onKeyDown={(e) => textareaKeydown(e, submitForm)}
+                maxLength={1000}
+                errorName="Sentence"
+                cols={35}
+                rows={3}
+                default
+              />
+            </EntryRow>
+            <EntryRow headerText={'Status'}>
+              <StatusRadioButtons
+                defaultStatus={1}
+                onChange={setDirty}
+                refMap={refMap}
+              />
+            </EntryRow>
             <tr>
               <td className="td1 right" colSpan={2}>
                 <DictionaryLinks
@@ -215,7 +177,8 @@ export function AddNewWordPane({
           </tbody>
         </table>
       </form>
-      <div id="exsent">
+      {/* TODO? */}
+      {/* <div id="exsent">
         {showingSentences && existingTerm ? (
           <SentencesForWord
             word={existingTerm}
@@ -233,7 +196,7 @@ export function AddNewWordPane({
             Show Sentences
           </span>
         )}
-      </div>
+      </div> */}
       <ul
         className="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all"
         id="ui-id-1"
@@ -279,8 +242,8 @@ export function EditWordPane({
     setDirty,
     TextArea,
   } = useFormInput({
-    entry: { WoText: word || '', WoLgID: word.WoLgID },
     validator,
+    entry: word,
   });
   console.log('TEST123-newword', word.WoLgID);
   const [showingSentences, setShowingSentences] = useState<boolean>(false);

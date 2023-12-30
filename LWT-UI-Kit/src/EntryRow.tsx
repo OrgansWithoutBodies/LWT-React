@@ -1,18 +1,8 @@
 import { openInNewWindow } from "lwt-common";
-import { UIString } from "lwt-i18n";
+import { EntryRowType } from "lwt-schemas";
 import { PropsWithChildren } from "react";
 import { I18N } from "./I18N";
 import { Icon } from "./Icon";
-
-export interface EntryRowType {
-  headerClasses?: string[];
-  // TODO hacky
-  PreMapComponent?: () => JSX.Element;
-  entryTitle?: string;
-  headerText: UIString;
-  headerInfoLink?: string;
-  headerDir?: "left" | "right" | "center";
-}
 
 export function EntryRow({
   headerClasses = [],

@@ -5,18 +5,18 @@ import {
   Text,
   TextItem,
   Word,
+  WordsID,
   getStatusAbbr,
   getStatusName,
 } from 'lwt-schemas';
-import { A, Icon } from 'lwt-ui-kit';
-import { WordsID } from '../data/validators';
+import { A, Icon, useI18N } from 'lwt-ui-kit';
 import { APITranslateTerm } from '../plugins/deepl.plugin';
 import {
   DictionaryLinks,
   KnownTermLines,
   LanguageDictionaryDataTempHack,
 } from './Term/DictionaryLinks';
-import { WordKnownTermLines } from './Term/limitedTypes';
+import { WordKnownTermLines } from './limitedTypes';
 import {
   EscapeHtmlChars2,
   MW29,
@@ -61,11 +61,11 @@ export function RunOverlibStatus99({
   Pick<Language, 'LgRightToLeft'> &
   Pick<Text, 'TxID'> & {
     lang: LanguageDictionaryDataTempHack;
-    hints;
-    txt;
+    hints: string;
+    txt: any;
     WoID: WordsID;
     mw29: MW29;
-    ann;
+    ann: any;
     onSetEditingWord: (params: EditWordParams) => void;
     onDeleteWord: (params: Pick<EditWordParams, 'TxID' | 'WoID'>) => void;
 
@@ -175,11 +175,11 @@ export function RunOverlibStatus1To5({
     ) => void;
     setIFrameURL: (url: string | null) => void;
     lang: LanguageDictionaryDataTempHack;
-    hints;
-    txt;
-    stat;
+    hints: string;
+    txt: string;
+    stat: Word['WoStatus'];
     mw29: MW29;
-    ann;
+    ann: any;
   }) {
   const defaultOnSetEditWord = () => onSetEditingWord({ TxID, TiOrder, WoID });
   return (
@@ -266,7 +266,7 @@ export function RunOverlibStatusUnknown({
     lang: LanguageDictionaryDataTempHack;
     mw29: MW29;
     hints: string;
-    txt;
+    txt: any;
     setTranslateAPIParams: (
       vals: (APITranslateTerm<string, string> & { apiKey: string }) | null
     ) => void;
@@ -339,7 +339,8 @@ export function RunOverlibMultiword({
   txt,
   WoID,
   WoStatus: WoStatus,
-  wcnt,
+  // TODO
+  // wcnt,
   onSetDeleteMultiWord,
   onSetEditingWord,
   onSetWordStatus,
@@ -349,7 +350,7 @@ export function RunOverlibMultiword({
 }: Pick<Word, 'WoStatus'> &
   EditWordParams & {
     langDictData: LanguageDictionaryDataTempHack;
-    hints;
+    hints: string;
     txt: string;
 
     wcnt: number;
@@ -441,7 +442,7 @@ function MakeOverlibLinkChangeStatusAll({
  * @param TiOrder
  * @param WoID
  */
-function MakeOverlibLinkEditMultiwordTitle({
+export function MakeOverlibLinkEditMultiwordTitle({
   text,
   TxID,
   TiOrder,
@@ -541,7 +542,7 @@ function MakeOverlibLinkChangeStatus({
  * @param TiOrder
  * @param WoID
  */
-function MakeOverlibLinkEditWordTitle({
+export function MakeOverlibLinkEditWordTitle({
   text,
   onSetEditingWord: onSetEditingWord,
 }: {
@@ -880,7 +881,8 @@ export function RunOverlibStatus98({
   setIFrameURL,
   onSetNewWord,
   onSetEditingWord,
-  onSetTestStatus,
+  // TODO
+  // onSetTestStatus,
   onDeleteWord,
 }: EditWordParams &
   Pick<Language, 'LgRightToLeft'> & {
@@ -1059,6 +1061,7 @@ export function RunTestForWord(
     }) => void;
   } // oldstat: undefined
 ) {
+  const t = useI18N();
   const { WoStatus, WoID } = word;
   const c = Math.min(5, WoStatus + 1);
   const w = Math.max(1, WoStatus - 1);
@@ -1083,7 +1086,8 @@ export function RunTestForWord(
                     }
                   >
                     <>
-                      <Icon src="thumb-up" title="Got it!" /> Got it! [{cc}]
+                      <Icon src="thumb-up" title="Got it!" /> {t('Got it!')} [
+                      {cc}]
                     </>
                   </MakeOverlibLinkChangeStatusTest>
                   <hr className="noshade" />
@@ -1093,7 +1097,7 @@ export function RunTestForWord(
                     }
                   >
                     <>
-                      <Icon src="thumb" title="Oops!" /> Oops! [{ww}]
+                      <Icon src="thumb" title="Oops!" /> {t('Oops!')} [{ww}]
                     </>
                   </MakeOverlibLinkChangeStatusTest>
                   <hr className="noshade" />

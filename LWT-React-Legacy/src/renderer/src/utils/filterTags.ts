@@ -1,5 +1,11 @@
-import { TextTag, WordTag } from 'lwt-schemas';
-import { Tags2ID, TagsID, TextsID, WordsID } from '../data/validators';
+import {
+  Tags2ID,
+  TagsID,
+  TextTag,
+  TextsID,
+  WordTag,
+  WordsID,
+} from 'lwt-schemas';
 
 const isWordTag = (tag: WordTag[] | TextTag[]): tag is WordTag[] =>
   tag[0] && 'WtTgID' in tag[0];
@@ -7,6 +13,8 @@ const isWordTag = (tag: WordTag[] | TextTag[]): tag is WordTag[] =>
  *
  * filterTags steps through an intermediate table and reduces it to a lookup for the non-tag value
  */
+
+// TODO this is very messy
 
 /**
  *

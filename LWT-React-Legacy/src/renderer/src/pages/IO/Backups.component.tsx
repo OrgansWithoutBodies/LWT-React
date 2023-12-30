@@ -1,8 +1,7 @@
 import { confirmDelete } from 'lwt-common';
 import { dataService } from 'lwt-state';
-import { Header } from 'lwt-ui-kit';
+import { Header, useInternalNavigate } from 'lwt-ui-kit';
 import { useRef } from 'react';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
 
 export function BackupScreen(): JSX.Element {
   // const [] = useData([]);

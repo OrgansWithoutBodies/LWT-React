@@ -882,15 +882,15 @@ export function remove_spaces(s: string, remove: Language["LgRemoveSpaces"]) {
 // }
 
 // // -------------------------------------------------------------
-
-// function get_sepas()
-// {
-// 	static sepa;
-// 	if (!sepa) {
-// 		sepa = preg_quote(getSettingWithDefault('set-term-translation-delimiters'), '/');
-// 	}
-// 	return sepa;
-// }
+// TODO
+const preg_quote = (arg: string) => arg;
+export function get_sepas() {
+  const sepa = preg_quote(
+    // getSettingWithDefault("set-term-translation-delimiters"),
+    "/"
+  );
+  return sepa;
+}
 
 // // -------------------------------------------------------------
 
@@ -932,21 +932,6 @@ export function remove_spaces(s: string, remove: Language["LgRemoveSpaces"]) {
 // 		return val;
 // 	} else
 // 		return '';
-// }
-
-// // -------------------------------------------------------------
-
-// function get_mobile_display_mode_selectoptions(v)
-// {
-// 	if (!isset(v))
-// 		v = "0";
-// 	r = "<option value="0"" . get_selected(v, "0");
-// 	r += ">Auto</option>";
-// 	r += "<option value="1"" . get_selected(v, "1");
-// 	r += ">Force Non-Mobile</option>";
-// 	r += "<option value="2"" . get_selected(v, "2");
-// 	r += ">Force Mobile</option>";
-// 	return r;
 // }
 
 // // -------------------------------------------------------------
@@ -1016,40 +1001,6 @@ export function remove_spaces(s: string, remove: Language["LgRemoveSpaces"]) {
 
 // // -------------------------------------------------------------
 
-// function validateLang(currentlang)
-// {
-// 	global tbpref;
-// 	if (currentlang !== '') {
-// 		if (
-// 			get_first_value(
-// 				'select count(LgID) as value from ' . tbpref . 'languages where LgID=' .
-// 				((int) currentlang)
-// 			) === 0
-// 		)
-// 			currentlang = '';
-// 	}
-// 	return currentlang;
-// }
-
-// // -------------------------------------------------------------
-
-// function validateText(currenttext)
-// {
-// 	global tbpref;
-// 	if (currenttext !== '') {
-// 		if (
-// 			get_first_value(
-// 				'select count(TxID) as value from ' . tbpref . 'texts where TxID=' .
-// 				((int) currenttext)
-// 			) === 0
-// 		)
-// 			currenttext = '';
-// 	}
-// 	return currenttext;
-// }
-
-// // -------------------------------------------------------------
-
 // function validateTag(currenttag, currentlang)
 // {
 // 	global tbpref;
@@ -1110,104 +1061,6 @@ export function remove_spaces(s: string, remove: Language["LgRemoveSpaces"]) {
 // 	if (tohtml)
 // 		r = tohtml(r);
 // 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function make_status_controls_test_table(score, status, wordid)
-// {
-// 	if (score < 0)
-// 		scoret = '<span class="red2">' . get_status_abbr(status) . '</span>';
-// 	else
-// 		scoret = get_status_abbr(status);
-
-// 	if (status <= 5 || status === 98)
-// 		plus = '<img src="icn/plus.png" class="click" title="+" alt="+" onClick="changeTableTestStatus(' . wordid . ',true);" />';
-// 	else
-// 		plus = '<img src="icn/placeholder.png" title="" alt="" />';
-// 	if (status >= 1)
-// 		minus = '<img src="icn/minus.png" class="click" title="-" alt="-" onClick="changeTableTestStatus(' . wordid . ',false);" />';
-// 	else
-// 		minus = '<img src="icn/placeholder.png" title="" alt="" />';
-// 	return (status === 98 ? '' : minus . ' ') . scoret . (status === 99 ? '' : ' ' . plus);
-// }
-
-// // -------------------------------------------------------------
-
-// function get_languages_selectoptions(v, dt)
-// {
-// 	global tbpref;
-// 	sql = "select LgID, LgName from " . tbpref . "languages order by LgName";
-// 	res = do_mysqli_query(sql);
-// 	if (!isset(v) || trim(v) === '') {
-// 		r = "<option value="\" selected=\"selected">" . dt . "</option>";
-// 	} else {
-// 		r = "<option value="">" . dt . "</option>";
-// 	}
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		d = record["LgName"];
-// 		if (strlen(d) > 30)
-// 			d = substr(d, 0, 30) . "...";
-// 		r += "<option value="" . record["LgID"] . "" " . get_selected(v, record["LgID"]);
-// 		r += ">" . tohtml(d) . "</option>";
-// 	}
-// 	mysqli_free_result(res);
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_wordstatus_radiooptions(v)
-// {
-// 	if (!isset(v))
-// 		v = 1;
-// 	r = "";
-// 	statuses = get_statuses();
-// 	foreach (statuses as n => status) {
-// 		r += '<span class="status' . n . '" title="' . tohtml(status["name"]) . '">';
-// 		r += '&nbsp;<input type="radio" name="WoStatus" value="' . n . '"';
-// 		if (v === n)
-// 			r += ' checked="checked"';
-// 		r += ' />' . tohtml(status["abbr"]) . "&nbsp;</span> ";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_paging_selectoptions(currentpage, pages)
-// {
-// 	r = "";
-// 	for (i = 1; i <= pages; i++) {
-// 		r += "<option value="" . i . """ . get_selected(i, currentpage);
-// 		r += ">i</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_set_status_option(n, suffix = "")
-// {
-// 	return "<option value="s" . n . suffix . "">Set Status to " .
-// 		tohtml(get_status_name(n)) . " [" . tohtml(get_status_abbr(n)) .
-// 		"]</option>";
-// }
-
-// // -------------------------------------------------------------
-
-// function get_status_name(n)
-// {
-// 	statuses = get_statuses();
-// 	return statuses[n]["name"];
-// }
-
-// // -------------------------------------------------------------
-
-// function get_status_abbr(n)
-// {
-// 	statuses = get_statuses();
-// 	return statuses[n]["abbr"];
 // }
 
 // // -------------------------------------------------------------
@@ -1536,59 +1389,6 @@ export function replaceTabsWithNewLine(s: string) {
 // 	return r;
 // }
 
-// // -------------------------------------------------------------
-
-// function get_languages()
-// {
-// 	global tbpref;
-// 	langs = array();
-// 	sql = "select LgID, LgName from " . tbpref . "languages";
-// 	res = do_mysqli_query(sql);
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		langs[record['LgName']] = record['LgID'];
-// 	}
-// 	mysqli_free_result(res);
-// 	return langs;
-// }
-
-// // -------------------------------------------------------------
-
-// function reparse_all_texts()
-// {
-// 	global tbpref;
-// 	runsql('TRUNCATE ' . tbpref . 'sentences', '');
-// 	runsql('TRUNCATE ' . tbpref . 'textitems', '');
-// 	adjust_autoincr('sentences', 'SeID');
-// 	adjust_autoincr('textitems', 'TiID');
-// 	sql = "select TxID, TxLgID from " . tbpref . "texts";
-// 	res = do_mysqli_query(sql);
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		id = record['TxID'];
-// 		splitCheckText(
-// 			get_first_value('select TxText as value from ' . tbpref . 'texts where TxID = ' . id), record['TxLgID'],
-// 			id
-// 		);
-// 	}
-// 	mysqli_free_result(res);
-// }
-
-// // -------------------------------------------------------------
-
-// function getLanguage(lid)
-// {
-// 	global tbpref;
-// 	if (!isset(lid))
-// 		return '';
-// 	if (trim(lid) === '')
-// 		return '';
-// 	if (!is_numeric(lid))
-// 		return '';
-// 	r = get_first_value("select LgName as value from " . tbpref . "languages where LgID='" . lid . "'");
-// 	if (isset(r))
-// 		return r;
-// 	return '';
-// }
-
 // 	////////////////////////////////////
 // 	// Split: insert sentences/textitems entries in DB
 
@@ -1699,76 +1499,6 @@ export function replaceTabsWithNewLine(s: string) {
 // 		sentNumber += 1;
 // 	}
 
-// }
-
-// // -------------------------------------------------------------
-
-// function restore_file(handle, title)
-// {
-// 	global tbpref;
-// 	message = "";
-// 	lines = 0;
-// 	ok = 0;
-// 	errors = 0;
-// 	drops = 0;
-// 	inserts = 0;
-// 	creates = 0;
-// 	start = 1;
-// 	while (!gzeof(handle)) {
-// 		sql_line = trim(
-// 			str_replace(
-// 				"\r",
-// 				"",
-// 				str_replace(
-// 					"\n",
-// 					"",
-// 					gzgets(handle, 99999)
-// 				)
-// 			)
-// 		);
-// 		if (sql_line !== "") {
-// 			if (start) {
-// 				if (strpos(sql_line, "-- lwt-backup-") === false) {
-// 					message = "Error: Invalid " . title . " Restore file (possibly not created by LWT backup)";
-// 					errors = 1;
-// 					break;
-// 				}
-// 				start = 0;
-// 				continue;
-// 			}
-// 			if (substr(sql_line, 0, 3) !== '-- ') {
-// 				res = mysqli_query(GLOBALS['DBCONNECTION'], insert_prefix_in_sql(sql_line));
-// 				lines++;
-// 				if (res === FALSE)
-// 					errors++;
-// 				else {
-// 					ok++;
-// 					if (substr(sql_line, 0, 11) === "INSERT INTO")
-// 						inserts++;
-// 					elseif (substr(sql_line, 0, 10) === "DROP TABLE")
-// 						drops++;
-// 					elseif (substr(sql_line, 0, 12) === "CREATE TABLE")
-// 						creates++;
-// 				}
-// 				// echo ok . " / " . tohtml(insert_prefix_in_sql(sql_line)) . "<br />";
-// 			}
-// 		}
-// 	} // while (! feof(handle))
-// 	gzclose(handle);
-// 	if (errors === 0) {
-// 		reparse_all_texts();
-// 		optimizedb();
-// 		get_tags(refresh = 1);
-// 		get_texttags(refresh = 1);
-// 		message = "Success: " . title . " restored - " .
-// 			lines . " queries - " . ok . " successful (" . drops . "/" . creates . " tables dropped/created, " . inserts . " records added), " . errors . " failed.";
-// 	} else {
-// 		if (message === "") {
-// 			message = "Error: " . title . " NOT restored - " .
-// 				lines . " queries - " . ok . " successful (" . drops . "/" . creates . " tables dropped/created, " . inserts . " records added), " . errors . " failed.";
-// 		}
-// 	}
-// 	return message;
 // }
 
 // // -------------------------------------------------------------
@@ -2520,6 +2250,8 @@ export function verifyAddTagWindow(t: string, numChecked: number) {
   return answer;
 }
 
+export type TextPropsForTextSplitting = Pick<Text, "TxText" | "TxID">;
+
 /**
  *
  * @param text
@@ -2527,8 +2259,9 @@ export function verifyAddTagWindow(t: string, numChecked: number) {
  * @param id
  */
 export function splitCheckText(
-  text: Pick<Text, "TxText" | "TxID">,
-  language: Language,
+  text: TextPropsForTextSplitting,
+  language: LanguagePropsForSentenceBuilding &
+    Pick<Language, "LgRegexpWordCharacters" | "LgRemoveSpaces">,
   sentenceStartID: SentencesID = 0 as SentencesID,
   textItemStartID: TextItemsID = 0 as TextItemsID
 ) {
@@ -2602,7 +2335,15 @@ export function splitCheckText(
 
   return { wordCount, sArray, sepsCount, symbolList };
 }
-type RawSentence = Sentence;
+
+type LanguagePropsForSentenceBuilding = Pick<
+  Language,
+  | "LgCharacterSubstitutions"
+  | "LgSplitEachChar"
+  | "LgRegexpSplitSentences"
+  | "LgExceptionsSplitSentences"
+  | "LgID"
+>;
 
 /**
  *
@@ -2616,9 +2357,9 @@ export function buildSentences(
     LgRegexpSplitSentences,
     LgExceptionsSplitSentences,
     LgID,
-  }: Language,
+  }: LanguagePropsForSentenceBuilding,
   startAt: SentencesID = 0 as SentencesID
-): RawSentence[] {
+): Sentence[] {
   const replace = LgCharacterSubstitutions.split("|");
 
   let s = cleanText(text.TxText, LgSplitEachChar);
@@ -2639,15 +2380,15 @@ export function buildSentences(
     s = s.replace(reNoSplit, "$1‧");
   }
   const reSplitSentence = new RegExp(`([${LgRegexpSplitSentences}¶])`, "g");
-  console.log("TEST123-PARSE-SENTENCE-PRE", s, reSplitSentence);
+
   s = s
     // \n seems to be used as an intermediate char here?
     .replace(reSplitSentence, "$1\n")
     .replace(new RegExp(" ¶\\n", "g"), "\n¶\n")
     .replace("‧", " ")
     .trim();
-  console.log("TEST123-PARSE-SENTENCE", s);
-  const sentences: RawSentence[] = s
+
+  const sentences: Sentence[] = s
     .split("\n")
     .filter((sent) => sent.trim() !== "")
     // TODO
@@ -2697,18 +2438,14 @@ export function cleanText(
     .trim();
   if (LgSplitEachChar) {
     // add space after anything not a space
-    console.log("TEST123-spliteachchar", s);
+
     s = s.replace(new RegExp(/([^\s])/u, "g"), "$1 ");
-    console.log("TEST123-spliteachchar", s);
   }
   // replace any multiple spaces with single space
   s = s.replace(/\s{2,}/u, " ");
   return s;
 }
 
-// TODO
-
-export function check_dupl_lang() {}
 /**
  *
  * @param method
@@ -2759,4 +2496,52 @@ export function AreUnknownWordsInSentence(
  */
 export function pluralize(count: number) {
   return count === 1 ? "" : "s";
+}
+
+export function maskTermInSentence(s: string, regexword: string) {
+  const regMatchWord = new RegExp(regexword, "g");
+  const l = s.length;
+  let r = "";
+  let isOn = 0;
+  for (let i = 0; i < l; i++) {
+    const c = s.substring(i, i + 1);
+    if (c == "}") {
+      isOn = 0;
+    }
+    if (isOn) {
+      if (regMatchWord.test(c)) {
+        r += "•";
+      } else {
+        r += c;
+      }
+    } else {
+      r += c;
+    }
+    if (c == "{") {
+      isOn = 1;
+    }
+  }
+  return r;
+}
+
+export function maskTermInSentenceV2(s: string) {
+  const l = s.length;
+  let r = "";
+  let isOn = 0;
+  for (let i = 0; i < l; i++) {
+    const c = s.substring(i, i + 1);
+    if (c == "}") {
+      isOn = 0;
+      continue;
+    }
+    if (c == "{") {
+      isOn = 1;
+      r += "[...]";
+      continue;
+    }
+    if (isOn == 0) {
+      r += c;
+    }
+  }
+  return r;
 }

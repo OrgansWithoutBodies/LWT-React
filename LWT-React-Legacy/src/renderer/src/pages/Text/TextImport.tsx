@@ -1,4 +1,5 @@
-import { AddNewTextValidator } from 'lwt-schemas';
+import { ResetForm } from 'lwt-forms';
+import { AddNewTextWithTagsValidator } from 'lwt-schemas';
 import { dataService, textNoIDPrevalidateMap, useData } from 'lwt-state';
 import {
   Header,
@@ -6,11 +7,10 @@ import {
   LanguageDropdown,
   RequiredLineButton,
   TextTagsAutocomplete,
+  useFormInput,
+  useInternalNavigate,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { ResetForm } from '../../../../../../LWT-Forms/src/Forms';
-import { useFormInput } from '../../hooks/useFormInput';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { do_ajax_update_media_select } from '../SelectMediaPath';
 import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
 
@@ -33,7 +33,7 @@ export function ImportShortText({
   onCheckText: OnCheckText;
 }): JSX.Element {
   const [{ activeLanguage }] = useData(['activeLanguage']);
-  const validator = AddNewTextValidator;
+  const validator = AddNewTextWithTagsValidator;
 
   const {
     Input: TxInput,
@@ -47,7 +47,9 @@ export function ImportShortText({
   return (
     <>
       <Header
-        title={`My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts`}
+        title={
+          `My ${activeLanguage ? `${activeLanguage.LgName} ` : ''}Texts` as any
+        }
       />
 
       <p>&nbsp;</p>
@@ -127,7 +129,10 @@ export function ImportShortText({
             <tr>
               <td className="td1 right">Tags:</td>
               <td className="td1">
-                <TextTagsAutocomplete onChange={setDirty} ref={refMap} />
+                <TextTagsAutocomplete
+                  onChange={setDirty}
+                  ref={refMap.taglist}
+                />
               </td>
             </tr>
             <tr>

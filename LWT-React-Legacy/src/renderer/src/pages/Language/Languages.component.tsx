@@ -1,9 +1,7 @@
 import { confirmDelete } from 'lwt-common';
-import { Language } from 'lwt-schemas';
+import { Language, LanguagesID } from 'lwt-schemas';
 import { dataService, useData } from 'lwt-state';
-import { A, Header, I18N, Icon, SortableHeader } from 'lwt-ui-kit';
-import { LanguagesID } from '../../data/validators';
-import { Loader } from '../Loader';
+import { A, Header, I18N, Icon, Loader, SortableHeader } from 'lwt-ui-kit';
 import { LanguageSorting } from '../Sorting';
 import {
   sortAZ,
@@ -181,20 +179,20 @@ export function LanguagesPage({
       languages,
       activeLanguageID,
       archivedTextsHashmapByLanguage,
-      textsHashmapByLanguage,
-      wordHashmapByLanguage,
+      textsCountmapByLanguage,
+      wordCountmapByLanguage,
     },
   ] = useData([
     'languages',
     'activeLanguageID',
     'archivedTextsHashmapByLanguage',
-    'textsHashmapByLanguage',
-    'wordHashmapByLanguage',
+    'textsCountmapByLanguage',
+    'wordCountmapByLanguage',
   ]);
   if (
     archivedTextsHashmapByLanguage === undefined ||
-    textsHashmapByLanguage === undefined ||
-    wordHashmapByLanguage === undefined
+    textsCountmapByLanguage === undefined ||
+    wordCountmapByLanguage === undefined
   ) {
     return (
       <>
@@ -205,8 +203,8 @@ export function LanguagesPage({
   const languageLines: TLanguageLine[] = languages.map((val) => ({
     ...val,
     numArchivedTexts: archivedTextsHashmapByLanguage[val.LgID] || 0,
-    numTerms: wordHashmapByLanguage[val.LgID] || 0,
-    numTexts: textsHashmapByLanguage[val.LgID] || 0,
+    numTerms: wordCountmapByLanguage[val.LgID] || 0,
+    numTexts: textsCountmapByLanguage[val.LgID] || 0,
   }));
   const sortedLanguages = languageLines.sort(sortValues(sorting));
   return (

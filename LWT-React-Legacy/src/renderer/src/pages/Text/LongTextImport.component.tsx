@@ -1,17 +1,21 @@
 import { buildSentences } from 'lwt-common';
-import { AddNewTextType } from 'lwt-schemas';
+import {
+  AddNewTextType,
+  TagListValidator,
+  TextsID,
+  languagesID,
+} from 'lwt-schemas';
 import { dataService, parseNumMap, useData } from 'lwt-state';
 import {
   Header,
   LanguageDropdown,
   RequiredLineButton,
   TextTagsAutocomplete,
+  useFormInput,
+  useInternalNavigate,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
 import * as ss from 'superstruct';
-import { TagListValidator } from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { LongTextVerify } from './LongTextImportVerify.component';
 
 export default function ImportLongText({
@@ -20,14 +24,16 @@ export default function ImportLongText({
   onSetVerify: (verify: AddNewTextType[]) => void;
 }): JSX.Element {
   // TODO custom eslint hook to make sure in & out are same len? avoid hanging params
-  const [{ languages, activeLanguageID }] = useData([
+  const [{ texts, languages, activeLanguageID }] = useData([
     'languages',
+    'texts',
     'activeLanguageID',
   ]);
+  const maxID = texts.reduce((prev, curr) => Math.max(prev, curr.TxID), -1);
   const navigate = useInternalNavigate();
   const validator = ss.object({
     TxText: ss.string(),
-    TxLgID: ss.number(),
+    TxLgID: languagesID,
     TxTitle: ss.string(),
     maxSent: ss.number(),
     taglist: TagListValidator,
@@ -199,7 +205,7 @@ export default function ImportLongText({
                         // TODO
                         // console.log(TxLgID);
                         const splitTexts = buildSentences(
-                          TxText,
+                          { TxText, TxID: maxID as TextsID },
                           languages.find((lang) => lang.LgID === TxLgID)!
                         );
                         console.log(splitTexts);

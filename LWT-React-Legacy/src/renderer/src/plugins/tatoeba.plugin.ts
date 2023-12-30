@@ -3,7 +3,7 @@ import { Plugin } from '../Plugin';
 import { TatoebaEntryLine } from './Tatoeba.plugin.entryline';
 import { TatoebaOpenAPIWrapper } from './TatoebaAPI';
 
-export const TatoebaPlugin: Plugin = {
+export const TatoebaPlugin = {
   validators: {
     languages: {
       LgTatoebaSourceKey: ss.optional(ss.string()),
@@ -12,13 +12,13 @@ export const TatoebaPlugin: Plugin = {
   } as const,
   entryLines: {
     languages: {
-      // TODO sourceKey vs targetKey
       LgTatoebaSourceKey: {
-        headerText: 'Tatoeba Key (L2)',
+        // TODO i18n text
+        headerText: 'Tatoeba Key (L2)' as any,
         child: TatoebaEntryLine,
       },
       LgTatoebaTargetKey: {
-        headerText: 'Tatoeba Key (L1)',
+        headerText: 'Tatoeba Key (L1)' as any,
         child: TatoebaEntryLine,
       },
     },
@@ -28,7 +28,7 @@ export const TatoebaPlugin: Plugin = {
     // during construction:
     // this.TatoebaAPI = new TatoebaOpenAPIWrapper();
 
-    getTatoebaSentence: async (langKey: ThreeLetterString, word: string) => {
+    getTatoebaSentence: async (langKey: string, word: string) => {
       const tatoebaData = await this.TatoebaAPI.getPath('/unstable/sentences', {
         lang: langKey,
         q: word,
@@ -51,4 +51,4 @@ export const TatoebaPlugin: Plugin = {
     },
   },
   pluginName: 'tatoeba',
-};
+} as Plugin;

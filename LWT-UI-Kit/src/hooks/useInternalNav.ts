@@ -1,26 +1,25 @@
-import { headerValues, headerValuesTemp } from 'lwt-ui-kit';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { headerValues, headerValuesTemp } from "lwt-ui-kit";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
 type NonHeaderLinks =
-  | ''
-  | 'info_export_template'
-  | 'edit_word'
-  | 'edit_tword'
-  | 'do_test'
-  | 'edit_mword'
-  | 'new_word'
-  | 'install_demo'
-  | 'print_text'
-  | 'print_impr_text'
-  | 'display_impr_text'
-  | 'do_text';
+  | ""
+  | "info_export_template"
+  | "edit_word"
+  | "edit_tword"
+  | "do_test"
+  | "edit_mword"
+  | "install_demo"
+  | "print_text"
+  | "print_impr_text"
+  | "display_impr_text"
+  | "do_text";
 
-type BasePath = InternalPathsFromHeader | NonHeaderLinks | '/';
-export type InternalPaths = `/${BasePath}${`?${string}` | ''}${
+type BasePath = InternalPathsFromHeader | NonHeaderLinks | "/";
+export type InternalPaths = `/${BasePath}${`?${string}` | ""}${
   | `#${string}`
-  | ''}`;
+  | ""}`;
 // const urlIsInternalPathGuard = (url: string): url is InternalPaths => {
 //   return Object.values(headerValues).includes(url as any);
 // };
@@ -44,7 +43,7 @@ export const useInternalNavigate: () => (
 };
 
 export type PathParams =
-  (typeof headerValuesTemp)[keyof typeof headerValuesTemp]['params'][number];
+  (typeof headerValuesTemp)[keyof typeof headerValuesTemp]["params"][number];
 export const useUpdateParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();

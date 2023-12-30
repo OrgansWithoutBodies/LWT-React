@@ -1,8 +1,14 @@
 import { AppVariables, useAppContext } from 'lwt-build';
 import { PersistanceStrategy } from 'lwt-persist';
 import { dataService, useData } from 'lwt-state';
-import { A, DevModeGate, Icon, LanguageDropdown, useI18N } from 'lwt-ui-kit';
-import { InternalPaths } from '../hooks/useInternalNav';
+import {
+  A,
+  DevModeGate,
+  Icon,
+  InternalPaths,
+  LanguageDropdown,
+  useI18N,
+} from 'lwt-ui-kit';
 import { PLUGINS } from '../plugins';
 import { getGoogleSheets } from '../utils/parsers/getGoogleSheets';
 

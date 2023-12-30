@@ -63,6 +63,7 @@ export class DataQuery extends Query<DataState> {
   public languages = this.select("languages");
   // TODO use these
   public languageHashmap = DataQuery.makeHash(this.languages, "LgID");
+  public languageHashmapByName = DataQuery.makeHash(this.languages, "LgName");
 
   public sentences = this.select("sentences");
   public sentenceHashmap = DataQuery.makeHash(this.sentences, "SeID");
@@ -78,21 +79,29 @@ export class DataQuery extends Query<DataState> {
   public textitems = this.select("textitems");
 
   public texts = this.select("texts");
-  public textsHashmapByLanguage = DataQuery.makeCountHash(this.texts, "TxLgID");
+  public textsCountmapByLanguage = DataQuery.makeCountHash(
+    this.texts,
+    "TxLgID"
+  );
+  public textsHashmap = DataQuery.makeHash(this.texts, "TxID");
 
   public texttags = this.select("texttags");
 
   public words = this.select("words");
   public wordHashmapByID = DataQuery.makeHash(this.words, "WoID");
+  // TODO this isnt a unique key - lang&&lc is - maybe just string key?
   public wordHashmapByLC = DataQuery.makeHash(this.words, "WoTextLC");
-  public wordHashmapByLanguage = DataQuery.makeCountHash(this.words, "WoLgID");
+  public wordCountmapByLanguage = DataQuery.makeCountHash(this.words, "WoLgID");
 
   public wordtags = this.select("wordtags");
-  public wordTagHashmapByWord = DataQuery.makeCountHash(
+  public wordTagCountmapByWord = DataQuery.makeCountHash(
     this.wordtags,
     "WtWoID"
   );
-  public wordTagHashmapByTag = DataQuery.makeCountHash(this.wordtags, "WtTgID");
+  public wordTagCountmapByTag = DataQuery.makeCountHash(
+    this.wordtags,
+    "WtTgID"
+  );
   // TODO
   // public wordTagsHashmapByWord = DataQuery.makeHash(this.worta, 'WoTextLC');
 
@@ -143,6 +152,12 @@ export class DataQuery extends Query<DataState> {
         : val.currentlanguage
     )
   );
+  public activeLanguage = combineLatest([
+    this.activeLanguageID,
+    this.languageHashmap,
+  ]).pipe(
+    map(([activeID, langs]) => (activeID !== null ? langs[activeID] : null))
+  );
   public activeTextID = this.settings.pipe(
     map((val) =>
       val.currenttext === undefined || val.currenttext === null
@@ -151,19 +166,20 @@ export class DataQuery extends Query<DataState> {
         : val.currenttext
     )
   );
+
+  public activeText = combineLatest([
+    this.activeTextID,
+    this.textsHashmap,
+  ]).pipe(
+    map(([activeID, texts]) => (activeID !== null ? texts[activeID] : null))
+  );
+  public languageOfActiveText = combineLatest([
+    this.activeText,
+    this.languageHashmap,
+  ]).pipe(map(([text, langs]) => (text !== null ? langs[text.TxLgID] : null)));
+
   public uiLanguage: Observable<SuppportedI18NLanguages> = this.settings.pipe(
     map((val) => (val.uilanguage === undefined ? "English" : val.uilanguage))
-  );
-
-  // derived observables
-  public activeLanguage = combineLatest([
-    this.activeLanguageID,
-    this.languages,
-  ]).pipe(
-    map(
-      ([activeLanguageID, languages]) =>
-        languages.find((language) => language.LgID === activeLanguageID) || null
-    )
   );
 
   public activeWords = combineLatest([this.activeLanguageID, this.words]).pipe(
@@ -288,8 +304,9 @@ export class DataQuery extends Query<DataState> {
   // TODO not sure this is best pattern
   public textDetails: Observable<TextDetailRow[]> = combineLatest([
     this.textsForActiveLanguage,
+    this.languageHashmap,
   ]).pipe(
-    map(([textsForActiveLanguage]) =>
+    map(([textsForActiveLanguage, languageHashmap]) =>
       textsForActiveLanguage.map((text) => ({
         ...text,
         // TODO split
@@ -301,6 +318,7 @@ export class DataQuery extends Query<DataState> {
         // TODO
         unkPerc: 100,
         TxLgID: text.TxLgID,
+        TxLgName: languageHashmap[text.TxLgID].LgName,
         // unkPerc: Math.round(100*)
         // txttodowords = txttotalwords - txtworkedwords;
         // percentunknown = 0;
@@ -347,16 +365,9 @@ export class DataQuery extends Query<DataState> {
           }
           return prev;
         }, new Set<TKey>());
-
-        console.log("TEST123-HASHTEST");
         const hashmap = vals.reduce((prev, curr) => {
           const mutablePrev = prev;
-          console.log("TEST123-HASHCOUNT", {
-            prev,
-            entry: curr[key],
-            curr,
-            key,
-          });
+
           mutablePrev[curr[key]] = mutablePrev[curr[key]] + 1;
           return mutablePrev;
         }, Object.fromEntries([...hashKeys].map((key) => [key, 0])));
@@ -365,5 +376,38 @@ export class DataQuery extends Query<DataState> {
       // TODO no any
     ) as any;
   }
+
+  // TODO
+  // private static makeCompoundCountHash<
+  //   TKey extends string,
+  //   TBrand extends number | string,
+  //   TObj extends { [key in TKey]: TBrand }
+  // >(
+  //   observable: Observable<TObj[]>,
+  //   keys: TKey[]
+  // ): Observable<Record<TBrand, number>> {
+  //   return observable.pipe(
+  //     map((vals) => {
+  //       const hashKeys = vals.reduce((prev, curr) => {
+  //         const mutablePrev = prev;
+  //         // TODO no any
+  //         if (!mutablePrev.has(curr[keys] as any)) {
+  //           // TODO no any
+  //           mutablePrev.add(curr[keys] as any);
+  //           return mutablePrev;
+  //         }
+  //         return prev;
+  //       }, new Set<TKey>());
+  //       const hashmap = vals.reduce((prev, curr) => {
+  //         const mutablePrev = prev;
+
+  //         mutablePrev[curr[keys]] = mutablePrev[curr[keys]] + 1;
+  //         return mutablePrev;
+  //       }, Object.fromEntries([...hashKeys].map((key) => [key, 0])));
+  //       return hashmap;
+  //     })
+  //     // TODO no any
+  //   ) as any;
+  // }
 }
 export const dataQuery = new DataQuery(dataStore);

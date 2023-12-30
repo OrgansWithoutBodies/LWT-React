@@ -1,4 +1,4 @@
-import { Store } from "@datorama/akita";
+import { Store, StoreConfig } from "@datorama/akita";
 import {
   LWTContainer,
   PersistanceStrategyToken,
@@ -12,7 +12,7 @@ export interface DataState extends LWTData {
   notificationMessage: null | { txt: string };
 }
 
-// @StoreConfig({ name: "data" })
+@StoreConfig({ name: "data" })
 @injectable()
 export class DataStore extends Store<DataState> {
   public persistanceHandles: PersistenceHandles;
@@ -35,6 +35,7 @@ export class DataStore extends Store<DataState> {
 // TODO this is super flimsy - since we conditionally import in lwt-build we need to wait for the promise to resolve before
 // container registrations are loaded...this just waits the same length since it imports again....
 await import("lwt-persist");
+await import("lwt-build");
 export const dataStore = LWTContainer.resolve(DataStore);
 /**
  *

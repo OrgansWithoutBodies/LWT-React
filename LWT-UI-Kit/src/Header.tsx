@@ -1,5 +1,5 @@
 import { AppVariables } from "lwt-build";
-import { I18NLanguages, UIString } from "lwt-i18n";
+import { I18NLanguages, SuppportedI18NLanguages, UIString } from "lwt-i18n";
 import { LanguagesID, TextsID } from "lwt-schemas";
 import { dataService, useData } from "lwt-state";
 import { useLocation } from "react-router-dom";
@@ -65,14 +65,17 @@ export function Header({
           }}
         >
           <option disabled>[Menu]</option>
-          {Object.keys(headerValues).map((key) => (
-            <option
-              value={headerValues[key]}
-              selected={location.pathname === `/${headerValues[key]}`}
-            >
-              {t(key)}
-            </option>
-          ))}
+          {Object.keys(headerValues).map((key) => {
+            const headerKey = key as keyof typeof headerValues;
+            return (
+              <option
+                value={headerValues[headerKey]}
+                selected={location.pathname === `/${headerValues[headerKey]}`}
+              >
+                {t(headerKey)}
+              </option>
+            );
+          })}
         </select>
         {readerProps && (
           <>
@@ -80,13 +83,13 @@ export function Header({
             <A href={`/do_text?start=${readerProps.prevTextID}`} target="_top">
               <Icon
                 src="navigation-180-button"
-                title={`Previous Text: ${readerProps.prevTextString}`}
+                title={`Previous Text: ${readerProps.prevTextString}` as any}
               />
             </A>
             <A href={`/do_text?start=${readerProps.nextTextID}`} target="_top">
               <Icon
                 src="navigation-000-button"
-                title={`Next Text: ${readerProps.nextTextString}`}
+                title={`Next Text: ${readerProps.nextTextString}` as any}
               />
             </A>
             &nbsp; | &nbsp;
@@ -103,7 +106,8 @@ export function Header({
             </A>
             &nbsp; | &nbsp;
             <A
-              href={`/new_word?text=${readerProps.textID}&lang=${readerProps.langID}`}
+              // onClick={()=>{setNewWord}}
+              // href={`/new_word?text=${readerProps.textID}&lang=${readerProps.langID}`}
               target="ro"
             >
               <Icon src="sticky-note--plus" title="New Term" />
@@ -130,7 +134,9 @@ export function Header({
       <DevModeGate>
         <I18N i="UI Language" />:{" "}
         <select
-          onChange={({ target: { value } }) => dataService.setUILanguage(value)}
+          onChange={({ target: { value } }) =>
+            dataService.setUILanguage(value as SuppportedI18NLanguages)
+          }
         >
           {I18NLanguages.map((lang) => (
             <option value={lang} selected={settings.uilanguage === lang}>

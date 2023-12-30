@@ -1,6 +1,6 @@
+import { TRefMap } from "lwt-forms";
 import { StrengthMapNumericalKey, Word } from "lwt-schemas";
 import { useEffect, useState } from "react";
-import { TRefMap } from "../forms/Forms";
 
 /**
  *
@@ -19,7 +19,7 @@ export function StatusRadioButtons<TEntryType extends Pick<Word, "WoStatus">>({
   const setRef = (event: React.ChangeEvent<HTMLInputElement>) => {
     refMap.WoStatus.current = event.target;
     setcurrentStatus(
-      Number.parseInt(refMap.WoStatus.current.value as Word["WoStatus"])
+      Number.parseInt(refMap.WoStatus.current.value) as Word["WoStatus"]
     );
   };
   useEffect(() => {

@@ -1,19 +1,20 @@
-import { check_dupl_lang } from 'lwt-common';
 import { TRefMap } from 'lwt-forms';
-import { Persistable, TextSize } from 'lwt-schemas';
+import { LanguageValidatorNoID, Persistable, TextSize } from 'lwt-schemas';
 import { dataService, languageNoIDPreValidateMap } from 'lwt-state';
 import {
+  A,
   EntryRow,
   GetLanguagessizeSelectoptions,
   Header,
   Icon,
   SelectBoolean,
+  useCheckLangDupl,
+  useFormInput,
+  useI18N,
+  useInternalNavigate,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
 import Modal from 'react-modal';
-import { LanguageValidatorNoID } from '../../data/validators';
-import { useFormInput } from '../../hooks/useFormInput';
-import { useInternalNavigate } from '../../hooks/useInternalNav';
 import { PluginEntries } from '../../plugins/PluginEntries';
 import NewLanguageWizard from './Wizard.component';
 
@@ -24,14 +25,17 @@ export function NewLanguage() {
   const validator = LanguageValidatorNoID;
 
   const defaultLgForm = {
+    LgSplitEachChar: 0,
+    LgRemoveSpaces: 0,
+    LgRightToLeft: 0,
     LgRegexpWordCharacters: 'a-zA-ZÀ-ÖØ-öø-ȳ',
     LgExportTemplate: 'y\tt\n',
     LgExceptionsSplitSentences: 'Mr.|Dr.|[A-Z].|Vd.|Vds.',
     LgRegexpSplitSentences: '.!?:;"',
     LgGoogleTranslateURI:
-      '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
+      '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###' as any,
     LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
-  };
+  } as const;
   const {
     refMap,
     Input: LgInput,
@@ -40,14 +44,17 @@ export function NewLanguage() {
     validator,
     entry: defaultLgForm,
   });
+  const check_dupl_lang = useCheckLangDupl();
+
+  const t = useI18N();
   return (
     <>
       <Header title="My Languages" />
       <h4>
-        New Language
-        <a target="_blank" href="info#howtolang">
+        {t('New Language')}
+        <A target="_blank" href="/info#howtolang">
           <Icon src="question-frame" title="Help" />
-        </a>
+        </A>
       </h4>
       <form>
         <table className="tab1" cellSpacing={0} cellPadding={5}>
@@ -69,16 +76,15 @@ export function NewLanguage() {
                     setWizardOpen(true);
                   }}
                 >
-                  <Icon src="arrow-000-medium" title={'->' as any} />
-                  <b>Language Settings Wizard</b>
-                  <Icon src="arrow-180-medium" title={'<-' as any} />
+                  <Icon src="arrow-000-medium" title={'->'} />
+                  <b>{t('Language Settings Wizard')}</b>
+                  <Icon src="arrow-180-medium" title={'<-'} />
                 </span>
                 <br />
                 <span className="smallgray">
-                  Select your native (L1) and study (L2) languages, and let the
-                  wizard set all marked language settings!
-                  <br />
-                  (You can adjust the settings afterwards.)
+                  {t(
+                    'Select your native (L1) and study (L2) languages, and let the wizard set all marked language settings!\n(You can adjust the settings afterwards.)'
+                  )}{' '}
                 </span>
               </td>
             </tr>
@@ -198,9 +204,9 @@ export function NewLanguage() {
               <SelectBoolean
                 refMap={refMap}
                 entryKey={'LgSplitEachChar'}
-                entry={{ LgSplitEachChar: 0 }}
+                entry={defaultLgForm}
               />
-              (e.g. for Chinese, Japanese, etc.)
+              {t('(e.g. for Chinese, Japanese, etc.)')}
             </EntryRow>
             <EntryRow
               headerClasses={['backlightyellow']}
@@ -210,9 +216,9 @@ export function NewLanguage() {
                 <SelectBoolean
                   refMap={refMap}
                   entryKey={'LgRemoveSpaces'}
-                  entry={{ LgRemoveSpaces: 0 }}
+                  entry={defaultLgForm}
                 />
-                (e.g. for Chinese, Japanese, etc.)
+                {t('(e.g. for Chinese, Japanese, etc.)')}
               </>
             </EntryRow>
             <EntryRow
@@ -223,9 +229,9 @@ export function NewLanguage() {
                 <SelectBoolean
                   refMap={refMap}
                   entryKey={'LgRightToLeft'}
-                  entry={{ LgRightToLeft: 0 }}
+                  entry={defaultLgForm}
                 />
-                (e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)
+                {t('(e.g. for Arabic, Hebrew, Farsi, Urdu, etc.)')}
               </>
             </EntryRow>
             <EntryRow
@@ -260,17 +266,17 @@ export function NewLanguage() {
                   name="op"
                   value="Save"
                   onClick={() => {
-                    check_dupl_lang();
-
-                    {
-                      /* TODO */
-                    }
-                    {
-                      /* check_dupl_lang(0) */
-                    }
-                    onSubmit(languageNoIDPreValidateMap, (value) => {
-                      dataService.addLanguage(value);
-                      navigator('/edit_languages');
+                    onSubmit(languageNoIDPreValidateMap, (value, refMap) => {
+                      if (
+                        // TODO dont clear if this returns false
+                        check_dupl_lang(
+                          { LgID: null, LgName: value.LgName },
+                          () => refMap.LgName.current.focus()
+                        )
+                      ) {
+                        dataService.addLanguage(value);
+                        navigator('/edit_languages');
+                      }
                     });
                   }}
                 />
@@ -279,19 +285,19 @@ export function NewLanguage() {
           </tbody>
         </table>
         <p className="smallgray">
-          <b>Important:</b>
+          <b>{t('Important')}:</b>
           <br />
           The placeholders "••" for the from/sl and dest/tl language codes in
           the URIs must be <b>replaced</b> by the actual source and target
           language codes!
           <br />
-          <a href="info#howtolang" target="_blank">
+          <A href="/info#howtolang" target="_blank">
             Please read the documentation
-          </a>
+          </A>
           . Languages with a <b>non-Latin alphabet need special attention</b>,
-          <a href="info#langsetup" target="_blank">
+          <A href="/info#langsetup" target="_blank">
             see also here
-          </a>
+          </A>
           .
         </p>
       </form>

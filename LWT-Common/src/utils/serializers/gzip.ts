@@ -1,5 +1,9 @@
-import { deflate } from "pako";
-
+import { deflate, inflate } from "pako";
+export function unGzString(val: Uint8Array): string {
+  return inflate(val, {
+    to: "string",
+  });
+}
 /**
  *
  * @param val
@@ -12,6 +16,13 @@ export function gzipString(val: string): Uint8Array {
  *
  * @param val
  */
-export function objectToGzUInt8(val: object): Uint8Array {
-  return deflate(JSON.stringify(val));
+export function gzipObject(val: object): Uint8Array {
+  return gzipString(JSON.stringify(val));
+}
+/**
+ *
+ * @param val
+ */
+export function unGzObject(val: Uint8Array): object {
+  return JSON.parse(unGzString(val));
 }

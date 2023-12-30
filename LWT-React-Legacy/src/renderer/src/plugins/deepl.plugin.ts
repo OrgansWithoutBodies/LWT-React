@@ -48,14 +48,14 @@ export const DeeplPlugin: Plugin<string, DeeplSourceKeys, DeeplTargetKeys> = {
   entryLines: {
     settings: {
       'plugin-deepl:auth-key': {
-        headerText: 'DeepL Auth\nKey',
+        headerText: 'DeepL Auth\nKey' as any,
         headerDir: 'center',
         child: DeepLSettingEntryLine,
       },
     },
     languages: {
       LgDeeplKey: {
-        headerText: 'DeepL Key',
+        headerText: 'DeepL Key' as any,
         child: DeepLLanguageEntryLine,
       },
     },
@@ -63,6 +63,7 @@ export const DeeplPlugin: Plugin<string, DeeplSourceKeys, DeeplTargetKeys> = {
 
   api: {
     apiName: 'DeepL',
+    whatsRetrievedFromAPISingular: 'translation',
     apiHomePage: 'https://deepl.com',
     getFromAPI: async ({ targetKey, sourceKey, word, apiKey }) => {
       // TODO auth
