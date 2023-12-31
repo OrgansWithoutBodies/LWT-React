@@ -70,7 +70,9 @@ export function ResizePage({
           }
         >
           {options.map((val) => (
-            <option value={val}>{val}</option>
+            <option key={val} value={val}>
+              {val}
+            </option>
           ))}
         </select>
       ) : (

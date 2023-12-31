@@ -15,10 +15,10 @@ import {
   Header,
   Icon,
   useInternalNavigate,
+  useThemeColors,
+  useUpdateActiveText,
   useUpdateParams,
 } from 'lwt-ui-kit';
-import { useThemeColors } from '../../hooks/useThemeColors';
-import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { changeImprAnnRadio, changeImprAnnText } from '../IO/CheckForm';
 import { AnnPlcmnt, AnnType } from './Annotation.types';
 /**
@@ -44,7 +44,7 @@ export function PrintText({
     'words',
     'wordHashmapByLC',
   ]);
-  useUpdateActiveText({ textID });
+  useUpdateActiveText({ txID: textID });
 
   const paramUpdater = useUpdateParams();
   const navigator = useInternalNavigate();
@@ -429,7 +429,7 @@ export function GetWordstatusSelectoptions({
       ).map((n) => {
         const status = StrengthMapNumericalKey[n];
         return (
-          <option value={n}>
+          <option key={n} value={n}>
             {status['name']} [{status['abbr']}]
           </option>
         );
@@ -500,7 +500,7 @@ export function do_ajax_edit_impr_text(pagepos: number, word) {
 
 // rr = "";
 // r = "";
-// r .= '<form action="" method="post"><table class="tab1" cellspacing="0" cellpadding="5"><tr>';
+// r .= '<form ><table class="tab1" cellspacing="0" cellpadding="5"><tr>';
 // r .= '<th class="th1 center">Text</th>';
 // r .= '<th class="th1 center">Dict.</th>';
 // r .= '<th class="th1 center">Edit<br />Term</th>';

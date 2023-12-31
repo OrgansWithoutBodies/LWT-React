@@ -7,32 +7,47 @@ export function Icon({
   src: iconName,
   title,
   alt,
-  translateTitle = true,
+  dontTranslate = false,
   ...rest
-}: {
-  translateTitle?: boolean;
-  src: (typeof IconNameMap)[number];
-  title?: UIString | (typeof NonTranslatedStrings)[number];
-  alt?: UIString;
-} & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
+}: (
+  | {
+      dontTranslate?: boolean;
+      src: (typeof IconNameMap)[number];
+      title?: UIString | (typeof NonTranslatedStrings)[number];
+      alt?: UIString;
+    }
+  | {
+      dontTranslate: true;
+      src: (typeof IconNameMap)[number];
+      title?: string;
+      alt?: string;
+    }
+) &
+  ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
   const iconURI = `icn/${iconName}.png`;
-  const t = translateTitle
-    ? useI18N()
-    : (val: UIString) => {
+  const t = dontTranslate
+    ? (val: string) => {
         return val;
-      };
+      }
+    : useI18N();
   const titleString = title
     ? // TODO why cast necessary? types overlap
       NonTranslatedStrings.includes(title as any)
       ? title
       : t(title as UIString)
     : "";
+  const altString = alt
+    ? // TODO why cast necessary? types overlap
+      NonTranslatedStrings.includes(alt as any)
+      ? alt
+      : t(alt as UIString)
+    : "";
   return (
     <img
       {...rest}
       src={iconURI}
       // automatically add alt text if title is specified but no alt
-      alt={alt === undefined ? titleString : t(alt)}
+      alt={alt === undefined ? titleString : altString}
       title={titleString}
     />
   );

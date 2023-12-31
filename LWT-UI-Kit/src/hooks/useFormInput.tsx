@@ -91,10 +91,14 @@ export function useFormInput<
             refMap={refMap}
             formErrors={formErrors}
             fixedEntry={
-              entry && args.fixed && entry[args.entryKey] ? entry : undefined
+              entry && args.fixed && entry[args.entryKey] !== undefined
+                ? entry
+                : undefined
             }
             defaultEntry={
-              entry && args.default && entry[args.entryKey] ? entry : undefined
+              entry && args.default && entry[args.entryKey] !== undefined
+                ? entry
+                : undefined
             }
           />
         );

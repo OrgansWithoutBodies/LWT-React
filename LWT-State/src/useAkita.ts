@@ -1,4 +1,4 @@
-import { Query } from "@datorama/akita";
+import type { Query } from "@datorama/akita";
 import { pick } from "rambdax";
 import { Observable, ObservedValueOf } from "rxjs";
 

@@ -1,5 +1,6 @@
 export enum PersistanceStrategy {
   LocalStorage,
+  // GZippedLocalStorage,
   // TODO
   // IndexedDB,
   RestAPI,

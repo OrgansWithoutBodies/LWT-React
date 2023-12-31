@@ -34,7 +34,16 @@ function fillAnkiTemplateForCard({
   taglist,
   sent1,
   sent2,
-}: TermExportRow & { sent1: string; sent2: string }) {
+}: Pick<
+  TermExportRow,
+  | "LgRightToLeft"
+  | "WoText"
+  | "WoTranslation"
+  | "WoRomanization"
+  | "LgName"
+  | "WoID"
+  | "taglist"
+> & { sent1: string; sent2: string }) {
   const wrap = (val: string) => wrapRTL(val, LgRightToLeft);
   return `${wrap(replaceTabsWithNewLine(WoText))}\t${replaceTabsWithNewLine(
     WoTranslation

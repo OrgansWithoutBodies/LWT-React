@@ -1,7 +1,6 @@
 import { useData } from 'lwt-state';
-import { useAnimation } from 'lwt-ui-kit';
+import { useAnimation, useCountdown } from 'lwt-ui-kit';
 import React from 'react';
-import { useCountdown } from './hooks/useTimer';
 
 export function NotificationMessage(): React.ReactNode {
   const [{ notificationMessage }] = useData(['notificationMessage']);

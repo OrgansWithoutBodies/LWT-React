@@ -341,6 +341,8 @@ export function onTextKeydown(
     ann: ann,
     onSetAudioPosition,
     ADDFILTER,
+    onSetKWordMarked,
+    onSetUWordMarked,
   }: {
     ann: string;
     text: Pick<Text, 'TxID'>;
@@ -350,6 +352,8 @@ export function onTextKeydown(
     onSetEditWord: (params: EditWordParams) => void;
     onSetAudioPosition: (params: number) => void;
     onSetShowingWord: (params: Pick<Word, 'WoID'> & { ann: string }) => void;
+    onSetKWordMarked: (val: boolean) => void;
+    onSetUWordMarked: (val: boolean) => void;
     ADDFILTER: number;
   }
 ) {
@@ -360,8 +364,8 @@ export function onTextKeydown(
     TEXTPOS = -1;
     // TODO
     // onEscape()
-    $('span.uwordmarked').removeClass('uwordmarked');
-    $('span.kwordmarked').removeClass('kwordmarked');
+    onSetKWordMarked(false);
+    onSetUWordMarked(false);
     cClick();
     return false;
   }
@@ -370,11 +374,12 @@ export function onTextKeydown(
     // return = edit next unknown word
     // TODO
     // onReturn()
-    $('span.uwordmarked').removeClass('uwordmarked');
+    onSetUWordMarked(false);
     const unknownwordlist = $('span.status0.word:not(.hide):first');
     if (unknownwordlist.size() === 0) return false;
     window.scrollTo({ axis: 'y', offset: -150 });
-    unknownwordlist.addClass('uwordmarked').click();
+    onSetUWordMarked(true);
+    // TODO .click()
     cClick();
     return false;
   }
@@ -394,20 +399,21 @@ export function onTextKeydown(
   // the following only for a non-zero known words list
   if (e.which === 36) {
     // home : known word navigation -> first
-    $('span.kwordmarked').removeClass('kwordmarked');
+    onSetKWordMarked(false);
     TEXTPOS = 0;
     curr = knownwordlist.eq(TEXTPOS);
-    curr.addClass('kwordmarked');
+    onSetKWordMarked(true);
     window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
     return false;
   }
   if (e.which === 35) {
     // end : known word navigation -> last
-    $('span.kwordmarked').removeClass('kwordmarked');
+    onSetKWordMarked(false);
     TEXTPOS = l_knownwordlist - 1;
     curr = knownwordlist.eq(TEXTPOS);
-    curr.addClass('kwordmarked');
+    // TODO only curr
+    onSetKWordMarked(true);
     window.scrollTo(curr, { axis: 'y', offset: -150 });
     let ann = '';
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
@@ -433,7 +439,7 @@ export function onTextKeydown(
     // TEXTPOS--;
     // if (TEXTPOS < 0) TEXTPOS = l_knownwordlist - 1;
     curr = knownwordlist.eq(TEXTPOS);
-    curr.addClass('kwordmarked');
+    onSetKWordMarked(true);
     // TODO scrollTo
     window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
@@ -458,7 +464,8 @@ export function onTextKeydown(
     // TEXTPOS++;
     // if (TEXTPOS >= l_knownwordlist) TEXTPOS = 0;
     curr = knownwordlist.eq(TEXTPOS);
-    curr.addClass('kwordmarked');
+    onSetKWordMarked(true);
+
     window.scrollTo(curr, { axis: 'y', offset: -150 });
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
 

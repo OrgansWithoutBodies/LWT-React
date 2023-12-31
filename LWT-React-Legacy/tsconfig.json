@@ -22,6 +22,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "../LWT-UI-Kit/src/FloatingMenu.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,13 +1,13 @@
 import {
   cleanText,
   getDirTag,
-  remove_spaces,
+  removeSpaces,
   replaceTabsWithNewLine,
   splitCheckText,
 } from 'lwt-common';
 import { CheckTextsValidator, Language, TextsID } from 'lwt-schemas';
 import { parseNumMap, useData } from 'lwt-state';
-import { Header, RequiredLineButton, useFormInput } from 'lwt-ui-kit';
+import { Header, RequiredLineButton, useFormInput, useI18N } from 'lwt-ui-kit';
 import { useState } from 'react';
 import { NavigateButton } from '../Statistics.component';
 
@@ -37,12 +37,13 @@ export function CheckText({
   const { LanguageSelectInput, onSubmit, TextArea } = useFormInput({
     validator,
   });
+  const t = useI18N();
   return (
     <>
       <Header title="Check Text" />
 
       <p>&nbsp;</p>
-      <form action="/check_text" method="post">
+      <form>
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -57,14 +58,7 @@ export function CheckText({
             </tr>
             <tr>
               <td className="td1 right">
-                Text:
-                <br />
-                <br />
-                (max.
-                <br />
-                65,000
-                <br />
-                bytes)
+                {t('Text:\n\n(max.\n65,000\nbytes)')}
               </td>
               <td className="td1">
                 <TextArea
@@ -147,7 +141,7 @@ export function CheckTextSentences({
   language: Language;
   s: string;
 }) {
-  const { LgRemoveSpaces: removeSpaces } = language;
+  const { LgRemoveSpaces } = language;
   // const wordList = [];
   const [{ words }] = useData(['words']);
   const {
@@ -179,7 +173,8 @@ export function CheckTextSentences({
           {textlines.map(
             (value) => (
               <li {...getDirTag(language)}>
-                {remove_spaces(value.SeText, removeSpaces)}
+                {/* TODO */}
+                {removeSpaces(value.SeText, LgRemoveSpaces)}
               </li>
             )
             // lineWords[sentNumber] = preg_split('/([^' . termchar . ']{1,})/u', value, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -206,7 +201,8 @@ export function CheckTextSentences({
           )}
         </ol>
         <h4>
-          Word List <span className="red2">(red = already saved)</span>
+          {t('Word List')}{' '}
+          <span className="red2">({t('red = already saved')})</span>
         </h4>
         <ul>
           {/* ksort(wordList); */}

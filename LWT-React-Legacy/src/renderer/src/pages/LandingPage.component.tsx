@@ -121,14 +121,14 @@ export function LandingPage() {
         </div>
 
         <ul>
-          {linkLayout.map((layoutLine) =>
+          {linkLayout.map((layoutLine, ii) =>
             layoutLine === null ? (
-              <>
+              <p key={`null-${ii}`}>
                 <br />
                 <br />
-              </>
+              </p>
             ) : (
-              <li>
+              <li key={layoutLine.label}>
                 <A href={layoutLine.link}>{layoutLine.label}</A>
               </li>
             )

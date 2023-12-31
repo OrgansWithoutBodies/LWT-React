@@ -1,6 +1,7 @@
 import { SettingsObjValidator } from 'lwt-schemas';
 import { dataService, settingsPrevalidateMap, useData } from 'lwt-state';
 import {
+  GetSentenceCountSelectoptions,
   Header,
   RequiredLineButton,
   SelectBoolean,
@@ -177,6 +178,7 @@ const DEFAULT_SETTINGS = {
   'set-archivedtexts-per-page': 100,
   'set-terms-per-page': 100,
   'set-tags-per-page': 100,
+  'set-text-visit-statuses-via-key': '',
 };
 
 export function SettingsComponent(): JSX.Element {
@@ -191,13 +193,26 @@ export function SettingsComponent(): JSX.Element {
     onSubmit,
   } = useFormInput({
     validator,
-    entry: { ...DEFAULT_SETTINGS, ...settings },
+    entry: {
+      ...DEFAULT_SETTINGS,
+      ...Object.fromEntries(
+        Object.entries(settings).filter(([_, val]) => val !== undefined)
+      ),
+    },
   });
+  console.log(
+    {
+      ...DEFAULT_SETTINGS,
+      ...Object.fromEntries(
+        Object.entries(settings).filter(([_, val]) => val !== undefined)
+      ),
+    }['set-similar-terms-count']
+  );
   return (
     <>
       <Header title="Settings/Preferences" />
       <p>&nbsp;</p>
-      <form action="/settings" method="post">
+      <form>
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <tbody>
             <tr>
@@ -489,11 +504,9 @@ export function SettingsComponent(): JSX.Element {
                   ref={refMap['set-test-sentence-count']}
                   className="notempty"
                 >
-                  <option value="1" selected>
-                    Just ONE
-                  </option>
-                  <option value="2">TWO (+previous)</option>
-                  <option value="3">THREE (+previous,+next)</option>
+                  <GetSentenceCountSelectoptions
+                    selected={settings['set-test-sentence-count']}
+                  />
                 </select>
               </td>
               <td className="td1 center">
@@ -516,7 +529,11 @@ export function SettingsComponent(): JSX.Element {
                   name="set-term-sentence-count"
                   ref={refMap['set-term-sentence-count']}
                   className="notempty"
-                ></select>
+                >
+                  <GetSentenceCountSelectoptions
+                    selected={settings['set-term-sentence-count']}
+                  />
+                </select>
               </td>
               <td className="td1 center">
                 <RequiredLineButton />
@@ -536,6 +553,7 @@ export function SettingsComponent(): JSX.Element {
               </td>
               <td className="td1 center">
                 <StInput
+                  type="text"
                   className="notempty zeroposintnumber right"
                   entryKey="set-similar-terms-count"
                   errorName="Similar terms to be displayed while adding/editing a term"

@@ -1,7 +1,16 @@
 import { confirmDelete, getDirTag } from 'lwt-common';
-import { Tags2ID, Text, TextsID, TextsWithTagsValidator } from 'lwt-schemas';
+import {
+  Tags2ID,
+  Text,
+  TextItem,
+  TextTag,
+  TextsID,
+  TextsWithTagsValidator,
+  Word,
+} from 'lwt-schemas';
 import {
   TextDetailRow,
+  calculateWordCounts,
   dataService,
   textPrevalidateMap,
   useData,
@@ -22,12 +31,10 @@ import {
   useI18N,
   useInternalNavigate,
   usePager,
-  useUpdateParams,
+  useSelection,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { useSelection } from '../../hooks/useSelection';
 import { filterTags } from '../../utils/filterTags';
-import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { SelectMediaPath } from '../SelectMediaPath';
 import { TextSorting, buildSortByValue } from '../Sorting';
 import {
@@ -97,7 +104,7 @@ export function TextMultiActions({
   onSelectNone: () => void;
 }) {
   return (
-    <form name="form1" action="#">
+    <form name="form1">
       <GenericMultiActions
         AllActions={null}
         onChangeAll={null}
@@ -122,7 +129,6 @@ export function TextMultiActions({
  *
  */
 function LibraryHeader({ sorting }: { sorting: TextSorting }): JSX.Element {
-  console.log('TEST123-library-header', sorting);
   const [{ activeLanguageID }] = useData(['activeLanguageID']);
   return (
     <thead>
@@ -205,17 +211,19 @@ function LibraryRow({
   text,
   checked,
   onChange,
-  textTags,
+  filterArgs,
 }: {
   text: TextDetailRow;
-  textTags: string[];
   checked: boolean;
+  filterArgs: FilterArgs;
   onChange: () => void;
 }): JSX.Element {
-  const [{ languages, activeLanguageID }] = useData([
+  const [{ languages, activeLanguageID, settings }] = useData([
     'languages',
     'activeLanguageID',
+    'settings',
   ]);
+  const showCounts = settings['set-show-text-word-counts'];
   const languageForLine = languages.find((lang) => lang.LgID === text.TxLgID);
   if (!languageForLine) {
     throw new Error('Invalid Language line');
@@ -239,7 +247,10 @@ function LibraryRow({
       </td>
       <td style={{ whiteSpace: 'nowrap' }} className="td1 center">
         &nbsp;
-        <A href={`/do_text?start=${text.TxID}`}>
+        <A
+          // TODO better way than passing as params
+          href={`/do_text?start=${text.TxID}&query=${filterArgs.query}&sorting=${filterArgs.sorting}&onlyAnn=${filterArgs.onlyAnn}&tag1=${filterArgs.tag1}&tag2=${filterArgs.tag2}&tag12=${filterArgs.tag12}`}
+        >
           <Icon src="book-open-bookmark" title="Read" />
         </A>
         &nbsp;
@@ -280,7 +291,9 @@ function LibraryRow({
       )}
       <td className="td1 center">
         {text.TxTitle}
-        <span className="smallgray2"> [{textTags.join(', ')}]</span>
+        {text.taglist && text.taglist.length > 0 && (
+          <span className="smallgray2"> [{text.taglist.join(', ')}]</span>
+        )}
         {text.TxAudioURI && <Icon src="speaker-volume" title="With Audio" />}
         {text.TxSourceURI && (
           <a href={text.TxSourceURI} target="_blank">
@@ -293,10 +306,59 @@ function LibraryRow({
           </A>
         )}
       </td>
-      <td className="td1 center">{text.totalWords}</td>
-      <td className="td1 center">{text.saved}</td>
-      <td className="td1 center">{text.unk}</td>
-      <td className="td1 center">{text.unkPerc}</td>
+      {/* TODO */}
+      {showCounts ? (
+        <>
+          <td className="td1 center">
+            <span title="Total">&nbsp;{text.totalWords}</span>
+          </td>
+          <td className="td1 center">
+            <span title="Saved" className="status4">
+              {/* ($txtworkedall > 0 ? '<a href="edit_words.php?page=1&amp;query=&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=&amp;text=' . $record['TxID'] . '">'  */}
+              &nbsp;{text.saved}&nbsp;
+              {/* </a> */}
+            </span>
+          </td>
+          <td className="td1 center">
+            <span title="Unknown" className="status0">
+              &nbsp;{text.unk}&nbsp;
+            </span>
+          </td>
+          <td className="td1 center">
+            <span title="Unknown (%)">{text.unkPerc}</span>
+          </td>
+        </>
+      ) : (
+        <>
+          <td className="td1 center">
+            <span id={`total-${text.TxID}`}></span>
+          </td>
+          <td className="td1 center">
+            <span data_id={text.TxID} id={`saved-${text.TxID}`}>
+              <span
+                className="click"
+                onClick={() => {
+                  // TODO
+                  do_ajax_word_counts();
+
+                  // $r[] = '<span title="Total">&nbsp;' . $txttotalwords . '&nbsp;</span>';
+                  // $r[] = '<span title="Saved" class="status4">&nbsp;' . ($txtworkedall > 0 ? '<a href="edit_words.php?page=1&amp;query=&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=&amp;text=' . $id . '">' . $txtworkedwords . '+' . $txtworkedexpr . '</a>' : '0') . '&nbsp;';
+                  // $r[] = '<span title="Unknown" class="status0">&nbsp;' . $txttodowords . '&nbsp;</span>';
+                  // $r[] = '<span title="Unknown (%)">' . $percentunknown . '</span></td>';
+                }}
+              >
+                <Icon src="lightning" title="View Word Counts" />
+              </span>
+            </span>
+          </td>
+          <td className="td1 center">
+            <span id={`todo-${text.TxID}`}></span>
+          </td>
+          <td className="td1 center">
+            <span id={`todop-${text.TxID}`}></span>
+          </td>
+        </>
+      )}
     </tr>
   );
 }
@@ -311,13 +373,8 @@ export function Library({
   tag12 = 0,
   tag1 = null,
   sorting = TextSorting['Oldest first'],
-}: {
+}: FilterArgs & {
   currentPage: number;
-  query: string | null;
-  tag2: Tags2ID | null;
-  tag1: Tags2ID | null;
-  tag12: 0 | 1;
-  sorting?: TextSorting;
 }) {
   const [{ textDetails, activeLanguage, texttags, tags2, settings }] = useData([
     'textDetails',
@@ -326,33 +383,30 @@ export function Library({
     'tags2',
     'settings',
   ]);
-  console.log({ textDetails, texttags, tags2 });
   const pageSize = settings['set-texts-per-page'] || 1;
   // TODO
   // const tags2ForLanguage=tags2.filter((val)=>val.)
-  const filteredTags = filterTags(texttags, tag1, tag2, tag12);
-  const filteredTextDetails = (textDetails || []).filter((textDetail) => {
-    // TODO query
-
-    const includesTag = filteredTags[textDetail.TxID] === true;
-    return includesTag;
+  const filteredSortedTextDetails = filterAndSortTexts({
+    texttags,
+    tag1,
+    tag2,
+    tag12,
+    textDetails,
+    sorting,
+    query,
   });
-  const filteredSortedTextDetails = filteredTextDetails.sort(
-    sortingMethod(sorting)
-  );
+  console.log('test123-lib', { filteredSortedTextDetails, tags2 });
   // TODO useFilter
   const { numPages, dataOnPage } = usePager(
     filteredSortedTextDetails || [],
     currentPage,
     pageSize
   );
-  const paramUpdater = useUpdateParams();
   const t = useI18N();
   const { selectedValues, onSelectAll, onSelectNone, checkboxPropsForEntry } =
     useSelection(textDetails || [], 'TxID');
-  const textTagLookup = buildTextTagLookup(tags2, texttags);
 
-  const recno = (filteredTextDetails || []).length;
+  const recno = (filteredSortedTextDetails || []).length;
   return (
     <>
       <Header
@@ -362,7 +416,7 @@ export function Library({
       />
       <p>
         <A href={`/edit_texts?new=${1}`}>
-          <Icon src="plus-button" title="New" /> New Text ...
+          <Icon src="plus-button" title="New" /> {t('New Text ...')}
         </A>
         &nbsp; | &nbsp;
         <A href="/long_text_import">
@@ -411,8 +465,17 @@ export function Library({
             {dataOnPage &&
               dataOnPage.map((text) => (
                 <LibraryRow
+                  filterArgs={{
+                    query,
+                    tag1,
+                    tag12,
+                    tag2,
+                    sorting,
+                    // TODO
+                    onlyAnn: false,
+                  }}
+                  key={`library-row-${text.TxID}`}
                   text={text}
-                  textTags={textTagLookup[text.TxID]}
                   {...checkboxPropsForEntry(text)}
                 />
               ))}
@@ -429,6 +492,85 @@ export function Library({
       </>
     </>
   );
+}
+
+type TagFilterArgs = {
+  tag1: Tags2ID | null;
+  tag2: Tags2ID | null;
+  tag12: 0 | 1;
+};
+
+type SortFilterArgs = { sorting: TextSorting };
+type QueryFilterArgs = { query: string | null };
+export type FilterArgs = SortFilterArgs &
+  QueryFilterArgs &
+  TagFilterArgs & {
+    onlyAnn?: boolean;
+  };
+
+/**
+ *
+ */
+export function filterAndSortTexts({
+  texttags,
+  tag1,
+  tag2,
+  tag12,
+  textDetails,
+  sorting,
+  query,
+  onlyAnn = false,
+}: FilterArgs & {
+  texttags: TextTag[];
+  textDetails: TextDetailRow[];
+}) {
+  const filteredTags = filterTags({ tagIDs: texttags, tag1, tag2, tag12 });
+  const filteredTextDetails = (textDetails || []).filter((textDetail) => {
+    if (onlyAnn && textDetail.TxAnnotatedText === '') {
+      return false;
+    }
+    if (filterByQuery(query, [textDetail.TxTitle]) === false) {
+      return false;
+    }
+    const includesTag =
+      Object.keys(filteredTags).length === 0 ||
+      filteredTags[textDetail.TxID] === true;
+    return includesTag;
+  });
+  const filteredSortedTextDetails = filteredTextDetails.sort(
+    textSortingMethod(sorting)
+  );
+  return filteredSortedTextDetails;
+}
+
+/**
+ *
+ * @param query
+ * @param stringsToCheck
+ */
+export function filterByQuery(query: string | null, stringsToCheck: string[]) {
+  // Ignore if no query
+  if (query === null) {
+    return true;
+  }
+  let checking = true;
+  let i = 0;
+  // for each field to check
+  while (checking) {
+    // TODO account for *
+    // let walkingQueryString=true
+    // let i=0
+    // while(walkingQueryString){
+    //   query[]
+    // }
+    console.log(stringsToCheck[i], i, stringsToCheck.length);
+    if (stringsToCheck[i].toLowerCase().includes(query.toLowerCase())) {
+      return true;
+    }
+    i = i + 1;
+    checking = i < stringsToCheck.length;
+  }
+  return false;
 }
 
 /**
@@ -612,7 +754,7 @@ export function EditText({ chgID }: { chgID: TextsID }) {
     </>
   );
 }
-const sortingMethod = (
+const textSortingMethod = (
   sort: TextSorting
 ): ((termA: TextDetailRow, termB: TextDetailRow) => 1 | -1 | 0) => {
   switch (sort) {
@@ -651,3 +793,38 @@ const sortingMethod = (
       return buildSortByValue('totalWords', false);
   }
 };
+/**
+ *
+ * @param text
+ * @param textItems
+ * @param words
+ * @param onSetLoading
+ */
+function do_ajax_word_counts(
+  text: Text,
+  textItems: TextItem[],
+  words: Word[],
+  onSetLoading: (loading: boolean) => void,
+  setTotal: (vals: { $txttotalwords: number }) => void,
+  setSaved: (vals: {
+    $txtworkedall: number;
+    $percentunknown: number;
+    $txtworkedwords: number;
+    $txtworkedexpr: number;
+  }) => void,
+  setUnknown: (val: { $txttodowords: number }) => void,
+  setUnknownPerc: (val: { $percentunknown: number }) => void
+) {
+  $("span[id^='saved-']").each(function (i) {
+    onSetLoading(true);
+
+    const wordCounts = calculateWordCounts(text, textItems, words);
+
+    setTotal(wordCounts);
+    setSaved(wordCounts);
+    setUnknown(wordCounts);
+    setUnknownPerc(wordCounts);
+
+    onSetLoading(false);
+  });
+}

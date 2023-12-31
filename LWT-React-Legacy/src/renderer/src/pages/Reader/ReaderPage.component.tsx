@@ -1,7 +1,7 @@
 import {
   SetBoolHandler,
   getCurrentTimeAsString,
-  prepare_textdata_js,
+  prepareTextdataJs,
   strToClassName,
 } from 'lwt-common';
 import {
@@ -13,14 +13,21 @@ import {
   WordsID,
 } from 'lwt-schemas';
 import { dataService, useData } from 'lwt-state';
-import { AudioPlayer, FourFramePage, Header, Loader } from 'lwt-ui-kit';
+import {
+  AudioPlayer,
+  FourFramePage,
+  Header,
+  Loader,
+  useThemeColors,
+  useUpdateActiveText,
+} from 'lwt-ui-kit';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { useThemeColors } from '../../hooks/useThemeColors';
-import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { PLUGINS } from '../../plugins';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { TranslationAPI } from '../API/APITranslation.component';
 import { AddNewWordPane, EditWordPane } from '../Term/AddNewWordPane';
+import { usePreviousAndNextTextLinks } from '../Tester/Tester';
+import { FilterArgs } from '../Text/Library.component';
 import { TextToDoCount } from '../TextToDoCount';
 import { makeTooltipTitleObj } from '../readerTesterEventHandlers';
 import { Reader } from './Reader.component';
@@ -177,14 +184,17 @@ export type APITranslateTermParams =
  *
  */
 export function ReaderPage({
-  textID: textID,
+  txID: txID,
+  filterArgs,
 }: // onShowChanged,
 {
-  textID: TextsID;
+  txID: TextsID;
+  filterArgs: FilterArgs;
+
   // onShowChanged: (args: { text: TextsID; mode: 0 | 1 }) => void;
 }) {
   console.log('TEST123-setting-READER-PAGE');
-  useUpdateActiveText({ textID });
+  useUpdateActiveText({ txID });
 
   const [{ texts }] = useData(['texts']);
 
@@ -221,7 +231,7 @@ export function ReaderPage({
 
   const [translateAPIParams, setTranslateAPIParams] =
     useState<APITranslateTermParams>(null);
-  const text = texts.find((text) => text.TxID === textID);
+  const text = texts.find((text) => text.TxID === txID);
   const activeText =
     activeWord === null
       ? null
@@ -257,6 +267,7 @@ export function ReaderPage({
           text={text}
           setShowAll={setShowAll}
           audioPlayerRef={audioPlayerRef}
+          filterArgs={filterArgs}
         />
       )}
       URFrame={() => (
@@ -290,7 +301,7 @@ export function ReaderPage({
       BLFrame={() => (
         <Reader
           showAll={showAll}
-          activeID={textID}
+          activeID={txID}
           setActiveWord={setActiveWord}
           activeWord={activeWord}
           setIFrameURL={setIFrameURL}
@@ -323,6 +334,9 @@ export enum Modality {
   'table' = 'table',
 }
 
+/**
+ *
+ */
 export function ReaderTranslatePane({
   translateAPIParams,
   iFrameURL,
@@ -369,27 +383,30 @@ export function ReaderTranslatePane({
     </div>
   );
 }
+/**
+ *
+ */
 export function ReaderHeader({
   text,
   setShowAll,
   audioPlayerRef,
+  filterArgs,
 }: {
+  filterArgs: FilterArgs;
   text: Text;
   setShowAll: SetBoolHandler;
   audioPlayerRef: MutableRefObject<HTMLAudioElement | null>;
 }) {
+  const prevNext = usePreviousAndNextTextLinks({
+    ...filterArgs,
+    textid: text.TxID,
+  });
   console.log('TEST123-AUDIOREF', audioPlayerRef.current, audioPlayerRef);
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <Header
         title={`READ ▶ ${text.TxTitle}` as any}
-        readerProps={{
-          // TODO getPreviousAndNextTextLinks
-          nextTextID: 'Test1',
-          prevTextString: 'test2',
-          langID: text.TxLgID,
-          textID: text.TxID,
-        }}
+        readerProps={{ ...prevNext, langID: text.TxLgID, textID: text.TxID }}
       />
       <table
         className="width99pc"
@@ -537,7 +554,7 @@ const onWellKnownTerm = ({
   // echo "<p>OK, you know this term well!</p>";
   const hex = strToClassName($wordlc);
   const title = makeTooltipTitleObj({
-    WoText: prepare_textdata_js(word),
+    WoText: prepareTextdataJs(word),
     WoTranslation: '*',
     WoStatus: 99,
   });

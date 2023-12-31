@@ -153,73 +153,6 @@ export function confirmDelete(): boolean {
 
 // // -------------------------------------------------------------
 
-// function getTextTitle(textid)
-// {
-// 	global tbpref;
-// 	text = get_first_value("select TxTitle as value from " . tbpref . "texts where TxID=" . textid);
-// 	if (!isset(text))
-// 		text = "?";
-// 	return text;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_tag_selectoptions(v, l)
-// {
-// 	global tbpref;
-// 	if (!isset(v))
-// 		v = '';
-// 	r = "<option value=""" . get_selected(v, '');
-// 	r += ">[Filter off]</option>";
-// 	if (l === '')
-// 		sql = "select TgID, TgText from " . tbpref . "words, " . tbpref . "tags, " . tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID group by TgID order by TgText";
-// 	else
-// 		sql = "select TgID, TgText from " . tbpref . "words, " . tbpref . "tags, " . tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID and WoLgID = " . l . " group by TgID order by TgText";
-// 	res = do_mysqli_query(sql);
-// 	cnt = 0;
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		d = record["TgText"];
-// 		cnt++;
-// 		r += "<option value="" . record["TgID"] . """ . get_selected(v, record["TgID"]) . ">" . tohtml(d) . "</option>";
-// 	}
-// 	mysqli_free_result(res);
-// 	if (cnt > 0) {
-// 		r += "<option disabled="disabled">--------</option>";
-// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function get_texttag_selectoptions(v, l)
-// {
-// 	global tbpref;
-// 	if (!isset(v))
-// 		v = '';
-// 	r = "<option value=""" . get_selected(v, '');
-// 	r += ">[Filter off]</option>";
-// 	if (l === '')
-// 		sql = "select T2ID, T2Text from " . tbpref . "texts, " . tbpref . "tags2, " . tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text";
-// 	else
-// 		sql = "select T2ID, T2Text from " . tbpref . "texts, " . tbpref . "tags2, " . tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID and TxLgID = " . l . " group by T2ID order by T2Text";
-// 	res = do_mysqli_query(sql);
-// 	cnt = 0;
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		d = record["T2Text"];
-// 		cnt++;
-// 		r += "<option value="" . record["T2ID"] . """ . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
-// 	}
-// 	mysqli_free_result(res);
-// 	if (cnt > 0) {
-// 		r += "<option disabled="disabled">--------</option>";
-// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 // TODO
 /**
  *
@@ -230,32 +163,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
   console.log(v, l);
   return "";
 }
-// function get_archivedtexttag_selectoptions(v, l)
-// {
-// 	global tbpref;
-// 	if (!isset(v))
-// 		v = '';
-// 	r = "<option value=""" . get_selected(v, '');
-// 	r += ">[Filter off]</option>";
-// 	if (l === '')
-// 		sql = "select T2ID, T2Text from " . tbpref . "archivedtexts, " . tbpref . "tags2, " . tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID group by T2ID order by T2Text";
-// 	else
-// 		sql = "select T2ID, T2Text from " . tbpref . "archivedtexts, " . tbpref . "tags2, " . tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID and AtLgID = " . l . " group by T2ID order by T2Text";
-// 	res = do_mysqli_query(sql);
-// 	cnt = 0;
-// 	while (record = mysqli_fetch_assoc(res)) {
-// 		d = record["T2Text"];
-// 		cnt++;
-// 		r += "<option value="" . record["T2ID"] . """ . get_selected(v, record["T2ID"]) . ">" . tohtml(d) . "</option>";
-// 	}
-// 	mysqli_free_result(res);
-// 	if (cnt > 0) {
-// 		r += "<option disabled="disabled">--------</option>";
-// 		r += "<option value="-1"" . get_selected(v, -1) . ">UNTAGGED</option>";
-// 	}
-// 	return r;
-// }
-// // -------------------------------------------------------------
+
 // function saveWordTags(wid)
 // {
 // 	global tbpref;
@@ -661,15 +569,7 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 			round(get_execution_time(), 5) . " secs</p>\n";
 // 	?></body></html><?php
 // }
-// // -------------------------------------------------------------
-// function echo_lwt_logo()
-// {
-// 	global tbpref;
-// 	pref = substr(tbpref, 0, -1);
-// 	if (pref === '')
-// 		pref = 'Default Table Set';
-// 	echo '<img class="lwtlogo" src="img/lwt_icon.png"  title="LWT - Current Table Set: ' . tohtml(pref) . '" alt="LWT - Current Table Set: ' . tohtml(pref) . '" />';
-// }
+
 // // -------------------------------------------------------------
 // function get_execution_time()
 // {
@@ -689,29 +589,6 @@ export function get_archivedtexttag_selectoptions(v: string, l: string) {
 // 		prefix[] = substr(row[0], 0, -9);
 // 	mysqli_free_result(res);
 // 	return prefix;
-// }
-
-// // -------------------------------------------------------------
-
-// function quickMenu()
-// {
-// 	?><select id="quickmenu" onchange="{const qm = document.getElementByID('quickmenu'); const val=qm.options[qm.selectedIndex].value; qm.selectedIndex=0; if (val !== '') { if (val === 'INFO') {top.location.href='info.htm';} else {top.location.href = val + '';}}}">
-// 	<option value="" selected="selected">[Menu]</option>
-// 	<option value="index">Home</option>
-// 	<option value="edit_texts">Texts</option>
-// 	<option value="edit_archivedtexts">Text Archive</option>
-// 	<option value="edit_texttags">Text Tags</option>
-// 	<option value="edit_languages">Languages</option>
-// 	<option value="edit_words">Terms</option>
-// 	<option value="edit_tags">Term Tags</option>
-// 	<option value="statistics">Statistics</option>
-// 	<option value="check_text">Text Check</option>
-// 	<option value="long_text_import">Long Text Import</option>
-// 	<option value="upload_words">Term Import</option>
-// 	<option value="backup_restore">Backup/Restore</option>
-// 	<option value="settings">Settings</option>
-// 	<option value="INFO">Help</option>
-// 	</select><?php
 // }
 
 // // -------------------------------------------------------------
@@ -747,11 +624,10 @@ export function remove_soft_hyphens(softHyphenString: string) {
 
 // // -------------------------------------------------------------
 
-// function replace_supp_unicode_planes_char(s)
-// {
-// 	return preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xE2\x96\x88", s);
-// 	/* U+2588 = UTF8: E2 96 88 = FULL BLOCK = ⬛︎  */
-// }
+export function replaceSuppUnicodePlanesChar(s: string) {
+  return s.replace(new RegExp("[\\x{10000}-\\x{10FFFF}]", "u"), "\xE2\x96\x88");
+  /* U+2588 = UTF8: E2 96 88 = FULL BLOCK = ⬛︎  */
+}
 
 // // -------------------------------------------------------------
 
@@ -762,7 +638,7 @@ export function remove_soft_hyphens(softHyphenString: string) {
 
 // // -------------------------------------------------------------
 // TODO defunct? just escapes chars
-export function prepare_textdata_js(s: string) {
+export function prepareTextdataJs(s: string) {
   return s;
   // s = (s);
   // if (s === null)
@@ -787,35 +663,35 @@ export function prepare_textdata_js(s: string) {
 
 // // -------------------------------------------------------------
 
-// function encodeURI(url)
-// {
-// 	reserved = array(
-// 		'%2D' => '-',
-// 		'%5F' => '_',
-// 		'%2E' => '.',
-// 		'%21' => '!',
-// 		'%2A' => '*',
-// 		'%27' => "'",
-// 		'%28' => '(',
-// 		'%29' => ')'
-// 	);
-// 	unescaped = array(
-// 		'%3B' => ';',
-// 		'%2C' => ',',
-// 		'%2F' => '/',
-// 		'%3F' => '?',
-// 		'%3A' => ':',
-// 		'%40' => '@',
-// 		'%26' => '&',
-// 		'%3D' => '=',
-// 		'%2B' => '+',
-// 		'%24' => '$'
-// 	);
-// 	score = array(
-// 		'%23' => '#'
-// 	);
-// 	return strtr(rawurlencode(url), array_merge(reserved, unescaped, score));
-// }
+export function encodeURI(url: string) {
+  const reserved = {
+    "%2D": "-",
+    "%5F": "_",
+    "%2E": ".",
+    "%21": "!",
+    "%2A": "*",
+    "%27": "'",
+    "%28": "(",
+    "%29": ")",
+  };
+  const unescaped = {
+    "%3B": ";",
+    "%2C": ",",
+    "%2F": "/",
+    "%3F": "?",
+    "%3A": ":",
+    "%40": "@",
+    "%26": "&",
+    "%3D": "=",
+    "%2B": "+",
+    "%24": "$",
+  };
+  const score = {
+    "%23": "#",
+  };
+  // TODO
+  return { url, maps: { ...reserved, ...unescaped, ...score } };
+}
 
 // // -------------------------------------------------------------
 
@@ -865,26 +741,16 @@ export function prepare_textdata_js(s: string) {
 
 // // -------------------------------------------------------------
 
-export function remove_spaces(s: string, remove: Language["LgRemoveSpaces"]) {
+export function removeSpaces(s: string, remove: Language["LgRemoveSpaces"]) {
   if (remove) return s.replace("/s{1,}/u", "");
   // '' enthält &#x200B;
   else return s;
 }
 
 // // -------------------------------------------------------------
-
-// function getreq(s)
-// {
-// 	if (isset($_REQUEST[s])) {
-// 		return trim($_REQUEST[s]);
-// 	} else
-// 		return '';
-// }
-
-// // -------------------------------------------------------------
 // TODO
 const preg_quote = (arg: string) => arg;
-export function get_sepas() {
+export function getSepas() {
   const sepa = preg_quote(
     // getSettingWithDefault("set-term-translation-delimiters"),
     "/"
@@ -998,58 +864,6 @@ export function get_sepas() {
 // 		result = (int) result;
 // 	return result;
 // }
-
-// // -------------------------------------------------------------
-
-// function validateTag(currenttag, currentlang)
-// {
-// 	global tbpref;
-// 	if (currenttag !== '' && currenttag !== -1) {
-// 		if (currentlang === '')
-// 			sql = "select (" . currenttag . " in (select TgID from " . tbpref . "words, " . tbpref . "tags, " . tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID group by TgID order by TgText)) as value";
-// 		else
-// 			sql = "select (" . currenttag . " in (select TgID from " . tbpref . "words, " . tbpref . "tags, " . tbpref . "wordtags where TgID = WtTgID and WtWoID = WoID and WoLgID = " . currentlang . " group by TgID order by TgText)) as value";
-// 		r = get_first_value(sql);
-// 		if (r === 0)
-// 			currenttag = '';
-// 	}
-// 	return currenttag;
-// }
-
-// // -------------------------------------------------------------
-
-// function validateArchTextTag(currenttag, currentlang)
-// {
-// 	global tbpref;
-// 	if (currenttag !== '' && currenttag !== -1) {
-// 		if (currentlang === '')
-// 			sql = "select (" . currenttag . " in (select T2ID from " . tbpref . "archivedtexts, " . tbpref . "tags2, " . tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID group by T2ID order by T2Text)) as value";
-// 		else
-// 			sql = "select (" . currenttag . " in (select T2ID from " . tbpref . "archivedtexts, " . tbpref . "tags2, " . tbpref . "archtexttags where T2ID = AgT2ID and AgAtID = AtID and AtLgID = " . currentlang . " group by T2ID order by T2Text)) as value";
-// 		r = get_first_value(sql);
-// 		if (r === 0)
-// 			currenttag = '';
-// 	}
-// 	return currenttag;
-// }
-
-// // -------------------------------------------------------------
-
-// function validateTextTag(currenttag, currentlang)
-// {
-// 	global tbpref;
-// 	if (currenttag !== '' && currenttag !== -1) {
-// 		if (currentlang === '')
-// 			sql = "select (" . currenttag . " in (select T2ID from " . tbpref . "texts, " . tbpref . "tags2, " . tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID group by T2ID order by T2Text)) as value";
-// 		else
-// 			sql = "select (" . currenttag . " in (select T2ID from " . tbpref . "texts, " . tbpref . "tags2, " . tbpref . "texttags where T2ID = TtT2ID and TtTxID = TxID and TxLgID = " . currentlang . " group by T2ID order by T2Text)) as value";
-// 		r = get_first_value(sql);
-// 		if (r === 0)
-// 			currenttag = '';
-// 	}
-// 	return currenttag;
-// }
-
 // // -------------------------------------------------------------
 
 // function getWordTagList(wid, before = ' ', brack = 1, tohtml = 1)
@@ -1118,22 +932,25 @@ export function get_sepas() {
 
 // // -------------------------------------------------------------
 
-// function checkStatusRange(currstatus, statusrange)
-// {
-// 	if (statusrange >= 12 && statusrange <= 15) {
-// 		return (currstatus >= 1 && currstatus <= (statusrange % 10));
-// 	} elseif (statusrange >= 23 && statusrange <= 25) {
-// 		return (currstatus >= 2 && currstatus <= (statusrange % 10));
-// 	} elseif (statusrange >= 34 && statusrange <= 35) {
-// 		return (currstatus >= 3 && currstatus <= (statusrange % 10));
-// 	} elseif (statusrange === 45) {
-// 		return (currstatus === 4 || currstatus === 5);
-// 	} elseif (statusrange === 599) {
-// 		return (currstatus === 5 || currstatus === 99);
-// 	} else {
-// 		return (currstatus === statusrange);
-// 	}
-// }
+// TODO
+export function checkStatusRange(
+  currstatus: Word["WoStatus"],
+  statusrange: NumericalStrengthPotentiallyCompound
+) {
+  if (statusrange >= 12 && statusrange <= 15) {
+    return currstatus >= 1 && currstatus <= statusrange % 10;
+  } else if (statusrange >= 23 && statusrange <= 25) {
+    return currstatus >= 2 && currstatus <= statusrange % 10;
+  } else if (statusrange >= 34 && statusrange <= 35) {
+    return currstatus >= 3 && currstatus <= statusrange % 10;
+  } else if (statusrange === 45) {
+    return currstatus === 4 || currstatus === 5;
+  } else if (statusrange === 599) {
+    return currstatus === 5 || currstatus === 99;
+  } else {
+    return currstatus === statusrange;
+  }
+}
 
 // // -------------------------------------------------------------
 
@@ -1169,51 +986,6 @@ function makeStatusClassFilterHelper(status: number, array: number[]) {
     array[pos] = -1;
   }
 }
-
-// // -------------------------------------------------------------
-
-// function makeOpenDictStr(url, txt)
-// {
-// 	r = '';
-// 	if (url !== '' && txt !== '') {
-// 		if (substr(url, 0, 1) === '*') {
-// 			r = ' <span class="click" onClick="owin(' . prepare_textdata_js(substr(url, 1)) . ');">' . tohtml(txt) . '</span> ';
-// 		} else {
-// 			r = ' <a href="' . url . '" target="ru">' . tohtml(txt) . '</a> ';
-// 		}
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function makeOpenDictStrJS(url)
-// {
-// 	r = '';
-// 	if (url !== '') {
-// 		if (substr(url, 0, 1) === '*') {
-// 			r = "owin(" . prepare_textdata_js(substr(url, 1)) . ");\n";
-// 		} else {
-// 			r = "top.frames['ru'].location.href=" . prepare_textdata_js(url) . ";\n";
-// 		}
-// 	}
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
-// function makeOpenDictStrDynSent(url, sentctljs, txt)
-// {
-// 	r = '';
-// 	if (url !== '') {
-// 		if (substr(url, 0, 1) === '*') {
-// 			r = '<span class="click" onClick="translateSentence2(' . prepare_textdata_js(substr(url, 1)) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
-// 		} else {
-// 			r = '<span class="click" onClick="translateSentence(' . prepare_textdata_js(url) . ',' . sentctljs . ');">' . tohtml(txt) . '</span>';
-// 		}
-// 	}
-// 	return r;
-// }
 
 // // -------------------------------------------------------------
 
@@ -1273,35 +1045,65 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-// TODO
+// TODO - these three could be calculated together
 /**
  *
  * @param text
  */
-// export function textwordcount(text): number {
-//   return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . text);
-// }
+export function textwordcount(
+  { TxID: text }: Text,
+  textItems: TextItem[]
+): number {
+  return new Set([
+    ...textItems.filter(
+      (val) =>
+        val.TiWordCount === 1 && val.TiIsNotWord === 0 && val.TiTxID === text
+    ),
+  ]).size;
+}
 
 // // -------------------------------------------------------------
 
-// function textexprcount(text)
-// {
-// 	global tbpref;
-// 	return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount > 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
-// }
+// TODO ugly
+export function textexprcount(
+  { TxID: text, TxLgID }: Text,
+  textItems: TextItem[],
+  words: Word[]
+): number {
+  const wordsForThisLang = words.filter((val) => val.WoLgID === TxLgID);
+  return new Set([
+    ...textItems.filter(
+      (val) =>
+        val.TiWordCount > 1 &&
+        val.TiIsNotWord === 0 &&
+        val.TiTxID === text &&
+        wordsForThisLang.find(
+          (word) => word.WoLgID === TxLgID && word.WoTextLC === val.TiTextLC
+        ) !== undefined
+    ),
+  ]).size;
+}
 
 // // -------------------------------------------------------------
 
-// TODO
-/**
- *
- * @param text
- */
-// export function textworkcount(words:Word[],textitems:TextItem[]): number {
-//   return get_first_value('select count(distinct TiTextLC) as value from ' . tbpref . 'textitems left join ' . tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . text . ' and WoID is not null and TiLgID = WoLgID');
-// }
-
-// // -------------------------------------------------------------
+export function textworkcount(
+  { TxID: text, TxLgID }: Text,
+  textItems: TextItem[],
+  words: Word[]
+): number {
+  const wordsForThisLang = words.filter((val) => val.WoLgID === TxLgID);
+  return new Set([
+    ...textItems.filter(
+      (val) =>
+        val.TiWordCount === 1 &&
+        val.TiIsNotWord === 0 &&
+        val.TiTxID === text &&
+        wordsForThisLang.find(
+          (word) => word.WoLgID === TxLgID && word.WoTextLC === val.TiTextLC
+        ) !== undefined
+    ),
+  ]).size;
+}
 
 // // -------------------------------------------------------------
 
@@ -1686,19 +1488,6 @@ export function replaceTabsWithNewLine(s: string) {
 
 // // -------------------------------------------------------------
 
-// function get_first_translation(trans)
-// {
-// 	arr = preg_split('/[' . get_sepas() . ']/u', trans);
-// 	if (count(arr) < 1)
-// 		return '';
-// 	r = trim(arr[0]);
-// 	if (r === '*')
-// 		r = "";
-// 	return r;
-// }
-
-// // -------------------------------------------------------------
-
 export function makeScoreRandomInsertUpdate({
   word,
 }: {
@@ -2022,9 +1811,10 @@ export function makeScoreRandomInsertUpdate({
 export function allActionGo({
   sel,
   numRecords: numRecords,
-  onAddTag,
+  onTag: onTag,
   onSetCapitalization,
   onSetStrength,
+  onNudgeStrength,
   onExport,
   onClear,
 }: {
@@ -2032,9 +1822,10 @@ export function allActionGo({
   numRecords: number;
   onExport: (exportMode: "anki" | "tsv" | "flexible") => void;
   onClear: () => void;
-  onAddTag: (tagStr: string) => void;
+  onTag: (tagStr: string, adding: boolean) => void;
   onSetCapitalization: SetBoolHandler;
   onSetStrength: (strength: NumericalStrength) => void;
+  onNudgeStrength: (direction: "plus" | "minus") => void;
 }) {
   if (sel !== undefined) {
     const v = sel.value;
@@ -2042,7 +1833,7 @@ export function allActionGo({
       if (v === "addtagall" || v === "deltagall") {
         const answer = verifyAddTagWindow(sel.text, numRecords);
         if (answer !== "") {
-          onAddTag(answer);
+          onTag(answer, v === "addtagall");
         }
       } else if (
         v === "delall" ||
@@ -2069,7 +1860,7 @@ export function allActionGo({
             case "capall":
               return onSetCapitalization(true);
             case "lowerall":
-              return onSetCapitalization(true);
+              return onSetCapitalization(false);
             case "s1all":
               return onSetStrength(1);
             case "s5all":
@@ -2078,6 +1869,10 @@ export function allActionGo({
               return onSetStrength(98);
             case "s99all":
               return onSetStrength(99);
+            case "smi1all":
+              return onNudgeStrength("minus");
+            case "spl1all":
+              return onNudgeStrength("plus");
             // TODO others
           }
         }
@@ -2321,7 +2116,7 @@ export function splitCheckText(
         };
       }
       // %2===1 => is sep
-      const sepKey = remove_spaces(curr.TiText, LgRemoveSpaces);
+      const sepKey = removeSpaces(curr.TiText, LgRemoveSpaces);
       return {
         ...prev,
         sepsCount: {
@@ -2404,6 +2199,7 @@ export function buildSentences(
       const trimmed = sent.trim();
       // TODO
       // const pos = LgRegexpSplitSentences.indexOf(trimmed);
+      console.log("TEST123-sentenceID", ii, startAt);
       return {
         SeText: trimmed,
         SeOrder: ii,

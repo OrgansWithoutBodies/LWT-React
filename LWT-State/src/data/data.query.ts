@@ -1,13 +1,22 @@
 import { Query } from "@datorama/akita";
+import { textexprcount, textwordcount, textworkcount } from "lwt-common";
 import { SuppportedI18NLanguages } from "lwt-i18n";
 import type {
   LanguagesID,
   NumericalStrengthPotentiallyCompound,
   SettingsObject,
+  Text,
+  TextItem,
+  Word,
 } from "lwt-schemas";
-import { Observable, combineLatest, count, map, tap } from "rxjs";
+import { Observable, combineLatest, count, map } from "rxjs";
 import { DataState, DataStore, dataStore } from "./data.storage";
-import { TextDetailRow } from "./detailRows.types";
+import {
+  ArchivedTextDetailRow,
+  TermDetailRow,
+  TextDetailRow,
+} from "./detailRows.types";
+import { makeHash } from "./makeHash";
 
 // /**
 //  *
@@ -118,8 +127,7 @@ export class DataQuery extends Query<DataState> {
             ] as [keyof SettingsObject, SettingsObject[keyof SettingsObject]]
         )
       ) as SettingsObject;
-    }),
-    tap((settings) => console.log("TEST123-query", settings))
+    })
   );
 
   // public;
@@ -196,12 +204,21 @@ export class DataQuery extends Query<DataState> {
     this.activeLanguageID,
   ]).pipe(
     map(([texts, activeLanguageID]) => {
-      console.log("QUERY", { texts });
-
       if (activeLanguageID === null) {
         return texts;
       }
       return texts.filter((text) => text.TxLgID === activeLanguageID);
+    })
+  );
+  public archivedtextsForActiveLanguage = combineLatest([
+    this.archivedtexts,
+    this.activeLanguageID,
+  ]).pipe(
+    map(([texts, activeLanguageID]) => {
+      if (activeLanguageID === null) {
+        return texts;
+      }
+      return texts.filter((text) => text.AtLgID === activeLanguageID);
     })
   );
 
@@ -305,28 +322,82 @@ export class DataQuery extends Query<DataState> {
   public textDetails: Observable<TextDetailRow[]> = combineLatest([
     this.textsForActiveLanguage,
     this.languageHashmap,
+    this.textitems,
+    this.tags2HashmapByID,
+    this.texttags,
+    this.words,
   ]).pipe(
-    map(([textsForActiveLanguage, languageHashmap]) =>
-      textsForActiveLanguage.map((text) => ({
-        ...text,
-        // TODO split
-        totalWords: text.TxText.length,
-        // TODO
-        saved: "test",
-        // TODO
-        unk: 100,
-        // TODO
-        unkPerc: 100,
-        TxLgID: text.TxLgID,
-        TxLgName: languageHashmap[text.TxLgID].LgName,
-        // unkPerc: Math.round(100*)
-        // txttodowords = txttotalwords - txtworkedwords;
-        // percentunknown = 0;
-        // if (txttotalwords !== 0) {
-        //   percentunknown =
-        //     round(100 * txttodowords / txttotalwords, 0);
-      }))
+    map(
+      ([
+        textsForActiveLanguage,
+        languageHashmap,
+        textitems,
+        tags2HashmapByID,
+        texttags,
+        words,
+      ]) => {
+        console.log("TEST123-query", tags2HashmapByID);
+
+        return textsForActiveLanguage.map((text) => {
+          // TODO maybe move these to own observable in order to not need to calc if setting is false
+          const wordCounts = calculateWordCounts(text, textitems, words);
+          return {
+            ...text,
+            totalWords: wordCounts.$txttotalwords,
+            saved:
+              wordCounts.$txtworkedall > 0
+                ? wordCounts.$txtworkedwords + wordCounts.$txtworkedexpr
+                : 0,
+            unk: wordCounts.$txttodowords,
+            unkPerc: wordCounts.$percentunknown,
+            TxLgID: text.TxLgID,
+            TxLgName: languageHashmap[text.TxLgID].LgName,
+            taglist: texttags
+              .filter((val) => val.TtTxID === text.TxID)
+              .map((val) => tags2HashmapByID[val.TtT2ID].T2Text),
+          };
+        });
+      }
     )
+  );
+  public archtextdetails: Observable<ArchivedTextDetailRow[]> = combineLatest([
+    this.archivedtextsForActiveLanguage,
+    this.languageHashmap,
+  ]).pipe(
+    map(([textsForActiveLanguage, languageHashmap]) => {
+      return textsForActiveLanguage.map((text) => {
+        return {
+          ...text,
+          // TODO split
+          totalWords: text.AtText.length,
+          // TODO
+          saved: "test",
+          // TODO
+          unk: 100,
+          // TODO
+          unkPerc: 100,
+          AtLgName: languageHashmap[text.AtLgID].LgName,
+          // unkPerc: Math.round(100*)
+          // txttodowords = txttotalwords - txtworkedwords;
+          // percentunknown = 0;
+          // if (txttotalwords !== 0) {
+          //   percentunknown =
+          //     round(100 * txttodowords / txttotalwords, 0);
+        };
+      });
+    })
+  );
+  public termDetailRows: Observable<TermDetailRow[]> = combineLatest([
+    this.words,
+    this.languageHashmap,
+  ]).pipe(
+    map(([words, languageHashmap]) => {
+      return words.map((val) => ({
+        ...val,
+        termCount: 0,
+        WoLgName: languageHashmap[val.WoLgID].LgName,
+      }));
+    })
   );
 
   // TODO types not right
@@ -339,9 +410,7 @@ export class DataQuery extends Query<DataState> {
     key: TKey
   ): Observable<Record<TBrand, TObj>> {
     return observable.pipe(
-      map((vals) =>
-        Object.fromEntries(vals.map((val) => [val[key], val] as [TBrand, TObj]))
-      )
+      map((vals) => makeHash<TKey, TBrand, TObj>(vals, key))
       // TODO no any
     ) as any;
   }
@@ -411,3 +480,37 @@ export class DataQuery extends Query<DataState> {
   // }
 }
 export const dataQuery = new DataQuery(dataStore);
+
+/**
+ *
+ * @param text
+ * @param textItems
+ * @param words
+ */
+export function calculateWordCounts(
+  text: Text,
+  textItems: TextItem[],
+  words: Word[]
+) {
+  const $txttotalwords = textwordcount(text, textItems);
+  const $txtworkedwords = textworkcount(text, textItems, words);
+  const $txtworkedexpr = textexprcount(text, textItems, words);
+  const $txtworkedall = $txtworkedwords + $txtworkedexpr;
+  const $txttodowords = $txttotalwords - $txtworkedwords;
+  const $percentunknown =
+    $txttotalwords === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(Math.round((100 * $txttodowords) / $txttotalwords), 100)
+        );
+
+  return {
+    $txttotalwords,
+    $txtworkedwords,
+    $txtworkedexpr,
+    $txtworkedall,
+    $percentunknown,
+    $txttodowords,
+  };
+}

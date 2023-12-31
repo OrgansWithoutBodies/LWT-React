@@ -261,7 +261,7 @@ export function StatisticsComponent(): JSX.Element {
               ] as const;
 
               return (
-                <tr>
+                <tr key={language.LgID}>
                   <td className="td1">{language.LgName}</td>
                   <td className="td1 center">
                     <A href={`/edit_words?filterlang=${language.LgID}`}>
@@ -288,7 +288,7 @@ export function StatisticsComponent(): JSX.Element {
                   </td>
                   {languageStatusStatistics &&
                     statuses.map((statusVal) => (
-                      <td className="td1 center">
+                      <td key={statusVal} className="td1 center">
                         <span className={`status${statusVal}`}>
                           &nbsp;
                           <A
@@ -319,7 +319,7 @@ export function StatisticsComponent(): JSX.Element {
               Language
             </th>
             {periods.map((period) => (
-              <th className="th1" colSpan={3}>
+              <th key={period} className="th1" colSpan={3}>
                 {period}
               </th>
             ))}
@@ -334,7 +334,7 @@ export function StatisticsComponent(): JSX.Element {
             ))}
           </tr>
           {languages.map((language) => (
-            <tr>
+            <tr key={language.LgID}>
               <td className="td1">{language.LgName}</td>
               <td className="td1 center">
                 <span className="status1">

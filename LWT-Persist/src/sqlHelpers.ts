@@ -7,6 +7,8 @@ import {
 } from "./electron-sqlite/electron-sqlite-backend.plugin.main";
 const { Database } = require("sqlite3");
 
+// TODO typeORM?
+
 /**
  *
  * @param lgID

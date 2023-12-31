@@ -1,10 +1,6 @@
 import { AppVariables } from 'lwt-build';
-import { A, useInternalNavigate } from 'lwt-ui-kit';
-import {
-  FloatingMenu,
-  InfoLine,
-  useSmoothScrollToHash,
-} from '../pages/Info.component';
+import { A, FloatingMenu, useInternalNavigate } from 'lwt-ui-kit';
+import { InfoLine, useSmoothScrollToHash } from '../pages/Info.component';
 import { FooterInfo } from '../pages/LandingPage.component';
 import { PLUGINS } from '../plugins';
 

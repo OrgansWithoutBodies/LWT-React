@@ -1,4 +1,4 @@
-import { get_sepas } from 'lwt-common';
+import { getSepas } from 'lwt-common';
 import { TextsID, WordsID } from 'lwt-schemas';
 import { useData } from 'lwt-state';
 import { Icon } from 'lwt-ui-kit';
@@ -28,7 +28,7 @@ export function MakeTrans(
   }
   const r = '';
   const set = false;
-  const transarr = alltrans.split(`/[${get_sepas()}]\\u`);
+  const transarr = alltrans.split(`/[${getSepas()}]\\u`);
 
   return transarr.map((t) => {
     const tt = t.trim();

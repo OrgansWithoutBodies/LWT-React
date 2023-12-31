@@ -248,22 +248,3 @@ export async function changeImprAnnText(
 
 //   window.setTimeout(noShowAfter3Secs, 3000);
 // });
-
-// TODO
-// function do_ajax_word_counts() {
-// 	$("span[id^='saved-']").each(
-// 		function(i) {
-// 			var textid = $(this).attr('data_id');
-// 			$(this).html('<img src="icn/waiting2.gif" />');
-// 			$.post('ajax_word_counts.php', { id: textid },
-// 				function(data) {
-// 					var res = eval('(' + data + ')');
-// 					$('#total-'+textid).html(res[0]);
-// 					$('#saved-'+textid).html(res[1]);
-// 					$('#todo-'+textid).html(res[2]);
-// 					$('#todop-'+textid).html(res[3]);
-// 				}
-// 			);
-// 		}
-// 	);
-// }

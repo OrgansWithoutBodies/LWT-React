@@ -10,16 +10,25 @@ import {
   get_status_abbr,
 } from 'lwt-schemas';
 import { useData } from 'lwt-state';
-import { FourFramePage, Header, Icon, useI18N } from 'lwt-ui-kit';
+import {
+  FourFramePage,
+  Header,
+  Icon,
+  Loader,
+  PrevNextLinks,
+  useI18N,
+  useTick,
+  useUpdateActiveText,
+} from 'lwt-ui-kit';
 import { useState } from 'react';
-import { useTick } from '../../hooks/useTimer';
-import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
 import { PLUGINS } from '../../plugins';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { TranslationAPI } from '../API/APITranslation.component';
 import { RunTestForWord } from '../OverlibComponents';
 import { IFramePane, Modality } from '../Reader/ReaderPage.component';
 import { EditWordPane } from '../Term/AddNewWordPane';
+import { FilterArgs, filterAndSortTexts } from '../Text/Library.component';
+
 //   const currenttag2 = validateTextTag(
 //     processSessParam('tag2', 'currenttexttag2', '', 0),
 //     currentlang
@@ -146,147 +155,62 @@ import { EditWordPane } from '../Term/AddNewWordPane';
 //   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
 // }
 
-// TODO deprecate?
-// function getPreviousAndNextTextLinks(textid, url, onlyann, add) {
-//   const currentlang = validateLang(
-//     processDBParam('filterlang', 'currentlanguage', '', 0)
-//   );
-//   const wh_lang = currentlang !== '' ? ' and TxLgID='.currentlang : '';
-//   const currentquery = processSessParam('query', 'currenttextquery', '', 0);
-//   const wh_query = (
-//     str_replace('*', '%', mb_strtolower(currentquery, 'UTF-8'))
-//   );
-//   const wh_query = currentquery !== '' ? ' and TxTitle like '.wh_query : '';
-//   const currenttag1 = validateTextTag(
-//     processSessParam('tag1', 'currenttexttag1', '', 0),
-//     currentlang
-//   );
-//   const currenttag2 = validateTextTag(
-//     processSessParam('tag2', 'currenttexttag2', '', 0),
-//     currentlang
-//   );
-//   const currenttag12 = processSessParam('tag12', 'currenttexttag12', '', 0);
-//   if (currenttag1 === '' && currenttag2 === '') const wh_tag = '';
-//   else {
-//     if (currenttag1 !== '') {
-//       if (currenttag1 === -1) {
-//         const wh_tag1 = 'group_concat(TtT2ID) IS NULL';
-//       } else {
-//         const wh_tag1 =
-//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
-//         // . currenttag1 .
-//         ("/%'");
-//       }
-//     }
-//     if (currenttag2 !== '') {
-//       if (currenttag2 === -1) {
-//         const wh_tag2 = 'group_concat(TtT2ID) IS NULL';
-//       } else {
-//         const wh_tag2 =
-//           "concat('/',group_concat(TtT2ID separator '/'),'/') like '%/";
-//         // . currenttag2 .
-//         ("/%'");
-//       }
-//     }
-//     if (currenttag1 !== '' && currenttag2 === '') {
-//       const wh_tag = ' having (';
-//       // . wh_tag1 .
-//       (') ');
-//     } else if (currenttag2 !== '' && currenttag1 === '') {
-//       const wh_tag = ' having (';
-//       // . wh_tag2 .
-//       (') ');
-//     } else {
-//       const wh_tag = ' having (('(
-//         //  . wh_tag1 .
-//         currenttag12 ? ') AND (' : ') OR ('
-//       );
-//       // . wh_tag2 .
-//       (')) ');
-//     }
-//   }
-//   const currentsort = processDBParam('sort', 'currenttextsort', '1', 1);
-//   const sorts = array('TxTitle', 'TxID desc', 'TxID');
-//   const lsorts = count(sorts);
-//   if (currentsort < 1) const currentsort = 1;
-//   if (currentsort > lsorts) const currentsort = lsorts;
-//   if (onlyann) {
-//     const sql =
-//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID AND LENGTH(TxAnnotatedText) > 0 ';
-//     //  . wh_lang . wh_query .
-//     // ' group by TxID '
-//     //  . wh_tag .
-//     // ' order by '
-//     //  . sorts[currentsort - 1];
-//   } else {
-//     const sql =
-//       'select TxID from ((texts left JOIN texttags ON TxID = TtTxID) left join tags2 on T2ID = TtT2ID), languages where LgID = TxLgID ';
-//     // . wh_lang . wh_query .
-//     // ' group by TxID '
-//     // . wh_tag .
-//     // ' order by '
-//     // . sorts[currentsort - 1];
-//   }
-//   const list = array(0);
-//   while ((record = mysqli_fetch_assoc(res))) {
-//     array_push(list, record['TxID'] + 0);
-//   }
-//   array_push(list, 0);
-//   const listlen = count(list);
-//   for (let i = 1; i < listlen - 1; i++) {
-//     if (list[i] === textid) {
-//       if (list[i - 1] !== 0) {
-//         const title = tohtml(getTextTitle(list[i - 1]));
-//         const prev = (
-//           <>
-//             <a href={`${url}${list[i - 1]}`} target="_top">
-//               <img
-//                 src="icn/navigation-180-button.png"
-//                 title="Previous Text: ' . title . '"
-//                 alt="Previous Text: ' . title . '"
-//               />
-//             </a>
-//           </>
-//         );
-//       } else
-//         const prev = (
-//           <>
-//             <img
-//               src="icn/navigation-180-button-light.png"
-//               title="No Previous Text"
-//               alt="No Previous Text"
-//             />
-//           </>
-//         );
-//       if (list[i + 1] !== 0) {
-//         const title = tohtml(getTextTitle(list[i + 1]));
-//         const next = (
-//           <>
-//             <a href={`${url}${list[i + 1]}`} target="_top">
-//               <img
-//                 src="icn/navigation-000-button.png"
-//                 title="Next Text: ' . title . '"
-//                 alt="Next Text: ' . title . '"
-//               />
-//             </a>
-//           </>
-//         );
-//       } else {
-//         const next = (
-//           <>
-//             <img
-//               src="icn/navigation-000-button-light.png"
-//               title="No Next Text"
-//               alt="No Next Text"
-//             />
-//           </>
-//         );
-//       } // return add . prev . ' ' . next;
-//     }
-//   }
-//   // return add . '<Icon src="navigation-180-button-light.png" title="No Previous Text" alt="No Previous Text" /> <img src="icn/navigation-000-button-light" title="No Next Text" />';
-// }
+/**
+ * TODO maybe move towards handling all filter stuff in state so we don't need to pass in args?
+ * TODO use in print_text, print_impr_text,do_text_header,do_test_header,display_impr_text_header
+ */
+export function usePreviousAndNextTextLinks({
+  textid,
+  onlyAnn,
+  // TODO whats this
+  // add,
+  tag1,
+  tag2,
+  tag12,
+  sorting,
+  query,
+}: {
+  textid: TextsID;
+  // add: boolean;
+} & FilterArgs): PrevNextLinks {
+  const [{ texttags, textDetails, textsHashmap: textTitleHashmap }] = useData([
+    'texttags',
+    'textDetails',
+    'textsHashmap',
+  ]);
+  const list: TextsID[] = filterAndSortTexts({
+    texttags,
+    textDetails,
+    tag1,
+    tag2,
+    tag12,
+    sorting,
+    query,
+    onlyAnn,
+  }).map((val) => val.TxID);
+  const indexForThisEntry = list.indexOf(textid);
+  const prevIndex = indexForThisEntry - 1;
+  const nextIndex = indexForThisEntry + 1;
+  const prev: PrevNextLinks['prev'] =
+    list[prevIndex] !== undefined
+      ? {
+          textID: list[prevIndex],
+          title: textTitleHashmap[list[prevIndex]].TxTitle,
+        }
+      : { fallback: 'No Previous Text' };
+  const next: PrevNextLinks['next'] =
+    nextIndex > 0 && list[nextIndex] !== undefined
+      ? {
+          title: textTitleHashmap[list[nextIndex]].TxTitle,
+          textID: list[nextIndex],
+        }
+      : { fallback: 'No Next Text' };
+  return { prev, next };
+}
 
+/**
+ *
+ */
 export function TesterTable({
   language,
   words: words,
@@ -509,6 +433,9 @@ export function MakeStatusControlsTestTable({
     </>
   );
 }
+/**
+ *
+ */
 export function Tester({
   modality,
   setTranslateAPIParams,
@@ -605,6 +532,9 @@ export function Tester({
  *
  */
 
+/**
+ *
+ */
 export function TesterPage({
   langID: langID,
   textID: textID,
@@ -618,7 +548,7 @@ export function TesterPage({
     'languageHashmap',
     'textitems',
   ]);
-  useUpdateActiveText({ textID });
+  useUpdateActiveText({ txID: textID });
 
   const t = useI18N();
   const [activeWord, setActiveWord] = useState<string | null>();
@@ -635,6 +565,9 @@ export function TesterPage({
   const [testModality, setTestModality] = useState<Modality | null>(null);
   if (!text) {
     return <></>;
+  }
+  if (languageHashmap === undefined) {
+    return <Loader />;
   }
   const language = languageHashmap[langID ? langID : text.TxLgID];
   // TODO might be no text & only specified language?
@@ -757,6 +690,9 @@ export function TesterPage({
   );
 }
 
+/**
+ *
+ */
 export function getWordsForTextItems({
   words,
   textitems,
@@ -949,6 +885,17 @@ export function getWordsForTextItems({
 // 			on = 0;
 
 // sent.map((thisSent)=>{
+/**
+ *
+ * @param sent
+ * @param wid
+ * @param trans
+ * @param word
+ * @param roman
+ * @param cleansent
+ * @param regexword
+ * @param testtype
+ */
 export function sentenceTester(
   sent: string,
   wid: WordsID,

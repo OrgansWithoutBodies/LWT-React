@@ -1,8 +1,12 @@
 import { getDirTag } from 'lwt-common';
 import { TextsID } from 'lwt-schemas';
 import { useData } from 'lwt-state';
-import { Header, Icon, useInternalNavigate } from 'lwt-ui-kit';
-import { useUpdateActiveText } from '../../hooks/useUpdateActiveText';
+import {
+  Header,
+  Icon,
+  useInternalNavigate,
+  useUpdateActiveText,
+} from 'lwt-ui-kit';
 import { AnnPlcmnt } from './Annotation.types';
 /**
  *
@@ -16,7 +20,7 @@ export function AnnotateText({
   annplcmnt: AnnPlcmnt;
   editmode: boolean;
 }) {
-  useUpdateActiveText({ textID });
+  useUpdateActiveText({ txID: textID });
   const [{ texts, languages }] = useData(['texts', 'languages']);
   const $ann = '';
   const text = texts.find((val) => val.TxID === textID);

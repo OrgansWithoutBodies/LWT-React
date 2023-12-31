@@ -1,9 +1,9 @@
-// import { Gzip } from 'browserify-zlib';
 import demoDB from "./demo_db.json";
 
 import { DataStore, dataStore } from "./data.storage";
 
 import {
+  anki_export,
   downloadBlob,
   getCurrentTimeAsString,
   gzipString,
@@ -11,12 +11,14 @@ import {
   parseSQL,
   serializeJsonToSQL,
   splitCheckText,
+  tsv_export,
   unGzString,
 } from "lwt-common";
 import { SuppportedI18NLanguages } from "lwt-i18n";
 import {
   LWTData,
   Persistable,
+  WordTag,
   type AddNewTextType,
   type AddNewWordType,
   type ArchivedText,
@@ -38,6 +40,7 @@ import {
   type Word,
   type WordsID,
 } from "lwt-schemas";
+import { makeHash } from "./makeHash";
 
 const TypeCastDemoDB = demoDB as any as LWTData;
 export enum CRUD {
@@ -518,7 +521,7 @@ export class DataService {
       const tagID = foundTag.T2ID;
       return {
         ...state,
-        notificationMessage: { txt: "Added Tag to Text" },
+        notificationMessage: { txt: "Removed Tag from Text" },
         texttags: state.texttags.filter(
           // remove all that are both included in our list and match tag
           (val) => !(textIDs.includes(val.TtTxID) && val.TtT2ID === tagID)
@@ -526,6 +529,27 @@ export class DataService {
       };
     });
     this.persistSet("texttags");
+  }
+  public removeTagFromMultipleTerms(tagString: string, termIDs: WordsID[]) {
+    this.dataStore.update((state) => {
+      const foundTag = state.tags.find(
+        (tag) => tag.TgText === tagString.trim()
+      );
+
+      if (!foundTag) {
+        return state;
+      }
+      const tagID = foundTag.TgID;
+      return {
+        ...state,
+        notificationMessage: { txt: "Removed Tag from Terms" },
+        wordtags: state.wordtags.filter(
+          // remove all that are both included in our list and match tag
+          (val) => !(termIDs.includes(val.WtWoID) && val.WtTgID === tagID)
+        ),
+      };
+    });
+    this.persistSet("wordtags");
   }
   public addTagToMultipleArchivedTexts(
     tagString: string,
@@ -686,11 +710,19 @@ export class DataService {
     this.persistSet("wordtags");
     mappedTerms.forEach((term) => this.persistInsert("words", term));
   }
-  public exportTermsAnki(terms: WordsID[]) {
-    window.alert(`TODO ANKI ${terms.length}`);
+  public exportTermsAnki(termIDs: WordsID[]) {
+    const { words, languages, wordtags, tags } = this.dataStore.getValue();
+    const tagsHashmapByID = makeHash(tags, "TgID");
+    anki_export(
+      buildWordDetailRows(termIDs, words, languages, wordtags, tagsHashmapByID)
+    );
   }
-  public exportTermsTSV(terms: WordsID[]) {
-    window.alert(`TODO TSV ${terms.length}`);
+  public exportTermsTSV(termIDs: WordsID[]) {
+    const { words, languages, wordtags, tags } = this.dataStore.getValue();
+    const tagsHashmapByID = makeHash(tags, "TgID");
+    tsv_export(
+      buildWordDetailRows(termIDs, words, languages, wordtags, tagsHashmapByID)
+    );
   }
   public exportTermsFlexible(terms: WordsID[]) {
     window.alert(`TODO Flexible ${terms.length}`);
@@ -1027,6 +1059,13 @@ export class DataService {
       this.dataStore.getValue();
     const filteredSentences = sentences.filter((val) => val.SeTxID !== textID);
     const filteredTextItems = textitems.filter((val) => val.TiTxID !== textID);
+    console.log(
+      "TEST123-reparse",
+      filteredSentences.length,
+      filteredTextItems.length,
+      sentences.length,
+      textitems.length
+    );
     const parsingText = texts.find(({ TxID }) => TxID === textID);
     if (!parsingText) {
       return;
@@ -1045,6 +1084,7 @@ export class DataService {
       (prev, curr) => (prev > curr.TiID ? prev : curr.TiID),
       -1 as TextItemsID
     );
+    console.log("TEST123-seid", { maxSentenceID, maxTextItemID });
     const { symbolList: parsedTextItems, sArray: parsedSentences } =
       splitCheckText(
         parsingText,
@@ -1127,6 +1167,20 @@ export class DataService {
       WoStatusChanged: getCurrentTimeAsString(),
     });
   }
+  public nudgeTermStrength(wordID: WordsID, nudgeDirection: "plus" | "minus") {
+    const word = this.dataStore
+      .getValue()
+      .words.find((val) => val.WoID === wordID);
+    if (!word) {
+      return;
+    }
+
+    this.editTerm({
+      ...word,
+      WoStatus: nudgeTermStatus(word.WoStatus, nudgeDirection),
+      WoStatusChanged: getCurrentTimeAsString(),
+    });
+  }
 
   // public async getTatoebaSentence(langKey: ThreeLetterString, word: string) {
   //   const tatoebaData = await this.TatoebaAPI.getPath("/unstable/sentences", {
@@ -1165,17 +1219,31 @@ export class DataService {
 
 export const dataService = new DataService(dataStore);
 
-// /**
-//  *
-//  * @param input
-//  * @param output
-//  */
-// async function do_gzip(input, output) {
-//   const gzip = createGzip();
-//   const source = createReadStream(input);
-//   const destination = createWriteStream(output);
-//   await pipe(source, gzip, destination);
-// }
+function buildWordDetailRows(
+  termIDs: WordsID[],
+  words: Word[],
+  languages: Language[],
+  wordtags: WordTag[],
+  tagsHashmapByID: Record<TagsID, Tag>
+): import("/home/v/Projects/LWT-Phoenix/LWT-Common/src/index").TermExportRow[] {
+  return termIDs.map((termID) => {
+    const word = words.find((val) => val.WoID === termID);
+    if (!word) {
+      throw new Error("Invalid word specified");
+    }
+    const language = languages.find((val) => val.LgID === word?.WoLgID);
+    if (!language) {
+      throw new Error("Invalid lang specified");
+    }
+    return {
+      ...word,
+      ...language,
+      taglist: wordtags
+        .filter((val) => val.WtWoID === word.WoID)
+        .map((val) => tagsHashmapByID[val.WtTgID].TgText),
+    };
+  });
+}
 
 function ungz(file: File, onRead: (data: string | null) => void) {
   const reader = new FileReader();
@@ -1235,4 +1303,46 @@ function ungz(file: File, onRead: (data: string | null) => void) {
     // }
   };
   reader.readAsArrayBuffer(file);
+}
+function nudgeTermStatus(
+  status: NumericalStrength,
+  direction: "plus" | "minus"
+): NumericalStrength {
+  if (status === 98) {
+    return 98;
+  }
+  if (direction === "plus") {
+    switch (status) {
+      case 0:
+        return 1;
+      case 1:
+        return 2;
+      case 2:
+        return 3;
+      case 3:
+        return 4;
+      case 4:
+        return 5;
+      case 5:
+        return 99;
+      case 99:
+        return 99;
+    }
+  }
+  switch (status) {
+    case 0:
+      return 0;
+    case 1:
+      return 0;
+    case 2:
+      return 1;
+    case 3:
+      return 2;
+    case 4:
+      return 3;
+    case 5:
+      return 4;
+    case 99:
+      return 5;
+  }
 }

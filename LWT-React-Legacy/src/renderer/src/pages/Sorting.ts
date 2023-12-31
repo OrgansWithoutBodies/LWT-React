@@ -1,4 +1,4 @@
-import { Word } from 'lwt-schemas';
+import { TermDetailRow } from 'lwt-state';
 
 // TODO these enums are different per select
 export const enum WordSorting {
@@ -66,7 +66,7 @@ export const enum LanguageSorting {
 
 export const sortingMethod = (
   sort: WordSorting
-): ((termA: Word, termB: Word) => 1 | -1 | 0) => {
+): ((termA: TermDetailRow, termB: TermDetailRow) => 1 | -1 | 0) => {
   switch (sort) {
     case WordSorting['Oldest first']:
       return buildSortByOldest('WoCreated');
@@ -87,10 +87,10 @@ export const sortingMethod = (
       return buildSortByValue('WoTranslation', false);
     case WordSorting['Stat./Days (desc)']:
       // TODO
-      return buildSortByValue('WoTranslation', false);
+      return buildSortByValue('WoLgName', false);
     case WordSorting['Lang.']:
       // TODO
-      return buildSortByValue('WoTranslation', false);
+      return buildSortByValue('WoLgName', false);
     case WordSorting['Lang. (desc)']:
       // TODO
       return buildSortByValue('WoTranslation', false);

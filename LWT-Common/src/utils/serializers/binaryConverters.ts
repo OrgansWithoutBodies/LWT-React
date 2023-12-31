@@ -1,17 +1,16 @@
 import { BrandedString } from "lwt-schemas";
 
-type Base64String = BrandedString<"B64">;
+export type Base64String = BrandedString<"B64">;
 export const uInt8ToBase64 = (u8: Uint8Array): Base64String => {
-  const decoder = new TextDecoder("utf8");
-  const b64encoded = btoa(decoder.decode(u8));
+  // const decoder = new TextDecoder("utf8");
+  // console.log("u8b64", decoder.decode(u8));
+  // const b64encoded = btoa(decoder.decode(u8));
+  const b64encoded = btoa(String.fromCharCode.apply(null, u8 as any));
   return b64encoded as Base64String;
 };
 export const base64ToUInt8 = (b64: Base64String): Uint8Array => {
   const binaryString = atob(b64);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
+  const bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));
   return bytes;
 };
 

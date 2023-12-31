@@ -16,12 +16,12 @@ export function I18N({ i: stringToTranslate }: { i: UIString }) {
   return (
     <>
       {str.split("\n").map((val, index) => (
-        <>
+        <span key={index}>
           {index > 0 && <br />}
           <span style={{ color: stringExists || !devMode ? undefined : "red" }}>
             {val}
           </span>
-        </>
+        </span>
       ))}
     </>
   );

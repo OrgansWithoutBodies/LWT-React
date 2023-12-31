@@ -33,7 +33,7 @@ export function NewLanguage() {
     LgExceptionsSplitSentences: 'Mr.|Dr.|[A-Z].|Vd.|Vds.',
     LgRegexpSplitSentences: '.!?:;"',
     LgGoogleTranslateURI:
-      '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###' as any,
+      '*http://translate.google.com/?ie=UTF-8&sl=••&tl=••&text=###',
     LgCharacterSubstitutions: "´='|`='|’='|‘='|...=…|..=‥",
   } as const;
   const {

@@ -1,5 +1,12 @@
 import { UIString } from 'lwt-i18n';
-import { LanguagesID, Tag, Tag2, Tags2ID, TagsID } from 'lwt-schemas';
+import {
+  LanguagesID,
+  NumericalStrengthPotentiallyCompound,
+  Tag,
+  Tag2,
+  Tags2ID,
+  TagsID,
+} from 'lwt-schemas';
 import { dataService } from 'lwt-state';
 import {
   Icon,
@@ -24,11 +31,7 @@ export function LanguageBoxFilterWidget({
       {t('Language')}:
       <LanguageDropdown
         onChange={(val) => {
-          if (val === -1) {
-            dataService.setActiveLanguage(null);
-          } else {
-            dataService.setActiveLanguage(val);
-          }
+          dataService.setActiveLanguage(val);
         }}
         defaultValue={activeLanguageID === null ? undefined : activeLanguageID}
         header="Filter off"
@@ -37,7 +40,11 @@ export function LanguageBoxFilterWidget({
   );
 }
 
-export function StatusSelectFilterWidget() {
+export function StatusSelectFilterWidget({
+  selected = null,
+}: {
+  selected?: NumericalStrengthPotentiallyCompound | null;
+}) {
   const t = useI18N();
   const updateParams = useUpdateParams();
   return (
@@ -45,34 +52,42 @@ export function StatusSelectFilterWidget() {
       {t('Status')}:
       <select
         name="status"
-        defaultValue={status === null ? undefined : status}
+        defaultValue={selected === null ? undefined : selected}
         onChange={({ target: { value: selectedValue } }) => {
           updateParams({ status: selectedValue, page: null });
         }}
       >
-        <option value="" selected>
+        <option value="" selected={selected === undefined}>
           [{t('Filter off')}]
         </option>
         {new Array(5).fill(0).map((_, ii) => {
           const val = ii + 1;
           return (
-            <option value={val}>
+            <option key={val} value={val} selected={selected === val}>
               {val === 5 ? t('Learned') : t('Learning')} [{val}]
             </option>
           );
         })}
-        <option value="99">Well Known [WKn]</option>
-        <option value="98">Ignored [Ign]</option>
+        <option value="99" selected={selected === 99}>
+          Well Known [WKn]
+        </option>
+        <option value="98" selected={selected === 98}>
+          Ignored [Ign]
+        </option>
         {/* TODO reuse GetWordstatusSelectoptions */}
         {new Array(4).fill(0).map((_, ii) => {
           const val = ii + 1;
           return (
-            <>
+            <span key={ii}>
               <option disabled>--------</option>
               {new Array(5 - val).fill(0).map((__, jj) => {
                 const jVal = jj + 1;
                 return (
-                  <option value={`${val}${jVal}`}>
+                  <option
+                    key={jj}
+                    value={`${val}${jVal}`}
+                    selected={selected === Number.parseInt(`${val}${jVal}`)}
+                  >
                     {val + jVal === 5 ? t('Learning/-ed') : t('Learning')} [
                     {val}
                     ..
@@ -80,7 +95,7 @@ export function StatusSelectFilterWidget() {
                   </option>
                 );
               })}
-            </>
+            </span>
           );
         })}
         <option disabled>--------</option>
@@ -110,9 +125,21 @@ export function QueryFilterWidget({
     >
       {t(filterString)}:
       <input
+        onKeyDown={(val) => {
+          if (val.key === 'Enter') {
+            if (queryRef.current) {
+              updateParams({
+                query:
+                  queryRef.current.value === '' ? null : queryRef.current.value,
+                page: null,
+              });
+            }
+            val.preventDefault();
+          }
+        }}
         type="text"
         name="query"
-        value={query || ''}
+        defaultValue={query || ''}
         ref={queryRef}
         maxLength={50}
         size={15}
@@ -122,9 +149,14 @@ export function QueryFilterWidget({
         type="button"
         name="querybutton"
         value="Filter"
-        onChange={() => {
-          if (queryRef.current && queryRef.current.value !== '') {
-            updateParams({ query: queryRef.current.value, page: null });
+        onClick={() => {
+          console.log('TEST123-filter');
+          if (queryRef.current) {
+            updateParams({
+              query:
+                queryRef.current.value === '' ? null : queryRef.current.value,
+              page: null,
+            });
           }
         }}
       />
@@ -132,7 +164,7 @@ export function QueryFilterWidget({
       <input
         type="button"
         value="Clear"
-        onChange={() => {
+        onClick={() => {
           updateParams(null);
           if (queryRef.current) {
             queryRef.current.value = '';
@@ -153,6 +185,7 @@ export function FilterHeaderWidget() {
         <input
           type="button"
           value="Reset All"
+          // TODO this doesnt update language to null
           onClick={() => paramUpdater(null)}
         />
       </th>
@@ -199,11 +232,11 @@ export function CompoundTagFilterWidget(
   return (
     <tr>
       <td className="td1 center" colSpan={2} style={{ whiteSpace: 'nowrap' }}>
-        {t('Tag #1')}:
+        {t('Tag #1')}:{/* just used for type discrimination */}
         {isTextTag ? (
           <TagDropDown
             tags={tagArgs.availableTags}
-            tagKey={'tag2'}
+            tagKey={'tag1'}
             defaultValue={tagArgs.tag1}
           />
         ) : (
@@ -226,13 +259,13 @@ export function CompoundTagFilterWidget(
           <TagDropDown
             tags={tagArgs.availableTags}
             tagKey={'tag2'}
-            defaultValue={tagArgs.tag1}
+            defaultValue={tagArgs.tag2}
           />
         ) : (
           <TagDropDown
             tags={tagArgs.availableTags}
-            tagKey={'tag1'}
-            defaultValue={tagArgs.tag1}
+            tagKey={'tag2'}
+            defaultValue={tagArgs.tag2}
           />
         )}{' '}
       </td>
@@ -242,5 +275,9 @@ export function CompoundTagFilterWidget(
 function tagIsTextTag(
   args: TextTagWidgetProps | TermTagWidgetProps
 ): args is TextTagWidgetProps {
-  return args.availableTags && 'T2ID' in args.availableTags[0];
+  return (
+    args.availableTags &&
+    args.availableTags[0] !== undefined &&
+    'T2ID' in args.availableTags[0]
+  );
 }

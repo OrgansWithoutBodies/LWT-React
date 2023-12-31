@@ -3,21 +3,22 @@ import * as ss from "superstruct";
 import { BrandedString, brandedNumber, brandedString } from "./branding";
 import { NumericalSettingInRangeValidator } from "./settings";
 
-type URL = `http://${string}` | `https://${string}`;
-type URLTemplate = `http://${string}` | `https://${string}`;
+type TemplateString = `${string}###${string}`;
+type URL = `http${"s" | ""}://${TemplateString}`;
+type NewWindowURL = `*${URL}`;
 type APIURLTemplate = `api://${string}`;
 
 const isValidAPIURL = (
   validationString: string
 ): validationString is APIURLTemplate => validationString.startsWith("api://");
 const isValidURL = (validationString: string): validationString is URL =>
-  validationString.startsWith("http://") ||
-  validationString.startsWith("https://");
+  (validationString.startsWith("http://") ||
+    validationString.startsWith("https://")) &&
+  validationString.includes("###");
 const isValidURLTemplate = (
   validationString: string
-): validationString is URLTemplate =>
-  validationString.startsWith("*http://") ||
-  validationString.startsWith("*https://");
+): validationString is NewWindowURL =>
+  validationString.startsWith("*") && isValidURL(validationString.slice(1));
 const LowerCaseValidator = () =>
   ss.refine(
     ss.string(),
@@ -31,13 +32,13 @@ export const URLValidator = () =>
 const APIURLValidator = () =>
   ss.refine<APIURLTemplate, any>(ss.string() as any, "api-url", isValidAPIURL);
 const URLTemplateValidator = (): ss.Struct<any, any> =>
-  ss.refine<URLTemplate, any>(
+  ss.refine<NewWindowURL, any>(
     ss.string() as any,
     "urlTemplate",
     isValidURLTemplate
   );
 export const DictURLValidator: () => ss.Struct<
-  APIURLTemplate | URLTemplate | BrandedString<"URL">
+  APIURLTemplate | NewWindowURL | BrandedString<"URL">
 > = () => ss.union([URLTemplateValidator(), APIURLValidator(), URLValidator()]);
 export const NumberInListValidator = <TNum extends Readonly<number[]>>(
   numbers: TNum

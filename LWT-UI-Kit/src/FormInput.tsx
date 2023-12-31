@@ -40,7 +40,7 @@ export function FormTextArea<
 }: FormTextAreaProps<TKey, TData>) {
   // TODO dynamically add constraint to validator here? or just hardcode
   // const { maxLength } = nativeProps;
-  if (fixedEntry && defaultEntry) {
+  if (fixedEntry !== undefined && defaultEntry !== undefined) {
     throw new Error("Can't have fixed and default set!");
   }
   return (

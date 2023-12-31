@@ -150,7 +150,7 @@ export function UploadWords() {
                     (val) => val !== 0
                   ) as (keyof typeof StrengthMap)[]
                 ).map((key) => (
-                  <option value={StrengthMap[key].classKey}>
+                  <option value={StrengthMap[key].classKey} key={key}>
                     {StrengthMap[key].status} [{key}]
                   </option>
                 ))}
@@ -320,7 +320,7 @@ export function ImportedWordsReport({
             $sqlct = $sqlct + 1;
           }
           return (
-            <tr>
+            <tr key={term.WoID}>
               <td className="td1 right">{ii + 1}</td>
               <td className="td1">{term.WoText}</td>
               <td className="td1">{term.WoTranslation}</td>

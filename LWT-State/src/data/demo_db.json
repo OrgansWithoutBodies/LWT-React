@@ -154,18 +154,7 @@
       "LgRightToLeft": 1
     }
   ],
-  "sentences": [
-    {
-      "SeID": "",
-      "SeLgID": "",
-      "SeTxID": "",
-      "SeOrder": "",
-      "SeText": "",
-      "SeLgID": "",
-      "SeTxID": "",
-      "SeOrder": ""
-    }
-  ],
+  "sentences": [],
   "settings": [
     {
       "StKey": "dbversion",

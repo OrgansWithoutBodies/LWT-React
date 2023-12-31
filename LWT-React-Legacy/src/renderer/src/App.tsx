@@ -154,6 +154,11 @@ export function App(): JSX.Element {
     <AppContext.Provider value={AppVariables}>
       <GlobalStyle />
       <NotificationMessage />
+      {/* <AnimatePresence> */}
+      {/* https://adelpro.medium.com/page-transitions-in-react-with-react-router-v6-and-framer-motion-162d14a0cbe9 */}
+      {/* import { CSSTransition, SwitchTransition } from 'react-transition-group' */}
+
+      {/* <CSSTransition key={location.pathname} classNames="fade" timeout={300}> */}
       <Router basename={BASENAME}>
         {/*
          */}

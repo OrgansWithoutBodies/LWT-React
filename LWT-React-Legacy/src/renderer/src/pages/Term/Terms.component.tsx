@@ -9,7 +9,9 @@ import {
   AddNewWordValidator,
   EditWordsValidator,
   LanguagesID,
+  NumericalStrengthPotentiallyCompound,
   TagsID,
+  TextItem,
   TextsID,
   Word,
   WordsID,
@@ -17,6 +19,7 @@ import {
   get_status_abbr,
 } from 'lwt-schemas';
 import {
+  TermDetailRow,
   dataService,
   useData,
   wordNoIDPrevalidateMap,
@@ -40,17 +43,18 @@ import {
   useI18N,
   useInternalNavigate,
   usePager,
+  useSelection,
   useSettingWithDefault,
   useUpdateParams,
 } from 'lwt-ui-kit';
 import { useEffect, useState } from 'react';
-import { useSelection } from '../../hooks/useSelection';
 import { filterTags } from '../../utils/filterTags';
 import { prepare_textdata_js } from '../../utils/windowFunctions';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { buildTextTagLookup } from '../ArchivedText/buildTextTagLookup';
 import { textareaKeydown } from '../IO/CheckForm';
 import { WordSorting, sortingMethod } from '../Sorting';
+import { filterByQuery } from '../Text/Library.component';
 import { SentencesForWord } from './AddNewWordPane';
 import { DictionaryLinks } from './DictionaryLinks';
 import {
@@ -158,7 +162,7 @@ export function TermsFilterBox({
   numTerms: number;
   numPages: number;
   currentPage: number;
-  status: number | null;
+  status: NumericalStrengthPotentiallyCompound | null;
   query: string | null;
   tag1: TagsID | null;
   tag2: TagsID | null;
@@ -196,13 +200,15 @@ export function TermsFilterBox({
                 ? texts.filter(({ TxLgID }) => TxLgID === activeLanguageID)
                 : texts
               ).map((text) => (
-                <option value={text.TxID}>{text.TxTitle}</option>
+                <option key={text.TxID} value={text.TxID}>
+                  {text.TxTitle}
+                </option>
               ))}
             </select>
           </td>
         </tr>
         <tr>
-          <StatusSelectFilterWidget />
+          <StatusSelectFilterWidget selected={status} />
           <QueryFilterWidget
             filterString="Term, Rom., Transl. (Wildc.=*)"
             query={query}
@@ -271,23 +277,14 @@ function TermRow({
   sorting,
 }: {
   sorting: WordSorting;
-  word: Word;
+  word: TermDetailRow;
   tags: string[];
   isSelected: boolean;
   onSelect: (term: Word, checked: boolean) => void;
 }): JSX.Element {
   const termID = word.WoID;
   const sentence = word.WoSentence;
-  const [{ activeLanguageID, languages }] = useData([
-    'activeLanguageID',
-    'languages',
-  ]);
-  const foundLanguage = activeLanguageID
-    ? null
-    : languages.find((val) => val.LgID === word.WoLgID);
-  if (!foundLanguage && !activeLanguageID) {
-    throw new Error('Invalid Word Language ID!');
-  }
+  const [{ activeLanguageID }] = useData(['activeLanguageID']);
   return (
     <tr>
       <td id={`rec${termID}`} className="td1 center">
@@ -322,14 +319,13 @@ function TermRow({
         />
         &nbsp;
       </td>
-      {!activeLanguageID && (
-        <td className="td1 center">{foundLanguage?.LgName}</td>
-      )}
+      {!activeLanguageID && <td className="td1 center">{word.WoLgName}</td>}
       <td className="td1">
         <span>{word.WoText}</span> /{' '}
         <span
           id={`roman${termID}`}
           className="edit_area clickedit"
+          // TODO
           title="Click to edit..."
         >
           {/* TODO click to edit */}
@@ -352,13 +348,7 @@ function TermRow({
       <td className="td1 center">
         <b>
           {sentence !== undefined ? (
-            // TODO this shouldnt be translated
-            <Icon
-              src="status"
-              title={`${sentence}` as any}
-              translateTitle={false}
-              alt="Yes"
-            />
+            <Icon src="status" title={`${sentence}`} dontTranslate alt="Yes" />
           ) : (
             <Icon src="status-busy" title="(No valid sentence)" alt="No" />
           )}
@@ -443,30 +433,32 @@ export function Terms({
   textFilter: TextsID | null;
   pageNum: number | null;
   // filterlang: LanguagesID | null;
-  status: number | null;
+  status: NumericalStrengthPotentiallyCompound | null;
   query: string | null;
   tag1: TagsID | null;
   tag12: 0 | 1;
   tag2: TagsID | null;
   sort?: WordSorting;
 }): JSX.Element {
-  const [{ words, activeLanguage, tags, wordtags }] = useData([
-    'words',
-    'tags',
-    'activeLanguage',
-    'wordtags',
-  ]);
-
+  const [{ termDetailRows, activeLanguage, tags, wordtags, textitems }] =
+    useData([
+      'termDetailRows',
+      'tags',
+      'activeLanguage',
+      'wordtags',
+      'textitems',
+    ]);
+  const words = termDetailRows || [];
   const { ['set-terms-per-page']: pageSize } = useSettingWithDefault([
     'set-terms-per-page',
   ]);
 
-  const filteredWordTags = filterTags(wordtags, tag1, tag2, tag12);
-
+  const filteredWordTags = filterTags({ tagIDs: wordtags, tag1, tag2, tag12 });
+  const textItemsForThisText = textitems.filter((val) =>
+    textFilter === null ? false : val.TiTxID === textFilter
+  );
   const filteredWords = words.filter((word) => {
-    // TODO - find if in target text
-    const isRightText = textFilter === null ? true : true;
-    if (!isRightText) {
+    if (!isRightText(textFilter, textItemsForThisText, word)) {
       return false;
     }
     const isRightStatus = status === null ? true : word.WoStatus === status;
@@ -480,17 +472,29 @@ export function Terms({
     if (!isRightLang) {
       return false;
     }
+
+    if (
+      filterByQuery(query, [
+        word.WoText,
+        word.WoRomanization || '',
+        word.WoTranslation,
+      ]) === false
+    ) {
+      return false;
+    }
+
     if (tag1 === null && tag2 === null) {
       return true;
     }
     const filteredTagsIncludesWord = filteredWordTags[word.WoID] === true;
     return filteredTagsIncludesWord;
   });
-  console.log('WORDFILTER', filteredWordTags);
 
   const textTagLookup = buildTextTagLookup(tags, wordtags);
   const sortedWords =
-    sort !== null ? filteredWords.sort(sortingMethod(sort)) : filteredWords;
+    sort !== null
+      ? [...filteredWords].sort(sortingMethod(sort))
+      : filteredWords;
   const currentPage = pageNum !== null ? pageNum : 1;
   const { onSelectAll, onSelectNone, selectedValues, onSelect } = useSelection(
     filteredWords,
@@ -550,6 +554,7 @@ export function Terms({
             <tbody>
               {displayedWords.map((word) => (
                 <TermRow
+                  key={word.WoID}
                   tags={textTagLookup[word.WoID] || []}
                   word={word}
                   onSelect={onSelect}
@@ -571,6 +576,18 @@ export function Terms({
       )}
     </>
   );
+}
+
+function isRightText(
+  textFilter: TextsID | null,
+  textItemsForThisText: TextItem[],
+  word: Word
+) {
+  return textFilter === null
+    ? true
+    : textItemsForThisText.find(
+        (val) => val.TiTextLC === word.WoTextLC && val.TiLgID === word.WoLgID
+      ) !== undefined;
 }
 
 export function EditTerm({ chgID }: { chgID: number }): JSX.Element {
@@ -912,18 +929,29 @@ export function TermMultiActions({
       <GenericMultiActions
         AllActions={GetAllWordsActionsSelectOptions}
         SelectedOptions={GetMultipleWordsSelectoptions}
-        onChangeAll={({ target: { value, innerText } }) => {
+        onChangeAll={({ target }) => {
+          const { value, innerText } = target;
           allActionGo({
             numRecords: recno,
             sel: { value, text: innerText },
+            onNudgeStrength(direction) {
+              allTermIDs.map((val) =>
+                dataService.nudgeTermStrength(val, direction)
+              );
+            },
             onSetCapitalization: (upperCase) => {
               if (upperCase) {
                 return dataService.setTermTextUppercase(allTermIDs);
               }
-              return dataService.setTermTextUppercase(allTermIDs);
+              return dataService.setTermTextLowercase(allTermIDs);
             },
-            onAddTag: (tagStr) => {
-              dataService.addPotentiallyNewTagToTerms(tagStr, allTermIDs);
+            onTag: (tagStr, adding) => {
+              if (adding) {
+                dataService.addPotentiallyNewTagToTerms(tagStr, allTermIDs);
+                return;
+              }
+              dataService.removeTagFromMultipleTerms(tagStr, allTermIDs);
+              return;
             },
             onClear: () => {},
             onExport: (mode) => {
@@ -932,7 +960,7 @@ export function TermMultiActions({
                   dataService.exportTermsAnki(allTermIDs);
                   break;
                 case 'flexible':
-                  dataService.exportTermsTSV(allTermIDs);
+                  dataService.exportTermsFlexible(allTermIDs);
                   break;
                 case 'tsv':
                   dataService.exportTermsTSV(allTermIDs);
@@ -946,6 +974,7 @@ export function TermMultiActions({
               });
             },
           });
+          target.selectedIndex = 0;
         }}
         onChangeSelected={multiActionGo}
         countAllTerms={recno}
@@ -1055,7 +1084,7 @@ function PrintSimilarTerms({
         const compare = compared_term;
 
         return (
-          <>
+          <span key={termid}>
             <Icon
               className="clickedit"
               src="tick-button-small"
@@ -1077,7 +1106,7 @@ function PrintSimilarTerms({
             )}
             {romd} — {tra}
             <br />
-          </>
+          </span>
         );
       })}
     </>

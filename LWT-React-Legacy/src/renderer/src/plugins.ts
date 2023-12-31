@@ -33,11 +33,8 @@ const plugins: readonly Plugin[] = [
   },
   {
     pluginName: 'demo-lorem-ipsum',
-    landingPageLinks: [
-      null,
-      { link: '/lorem_ipsum', label: 'Demo Plugin Route' },
-    ],
-    routes: { '/lorem_ipsum': () => LoremIpsum({ len: 100 }) },
+    landingPageLinks: [null, { link: '/lorem_ipsum', label: 'Lorem Ipsum' }],
+    routes: { '/lorem_ipsum': () => LoremIpsum({ len: 1000 }) },
   },
 ] as const;
 

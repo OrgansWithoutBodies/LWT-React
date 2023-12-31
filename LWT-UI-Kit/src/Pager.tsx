@@ -45,7 +45,11 @@ export function Pager({
           {[...new Array(numPages).keys()].map((pageNumber) => {
             const isSelected = currentPage === pageNumber + 1;
             return (
-              <option value={pageNumber + 1} selected={isSelected}>
+              <option
+                key={pageNumber + 1}
+                value={pageNumber + 1}
+                selected={isSelected}
+              >
                 {pageNumber + 1}
               </option>
             );

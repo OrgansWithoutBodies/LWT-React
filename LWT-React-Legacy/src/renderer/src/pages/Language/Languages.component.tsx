@@ -260,7 +260,11 @@ export function LanguagesPage({
           </tr>
         </thead>
         {sortedLanguages.map((lang) => (
-          <LanguageLine language={lang} activeLanguageID={activeLanguageID} />
+          <LanguageLine
+            key={lang.LgID}
+            language={lang}
+            activeLanguageID={activeLanguageID}
+          />
         ))}
       </table>
     </>

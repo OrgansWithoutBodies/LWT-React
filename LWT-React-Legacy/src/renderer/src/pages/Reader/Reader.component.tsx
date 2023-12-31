@@ -6,10 +6,10 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  useThemeColors,
 } from 'lwt-ui-kit';
 import { title } from 'process';
 import { useState } from 'react';
-import { useThemeColors } from '../../hooks/useThemeColors';
 import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { EditWordParams } from '../OverlibComponents';
 import { AddNewTermTooltip } from '../Term/AddNewTermTooltip';

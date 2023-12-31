@@ -16,8 +16,8 @@ import {
   useI18N,
   useInternalNavigate,
   usePager,
+  useSelection,
 } from 'lwt-ui-kit';
-import { useSelection } from '../../hooks/useSelection';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { textareaKeydown } from '../IO/CheckForm';
 import { TagSorting } from '../Sorting';
@@ -94,7 +94,7 @@ export function DisplayTextTags({
       {recno === 0 ? (
         <p>{t('No tags found')}.</p>
       ) : (
-        <form name="form2" method="post">
+        <form name="form2">
           <input type="hidden" name="data" value="" />
           <GenericMultiActions
             AllActions={GetAllTagsActionsSelectOptions}
@@ -118,7 +118,7 @@ export function DisplayTextTags({
               const { textCount } = tag;
               const { archTextCount } = tag;
               return (
-                <tr>
+                <tr key={tag.T2ID}>
                   {/* TODO think already taken care of?*/}
                   {/*  ' . checkTest(record['T2ID'], 'marked') . ' */}
                   <td className="td1 center">
@@ -175,7 +175,7 @@ export function DisplayTextTags({
         </form>
       )}
       {numPages > 1 && (
-        <form name="form3" action="#">
+        <form name="form3">
           <TableFooter
             currentPage={currentPage}
             pageSize={pageSize}
@@ -280,7 +280,7 @@ export function NewTextTag() {
     <>
       <Header title="My Text Tags" />
       <h4>{t('New Tag')}</h4>
-      <form name="newtag" method="post">
+      <form name="newtag">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
           <EntryRow headerText="Tag">
             <TtInput

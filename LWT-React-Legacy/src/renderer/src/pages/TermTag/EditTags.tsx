@@ -21,8 +21,8 @@ import {
   useI18N,
   useInternalNavigate,
   usePager,
+  useSelection,
 } from 'lwt-ui-kit';
-import { useSelection } from '../../hooks/useSelection';
 import { FilterSortPager } from '../ArchivedText/FilterSortPager';
 import { textareaKeydown } from '../IO/CheckForm';
 import { TagSorting } from '../Sorting';
@@ -30,6 +30,7 @@ import {
   FilterHeaderWidget,
   QueryFilterWidget,
 } from '../Term/LanguageBoxFilterWidget';
+import { filterByQuery } from '../Text/Library.component';
 
 export function DisplayTags({
   query,
@@ -45,9 +46,15 @@ export function DisplayTags({
     'settings',
     'wordTagCountmapByTag',
   ]);
-  const recno = tags.length;
 
-  const sortedTags = tags
+  const filteredTags = tags.filter((tag) => {
+    if (filterByQuery(query, [tag.TgText, tag.TgComment || '']) === false) {
+      return false;
+    }
+    return true;
+  });
+  const recno = filteredTags.length;
+  const sortedTags = filteredTags
     .map((tag) => ({
       ...tag,
       termCount: (wordTagCountmapByTag || {})[tag.TgID],
@@ -56,7 +63,7 @@ export function DisplayTags({
   const pageSize = settings['set-tags-per-page'] || 1;
   const { dataOnPage, numPages } = usePager(sortedTags, currentPage, pageSize);
   const { checkboxPropsForEntry, onSelectAll, onSelectNone, selectedValues } =
-    useSelection(tags, 'TgID');
+    useSelection(filteredTags, 'TgID');
   const t = useI18N();
   return (
     <>
@@ -100,7 +107,7 @@ export function DisplayTags({
               AllActions={GetAllTagsActionsSelectOptions}
               SelectedOptions={GetMultipleTagsActionsSelectOptions}
               onChangeAll={({ target: { value } }) => {
-                onChangeAllTags(value, dataOnPage, tags);
+                onChangeAllTags(value, dataOnPage, filteredTags);
               }}
               onChangeSelected={({ target: { value } }) => {
                 onChangeSelectedTags(value, selectedValues);
@@ -116,6 +123,7 @@ export function DisplayTags({
               <TagHeader sorting={sorting} />
               {dataOnPage.map((tag) => (
                 <TagRow
+                  key={tag.TgID}
                   tag={tag}
                   checkboxPropsForEntry={checkboxPropsForEntry}
                 />
@@ -307,37 +315,32 @@ export function NewTag() {
       'TgID'
     );
   };
+  const t = useI18N();
   return (
     <>
       <Header title="My Term Tags" />
-      <h4>New Tag</h4>
-      <form name="newtag" method="post">
+      <h4>{t('New Tag')}</h4>
+      <form name="newtag">
         <table className="tab3" cellSpacing={0} cellPadding={5}>
-          <tr>
-            <td className="td1 right">Tag:</td>
-            <td className="td1">
-              <TgInput
-                className="notempty setfocus noblanksnocomma checkoutsidebmp"
-                entryKey="TgText"
-                maxLength={20}
-                size={20}
-                isRequired
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="td1 right">Comment:</td>
-            <td className="td1">
-              <TextArea
-                className="checklength checkoutsidebmp"
-                onKeyDown={(e) => textareaKeydown(e, submitForm)}
-                maxLength={200}
-                entryKey="TgComment"
-                cols={40}
-                rows={3}
-              />
-            </td>
-          </tr>
+          <EntryRow headerText="Tag">
+            <TgInput
+              className="notempty setfocus noblanksnocomma checkoutsidebmp"
+              entryKey="TgText"
+              maxLength={20}
+              size={20}
+              isRequired
+            />
+          </EntryRow>
+          <EntryRow headerText="Comment">
+            <TextArea
+              className="checklength checkoutsidebmp"
+              onKeyDown={(e) => textareaKeydown(e, submitForm)}
+              maxLength={200}
+              entryKey="TgComment"
+              cols={40}
+              rows={3}
+            />
+          </EntryRow>
           <tr>
             <td className="td1 right" colSpan={2}>
               <input

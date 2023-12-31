@@ -1,6 +1,6 @@
-import { deflate, inflate } from "pako";
+import { gzip, ungzip } from "pako";
 export function unGzString(val: Uint8Array): string {
-  return inflate(val, {
+  return ungzip(val, {
     to: "string",
   });
 }
@@ -10,7 +10,7 @@ export function unGzString(val: Uint8Array): string {
  */
 export function gzipString(val: string): Uint8Array {
   // unescape(encodeURIComponent?
-  return deflate(val);
+  return gzip(val, { to: "string" } as any);
 }
 /**
  *

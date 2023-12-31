@@ -15,7 +15,7 @@ import { AnnPlcmnt, AnnType } from './pages/PrintAnnotate/Annotation.types';
 import { DisplayImprText } from './pages/PrintAnnotate/DisplayImprText';
 import { PrintText } from './pages/PrintAnnotate/PrintText.component';
 import { ReaderPage } from './pages/Reader/ReaderPage.component';
-import { LanguageSorting, WordSorting } from './pages/Sorting';
+import { LanguageSorting, TextSorting, WordSorting } from './pages/Sorting';
 import { AddTerm, EditTerm, Terms } from './pages/Term/Terms.component';
 import { DisplayTags, EditTag, NewTag } from './pages/TermTag/EditTags';
 import { TesterPage } from './pages/Tester/Tester';
@@ -65,18 +65,10 @@ export function TermsWrapper() {
           pageNum={page !== null ? Number.parseInt(page) : 1}
           sort={sort ? (Number.parseInt(sort) as WordSorting) : undefined}
           status={status ? Number.parseInt(status) : null}
-          textFilter={text === null ? null : Number.parseInt<TextsID>(text)}
-          tag1={
-            tag1 === null || tag1 === '' ? null : Number.parseInt<TagsID>(tag1)
-          }
-          tag12={
-            tag12 === null || !['0', '1'].includes(tag12)
-              ? 0
-              : Number.parseInt<0 | 1>(tag12)
-          }
-          tag2={
-            tag2 === null || tag2 === '' ? null : Number.parseInt<TagsID>(tag2)
-          }
+          textFilter={parseNumericalParam<TextsID, TextsID | null>(text, null)}
+          tag1={parseNumericalParam<TagsID, TagsID | null>(tag1, null)}
+          tag12={parseNumericalBoolean(tag12)}
+          tag2={parseNumericalParam<TagsID, TagsID | null>(tag2, null)}
           query={query}
         />
         <EditTerm chgID={Number.parseInt(chg!)} />
@@ -86,22 +78,50 @@ export function TermsWrapper() {
   );
 }
 
+function parseNumericalParam<
+  TVal extends number,
+  TDefault extends null | TVal = TVal
+>(val: string | null, defaultVal: TDefault): TDefault {
+  return val === null || val === ''
+    ? defaultVal
+    : // TODO no any
+      (Number.parseInt<TVal>(val) as any);
+}
+function parseNumericalBoolean(
+  val: string | null,
+  defaultVal: 0 | 1 = 0
+): 0 | 1 {
+  return val === null || !['0', '1'].includes(val)
+    ? defaultVal
+    : Number.parseInt<0 | 1>(val);
+}
+
 export function AnnotatedTextsWrapper() {
-  const { text, annplcmnt, ann, status } = useInternalParams('print_impr_text');
+  const {
+    text,
+    annplcmnt,
+    // TODO
+    // ann, status
+  } = useInternalParams('print_impr_text');
   if (text === null) {
     throw new Error('Need To Specify Text ID');
   }
   return (
     <AnnotateText
       textID={Number.parseInt(text)}
-      annplcmnt={annplcmnt === null ? 0 : Number.parseInt(annplcmnt)}
+      annplcmnt={parseNumericalParam(annplcmnt, AnnPlcmnt.behind)}
       editmode={false}
     />
   );
 }
 export function DisplayImprTextWrapper() {
-  const { text, annplcmnt, ann, status } =
-    useInternalParams('display_impr_text');
+  const {
+    text,
+    // TODO
+    //  annplcmnt,
+    //   ann,
+    //    status
+  } = useInternalParams('display_impr_text');
   if (text === null) {
     throw new Error('Need To Specify Text ID');
   }
@@ -119,11 +139,9 @@ export function PrintTextWrapper() {
   }
   return (
     <PrintText
-      ann={ann === null ? AnnType['Nothing'] : Number.parseInt(ann)}
+      ann={parseNumericalParam<AnnType>(ann, AnnType['Nothing'])}
       textID={Number.parseInt(text)}
-      annplcmnt={
-        annplcmnt === null ? AnnPlcmnt['behind'] : Number.parseInt(annplcmnt)
-      }
+      annplcmnt={parseNumericalParam(annplcmnt, AnnPlcmnt.behind)}
       status={status === null ? 14 : Number.parseInt(status)}
     />
   );
@@ -180,18 +198,16 @@ export function LibraryWrapper() {
         <Library
           currentPage={page !== null ? Number.parseInt(page) : 1}
           query={query}
-          sorting={sort !== null ? Number.parseInt(sort) : undefined}
+          sorting={
+            sort !== null ? Number.parseInt(sort) : TextSorting['Newest first']
+          }
           tag2={
             tag2 === null || tag2 === '' ? null : Number.parseInt<Tags2ID>(tag2)
           }
           tag1={
             tag1 === null || tag1 === '' ? null : Number.parseInt<Tags2ID>(tag1)
           }
-          tag12={
-            tag12 === null || !['0', '1'].includes(tag12)
-              ? 0
-              : Number.parseInt<0 | 1>(tag12)
-          }
+          tag12={parseNumericalBoolean(tag12)}
         />
         <EditText chgID={Number.parseInt(chg!)} />
       </Switch>
@@ -217,6 +233,7 @@ export function EditArchivedTextsWrapper() {
     dataService.unarchiveText(Number.parseInt(unarch));
     paramUpdater(null);
   }
+  console.log('TEST123-tag', tag1, tag2);
   return (
     <Switch on={chgID !== null}>
       <DisplayArchivedTexts
@@ -224,10 +241,10 @@ export function EditArchivedTextsWrapper() {
         currentPage={page !== null ? Number.parseInt(page) : 1}
         tag12={tag12 && ['1', '0'].includes(tag12) ? Number.parseInt(tag12) : 0}
         tag1={
-          tag1 !== null || tag1 === '' ? Number.parseInt<TagsID>(tag1) : null
+          tag1 !== null && tag1 !== '' ? Number.parseInt<Tags2ID>(tag1) : null
         }
         tag2={
-          tag2 !== null || tag2 === '' ? Number.parseInt<TagsID>(tag2) : null
+          tag2 !== null && tag2 !== '' ? Number.parseInt<Tags2ID>(tag2) : null
         }
         sorting={sort !== null ? Number.parseInt(sort) : undefined}
       />
@@ -283,15 +300,20 @@ export function EditTagsWrapper() {
 }
 
 export function ReaderWrapper() {
-  const [searchParams] = useSearchParams();
-  const start = searchParams.get('start');
+  const { start, onlyAnn, query, tag1, tag2, tag12 } =
+    useInternalParams('do_text');
   // TODO sanitize
   // TODO verify exists
   if (!start) {
     throw new Error('Invalid Start ID!');
   }
   console.log('WRAPPER');
-  return <ReaderPage textID={Number.parseInt(start)} />;
+  return (
+    <ReaderPage
+      filterArgs={{ onlyAnn, query, tag1, tag2, tag12 }}
+      txID={Number.parseInt(start)}
+    />
+  );
 }
 
 export function TestWrapper() {

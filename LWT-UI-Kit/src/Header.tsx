@@ -9,6 +9,24 @@ import { Icon } from "./Icon";
 import { headerValues } from "./headerValues";
 import { InternalPaths, useInternalNavigate } from "./hooks/useInternalNav";
 import { A } from "./nav/InternalLink";
+export type PrevNextLinks = {
+  prev:
+    | {
+        textID: TextsID;
+        title: string;
+      }
+    | {
+        fallback: UIString;
+      };
+  next:
+    | {
+        title: string;
+        textID: TextsID;
+      }
+    | {
+        fallback: UIString;
+      };
+};
 
 // TODO Header is the same on all crud ops of a given
 export function Header({
@@ -21,13 +39,7 @@ export function Header({
   title: UIString;
   TitleDecoration?: () => JSX.Element;
   link?: InternalPaths;
-  readerProps?: {
-    prevTextID: TextsID;
-    nextTextID: TextsID;
-
-    prevTextString: string;
-    nextTextString: string;
-
+  readerProps?: PrevNextLinks & {
     textID: TextsID;
     langID: LanguagesID;
   };
@@ -69,6 +81,7 @@ export function Header({
             const headerKey = key as keyof typeof headerValues;
             return (
               <option
+                key={key}
                 value={headerValues[headerKey]}
                 selected={location.pathname === `/${headerValues[headerKey]}`}
               >
@@ -80,18 +93,38 @@ export function Header({
         {readerProps && (
           <>
             &nbsp; | &nbsp;
-            <A href={`/do_text?start=${readerProps.prevTextID}`} target="_top">
+            {"fallback" in readerProps.prev ? (
               <Icon
-                src="navigation-180-button"
-                title={`Previous Text: ${readerProps.prevTextString}` as any}
+                src="navigation-180-button-light"
+                title={readerProps.prev.fallback}
               />
-            </A>
-            <A href={`/do_text?start=${readerProps.nextTextID}`} target="_top">
+            ) : (
+              <A
+                href={`/do_text?start=${readerProps.prev.textID}`}
+                target="_top"
+              >
+                <Icon
+                  src="navigation-180-button"
+                  title={`Previous Text: ${readerProps.prev.title}` as any}
+                />
+              </A>
+            )}
+            {"fallback" in readerProps.next ? (
               <Icon
-                src="navigation-000-button"
-                title={`Next Text: ${readerProps.nextTextString}` as any}
+                src="navigation-000-button-light"
+                title={readerProps.next.fallback}
               />
-            </A>
+            ) : (
+              <A
+                href={`/do_text?start=${readerProps.next.textID}`}
+                target="_top"
+              >
+                <Icon
+                  src="navigation-000-button"
+                  title={`Next Text: ${readerProps.next.title}` as any}
+                />
+              </A>
+            )}
             &nbsp; | &nbsp;
             <A href={`/do_test?text=${readerProps.textID}`} target="_top">
               <Icon src="question-balloon" title="Test" />
@@ -139,7 +172,11 @@ export function Header({
           }
         >
           {I18NLanguages.map((lang) => (
-            <option value={lang} selected={settings.uilanguage === lang}>
+            <option
+              key={lang}
+              value={lang}
+              selected={settings.uilanguage === lang}
+            >
               {lang}
             </option>
           ))}

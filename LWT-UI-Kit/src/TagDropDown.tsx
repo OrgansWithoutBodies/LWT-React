@@ -34,12 +34,20 @@ export function TagDropDown<TTag extends Tag | Tag2>({
       </option>
       {isTags(tags)
         ? tags.map((tag) => (
-            <option value={tag.TgID} selected={defaultValue === tag.TgID}>
+            <option
+              key={tag.TgID}
+              value={tag.TgID}
+              selected={defaultValue === tag.TgID}
+            >
               {tag.TgText}
             </option>
           ))
         : tags.map((tag) => (
-            <option value={tag.T2ID} selected={defaultValue === tag.T2ID}>
+            <option
+              key={tag.T2ID}
+              value={tag.T2ID}
+              selected={defaultValue === tag.T2ID}
+            >
               {tag.T2Text}
             </option>
           ))}

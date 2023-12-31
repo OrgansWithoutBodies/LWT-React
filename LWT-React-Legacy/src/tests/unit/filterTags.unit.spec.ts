@@ -12,21 +12,51 @@ describe('filterTags', () => {
     { TtTxID: 3, TtT2ID: 2 },
   ] as TextTag[];
   it('Accounts for when no tags are specified', () => {
-    const filteredDataOR = filterTags(testData, null, null, 0);
+    const filteredDataOR = filterTags({
+      tagIDs: testData,
+      tag1: null,
+      tag2: null,
+      tag12: 0,
+    });
 
-    const filteredDataAND = filterTags(testData, null, null, 1);
+    const filteredDataAND = filterTags({
+      tagIDs: testData,
+      tag1: null,
+      tag2: null,
+      tag12: 1,
+    });
 
     expect(filteredDataOR).toEqual({ 1: true, 2: true, 3: true });
     expect(filteredDataAND).toEqual({ 1: true, 2: true, 3: true });
   });
   it('Accounts for when one tag is specified', () => {
-    const filteredDataLeftOR = filterTags(testData, 1 as Tags2ID, null, 0);
+    const filteredDataLeftOR = filterTags({
+      tagIDs: testData,
+      tag1: 1 as Tags2ID,
+      tag2: null,
+      tag12: 0,
+    });
 
-    const filteredDataLeftAND = filterTags(testData, 2 as Tags2ID, null, 1);
+    const filteredDataLeftAND = filterTags({
+      tagIDs: testData,
+      tag1: 2 as Tags2ID,
+      tag2: null,
+      tag12: 1,
+    });
 
-    const filteredDataRightOR = filterTags(testData, null, 1 as Tags2ID, 0);
+    const filteredDataRightOR = filterTags({
+      tagIDs: testData,
+      tag1: null,
+      tag2: 1 as Tags2ID,
+      tag12: 0,
+    });
 
-    const filteredDataRightAND = filterTags(testData, null, 2 as Tags2ID, 1);
+    const filteredDataRightAND = filterTags({
+      tagIDs: testData,
+      tag1: null,
+      tag2: 2 as Tags2ID,
+      tag12: 1,
+    });
 
     expect(filteredDataLeftOR).toEqual({ 1: true, 2: true });
     expect(filteredDataLeftAND).toEqual({ 1: true, 3: true });
@@ -34,9 +64,19 @@ describe('filterTags', () => {
     expect(filteredDataRightAND).toEqual({ 1: true, 3: true });
   });
   it('Accounts for when multiple tags are specified', () => {
-    const filteredDataOR = filterTags(testData, 1 as Tags2ID, 2 as Tags2ID, 0);
+    const filteredDataOR = filterTags({
+      tagIDs: testData,
+      tag1: 1 as Tags2ID,
+      tag2: 2 as Tags2ID,
+      tag12: 0,
+    });
 
-    const filteredDataAND = filterTags(testData, 1 as Tags2ID, 2 as Tags2ID, 1);
+    const filteredDataAND = filterTags({
+      tagIDs: testData,
+      tag1: 1 as Tags2ID,
+      tag2: 2 as Tags2ID,
+      tag12: 1,
+    });
 
     expect(filteredDataOR).toEqual({ 1: true, 2: true, 3: true });
     expect(filteredDataAND).toEqual({ 1: true, 2: 'partial', 3: 'partial' });

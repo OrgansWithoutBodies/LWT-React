@@ -45,6 +45,7 @@ function GetGenericSelectOptions<TVal extends string | number>({
         const { title, value, disabled } = optionVal;
         return (
           <option
+            key={value}
             value={value}
             disabled={disabled === true}
             selected={selected === value}

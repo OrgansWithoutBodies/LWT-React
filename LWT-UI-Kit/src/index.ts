@@ -3,6 +3,7 @@ export * from "./GenericMultiActions";
 // export * from "./Button.component";
 export * from "./DevModeGate";
 export * from "./EntryRow";
+export * from "./FloatingMenu";
 export * from "./FourFrames";
 export * from "./Header";
 export * from "./I18N";
