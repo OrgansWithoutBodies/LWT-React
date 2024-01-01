@@ -300,17 +300,23 @@ export function EditTagsWrapper() {
 }
 
 export function ReaderWrapper() {
-  const { start, onlyAnn, query, tag1, tag2, tag12 } =
+  const { start, onlyAnn, query, tag1, tag2, tag12, sorting } =
     useInternalParams('do_text');
   // TODO sanitize
   // TODO verify exists
   if (!start) {
     throw new Error('Invalid Start ID!');
   }
-  console.log('WRAPPER');
   return (
     <ReaderPage
-      filterArgs={{ onlyAnn, query, tag1, tag2, tag12 }}
+      filterArgs={{
+        sorting: parseNumericalParam(sorting, TextSorting['Newest first']),
+        onlyAnn: onlyAnn === '1',
+        query,
+        tag1: tag1 === null ? null : Number.parseInt<Tags2ID>(tag1),
+        tag2: tag2 === null ? null : Number.parseInt<Tags2ID>(tag2),
+        tag12: parseNumericalBoolean(tag12),
+      }}
       txID={Number.parseInt(start)}
     />
   );

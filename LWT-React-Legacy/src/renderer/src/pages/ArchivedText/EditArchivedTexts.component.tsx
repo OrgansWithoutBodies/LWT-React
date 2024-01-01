@@ -554,14 +554,6 @@ export function filterAndSortArchivedTexts({
     if (filterByQuery(query, [textDetail.AtTitle]) === false) {
       return false;
     }
-    console.log('TEST123-query-postquery', {
-      texttags,
-      tag1,
-      tag2,
-      tag12,
-      textDetails,
-      filteredTags,
-    });
     if (!(filteredTags[textDetail.AtID] === true)) {
       return false;
     }

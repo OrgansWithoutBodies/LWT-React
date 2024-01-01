@@ -8,7 +8,9 @@ import { createGlobalStyle } from 'styled-components';
 
 import { AppContext, AppVariables, useAppContext } from 'lwt-build';
 import { BASENAME } from 'lwt-common';
+import { dataService } from 'lwt-state';
 import { Header, InternalPaths } from 'lwt-ui-kit';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { NotificationMessage } from './NotificationMessage';
 import {
   AnnotatedTextsWrapper,
@@ -159,19 +161,47 @@ export function App(): JSX.Element {
       {/* import { CSSTransition, SwitchTransition } from 'react-transition-group' */}
 
       {/* <CSSTransition key={location.pathname} classNames="fade" timeout={300}> */}
-      <Router basename={BASENAME}>
-        {/*
-         */}
+      <ErrorBoundary FallbackComponent={ErrorPage}>
+        <Router basename={BASENAME}>
+          {/*
+           */}
 
-        {/* A <Routes> looks through its children <Route>s and
+          {/* A <Routes> looks through its children <Route>s and
                     renders the first one that matches the current URL. */}
-        <Routes>
-          {...Object.keys(routes).map((routeKey) => {
-            const PathRouteElement = routes[routeKey];
-            return <Route path={routeKey} element={<PathRouteElement />} />;
-          })}
-        </Routes>
-      </Router>
+          <Routes>
+            {...Object.keys(routes).map((routeKey) => {
+              const PathRouteElement = routes[routeKey];
+              return <Route path={routeKey} element={<PathRouteElement />} />;
+            })}
+          </Routes>
+        </Router>
+      </ErrorBoundary>
     </AppContext.Provider>
+  );
+}
+export function ErrorPage({ error }: FallbackProps) {
+  console.log(error, Object.keys(error));
+  return (
+    <body>
+      An Error has ocurred!
+      <br />
+      If this keeps happening even on reload, you can try the following:
+      <ul>
+        <li>
+          <button onClick={() => dataService.emptyDatabase()}>
+            Delete Database
+          </button>
+        </li>
+        <li>
+          <button onClick={() => dataService.emptyDatabase()}>
+            Install Demo Database
+          </button>
+        </li>
+      </ul>
+      <div>
+        Error Message:
+        <span style={{ fontSize: 20, color: 'red' }}>{`${error}`}</span>
+      </div>
+    </body>
   );
 }

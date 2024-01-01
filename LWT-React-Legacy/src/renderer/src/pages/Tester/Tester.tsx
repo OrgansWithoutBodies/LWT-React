@@ -9,7 +9,7 @@ import {
   WordsID,
   get_status_abbr,
 } from 'lwt-schemas';
-import { useData } from 'lwt-state';
+import { dataService, useData } from 'lwt-state';
 import {
   FourFramePage,
   Header,
@@ -214,9 +214,11 @@ export function usePreviousAndNextTextLinks({
 export function TesterTable({
   language,
   words: words,
+  onSetEditingWord,
 }: {
   language: Language;
   words: Word[];
+  onSetEditingWord: (id: WordsID) => void;
 }) {
   // TODO;
   // BETWEEN 1 AND 5 AND WoTranslation !== \'\' AND WoTranslation !== \'*\'
@@ -311,6 +313,7 @@ export function TesterTable({
             {showEdit && (
               <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                 <a
+                  onClick={() => onSetEditingWord(word.WoID)}
                   href="edit_tword?wid=<?php echo record['WoID']; ?>"
                   target="ro"
                 >
@@ -321,13 +324,14 @@ export function TesterTable({
             {showStatus && (
               <td className="td1 center" style={{ whiteSpace: 'nowrap' }}>
                 <span id={`STAT${word.WoID}`}>
-                  <MakeStatusControlsTestTable
+                  <MakeStatusControlsTestTableRow
                     WoID={word.WoID}
                     // TODO Today or tomorrow
                     score={word.WoTodayScore}
                     status={word.WoStatus}
-                    onChangeTableStatus={() => {
-                      console.log('TODO');
+                    onChangeTableStatus={({ WoID, plusminus }) => {
+                      // const
+                      dataService.nudgeTermStrength(WoID, plusminus);
                     }}
                   />
                 </span>
@@ -347,16 +351,12 @@ export function TesterTable({
             )}
             {showTranslation && (
               <td className="td1 center">
-                <span id="TRAN<?php echo record['WoID']; ?>">
-                  {word.WoTranslation}
-                </span>
+                <span id={`TRAN${word.WoID}`}>{word.WoTranslation}</span>
               </td>
             )}
             {showRomanization && (
               <td className="td1 center">
-                <span id="ROMA<?php echo record['WoID']; ?>">
-                  {/* <?php echo tohtml(record['WoRomanization']); ?> */}
-                </span>
+                <span id={`ROMA${word.WoID}`}>{word.WoRomanization}</span>
               </td>
             )}
             {showSentence && (
@@ -381,7 +381,7 @@ export function TesterTable({
  * @param status
  * @param WoID
  */
-export function MakeStatusControlsTestTable({
+export function MakeStatusControlsTestTableRow({
   score,
   status,
   WoID,
@@ -429,7 +429,6 @@ export function MakeStatusControlsTestTable({
           )}
         </>
       )}
-      ;
     </>
   );
 }
@@ -548,6 +547,7 @@ export function TesterPage({
     'languageHashmap',
     'textitems',
   ]);
+
   useUpdateActiveText({ txID: textID });
 
   const t = useI18N();
@@ -621,7 +621,11 @@ export function TesterPage({
         testModality === null ? (
           <></>
         ) : testModality === 'table' ? (
-          <TesterTable language={language} words={tableWords} />
+          <TesterTable
+            language={language}
+            words={tableWords}
+            onSetEditingWord={(id) => setActiveWord(id)}
+          />
         ) : (
           <Tester
             modality={testModality}
@@ -1010,3 +1014,10 @@ export function sentenceTester(
     new CountUp(time(), $_SESSION['teststart'], 'timer', count ? 0 : 1);
   });
 }
+
+// if ($oldstatus == $status)
+// 	echo '<p>Status ' . get_colored_status_msg($status) . ' not changed.</p>';
+// else
+// 	echo '<p>Status changed from ' . get_colored_status_msg($oldstatus) . ' to ' . get_colored_status_msg($status) . '.</p>';
+
+// echo "<p>Old score was " . $oldscore . ", new score is now " . $newscore . ".</p>";

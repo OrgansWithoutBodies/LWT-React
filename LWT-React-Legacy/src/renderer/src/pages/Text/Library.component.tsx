@@ -35,7 +35,6 @@ import {
 } from 'lwt-ui-kit';
 import { useState } from 'react';
 import { filterTags } from '../../utils/filterTags';
-import { SelectMediaPath } from '../SelectMediaPath';
 import { TextSorting, buildSortByValue } from '../Sorting';
 import {
   CompoundTagFilterWidget,
@@ -525,6 +524,7 @@ export function filterAndSortTexts({
   textDetails: TextDetailRow[];
 }) {
   const filteredTags = filterTags({ tagIDs: texttags, tag1, tag2, tag12 });
+  const isTagsFilterRunning = filteredTags !== null;
   const filteredTextDetails = (textDetails || []).filter((textDetail) => {
     if (onlyAnn && textDetail.TxAnnotatedText === '') {
       return false;
@@ -532,9 +532,10 @@ export function filterAndSortTexts({
     if (filterByQuery(query, [textDetail.TxTitle]) === false) {
       return false;
     }
-    const includesTag =
-      Object.keys(filteredTags).length === 0 ||
-      filteredTags[textDetail.TxID] === true;
+    const includesTag = isTagsFilterRunning
+      ? Object.keys(filteredTags).length === 0 ||
+        filteredTags[textDetail.TxID] === true
+      : true;
     return includesTag;
   });
   const filteredSortedTextDetails = filteredTextDetails.sort(
@@ -550,7 +551,7 @@ export function filterAndSortTexts({
  */
 export function filterByQuery(query: string | null, stringsToCheck: string[]) {
   // Ignore if no query
-  if (query === null) {
+  if (query === null || query === '') {
     return true;
   }
   let checking = true;
@@ -696,7 +697,8 @@ export function EditTextPane({
                 size={60}
               />
               <span id="mediaselect">
-                <SelectMediaPath f="TxAudioURI" />
+                <TxInput type="file" entryKey={'TxAudioFile'} />
+                {/* <SelectMediaPath f="TxAudioURI" /> */}
               </span>
             </>
           </EntryRow>

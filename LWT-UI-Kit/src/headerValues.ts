@@ -39,7 +39,9 @@ export const headerValuesTemp = {
   check_text: { params: [] },
   new_word: { params: [] },
   do_test: { params: [] },
-  do_text: { params: ["onlyAnn", "query", "tag1", "tag2", "tag12"] },
+  do_text: {
+    params: ["start", "onlyAnn", "query", "tag1", "tag2", "tag12", "sorting"],
+  },
   long_text_import: { params: [] },
   upload_words: { params: [] },
   backup_restore: { params: [] },

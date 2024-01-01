@@ -27,6 +27,7 @@ export const setPersistedValueLocalStorage: PersistedValueSetter = (
   key,
   val
 ) => {
+  console.log({ key, val });
   localStorage.setItem(key, uInt8ToBase64(gzipObject(val)));
   const { size } = new Blob(Object.values(localStorage));
   console.log(

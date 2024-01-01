@@ -1,6 +1,6 @@
-import { gzip, ungzip } from "pako";
+import { deflate, inflate } from "pako";
 export function unGzString(val: Uint8Array): string {
-  return ungzip(val, {
+  return inflate(val, {
     to: "string",
   });
 }
@@ -8,16 +8,18 @@ export function unGzString(val: Uint8Array): string {
  *
  * @param val
  */
-export function gzipString(val: string): Uint8Array {
+export function gzipStringOrArrayBuffer(
+  val: string | Uint8Array | ArrayBuffer
+): Uint8Array {
   // unescape(encodeURIComponent?
-  return gzip(val, { to: "string" } as any);
+  return deflate(val);
 }
 /**
  *
  * @param val
  */
 export function gzipObject(val: object): Uint8Array {
-  return gzipString(JSON.stringify(val));
+  return gzipStringOrArrayBuffer(JSON.stringify(val));
 }
 /**
  *

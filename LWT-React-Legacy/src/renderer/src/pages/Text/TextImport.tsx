@@ -1,3 +1,4 @@
+import { uInt8ToBase64 } from 'lwt-common';
 import { ResetForm } from 'lwt-forms';
 import { AddNewTextWithTagsValidator } from 'lwt-schemas';
 import { dataService, textNoIDPrevalidateMap, useData } from 'lwt-state';
@@ -11,7 +12,6 @@ import {
   useInternalNavigate,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { do_ajax_update_media_select } from '../SelectMediaPath';
 import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
 
 export function ImportShortTextPage() {
@@ -147,7 +147,9 @@ export function ImportShortText({
                   size={60}
                 />
                 <span id="mediaselect">
-                  <br />
+                  <TxInput type="file" entryKey={'TxAudioFile'} />
+
+                  {/* <br />
                   or choose a file in ".../lwt/media" (only mp3, ogg, wav files
                   shown): <br />
                   [Directory ".../lwt/media" does not yet exist.] &nbsp; &nbsp;
@@ -157,7 +159,7 @@ export function ImportShortText({
                       title="Refresh Media Selection"
                     />
                     Refresh
-                  </span>
+                  </span> */}
                 </span>
               </td>
             </tr>
@@ -184,14 +186,38 @@ export function ImportShortText({
                   type="button"
                   value="Save"
                   onClick={() => {
-                    onSubmit(textNoIDPrevalidateMap, (value) => {
-                      const textID = dataService.addText(value);
-                      if (textID !== null) {
-                        dataService.reparseText(textID);
-                        navigator('/edit_texts');
+                    onSubmit(
+                      textNoIDPrevalidateMap,
+                      async (value, { TxAudioFile }) => {
+                        // TODO this doesnt seem to be working
+                        const file = TxAudioFile.current.files[0] as File;
+                        console.log({
+                          file,
+                          curr: TxAudioFile.current.files[0],
+                        });
+                        const encodedAudioFile =
+                          value.TxAudioFile !== undefined
+                            ? uInt8ToBase64(
+                                new Uint8Array(await file.arrayBuffer())
+                              )
+                            : undefined;
+                        console.log(
+                          'TEST123-submitting',
+                          value.TxAudioFile,
+                          TxAudioFile.current.files[0],
+                          encodedAudioFile
+                        );
+                        const textID = dataService.addText({
+                          ...value,
+                          TxAudioFile: encodedAudioFile,
+                        });
+                        if (textID !== null) {
+                          dataService.reparseText(textID);
+                          navigator('/edit_texts');
+                        }
+                        // todo something if null?
                       }
-                      // todo something if null?
-                    });
+                    );
                   }}
                 />
                 <input

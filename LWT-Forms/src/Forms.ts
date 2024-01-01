@@ -83,6 +83,8 @@ export function CheckAndSubmit<TForm>(
       value: string,
       refMap: TRefMap<TForm>
     ) => any | null;
+    // TODO consider
+    // | Promise<any | null>;
   },
   validator: ss.Struct<{ [key in keyof TForm]: any }>,
   takeValidatedObject: (
@@ -95,14 +97,24 @@ export function CheckAndSubmit<TForm>(
   const values = Object.fromEntries(
     (Object.keys(refMap) as (keyof typeof refMap)[])
       .filter((val) => (omit === null || val !== omit) && val !== "clearAll")
-      .map((refKey) => [
-        refKey,
-        // TODO no cast if possible
-        (preValidateMap[refKey as keyof TForm] || identityMap)(
+      .map((refKey) => {
+        const prevalidateFunction =
+          preValidateMap[refKey as keyof TForm] || identityMap;
+        // const isAsync = 'then' in prevalidateFunction
+        const prevalidateMappedValue = prevalidateFunction(
           refMap[refKey].current?.value,
           refMap
-        ),
-      ])
+        );
+        // isAsync?await prevalidateFunction(
+        //   refMap[refKey].current?.value,
+        //   refMap
+        // ):
+        return [
+          refKey,
+          // TODO no cast if possible
+          prevalidateMappedValue,
+        ];
+      })
   );
 
   const [validationErrors, postValidationObj] = ss

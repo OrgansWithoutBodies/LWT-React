@@ -1,5 +1,7 @@
 import {
+  Base64String,
   SetBoolHandler,
+  base64ToUInt8,
   getCurrentTimeAsString,
   prepareTextdataJs,
   strToClassName,
@@ -18,6 +20,7 @@ import {
   FourFramePage,
   Header,
   Loader,
+  createBufferAudioURL,
   useThemeColors,
   useUpdateActiveText,
 } from 'lwt-ui-kit';
@@ -401,7 +404,12 @@ export function ReaderHeader({
     ...filterArgs,
     textid: text.TxID,
   });
-  console.log('TEST123-AUDIOREF', audioPlayerRef.current, audioPlayerRef);
+  console.log(
+    'TEST123-AUDIOREF',
+    audioPlayerRef.current,
+    audioPlayerRef,
+    text.TxAudioFile
+  );
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <Header
@@ -449,8 +457,17 @@ export function ReaderHeader({
           </td>
         </tr>
       </table>
-      {text.TxAudioURI && (
-        <AudioPlayer ref={audioPlayerRef} audioURL={text.TxAudioURI} />
+      {(text.TxAudioURI || text.TxAudioFile) && (
+        <AudioPlayer
+          ref={audioPlayerRef}
+          audioURL={
+            text.TxAudioFile !== undefined
+              ? createBufferAudioURL(
+                  base64ToUInt8(text.TxAudioFile as Base64String)
+                )
+              : text.TxAudioURI!
+          }
+        />
       )}
     </div>
   );

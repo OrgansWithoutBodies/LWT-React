@@ -1,5 +1,5 @@
 import { base64ToUInt8, uInt8ToBase64 } from ".";
-import { gzipObject, gzipString, unGzString } from "./gzip";
+import { gzipObject, gzipStringOrArrayBuffer, unGzString } from "./gzip";
 
 describe("Binary Tests", () => {
   it("B64 Object Works", () => {
@@ -21,7 +21,7 @@ describe("Binary Tests", () => {
       )
       .join("");
     console.log(originalString);
-    const u8Array = gzipString(originalString);
+    const u8Array = gzipStringOrArrayBuffer(originalString);
     expect(unGzString(base64ToUInt8(uInt8ToBase64(u8Array)))).toEqual(
       originalString
     );

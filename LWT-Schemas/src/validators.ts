@@ -304,6 +304,8 @@ export const TextsWithTagsValidator = ss.object({
   TxAnnotatedText: ss.string(),
   // TxAudioURI: varchar(200) DEFAULT NULL,
   TxAudioURI: ss.optional(URLValidator()),
+  // (gzip-compressed? TODO) b64 string of uint8array buffer
+  TxAudioFile: ss.optional(ss.string()),
   // TxSourceURI: varchar(1000) DEFAULT NULL,
   TxSourceURI: ss.optional(URLValidator()),
   taglist: Tag2ListValidator,
@@ -328,7 +330,7 @@ export const TextTagsValidator = ss.object({
   // ...getValidatorPluginsFor(Persistable.texttags),
 });
 
-export const TagListValidator = ss.array(ss.string());
+export const TagListValidator = ss.optional(ss.array(ss.string()));
 // export const TagListValidator = ss.array(TagsValidator);
 
 export const WordsWithTagsValidator = ss.object({

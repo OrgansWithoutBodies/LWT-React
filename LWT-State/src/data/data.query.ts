@@ -9,7 +9,7 @@ import type {
   TextItem,
   Word,
 } from "lwt-schemas";
-import { Observable, combineLatest, count, map } from "rxjs";
+import { Observable, combineLatest, count, map, tap } from "rxjs";
 import { DataState, DataStore, dataStore } from "./data.storage";
 import {
   ArchivedTextDetailRow,
@@ -87,7 +87,9 @@ export class DataQuery extends Query<DataState> {
 
   public textitems = this.select("textitems");
 
-  public texts = this.select("texts");
+  public texts = this.select("texts").pipe(
+    tap((val) => console.log("TEST123-texts", val))
+  );
   public textsCountmapByLanguage = DataQuery.makeCountHash(
     this.texts,
     "TxLgID"
@@ -336,8 +338,6 @@ export class DataQuery extends Query<DataState> {
         texttags,
         words,
       ]) => {
-        console.log("TEST123-query", tags2HashmapByID);
-
         return textsForActiveLanguage.map((text) => {
           // TODO maybe move these to own observable in order to not need to calc if setting is false
           const wordCounts = calculateWordCounts(text, textitems, words);
@@ -358,7 +358,8 @@ export class DataQuery extends Query<DataState> {
           };
         });
       }
-    )
+    ),
+    tap(console.log)
   );
   public archtextdetails: Observable<ArchivedTextDetailRow[]> = combineLatest([
     this.archivedtextsForActiveLanguage,

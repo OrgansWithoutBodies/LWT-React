@@ -42,7 +42,7 @@ function AudioPlayerImpl(
   );
   //   TODO
   //   ref = audio;
-  console.log("ref", ref);
+  console.log("TEST123-audio", ref, audioURL);
 
   const headPerc = (headPos / duration) * 100;
   /**
@@ -479,6 +479,7 @@ const useAudio = (
   };
 };
 export const AudioPlayer = React.forwardRef(AudioPlayerImpl);
+// TODO click and drag
 const getPercentClickedAlongElementWidth = (
   { pageX, currentTarget }: React.MouseEvent,
   setPerc: (vol: number) => void
@@ -486,3 +487,18 @@ const getPercentClickedAlongElementWidth = (
   const { left, width } = currentTarget.getBoundingClientRect();
   setPerc((pageX - left) / width);
 };
+
+export function createBufferAudioURL(audioBuffer: Uint8Array) {
+  if (!window.AudioContext) {
+    if (!(window as any).webkitAudioContext) {
+      throw new Error("Your browser does NOT support any AudioContext!");
+      // return;
+    }
+    window.AudioContext = (window as any).webkitAudioContext;
+  }
+  var blob = new Blob([audioBuffer], { type: "audio/mp3" });
+
+  var url = window.URL.createObjectURL(blob);
+  console.log({ url });
+  return url;
+}

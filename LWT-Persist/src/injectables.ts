@@ -2,7 +2,7 @@ import { PersistenceHandles } from "./PersistedValueGetter.types";
 import {
   getPersistedValueLocalStorage,
   setPersistedValueLocalStorage,
-} from "./getPersistedValueLocalStorage";
+} from "./localStorage.persist";
 // ================== //
 export const localStoragePersistanceStrategy: PersistenceHandles = {
   // TODO no any

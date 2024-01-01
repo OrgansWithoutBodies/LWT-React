@@ -54,7 +54,7 @@ export function filterTags<
       tag2: Tags2ID | null;
       tag12: 0 | 1;
       isArchived: true;
-    }): TRecord {
+    }): TRecord | null {
   const isWord = isWordTag(tagIDs);
   const key = isWord
     ? ('WtWoID' as const)
@@ -70,9 +70,7 @@ export function filterTags<
   const tag2Specified = tag2 !== null;
   const noTagsSpecified = !tag1Specified && !tag2Specified;
   if (noTagsSpecified) {
-    return Object.fromEntries(
-      tagIDs.map((tag) => [tag[key as keyof typeof tag], true])
-    ) as TRecord;
+    return null;
   }
   const returnedLookup = tagIDs.reduce((prev, curr) => {
     const currTag = curr[tagKey as keyof typeof curr] as TTag;

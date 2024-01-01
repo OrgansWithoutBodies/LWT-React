@@ -3,9 +3,13 @@ import { BrandedString } from "lwt-schemas";
 export type Base64String = BrandedString<"B64">;
 export const uInt8ToBase64 = (u8: Uint8Array): Base64String => {
   // const decoder = new TextDecoder("utf8");
-  // console.log("u8b64", decoder.decode(u8));
   // const b64encoded = btoa(decoder.decode(u8));
-  const b64encoded = btoa(String.fromCharCode.apply(null, u8 as any));
+  console.log("u8b64", u8);
+
+  const b64encoded = btoa(
+    u8.reduce((data, byte) => data + String.fromCharCode(byte), "")
+  );
+
   return b64encoded as Base64String;
 };
 export const base64ToUInt8 = (b64: Base64String): Uint8Array => {
@@ -35,3 +39,13 @@ export const blobToBase64 = (blob: Blob) => {
     };
   });
 };
+// // TODO have this in worker thread
+// export const blobToBase64Sync = (blob: Blob) => {
+//   const reader = new FileReaderSync();
+//   reader.readAsDataURL(blob);
+//   return new Promise((resolve) => {
+//     reader.onloadend = () => {
+//       resolve(reader.result);
+//     };
+//   });
+// };

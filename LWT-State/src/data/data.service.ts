@@ -6,7 +6,7 @@ import {
   anki_export,
   downloadBlob,
   getCurrentTimeAsString,
-  gzipString,
+  gzipStringOrArrayBuffer,
   makeScoreRandomInsertUpdate,
   parseSQL,
   serializeJsonToSQL,
@@ -41,6 +41,10 @@ import {
   type WordsID,
 } from "lwt-schemas";
 import { makeHash } from "./makeHash";
+
+// TODO maybe something like this to keep track of encoding chains? IE GZip>B64
+// type ProcessingStep<TStart,TProcess>={startingType:TStart,process:TProcess}
+// type ProcessedObject<TSteps extends ProcessingStep[]> = TSteps
 
 const TypeCastDemoDB = demoDB as any as LWTData;
 export enum CRUD {
@@ -194,10 +198,13 @@ export class DataService {
   }
 
   public addText(text: AddNewTextType) {
-    let maxID = null;
+    let newMaxID = null;
     this.dataStore.update((state) => {
-      const ids = state.texts.map((text) => text.TxID);
-      maxID = (Math.max(...ids) + 1) as TextsID;
+      const oldMaxID = state.texts.reduce(
+        (prev, curr) => Math.max(prev, curr.TxID),
+        -1
+      );
+      newMaxID = (oldMaxID + 1) as TextsID;
       return {
         ...state,
         notificationMessage: { txt: `Added New Text ${text.TxTitle}` },
@@ -205,16 +212,21 @@ export class DataService {
           ...state.texts,
           {
             ...text,
-            TxID: maxID,
+            TxID: newMaxID,
             // TODO
             TxAnnotatedText: "",
           },
         ],
       };
     });
+    console.log("TEST123-adding-text", {
+      text,
+      maxID: newMaxID,
+      texts: this.dataStore.getValue().texts,
+    });
     this.persistSet("texts");
     this.persistInsert("texts", text);
-    return maxID;
+    return newMaxID;
   }
 
   public addTag(tag: Omit<Tag, "TgID">) {
@@ -836,7 +848,7 @@ export class DataService {
     const serializedData = this.serialize(backupType);
 
     const utf8Data = unescape(encodeURIComponent(serializedData)); //3
-    const geoJsonGz = gzipString(utf8Data);
+    const geoJsonGz = gzipStringOrArrayBuffer(utf8Data);
     const gzippedBlob = new Blob([geoJsonGz]); //5
     downloadBlob(gzippedBlob, `LWT-Backup.${backupType.toLowerCase()}.gz`);
   }
