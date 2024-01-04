@@ -14245,11 +14245,6 @@ sql.js@^1.8.0:
   resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.9.0.tgz#f78e9b08cd42d6d29dbd842b8733d6c0be52f57a"
   integrity sha512-+QMN8NU5KJxofT+lEaSLYdhh+Pdq7ZYS6X5bSbpmD+4SKFf+qBmr+coKT07LZ+keUNh1sf3Nz9dQwD8WNI2i/Q==
 
-sqlite-electron@^2.2.8:
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/sqlite-electron/-/sqlite-electron-2.2.8.tgz#17b8132d93da5a7850b3b9aacebe40449ab47909"
-  integrity sha512-8zEpGHny0P6VvaY4RxiilR4/gkill4YjWnqhq/0Q/421Mv1h+2T6t6kxaBRWaOVGDb0Kac5wKN8VS0rsFsEAJw==
-
 sqlite3@^5.1.6:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-5.1.6.tgz#1d4fbc90fe4fbd51e952e0a90fd8f6c2b9098e97"

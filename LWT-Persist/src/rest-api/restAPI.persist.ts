@@ -1,4 +1,4 @@
-import { PersistedValueGetter } from "./PersistedValueGetter.types";
+import { PersistedValueGetter } from "../persist/PersistedValueGetter.types";
 
 // ===================== //
 // GZipped Index DB

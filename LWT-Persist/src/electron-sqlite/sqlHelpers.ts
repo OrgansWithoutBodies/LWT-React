@@ -4,7 +4,7 @@ import {
   dbLoc,
   tableIDLookup,
   tbpref,
-} from "./electron-sqlite/electron-sqlite-backend.plugin.main";
+} from "./electron-sqlite-backend.plugin.main";
 const { Database } = require("sqlite3");
 
 // TODO typeORM?

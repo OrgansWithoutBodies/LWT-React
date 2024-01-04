@@ -1,7 +1,7 @@
-import { PersistenceHandles } from "lwt-persist";
 import path from "path";
 import * as sql from "sqlite";
-import { deleteEntry, emptyDB, getEntries, updateEntry } from "../sqlHelpers";
+import { PersistenceHandles } from "../persist";
+import { deleteEntry, emptyDB, getEntries, updateEntry } from "./sqlHelpers";
 
 const { Database } = require("sqlite3");
 

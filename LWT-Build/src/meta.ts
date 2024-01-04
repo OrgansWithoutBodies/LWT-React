@@ -136,7 +136,9 @@ switch (AppVariables.persistMethod) {
     });
     break;
   case PersistanceStrategy.LocalStorage:
-    const { localStoragePersistanceStrategy } = await import("lwt-persist");
+    const { localStoragePersistanceStrategy } = await import(
+      "lwt-persist/local-storage"
+    );
     console.log(
       "TEST123 REGISTERING LOCALSTORAGE",
       localStoragePersistanceStrategy

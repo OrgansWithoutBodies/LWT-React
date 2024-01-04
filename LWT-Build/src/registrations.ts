@@ -2,8 +2,8 @@ import {
   LWTContainer,
   PersistanceStrategy,
   PersistanceStrategyToken,
-  localStoragePersistanceStrategy,
 } from "lwt-persist";
+import { localStoragePersistanceStrategy } from "lwt-persist/local-storage";
 import { AppVariables } from "./meta";
 
 switch (AppVariables.persistMethod) {

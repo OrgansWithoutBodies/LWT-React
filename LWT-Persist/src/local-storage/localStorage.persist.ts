@@ -9,7 +9,8 @@ import type { LWTData } from "lwt-schemas";
 import {
   PersistedValueGetter,
   PersistedValueSetter,
-} from "./PersistedValueGetter.types";
+  PersistenceHandles,
+} from "../persist/PersistedValueGetter.types";
 
 export const getPersistedValueLocalStorage = <TKey extends keyof LWTData>(
   key: TKey,
@@ -34,6 +35,12 @@ export const setPersistedValueLocalStorage: PersistedValueSetter = (
     `LocalStorage Size: ${Math.round((size / (1000 * 1000)) * 100) / 100}Mb`
   );
   return true;
+};
+// ================== //
+export const localStoragePersistanceStrategy: PersistenceHandles = {
+  // TODO no any
+  get: getPersistedValueLocalStorage as any,
+  set: setPersistedValueLocalStorage,
 };
 // export const getPersistedValueLocalStorage = <TKey extends keyof LWTData>(
 //   key: TKey,
