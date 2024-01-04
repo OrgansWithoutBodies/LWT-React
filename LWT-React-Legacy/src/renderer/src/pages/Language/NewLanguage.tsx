@@ -15,7 +15,7 @@ import {
 } from 'lwt-ui-kit';
 import { useState } from 'react';
 import Modal from 'react-modal';
-import { PluginEntries } from '../../plugins/PluginEntries';
+import { PluginEntries } from '../../PluginEntries';
 import NewLanguageWizard from './Wizard.component';
 
 export function NewLanguage() {

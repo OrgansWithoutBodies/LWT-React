@@ -679,7 +679,9 @@ export class DataService {
     }));
     const newTags = terms
       .map((val) =>
-        val.taglist.filter((tag) => termsHashMapKeyedByText[tag] === undefined)
+        (val.taglist || []).filter(
+          (tag) => termsHashMapKeyedByText[tag] === undefined
+        )
       )
       .flat();
     this.addMultipleTags(newTags);
@@ -697,7 +699,7 @@ export class DataService {
             ...state.wordtags,
             ...mappedTerms
               .map((val, ii) => {
-                return val.taglist.map((tag) => ({
+                return (val.taglist || []).map((tag) => ({
                   WtTgID: tagIDHashmapByText[tag]!,
                   WtWoID: (maxID + ii) as WordsID,
                 }));
@@ -900,6 +902,7 @@ export class DataService {
       ...TypeCastDemoDB,
       notificationMessage: { txt: "Installed Demo DB" },
     }));
+    this.reparseAllTexts();
 
     // TODO drop db
     // TODO installDemo handler?
@@ -1142,6 +1145,12 @@ export class DataService {
         console.log("reparsing", text);
         this.reparseText(text.TxID);
       });
+  }
+  public reparseAllTexts() {
+    const { texts } = this.dataStore.getValue();
+    texts.forEach((text) => {
+      this.reparseText(text.TxID);
+    });
   }
   public reparseMultipleTexts(texts: TextsID[]) {
     texts.forEach((TxID) => {

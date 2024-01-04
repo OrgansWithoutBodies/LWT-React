@@ -1,0 +1,790 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Linguee API",
+    "description": "\n<p>\n    <a href=\"https://linguee.com\" target=\"_blank\">Linguee</a> provides excellent\n    dictionary and translation memory service. Unfortunately, there is no way you\n    can get automated access to it. Linguee API fixes the problem. It acts as a\n    proxy and converts their HTML responses to easy-to-use JSON API.\n</p>\n<p>\n    This installation is an example. If you want to have reliable service, install\n    it yourself. The source code and installation instructions are available at\n    <a href=\"https://github.com/imankulov/linguee-api\"\n    >github.com/imankulov/linguee-api</a>.\n</p>\n<p>\n    For any questions, ideas or bug reports, fill in\n    <a href=\"https://github.com/imankulov/linguee-api/issues\" target=\"_blank\">\n    the issue at GitHub</a>.\n</p>\n",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v2/translations": {
+      "get": {
+        "summary": "Translations",
+        "description": "Translate the query between src and dst language.\n\nThe response contains the list of lemma objects matching the query in the source\nlanguage. Each of these lemmas is annotated with one or multiple translations\nand optional examples.",
+        "operationID": "translations_api_v2_translations_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Query", "type": "string" },
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Src",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "src",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Dst",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "dst",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Guess Direction",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "guess_direction",
+            "in": "query"
+          },
+          {
+            "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+            "required": false,
+            "schema": {
+              "allOf": [{ "$ref": "#/components/schemas/FollowCorrections" }],
+              "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+              "default": "always"
+            },
+            "name": "follow_corrections",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 200 Translations Api V2 Translations Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Lemma" }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParseError" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/examples": {
+      "get": {
+        "summary": "Examples",
+        "description": "Provide translation examples.",
+        "operationID": "examples_api_v2_examples_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Query", "type": "string" },
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Src",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "src",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Dst",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "dst",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Guess Direction",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "guess_direction",
+            "in": "query"
+          },
+          {
+            "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+            "required": false,
+            "schema": {
+              "allOf": [{ "$ref": "#/components/schemas/FollowCorrections" }],
+              "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+              "default": "always"
+            },
+            "name": "follow_corrections",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 200 Examples Api V2 Examples Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Example" }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParseError" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/external_sources": {
+      "get": {
+        "summary": "External Sources",
+        "description": "Provide translation examples from external (unverified) sources.",
+        "operationID": "external_sources_api_v2_external_sources_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Query", "type": "string" },
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Src",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "src",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Dst",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "dst",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Guess Direction",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "guess_direction",
+            "in": "query"
+          },
+          {
+            "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+            "required": false,
+            "schema": {
+              "allOf": [{ "$ref": "#/components/schemas/FollowCorrections" }],
+              "description": "A flag that defines how to treat responses with a\n'did you mean' link. There are three possible values:\n\n- `always` (default): always follow the suggestion if found on a page, even if the page\n   itself has translations.\n- `never`: never follow the suggested correction.\n- `on_empty_translations`: only follow the link if there are no translations on\n   the page.\n",
+              "default": "always"
+            },
+            "name": "follow_corrections",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 200 External Sources Api V2 External Sources Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ExternalSource" }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParseError" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/autocompletions": {
+      "get": {
+        "summary": "Autocompletions",
+        "description": "Provide translation examples from external (unverified) sources.",
+        "operationID": "autocompletions_api_v2_autocompletions_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Query", "type": "string" },
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Src",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "src",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Dst",
+              "enum": [
+                "bg",
+                "cs",
+                "da",
+                "de",
+                "el",
+                "en",
+                "es",
+                "et",
+                "fi",
+                "fr",
+                "hu",
+                "it",
+                "ja",
+                "lt",
+                "lv",
+                "mt",
+                "nl",
+                "pl",
+                "pt",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sv",
+                "zh"
+              ],
+              "type": "string"
+            },
+            "name": "dst",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 200 Autocompletions Api V2 Autocompletions Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AutocompletionItem" }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParseError" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AudioLink": {
+        "title": "AudioLink",
+        "required": ["url", "lang"],
+        "type": "object",
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string",
+            "example": "https://www.linguee.com/mp3/PT_BR/f5/f5491d72610965dd0a287c1ab1025c0f-300.mp3"
+          },
+          "lang": {
+            "title": "Lang",
+            "type": "string",
+            "example": "Brazilian Portuguese"
+          }
+        },
+        "description": "The link to the audio file along with the language variant."
+      },
+      "AutocompletionItem": {
+        "title": "AutocompletionItem",
+        "required": ["text", "translations"],
+        "type": "object",
+        "properties": {
+          "text": { "title": "Text", "type": "string", "example": "Katze" },
+          "pos": { "title": "Pos", "type": "string", "example": "f" },
+          "translations": {
+            "title": "Translations",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TranslationItem" }
+          }
+        },
+        "description": "Information about one word."
+      },
+      "Example": {
+        "title": "Example",
+        "required": ["text", "translations"],
+        "type": "object",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string",
+            "example": "muito obrigado"
+          },
+          "pos": { "title": "Pos", "type": "string", "example": "m" },
+          "audio_links": {
+            "title": "Audio Links",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AudioLink" }
+          },
+          "translations": {
+            "title": "Translations",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/linguee_api__models__SearchResult__Example__Translation"
+            }
+          }
+        },
+        "description": "One example."
+      },
+      "ExternalSource": {
+        "title": "ExternalSource",
+        "required": ["src", "dst", "src_url", "dst_url"],
+        "type": "object",
+        "properties": {
+          "src": {
+            "title": "Src",
+            "type": "string",
+            "example": "Parabéns e um grande obrigado a todos que ajudaram [...] ao sucesso desta noite!"
+          },
+          "dst": {
+            "title": "Dst",
+            "type": "string",
+            "example": "Well done and many thanks to everyone who helped [...] make this evening a success!"
+          },
+          "src_url": {
+            "title": "Src Url",
+            "type": "string",
+            "example": "http://www.findmadeleine.com/pt/updates@page=2.html"
+          },
+          "dst_url": {
+            "title": "Dst Url",
+            "type": "string",
+            "example": "http://www.findmadeleine.com/updates@page=2.html"
+          }
+        },
+        "description": "An example of usage of the word in the context."
+      },
+      "FollowCorrections": {
+        "title": "FollowCorrections",
+        "enum": ["always", "never", "on_empty_translations"],
+        "description": "An enumeration."
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ValidationError" }
+          }
+        }
+      },
+      "Lemma": {
+        "title": "Lemma",
+        "required": ["featured", "text", "forms", "translations"],
+        "type": "object",
+        "properties": {
+          "featured": {
+            "title": "Featured",
+            "type": "boolean",
+            "example": false
+          },
+          "text": { "title": "Text", "type": "string", "example": "obrigado" },
+          "pos": {
+            "title": "Pos",
+            "type": "string",
+            "example": "interjection"
+          },
+          "forms": {
+            "title": "Forms",
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["obrigada f sl", "obrigados m pl", "obrigadas f pl"]
+          },
+          "grammar_info": {
+            "title": "Grammar Info",
+            "type": "string",
+            "example": "Akk"
+          },
+          "audio_links": {
+            "title": "Audio Links",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AudioLink" }
+          },
+          "translations": {
+            "title": "Translations",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/linguee_api__models__SearchResult__Lemma__Translation"
+            }
+          }
+        },
+        "description": "Information about one found word (lemma)."
+      },
+      "ParseError": {
+        "title": "ParseError",
+        "required": ["message"],
+        "type": "object",
+        "properties": { "message": { "title": "Message", "type": "string" } },
+        "description": "Unexpected parsing error. Don't know what to do."
+      },
+      "TranslationExample": {
+        "title": "TranslationExample",
+        "required": ["src", "dst"],
+        "type": "object",
+        "properties": {
+          "src": {
+            "title": "Src",
+            "type": "string",
+            "example": "Estou obrigado pelo contrato a trabalhar seis horas por dia."
+          },
+          "dst": {
+            "title": "Dst",
+            "type": "string",
+            "example": "I am bound by the contract to work six hours a day."
+          }
+        },
+        "description": "A translation example."
+      },
+      "TranslationItem": {
+        "title": "TranslationItem",
+        "required": ["text"],
+        "type": "object",
+        "properties": {
+          "text": { "title": "Text", "type": "string", "example": "cat" },
+          "pos": { "title": "Pos", "type": "string", "example": "n" }
+        }
+      },
+      "UsageFrequency": {
+        "title": "UsageFrequency",
+        "enum": ["often", "almost_always"],
+        "description": "Translation usage frequency. Valid values: `often` or `almost_always`."
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": ["loc", "msg", "type"],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] }
+          },
+          "msg": { "title": "Message", "type": "string" },
+          "type": { "title": "Error Type", "type": "string" }
+        }
+      },
+      "linguee_api__models__SearchResult__Example__Translation": {
+        "title": "Translation",
+        "required": ["text"],
+        "type": "object",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string",
+            "example": "big thanks"
+          },
+          "pos": { "title": "Pos", "type": "string", "example": "n [colloq.]" }
+        },
+        "description": "Translation example."
+      },
+      "linguee_api__models__SearchResult__Lemma__Translation": {
+        "title": "Translation",
+        "required": ["featured", "text"],
+        "type": "object",
+        "properties": {
+          "featured": {
+            "title": "Featured",
+            "type": "boolean",
+            "example": false
+          },
+          "text": { "title": "Text", "type": "string", "example": "required" },
+          "pos": {
+            "title": "Pos",
+            "type": "string",
+            "example": "adjective / past participle, masculine"
+          },
+          "audio_links": {
+            "title": "Audio Links",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AudioLink" }
+          },
+          "examples": {
+            "title": "Examples",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TranslationExample" }
+          },
+          "usage_frequency": {
+            "allOf": [{ "$ref": "#/components/schemas/UsageFrequency" }],
+            "example": "often"
+          }
+        },
+        "description": "One of the possible translation of the term."
+      }
+    }
+  }
+}

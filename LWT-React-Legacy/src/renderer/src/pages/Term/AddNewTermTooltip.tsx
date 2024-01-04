@@ -1,8 +1,8 @@
+import { APITranslateTerm } from 'lwt-plugins';
 import { Language, Sentence, TextItem, Word } from 'lwt-schemas';
 import { useData } from 'lwt-state';
 import { A } from 'lwt-ui-kit';
 import React from 'react';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import {
   DictionaryLinks,
   KnownTermLines,

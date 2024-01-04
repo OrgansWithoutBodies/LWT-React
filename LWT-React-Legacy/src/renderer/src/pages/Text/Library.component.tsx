@@ -42,7 +42,7 @@ import {
   LanguageBoxFilterWidget,
   QueryFilterWidget,
 } from '../Term/LanguageBoxFilterWidget';
-import { OnCheckText, TextChecker } from './CheckText';
+import { CheckTextType, OnCheckText, TextChecker } from './CheckText';
 
 const TextMultiAction = {
   test: (selectedValues: Set<TextsID>) => {
@@ -745,7 +745,7 @@ export function EditTextPane({
  *
  */
 export function EditText({ chgID }: { chgID: TextsID }) {
-  const [checkingText, setCheckingText] = useState<null | Text>(null);
+  const [checkingText, setCheckingText] = useState<null | CheckTextType>(null);
   return (
     <>
       {checkingText ? (
@@ -805,6 +805,7 @@ const textSortingMethod = (
 function do_ajax_word_counts(
   text: Text,
   textItems: TextItem[],
+
   words: Word[],
   onSetLoading: (loading: boolean) => void,
   setTotal: (vals: { $txttotalwords: number }) => void,

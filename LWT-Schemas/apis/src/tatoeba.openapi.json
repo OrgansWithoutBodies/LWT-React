@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Tatoeba API",
+    "description": "<h2>Welcome to the Tatoeba API</h1>\n<p>\nThis is an ongoing effort to provide an API for tatoeba.org.\nThis API is currently read-only and subject to change, but open to the public without authentification.\nYou are encouraged to try it, feedback is welcome.\nWhen this API will be considered mature, we will release a stable version and you will just have to change your endpoints from <em>/unstable</em> to <em>/v1</em>.\n</p>",
+    "contact": {
+      "name": "API support",
+      "email": "team@tatoeba.org"
+    },
+    "version": "unstable"
+  },
+  "servers": [
+    {
+      "url": "https://api.tatoeba.org",
+      "description": "Tatoeba's production server"
+    },
+    {
+      "url": "https://api.dev.tatoeba.org",
+      "description": "Tatoeba's development server"
+    }
+  ],
+  "paths": {
+    "/unstable/audio/{id}/file": {
+      "get": {
+        "tags": ["Audio"],
+        "summary": "Get an audio file",
+        "description": "Download an audio recording of a sentence.",
+        "operationID": "6aede2bb75cb021d1b2ca89c47817d48",
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid parameter."
+          },
+          "404": {
+            "description": "There is no audio with that ID, it was removed, or the audio author does not allow reuse outside of Tatoeba."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The audio identifier.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Audio/properties/id"
+          }
+        }
+      ]
+    },
+    "/unstable/sentences/{id}": {
+      "get": {
+        "tags": ["Sentences"],
+        "summary": "Get a sentence",
+        "description": "Get sentence text as well as metadata about this sentence and related sentences.",
+        "operationID": "33a2db5ccb628358074a151063ca18b7",
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid ID parameter."
+          },
+          "404": {
+            "description": "There is no sentence with that ID or it has been deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The sentence identifier.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Sentence/properties/id"
+          }
+        }
+      ]
+    },
+    "/unstable/sentences": {
+      "get": {
+        "tags": ["Sentences"],
+        "summary": "Search sentences",
+        "description": "Search sentences in the Tatoeba corpus.",
+        "operationID": "f233954e6e3217239f65cee426ba9038",
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid parameter."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "lang",
+          "in": "query",
+          "description": "The language to search in.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/LanguageCode"
+          }
+        },
+        {
+          "name": "q",
+          "in": "query",
+          "description": "The search query. The query must follow ManticoreSearch query syntax.",
+          "schema": {
+            "type": "string",
+            "example": "Let's"
+          }
+        },
+        {
+          "name": "trans",
+          "in": "query",
+          "description": "Limit to sentences having translations in this language.",
+          "schema": {
+            "$ref": "#/components/schemas/LanguageCode"
+          }
+        },
+        {
+          "name": "include_unapproved",
+          "in": "query",
+          "description": "By default, unapproved sentences are not included in the response. Set to 'yes' to include them.",
+          "schema": {
+            "type": "string",
+            "example": "yes"
+          }
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "description": "Page number, starts at 1. Use this parameter to paginate results.",
+          "schema": {
+            "type": "integer",
+            "example": "2"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Maximum number of sentences in the response.",
+          "schema": {
+            "type": "integer",
+            "example": "20"
+          }
+        }
+      ]
+    },
+    "/unstable/users/{username}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get a user",
+        "description": "Get information about a member of Tatoeba.",
+        "operationID": "f7d9d4e39558b6de60724081b3a0253c",
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid parameter."
+          },
+          "404": {
+            "description": "There is no user with that username or the account was removed."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The user name of the member.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/User/properties/username"
+          }
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "LanguageCode": {
+        "description": "The ISO 639-3 code of the language, or some <a href=\"https://en.wiki.tatoeba.org/articles/show/tatoeba-supported-languages-exceptions\">exceptional code</a>.",
+        "type": "string",
+        "maxLength": 4,
+        "minLength": 3,
+        "pattern": "[a-z]+",
+        "example": "epo"
+      },
+      "Audio": {
+        "description": "An audio object that contains metadata about a recording.",
+        "properties": {
+          "id": {
+            "description": "The audio identifier",
+            "type": "integer",
+            "example": "4321"
+          }
+        },
+        "type": "object"
+      },
+      "Sentence": {
+        "description": "A sentence object that contains both sentence text and metadata about the sentence.",
+        "properties": {
+          "id": {
+            "description": "The sentence identifier",
+            "type": "integer",
+            "example": "1234"
+          }
+        },
+        "type": "object"
+      },
+      "User": {
+        "description": "A user object that contains metadata about a member of Tatoeba.",
+        "properties": {
+          "username": {
+            "description": "The name of the member.",
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2,
+            "pattern": "[a-zA-Z0-9_]+",
+            "example": "gillux"
+          },
+          "role": {
+            "description": "The role this member was given.",
+            "type": "enum",
+            "enum": [
+              "admin",
+              "corpus_maintainer",
+              "advanced_contributor",
+              "contributor",
+              "inactive",
+              "spammer"
+            ],
+            "example": "contributor"
+          },
+          "since": {
+            "description": "The date this member joined Tatoeba.",
+            "type": "string",
+            "format": "date",
+            "example": "2019-12-31"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "code": {
+                  "$ref": "#/components/schemas/LanguageCode"
+                },
+                "level": {
+                  "description": "The self-proclaimed level of proficiency in this language, ranging from 0 (lowest) to 5 (highest).",
+                  "type": "integer",
+                  "example": "3",
+                  "nullable": true
+                },
+                "details": {
+                  "description": "Optional details about the language ability, such as dialect or country. This is a free-form text entered by the member, which can be written in any language.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "lwt-plugins",
+  "private": true,
+  "version": "0.0.0",
+  "exports": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "lwt-forms": "0.0.0",
+    "lwt-state": "0.0.0",
+    "lwt-ui-kit": "0.0.0",
+    "lwt-schemas": "0.0.0"
+  }
+}

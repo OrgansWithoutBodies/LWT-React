@@ -1,4 +1,4 @@
-import { uInt8ToBase64 } from 'lwt-common';
+import { gzipStringOrArrayBuffer, uInt8ToBase64 } from 'lwt-common';
 import { ResetForm } from 'lwt-forms';
 import { AddNewTextWithTagsValidator } from 'lwt-schemas';
 import { dataService, textNoIDPrevalidateMap, useData } from 'lwt-state';
@@ -198,15 +198,12 @@ export function ImportShortText({
                         const encodedAudioFile =
                           value.TxAudioFile !== undefined
                             ? uInt8ToBase64(
-                                new Uint8Array(await file.arrayBuffer())
+                                gzipStringOrArrayBuffer(
+                                  new Uint8Array(await file.arrayBuffer())
+                                )
                               )
                             : undefined;
-                        console.log(
-                          'TEST123-submitting',
-                          value.TxAudioFile,
-                          TxAudioFile.current.files[0],
-                          encodedAudioFile
-                        );
+
                         const textID = dataService.addText({
                           ...value,
                           TxAudioFile: encodedAudioFile,

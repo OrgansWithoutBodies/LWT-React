@@ -1,40 +1,14 @@
-import { CheckAndSubmit, RefMap, TRefMap } from "lwt-forms";
+import {
+  CheckAndSubmit,
+  FormInputComponentParams,
+  FormTextAreaComponentParams,
+  RefMap,
+  TRefMap,
+} from "lwt-forms";
 import { LanguageDropdown, RequiredLineButton } from "lwt-ui-kit";
 import { useEffect, useMemo, useState } from "react";
 import * as ss from "superstruct";
-import {
-  FormInput,
-  FormInputParams,
-  FormLineError,
-  FormTextArea,
-  FormTextAreaProps,
-} from "../FormInput";
-
-export type FormInputComponentParams<
-  TKey extends string,
-  TData extends Record<TKey, any>
-> = Omit<
-  FormInputParams<TKey, TData>,
-  "refMap" | "defaultEntry" | "fixedEntry" | "type"
-> & {
-  type?: string;
-  fixed?: boolean;
-  default?: boolean;
-};
-export type FormTextAreaComponentParams<
-  TKey extends string,
-  TData extends Record<TKey, any>
-> = Omit<
-  FormTextAreaProps<TKey, TData>,
-  "refMap" | "defaultEntry" | "fixedEntry"
-> & {
-  fixed?: boolean;
-  default?: boolean;
-};
-export type FormInputComponent<
-  TKey extends string = string,
-  TData extends Record<TKey, any> = Record<TKey, any>
-> = (args: FormInputComponentParams<TKey, TData>) => JSX.Element;
+import { FormInput, FormLineError, FormTextArea } from "../FormInput";
 
 /**
  *

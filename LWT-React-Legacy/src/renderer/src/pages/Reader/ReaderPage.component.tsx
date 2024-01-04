@@ -5,7 +5,9 @@ import {
   getCurrentTimeAsString,
   prepareTextdataJs,
   strToClassName,
+  unGzArrayBuffer,
 } from 'lwt-common';
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   AddNewWordType,
   Text,
@@ -25,8 +27,7 @@ import {
   useUpdateActiveText,
 } from 'lwt-ui-kit';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { PLUGINS } from '../../plugins';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { usePlugins } from '../../usePlugins';
 import { TranslationAPI } from '../API/APITranslation.component';
 import { AddNewWordPane, EditWordPane } from '../Term/AddNewWordPane';
 import { usePreviousAndNextTextLinks } from '../Tester/Tester';
@@ -347,6 +348,7 @@ export function ReaderTranslatePane({
   translateAPIParams: APITranslateTermParams;
   iFrameURL: string | null;
 }) {
+  const PLUGINS = usePlugins();
   const availableAPIPlugins = Object.fromEntries(
     PLUGINS.filter((val) => val.api !== undefined).map((plugin) => [
       plugin.pluginName,
@@ -463,7 +465,10 @@ export function ReaderHeader({
           audioURL={
             text.TxAudioFile !== undefined
               ? createBufferAudioURL(
-                  base64ToUInt8(text.TxAudioFile as Base64String)
+                  unGzArrayBuffer(
+                    // TODO no cast
+                    base64ToUInt8(text.TxAudioFile as Base64String)
+                  )
                 )
               : text.TxAudioURI!
           }

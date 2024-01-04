@@ -1,4 +1,5 @@
 import { confirmDelete, getDirTag } from 'lwt-common';
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   Language,
   NumericalStrength,
@@ -10,7 +11,6 @@ import {
   getStatusName,
 } from 'lwt-schemas';
 import { A, Icon, useI18N } from 'lwt-ui-kit';
-import { APITranslateTerm } from '../plugins/deepl.plugin';
 import {
   DictionaryLinks,
   KnownTermLines,

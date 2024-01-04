@@ -62,15 +62,21 @@ export const wordNoIDPrevalidateMap = {
   ),
   WoCreated: getCurrentTimeAsString,
 };
-async function parseAudioFile(file: File, onFileParsed: (val: string) => void) {
-  const fileReader = new FileReader();
-  fileReader.onload((val) => console.log("TEST123-audio file", val));
-  fileReader.readAsArrayBuffer(file);
-}
+// async function parseAudioFile(file: File, onFileParsed: (val: string) => void) {
+//   const fileReader = new FileReader();
+//   if(fileReader.onload){
+
+//     fileReader.onload((val) => console.log("TEST123-audio file", val));
+//   }
+//   fileReader.readAsArrayBuffer(file);
+// }
 export const textNoIDPrevalidateMap = {
   TxLgID: parseNumMap,
   TxAudioURI: emptyToUndefinedMap,
-  TXAudioFile: (_, { TXAudioFile: file }) => ({
+  TXAudioFile: (
+    _: any,
+    { TXAudioFile: file }: { TXAudioFile: { current: { files: File[] } } }
+  ) => ({
     // TODO this object confuses error handling - compound path
     file: file.current.files[0] || false,
     fileName: file.current.files[0]?.name,

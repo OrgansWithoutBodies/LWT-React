@@ -1,7 +1,7 @@
 import { A, FloatingMenu, useInternalNavigate } from 'lwt-ui-kit';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { FooterInfo } from './LandingPage.component';
+import { FooterInfo } from '../../../../../LWT-UI-Kit/src/FooterInfo';
+import { InfoLine } from '../../../../../LWT-UI-Kit/src/InfoLine';
+import { useSmoothScrollOnHashChange } from '../../../../../LWT-UI-Kit/src/hooks/useSmoothScrollOnHashChange';
 
 const infoLines: Parameters<typeof InfoLine>[0][] = [
   { title: 'Preface', href: 'preface' },
@@ -25,7 +25,7 @@ const infoLines: Parameters<typeof InfoLine>[0][] = [
 
 export function InfoPage() {
   const navigator = useInternalNavigate();
-  useSmoothScrollToHash();
+  useSmoothScrollOnHashChange();
   return (
     <body>
       <FloatingMenu menuOptions={infoLines} />
@@ -3152,35 +3152,5 @@ export function InfoPage() {
         <FooterInfo />
       </div>
     </body>
-  );
-}
-
-export function useSmoothScrollToHash() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.hash === '') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    // would be cool to be stop default jump to # if we go directly to this page with a hash
-    // window.history.replaceState('', document.title, window.location.pathname);
-    const foundElement = document.getElementById(location.hash.slice(1));
-    if (foundElement) {
-      foundElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [location.hash]);
-}
-
-export function InfoLine({ href, title }: { href: string; title: string }) {
-  return (
-    <dt>
-      ▶
-      <b>
-        {' '}
-        <a id={href}>{title}</a>{' '}
-      </b>
-      - <a href={'#'}>[↑]</a>{' '}
-    </dt>
   );
 }

@@ -1,4 +1,5 @@
 import { confirmDelete, replaceTemplate } from 'lwt-common';
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   Language,
   ReverseStrengthMap,
@@ -10,7 +11,6 @@ import {
 import { dataService } from 'lwt-state';
 import { A, useI18N } from 'lwt-ui-kit';
 import React from 'react';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { LanguageDictionaryData, WordKnownTermLines } from '../limitedTypes';
 
 export type LanguageDictionaryDataTempHack = LanguageDictionaryData &

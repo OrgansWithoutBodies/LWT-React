@@ -1,10 +1,7 @@
 import { pluralize } from 'lwt-common';
+import { APITranslateTerm, GenericRetrievalAPI } from 'lwt-plugins';
 import { Icon } from 'lwt-ui-kit';
 import { useEffect, useState } from 'react';
-import {
-  APITranslateTerm,
-  GenericRetrievalAPI,
-} from '../../plugins/deepl.plugin';
 
 /**
  * Call a given Translation API, analyze and present JSON results

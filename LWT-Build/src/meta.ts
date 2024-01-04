@@ -126,15 +126,15 @@ console.log("STARTING APP WITH VARIABLES: ", AppVariables);
 import { LWTContainer, PersistanceStrategyToken } from "lwt-persist";
 
 switch (AppVariables.persistMethod) {
-  case PersistanceStrategy.ElectronSqlite:
-    console.log("TEST123 REGISTERING SQLITE");
-    const { electronSqlitePersistanceStrategy } = await import(
-      "lwt-persist/electron-sqlite"
-    );
-    LWTContainer.register(PersistanceStrategyToken, {
-      useValue: electronSqlitePersistanceStrategy,
-    });
-    break;
+  // case PersistanceStrategy.ElectronSqlite:
+  //   console.log("TEST123 REGISTERING SQLITE");
+  //   const { electronSqlitePersistanceStrategy } = await import(
+  //     "lwt-persist/electron-sqlite"
+  //   );
+  //   LWTContainer.register(PersistanceStrategyToken, {
+  //     useValue: electronSqlitePersistanceStrategy,
+  //   });
+  //   break;
   case PersistanceStrategy.LocalStorage:
     const { localStoragePersistanceStrategy } = await import(
       "lwt-persist/local-storage"
@@ -152,3 +152,10 @@ switch (AppVariables.persistMethod) {
     throw new Error("Unimplemented Persistance Strategy!");
 }
 // Server requirements: persist data, REST-compliant w openapi schema, backup/restore from backup, tableSize endpoint,parse sentences?
+
+// LWTContainer.register(PluginsListToken, {
+//   useValue: AppVariables.pluginsEnabled ? plugins : [],
+// });
+// export const PLUGINS: Readonly<Plugin[]> = AppVariables.pluginsEnabled
+//   ? plugins
+//   : [];

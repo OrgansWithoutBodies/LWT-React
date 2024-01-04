@@ -492,7 +492,7 @@ export function createBufferAudioURL(audioBuffer: Uint8Array) {
   if (!window.AudioContext) {
     if (!(window as any).webkitAudioContext) {
       throw new Error("Your browser does NOT support any AudioContext!");
-      // return;
+      // return undefined;
     }
     window.AudioContext = (window as any).webkitAudioContext;
   }

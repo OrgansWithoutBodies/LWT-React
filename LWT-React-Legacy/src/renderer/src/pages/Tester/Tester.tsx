@@ -1,4 +1,5 @@
 import { maskTermInSentence } from 'lwt-common';
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   Language,
   LanguagesID,
@@ -21,8 +22,7 @@ import {
   useUpdateActiveText,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { PLUGINS } from '../../plugins';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
+import { usePlugins } from '../../usePlugins';
 import { TranslationAPI } from '../API/APITranslation.component';
 import { RunTestForWord } from '../OverlibComponents';
 import { IFramePane, Modality } from '../Reader/ReaderPage.component';
@@ -562,6 +562,7 @@ export function TesterPage({
       : texts.find((text) => text.TxLgID === langID);
   const [iFrameURL, setIFrameURL] = useState<string | null>(null);
 
+  const PLUGINS = usePlugins();
   const [testModality, setTestModality] = useState<Modality | null>(null);
   if (!text) {
     return <></>;

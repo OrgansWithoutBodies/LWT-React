@@ -9,9 +9,8 @@ import { createGlobalStyle } from 'styled-components';
 import { AppContext, AppVariables, useAppContext } from 'lwt-build';
 import { BASENAME } from 'lwt-common';
 import { dataService } from 'lwt-state';
-import { Header, InternalPaths } from 'lwt-ui-kit';
+import { Header, InternalPaths, NotificationMessage } from 'lwt-ui-kit';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { NotificationMessage } from './NotificationMessage';
 import {
   AnnotatedTextsWrapper,
   DisplayImprTextWrapper,
@@ -35,8 +34,9 @@ import { SettingsComponent } from './pages/Settings.component';
 import { StatisticsComponent } from './pages/Statistics.component';
 import { CheckTextPage } from './pages/Text/CheckText';
 import { LongText } from './pages/Text/LongTextImport.component';
-import { PLUGINS } from './plugins';
-import { createColors } from './styles';
+
+import { createColors } from 'lwt-style';
+import { usePlugins } from './usePlugins';
 
 declare global {
   interface NumberConstructor {
@@ -85,6 +85,8 @@ export function GlobalStyle(): JSX.Element {
 export default App;
 export function App(): JSX.Element {
   // TODO useTheme/'tailwind-esque'?
+  const PLUGINS = usePlugins();
+
   const pluginRoutes = PLUGINS.filter(
     (plugin) => plugin.routes !== undefined
   ).reduce<Record<Partial<InternalPaths>, () => JSX.Element>>(

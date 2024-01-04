@@ -20,6 +20,7 @@ export class DataStore extends Store<DataState> {
   constructor(
     @inject(PersistanceStrategyToken)
     persistanceHandles: PersistenceHandles
+    // @inject(PluginsListToken) public PluginsList: Plugin[]
   ) {
     const { get: persistGetter } = persistanceHandles;
     console.log("TEST123-di", persistGetter, persistanceHandles);

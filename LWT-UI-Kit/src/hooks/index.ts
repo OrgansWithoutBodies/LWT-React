@@ -5,6 +5,7 @@ export * from "./useInternalParams";
 export * from "./usePager";
 export * from "./useSelection";
 export * from "./useSettingWithDefault";
+export * from "./useSmoothScrollOnHashChange";
 export * from "./useThemeColors";
 export * from "./useTimer";
 export * from "./useUpdateActiveText";

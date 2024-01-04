@@ -1,4 +1,4 @@
-import { SettingsObjValidator } from 'lwt-schemas';
+import { Persistable, SettingsObjValidator } from 'lwt-schemas';
 import { dataService, settingsPrevalidateMap, useData } from 'lwt-state';
 import {
   GetSentenceCountSelectoptions,
@@ -9,8 +9,7 @@ import {
   useInternalNavigate,
 } from 'lwt-ui-kit';
 import * as ss from 'superstruct';
-import { Persistable } from '../../../shared/Persistable';
-import { PluginEntries } from '../plugins/PluginEntries';
+import { PluginEntries } from '../PluginEntries';
 // TODO abstract this out into a nested settings component
 
 const validator = ss.omit(SettingsObjValidator, [

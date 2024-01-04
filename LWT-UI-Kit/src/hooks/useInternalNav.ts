@@ -1,6 +1,8 @@
 import { headerValues, headerValuesTemp } from "lwt-ui-kit";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
+// TODO move to own lib?
+
 type InternalPathsFromHeader = (typeof headerValues)[keyof typeof headerValues];
 
 type NonHeaderLinks =
@@ -44,6 +46,7 @@ export const useInternalNavigate: () => (
 
 export type PathParams =
   (typeof headerValuesTemp)[keyof typeof headerValuesTemp]["params"][number];
+// TODO this maybe stays in uikit
 export const useUpdateParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();

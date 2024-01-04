@@ -22,6 +22,18 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../LWT-UI-Kit/src/FloatingMenu.tsx"],
+  "include": [
+    "src",
+    "../LWT-UI-Kit/src/FloatingMenu.tsx",
+    "../LWT-Plugins/src/Plugin.ts",
+    "../LWT-Plugins/src/GenericRetrievalAPI.ts",
+    "../LWT-Plugins/src/plugins/tatoeba/TatoebaAPI.ts",
+    "../LWT-Plugins/src/BaseOpenAPIWrapper.ts",
+    "../LWT-UI-Kit/src/GoBackButton.tsx",
+    "../LWT-UI-Kit/src/NotificationMessage.tsx",
+    "../LWT-UI-Kit/src/hooks/useSmoothScrollOnHashChange.tsx",
+    "../LWT-UI-Kit/src/InfoLine.tsx",
+    "../LWT-UI-Kit/src/FooterInfo.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

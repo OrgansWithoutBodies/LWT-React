@@ -1,3 +1,4 @@
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   Language,
   Sentence,
@@ -5,12 +6,12 @@ import {
   TextItem,
   TextsID,
   Word,
+  WordsID,
   getStatusAbbr,
   getStatusName,
 } from 'lwt-schemas';
 import { useData } from 'lwt-state';
 import { useSettingWithDefault } from 'lwt-ui-kit';
-import { APITranslateTerm } from '../plugins/deepl.plugin';
 import { prepare_textdata_js } from '../utils/windowFunctions';
 import {
   EditWordParams,
@@ -66,7 +67,7 @@ export function onTestWordClick(
       setTranslateAPIParams,
       setIFrameURL,
       modality,
-      onSetTestStatus,
+      onNudgeTestStatus: onSetTestStatus,
     });
   const onKeyDown: React.EventHandler<React.KeyboardEvent> = (e) =>
     onTestKeydown(
@@ -193,7 +194,7 @@ function WordClickEventDoTestTest({
   setTranslateAPIParams,
   setIFrameURL,
   sentence: { SeID: SeID },
-  onSetTestStatus,
+  onNudgeTestStatus,
   modality: modality = 1,
   onSetTodoText,
 }: {
@@ -208,7 +209,7 @@ function WordClickEventDoTestTest({
   ) => void;
   onSetTodoText: (todo: string) => void;
   setIFrameURL: (url: string | null) => void;
-  onSetTestStatus: SetTestStatus;
+  onNudgeTestStatus: NudgeTestStatus;
 }) {
   const { ['set-test-sentence-count']: testSentenceCount } =
     useSettingWithDefault(['set-test-sentence-count']);
@@ -222,7 +223,7 @@ function WordClickEventDoTestTest({
         todo={todo}
         setTranslateAPIParams={setTranslateAPIParams}
         setIFrameURL={setIFrameURL}
-        onNudgeTestStatus={onSetTestStatus}
+        onNudgeTestStatus={onNudgeTestStatus}
       />
     );
   }
@@ -343,8 +344,12 @@ export function onTextKeydown(
     ADDFILTER,
     onSetKWordMarked,
     onSetUWordMarked,
+    curr,
+    totalCharCount,
   }: {
+    curr: HTMLElement;
     ann: string;
+    totalCharCount: number;
     text: Pick<Text, 'TxID'>;
     textItem: Pick<TextItem, 'TiOrder'>;
     word: Pick<Word, 'WoID'>;
@@ -377,7 +382,8 @@ export function onTextKeydown(
     onSetUWordMarked(false);
     const unknownwordlist = $('span.status0.word:not(.hide):first');
     if (unknownwordlist.size() === 0) return false;
-    window.scrollTo({ axis: 'y', offset: -150 });
+    // TOOD -150
+    window.scrollTo(curr.getBoundingClientRect());
     onSetUWordMarked(true);
     // TODO .click()
     cClick();
@@ -401,9 +407,10 @@ export function onTextKeydown(
     // home : known word navigation -> first
     onSetKWordMarked(false);
     TEXTPOS = 0;
-    curr = knownwordlist.eq(TEXTPOS);
+    // curr = knownwordlist.eq(TEXTPOS);
     onSetKWordMarked(true);
-    window.scrollTo(curr, { axis: 'y', offset: -150 });
+    // , { axis: 'y', offset: -150 }
+    window.scrollTo(curr.getBoundingClientRect());
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
     return false;
   }
@@ -411,10 +418,11 @@ export function onTextKeydown(
     // end : known word navigation -> last
     onSetKWordMarked(false);
     TEXTPOS = l_knownwordlist - 1;
-    curr = knownwordlist.eq(TEXTPOS);
+    // curr = knownwordlist.eq(TEXTPOS);
     // TODO only curr
     onSetKWordMarked(true);
-    window.scrollTo(curr, { axis: 'y', offset: -150 });
+    // , { axis: 'y', offset: -150 }
+    window.scrollTo(curr.getBoundingClientRect());
     let ann = '';
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
 
@@ -422,7 +430,8 @@ export function onTextKeydown(
   }
   if (e.key === 'LeftArrow') {
     // left : known word navigation
-    const marked = $('span.kwordmarked');
+    // const marked = $('span.kwordmarked');
+    const marked = {} as any;
     const currid =
       marked.length === 0 ? 100000000 : get_position_from_id(marked.attr('id'));
     $('span.kwordmarked').removeClass('kwordmarked');
@@ -438,16 +447,18 @@ export function onTextKeydown(
     }
     // TEXTPOS--;
     // if (TEXTPOS < 0) TEXTPOS = l_knownwordlist - 1;
-    curr = knownwordlist.eq(TEXTPOS);
+    // curr = knownwordlist.eq(TEXTPOS);
     onSetKWordMarked(true);
     // TODO scrollTo
-    window.scrollTo(curr, { axis: 'y', offset: -150 });
+    // , { axis: 'y', offset: -150 }
+    window.scrollTo(curr.getBoundingClientRect());
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
     return false;
   }
   if (e.key === ' ' || e.key === 'RightArrow') {
     // space /right : known word navigation
-    const marked = $('span.kwordmarked');
+    // const marked = $('span.kwordmarked');
+    const marked = {} as any;
     const currid =
       marked.length === 0 ? -1 : get_position_from_id(marked.attr('id'));
     $('span.kwordmarked').removeClass('kwordmarked');
@@ -463,10 +474,11 @@ export function onTextKeydown(
     }
     // TEXTPOS++;
     // if (TEXTPOS >= l_knownwordlist) TEXTPOS = 0;
-    curr = knownwordlist.eq(TEXTPOS);
+    // curr = knownwordlist.eq(TEXTPOS);
     onSetKWordMarked(true);
 
-    window.scrollTo(curr, { axis: 'y', offset: -150 });
+    // , { axis: 'y', offset: -150 }
+    window.scrollTo(curr.getBoundingClientRect());
     onSetShowingWord({ WoID, ann: encodeURIComponent(usingAnn) });
 
     return false;
@@ -475,7 +487,7 @@ export function onTextKeydown(
   if (TEXTPOS < 0 || TEXTPOS >= l_knownwordlist) {
     return true;
   }
-  let curr = knownwordlist.eq(TEXTPOS);
+  // let curr = knownwordlist.eq(TEXTPOS);
 
   // the following only with valid pos.
   for (let i = 1; i <= 5; i++) {
@@ -504,7 +516,7 @@ export function onTextKeydown(
   if (e.key === 'A') {
     // A : set audio pos.
     let p = pos;
-    const t = parseInt($('#totalcharcount').text(), 10);
+    const t = totalCharCount;
     if (t === 0) return true;
     p = (100 * (p - 5)) / t;
     if (p < 0) {
@@ -515,7 +527,7 @@ export function onTextKeydown(
   }
   if (e.key === 'E') {
     //  E : EDIT
-    if (curr.has('.mword'))
+    if (curr.classList.has('.mword'))
       // is multiword TODO make sure no difference
       onSetEditWord({ WoID, TxID, TiOrder });
     else {
@@ -532,7 +544,8 @@ export function MwordClickEventDoTextText({
   langDictData: langDictData,
   textItem: { TiOrder: TiOrder, TiText: text, TiWordCount: code },
   ann = '',
-  mw,
+  // TODO
+  // mw,
   TxID,
   title,
 }: {
@@ -602,6 +615,7 @@ export function WordClickEventDoTextText({
   onInsertIgnoreWord,
   onSetWordStatus,
   onSetEditingNewWord,
+  onSetTestStatus,
 }: {
   word: Pick<Word, 'WoStatus' | 'WoID'>;
   language: LanguageDictionaryDataTempHack & Pick<Language, 'LgRightToLeft'>;
@@ -621,6 +635,10 @@ export function WordClickEventDoTextText({
   onInsertIgnoreWord: (
     args: Pick<Text, 'TxID'> & Pick<TextItem, 'TiOrder'>
   ) => void;
+  onSetTestStatus: (args: {
+    WoID: WordsID;
+    plusminus: 'plus' | 'minus';
+  }) => void;
   onSetWordStatus: (params: EditWordParams & Pick<Word, 'WoStatus'>) => void;
   onSetEditingNewWord: (
     params: Pick<EditWordParams, 'TiOrder' | 'TxID'> & { txt: string }
@@ -682,6 +700,7 @@ export function WordClickEventDoTextText({
       setTranslateAPIParams={setTranslateAPIParams}
       setIFrameURL={setIFrameURL}
       onSetNewWord={onSetNewWord}
+      onSetTestStatus={onSetTestStatus}
     />;
   else
     <RunOverlibStatus1To5
@@ -738,7 +757,8 @@ export function MWordEachDoTextText(
       const order = TiOrder;
       for (let j = 2; j <= 16; j = j + 2) {
         const index = (order + j).toString();
-        if (index in annArray) {
+        // TODO
+        if (annArray.includes(index)) {
           if (wid === annArray[index][1]) {
             setDataAnn(annArray[index][2]);
             break;

@@ -1,3 +1,4 @@
+import { APITranslateTerm } from 'lwt-plugins';
 import {
   AddNewWordValidator,
   LanguagesID,
@@ -15,7 +16,6 @@ import {
   useFormInput,
 } from 'lwt-ui-kit';
 import { useState } from 'react';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { textareaKeydown } from '../IO/CheckForm';
 import { DictionaryLinks } from './DictionaryLinks';
 

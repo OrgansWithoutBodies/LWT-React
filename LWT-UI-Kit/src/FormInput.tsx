@@ -1,27 +1,10 @@
 import { AppVariables } from "lwt-build";
-import { TRefMap } from "lwt-forms";
 import { VariantMap } from "lwt-style";
-import { RequiredLineButton } from "lwt-ui-kit";
-import { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
-
-export type FormTextAreaProps<
-  TKey extends string,
-  TData extends Record<TKey, any>
-> = Omit<
-  TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "defaultValue" | "ref" | "name"
-> & {
-  entryKey: TKey;
-  // TODO need refmap if fixed entry?
-  refMap: TRefMap<TData>;
-  isRequired?: boolean;
-  defaultEntry?: Partial<TData>;
-  fixedEntry?: Partial<TData>;
-  errorName?: string;
-  formErrors?: {
-    [key in TKey]?: string;
-  };
-};
+import {
+  FormInputParams,
+  FormTextAreaProps,
+  RequiredLineButton,
+} from "lwt-ui-kit";
 
 export function FormTextArea<
   TKey extends string,
@@ -66,24 +49,6 @@ export function FormTextArea<
     </>
   );
 }
-export type FormInputParams<
-  TKey extends string,
-  TData extends Record<TKey, any>
-> = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "defaultValue" | "ref" | "name"
-> & {
-  entryKey: TKey;
-  // TODO need refmap if fixed entry?
-  refMap: TRefMap<TData>;
-  isRequired?: boolean;
-  defaultEntry?: TData;
-  fixedEntry?: TData;
-  errorName?: string;
-  formErrors?: {
-    [key in TKey]?: string;
-  };
-};
 
 export function FormInput<
   TKey extends string,

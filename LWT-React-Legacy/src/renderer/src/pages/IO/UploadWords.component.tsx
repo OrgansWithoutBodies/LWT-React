@@ -9,7 +9,7 @@ import {
   useI18N,
   useInternalNavigate,
 } from 'lwt-ui-kit';
-import { GoBackButton } from '../../GoBackButton';
+import { GoBackButton } from '../../../../../../LWT-UI-Kit/src/GoBackButton';
 import { GetWordstatusSelectoptions } from '../PrintAnnotate/PrintText.component';
 
 /**

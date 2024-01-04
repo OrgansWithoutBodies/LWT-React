@@ -1,4 +1,5 @@
 import { getDirTag, strToClassName } from 'lwt-common';
+import { APITranslateTerm } from 'lwt-plugins';
 import { Language, Text, TextItem, TextsID, Word } from 'lwt-schemas';
 import { useData } from 'lwt-state';
 import {
@@ -10,7 +11,6 @@ import {
 } from 'lwt-ui-kit';
 import { title } from 'process';
 import { useState } from 'react';
-import { APITranslateTerm } from '../../plugins/deepl.plugin';
 import { EditWordParams } from '../OverlibComponents';
 import { AddNewTermTooltip } from '../Term/AddNewTermTooltip';
 import {

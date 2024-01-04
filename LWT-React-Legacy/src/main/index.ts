@@ -2,9 +2,9 @@ import { BrowserWindow, Menu, app, ipcMain, nativeImage } from 'electron';
 import { AppVariables } from 'lwt-build';
 import { BackendPlugin } from 'lwt-persist/electron-sqlite';
 import { IDValOf, LWTData, Persistable } from 'lwt-schemas';
+import { createColors } from 'lwt-style';
 import path from 'path';
 import icon from '../renderer/public/img/lwt_icon.png';
-import { createColors } from '../renderer/src/styles';
 
 let mainWindow: BrowserWindow | null;
 

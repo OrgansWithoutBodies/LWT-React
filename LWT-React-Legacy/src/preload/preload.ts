@@ -1,5 +1,4 @@
-import { LWTData } from 'lwt-schemas';
-import { Persistable } from '../shared/Persistable';
+import { LWTData, Persistable } from 'lwt-schemas';
 
 const { contextBridge, ipcRenderer } = require('electron');
 

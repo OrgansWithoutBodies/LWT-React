@@ -5,6 +5,7 @@
   "type": "module",
   "exports": "./src/index.ts",
   "scripts": {
+    "patch": "npx patch-package",
     "build": "tsc"
   },
   "devDependencies": {

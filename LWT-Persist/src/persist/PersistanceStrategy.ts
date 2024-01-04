@@ -7,4 +7,5 @@ export enum PersistanceStrategy {
   // TODO technically nothing here that should be specific to sqlite? maybe just "ElectronIPC"?
   ElectronSqlite,
 }
+
 export const PersistanceStrategyToken = Symbol("Persistance");

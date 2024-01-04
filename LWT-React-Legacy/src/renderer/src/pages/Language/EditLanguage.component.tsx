@@ -1,4 +1,4 @@
-import { LanguagesID, LanguagesValidator } from 'lwt-schemas';
+import { LanguagesID, LanguagesValidator, Persistable } from 'lwt-schemas';
 import { dataService, languagePreValidateMap, useData } from 'lwt-state';
 import {
   A,
@@ -11,8 +11,7 @@ import {
   useI18N,
   useInternalNavigate,
 } from 'lwt-ui-kit';
-import { Persistable } from '../../../../shared/Persistable';
-import { PluginEntries } from '../../plugins/PluginEntries';
+import { PluginEntries } from '../../PluginEntries';
 import { TextSizeSelect } from './NewLanguage';
 
 export function EditLanguage({ chgID }: { chgID: LanguagesID }) {

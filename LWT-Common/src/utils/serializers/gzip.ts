@@ -4,6 +4,9 @@ export function unGzString(val: Uint8Array): string {
     to: "string",
   });
 }
+export function unGzArrayBuffer(val: Uint8Array): Uint8Array {
+  return inflate(val);
+}
 /**
  *
  * @param val
